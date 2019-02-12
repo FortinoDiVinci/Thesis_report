@@ -1,0 +1,201 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wenneker Article
+% LaTeX Template
+% Version 2.0 (28/2/17)
+%
+% This template was downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@LaTeXTemplates.com)
+% Frits Wenneker
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt, a4paper]{article} % 12pt font size (11 and 12 also possible), A4 paper (letterpaper for US letter) and two column layout (remove for one column)
+
+\input{structure.tex} % Specifies the document structure and loads requires packages
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Impédance mécanique} % The article title
+
+\author{
+	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2}, Maria MAKAROV\textsuperscript{2}, Pedro RODRIGUEZ\textsuperscript{2}, Isabelle Siegler\textsuperscript{1}} % Authors
+	\newline\newline % Space before institutions
+	\textsuperscript{1}\institution{Université Paris Sud - CIAMS}\\ % Institution 1
+	\textsuperscript{2}\institution{CentraleSupélec - L2S}\\ % Institution 2
+}
+
+
+\date{Février 2019} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title
+
+\thispagestyle{firstpage} % Apply the page style for the first page (no headers and footers)
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\lettrineabstract{During mechanical interaction with the environment, humans use the dynamical properties of their limb to reach stable and desired behaviour. The so called impedance extends beyond stiffness and has been studied for decades under the control prism \citep{hogan_adaptive_1984}, and is still under interest \citep{mizrahi_mechanical_2015}. The relationship with neurosciences and motor control created a complex ecosystem, implying different theories about human mouvement science, (eg. equilibrium theory \citep{flash_control_1987}, internal model \citep{hinder_case_2003}, \citep{danion_we_2011}, etc.). The main goal of the thesis is the study of the ball bouncing task, and therefore the human arm joints, and its link to end-point impedance. Several models have been proposed for the elbow, wrist and shoulder joints, and for the arm, using second order dynamic systems \citep{tsuji_human_1997} or more complex representation inspired by Hill, Voigt and other neuro-muscular models \citep{puzi_mechanical_2017}. However, other parts of the human body have also been well examined, the trunk \citep{smith_nonlinear_1994} and the ankel \citep{ludvig_mechanisms_2017} for example.}
+
+{
+\noindent
+\rule{\textwidth}{1pt}
+}
+
+\lettrineabstract{Traduction en français... texte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txet}
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section{Impédance Humaine}
+
+\begin{align}
+	A = 
+	\begin{bmatrix}
+		A_{11} & A_{21} \\
+		A_{21} & A_{22}
+	\end{bmatrix}
+\end{align}
+
+%------------------------------------------------
+
+\subsection{Définition de l'impédance}
+
+Le \textit{Collins English Dictionary} définie l'impédance mécanique comme le rapport entre une force exercée sur un système physique, soumis à un mouvement harmonique, et la vitesse des particules du dit système. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être défini en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se définit comme montré en \cref{mec_impedance}.
+
+\begin{figure}
+	\centering
+	
+	\begin{tikzpicture}
+		\node[rectangle, draw, align=center] (impedance) at (0,0) {\phantom{--} \\ \phantom{--} Impédance \phantom{--}  \\ \phantom{--}};
+		\draw[->] (impedance.east) -- +(2.8,0)
+			node[midway, above] {déplacement};
+		\draw[<-] (impedance.west) -- +(-2.8,0)
+			node[midway, above] {\phantom{p}force};
+	
+		
+		\node[rectangle, draw, align=center] (admittance) at (0,-2) {\phantom{--} \\ \phantom{--} Admittance \phantom{--}  \\ \phantom{--}};
+		\draw[->] (admittance.east) -- +(2.8,0)
+			node[midway, above] {\phantom{p}force};
+		\draw[<-] (admittance.west) -- +(-2.8,0)
+			node[midway, above] {déplacement};
+	\end{tikzpicture}
+	
+	\caption{Systèmes physiques} % Figure caption
+	\label{mec_impedance} % Label for referencing with \ref{bear}
+\end{figure}
+
+\subsubsection{Modèle}
+
+Modèle d'impédance du bras humain : != modèle mecanique du bras humain ?!
+\begin{itemize}
+	\item Hogan 1984 - 1985
+	\item Dolan (comparaison modèle non linéaire)
+	\item Tsuji 1997
+	\item Hondori représentation complexe
+	\item Speich 2005 (modèle à 5 paramètres pour tâche précise ?)
+	\item 
+\end{itemize}
+
+
+\begin{description}
+	\item[First] This is the first item
+	\item[Last] This is the last item
+\end{description}
+
+%------------------------------------------------
+
+\subsection{Méthodes d'estimation}
+
+Mussa-Ivaldi 1985 -> 1er à utiliser des perturbations pour estimer l'impédance du bras ?
+
+\begin{enumerate}
+	\item Bennett 1992 -> time varying parameters
+	\item Cavallo 2018 -> méthode d'identification des paramètres
+	\item Third numbered item in a list
+\end{enumerate}
+
+\begin{table}
+	\caption{Example table}
+	\centering
+	\begin{tabular}{llr}
+		\toprule
+		\multicolumn{2}{c}{Name} \\
+		\cmidrule(r){1-2}
+		First Name & Last Name & Grade \\
+		\midrule
+		John & Doe & $7.5$ \\
+		Richard & Miles & $5$ \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+%------------------------------------------------
+
+\subsection{Résultats d'expérience}
+
+\begin{itemize}
+	\item Bennett 1994 (différenciation réflexes et raideur intrinsèque)
+	\item Dolan (comparaison modèle non linéaire)
+	\item Burdet 2000 (nature) Apprentissage Impedance
+	\item Franklin 2002 contrôleur en impédance
+\end{itemize}
+
+
+%------------------------------------------------
+
+\section{Contrôle en impédance}
+
+Télé-impédance - Ajoudani
+
+%------------------------------------------------
+
+\subsection{Contrôle logiciel}
+
+\begin{itemize}
+	\item Hogan 1985
+	\item Tee 2004
+	\item Williamson 1998
+\end{itemize}
+
+%------------------------------------------------
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{bear.jpg} % Figure image
+	\caption{A majestic grizzly bear} % Figure caption
+	\label{bear} % Label for referencing with \ref{bear}
+\end{figure}
+
+
+%------------------------------------------------
+
+\subsection{Actionneurs à impédance variable (VIA)}
+
+Review 2013
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+\printbibliography[title={Bibliography}] % Print the bibliography, section title in curly brackets
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
