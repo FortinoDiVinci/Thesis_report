@@ -51,12 +51,9 @@
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
 
-\lettrineabstract{During mechanical interaction with the environment, humans use the dynamical properties of their limb to reach stable and desired behaviour. The so called impedance extends beyond stiffness and has been studied for decades under the control prism \citep{hogan_adaptive_1984}, and is still under interest \citep{mizrahi_mechanical_2015}. The relationship with neurosciences and motor control created a complex ecosystem, implying different theories about human mouvement science, (eg. equilibrium theory \citep{flash_control_1987}, internal model \citep{hinder_case_2003}, \citep{danion_we_2011}, etc.). The main goal of the thesis is the study of the ball bouncing task, and therefore the human arm joints, and its link to end-point impedance. Several models have been proposed for the elbow, wrist and shoulder joints, and for the arm, using second order dynamic systems \citep{tsuji_human_1997} or more complex representation inspired by Hill, Voigt and other neuro-muscular models \citep{puzi_mechanical_2017}. However, other parts of the human body have also been well examined, the trunk \citep{smith_nonlinear_1994} and the ankel \citep{ludvig_mechanisms_2017} for example.}
+\lettrineabstract{During mechanical interaction with the environment, humans use the dynamical properties of their limb to reach stable and desired behaviour. The so called impedance extends beyond stiffness and has been studied for decades under the control prism \citep{hogan_adaptive_1984}, and is still under interest \citep{mizrahi_mechanical_2015}. The relationship with neurosciences and motor control \citep{roberts_cerebellar_1996} created a complex ecosystem, implying different theories about human mouvement science, (eg. equilibrium theory \citep{flash_control_1987}, internal model \citep{hinder_case_2003, danion_we_2011}, etc.). The main goal of the thesis is the study of the ball bouncing task, and therefore the human arm joints, and its link to end-point impedance. Several models have been proposed for the elbow, wrist and shoulder joints, and also for the arm, using second order dynamic systems \citep{tsuji_human_1997} or more complex representation inspired by Hill, Voigt and other neuro-muscular models \citep{puzi_mechanical_2017}. However, other parts of the human body have also been well examined, the trunk \citep{smith_nonlinear_1994} and the ankel \citep{ludvig_mechanisms_2017} for example.}
 
-{
-\noindent
-\rule{\textwidth}{1pt}
-}
+\estheticline
 
 \lettrineabstract{Traduction en français... texte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txetexte texte texte texte texte texte txet xtexte texte txet}
 
@@ -66,44 +63,115 @@
 
 \section{Impédance Humaine}
 
-\begin{align}
-	A = 
-	\begin{bmatrix}
-		A_{11} & A_{21} \\
-		A_{21} & A_{22}
-	\end{bmatrix}
-\end{align}
-
 %------------------------------------------------
 
-\subsection{Définition de l'impédance}
+\subsection{Définition}
 
-Le \textit{Collins English Dictionary} définie l'impédance mécanique comme le rapport entre une force exercée sur un système physique, soumis à un mouvement harmonique, et la vitesse des particules du dit système. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être défini en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se définit comme montré en \cref{mec_impedance}.
+Le \textit{Collins English Dictionary} définie l'impédance mécanique comme, le rapport entre une force exercée sur un système physique soumis à un mouvement harmonique, et la vitesse des particules du-dit système. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{mec_impedance}) comme une force de résistance à un mouvement.
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	
 	\begin{tikzpicture}
-		\node[rectangle, draw, align=center] (impedance) at (0,0) {\phantom{--} \\ \phantom{--} Impédance \phantom{--}  \\ \phantom{--}};
-		\draw[->] (impedance.east) -- +(2.8,0)
-			node[midway, above] {déplacement};
-		\draw[<-] (impedance.west) -- +(-2.8,0)
-			node[midway, above] {\phantom{p}force};
-	
-		
-		\node[rectangle, draw, align=center] (admittance) at (0,-2) {\phantom{--} \\ \phantom{--} Admittance \phantom{--}  \\ \phantom{--}};
-		\draw[->] (admittance.east) -- +(2.8,0)
-			node[midway, above] {\phantom{p}force};
-		\draw[<-] (admittance.west) -- +(-2.8,0)
-			node[midway, above] {déplacement};
+		\node[rectangle, draw, align=center, minimum width=3.5cm, minimum height=1.75cm, line width=1.2] (impedance) at (0,0) { Impédance \\ (système)};
+		\node[rectangle, draw, align=center, minimum width=3.5cm, minimum height=1.75cm, line width=1.2] (admittance) at ($(impedance) + (6.5, 0)$) {Admittance \\ (environnement)};
+		\draw[-{Latex[length=3mm]}, line width=1.2] (impedance.east) -- (admittance.west)
+			node[midway, above] {\phantom{p}force\phantom{p}};
+		\draw[{Latex[length=3mm]}-, line width=1.2] (impedance.west) -- +(-2.8,0)
+			node[midway, above] {\phantom{p}mouvement\phantom{p}};		
+		\draw[-{Latex[length=3mm]}, line width=1.2] (admittance.east) -- +(2.8,0)
+			node[midway, above] {\phantom{p}mouvement\phantom{p}};
 	\end{tikzpicture}
 	
-	\caption{Systèmes physiques} % Figure caption
-	\label{mec_impedance} % Label for referencing with \ref{bear}
+	\caption{Systèmes physiques : comme expliqué par \cite{hogan_impedance_1985}, l'environnement peut souvent être modélisé par une admittance, un système qui interagit avec, devra donc être considéré comme une impédance.} % Figure caption
+	\label{mec_impedance} % Label for referencing
 \end{figure}
+
+Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes linéaires, il existe 3 éléments passifs, l'inertie, la raideur et l'amortissement et 2 actifs, la force et la vitesse que l'on peut rapprocher respectivement à l'inductance, à la capacité et à la résistance puis à la tension et au courant. Comme c'est fait pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \citep{hondori_method_2009}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme. La \cref{impedance_analogy} et le système \eqref{equ_impedance_analogy} résument l'ensemble de ces rapprochements, qui donneront lieux à différents modèles.
+
+\shorthandoff{:!}
+\begin{figure}[h]
+
+	\centering
+	
+	\begin{circuitikz}
+		\draw (0,0) node[ground] {} 
+		to[V=$U(t)$]  ++(0,2)
+		-- ++(0.5,0)
+		to[R=$R$] ++(1.5,0)
+		to[L=$L$] ++(1.5,0)
+		to[short, i^>=$i(t)$] ++ (0.5,0)
+		to[C=$C$] ++(0,-2)
+		node[ground] {};
+		
+		\node at (5.8,1) {\LARGE $\equiv$};
+
+		\draw (8,0) coordinate (O)
+		to[V=$F(t)$] ++(0,2) coordinate (A);
+		\coordinate (B) at ($(A) + (1.5, 0)$);
+		\coordinate (C) at ($(B) + (1.5, 0)$);
+		\coordinate (D) at ($(C) + (1.5, 0)$);
+		
+		\draw (B) 
+		to[damper=$B$] ++ (0,-2);
+		\draw (C)
+		to[mass=$I$] ++ (0,-2);		
+		\draw (D)
+		to[spring=$K$] ++ (0,-2);
+		\node at ($(D) + (1.2, 0)$) {$\updownarrow x(t)$};
+		\draw [line width = 1pt] ($(A) + (-0.5,0)$) --($(D) + (0.5,0)$);
+		\draw [line width = 1pt] ($(A) + (-0.5,-2)$) --($(D) + (0.5,-2)$);
+		
+		\foreach \i in {7.5, 7.75, ..., 13} {
+		\draw (\i, 0) --+ (225:0.4);
+		}
+		
+		%\draw (C) -- (O) node[midway, cground] {};
+
+	\end{circuitikz}
+	
+	\caption{Analogie électricité - mécanique} % Figure caption
+	\label{impedance_analogy} % Label for referencing
+\end{figure}
+\shorthandon{:!}
+
+\noindent
+%\begin{tabularx}{\textwidth}{@{}XX@{}}
+
+	\begin{equation}
+		\left\{
+			\begin{array}{rcl}
+				R 	& \equiv &		B \\
+				L 	& \equiv & 	I \\
+				C	& \equiv & 	\frac{1}{K} 
+			\end{array}
+		\right.
+	\label{equ_impedance_analogy} % Label for referencing
+	\end{equation}  %&
+	
+	\vspace{5mm}
+	
+	\begin{equation}
+		\begin{bmatrix}
+			F \\
+			\dot{x}
+		\end{bmatrix}
+		= 
+		\begin{bmatrix}
+			A_{11} & A_{21} \\
+			A_{21} & A_{22}
+		\end{bmatrix}
+		\begin{bmatrix}
+			U \\
+			i
+		\end{bmatrix}
+	\end{equation}
+
+%\end{tabularx}
 
 \subsubsection{Modèle}
 
+L'impédance d'une articulation est souvent présentée avec un simple modèle KBI \citep{, , , , ,}
 Modèle d'impédance du bras humain : != modèle mecanique du bras humain ?!
 \begin{itemize}
 	\item Hogan 1984 - 1985

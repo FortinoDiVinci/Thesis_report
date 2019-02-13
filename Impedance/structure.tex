@@ -49,11 +49,29 @@
 
 \usepackage{tikz} % figure de façon générale - T. Chevet (la référence)
 	\usetikzlibrary{shapes}
+	\usetikzlibrary{arrows.meta}
+	\usetikzlibrary{calc}
+	
+\usepackage{circuitikz}
 	
 \usepackage{cleveref}
 	\crefname{figure}{Figure}{Figures}
 	\crefname{section}{Section}{Sections}
 	\crefname{chapter}{Chapitre}{Chapitres}
+	
+\usepackage{pgffor} %for loop	
+
+\usepackage{tabularx} %for advanced tables
+	
+\newcommand{\estheticline}{
+{
+\noindent
+\rule{\textwidth}{1pt}
+}}
+
+\everymath{\displaystyle} 
+
+
 
 %----------------------------------------------------------------------------------------
 %	MARGINS AND SPACING

@@ -316,6 +316,56 @@
     \field{urlyear}{2018}
   \endentry
 
+  \entry{hondori_method_2009}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=HHM}{%
+         family={Hondori},
+         familyi={H\bibinitperiod},
+         given={Hossein\bibnamedelima Mousavi},
+         giveni={H\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=SFL}{%
+         family={Shih-Fu},
+         familyi={S\bibinitperiod-F\bibinitperiod},
+         given={Ling},
+         giveni={L\bibinitperiod},
+      }}%
+    }
+    \list{language}{1}{%
+      {en}%
+    }
+    \list{publisher}{1}{%
+      {ACM Press}%
+    }
+    \strng{namehash}{HHMSFL1}
+    \strng{fullhash}{HHMSFL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2009}
+    \field{labeldatesource}{year}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{booktitle}{Proceedings of the 3rd {International} {Convention} on
+  {Rehabilitation} {Engineering} \& {Assistive} {Technology} - {ICREATE} '09}
+    \verb{doi}
+    \verb 10.1145/1592700.1592720
+    \endverb
+    \field{isbn}{978-1-60558-792-9}
+    \field{pages}{1}
+    \field{title}{A method for measuring human arm's mechanical impedance for
+  assessment of motor rehabilitation}
+    \verb{url}
+    \verb http://portal.acm.org/citation.cfm?doid=1592700.1592720
+    \endverb
+    \list{location}{1}{%
+      {Singapore}%
+    }
+    \field{year}{2009}
+    \field{urlday}{02}
+    \field{urlmonth}{11}
+    \field{urlyear}{2018}
+  \endentry
+
   \entry{ludvig_mechanisms_2017}{article}{}
     \name{author}{4}{}{%
       {{hash=LD}{%
@@ -509,6 +559,72 @@
     \field{year}{2017}
     \field{urlday}{12}
     \field{urlmonth}{02}
+    \field{urlyear}{2019}
+  \endentry
+
+  \entry{roberts_cerebellar_1996}{article}{}
+    \name{author}{3}{}{%
+      {{hash=RPD}{%
+         family={Roberts},
+         familyi={R\bibinitperiod},
+         given={Patrick\bibnamedelima D.},
+         giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=MG}{%
+         family={McCollum},
+         familyi={M\bibinitperiod},
+         given={Gin},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=HJE}{%
+         family={Holly},
+         familyi={H\bibinitperiod},
+         given={Jan\bibnamedelima E.},
+         giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+    }
+    \list{language}{1}{%
+      {en}%
+    }
+    \strng{namehash}{RPDMGHJE1}
+    \strng{fullhash}{RPDMGHJE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{labelyear}{1996}
+    \field{labeldatesource}{year}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \field{abstract}{%
+    The behavior of the climbing fiber system in the cerebellum is viewed in
+  terms of resonances and rhythms. Building upon the anatomical modules in the
+  target article by Simpson et al., the rhythmic behavior of the system is
+  analyzed using a discrete approach. Rhythmic behavior requires oscillations
+  of the olivary cells, but does not necessitate synchrony of complex spike
+  activity. [HOUK et al.; SIMPSON et al.]%
+    }
+    \verb{doi}
+    \verb 10.1017/S0140525X0008184X
+    \endverb
+    \field{issn}{1469-1825, 0140-525X}
+    \field{number}{3}
+    \field{pages}{471\bibrangedash 472}
+    \field{shorttitle}{Cerebellar rhythms}
+    \field{title}{Cerebellar rhythms: {Exploring} another metaphor}
+    \verb{url}
+    \verb https://www.cambridge.org/core/journals/behavioral-and-brain-sciences
+    \verb /article/cerebellar-rhythms-exploring-another-metaphor/9D5084A3FCBBF3
+    \verb C19A6DF78CC6186554
+    \endverb
+    \field{volume}{19}
+    \verb{file}
+    \verb Snapshot:/Users/Vincent/Zotero/storage/ZG5LPIMM/9D5084A3FCBBF3C19A6DF
+    \verb 78CC6186554.html:text/html
+    \endverb
+    \field{journaltitle}{Behavioral and Brain Sciences}
+    \field{month}{09}
+    \field{year}{1996}
+    \field{urlday}{11}
+    \field{urlmonth}{01}
     \field{urlyear}{2019}
   \endentry
 
