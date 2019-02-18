@@ -87,9 +87,8 @@ Le \textit{Collins English Dictionary} définie l'impédance mécanique comme, l
 	\label{mec_impedance} % Label for referencing
 \end{figure}
 
-Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes linéaires, il existe 3 éléments passifs, l'inertie, la raideur et l'amortissement et 2 actifs, la force et la vitesse que l'on peut rapprocher respectivement à l'inductance, à la capacité et à la résistance puis à la tension et au courant. Comme c'est fait pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \citep{hondori_method_2009}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme. La \cref{impedance_analogy} et le système \eqref{equ_impedance_analogy} résument l'ensemble de ces rapprochements, qui donneront lieux à différents modèles.
+Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes linéaires, il existe 3 éléments passifs, l'inertie, la raideur et l'amortissement et 2 actifs, la force et la vitesse que l'on peut rapprocher respectivement à l'inductance, à la capacité et à la résistance puis à la tension et au courant. Comme c'est fait pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \citep{hondori_method_2009}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme. La \cref{impedance_analogy} et les systèmes \eqref{equ_impedance_analogy} et \eqref{equ_elec2mec_matrix} résument l'ensemble de ces rapprochements, qui donneront lieux à différents modèles.
 
-\shorthandoff{:!}
 \begin{figure}[h]
 
 	\centering
@@ -133,7 +132,6 @@ Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes 
 	\caption{Analogie électricité - mécanique} % Figure caption
 	\label{impedance_analogy} % Label for referencing
 \end{figure}
-\shorthandon{:!}
 
 \noindent
 %\begin{tabularx}{\textwidth}{@{}XX@{}}
@@ -165,6 +163,7 @@ Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes 
 			U \\
 			i
 		\end{bmatrix}
+	\label{equ_elec2mec_matrix} % Label for referencing
 	\end{equation}
 
 %\end{tabularx}
@@ -173,27 +172,157 @@ Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes 
 
 L'impédance d'une articulation est souvent présentée avec un modèle viscoélastique du second ordre, dit $KBI$ \citep{hogan_adaptive_1984, hogan_impedance_1985, flash_control_1987, bennett_time-varying_1992, abe_modulation_2003, ludvig_voluntary_2007}. Les cas d'étude plus complexes, avec plusieurs articulations, sont moins souvent étudiés dans le plan articulaire \citep{gomi_human_1997, gomi_task-dependent_1998}, mais plutôt dans un plan cartésien, où l'on s'intéresse principalement à l'impédance finale \citep{, burdet_method_2000, perreault_effects_2001, erden_hand_2015}, toujours avec un modèle $KBI$ équivalent. \cite{tsuji_human_1997} résume assez bien les différentes relations entre le plan musculaire, le plan articulaire et le plan cartésien. L'équation \eqref{equ_endpoint_impedance} décrit ce modèle, pour la position $p(t)$ qui correspond à la différence entre la position avec et sans perturbation.
 
-\begin{equation}
-	F = I(t) \ddot{p}(t) + B(t) \dot{p}(t) + K(t) p(t)
-\label{equ_endpoint_impedance} 
-\end{equation}
+\newlineBlank
 
 Le modèle linéaire $KBI$ proposé pour étudier l'impédance du bras humain, peut être utilisé pour de faibles perturbations, autour d'un point d'équilibre, qui peut être statique \citep{dolan_dynamic_1993} ou en mouvement, dans ce cas on parle de trajectoire virtuelle (non perturbée) \citep{tsuji_bio-mimetic_2008}. Certaines études semblent démontrer des faiblesses dans ce modèle, qui ne tient notamment pas compte des tendons et qui, ne permet pas d'extraire d'informations claires des paramètres \citep{kistemaker_vivo_2011}, il n'y a pas forcément de liens entre la raideur $K$ du modèle et la raideur des muscles par exemple. D'autres part, la différenciation entre la raideur intrinsèque du muscle et la raideur réflexe (commande neurale) n'est pas évidente \citep{guarin_unbiased_2018}.
 
 \newlineBlank
 
-Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} pour étudier le bras, \cite{popescu_elbow_2003} propose l'ajout d'un délais au modèle $KBI$ pour modéliser certaines non linéarités, et d'autres modèles mécaniques plus complexes sont aussi utilisés par \cite{piovesan_measuring_2012}. Ces derniers modèles essaient d'approcher et d'expliquer le modèle mécanique complexe du bras humain, dans certaines conditions.
+Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} pour étudier le bras, \cite{popescu_elbow_2003} proposent l'ajout d'un délais au modèle $KBI$ pour modéliser certaines non linéarités, et d'autres modèles mécaniques plus complexes sont aussi utilisés par \cite{piovesan_measuring_2012}. Ces derniers modèles essaient d'approcher et d'expliquer le modèle mécanique complexe du bras humain, dans certaines conditions.
 
-\newlineBlank
+\begin{figure}[h]
+
+	\centering
+	\subfloat[Modèle de Hill]{
+	\begin{circuitikz}
+
+		\coordinate (O) at (0,0);
+		\coordinate (A) at ($(O) + (0, 1.5)$);
+		\coordinate (B) at ($(A) + (-1.4, 0)$);
+		\coordinate (C) at ($(A) + (1.4, 0)$);
+		\coordinate (D) at ($(B) + (0, 0.5)$);
+		\coordinate (D1) at ($(D) + (0.75, 0)$);
+		\coordinate (D2) at ($(D) + (-0.75, 0)$);
+		\coordinate (E) at ($(C) + (0,2.5)$);
+		\coordinate(F1) at ($(D1) + (0, 1.5)$);
+		\coordinate(F2) at ($(D2) + (0, 1.5)$);
+		\coordinate(F) at ($(F1) + (-0.75, 0)$);
+		\coordinate (G) at ($(F) + (0,0.5)$);
+		\coordinate (EG) at ($(G) + ({1.4},0)$);
+		
+		\draw (O) 
+		to[spring=$K_{SEE}$] ++ (A);
+		\draw (D1) 
+		to[damper=$B$]  (F1);
+		\draw (D2)
+		to[V=$CE$] (F2);
+		\draw (C)
+		to[spring=$K_{PEE}$] (E);
+		
+		\draw ($(O) + (-0.25,0)$) -- ($(O) + (0.25,0)$);
+		\draw (B) -- (C);
+		\draw (B) -- (D);
+		\draw (D1) -- (D2);
+		\draw (F1) -- (F2);
+		\draw(F) -- (G);
+		\draw(G) -- (E);
+		\draw (EG) -- ($(EG) + (0, 0.5)$);
+		
+		\foreach \i in {-0.25, -0.15, ..., 0.3} {
+		\draw (\i, 0) --+ (225:0.25);
+		}
+
+	\end{circuitikz}
+	}
+	\subfloat[Modèle de Kelvin-Voigt]{
+	\begin{circuitikz}
+
+		\coordinate (O) at (0,0);
+		\coordinate (A) at ($(O) + (0, 0.5)$);
+		\coordinate (B) at ($(A) + (-1.4, 0)$);
+		\coordinate (C) at ($(A) + (1.4, 0)$);
+		\coordinate (D) at ($(B) + (0, 0.5)$);
+		\coordinate (D1) at ($(D) + (0.75, 0)$);
+		\coordinate (D2) at ($(D) + (-0.75, 0)$);
+		\coordinate (E) at ($(C) + (0,2.5)$);
+		\coordinate(F1) at ($(D1) + (0, 1.5)$);
+		\coordinate(F2) at ($(D2) + (0, 1.5)$);
+		\coordinate(F) at ($(F1) + (-0.75, 0)$);
+		\coordinate (G) at ($(F) + (0,0.5)$);
+		\coordinate (EG) at ($(G) + ({1.4},0)$);
+		
+		\draw (D1) 
+		to[damper=$B(t)$]  (F1);
+		\draw (D2)
+		to[spring=$K(t)$] (F2);
+		\draw (C)
+		to[mass=$M(\theta)$] (E);
+		
+		\draw (O) -- (A);
+		\draw ($(O) + (-0.25,0)$) -- ($(O) + (0.25,0)$);
+		\draw (B) -- (C);
+		\draw (B) -- (D);
+		\draw (D1) -- (D2);
+		\draw (F1) -- (F2);
+		\draw(F) -- (G);
+		\draw(G) -- (E);
+		\draw (EG) -- ($(EG) + (0, 0.5)$);
+		
+		\foreach \i in {-0.25, -0.15, ..., 0.3} {
+		\draw (\i, 0) --+ (225:0.25);
+		}
+
+	\end{circuitikz}
+	}
+	\subfloat[Modèle de Poynting Thomson]{
+	\begin{circuitikz}
+
+		\coordinate (O) at (0,0);
+		\coordinate (A) at ($(O) + (0, 0.5)$);
+		\coordinate (B) at ($(A) + (-1.4, 0)$);
+		\coordinate (C) at ($(A) + (1.4, 0)$);
+		\coordinate (BD) at ($(B) + (0, 0.3)$);
+		\coordinate (D) at ($(BD) + (0, 1.2)$);
+		\coordinate (D1) at ($(D) + (0.75, 0)$);
+		\coordinate (D2) at ($(D) + (-0.75, 0)$);
+		\coordinate (E) at ($(C) + (0,3.5)$);
+		\coordinate(F1) at ($(D1) + (0, 1.5)$);
+		\coordinate(F2) at ($(D2) + (0, 1.5)$);
+		\coordinate(F) at ($(F1) + (-0.75, 0)$);
+		\coordinate (G) at ($(F) + (0,0.5)$);
+		\coordinate (EG) at ($(G) + ({1.4},0)$);
+		
+		\draw (B)
+		to[spring=$K$] (D);
+		\draw (D1) 
+		to[damper=$B(t)$]  (F1);
+		\draw (D2)
+		to[spring=$K(t)$] (F2);
+		\draw (C)
+		to[mass=$M(\theta)$] (E);
+		
+		\draw (O) -- (A);
+		\draw ($(O) + (-0.25,0)$) -- ($(O) + (0.25,0)$);
+		\draw (B) -- (C);
+		\draw (B) -- (BD);
+		\draw (D1) -- (D2);
+		\draw (F1) -- (F2);
+		\draw(F) -- (G);
+		\draw(G) -- (E);
+		\draw (EG) -- ($(EG) + (0, 0.5)$);
+		
+		\foreach \i in {-0.25, -0.15, ..., 0.3} {
+		\draw (\i, 0) --+ (225:0.25);
+		}
+
+	\end{circuitikz}
+	}	
+	
+	\caption{Modèles mécaniques du bras humain} % Figure caption
+	\label{arm_mech_models} % Label for referencing
+\end{figure}
 
 L'étude de l'impédance cartésienne du bras avec un simple modèle $KBI$ ne permet donc pas d'apporter un modèle précis du bras humain, mais cette solution a le mérite de pouvoir reproduire certains résultats \citep{tee_model_2004} avec simplicité. L'objectif de cette étude n'étant ni de modéliser le bras humain, ni d'expliquer son comportement, mais plutôt de reproduire ses performances dynamiques, c'est avec ce modèle que sera étudié l'impédance du bras humain, à la manière de \cite{burdet_central_2001, erden_end-point_2015} qui ont mis en évidence l'apprentissage des paramètres d'impédance et l'optimisation de ces paramètres chez des sujets experts.
 
-\newlineBlank
+\begin{equation}
+	F = I(t) \ddot{p}(t) + B(t) \dot{p}(t) + K(t) p(t)
+\label{equ_endpoint_impedance} 
+\end{equation}
 
-\begin{description}
-	\item[First] This is the first item
-	\item[Last] This is the last item
-\end{description}
+%\begin{description}
+%	\item[First] This is the first item
+%	\item[Last] This is the last item
+%\end{description}
 
 
 
@@ -234,7 +363,13 @@ L'étude de l'impédance cartésienne du bras avec un simple modèle $KBI$ ne pe
 
 \subsection{Méthodes d'estimation}
 
-Mussa-Ivaldi 1985 -> 1er à utiliser des perturbations pour estimer l'impédance du bras ?
+Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De manière générale, que ce soit pour un objet, une structure mécanique ou pour une structure biologique, l'estimation de l'impédance se fait en soumettant le système étudié à une force ou à un mouvement, et en observant sa réponse. 
+
+\subsubsection{Tâches isométriques}
+
+\cite{mussa-ivaldi_neural_1985} sont parmi les premiers à étudier l'impédance du bras humain en le soumettant à des perturbations en position, lors d'une tâche isométrique. Les éléments du modèle $KBI$ sont ensuite identifiés grâce à un algorithme des moindres carrés appliqué sur les mesures en force et en position, la vitesse et l'accélération sont déterminées numériquement à partir des positions. Pour les tâches isométriques, c'est à dire avec une posture fixe et sans variation de la longueur des muscles, les éléments du modèle sont étudiés comme des constantes, même si des variations d'amplitude peuvent être observées chez un même individu sur différents jours \citep{mussa-ivaldi_neural_1985}.
+
+\subsubsection{Tâches de pointage ou rythmiques}
 
 \begin{enumerate}
 	\item Bennett 1992 -> time varying parameters
@@ -242,20 +377,20 @@ Mussa-Ivaldi 1985 -> 1er à utiliser des perturbations pour estimer l'impédance
 	\item Third numbered item in a list
 \end{enumerate}
 
-\begin{table}
-	\caption{Example table}
-	\centering
-	\begin{tabular}{llr}
-		\toprule
-		\multicolumn{2}{c}{Name} \\
-		\cmidrule(r){1-2}
-		First Name & Last Name & Grade \\
-		\midrule
-		John & Doe & $7.5$ \\
-		Richard & Miles & $5$ \\
-		\bottomrule
-	\end{tabular}
-\end{table}
+%\begin{table}
+%	\caption{Example table}
+%	\centering
+%	\begin{tabular}{llr}
+%		\toprule
+%		\multicolumn{2}{c}{Name} \\
+%		\cmidrule(r){1-2}
+%		First Name & Last Name & Grade \\
+%		\midrule
+%		John & Doe & $7.5$ \\
+%		Richard & Miles & $5$ \\
+%		\bottomrule
+%	\end{tabular}
+%\end{table}
 
 %------------------------------------------------
 
