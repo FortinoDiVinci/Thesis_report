@@ -67,14 +67,14 @@
 
 \subsection{Définition}
 
-Le \textit{Collins English Dictionary} définie l'impédance mécanique comme, le rapport entre une force exercée sur un système physique soumis à un mouvement harmonique, et la vitesse des particules du-dit système. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{mec_impedance}) comme une force de résistance à un mouvement.
+Le \textit{Collins English Dictionary} définie l'impédance mécanique comme, le rapport entre une \textbf{force} exercée sur un système physique soumis à un \textbf{mouvement} harmonique, et la \textbf{vitesse} des particules du-dit système. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{mec_impedance}) comme une \textbf{force de résistance à un mouvement}.
 
 \begin{figure}[h]
 	\centering
 	
 	\begin{tikzpicture}
-		\node[rectangle, draw, align=center, minimum width=3.5cm, minimum height=1.75cm, line width=1.2] (impedance) at (0,0) { Impédance \\ (système)};
-		\node[rectangle, draw, align=center, minimum width=3.5cm, minimum height=1.75cm, line width=1.2] (admittance) at ($(impedance) + (6.5, 0)$) {Admittance \\ (environnement)};
+		\node[rectangle, draw, align=center, minimum width=3.5cm, minimum height=1.75cm, line width=1.2] (impedance) at (0,0) {\textbf{Impédance} \\ (système)};
+		\node[rectangle, draw, align=center, minimum width=3.5cm, minimum height=1.75cm, line width=1.2] (admittance) at ($(impedance) + (6.5, 0)$) {\textbf{Admittance} \\ (environnement)};
 		\draw[-{Latex[length=3mm]}, line width=1.2] (impedance.east) -- (admittance.west)
 			node[midway, above] {\phantom{p}force\phantom{p}};
 		\draw[{Latex[length=3mm]}-, line width=1.2] (impedance.west) -- +(-2.8,0)
@@ -87,7 +87,7 @@ Le \textit{Collins English Dictionary} définie l'impédance mécanique comme, l
 	\label{mec_impedance} % Label for referencing
 \end{figure}
 
-Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes linéaires, il existe 3 éléments passifs, l'inertie, la raideur et l'amortissement et 2 actifs, la force et la vitesse que l'on peut rapprocher respectivement à l'inductance, à la capacité et à la résistance puis à la tension et au courant. Comme c'est fait pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \citep{hondori_method_2009}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme. La \cref{impedance_analogy} et les systèmes \eqref{equ_impedance_analogy} et \eqref{equ_elec2mec_matrix} résument l'ensemble de ces rapprochements, qui donneront lieux à différents modèles.
+Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes linéaires, il existe 3 éléments passifs, l'\textbf{inertie}, la \textbf{raideur} et l'\textbf{amortissement} et 2 actifs, la force et la vitesse que l'on peut rapprocher respectivement à l'inductance, à la capacité et à la résistance puis à la tension et au courant. Comme c'est fait pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \citep{hondori_method_2009}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme. La \cref{impedance_analogy} et les systèmes \eqref{equ_impedance_analogy} et \eqref{equ_elec2mec_matrix} résument l'ensemble de ces rapprochements, qui donneront lieux à différents modèles.
 
 \begin{figure}[h]
 
@@ -170,7 +170,7 @@ Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes 
 
 \subsubsection{Modèle}
 
-L'impédance d'une articulation est souvent présentée avec un modèle viscoélastique du second ordre, dit $KBI$ \citep{hogan_adaptive_1984, hogan_impedance_1985, flash_control_1987, bennett_time-varying_1992, abe_modulation_2003, ludvig_voluntary_2007}. Les cas d'étude plus complexes, avec plusieurs articulations, sont moins souvent étudiés dans le plan articulaire \citep{gomi_human_1997, gomi_task-dependent_1998}, mais plutôt dans un plan cartésien, où l'on s'intéresse principalement à l'impédance finale \citep{, burdet_method_2000, perreault_effects_2001, erden_hand_2015}, toujours avec un modèle $KBI$ équivalent. \cite{tsuji_human_1997} résume assez bien les différentes relations entre le plan musculaire, le plan articulaire et le plan cartésien. L'équation \eqref{equ_endpoint_impedance} décrit ce modèle, pour la position $p(t)$ qui correspond à la différence entre la position avec et sans perturbation.
+L'impédance d'une articulation est souvent présentée avec un \textbf{modèle viscoélastique du second ordre}, dit $KBI$ \citep{hogan_adaptive_1984, hogan_impedance_1985, flash_control_1987, bennett_time-varying_1992, abe_modulation_2003, ludvig_voluntary_2007}. Les cas d'étude plus complexes, avec plusieurs articulations, sont moins souvent étudiés dans le plan articulaire \citep{gomi_human_1997, gomi_task-dependent_1998}, mais plutôt dans un plan cartésien, où l'on s'intéresse principalement à l'impédance finale \citep{, burdet_method_2000, perreault_effects_2001, erden_hand_2015}, toujours avec un modèle $KBI$ équivalent. \cite{tsuji_human_1997} résume assez bien les différentes relations entre le plan musculaire, le plan articulaire et le plan cartésien. L'équation \eqref{equ_endpoint_impedance} décrit ce modèle, pour la position $p(t)$ qui correspond à la différence entre la position avec et sans perturbation.
 
 \newlineBlank
 
@@ -204,8 +204,12 @@ Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} p
 		to[spring=$K_{SEE}$] ++ (A);
 		\draw (D1) 
 		to[damper=$B$]  (F1);
-		\draw (D2)
-		to[V=$CE$] (F2);
+		%\draw (D2)
+		%to[V=$CE$] (F2);
+		\draw (D2) -- (F2);
+		\draw[fill=white] ($0.5*(D2) + 0.5*(F2)$) circle (0.4)
+		node {CE};
+		
 		\draw (C)
 		to[spring=$K_{PEE}$] (E);
 		
@@ -243,8 +247,10 @@ Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} p
 		
 		\draw (D1) 
 		to[damper=$B(t)$]  (F1);
+		\draw[-{Latex[length=3mm]}] ($(D1) + (0.4, 0.2)$) -- ($(F1) + (-0.4, -0.05)$);
 		\draw (D2)
 		to[spring=$K(t)$] (F2);
+		\draw[-{Latex[length=3mm]}] ($(D2) + (0.4, 0.2)$) -- ($(F2) + (-0.4, -0.05)$);
 		\draw (C)
 		to[mass=$M(\theta)$] (E);
 		
@@ -285,9 +291,9 @@ Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} p
 		\draw (B)
 		to[spring=$K$] (D);
 		\draw (D1) 
-		to[damper=$B(t)$]  (F1);
+		to[damper=$B$]  (F1);
 		\draw (D2)
-		to[spring=$K(t)$] (F2);
+		to[spring=$K$] (F2);
 		\draw (C)
 		to[mass=$M(\theta)$] (E);
 		
@@ -363,11 +369,16 @@ L'étude de l'impédance cartésienne du bras avec un simple modèle $KBI$ ne pe
 
 \subsection{Méthodes d'estimation}
 
-Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De manière générale, que ce soit pour un objet, une structure mécanique ou pour une structure biologique, l'estimation de l'impédance se fait en soumettant le système étudié à une force ou à un mouvement, et en observant sa réponse. 
+Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De manière générale, que ce soit pour un objet, une structure mécanique ou pour une structure biologique, l'estimation de l'impédance se fait en soumettant le système étudié à une force ou un mouvement, et en observant sa réponse. Ici, on sépare les études en fonction des tâches étudiées, soit des tâches isométriques, c'est à dire, comme expliqué dans le \textit{Larousse}, pour des contraction musculaire telle que la longueur des muscles ne varie pas pendant que la force développée croit, soit pour des tâches en mouvement (pointage, cyclique, etc.).
 
 \subsubsection{Tâches isométriques}
 
-\cite{mussa-ivaldi_neural_1985} sont parmi les premiers à étudier l'impédance du bras humain en le soumettant à des perturbations en position, lors d'une tâche isométrique. Les éléments du modèle $KBI$ sont ensuite identifiés grâce à un algorithme des moindres carrés appliqué sur les mesures en force et en position, la vitesse et l'accélération sont déterminées numériquement à partir des positions. Pour les tâches isométriques, c'est à dire avec une posture fixe et sans variation de la longueur des muscles, les éléments du modèle sont étudiés comme des constantes, même si des variations d'amplitude peuvent être observées chez un même individu sur différents jours \citep{mussa-ivaldi_neural_1985}.
+\cite{mussa-ivaldi_neural_1985} sont parmi les premiers à étudier l'impédance du bras humain, en le soumettant à des perturbations en position - \textit{lors d'une tâche isométrique}. Les éléments du modèle $KBI$ sont ensuite identifiés, grâce à un algorithme des \textbf{moindres carrés} appliqué sur les mesures en force et en position, la vitesse et l'accélération sont déterminées numériquement à partir des positions. Pour les tâches isométriques, c'est à dire avec une posture fixe et sans variation de la longueur des muscles, les éléments du modèle sont étudiés comme des constantes, même si des variations d'amplitude peuvent être observées chez un même individu sur différents jours \citep{mussa-ivaldi_neural_1985}.
+
+\newlineBlank
+
+Comme pour l'étude précédente, \cite{dolan_dynamic_1993, tsuji_human_1995} réalisent leurs expériences avec un robot à 2 degrés de libertés (DDL) dans le plan horizontal, en utilisant des méthodes regressives équivalentes pour identifier de manière paramétrique les éléments du modèle. D'autres techniques non-paramétriques, basée sur des perturbations stochastiques, notamment proposé par \cite{perreault_multiple-input_1999, perreault_effects_2001} permettent aussi de réaliser l'identification. Toutefois, ces dernières techniques nécessitent plus d'essais, ce qui peut avoir une influence sur les mesures à cause de la co-contraction des muscles, suites aux nombreuses itérations \citep{piovesan_measuring_2012}.
+
 
 \subsubsection{Tâches de pointage ou rythmiques}
 
@@ -413,6 +424,16 @@ Télé-impédance - Ajoudani
 %------------------------------------------------
 
 \subsection{Contrôle logiciel}
+
+\begin{equation}
+		\begin{split}
+			T_{act}  &	=    I(\theta)J^{-1}(\theta)M^{-1}K(X_0-L(\theta))+S(\theta) \text{ \hspace{1mm}(position terms)} \\
+			             & +   I(\theta)J^{-1}(\theta)M^{-1}B(V_0-J(\theta)\omega)+V(\omega) \text{ (velocity terms)} \\
+			             & +   I(\theta)J^{-1}(\theta)M^{-1}F_{int}-J^t(\theta)F_{int} \text{ \hspace{18mm}(force terms)} \\
+			             & -    I(\theta)J^{-1}(\theta)G(\theta,\omega)+C(\theta,\omega) \text{ \hspace{2mm}(inertial coupling terms)}
+		\end{split}
+\label{equ_impedance_control} % Label for referencing
+\end{equation}
 
 \begin{itemize}
 	\item Hogan 1985
