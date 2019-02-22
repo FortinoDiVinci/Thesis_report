@@ -414,9 +414,18 @@ Pour les tâches de pointage avec plusieurs articulations, \cite{burdet_method_2
 
 \newlineBlank
 
-Plus récemment des méthodes non paramétriques ont été proposées par \cite{ludvig_identification_2011, guarin_unbiased_2018, cavallo_nonparametric_2018} pour estimer avec plus de précision les propriétés intrinsèques des articulations lors de mouvements. Ces études sont issues d'une volonté de différencier la raideur intrinsèque des réflexes ostéotendineux.
+Plus récemment des méthodes non paramétriques ont été proposées par \cite{ludvig_identification_2011, guarin_unbiased_2018, cavallo_nonparametric_2018} pour estimer avec plus de précision les propriétés intrinsèques des articulations lors de mouvements. Ces études sont issues d'une volonté de différencier la raideur intrinsèque des réflexes ostéotendineux, et donc de mieux qualifier la modèle mécanique du bras.
 
-\newlineBlank
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\linewidth]{manipulandum.jpg} % Figure image
+	\caption{Parallel link drive air-magnet floating manipulandum utilisé par \cite{kimura_transcranial_2006}, proche de celui utilisé par les autres auteurs cités ci-après, permettant de négliger les effets de la gravité, .} % Figure caption
+	\label{manipulandum} % Label for referencing with \ref{bear}
+\end{figure}
+
+Dans la plupart de la littérature, l'identification des propriétés mécaniques de l'impédance du bras humain se fait dans le plan, le plus souvent horizontal, avec notamment l'utilisation d'un manipulandum montré en \cref{manipulandum} \citep{mussa-ivaldi_neural_1985, gomi_human_1997, gomi_task-dependent_1998, burdet_method_2000, burdet_central_2001}. L'épaule est souvent maintenue de manière à ne lui laisser qu'un seul DDL, et le poignet est immobilisé, ce qui laisse 2 DDL en ajoutant l'articulation du coude. De cette manière, le mouvement est mieux maitrisé, et le système n'est pas redondant, ce qui simplifie les passages entre du niveau articulaire au niveau cartésien. Des auteurs qui se sont placés dans l'espace en trois dimensions, comme \cite{erden_hand_2015}, se sont, pour simplifier le problème, intéressé à l'impédance cartésienne sur 3 axes ($x, y, z$) sans dépendance entre les équations - \textit{pas d'éléments croisés dans les matrices des paramètres}.
+
+
 
 %\begin{table}
 %	\caption{Example table}
@@ -442,6 +451,7 @@ Plus récemment des méthodes non paramétriques ont été proposées par \cite{
 	\item Dolan (comparaison modèle non linéaire)
 	\item Burdet 2000 (nature) Apprentissage Impedance
 	\item Franklin 2002 contrôleur en impédance
+	\item Bennet 1992, Gomi\&Kawato 1997, Popescu 2003, Ludvig 2017 (impédance pdt mvt VS impédance en statique)
 \end{itemize}
 
 
@@ -449,7 +459,7 @@ Plus récemment des méthodes non paramétriques ont été proposées par \cite{
 
 \section{Contrôle en impédance}
 
-Télé-impédance - Ajoudani
+Le contrôle en impédance consiste à imposer un comportement dynamique à un robot, lors de ses interactions avec d'autres systèmes physiques. \cite{hogan_impedance_1985} Colgate 1988 Télé-impédance - Ajoudani
 
 %------------------------------------------------
 
