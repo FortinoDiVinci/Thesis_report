@@ -423,7 +423,7 @@ Plus récemment des méthodes non paramétriques ont été proposées par \cite{
 	\label{manipulandum} % Label for referencing with \ref{bear}
 \end{figure}
 
-Dans la plupart de la littérature, l'identification des propriétés mécaniques de l'impédance du bras humain se fait dans le plan, le plus souvent horizontal, avec notamment l'utilisation d'un manipulandum montré en \cref{manipulandum} \citep{mussa-ivaldi_neural_1985, gomi_human_1997, gomi_task-dependent_1998, burdet_method_2000, burdet_central_2001}. L'épaule est souvent maintenue de manière à ne lui laisser qu'un seul DDL, et le poignet est immobilisé, ce qui laisse 2 DDL en ajoutant l'articulation du coude. De cette manière, le mouvement est mieux maitrisé, et le système n'est pas redondant, ce qui simplifie les passages entre du niveau articulaire au niveau cartésien. Des auteurs qui se sont placés dans l'espace en trois dimensions, comme \cite{erden_hand_2015}, se sont, pour simplifier le problème, intéressé à l'impédance cartésienne sur 3 axes ($x, y, z$) sans dépendance entre les équations - \textit{pas d'éléments croisés dans les matrices des paramètres}.
+Dans la plupart de la littérature, l'identification des propriétés mécaniques de l'impédance du bras humain se fait dans le plan, le plus souvent horizontal, avec notamment l'utilisation d'un manipulandum montré en \cref{manipulandum} \citep{mussa-ivaldi_neural_1985, gomi_human_1997, gomi_task-dependent_1998, burdet_method_2000, burdet_central_2001}. L'épaule est souvent maintenue de manière à ne lui laisser qu'un seul DDL, et le poignet est immobilisé, ce qui laisse 2 DDL en ajoutant l'articulation du coude. De cette manière, le mouvement est mieux maitrisé, et le système n'est pas redondant, ce qui simplifie les passages du niveau articulaire au niveau cartésien. Des auteurs qui se sont placés dans l'espace en trois dimensions, comme \cite{erden_hand_2015}, se sont, pour simplifier le problème, intéressé à l'impédance cartésienne sur 3 axes ($x, y, z$) avec un découplage entre les équations -\textit{pas d'éléments croisés dans les matrices des paramètres}-, en s'appuyant sur des résultats précédents \citep{fu_human-arm-and-hand-dynamic_2012}.
 
 
 
@@ -447,10 +447,10 @@ Dans la plupart de la littérature, l'identification des propriétés mécanique
 \subsection{Résultats d'expérience}
 
 \begin{itemize}
-	\item Bennett 1994 (différenciation réflexes et raideur intrinsèque)
-	\item Dolan (comparaison modèle non linéaire)
-	\item Burdet 2000 (nature) Apprentissage Impedance
-	\item Franklin 2002 contrôleur en impédance
+	\item Bennett 1994 (différenciation réflexes et raideur intrinsèque) : expliquer la problématique de la raideur intrinsèque et réflexe et pourquoi nous pouvons nous détacher de ce problème => on cherche à reproduire un comportement dont les réflexes font partis
+	\item Dolan (comparaison modèle non linéaire) => pertinence de cette information ? plusieurs indices semblent montrer un impédance rélfexe non linéaire et une impédance intrinsèque plutôt linéaire
+	\item Burdet 2000 (nature) Apprentissage Impedance => modèle de KP Tee qui ajoute un feedfoward au contrôle en impédance pour simuler l'apprentissage (possibilité de reproduire les comportements avant ou après la phase d'apprentissage) => autre modèle avec l'apprentissage
+	\item Franklin 2002 contrôleur en impédance 
 	\item Bennet 1992, Gomi\&Kawato 1997, Popescu 2003, Ludvig 2017 (impédance pdt mvt VS impédance en statique)
 \end{itemize}
 
@@ -459,11 +459,31 @@ Dans la plupart de la littérature, l'identification des propriétés mécanique
 
 \section{Contrôle en impédance}
 
-Le contrôle en impédance consiste à imposer un comportement dynamique à un robot, lors de ses interactions avec d'autres systèmes physiques. \cite{hogan_impedance_1985} Colgate 1988 Télé-impédance - Ajoudani
+Le contrôle en impédance consiste à imposer un comportement dynamique à un robot, lors de ses interactions avec d'autres systèmes physiques. Comme explicité par \cite{hogan_impedance_1985, colgate_robust_1988}, lorsqu'un système interagit avec son environnement, il ne suffit pas de le contrôler en position, il faut plutôt maitriser son impédance et son point d'équilibre, c'est à dire le point où les forces s'annulent. En effet, de cette manière le contrôle devient indépendant de toute connaissance en l'environnement.
+
+\newlineBlank
+
+Télé-impédance - Ajoudani
 
 %------------------------------------------------
 
 \subsection{Contrôle logiciel}
+
+Modèle dynamique du bras articulé :
+
+\begin{equation}
+	I(\theta)\frac{d\omega}{dt} + C(\theta, \omega) + V(\omega) + S(\theta) = T_{act} + T_{int} 
+\label{eq_modele_bras_hogan_1985}
+\end{equation}
+
+Comportement dynamique que l'on souhaite imposer au bras :
+
+\begin{equation}
+	F_{int} = K(X_0 - X) + B(V_0 - V) - M\frac{dV}{dt}	
+\label{eq_impedance_hogan_1985}
+\end{equation}
+
+Modèle de contrôle pour parvenir au comportement souhaité \citep{hogan_impedance_1985} :
 
 \begin{equation}
 		\begin{split}
