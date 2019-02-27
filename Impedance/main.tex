@@ -168,7 +168,7 @@ Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes 
 
 %\end{tabularx}
 
-\subsubsection{Modèle}
+\subsubsection{Modélisation}
 
 L'impédance d'une articulation est souvent présentée avec un \textbf{modèle viscoélastique du second ordre}, dit $KBI$ \citep{hogan_adaptive_1984, hogan_impedance_1985, flash_control_1987, bennett_time-varying_1992, abe_modulation_2003, ludvig_voluntary_2007}. Les cas d'étude plus complexes, avec plusieurs articulations, sont moins souvent étudiés dans le plan articulaire \citep{gomi_human_1997, gomi_task-dependent_1998}, mais plutôt dans un plan cartésien, où l'on s'intéresse principalement à l'impédance finale \citep{, burdet_method_2000, perreault_effects_2001, erden_hand_2015}, toujours avec un modèle $KBI$ équivalent. \cite{tsuji_human_1997} résume assez bien les différentes relations entre le plan musculaire, le plan articulaire et le plan cartésien. L'équation \eqref{equ_endpoint_impedance} décrit ce modèle, pour la position $p(t)$ qui correspond à la différence entre la position avec et sans perturbation.
 
@@ -248,7 +248,7 @@ Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} p
 
 	\end{circuitikz}
 	}
-	\subfloat[Modèle de Kelvin-Voigt]{
+	\subfloat[Modèle de Kelvin-Voigt (KBI)]{
 	\begin{circuitikz}
 
 		\coordinate (O) at (0,0);
@@ -341,7 +341,7 @@ Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} p
 L'étude de l'impédance cartésienne du bras avec un simple modèle $KBI$ ne permet donc pas d'apporter un modèle précis du bras humain, mais cette solution a le mérite de pouvoir reproduire certains résultats \citep{tee_model_2004} avec simplicité. L'objectif de cette étude n'étant ni de modéliser le bras humain, ni d'expliquer son comportement, mais plutôt de reproduire ses performances dynamiques, c'est avec ce modèle que sera étudié l'impédance du bras humain, à la manière de \cite{burdet_central_2001, erden_end-point_2015} qui ont mis en évidence l'apprentissage des paramètres d'impédance et l'optimisation de ces paramètres chez des sujets experts.
 
 \begin{equation}
-	F = I(t) \ddot{p}(t) + B(t) \dot{p}(t) + K(t) p(t)
+	\mathbf{F} = \mathbf{I}(t) \mathbf{\ddot{p}}(t) + \mathbf{B}(t) \mathbf{\dot{p}}(t) + \mathbf{K}(t) \mathbf{p}(t)
 \label{equ_endpoint_impedance} 
 \end{equation}
 
@@ -389,15 +389,15 @@ L'étude de l'impédance cartésienne du bras avec un simple modèle $KBI$ ne pe
 
 \subsection{Méthodes d'estimation}
 
-Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De manière générale, que ce soit pour un objet, une structure mécanique ou pour une structure biologique, l'estimation de l'impédance se fait en soumettant le système étudié à une force ou un mouvement, et en observant sa réponse. Ici, on sépare les études en fonction des tâches étudiées, soit des tâches isométriques, c'est à dire, comme expliqué dans le \textit{Larousse}, pour des contraction musculaire telle que la longueur des muscles ne varie pas pendant que la force développée croit, soit pour des tâches en mouvement (pointage, cyclique, etc.).
+Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De manière générale, que ce soit pour un objet, une structure mécanique ou pour une structure biologique, l'estimation de l'impédance se fait en soumettant le système étudié à une force ou un mouvement, et en observant sa réponse. Ici, on sépare les études en fonction des tâches étudiées, soit des tâches isométriques, c'est à dire, comme expliqué dans le \textit{Larousse}, pour des contractions musculaires telles que la longueur des muscles ne varie pas pendant que la force développée croit, soit pour des tâches en mouvement (pointage, cyclique, etc.).
 
 \subsubsection{Tâches isométriques}
 
-\cite{mussa-ivaldi_neural_1985} sont parmi les premiers à étudier l'impédance du bras humain, en le soumettant à des perturbations en position - \textit{lors d'une tâche isométrique}. Les éléments du modèle $KBI$ sont ensuite identifiés, grâce à un algorithme des \textbf{moindres carrés} appliqué sur les mesures en force et en position, la vitesse et l'accélération sont déterminées numériquement à partir des positions. Pour les tâches isométriques, c'est à dire avec une posture fixe et sans variation de la longueur des muscles, les éléments du modèle sont étudiés comme des constantes, même si des variations d'amplitude peuvent être observées chez un même individu sur différents jours \citep{mussa-ivaldi_neural_1985}, et une variabilité non négligeable peut être obtenue selon la méthodologie d'estimation \citep{gurram_mechanical_1995}.
+\cite{mussa-ivaldi_neural_1985} sont parmi les premiers à étudier l'impédance du bras humain, en le soumettant à des perturbations en position - \textit{lors d'une tâche isométrique}. Les éléments du modèle $KBI$ sont ensuite identifiés, grâce à un algorithme des \textbf{moindres carrés} appliqué sur les mesures en force et en position ; la vitesse et l'accélération sont déterminées numériquement à partir des positions. Pour les tâches isométriques, c'est à dire avec une posture fixe et sans variation de la longueur des muscles, les éléments du modèle sont étudiés comme des constantes, même si des variations d'amplitude peuvent être observées chez un même individu sur différents jours \citep{mussa-ivaldi_neural_1985}. Aussi, une variabilité non négligeable peut être obtenue selon la méthodologie d'estimation \citep{gurram_mechanical_1995}, ce qui rend les comparaisons difficiles.
 
 \newlineBlank
 
-Comme pour l'étude précédente, \cite{dolan_dynamic_1993, tsuji_human_1995} réalisent leurs expériences avec un robot à 2 degrés de libertés (DDL) dans le plan horizontal, en utilisant des méthodes régressives équivalentes pour identifier de manière paramétrique les éléments du modèle. D'autres techniques non-paramétriques, basée sur des perturbations stochastiques, notamment proposé par \cite{perreault_multiple-input_1999, perreault_effects_2001} permettent aussi de réaliser l'identification. \cite{ludvig_identification_2011} utilise une méthode non paramétrique d'identification pour différencier la raideur intrinsèque de la raideur réflexe. Toutefois, ces dernières techniques nécessitent plus d'essais, ce qui peut avoir une influence sur les mesures à cause de la co-contraction des muscles, suites aux nombreuses itérations \citep{piovesan_measuring_2012}.
+Comme pour l'étude précédente, \cite{dolan_dynamic_1993, tsuji_human_1995} réalisent leurs expériences avec un robot à 2 degrés de libertés (DDL) dans le plan horizontal, en utilisant des méthodes régressives équivalentes pour identifier de manière paramétrique les éléments du modèle. D'autres techniques non-paramétriques, basées sur des perturbations stochastiques, notamment proposées par \cite{perreault_multiple-input_1999, perreault_effects_2001} permettent aussi de réaliser l'identification. \cite{ludvig_identification_2011} utilise une méthode non paramétrique d'identification pour différencier la raideur intrinsèque de la raideur réflexe. Toutefois, ces dernières techniques nécessitent plus d'essais, ce qui peut avoir une influence sur les mesures à cause de la co-contraction des muscles, suites aux nombreuses itérations \citep{piovesan_measuring_2012}.
 
 
 \subsubsection{Tâches de pointage ou cycliques}
@@ -414,7 +414,7 @@ Pour les tâches de pointage avec plusieurs articulations, \cite{burdet_method_2
 
 \newlineBlank
 
-Plus récemment des méthodes non paramétriques ont été proposées par \cite{ludvig_identification_2011, guarin_unbiased_2018, cavallo_nonparametric_2018} pour estimer avec plus de précision les propriétés intrinsèques des articulations lors de mouvements. Ces études sont issues d'une volonté de différencier la raideur intrinsèque des réflexes ostéotendineux, et donc de mieux qualifier la modèle mécanique du bras.
+Plus récemment des méthodes non paramétriques ont été proposées par \cite{ludvig_identification_2011, guarin_unbiased_2018, cavallo_nonparametric_2018} pour estimer avec plus de précision les propriétés intrinsèques des articulations lors de mouvements. Ces études sont issues d'une volonté de différencier la raideur intrinsèque des réflexes ostéotendineux, et donc de mieux qualifier le modèle mécanique du bras.
 
 \begin{figure}[h]
 	\centering
@@ -423,7 +423,7 @@ Plus récemment des méthodes non paramétriques ont été proposées par \cite{
 	\label{manipulandum} % Label for referencing with \ref{bear}
 \end{figure}
 
-Dans la plupart de la littérature, l'identification des propriétés mécaniques de l'impédance du bras humain se fait dans le plan, le plus souvent horizontal, avec notamment l'utilisation d'un manipulandum montré en \cref{manipulandum} \citep{mussa-ivaldi_neural_1985, gomi_human_1997, gomi_task-dependent_1998, burdet_method_2000, burdet_central_2001}. L'épaule est souvent maintenue de manière à ne lui laisser qu'un seul DDL, et le poignet est immobilisé, ce qui laisse 2 DDL en ajoutant l'articulation du coude. De cette manière, le mouvement est mieux maitrisé, et le système n'est pas redondant, ce qui simplifie les passages du niveau articulaire au niveau cartésien. Des auteurs qui se sont placés dans l'espace en trois dimensions, comme \cite{erden_hand_2015}, se sont, pour simplifier le problème, intéressé à l'impédance cartésienne sur 3 axes ($x, y, z$) avec un découplage entre les équations -\textit{pas d'éléments croisés dans les matrices des paramètres}-, en s'appuyant sur des résultats précédents \citep{fu_human-arm-and-hand-dynamic_2012}.
+Dans la plupart de la littérature, l'identification des propriétés mécaniques de l'impédance du bras humain se fait dans le plan, le plus souvent horizontal, avec notamment l'utilisation d'un manipulandum montré en \cref{manipulandum} \citep{mussa-ivaldi_neural_1985, gomi_human_1997, gomi_task-dependent_1998, burdet_method_2000, burdet_central_2001}. L'épaule est souvent maintenue de manière à ne lui laisser qu'un seul DDL, et le poignet est immobilisé, ce qui laisse 2 DDL en ajoutant l'articulation du coude. De cette manière, le mouvement est mieux maitrisé, et le système n'est pas redondant, ce qui simplifie les passages du niveau articulaire au niveau cartésien. Des auteurs qui se sont placés dans l'espace en trois dimensions, comme \cite{erden_hand_2015}, se sont, pour simplifier le problème, intéressés à l'impédance cartésienne sur 3 axes ($x, y, z$) avec un découplage entre les équations -\textit{pas d'éléments croisés dans les matrices des paramètres}-, en s'appuyant sur des résultats précédents \citep{fu_human-arm-and-hand-dynamic_2012}.
 
 
 
@@ -498,8 +498,11 @@ Modèle de contrôle pour parvenir au comportement souhaité \citep{hogan_impeda
 \begin{itemize}
 	\item Hogan 1985
 	\item Tee 2004
-	\item Williamson 1998
 \end{itemize}
+
+\subsubsection{Contrôle rythmique}
+
+\citep{williamson_neural_1998} => simple proportionnel dérivé pour donner un comportement dynamique..
 
 %------------------------------------------------
 
@@ -514,7 +517,11 @@ Modèle de contrôle pour parvenir au comportement souhaité \citep{hogan_impeda
 
 \subsection{Actionneurs à impédance variable (VIA)}
 
-Review 2013
+Review 2013 \citep{vanderborght_variable_2013}
+
+\subsubsection{Contrôle rythmique}
+
+\citep{huang_torque-stiffness-controlled_2016} => utilisation de CPGs contrôlant la raideur variable et le point d'équilibre (2 GPGs par articulation)
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
