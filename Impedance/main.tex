@@ -55,7 +55,7 @@
 
 \estheticline
 
-\lettrine{L}{\textbf{ors}} d'interactions avec l'environnement, les Hommes utilisent les propriétés dynamiques de leurs membres pour atteindre des comportements stables. L'impédance mécanique chez les humains, qui regroupe plus d'information que la raideur seule, est étudiée depuis des années sous l'oeil de l'automatique \citep{hogan_adaptive_1984}, et est toujours étudiée \citep{mizrahi_mechanical_2015}. Les liens avec les neurosciences \citep{roberts_cerebellar_1996} en font une écosystème complexe avec de nombreuses théories émergeant sur le mouvement humain. L'objectif principal de cette thèse est l'étude rythmique de la jongle, et donc des articulations du bras et ses liens avec l'impédance cartésienne. Plusieurs modèles ont été proposés pour le bras, le poignet, l'épaule et le coude, avec des systèmes linéaire du second ordre \citep{tsuji_human_1997}, ou des représentations plus complexe inspirée par Hill and d'autres modèles neuro-musculaire \citep{puzi_mechanical_2017}. D'autres parties du corps humain ont été aussi étudiée, comme le tronc \citep{smith_nonlinear_1994}, et la cheville \citep{rouse_estimation_2014, ludvig_mechanisms_2017}.
+\lettrine{L}{\textbf{ors}} d'interactions avec l'environnement, les Hommes utilisent les propriétés dynamiques de leurs membres pour atteindre des comportements stables. L'impédance mécanique chez les humains, qui regroupe plus d'information que la raideur seule, est étudiée depuis des années sous l'oeil de l'automatique \citep{hogan_adaptive_1984}, et est toujours étudiée \citep{mizrahi_mechanical_2015}. Les liens avec les neurosciences \citep{roberts_cerebellar_1996} en font un écosystème complexe avec de nombreuses théories émergeant sur le mouvement humain. L'objectif principal de cette thèse est l'étude rythmique de la jongle, et donc des articulations du bras et ses liens avec l'impédance cartésienne. Plusieurs modèles ont été proposés pour le bras, le poignet, l'épaule et le coude, avec des systèmes linéaire du second ordre \citep{tsuji_human_1997}, ou des représentations plus complexe inspirée par Hill and d'autres modèles neuro-musculaire \citep{puzi_mechanical_2017}. D'autres parties du corps humain ont été aussi étudiées, comme le tronc \citep{smith_nonlinear_1994}, et la cheville \citep{rouse_estimation_2014, ludvig_mechanisms_2017}.
 
 %----------------------------------------------------------------------------------------
 %	ARTICLE CONTENTS
@@ -174,11 +174,11 @@ L'impédance d'une articulation est souvent présentée avec un \textbf{modèle 
 
 \newlineBlank
 
-Le modèle linéaire $KBI$ proposé pour étudier l'impédance du bras humain, peut être utilisé pour de faibles perturbations, autour d'un point d'équilibre, qui peut être statique \citep{dolan_dynamic_1993} ou en mouvement, dans ce cas on parle de trajectoire virtuelle (non perturbée) \citep{tsuji_bio-mimetic_2008}. Certaines études semblent démontrer des faiblesses dans ce modèle, qui ne tient notamment pas compte des tendons et qui, ne permet pas d'extraire d'informations claires des paramètres \citep{kistemaker_vivo_2011}, il n'y a pas forcément de liens entre la raideur $K$ du modèle et la raideur des muscles par exemple. D'autres part, la différenciation entre la raideur intrinsèque du muscle et la raideur réflexe (commande neurale) n'est pas évidente \citep{stroeve_impedance_1999, guarin_unbiased_2018}.
+Le modèle linéaire $KBI$ proposé pour étudier l'impédance du bras humain, peut être utilisé pour de faibles perturbations, autour d'un point d'équilibre, qui peut être statique \citep{dolan_dynamic_1993} ou en mouvement, dans ce cas on parle de trajectoire virtuelle (non perturbée) \citep{tsuji_bio-mimetic_2008}. Certaines études semblent démontrer des faiblesses de ce modèle, qui ne tient notamment pas compte des tendons et qui, ne permet pas d'extraire d'informations claires des paramètres \citep{kistemaker_vivo_2011}. Il n'y a pas forcément de liens entre la raideur $K$ du modèle et la raideur des muscles par exemple. D'autres part, la différenciation entre la raideur intrinsèque du muscle et la raideur réflexe (commande neurale) n'est pas évidente \citep{stroeve_impedance_1999, guarin_unbiased_2018}.
 
 \newlineBlank
 
-Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} pour étudier le bras, \cite{popescu_elbow_2003} proposent l'ajout d'un délais au modèle $KBI$ pour modéliser certaines non linéarités, et d'autres modèles mécaniques plus complexes sont aussi utilisés par \cite{piovesan_measuring_2012}. Ces derniers modèles essaient d'approcher et d'expliquer le modèle mécanique complexe du bras humain, dans certaines conditions.
+Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} pour étudier le bras lors de télémanipulation, \cite{popescu_elbow_2003} proposent l'ajout d'un délais au modèle $KBI$ pour modéliser certaines non linéarités, et d'autres modèles mécaniques plus complexes sont aussi utilisés par \cite{piovesan_measuring_2012}. Ces derniers modèles essaient d'approcher et d'expliquer le modèle mécanique complexe du bras humain, dans certaines conditions.
 
 \begin{figure}[h]
 
@@ -393,11 +393,11 @@ Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De man
 
 \subsubsection{Tâches isométriques}
 
-\cite{mussa-ivaldi_neural_1985} sont parmi les premiers à étudier l'impédance du bras humain, en le soumettant à des perturbations en position - \textit{lors d'une tâche isométrique}. Les éléments du modèle $KBI$ sont ensuite identifiés, grâce à un algorithme des \textbf{moindres carrés} appliqué sur les mesures en force et en position ; la vitesse et l'accélération sont déterminées numériquement à partir des positions. Pour les tâches isométriques, c'est à dire avec une posture fixe et sans variation de la longueur des muscles, les éléments du modèle sont étudiés comme des constantes, même si des variations d'amplitude peuvent être observées chez un même individu sur différents jours \citep{mussa-ivaldi_neural_1985}. Aussi, une variabilité non négligeable peut être obtenue selon la méthodologie d'estimation \citep{gurram_mechanical_1995}, ce qui rend les comparaisons difficiles.
+\cite{mussa-ivaldi_neural_1985} sont parmi les premiers à étudier l'impédance du bras humain, en le soumettant à des perturbations en position - \textit{lors d'une tâche isométrique}. Les éléments du modèle $KBI$ sont ensuite identifiés, grâce à un algorithme des \textbf{moindres carrés} appliqué sur les mesures en force et en position ; la vitesse et l'accélération sont déterminées numériquement à partir des positions. Pour les tâches isométriques, donc avec une posture fixe, les éléments du modèle sont étudiés comme des constantes, même si des variations d'amplitude peuvent être observées chez un même individu sur différents jours \citep{mussa-ivaldi_neural_1985}. Aussi, une variabilité non négligeable peut être obtenue selon la méthodologie d'estimation \citep{gurram_mechanical_1995}, ce qui rend les comparaisons difficiles.
 
 \newlineBlank
 
-Comme pour l'étude précédente, \cite{dolan_dynamic_1993, tsuji_human_1995} réalisent leurs expériences avec un robot à 2 degrés de libertés (DDL) dans le plan horizontal, en utilisant des méthodes régressives équivalentes pour identifier de manière paramétrique les éléments du modèle. D'autres techniques non-paramétriques, basées sur des perturbations stochastiques, notamment proposées par \cite{perreault_multiple-input_1999, perreault_effects_2001} permettent aussi de réaliser l'identification. \cite{ludvig_identification_2011} utilise une méthode non paramétrique d'identification pour différencier la raideur intrinsèque de la raideur réflexe. Toutefois, ces dernières techniques nécessitent plus d'essais, ce qui peut avoir une influence sur les mesures à cause de la co-contraction des muscles, suites aux nombreuses itérations \citep{piovesan_measuring_2012}.
+Comme pour l'étude précédente, \cite{dolan_dynamic_1993, tsuji_human_1995} réalisent leurs expériences avec un robot à 2 degrés de libertés (DDL) dans le plan horizontal, en utilisant des méthodes régressives équivalentes, pour identifier de manière paramétrique les éléments du modèle. D'autres techniques non-paramétriques, basées sur des perturbations stochastiques, notamment proposées par \cite{perreault_multiple-input_1999, perreault_effects_2001} permettent aussi de réaliser l'identification. \cite{ludvig_identification_2011} utilisent une méthode non paramétrique d'identification pour différencier la raideur intrinsèque de la raideur réflexe. Toutefois, ces dernières techniques nécessitent plus d'essais, ce qui peut avoir une influence sur les mesures à cause de la co-contraction des muscles, suites aux nombreuses itérations \citep{piovesan_measuring_2012}.
 
 
 \subsubsection{Tâches de pointage ou cycliques}
@@ -419,7 +419,7 @@ Plus récemment des méthodes non paramétriques ont été proposées par \cite{
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.4\linewidth]{manipulandum.jpg} % Figure image
-	\caption{Parallel link drive air-magnet floating manipulandum utilisé par \cite{kimura_transcranial_2006}, proche de celui utilisé par les autres auteurs cités ci-après, permettant de négliger les effets de la gravité, .} % Figure caption
+	\caption{Parallel link drive air-magnet floating manipulandum utilisé par \cite{kimura_transcranial_2006}, proche de celui utilisé par les autres auteurs cités ci-après, permettant de négliger les effets de la gravité, et de limiter la fatigue.} % Figure caption
 	\label{manipulandum} % Label for referencing with \ref{bear}
 \end{figure}
 
@@ -448,7 +448,7 @@ Dans la plupart de la littérature, l'identification des propriétés mécanique
 
 \begin{itemize}
 	\item Bennett 1994 (différenciation réflexes et raideur intrinsèque) : expliquer la problématique de la raideur intrinsèque et réflexe et pourquoi nous pouvons nous détacher de ce problème => on cherche à reproduire un comportement dont les réflexes font partis
-	\item Dolan (comparaison modèle non linéaire) => pertinence de cette information ? plusieurs indices semblent montrer un impédance rélfexe non linéaire et une impédance intrinsèque plutôt linéaire
+	\item Dolan (comparaison modèle non linéaire) => pertinence de cette information ? plusieurs indices semblent montrer un impédance réflexe non linéaire et une impédance intrinsèque plutôt linéaire (autres sources ??)
 	\item Burdet 2000 (nature) Apprentissage Impedance => modèle de KP Tee qui ajoute un feedfoward au contrôle en impédance pour simuler l'apprentissage (possibilité de reproduire les comportements avant ou après la phase d'apprentissage) => autre modèle avec l'apprentissage
 	\item Franklin 2002 contrôleur en impédance 
 	\item Bennet 1992, Gomi\&Kawato 1997, Popescu 2003, Ludvig 2017 (impédance pdt mvt VS impédance en statique)
@@ -463,40 +463,43 @@ Le contrôle en impédance consiste à imposer un comportement dynamique à un r
 
 \newlineBlank
 
-Ainsi, dès que des robots sortent de leur environnement parfaitement maîtrisé et connu, comme c'est le cas dans de nombreuses usines, ils doivent pouvoir agir avec une connaissance partielle de leur environnement. Les cobots, les prothèses et exosquelettes robotisées ou simplement les robots manipulant des outils adaptés aux humains, sont des exemples d'applications en plein essor pour ces robots évoluants dans des environnement où les interactions dynamiques sont essentielles \citep{sensinger_user-modulated_2008, burdet_interaction_2014, erden_hand_2015, cherubini_collaborative_2016, li_adaptive_2017}. On peut ainsi citer le contrôle en télé-impédance \citep{ajoudani_tele-impedance_2011, ajoudani_tele-impedance_2012} où l'on cherche à mimer l'impédance du bras de la personne contrôlant à distance un robot, notamment en utilisant des capteurs électromyogrammes pour observer l'activité musculaire. Dans d'autre cas, on cherche plutôt à exploiter les propriétés dynamiques de l'environnement, pour par exemple, minimiser l'énergie utilisée \citep{haddadin_exploiting_2011}.
+Ainsi, dès que des robots sortent de leur environnement parfaitement maîtrisé et connu, comme c'est le cas dans de nombreuses usines, ils doivent pouvoir agir avec une connaissance partielle de leur environnement. Les cobots, les prothèses et exosquelettes robotisés ou simplement les robots manipulant des outils adaptés aux humains, sont des exemples d'applications en plein essor pour ces robots évoluants dans des environnement où les interactions dynamiques sont essentielles \citep{sensinger_user-modulated_2008, burdet_interaction_2014, erden_hand_2015, cherubini_collaborative_2016, li_adaptive_2017}. On peut citer le contrôle en télé-impédance \citep{ajoudani_tele-impedance_2011, ajoudani_tele-impedance_2012} où l'on cherche à mimer l'impédance du bras de la personne contrôlant à distance un robot, notamment en utilisant des capteurs électromyogrammes pour observer l'activité musculaire. Dans d'autre cas, on cherche plutôt à exploiter les propriétés dynamiques de l'environnement, pour par exemple, minimiser l'énergie utilisée \citep{haddadin_exploiting_2011}.
+
+\newlineBlank
+
+Pour parvenir à contrôler l'impédance de robots, il est possible d'utiliser des actionneurs à raideur, et/ou viscosité variables et contrôlables, ou alors de simuler un comportement dynamique en utilisant des lois de commande adaptées.
 
 %------------------------------------------------
 
 \subsection{Contrôle logiciel}
 
-Modèle dynamique du bras articulé :
+Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} défini les lois permettant d'imposer, un comportement logiciel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et des interfaces respectivement :
 
 \begin{equation}
-	I(\theta)\frac{d\omega}{dt} + C(\theta, \omega) + V(\omega) + S(\theta) = T_{act} + T_{int} 
+	I(\theta)\frac{d\dot{\theta}}{dt} + C(\theta, \dot{\theta}) + V(\dot{\theta}) + S(\theta) = T_{act} + T_{int} 
 \label{eq_modele_bras_hogan_1985}
 \end{equation}
 
-Comportement dynamique que l'on souhaite imposer au bras :
+On défini ensuite, comme décrit dans l'équation \eqref{equ_endpoint_impedance}, le comportement en impédance que l'on souhaite imposer au bras, avec les indices $0$ désignant ll'état d'équilibre que l'on souhaite imposer, aux position $X$ et vitesse $V$ :
 
 \begin{equation}
 	F_{int} = K(X_0 - X) + B(V_0 - V) - M\frac{dV}{dt}	
 \label{eq_impedance_hogan_1985}
 \end{equation}
 
-Modèle de contrôle pour parvenir au comportement souhaité \citep{hogan_impedance_1985} :
+De ces deux équations, on déduit le modèle de contrôle permettant de parvenir au comportement souhaité, avec $\mathcal{J}$ le jacobien, tel que $\mathcal{J}(\theta)d\theta = dX$ et $G(\theta,\omega)$ les termes de couplage liés à l'accélération :
 
 \begin{equation}
 		\begin{split}
-			T_{act}  &	=    I(\theta)J^{-1}(\theta)M^{-1}K(X_0-L(\theta))+S(\theta) \text{ \hspace{1mm}(position terms)} \\
-			             & +   I(\theta)J^{-1}(\theta)M^{-1}B(V_0-J(\theta)\omega)+V(\omega) \text{ (velocity terms)} \\
-			             & +   I(\theta)J^{-1}(\theta)M^{-1}F_{int}-J^t(\theta)F_{int} \text{ \hspace{18mm}(force terms)} \\
-			             & -    I(\theta)J^{-1}(\theta)G(\theta,\omega)+C(\theta,\omega) \text{ \hspace{2mm}(inertial coupling terms)}
+			T_{act}  &	=    I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}K(X_0-L(\theta))+S(\theta) \text{ \hspace{2mm}(position terms)} \\
+			             & +   I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}B(V_0-\mathcal{J}(\theta)\dot{\theta})+V(\dot{\theta}) \text{ (velocity terms)} \\
+			             & +   I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}F_{int}-\mathcal{J}^t(\theta)F_{int} \text{ \hspace{18mm}(force terms)} \\
+			             & -    I(\theta)\mathcal{J}^{-1}(\theta)G(\theta, \dot{\theta})+C(\theta,\dot{\theta}) \text{ \hspace{3mm}(inertial coupling terms)}
 		\end{split}
 \label{equ_impedance_control} % Label for referencing
 \end{equation}
 
 \begin{itemize}
-	\item Hogan 1985
 	\item Tee 2004
 \end{itemize}
 
