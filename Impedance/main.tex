@@ -459,11 +459,11 @@ Dans la plupart de la littérature, l'identification des propriétés mécanique
 
 \section{Contrôle en impédance}
 
-Le contrôle en impédance consiste à imposer un comportement dynamique à un robot, lors de ses interactions avec d'autres systèmes physiques. Comme explicité par \cite{hogan_impedance_1985, colgate_robust_1988}, lorsqu'un système interagit avec son environnement, il ne suffit pas de le contrôler en position, il faut plutôt maitriser son impédance et son point d'équilibre, c'est à dire le point où les forces s'annulent. En effet, de cette manière le contrôle devient indépendant de toute connaissance en l'environnement.
+Le contrôle en impédance consiste à imposer un comportement dynamique à un robot, lors de ses interactions avec d'autres systèmes physiques. Comme explicité par \cite{hogan_impedance_1985, colgate_robust_1988}, lorsqu'un système interagit avec son environnement, il ne suffit pas de le contrôler en position - \textit{lorsque l'environnement n'est pas parfaitement connu}, il faut plutôt maitriser son impédance et son point d'équilibre, c'est à dire le point où les forces s'annulent. En effet, de cette manière le contrôle devient indépendant de toute connaissance de l'environnement, qui est souvent difficile à modéliser.
 
 \newlineBlank
 
-Télé-impédance - Ajoudani
+Ainsi, dès que des robots sortent de leur environnement parfaitement maîtrisé et connu, comme c'est le cas dans de nombreuses usines, ils doivent pouvoir agir avec une connaissance partielle de leur environnement. Les cobots, les prothèses et exosquelettes robotisées ou simplement les robots manipulant des outils adaptés aux humains, sont des exemples d'applications en plein essor pour ces robots évoluants dans des environnement où les interactions dynamiques sont essentielles \citep{sensinger_user-modulated_2008, burdet_interaction_2014, erden_hand_2015, cherubini_collaborative_2016, li_adaptive_2017}. On peut ainsi citer le contrôle en télé-impédance \citep{ajoudani_tele-impedance_2011, ajoudani_tele-impedance_2012} où l'on cherche à mimer l'impédance du bras de la personne contrôlant à distance un robot, notamment en utilisant des capteurs électromyogrammes pour observer l'activité musculaire. Dans d'autre cas, on cherche plutôt à exploiter les propriétés dynamiques de l'environnement, pour par exemple, minimiser l'énergie utilisée \citep{haddadin_exploiting_2011}.
 
 %------------------------------------------------
 
