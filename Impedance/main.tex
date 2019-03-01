@@ -473,21 +473,21 @@ Pour parvenir à contrôler l'impédance de robots, il est possible d'utiliser d
 
 \subsection{Contrôle logiciel}
 
-Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} défini les lois permettant d'imposer, un comportement logiciel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et des interfaces respectivement :
+Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} défini les lois permettant d'imposer, un comportement logiciel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie en coordonnées articulaires, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et des interfaces respectivement :
 
 \begin{equation}
 	I(\theta)\frac{d\dot{\theta}}{dt} + C(\theta, \dot{\theta}) + V(\dot{\theta}) + S(\theta) = T_{act} + T_{int} 
 \label{eq_modele_bras_hogan_1985}
 \end{equation}
 
-On défini ensuite, comme décrit dans l'équation \eqref{equ_endpoint_impedance}, le comportement en impédance que l'on souhaite imposer au bras, avec les indices $0$ désignant ll'état d'équilibre que l'on souhaite imposer, aux position $X$ et vitesse $V$ :
+On défini ensuite, comme décrit dans l'équation \eqref{equ_endpoint_impedance}, le comportement en impédance cartésienne que l'on souhaite imposer au bras, avec les indices $0$ désignant l'état d'équilibre que l'on souhaite imposer, aux position $X$ et vitesse $V$ :
 
 \begin{equation}
 	F_{int} = K(X_0 - X) + B(V_0 - V) - M\frac{dV}{dt}	
 \label{eq_impedance_hogan_1985}
 \end{equation}
 
-De ces deux équations, on déduit le modèle de contrôle permettant de parvenir au comportement souhaité, avec $\mathcal{J}$ le jacobien, tel que $\mathcal{J}(\theta)d\theta = dX$ et $G(\theta,\omega)$ les termes de couplage liés à l'accélération :
+De ces deux équations, on déduit le modèle de contrôle permettant de parvenir au comportement souhaité, avec $\mathcal{J}$ le jacobien, tel que $\mathcal{J}(\theta)d\theta = dX$, $G(\theta,\omega)$ les termes de couplage liés à l'accélération et $L(\theta)$ le modèle géométrique direct :
 
 \begin{equation}
 		\begin{split}
@@ -498,6 +498,133 @@ De ces deux équations, on déduit le modèle de contrôle permettant de parveni
 		\end{split}
 \label{equ_impedance_control} % Label for referencing
 \end{equation}
+
+
+\begin{figure}[h]
+
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{bloc} = [rectangle, draw, minimum width = 1cm, minimum height = 0.8cm, line width=0.7]  % bloc style
+	\tikzstyle{bloc_nl} = [rectangle, draw, double, minimum width = 1cm, minimum height = 0.8cm, line width=0.7] % non linear bloc style
+
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+
+	\begin{tikzpicture}[node distance = 1.5cm, line width=0.7, label distance = -0.5mm]
+	
+		\comp{c1}{(0, 0)};
+		
+		\node[bloc, left of = c1] (K) {$K$};
+		\node[bloc, above of = K, node distance = 1cm] (B) {$B$};
+		
+		\comp[b]{c2}{($(K) + (-1.5,0)$)};
+		\comp[a]{c3}{($(B) + (-1.5,0)$)};
+		
+		\node[bloc_nl, above of = B, node distance = 1cm] (J) {$\mathcal{J}(\theta)$};
+		
+		\node[bloc_nl, right of = c1] (M) {$M^{-1}$};
+		\node[bloc_nl, right of = M, node distance = 2cm] (J1) {$\mathcal{J}^{-1}(\theta)$};
+		\node[bloc_nl, right of = J1, node distance = 2cm] (I) {$I(\theta)$};
+		
+		\comp[b]{c4}{($(I) + (1.5,0)$)};
+		
+		\node[bloc, right of = c4, node distance = 1.75cm] (bras) {$Bras$};
+		\node[right of = bras, label={$F_{int}$}] (bras_env) {};
+		\node[bloc, right of = bras_env, node distance = 1.25cm] (env) {$Env.$};
+		\draw[-{Latex[length=2mm]}] ($(env.south west) + (-0.1, -0.1)$) -- ($(env.north east) + (0.2, 0.15)$);
+		
+		\node[bloc_nl, below of = bras, node distance = 1.25cm] (Jt) {$\mathcal{J}^{T}(\theta)$};
+		
+		\comp[a]{c5}{($(c4) + (0,1.75)$)};
+		
+		\comp{c6}{($(c5) + (-1.5,0)$)};
+		
+		\node[bloc_nl, above of = c6, node distance = 2cm] (I1) {$I(\theta)$};
+		\node[bloc_nl, left of = I1, node distance = 2cm] (J2) {$\mathcal{J}^{-1}(\theta)$};
+		
+		\draw[{Latex[length=3mm]}-] (c2.west) -- +(-1,0)
+			node[left, above] {$X_0$};
+		\draw[{Latex[length=3mm]}-] (c2.south) -- +(0,-1)
+			node[right] {$L(\theta)$};
+		\draw[-{Latex[length=3mm]}] (c2.east) -- (K.west);
+		
+		\draw[{Latex[length=3mm]}-] (c3.west) -- +(-1,0)
+			node[left, above] {$V_0$};
+		\draw[{Latex[length=3mm]}-] (J.east) -- +(1,0)
+			node[right, above] {$\hat{\dot{\theta}}$};
+		\draw[{Latex[length=3mm]}-] (c3.north) |- (J);
+		\draw[-{Latex[length=3mm]}] (c3.east) -- (B);
+		
+		\draw[-{Latex[length=3mm]}] (K.east) -- (c1.west);
+		\draw[-{Latex[length=3mm]}] (B.east) -| (c1.north);
+		
+		\draw[-{Latex[length=3mm]}] (c1.east) -- (M.west);
+		\draw[-{Latex[length=3mm]}] (M.east) -- (J1.west);
+		\draw[-{Latex[length=3mm]}] (J1.east) -- (I.west);
+		
+		\draw[-{Latex[length=3mm]}] (I.east) -- (c4.west);
+		\draw[-{Latex[length=3mm]}] (Jt.west) -| (c4.south)
+			node[above, near start]{$T_{int}$};
+		
+		\draw[-{Latex[length=3mm]}] (c5.south) -- (c4.north);
+		\draw[-{Latex[length=3mm]}] (c6.east) -- (c5.west);
+		\draw[-{Latex[length=3mm]}] (I1.east) -| (c5.north);
+			
+		\draw[-{Latex[length=3mm]}] (J2.east) -- (I1.west);
+		\draw[{Latex[length=3mm]}-] (J2.west) -- +(-1,0)
+			node[left, above] {$G(\theta, \dot{\theta})$};
+		
+		\draw[{Latex[length=3mm]}-] (c6.west) -- +(-1,0)
+			node[left, above] {$C(\theta, \dot{\theta})$};
+		\draw[{Latex[length=3mm]}-] (c6.north) |- +(-1.25, 0.6)
+			node[left, above] {$S(\theta)$};
+		\draw[{Latex[length=3mm]}-] (c6.south) |- +(-1.25, -0.6)
+			node[left, above] {$V(\dot{\theta})$};
+		
+		\draw[-{Latex[length=3mm]}] (c4.east) -- (bras.west)
+			node[midway, above, xshift=-1.5mm] {$T_{act}$};
+		\draw[-{Latex[length=3mm]}] (bras.east) -- (env.west);
+		\draw[-{Latex[length=3mm]}] ($0.5*(bras.north east) + 0.5*(bras.north) $) -- +(0,0.75)
+			node[above] {$\theta$};
+		\draw[-{Latex[length=3mm]}] ($0.5*(bras.north west) + 0.5*(bras.north) $) -- +(0,0.75)
+			node[left, above] {$\hat{\dot{\theta}}$};
+		\draw[-{Latex[length=3mm]}] (bras_env.center) |- (Jt.east);		
+		\fill (bras_env) circle[radius=1.75pt];
+		\fill ($(bras_env) + (0,-1.25)$) circle[radius=1.75pt];
+		
+		\draw[-{Latex[length=3mm]}] (bras_env.center) -- ($(bras_env) + (0, -2)$) -| (c1);
+		
+		\draw[-{Latex[length=3mm]}] (env.east) -- +(0.75, 0)
+			node[right, above] {$X$};
+	
+	\end{tikzpicture}
+
+	\caption{Schéma équivalent décrivant la loi de commande \eqref{equ_impedance_control} définie par \cite{hogan_impedance_1985}}
+	\label{bloc_schema_hogan_1985}
+\end{figure}
+
+Comme on peut l'observer sur l'équation \eqref{equ_impedance_control} ainsi que sur son schéma équivalent en \cref{bloc_schema_hogan_1985}, la commande en impédance proposée ne nécessite pas la connaissance du modèle géométrique inverse du robot. Elle comprend 2 entrées $V_0$ et $X_0$, et 3 matrices de paramètres $K$, $B$ et $M$ qui peuvent être commandées pour modifier le comportement en impédance que l'on souhaite imposer - \textit{dans le cas du bras humain, $K$ serait une fonction de commandes neurales}. 
+
+\newlineBlank 
 
 \begin{itemize}
 	\item Tee 2004
