@@ -55,13 +55,17 @@
 
 \estheticline
 
-\lettrine{L}{\textbf{ors}} d'interactions avec l'environnement, les Hommes utilisent les propriétés dynamiques de leurs membres pour atteindre des comportements stables. L'impédance mécanique chez les humains, qui regroupe plus d'information que la raideur seule, est étudiée depuis des années sous l'oeil de l'automatique \citep{hogan_adaptive_1984}, et est toujours étudiée \citep{mizrahi_mechanical_2015}. Les liens avec les neurosciences \citep{roberts_cerebellar_1996} en font un écosystème complexe avec de nombreuses théories émergeant sur le mouvement humain. L'objectif principal de cette thèse est l'étude rythmique de la jongle, et donc des articulations du bras et ses liens avec l'impédance cartésienne. Plusieurs modèles ont été proposés pour le bras, le poignet, l'épaule et le coude, avec des systèmes linéaire du second ordre \citep{tsuji_human_1997}, ou des représentations plus complexe inspirée par Hill and d'autres modèles neuro-musculaire \citep{puzi_mechanical_2017}. D'autres parties du corps humain ont été aussi étudiées, comme le tronc \citep{smith_nonlinear_1994}, et la cheville \citep{rouse_estimation_2014, ludvig_mechanisms_2017}.
+\lettrine{L}{\textbf{ors}} d'interactions avec l'environnement, les Hommes utilisent les propriétés dynamiques de leurs membres pour atteindre des comportements stables. L'impédance mécanique chez les humains, qui regroupe plus d'information que la raideur seule, est étudiée depuis des années sous l'oeil de l'automatique \citep{hogan_adaptive_1984}, et l'est toujours \citep{mizrahi_mechanical_2015}. Les liens avec les neurosciences \citep{roberts_cerebellar_1996} en font un écosystème complexe avec de nombreuses théories émergeant sur le mouvement humain. L'objectif principal de cette thèse est l'étude rythmique de la jongle, et donc des articulations du bras et ses liens avec l'impédance cartésienne. Plusieurs modèles ont été proposés pour le bras, le poignet, l'épaule et le coude, avec des systèmes linéaire du second ordre \citep{tsuji_human_1997}, ou des représentations plus complexe inspirée par Hill and d'autres modèles neuro-musculaire \citep{puzi_mechanical_2017}. D'autres parties du corps humain ont été aussi étudiées, comme le tronc \citep{smith_nonlinear_1994}, et la cheville \citep{rouse_estimation_2014, ludvig_mechanisms_2017}.
 
 %----------------------------------------------------------------------------------------
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
 
 \section{Impédance Humaine}
+
+\begin{flushright}
+{\color{DarkGoldenrod} \textit{\textbf{Comment les paramètres d'impédance évoluent-ils au cours d'une tâche rythmique pour améliorer les performances lors d'interaction non déterministe avec l'environnement ?}}}
+\end{flushright}
 
 %------------------------------------------------
 
@@ -459,6 +463,10 @@ Dans la plupart de la littérature, l'identification des propriétés mécanique
 
 \section{Contrôle en impédance}
 
+\begin{flushright}
+{\color{DarkGoldenrod}\textit{\textbf{Le contrôle en impédance couplé à un contrôle rythmique permettrait-il d'améliorer la robustesse liée aux incertitudes de l'environnement ?}}}
+\end{flushright}
+
 Le contrôle en impédance consiste à imposer un comportement dynamique à un robot, lors de ses interactions avec d'autres systèmes physiques. Comme explicité par \cite{hogan_impedance_1985, colgate_robust_1988}, lorsqu'un système interagit avec son environnement, il ne suffit pas de le contrôler en position - \textit{lorsque l'environnement n'est pas parfaitement connu}, il faut plutôt maitriser son impédance et son point d'équilibre, c'est à dire le point où les forces s'annulent. En effet, de cette manière le contrôle devient indépendant de toute connaissance de l'environnement, qui est souvent difficile à modéliser.
 
 \newlineBlank
@@ -473,7 +481,7 @@ Pour parvenir à contrôler l'impédance de robots, il est possible d'utiliser d
 
 \subsection{Contrôle logiciel}
 
-Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} défini les lois permettant d'imposer, un comportement logiciel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie en coordonnées articulaires, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et des interfaces respectivement :
+Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} défini les lois permettant d'imposer, un comportement logiciel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie en coordonnées articulaires, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et de l'interface respectivement :
 
 \begin{equation}
 	I(\theta)\frac{d\dot{\theta}}{dt} + C(\theta, \dot{\theta}) + V(\dot{\theta}) + S(\theta) = T_{act} + T_{int} 
@@ -487,7 +495,7 @@ On défini ensuite, comme décrit dans l'équation \eqref{equ_endpoint_impedance
 \label{eq_impedance_hogan_1985}
 \end{equation}
 
-De ces deux équations, on déduit le modèle de contrôle permettant de parvenir au comportement souhaité, avec $\mathcal{J}$ le jacobien, tel que $\mathcal{J}(\theta)d\theta = dX$, $G(\theta,\omega)$ les termes de couplage liés à l'accélération et $L(\theta)$ le modèle géométrique direct :
+De ces deux équations, on déduit le modèle de contrôle permettant de parvenir au comportement souhaité, en annulant le comportement dynamique naturel du bras, avec $\mathcal{J}$ le jacobien, tel que $\mathcal{J}(\theta)d\theta = dX$, $G(\theta,\omega)$ les termes de couplage liés à l'accélération et $L(\theta)$ le modèle géométrique direct :
 
 \begin{equation}
 		\begin{split}
@@ -547,7 +555,7 @@ De ces deux équations, on déduit le modèle de contrôle permettant de parveni
 		
 		\comp[b]{c4}{($(I) + (1.5,0)$)};
 		
-		\node[bloc, right of = c4, node distance = 1.75cm] (bras) {$Bras$};
+		\node[bloc, right of = c4, node distance = 1.75cm] (bras) {$Bras$}; % \includegraphics[width=.08\textwidth]{joints_arm_drawing.jpg}
 		\node[right of = bras, label={$F_{int}$}] (bras_env) {};
 		\node[bloc, right of = bras_env, node distance = 1.25cm] (env) {$Env.$};
 		\draw[-{Latex[length=2mm]}] ($(env.south west) + (-0.1, -0.1)$) -- ($(env.north east) + (0.2, 0.15)$);
@@ -626,13 +634,19 @@ Comme on peut l'observer sur l'équation \eqref{equ_impedance_control} ainsi que
 
 \newlineBlank 
 
-\begin{itemize}
-	\item Tee 2004
-\end{itemize}
+Modèle simplifié de commande en impédance proposé par \cite{tee_model_2004}, l'intégration du modèle dynamique à l'intérieur de la boucle de contrôle est remplacé par un "\textit{feedforward}". Ainsi, le modèle dynamique du bras est calculé à partir de la commande et non en fonction de l'état réel, le contrôle en impédance, permet une retroaction et de corriger les erreurs de modélisation. L'objectif, de cette étude étant de reproduire les performances du bras humain.
+
+\newlineBlank 
+
+Citer d'autres exemples ??
 
 \subsubsection{Contrôle rythmique}
 
-\citep{williamson_neural_1998} => simple proportionnel dérivé pour donner un comportement dynamique..
+Contrairement à la loi de commande proposée par \cite{hogan_impedance_1985}, qui remplace le comportement dynamique du bras par celui que l'on souhaite imposer en impédance, \cite{williamson_neural_1998, williamson_robot_1999}, dans ses travaux de thèse, cherche à exploiter les dynamiques du bras lors de tâches rythmiques. Il n'annule donc pas le comportement dynamique, comme on peut l'observer dans la \cref{bloc_schema_hogan_1985}.
+
+\newlineBlank 
+
+Creuser la thèse de Williamson => mais peut-être que ce contrôle devrait être placer dans la partie VIA ?? auquel cas je n'ai pas encore trouvé d'exemple de contrôle rythmique lié à un contrôle en impédance, sans actionneur à raideur variable.
 
 %------------------------------------------------
 
@@ -647,7 +661,7 @@ Comme on peut l'observer sur l'équation \eqref{equ_impedance_control} ainsi que
 
 \subsection{Actionneurs à impédance variable (VIA)}
 
-Review 2013 \citep{vanderborght_variable_2013}
+Comme expliqué par le consortium VIACTORS \citep{vanderborght_variable_2013}, lorsque l'impédance est simulée par une loi de commande logiciel, les chocs ne peuvent pas être correctement gérés, à cause des limites en bande passante des contrôleurs.
 
 \subsubsection{Contrôle rythmique}
 
