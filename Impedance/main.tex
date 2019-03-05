@@ -55,13 +55,13 @@
 
 \estheticline
 
-\lettrine{L}{\textbf{ors}} d'interactions avec l'environnement, les Hommes utilisent les propriétés dynamiques de leurs membres pour atteindre des comportements stables. L'impédance mécanique chez les humains, qui regroupe plus d'information que la raideur seule, est étudiée depuis des années sous l'oeil de l'automatique \citep{hogan_adaptive_1984}, et l'est toujours \citep{mizrahi_mechanical_2015}. Les liens avec les neurosciences \citep{roberts_cerebellar_1996} en font un écosystème complexe avec de nombreuses théories émergeant sur le mouvement humain. L'objectif principal de cette thèse est l'étude rythmique de la jongle, et donc des articulations du bras et ses liens avec l'impédance cartésienne. Plusieurs modèles ont été proposés pour le bras, le poignet, l'épaule et le coude, avec des systèmes linéaire du second ordre \citep{tsuji_human_1997}, ou des représentations plus complexe inspirée par Hill and d'autres modèles neuro-musculaire \citep{puzi_mechanical_2017}. D'autres parties du corps humain ont été aussi étudiées, comme le tronc \citep{smith_nonlinear_1994}, et la cheville \citep{rouse_estimation_2014, ludvig_mechanisms_2017}.
+\lettrine{L}{\textbf{ors}} d'interactions avec l'environnement, les être humains utilisent les propriétés dynamiques de leurs membres pour atteindre des comportements stables. L'impédance mécanique chez les humains, qui regroupe plus d'information que la raideur seule, est étudiée depuis des années sous l'oeil de l'automatique \citep{hogan_adaptive_1984}, et l'est toujours \citep{mizrahi_mechanical_2015}. Les liens avec les neurosciences \citep{roberts_cerebellar_1996} en font un écosystème complexe avec de nombreuses théories émergeant sur le mouvement humain. L'objectif principal de cette thèse est l'étude de la frappe cyclique de balle, et donc des articulations du bras et ses liens avec l'impédance cartésienne. Plusieurs modèles ont été proposés pour le bras, le poignet, l'épaule et le coude, avec des systèmes linéaires du second ordre \citep{tsuji_human_1997}, ou des représentations plus complexe inspirées par Hill and d'autres modèles neuro-musculaires \citep{puzi_mechanical_2017}. D'autres parties du corps humain ont été aussi étudiées, comme le tronc \citep{smith_nonlinear_1994}, et la cheville \citep{rouse_estimation_2014, ludvig_mechanisms_2017}.
 
 %----------------------------------------------------------------------------------------
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
 
-\section{Impédance Humaine}
+\section{Impédance humaine}
 
 \begin{flushright}
 {\color{DarkGoldenrod} \textit{\textbf{Comment les paramètres d'impédance évoluent-ils au cours d'une tâche rythmique pour améliorer les performances lors d'interaction non déterministe avec l'environnement ?}}}
@@ -71,7 +71,7 @@
 
 \subsection{Définition}
 
-Le \textit{Collins English Dictionary} définie l'impédance mécanique comme, le rapport entre une \textbf{force} exercée sur un système physique soumis à un \textbf{mouvement} harmonique, et la \textbf{vitesse} des particules du-dit système. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{mec_impedance}) comme une \textbf{force de résistance à un mouvement}.
+Le \textit{Collins English Dictionary} définit l'impédance mécanique comme, le rapport entre une \textbf{force} exercée sur un système physique soumis à un \textbf{mouvement} harmonique, et la \textbf{vitesse} des particules du-dit système. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{mec_impedance}) comme une \textbf{force de résistance à un mouvement}.
 
 \begin{figure}[h]
 	\centering
@@ -182,7 +182,7 @@ Le modèle linéaire $KBI$ proposé pour étudier l'impédance du bras humain, p
 
 \newlineBlank
 
-Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} pour étudier le bras lors de télémanipulation, \cite{popescu_elbow_2003} proposent l'ajout d'un délais au modèle $KBI$ pour modéliser certaines non linéarités, et d'autres modèles mécaniques plus complexes sont aussi utilisés par \cite{piovesan_measuring_2012}. Ces derniers modèles essaient d'approcher et d'expliquer le modèle mécanique complexe du bras humain, dans certaines conditions.
+Ainsi un modèle à 5 paramètres est proposé par \cite{speich_modeling_2005} pour étudier le bras lors de télémanipulations, \cite{popescu_elbow_2003} proposent l'ajout d'un délai au modèle $KBI$ pour modéliser certaines non linéarités, et d'autres modèles mécaniques plus complexes sont aussi utilisés par \cite{piovesan_measuring_2012}. Ces derniers modèles essaient d'approcher et d'expliquer le modèle mécanique complexe du bras humain, dans certaines conditions.
 
 \begin{figure}[h]
 
@@ -401,7 +401,7 @@ Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De man
 
 \newlineBlank
 
-Comme pour l'étude précédente, \cite{dolan_dynamic_1993, tsuji_human_1995} réalisent leurs expériences avec un robot à 2 degrés de libertés (DDL) dans le plan horizontal, en utilisant des méthodes régressives équivalentes, pour identifier de manière paramétrique les éléments du modèle. D'autres techniques non-paramétriques, basées sur des perturbations stochastiques, notamment proposées par \cite{perreault_multiple-input_1999, perreault_effects_2001} permettent aussi de réaliser l'identification. \cite{ludvig_identification_2011} utilisent une méthode non paramétrique d'identification pour différencier la raideur intrinsèque de la raideur réflexe. Toutefois, ces dernières techniques nécessitent plus d'essais, ce qui peut avoir une influence sur les mesures à cause de la co-contraction des muscles, suites aux nombreuses itérations \citep{piovesan_measuring_2012}.
+Comme pour l'étude précédente, \cite{dolan_dynamic_1993} et \cite{tsuji_human_1995} réalisent leurs expériences avec un robot à 2 degrés de libertés (DDL) dans le plan horizontal, en utilisant des méthodes régressives équivalentes, pour identifier de manière paramétrique les éléments du modèle. D'autres techniques non-paramétriques, basées sur des perturbations stochastiques, notamment proposées par \cite{perreault_multiple-input_1999, perreault_effects_2001} permettent aussi de réaliser l'identification. \cite{ludvig_identification_2011} utilisent une méthode non paramétrique d'identification pour différencier la raideur intrinsèque de la raideur réflexe. Toutefois, ces dernières techniques nécessitent plus d'essais, ce qui peut avoir une influence sur les mesures à cause de la co-contraction des muscles, suites aux nombreuses itérations \citep{piovesan_measuring_2012}.
 
 
 \subsubsection{Tâches de pointage ou cycliques}
@@ -410,7 +410,7 @@ Pour les tâches en mouvement, l'estimation de l'impédance s'avère plus comple
 
 \newlineBlank
 
-La trajectoire non perturbée doit être estimée ou connue pour l'identification des paramètres. Pour des tâches rythmiques ou limités à une articulation, il est possible d'utiliser une trajectoire médiane après plusieurs essais non perturbés \citep{bennett_time-varying_1992, inbar_modeling_1995}, ou alors, de prédire la position non perturbé avec une équation décrivant le mouvement \citep{abe_modulation_2003}. Toutefois, dans ces deux cas, les itérations peuvent influencer la mesure.
+La trajectoire non perturbée doit être estimée ou connue pour l'identification des paramètres. Pour des tâches rythmiques ou limitées à une articulation, il est possible d'utiliser une trajectoire médiane après plusieurs essais non perturbés \citep{bennett_time-varying_1992, inbar_modeling_1995}, ou alors, de prédire la position non perturbée avec une équation décrivant le mouvement \citep{abe_modulation_2003}. Toutefois, dans ces deux cas, les itérations peuvent influencer la mesure.
 
 \newlineBlank
 
@@ -481,7 +481,7 @@ Pour parvenir à contrôler l'impédance de robots, il est possible d'utiliser d
 
 \subsection{Contrôle logiciel}
 
-Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} défini les lois permettant d'imposer, un comportement logiciel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie en coordonnées articulaires, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et de l'interface respectivement :
+Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} définit les lois permettant d'imposer, un comportement logiciel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie en coordonnées articulaires, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et de l'interface respectivement :
 
 \begin{equation}
 	I(\theta)\frac{d\dot{\theta}}{dt} + C(\theta, \dot{\theta}) + V(\dot{\theta}) + S(\theta) = T_{act} + T_{int} 
