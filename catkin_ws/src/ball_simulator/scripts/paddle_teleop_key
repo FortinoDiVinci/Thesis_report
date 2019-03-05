@@ -1,0 +1,165 @@
+#!/usr/bin/env python
+
+# Copyright (c) 2011, Willow Garage, Inc.
+# All rights reserved.
+#
+# Modified by Vincent FORTINEAU, PhD. student, Univ. Paris-Sud, 2019
+# 
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+#    * Redistributions of source code must retain the above copyright
+#      notice, this list of conditions and the following disclaimer.
+#    * Redistributions in binary form must reproduce the above copyright
+#      notice, this list of conditions and the following disclaimer in the
+#      documentation and/or other materials provided with the distribution.
+#    * Neither the name of the Willow Garage, Inc. nor the names of its
+#      contributors may be used to endorse or promote products derived from
+#       this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+import rospy
+
+import geometry_msgs.msg
+import tf # for the paddle height msg
+
+import sys, select, termios, tty
+
+import threading
+import time
+
+
+CST_SPEED = 0.02
+
+msg = """
+Control the paddle
+---------------------------
+u/j : move up/down
+space key, k : force stop
+anything else : stop smoothly
+CTRL-C to quit
+"""
+
+moveBindings = {
+        'j':-0.02,
+        'u':0.02,
+           }
+
+def getKey():
+    # to get only 1 char
+    tty.setraw(sys.stdin.fileno())
+    # check if there is any data in sys.stdin
+    rlist, _, _ = select.select([sys.stdin], [], [], 0.1)
+    if rlist:
+        key = sys.stdin.read(1)
+    else:
+        key = ''
+
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+
+    return key
+
+speed = 0
+
+
+#class BroadcastThread(threading.Thread):
+
+#    def __init__(self, f, args=z):
+#        threading.Thread.__init__(self)
+#        self.br = tf.TransformBroadcaster()
+#        self.z = z
+#        self._stop_event = threading.Event()
+#        self.freq = f
+#        
+#    def run(self, z):
+#        while(self.stopped() == False):
+#            self.z = z
+#            self.br.sendTransform((0, 0, self.z), tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), frame_id, parent_frame_id)
+#            time.sleep(1./f)
+#          
+#            
+#    def stop(self):
+#        self._stop_event.set()
+#        
+#    def stopped(self):
+#        if(self._stop_event.is_set()):
+#            print("Broadcast thread exiting...")
+#            return True
+#        else:
+#            return False 
+
+def broadcastThread(freq):
+    th = threading.currentThread()
+    br = tf.TransformBroadcaster()
+    global z  # TODO a cleaner way should be used
+        
+    while getattr(th, "stop", False) == False:
+        br.sendTransform((0, 0, z), tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), frame_id, parent_frame_id)
+        time.sleep(1./freq)
+            
+    print("Exiting broadcasting thread...")
+        
+
+if __name__=="__main__":
+    settings = termios.tcgetattr(sys.stdin)
+    
+    rospy.init_node('paddle_teleop')
+    
+    z = 1
+    f = 400
+
+    frame_id = 'paddle'
+    parent_frame_id = 'world'
+
+    #th = BroadcastThread(f, args=z)
+    #th.start()
+    
+    rospy.Rate(f)
+    
+    th = threading.Thread(target=broadcastThread, args=(f,))
+    th.start()
+    
+    status = 0
+    count = 0
+    try:
+        print(msg)
+        while(1):
+            key = getKey()
+            if key in moveBindings.keys():
+                z = z + moveBindings[key]
+                speed = CST_SPEED
+                count = 0
+                print('Current height %s' % z)
+            elif key == ' ' or key == 'k' :
+                speed = 0
+            else:
+                count = count + 1
+                if count > 4:
+                    speed = 0
+                if (key == '\x03'):
+                    break
+
+    except Exception as e:
+        print(e)
+
+    finally:
+        z = 0
+        #real_paddle_pose.pose.position.z = 0       
+        #th.stop()
+        #th.join() 
+        th.stop = True
+        th.join()
+    
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
