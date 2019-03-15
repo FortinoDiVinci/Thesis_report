@@ -61,17 +61,21 @@
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
 
+\tableofcontents
+
 \section{Impédance humaine}
 
 \begin{flushright}
-{\color{DarkGoldenrod} \textit{\textbf{Comment les paramètres d'impédance évoluent-ils au cours d'une tâche rythmique pour améliorer les performances lors d'interaction non déterministe avec l'environnement ?}}}
+{\color{DarkGoldenrod} \textit{\textbf{Comment les paramètres d'impédance évoluent-ils au cours d'une tâche rythmique pour améliorer les caractéristiques lors d'interaction non déterministe avec l'environnement ?}}}
 \end{flushright}
 
 %------------------------------------------------
 
+
 \subsection{Définition}
 
-Le \textit{Collins English Dictionary} définit l'impédance mécanique comme, le rapport entre une \textbf{force} exercée sur un système physique soumis à un \textbf{mouvement} harmonique, et la \textbf{vitesse} des particules du-dit système. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{mec_impedance}) comme une \textbf{force de résistance à un mouvement}.
+
+Le \textit{Random House Kernerman Webster's College Dictionary} définit l'impédance mécanique comme, le rapport entre une \textbf{force} exercée sur un système physique soumis à un \textbf{mouvement} harmonique, et la \textbf{vitesse} des particules du-dit système\footnote{"\textit{The ratio of the force on a system undergoing harmonic motion to the velocity of the particles in the system.}"}. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{mec_impedance}) comme une \textbf{force de résistance à un mouvement}.
 
 \begin{figure}[h]
 	\centering
@@ -91,7 +95,7 @@ Le \textit{Collins English Dictionary} définit l'impédance mécanique comme, l
 	\label{mec_impedance} % Label for referencing
 \end{figure}
 
-Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes linéaires, il existe 3 éléments passifs, l'\textbf{inertie}, la \textbf{raideur} et l'\textbf{amortissement} et 2 actifs, la force et la vitesse que l'on peut rapprocher respectivement à l'inductance, à la capacité et à la résistance puis à la tension et au courant. Comme c'est fait pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \citep{hondori_method_2009}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme. La \cref{impedance_analogy} et les systèmes \eqref{equ_impedance_analogy} et \eqref{equ_elec2mec_matrix} résument l'ensemble de ces rapprochements, qui donneront lieux à différents modèles.
+Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes linéaires, il existe 3 éléments passifs, l'\textbf{inertie}, la \textbf{raideur} et l'\textbf{amortissement} et 2 actifs, la force et la vitesse que l'on peut rapprocher respectivement à l'inductance, à la capacité et à la résistance puis à la tension et au courant. Comme c'est fait pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \citep{hondori_method_2009}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme. La \cref{impedance_analogy} et le système \eqref{equ_impedance_analogy} résument l'ensemble de ces rapprochements, qui donneront lieux à différents modèles.
 
 \begin{figure}[h]
 
@@ -152,33 +156,37 @@ Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes 
 	\end{equation}  %&
 	
 	\vspace{5mm}
+
+%% Matrice de passage entre l'electricité et la mécanique, notamment connu pour les moteurs et autres quaripôles %%
 	
-	\begin{equation}
-		\begin{bmatrix}
-			F \\
-			\dot{x}
-		\end{bmatrix}
-		= 
-		\begin{bmatrix}
-			A_{11} & A_{21} \\
-			A_{21} & A_{22}
-		\end{bmatrix}
-		\begin{bmatrix}
-			U \\
-			i
-		\end{bmatrix}
-	\label{equ_elec2mec_matrix} % Label for referencing
-	\end{equation}
+%	\begin{equation}
+%		\begin{bmatrix}
+%			F \\
+%			\dot{x}
+%		\end{bmatrix}
+%		= 
+%		\begin{bmatrix}
+%			A_{11} & A_{21} \\
+%			A_{21} & A_{22}
+%		\end{bmatrix}
+%		\begin{bmatrix}
+%			U \\
+%			i
+%		\end{bmatrix}
+%	\label{equ_elec2mec_matrix} % Label for referencing
+%	\end{equation}
 
 %\end{tabularx}
 
-\subsubsection{Modélisation}
+
+\subsection{Modélisation}
+
 
 L'impédance d'une articulation est souvent présentée avec un \textbf{modèle viscoélastique du second ordre}, dit $KBI$ \citep{hogan_adaptive_1984, hogan_impedance_1985, flash_control_1987, bennett_time-varying_1992, abe_modulation_2003, ludvig_voluntary_2007}. Les cas d'étude plus complexes, avec plusieurs articulations, sont moins souvent étudiés dans le plan articulaire \citep{gomi_human_1997, gomi_task-dependent_1998}, mais plutôt dans un plan cartésien, où l'on s'intéresse principalement à l'impédance finale \citep{, burdet_method_2000, perreault_effects_2001, erden_hand_2015}, toujours avec un modèle $KBI$ équivalent. \cite{tsuji_human_1997} résume assez bien les différentes relations entre le plan musculaire, le plan articulaire et le plan cartésien. L'équation \eqref{equ_endpoint_impedance} décrit ce modèle, pour la position $p(t)$ qui correspond à la différence entre la position avec et sans perturbation.
 
 \newlineBlank
 
-Le modèle linéaire $KBI$ proposé pour étudier l'impédance du bras humain, peut être utilisé pour de faibles perturbations, autour d'un point d'équilibre, qui peut être statique \citep{dolan_dynamic_1993} ou en mouvement, dans ce cas on parle de trajectoire virtuelle (non perturbée) \citep{tsuji_bio-mimetic_2008}. Certaines études semblent démontrer des faiblesses de ce modèle, qui ne tient notamment pas compte des tendons et qui, ne permet pas d'extraire d'informations claires des paramètres \citep{kistemaker_vivo_2011}. Il n'y a pas forcément de liens entre la raideur $K$ du modèle et la raideur des muscles par exemple. D'autres part, la différenciation entre la raideur intrinsèque du muscle et la raideur réflexe (commande neurale) n'est pas évidente \citep{stroeve_impedance_1999, guarin_unbiased_2018}.
+Le modèle linéaire $KBI$ proposé pour étudier l'impédance du bras humain, peut être utilisé pour de faibles perturbations, autour d'un point d'équilibre, qui peut être statique \citep{dolan_dynamic_1993} ou en mouvement, dans ce cas on parle de trajectoire virtuelle (non perturbée) (\cref{virtual_trajectory}). Certaines études semblent démontrer des faiblesses de ce modèle, qui ne tient notamment pas compte des tendons et qui, ne permet pas d'extraire d'informations claires des paramètres \citep{kistemaker_vivo_2011}. Il n'y a pas forcément de liens entre la raideur $K$ du modèle et la raideur des muscles par exemple. D'autres part, la différenciation entre la raideur intrinsèque du muscle et la raideur réflexe (commande neurale) n'est pas évidente \citep{stroeve_impedance_1999, guarin_unbiased_2018}.
 
 \newlineBlank
 
@@ -391,9 +399,18 @@ L'étude de l'impédance cartésienne du bras avec un simple modèle $KBI$ ne pe
 
 %------------------------------------------------
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\linewidth]{virtual_trajectory_impedance_tsuji.pdf} % Figure image
+	\caption{Position virtuelle (non-perturbée) et position suite à la perturbation \citep{tsuji_bio-mimetic_2008}} % Figure caption
+	\label{virtual_trajectory} % Label for referencing with \ref{bear}
+\end{figure}
+
+
 \subsection{Méthodes d'estimation}
 
-Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De manière générale, que ce soit pour un objet, une structure mécanique ou pour une structure biologique, l'estimation de l'impédance se fait en soumettant le système étudié à une force ou un mouvement, et en observant sa réponse. Ici, on sépare les études en fonction des tâches étudiées, soit des tâches isométriques, c'est à dire, comme expliqué dans le \textit{Larousse}, pour des contractions musculaires telles que la longueur des muscles ne varie pas pendant que la force développée croit, soit pour des tâches en mouvement (pointage, cyclique, etc.).
+
+Il n'existe à ce jour pas de méthode de mesure directe de l'impédance. De manière générale, que ce soit pour un objet, une structure mécanique ou pour une structure biologique, l'estimation de l'impédance se fait en soumettant le système étudié à une force ou un mouvement, et en observant sa réponse. Ici, on sépare les études en fonction des tâches étudiées, soit des tâches isométriques, c'est à dire, comme expliqué dans le \textit{Larousse}, pour des "\textit{contraction[s] musculaire[s] telle[s] que la longueur de[s] muscle[s] ne change pas alors que la force développée [...] augmente}", soit pour des tâches en mouvement (pointage, cyclique, etc.).
 
 \subsubsection{Tâches isométriques}
 
@@ -405,6 +422,7 @@ Comme pour l'étude précédente, \cite{dolan_dynamic_1993} et \cite{tsuji_human
 
 
 \subsubsection{Tâches de pointage ou cycliques}
+
 
 Pour les tâches en mouvement, l'estimation de l'impédance s'avère plus complexe. En effet, contrairement au cas statique où la matrice d'inertie pouvait être considérée constante et calculée analytiquement, dans ces cas d'études, non seulement cette dernière varie en fonction de la posture, mais les autres paramètres peuvent être amenés à évoluer en fonction de l'activation des muscles, de la fréquence du mouvement et d'autres paramètres \citep{milner_dependence_1993, abe_modulation_2003, kuxhaus_dependence_2014}. 
 
@@ -448,14 +466,17 @@ Dans la plupart de la littérature, l'identification des propriétés mécanique
 
 %------------------------------------------------
 
-\subsection{Résultats d'expérience}
+
+\subsection{Interprétations}
+
 
 \begin{itemize}
 	\item Bennett 1994 (différenciation réflexes et raideur intrinsèque) : expliquer la problématique de la raideur intrinsèque et réflexe et pourquoi nous pouvons nous détacher de ce problème => on cherche à reproduire un comportement dont les réflexes font partis
 	\item Dolan (comparaison modèle non linéaire) => pertinence de cette information ? plusieurs indices semblent montrer un impédance réflexe non linéaire et une impédance intrinsèque plutôt linéaire (autres sources ??)
-	\item Burdet 2000 (nature) Apprentissage Impedance => modèle de KP Tee qui ajoute un feedfoward au contrôle en impédance pour simuler l'apprentissage (possibilité de reproduire les comportements avant ou après la phase d'apprentissage) => autre modèle avec l'apprentissage
+	\item Burdet 2000 (nature) Apprentissage Impedance => modèle de KP Tee qui ajoute un élément au contrôle en impédance pour simuler l'apprentissage (possibilité de reproduire les comportements avant ou après la phase d'apprentissage) => autre modèle avec l'apprentissage
 	\item Franklin 2002 contrôleur en impédance 
 	\item Bennet 1992, Gomi\&Kawato 1997, Popescu 2003, Ludvig 2017 (impédance pdt mvt VS impédance en statique)
+	\item Tsuji \& Tanaka se sont intéressés à l'évolution de l'impédance en préparation de l'impact d'une balle => présenter leur résultat (task readiness)
 \end{itemize}
 
 
@@ -479,9 +500,11 @@ Pour parvenir à contrôler l'impédance de robots, il est possible d'utiliser d
 
 %------------------------------------------------
 
-\subsection{Contrôle logiciel}
 
-Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} définit les lois permettant d'imposer, un comportement logiciel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie en coordonnées articulaires, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et de l'interface respectivement :
+\subsection{Commande en impédance virtuelle}
+
+
+Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance. C'est ainsi que \cite{hogan_impedance_1985} définit les lois permettant d'imposer, un comportement virtuel en impédance. Il est, dans un premier temps, nécessaire de calculer un modèle dynamique du bras articulé, avec $I(\theta)$ l'inertie en coordonnées articulaires, $\theta$ la position angulaire, $\dot{\theta}$ la vitesse angulaire, $C(\theta, \omega)$ les couples de couplage inertiel, $V(\dot{\theta})$ les couples dépendant de la vitesse (frottements), $S(\theta)$ les couples dépendant de la position (poids), et $T_{act}$ et $T_{int}$ les couples des actionneurs et de l'interface respectivement :
 
 \begin{equation}
 	I(\theta)\frac{d\dot{\theta}}{dt} + C(\theta, \dot{\theta}) + V(\dot{\theta}) + S(\theta) = T_{act} + T_{int} 
@@ -495,15 +518,15 @@ On défini ensuite, comme décrit dans l'équation \eqref{equ_endpoint_impedance
 \label{eq_impedance_hogan_1985}
 \end{equation}
 
-De ces deux équations, on déduit le modèle de contrôle permettant de parvenir au comportement souhaité, en annulant le comportement dynamique naturel du bras, avec $\mathcal{J}$ le jacobien, tel que $\mathcal{J}(\theta)d\theta = dX$, $G(\theta,\omega)$ les termes de couplage liés à l'accélération et $L(\theta)$ le modèle géométrique direct :
+De ces deux équations, on déduit le modèle de commande permettant de parvenir au comportement souhaité en annulant la dynamique naturelle du bras, avec $\mathcal{J}$ le jacobien, tel que $\mathcal{J}(\theta)d\theta = dX$, $G(\theta,\omega)$ les termes de couplage liés à l'accélération et $L(\theta)$ le modèle géométrique direct :
 
 \begin{equation}
-		\begin{split}
-			T_{act}  &	=    I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}K(X_0-L(\theta))+S(\theta) \text{ \hspace{2mm}(position terms)} \\
-			             & +   I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}B(V_0-\mathcal{J}(\theta)\dot{\theta})+V(\dot{\theta}) \text{ (velocity terms)} \\
-			             & +   I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}F_{int}-\mathcal{J}^t(\theta)F_{int} \text{ \hspace{18mm}(force terms)} \\
-			             & -    I(\theta)\mathcal{J}^{-1}(\theta)G(\theta, \dot{\theta})+C(\theta,\dot{\theta}) \text{ \hspace{3mm}(inertial coupling terms)}
-		\end{split}
+		\begin{aligned}
+			T_{act}  &	=    I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}K(X_0-L(\theta))+S(\theta) & \text{(position terms)} \\
+			             & +   I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}B(V_0-\mathcal{J}(\theta)\dot{\theta})+V(\dot{\theta}) & \text{(velocity terms)} \\
+			             & +   I(\theta)\mathcal{J}^{-1}(\theta)M^{-1}F_{int}-\mathcal{J}^t(\theta)F_{int} & \text{(force terms)} \\
+			             & -    I(\theta)\mathcal{J}^{-1}(\theta)G(\theta, \dot{\theta})+C(\theta,\dot{\theta}) & \text{(inertial coupling terms)}
+		\end{aligned}
 \label{equ_impedance_control} % Label for referencing
 \end{equation}
 
@@ -620,9 +643,6 @@ De ces deux équations, on déduit le modèle de contrôle permettant de parveni
 		\fill ($(bras_env) + (0,-1.25)$) circle[radius=1.75pt];
 		
 		\draw[-{Latex[length=3mm]}] (bras_env.center) -- ($(bras_env) + (0, -2)$) -| (c1);
-		
-		\draw[-{Latex[length=3mm]}] (env.east) -- +(0.75, 0)
-			node[right, above] {$X$};
 	
 	\end{tikzpicture}
 
@@ -632,13 +652,187 @@ De ces deux équations, on déduit le modèle de contrôle permettant de parveni
 
 Comme on peut l'observer sur l'équation \eqref{equ_impedance_control} ainsi que sur son schéma équivalent en \cref{bloc_schema_hogan_1985}, la commande en impédance proposée ne nécessite pas la connaissance du modèle géométrique inverse du robot. Elle comprend 2 entrées $V_0$ et $X_0$, et 3 matrices de paramètres $K$, $B$ et $M$ qui peuvent être commandées pour modifier le comportement en impédance que l'on souhaite imposer - \textit{dans le cas du bras humain, $K$ serait une fonction de commandes neurales}. 
 
+\begin{figure}[h]
+
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{bloc} = [rectangle, draw, minimum width = 1cm, minimum height = 0.8cm, line width=0.7]  % bloc style
+	\tikzstyle{bloc_nl} = [rectangle, draw, double, minimum width = 1cm, minimum height = 0.8cm, line width=0.7] % non linear bloc style
+
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+
+	\begin{tikzpicture}[node distance = 1.5cm, line width=0.7, label distance = -0.5mm]
+	
+		\comp{c1}{(0, 0)};
+		
+		\node[bloc, left of = c1] (K) {$K$};
+		\node[bloc, above of = K, node distance = 1cm] (B) {$B$};
+		
+		\comp[b]{c2}{($(K) + (-1.5,0)$)};
+		\comp[a]{c3}{($(B) + (-1.5,0)$)};
+		
+		\node[bloc_nl, above of = B, node distance = 1cm] (J) {$\mathcal{J}(\theta)$};
+		
+		\node[bloc_nl, right of = c1] (M) {$M^{-1}$};
+		
+		\comp[b]{c0}{($(M) + (1.25,0)$)};
+		
+		\node[bloc_nl, right of = c0, node distance = 1.5cm] (J1) {$\mathcal{J}^{-1}(\theta)$};
+		\node[bloc_nl, right of = J1, node distance = 2cm] (I) {$I(\theta)$};
+		
+		\comp[b]{c4}{($(I) + (1.5,0)$)};
+		
+		\node[bloc, right of = c4, node distance = 1.75cm] (bras) {$Bras$}; % \includegraphics[width=.08\textwidth]{joints_arm_drawing.jpg}
+		\node[right of = bras, label={$F_{int}$}] (bras_env) {};
+		\node[bloc, right of = bras_env, node distance = 1.25cm] (env) {$Env.$};
+		\draw[-{Latex[length=2mm]}] ($(env.south west) + (-0.1, -0.1)$) -- ($(env.north east) + (0.2, 0.15)$);
+		
+		\node[bloc_nl, below of = bras, node distance = 1.25cm] (Jt) {$\mathcal{J}^{T}(\theta)$};
+		
+		\node[bloc_nl, above of = bras, node distance = 2cm](H) {$H(\theta, \dot{\theta})$};
+		
+		\draw[{Latex[length=3mm]}-] (c2.west) -- +(-1,0)
+			node[left, above] {$X_0$};
+		\draw[{Latex[length=3mm]}-] (c2.south) -- +(0,-1)
+			node[right] {$L(\theta)$};
+		\draw[-{Latex[length=3mm]}] (c2.east) -- (K.west);
+		
+		\draw[{Latex[length=3mm]}-] (c3.west) -- +(-1,0)
+			node[left, above] {$V_0$};
+		\draw[{Latex[length=3mm]}-] (J.east) -- +(1,0)
+			node[right, above] {$\hat{\dot{\theta}}$};
+		\draw[{Latex[length=3mm]}-] (c3.north) |- (J);
+		\draw[-{Latex[length=3mm]}] (c3.east) -- (B);
+		
+		\draw[-{Latex[length=3mm]}] (K.east) -- (c1.west);
+		\draw[-{Latex[length=3mm]}] (B.east) -| (c1.north);
+		
+		\draw[-{Latex[length=3mm]}] (c1.east) -- (M.west);
+		\draw[-{Latex[length=3mm]}] (M.east) -- (c0.west);
+		\draw[{Latex[length=3mm]}-] (c0.south) -- +(0,-1)
+			node[left] {$\dot{\mathcal{J}}(\theta) \dot{\theta}$};
+		\draw[-{Latex[length=3mm]}] (c0.east) -- (J1.west);
+		\draw[-{Latex[length=3mm]}] (J1.east) -- (I.west);
+		
+		\draw[-{Latex[length=3mm]}] (I.east) -- (c4.west);
+		\draw[-{Latex[length=3mm]}] (Jt.west) -| (c4.south)
+			node[above, near start]{$T_{int}$};
+		
+		\draw[-{Latex[length=3mm]}] (c4.east) -- (bras.west)
+			node[midway, above, xshift=-1.5mm] {$T_{act}$};
+		\draw[-{Latex[length=3mm]}] (bras.east) -- (env.west);
+		\draw[-{Latex[length=3mm]}] (bras.north) -- (H.south)
+			node[right, midway] {$\theta, \dot{\theta}$};
+		\draw[-{Latex[length=3mm]}] (H.west) -| (c4.north);
+
+		\draw[-{Latex[length=3mm]}] (bras_env.center) |- (Jt.east);		
+		\fill (bras_env) circle[radius=1.75pt];
+		\fill ($(bras_env) + (0,-1.25)$) circle[radius=1.75pt];
+		
+		\draw[-{Latex[length=3mm]}] (bras_env.center) -- ($(bras_env) + (0, -2)$) -| (c1);
+	
+	\end{tikzpicture}
+
+	\caption{Schéma de la linéarisation par bouclage}
+	\label{bloc_feedback_linearization}
+\end{figure}
+
+La \cref{bloc_feedback_linearization} montre le cas de la commande en impédance en linéarisation par bouclage, qui est équivalent au schéma donné par \cite{hogan_impedance_1985}, si l'on prend $H(\theta, \dot{\theta}) = C(\theta, \dot{\theta}) + V(\dot{\theta}) + S(\theta)$, les éléments du modèle dynamique du bras, et $\dot{\mathcal{J}}(\theta) \dot{\theta} = G(\theta,\dot{\theta})$, terme issu de la dérivation de la vitesse : $\ddot{X} = \mathcal{J}\ddot{\theta} + G(\theta,\dot{\theta})$.
+
 \newlineBlank 
 
-Modèle simplifié de commande en impédance proposé par \cite{tee_model_2004}, l'intégration du modèle dynamique à l'intérieur de la boucle de contrôle est remplacé par un "\textit{feedforward}". Ainsi, le modèle dynamique du bras est calculé à partir de la commande et non en fonction de l'état réel, le contrôle en impédance, permet une retroaction et de corriger les erreurs de modélisation. L'objectif, de cette étude étant de reproduire les performances du bras humain.
+Il est aussi possible d'utiliser des lois de commande en impédance en \textit{feedforward}. L'intégration du modèle dynamique à l'intérieur de la boucle de contrôle est remplacée par un \textit{feedforward}. Ainsi, le modèle dynamique du bras est calculé à partir de la consigne et non en fonction de l'état réel, on suppose donc que l'état est proche de ce qui est imposé par la consigne. Le contrôle en impédance permet de corriger les erreurs de modélisation par une retroaction. Dans son étude \cite{tee_model_2004} a réussi à reproduire les résultats observés chez des humains, lors d'expérimentation conduites par \cite{gomi_human_1997}, avec ce type de commande en impédance.
 
 \newlineBlank 
 
-Citer d'autres exemples ??
+\begin{figure}[h]
+
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 2.8cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+
+	\begin{tikzpicture} [node distance = 2cm]
+	
+		\comp{c1}{(0, 0)};
+		
+		\node[block, left of = c1, node distance = 2.5cm] (feed) {feedforward};
+		\node[left of = feed, node distance = 4cm](feed_cmd) {};
+		\fill (feed_cmd) circle[radius=1.75pt];
+		
+		\node[block, below of = feed] (imp) {impedance};
+		
+		\node[block, right of = c1, align = center, node distance = 3.5cm] (arm) {dynamiques\\bras};
+		\node[right of = arm, node distance = 2.5cm](arm_out) {};
+		\fill (arm_out) circle[radius=1.75pt];
+		
+		\comp[b]{c2}{($(imp) + (-4,0)$)};
+
+		\draw[{Latex[length=3mm]}-] (feed.west) --+ (-4,0)
+			node[align = center, above] {mouvement} node [align = center, below] {plannifié};
+		\draw[-{Latex[length=3mm]}] (feed_cmd.center) -- (c2.north);
+		\draw[{Latex[length=3mm]}-] (c2.south) --+ (0,-1) -| (arm_out.center);
+		
+		\draw[-{Latex[length=3mm]}] (c2.east) -- (imp.west)
+			node[midway, align = center, above] {erreur de} node[midway, align = center, below] {position};		
+		\draw[{Latex[length=3mm]}-] (c1.south) |- (imp.east)
+			node[left = -4mm, above = 2mm] {$\tau_{FB}$};;
+		
+		\draw[-{Latex[length=3mm]}] (feed.east) -- (c1.west)
+			node[above = 2mm, midway] {$\tau_{FF}$};	
+		\draw[-{Latex[length=3mm]}] (c1.east) -- (arm.west)
+			node[above = 1mm, midway] {$T_{act}$};	
+		\draw[-{Latex[length=3mm]}] (arm.east) --+ (2.5, 0);	
+		
+		\draw[{Latex[length=3mm]}-] (arm.north) --+ (0, 0.75)
+			node[above] {couple externe $\tau_E$};	
+	
+	\end{tikzpicture}
+
+	\caption{Schéma bloc de contrôle en impédance avec utilisation de commande prédictive, utilisé par \cite{tee_model_2004}} % Figure caption
+	\label{feedforward_control} % Label 
+\end{figure}
 
 \subsubsection{Contrôle rythmique}
 
@@ -650,22 +844,31 @@ Creuser la thèse de Williamson => mais peut-être que ce contrôle devrait êtr
 
 %------------------------------------------------
 
-\begin{figure}
-	\includegraphics[width=\linewidth]{bear.jpg} % Figure image
-	\caption{A majestic grizzly bear} % Figure caption
-	\label{bear} % Label for referencing with \ref{bear}
-\end{figure}
-
-
-%------------------------------------------------
 
 \subsection{Actionneurs à impédance variable (VIA)}
 
+
 Comme expliqué par le consortium VIACTORS \citep{vanderborght_variable_2013}, lorsque l'impédance est simulée par une loi de commande logiciel, les chocs ne peuvent pas être correctement gérés, à cause des limites en bande passante des contrôleurs.
+
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{variable_actuator.png} % Figure image
+	\caption{MACCEPA à 2 DDL et 1 raideur variable (a) et MACCEPA complet avec 2 DDL et 2 raideurs variables indépendantes (b), \citep{weckx_two-degree_2014}} % Figure caption
+	\label{var_actuator} % Label for referencing with \ref{bear}
+\end{figure}
 
 \subsubsection{Contrôle rythmique}
 
 \citep{huang_torque-stiffness-controlled_2016} => utilisation de CPGs contrôlant la raideur variable et le point d'équilibre (2 GPGs par articulation)
+
+%----------------------------------------------------------------------------------------
+%	APPENDIX
+%----------------------------------------------------------------------------------------
+
+\begin{appendix}
+
+	\listoffigures
+
+\end{appendix}
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
