@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+
+
+import rospy
+import tf 
+import numpy as np
+
+
+if __name__=="__main__":
+    
+    rospy.init_node('tf2endpoint')
+    
+    frames_id = ["base_link", "arm_link_0", "arm_link_1", "arm_link_2", "arm_link_3", "arm_link_4", "arm_link_5"]
+    
+    size_frame = len(frames_id)
+    ratio = 3.
+    
+    listener = tf.TransformListener()
+    br = tf.TransformBroadcaster()
+    
+    rate = rospy.Rate(500.0) # tf gets published at 500Hz approx
+    
+    while not rospy.is_shutdown():
+    
+    	try:
+    	    tfs = []
+    	    
+    	    for i in xrange(0, size_frame - 1):
+    		    tfs.append(listener.lookupTransform(frames_id[i], frames_id[i+1], 
+    		                                        rospy.Time(0)))
+    		                                            
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as err:
+            rospy.logwarn_throttle(1.0, err)
+            continue
+        
+        matrices = []
+        tf_ROS = tf.TransformerROS()
+        
+        for i in xrange(0, size_frame - 1):
+            
+            matrices.append(tf_ROS.fromTranslationRotation(tfs[i][0], tfs[i][1]))
+            
+        T = []
+        
+        for i in xrange(0, size_frame - 2):
+        
+            T.append(np.matmul(matrices[i], matrices[i+1]))
+        
+        T_f = np.identity(4)
+        
+        for i in xrange(0, size_frame - 2):
+        
+            T_f = np.matmul(T_f, T[i])
+        
+        trans = tf.transformations.translation_from_matrix(T_f)
+        #quat = tf.transformations.quaternion_from_matrix(T_f) # we don't need orientation for now
+        
+        br.sendTransform([0, 0, 0], tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), "world", "base_link")    
+        br.sendTransform([0, 0, trans[2]*ratio], tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), "arm", "world")
+        
+        rate.sleep()

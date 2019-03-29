@@ -55,7 +55,7 @@
 
 \estheticline
 
-\lettrine{L}{\textbf{ors}} d'interactions avec l'environnement, les être humains utilisent les propriétés dynamiques de leurs membres pour atteindre des comportements stables. L'impédance mécanique chez les humains, qui regroupe plus d'information que la raideur seule, est étudiée depuis des années sous l'oeil de l'automatique \citep{hogan_adaptive_1984}, et l'est toujours \citep{mizrahi_mechanical_2015}. Les liens avec les neurosciences \citep{roberts_cerebellar_1996} en font un écosystème complexe avec de nombreuses théories émergeant sur le mouvement humain. L'objectif principal de cette thèse est l'étude de la frappe cyclique de balle, et donc des articulations du bras et ses liens avec l'impédance cartésienne. Plusieurs modèles ont été proposés pour le bras, le poignet, l'épaule et le coude, avec des systèmes linéaires du second ordre \citep{tsuji_human_1997}, ou des représentations plus complexe inspirées par Hill and d'autres modèles neuro-musculaires \citep{puzi_mechanical_2017}. D'autres parties du corps humain ont été aussi étudiées, comme le tronc \citep{smith_nonlinear_1994}, et la cheville \citep{rouse_estimation_2014, ludvig_mechanisms_2017}.
+\lettrine{L}{\textbf{ors}} d'interactions avec l'environnement, les être humains utilisent les propriétés dynamiques de leurs membres pour atteindre des comportements stables. L'impédance mécanique chez les humains, qui regroupe plus d'information que la raideur seule, est étudiée depuis des années sous l'œil de l'automatique \citep{hogan_adaptive_1984}, et l'est toujours \citep{mizrahi_mechanical_2015}. Les liens avec les neurosciences \citep{roberts_cerebellar_1996} en font un écosystème complexe avec de nombreuses théories émergeant sur le mouvement humain. L'objectif principal de cette thèse est l'étude de la frappe cyclique de balle, et donc des articulations du bras et ses liens avec l'impédance cartésienne. Plusieurs modèles ont été proposés pour le bras, le poignet, l'épaule et le coude, avec des systèmes linéaires du second ordre \citep{tsuji_human_1997}, ou des représentations plus complexe inspirées par Hill and d'autres modèles neuro-musculaires \citep{puzi_mechanical_2017}. D'autres parties du corps humain ont été aussi étudiées, comme le tronc \citep{smith_nonlinear_1994}, et la cheville \citep{rouse_estimation_2014, ludvig_mechanisms_2017}.
 
 %----------------------------------------------------------------------------------------
 %	ARTICLE CONTENTS
@@ -761,7 +761,7 @@ La \cref{bloc_feedback_linearization} montre le cas de la commande en impédance
 
 \newlineBlank 
 
-Il est aussi possible d'utiliser des lois de commande en impédance en \textit{feedforward}. L'intégration du modèle dynamique à l'intérieur de la boucle de contrôle est remplacée par un \textit{feedforward}. Ainsi, le modèle dynamique du bras est calculé à partir de la consigne et non en fonction de l'état réel, on suppose donc que l'état est proche de ce qui est imposé par la consigne. Le contrôle en impédance permet de corriger les erreurs de modélisation par une retroaction. Dans son étude \cite{tee_model_2004} a réussi à reproduire les résultats observés chez des humains, lors d'expérimentation conduites par \cite{gomi_human_1997}, avec ce type de commande en impédance.
+Il est aussi possible d'utiliser des lois de commande en impédance par anticipation, souvent appelées \textit{feedforward}. L'intégration du modèle dynamique à l'intérieur de la boucle de contrôle est remplacée par un \textit{feedforward}. Ainsi, le modèle dynamique du bras est calculé à partir de la consigne et non en fonction de l'état réel, on suppose donc que l'état est proche de ce qui est imposé par la consigne. Le contrôle en impédance permet de corriger les erreurs de modélisation par une rétroaction. Dans son étude, \cite{tee_model_2004} a réussi à reproduire, en simulation, les résultats observés chez des humains, lors d'expérimentations conduites par \cite{gomi_human_1997}, avec ce type de commande en impédance.
 
 \newlineBlank 
 
@@ -840,7 +840,7 @@ Contrairement à la loi de commande proposée par \cite{hogan_impedance_1985}, q
 
 \newlineBlank 
 
-Creuser la thèse de Williamson => mais peut-être que ce contrôle devrait être placer dans la partie VIA ?? auquel cas je n'ai pas encore trouvé d'exemple de contrôle rythmique lié à un contrôle en impédance, sans actionneur à raideur variable.
+Creuser la thèse de Williamson => mais peut-être que ce contrôle devrait être placé dans la partie VIA (composant élastique + contrôle PD pour simuler comportement dynamique)  ?? auquel cas je n'ai pas encore trouvé d'exemple de contrôle rythmique lié à un contrôle en impédance, sans actionneur à raideur variable.
 
 %------------------------------------------------
 

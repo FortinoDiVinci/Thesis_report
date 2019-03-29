@@ -141,8 +141,7 @@ if __name__=="__main__":
     settings = termios.tcgetattr(sys.stdin)
 	
     pub_pos = rospy.Publisher('arm_1/arm_controller/position_command', JointPositions)
-    #pub_vel = rospy.Publisher('arm_1/arm_controller/velocity_command', JointVelocities)
-    pub_vel = rospy.Publisher('joint_vel_cmd/', JointVelocities)
+    pub_vel = rospy.Publisher('arm_1/arm_controller/velocity_command', JointVelocities)
     #pub = rospy.Publisher('cmd_vel', Twist)
     rospy.init_node('teleop_twist_keyboard')
     

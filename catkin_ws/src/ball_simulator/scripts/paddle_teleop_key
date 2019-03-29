@@ -47,8 +47,7 @@ msg = """
 Control the paddle
 ---------------------------
 u/j : move up/down
-space key, k : force stop
-anything else : stop smoothly
+
 CTRL-C to quit
 """
 
@@ -118,9 +117,9 @@ if __name__=="__main__":
     rospy.init_node('paddle_teleop')
     
     z = 1
-    f = 400
+    f = 500
 
-    frame_id = 'paddle'
+    frame_id = 'arm'
     parent_frame_id = 'world'
 
     #th = BroadcastThread(f, args=z)
@@ -141,7 +140,7 @@ if __name__=="__main__":
                 z = z + moveBindings[key]
                 speed = CST_SPEED
                 count = 0
-                print('Current height %s' % z)
+                #print('Current height %s' % z)
             elif key == ' ' or key == 'k' :
                 speed = 0
             else:

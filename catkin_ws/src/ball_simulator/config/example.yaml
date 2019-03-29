@@ -1,0 +1,26 @@
+sessions:
+  - test_1_ses_1:
+      duration: 30.0 # seconds
+      initial_config:
+        target_height: 2.0
+        restitution: 0.6
+        gravity: 9.807
+      events:
+        higher_on_mars_after_fifth_bounce:
+          trigger: BOUNCE
+          value: 5
+          config:
+            target_height: 3.0
+            gravity: 3.711
+  - test1_ses_2:
+      duration: 30.0 # seconds
+      initial_config:
+        target_height: 2.0
+        restitution: 0.6
+        gravity: 9.807
+      events:
+        on_moon_after_10s:
+          trigger: DELAY
+          value: 10.0 # seconds
+          config:
+            gravity: 1.62
