@@ -1,0 +1,104 @@
+#!/usr/bin/env python
+
+import time
+import rospy
+import tf 
+import numpy as np
+from copy import deepcopy
+from geometry_msgs.msg import WrenchStamped, Twist
+
+g = 9.80665
+
+sensor_data = WrenchStamped()
+BIAS = [0, 0, 0, 0, 0, 0]
+GRAVITY = [0, 0, 0]
+
+# For rotation matrix, the inverse is the transpose matrix
+def getInv3rdCol(matrix):
+    M02 = matrix[0][2]
+    M12 = matrix[1][2]
+    M22 = matrix[2][2]
+    mat = [M02, M12, M22]
+    return mat
+
+
+def getForceCallback(data):
+    global sensor_data
+    sensor_data = data
+
+if __name__=="__main__":
+
+    rospy.init_node('force_sensor_utils')
+    
+    listener = tf.TransformListener()
+    
+    rate = rospy.Rate(500.0)
+    
+    sensor_frame = "sensor"
+    parent_frame = "world"
+    
+    m = rospy.get_param('~sensor_mass', 0.2) #mass in kg
+    not_initialized_bias = rospy.get_param('~bias', False) 
+    
+    z = g * m
+                          
+    sub_force = rospy.Subscriber("netft_data", WrenchStamped,
+                                 getForceCallback)
+    pub_force_cor = rospy.Publisher('force_sensor/grav_comp',
+                               WrenchStamped, queue_size=1)  
+    time.sleep(0.2)
+
+    ######
+    
+    listener.waitForTransform(sensor_frame, parent_frame, rospy.Time(), rospy.Duration(4.0))
+    tf_sens = listener.lookupTransform(sensor_frame, parent_frame, rospy.Time(0))
+    grav_comp_data = deepcopy(sensor_data)
+    
+    f = open("test.txt", "w+")
+    f.write(tf_sens)
+    f.write("\n\nSensor Data:\n")
+    f.write(grav_comp_data)
+    f.close()
+    
+    ######
+
+    """
+
+    while not rospy.is_shutdown():
+
+        try:
+            tf_sens = listener.lookupTransform(sensor_frame, parent_frame, rospy.Time(0))
+		                                            
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as err:
+            rospy.logwarn_throttle(1.0, err)
+            continue
+    
+        tf_ROS = tf.TransformerROS()
+        mat_w_gravity = tf_ROS.fromTranslationRotation(tf_sens[0], tf_sens[1])
+        
+        #GRAVITY = deepcopy(list(getInv3rdCol(mat_w_gravity))) 
+        
+        grav_comp_data = deepcopy(sensor_data) # deepcopy to avoid undesired thread behaviour
+        grav_comp_data.wrench.force.x = grav_comp_data.wrench.force.x - GRAVITY[0] - BIAS[0]
+        grav_comp_data.wrench.force.y = grav_comp_data.wrench.force.y - GRAVITY[1] - BIAS[1]
+        grav_comp_data.wrench.force.z = grav_comp_data.wrench.force.z - GRAVITY[2] - BIAS[2]
+        
+        if(not_initialized_bias):
+            BIAS[0] = grav_comp_data.wrench.force.x
+            BIAS[1] = grav_comp_data.wrench.force.y
+            BIAS[2] = grav_comp_data.wrench.force.z
+            
+            
+            grav_comp_data.wrench.force.x = grav_comp_data.wrench.force.x - BIAS[0]
+            grav_comp_data.wrench.force.y = grav_comp_data.wrench.force.y - BIAS[1]
+            grav_comp_data.wrench.force.z = grav_comp_data.wrench.force.z - BIAS[2]
+            
+            not_initialized_bias = False
+        
+        pub_force_cor.publish(grav_comp_data)
+
+        rate.sleep()
+        
+        """
+        
+    rospy.spin()
