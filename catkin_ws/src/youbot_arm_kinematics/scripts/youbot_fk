@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+
+import numpy as np
+
+import rospy
+import tf
+from sensor_msgs.msg import JointState
+from geometry_msgs.msg import QuaternionStamped
+
+import youbot_arm_kinematics.kinematics as yk
+import youbot_arm_kinematics.dh_parameters as dh
+    
+thetas = np.array([0.,0.,0.,0.,0.])
+sensor = np.array(tf.transformations.quaternion_about_axis(70./180*np.pi, (0,0,1)))
+
+def getJointPos(joint):
+    global thetas
+    positions = joint.position
+
+    for i, theta in enumerate(thetas):
+        thetas[i] = positions[i]
+
+
+def initQuaternion(q):
+
+    quat = QuaternionStamped()
+    quat.header.stamp = rospy.Time.now()
+    quat.header.frame_id = "sensor"
+    quat.quaternion.x = q[0]
+    quat.quaternion.y = q[1]
+    quat.quaternion.z = q[2]
+    quat.quaternion.w = q[3]
+
+    return quat
+
+if __name__=="__main__":
+
+    y_DH = dh.YouBotDHParameters()    
+    youbot = yk.Kinematics(y_DH.DH_A, y_DH.DH_ALPHA, y_DH.DH_D, y_DH.DH_THETA)
+    
+    rospy.init_node('forward_kinematic')
+    
+    sub = rospy.Subscriber("joint_states", JointState, getJointPos)
+    pub_arm = rospy.Publisher('forward_kinematic/arm', QuaternionStamped, queue_size=1)
+    pub_sensor = rospy.Publisher('forward_kinematic/sensor', QuaternionStamped, queue_size=1) 
+    
+    rate = rospy.Rate(500.0) # joint_states gets published at 500Hz approx
+    
+    br = tf.TransformBroadcaster()
+    
+    while not rospy.is_shutdown():
+    
+        tr, quat, _, matrix = youbot.forward(thetas)
+        
+        q_sensor = tf.transformations.quaternion_multiply(quat, sensor)
+        
+        #br.sendTransform(tr, quat, rospy.Time.now(), "arm_mgd", "arm_link_0")
+        br.sendTransform(tr, q_sensor, rospy.Time.now(), "sensor_mgd", "arm_link_0")
+        
+        pub_sensor.publish(initQuaternion(q_sensor))
+        
+        rate.sleep()
+
