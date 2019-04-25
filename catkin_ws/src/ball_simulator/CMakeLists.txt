@@ -62,7 +62,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  SetLogFile.srv
+  StartLogging.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -149,7 +149,6 @@ add_executable(${PROJECT_NAME}_logger
   src/logger/log_file.cpp
   src/logger/message_aggregator.cpp
   src/logger/logger.cpp)
-add_executable(${PROJECT_NAME}_session_manager src/session_manager.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -157,14 +156,12 @@ add_executable(${PROJECT_NAME}_session_manager src/session_manager.cpp)
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(${PROJECT_NAME}_clock PROPERTIES OUTPUT_NAME clock PREFIX "")
 set_target_properties(${PROJECT_NAME}_logger PROPERTIES OUTPUT_NAME logger PREFIX "")
-set_target_properties(${PROJECT_NAME}_session_manager PROPERTIES OUTPUT_NAME session_manager PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_clock ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_logger ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(${PROJECT_NAME}_session_manager ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
@@ -174,9 +171,6 @@ target_link_libraries(${PROJECT_NAME}_clock
   ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_logger
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(${PROJECT_NAME}_session_manager
   ${catkin_LIBRARIES}
 )
 
@@ -190,9 +184,10 @@ target_link_libraries(${PROJECT_NAME}_session_manager
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 install(PROGRAMS
-   scripts/paddle_teleop_key
-   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
- )
+  scripts/session_manager
+  scripts/paddle_teleop_key
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ## Mark executables and/or libraries for installation
 install(
@@ -200,7 +195,7 @@ install(
     ${PROJECT_NAME}_clock
     ${PROJECT_NAME}_logger
     ${PROJECT_NAME}_node
-    ${PROJECT_NAME}_session_manager
+    # ${PROJECT_NAME}_session_manager
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

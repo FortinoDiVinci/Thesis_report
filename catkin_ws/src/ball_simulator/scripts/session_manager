@@ -1,0 +1,209 @@
+#!/usr/bin/env python
+
+import rospy
+import os, sys
+from ball_simulator.srv import StartLogging
+from std_srvs.srv import Trigger
+import dynamic_reconfigure.client
+from std_msgs.msg import Float64
+
+
+def wait_for_enter():
+    result = None
+
+    try:
+        while result != "\n":
+            if os.name == 'nt':
+                import msvcrt  # pylint: disable=import-error
+                result = msvcrt.getch()
+            else:
+                import termios  # pylint: disable=import-error
+                fd = sys.stdin.fileno()
+
+                oldterm = termios.tcgetattr(fd)
+                newattr = termios.tcgetattr(fd)
+                newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
+                termios.tcsetattr(fd, termios.TCSANOW, newattr)
+
+                try:
+                    result = sys.stdin.read(1)
+                except IOError:
+                    pass
+                finally:
+                    termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+    except KeyboardInterrupt:
+        pass
+
+
+def on_reconfiguration(config):
+    msg = "configuration is now set to :\n"
+    for name, value in config.iteritems():
+        if name != "groups":
+            msg += "\t{}: {}\n".format(name, value)
+    rospy.loginfo(msg)
+
+
+class BounceEvent:
+
+    def __init__(self, event_name, event_config, reconfigure_client):
+        self.name = event_name
+        self.config = event_config.get("config", {})
+        self.reconfigure_client = reconfigure_client
+        self.is_triggered = False
+        self.bouncing_counter = 0
+
+        try:
+            self.value = event_config["value"]
+        except KeyError:
+            rospy.logerr("value field is not defined for event %s", event_name)
+            return
+
+        if self.value < 0:
+            rospy.logerr("event value should be positive %s for event %s", self.value, event_name)
+            return
+
+        self.sub = rospy.Subscriber("impulse", Float64, self.on_event)
+
+    def on_event(self, msg):
+        if not self.is_triggered:
+            if msg.data > 0.0:
+                self.bouncing_counter += 1
+                if self.bouncing_counter >= self.value:
+                    self.is_triggered = True
+                    self.reconfigure_client.update_configuration(self.config)
+                    rospy.loginfo("event %s triggered", self.name)
+
+    def unregister(self):
+        self.sub.unregister()
+
+
+class DelayEvent:
+
+    def __init__(self, event_name, event_config, reconfigure_client):
+        self.name = event_name
+        self.config = event_config.get("config", {})
+        self.reconfigure_client = reconfigure_client
+        self.is_triggered = False
+
+        try:
+            self.value = event_config["value"]
+        except KeyError:
+            rospy.logerr("value field is not defined for event %s", event_name)
+            return
+
+        if self.value < 0.0:
+            rospy.logerr("event value should be positive %s for event %s", self.value, event_name)
+            return
+
+        self.timer = rospy.Timer(rospy.Duration(self.value), self.on_event)
+
+    def on_event(self, _):
+        if not self.is_triggered:
+            self.is_triggered = True
+            self.reconfigure_client.update_configuration(self.config)
+            rospy.loginfo("event %s triggered", self.name)
+
+    def unregister(self):
+        self.timer.shutdown()
+
+
+class EventFactory:
+    TRIGGER_TYPES = {"BOUNCE": BounceEvent, "DELAY": DelayEvent}
+
+    @classmethod
+    def create_event(cls, event_name, event_config, reconfigure_client):
+        try:
+            trigger_name = event_config["trigger"]
+        except KeyError:
+            rospy.logerr("trigger field is not defined for event %s", event_name)
+            return None
+
+        if trigger_name not in cls.TRIGGER_TYPES:
+            rospy.logerr("trigger should be one of %s", ", ".join(cls.TRIGGER_TYPES.keys()))
+            return None
+
+        return cls.TRIGGER_TYPES[trigger_name](event_name, event_config, reconfigure_client)
+
+
+if __name__ == '__main__':
+
+    rospy.init_node('session_manager')
+
+    sessions = rospy.get_param("~sessions")
+    log_file_path = rospy.get_param("~log_file_path", "")
+
+    stop_simulation_service = rospy.ServiceProxy('stop', Trigger)
+    reset_simulation_service = rospy.ServiceProxy('reset', Trigger)
+    start_logging_service = rospy.ServiceProxy('start_logging', StartLogging)
+    stop_logging_service = rospy.ServiceProxy('stop_logging', Trigger)
+    reconfigure_simulation_client = dynamic_reconfigure.client.Client(
+        "ball_simulator", timeout=1000, config_callback=on_reconfiguration)
+
+    def stop_simulation():
+        stop_simulation_service.wait_for_service()
+        stop_simulation_service()
+
+    def reset_simulation():
+        reset_simulation_service.wait_for_service()
+        reset_simulation_service()
+
+    def start_logging(log_file_path):
+        start_logging_service.wait_for_service()
+        start_logging_service(log_file_path)
+
+    def stop_logging():
+        stop_logging_service.wait_for_service()
+        stop_logging_service()
+
+    def reconfigure_simulation(configuration):
+        reconfigure_simulation_client.update_configuration(configuration)
+
+    events = []
+
+    for index, session_item in enumerate(sessions):
+
+        if len(session_item.keys()) != 1:
+            rospy.logfatal("session number %i definition is ill-formed", index)
+            sys.exit(1)
+
+        session_name = session_item.keys()[0]
+        session = session_item[session_name]
+
+        if rospy.is_shutdown():
+            break
+
+        stop_logging()
+        stop_simulation()
+
+        for event in events:
+            event.unregister()
+
+        events = []
+
+        rospy.loginfo("press enter to start this session")
+        wait_for_enter()
+
+        rospy.loginfo("starting session %s", session_name)
+        reconfigure_simulation(session.get("initial_config", {}))
+
+        events_config = session.get("events", {})
+
+        for event_name, event_config in events_config.iteritems():
+            event = EventFactory.create_event(
+                event_name, event_config, reconfigure_simulation_client)
+            if event:
+                events.append(event)
+                rospy.loginfo("event %s registered", event_name)
+            else:
+                rospy.logwarn("event %s not registered", event_name)
+
+        start_logging(os.path.join(log_file_path, "{}.log".format(session_name)))
+        reset_simulation()
+        session_start = rospy.Time.now()
+
+        try:
+            session_duration = session["duration"]
+            rospy.sleep(session_duration)
+        except KeyError:
+            rospy.loginfo("press enter to end this session")
+            wait_for_enter()

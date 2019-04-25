@@ -1,0 +1,100 @@
+#!/usr/bin/env python
+
+
+####################
+#    INCLUDE
+####################
+
+
+import rospy
+import numpy as np
+import time
+from copy import deepcopy
+
+import tf
+from sensor_msgs.msg import JointState
+from geometry_msgs.msg import QuaternionStamped
+
+import forward_kinematic as fk
+
+
+###################
+#    FUNCTIONS
+###################
+
+
+thetas = np.array([0.,0.,0.,0.,0.])
+
+def getJointPos(joint):
+    global thetas
+    positions = joint.position
+    #print("th1: %f" %positions[0])
+    #print("th2: %f" %positions[1])
+    #print("th3: %f" %positions[2])
+    #print("th4: %f" %positions[3])
+    #print("th5: %f" %positions[4])
+
+    for i, theta in enumerate(thetas):
+        thetas[i] = positions[i]
+
+def initQuaternion(q):
+
+    quat = QuaternionStamped()
+    quat.header.stamp = rospy.Time.now()
+    quat.header.frame_id = "sensor"
+    quat.quaternion.x = q[1]
+    quat.quaternion.y = q[2]
+    quat.quaternion.z = q[3]
+    quat.quaternion.w = q[0]
+
+    return quat
+
+######################
+#       MAIN          
+######################
+
+
+if __name__=="__main__":
+    
+    global th
+    
+    rospy.init_node('tf2endpoint_mgd')
+    
+    sub = rospy.Subscriber("joint_states", JointState, getJointPos)
+    pub = rospy.Publisher('forward_kinematic/MM/sensor',
+                               QuaternionStamped, queue_size=1)  
+    
+    time.sleep(0.3) # make sur subscriber is ready
+    
+    th = -110 * np.pi / 180 # rotation along z axis between sensor axis and robot end effector
+    z = 0.0175 # translation along z between sensor axis and robot end effector
+    sensor_link = np.array([
+    [np.cos(th), -np.sin(th), 0, 0], 
+    [np.sin(th), np.cos(th) , 0, 0], 
+    [0         , 0          , 1, z], 
+    [0         , 0          , 0, 1]])   
+    
+    ratio = rospy.get_param('tf_ratio', 1.) # multiply translation by ratio
+
+    listener = tf.TransformListener()
+    br = tf.TransformBroadcaster()
+    
+    rate = rospy.Rate(500.0) # joint_states gets published at 500Hz approx
+    
+    while not rospy.is_shutdown():
+    
+        rot_matrix = fk.forward_kinematic(deepcopy(thetas))
+        rot_matrix_sensor = np.matmul(rot_matrix, sensor_link)
+        #print(rot_matrix)
+        q = tf.transformations.quaternion_from_matrix(rot_matrix)
+        t = tf.transformations.translation_from_matrix(rot_matrix) 
+        
+        q_sens = tf.transformations.quaternion_from_matrix(rot_matrix_sensor)
+        
+        quat = initQuaternion(q)
+        
+        pub.publish(quat)
+        br.sendTransform(t, q, rospy.Time.now(), "arm_mgd", "arm_link_0")
+        br.sendTransform(t, q_sens, rospy.Time.now(), "sensor_mgd", "arm_link_0")
+
+        rate.sleep()

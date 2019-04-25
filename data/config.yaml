@@ -1,0 +1,28 @@
+	- Test_B_0:
+		duration: 50.30
+		initial_config:
+			target_height: 2.00
+			restitution: 0.60
+
+		events:
+			event_0
+				trigger: BOUNCE
+				value: 6
+				config:
+					gravity: 6.70
+
+			event_1
+				trigger: BOUNCE
+				value: 12
+				config:
+					target_height: 2.30
+					restitution: 0.90
+					gravity: 6.00
+
+			event_2
+				trigger: DELAY
+				value: 35.9
+				config:
+					target_height: 1.00
+					restitution: 0.50
+

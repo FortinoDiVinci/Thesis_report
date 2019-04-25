@@ -5,6 +5,7 @@ import rospy
 import tf 
 import numpy as np
 
+_USE_QUAT_ = False
 
 if __name__=="__main__":
     
@@ -12,16 +13,18 @@ if __name__=="__main__":
     
     frames_id = ["base_link", "arm_link_0", "arm_link_1", "arm_link_2", "arm_link_3", "arm_link_4", "arm_link_5"]
     
-    th = 116 * np.pi / 180 # rotation along z axis between sensor axis and robot end effector
+    th = -110 * np.pi / 180 # rotation along z axis between sensor axis and robot end effector
     z = 0.0175 # translation along z between sensor axis and robot end effector
     sensor_link = np.array([
     [np.cos(th), -np.sin(th), 0, 0], 
     [np.sin(th), np.cos(th) , 0, 0], 
     [0         , 0          , 1, z], 
     [0         , 0          , 0, 1]])
+    
 
     size_frame = len(frames_id)	
-    ratio = 3.
+    
+    ratio = rospy.get_param('tf_ratio', 1.) # multiply translation by ratio
     
     listener = tf.TransformListener()
     br = tf.TransformBroadcaster()
@@ -41,30 +44,51 @@ if __name__=="__main__":
             rospy.logwarn_throttle(1.0, err)
             continue
         
-        T = []
-        tf_ROS = tf.TransformerROS()
+        if _USE_QUAT_:
         
-        for i in xrange(0, size_frame - 1):
+            #trans = []
+            trans = np.array([0., 0., 0.5])
+            quat = []
             
-            T.append(tf_ROS.fromTranslationRotation(tfs[i][0], tfs[i][1]))
+            for i in xrange(0, size_frame - 1):
+                
+                #trans.append(tfs[i][0])
+                quat.append(tfs[i][1])
+            
+            tot_quat = np.array([0., 0., 0., 1.])
+                
+            for i in xrange(0, size_frame - 1):
+            
+                tot_quat = tf.transformations.quaternion_multiply(tot_quat, quat[i])
         
-        T_f = np.identity(4)
+            quat = tot_quat
         
-        for i in xrange(0, size_frame - 1):
+        else:
         
-            T_f = np.matmul(T_f, T[i])
-        
-        trans = tf.transformations.translation_from_matrix(T_f)
-        quat = tf.transformations.quaternion_from_matrix(T_f)
-        #tf.transformations.quaternion_from_euler(0, 0, 0) 
-        
-        T_f_sensor = np.matmul(T_f, sensor_link)
-        
-        trans_sens = tf.transformations.translation_from_matrix(T_f_sensor)
-        quat_sens = tf.transformations.quaternion_from_matrix(T_f_sensor)
-        
-        br.sendTransform([0, 0, 0], tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), "world", "base_link")    
+            T = []
+            tf_ROS = tf.TransformerROS()
+            
+            for i in xrange(0, size_frame - 1):
+                
+                T.append(tf_ROS.fromTranslationRotation(tfs[i][0], tfs[i][1]))
+            
+            T_f = np.identity(4)
+            
+            for i in xrange(0, size_frame - 1):
+            
+                T_f = np.matmul(T_f, T[i])
+            
+            trans = tf.transformations.translation_from_matrix(T_f)
+            quat = tf.transformations.quaternion_from_matrix(T_f)
+            #tf.transformations.quaternion_from_euler(0, 0, 0) 
+            
+            T_f_sensor = np.matmul(T_f, sensor_link)
+            
+            trans_sens = tf.transformations.translation_from_matrix(T_f_sensor)
+            quat_sens = tf.transformations.quaternion_from_matrix(T_f_sensor)
+       
+        br.sendTransform([0, 0, 0], [0, 0, 0, 1], rospy.Time.now(), "world", "base_link")    
         br.sendTransform(ratio*trans, quat, rospy.Time.now(), "arm", "world")
-        br.sendTransform(trans_sens, quat_sens, rospy.Time.now(), "sensor", "world")
+        #br.sendTransform(trans_sens, quat_sens, rospy.Time.now(), "sensor", "world")
         
         rate.sleep()

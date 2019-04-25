@@ -169,6 +169,8 @@ install(PROGRAMS
    scripts/youbot_joints_limits.py
    scripts/youbot_keyboard_teleop.py
    scripts/tf_endpoint
+   scripts/ATI_force_sensor_utils
+   scripts/tf_endpoint_mgd
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

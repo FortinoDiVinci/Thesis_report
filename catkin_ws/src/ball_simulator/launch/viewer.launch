@@ -1,0 +1,5 @@
+<launch>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ball_simulator)/rviz/default.rviz"/>
+
+</launch>
