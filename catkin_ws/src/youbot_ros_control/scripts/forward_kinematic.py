@@ -3,7 +3,11 @@
 
 import numpy as np
 
-# This forward kinematics model of the youbot (KUKA) was computed by Maria MAKAROV (L2S - CentraleSupélec) using Matlab(R) and converted to python by Vincent FORTINEAU (L2S - CentraleSupélec & Université Paris-Sud)
+# This forward kinematics model of the youbot (KUKA) was computed by 
+# Maria MAKAROV (L2S - CentraleSupélec) using Matlab(R) and converted 
+# to python by Vincent FORTINEAU (L2S - CentraleSupélec & Université 
+# Paris-Sud) with minor modifications
+# execution time estimated around 29.99us +/- 0.005us 
 
 def forward_kinematic(th):
 
@@ -13,75 +17,90 @@ def forward_kinematic(th):
     th4 = th[3]
     th5 = th[4]
     
-    d2 = 0.033
-    d3 = 0.155
-    d4 = 0.135
-    lend = 0.218
-    r1 = 0.147
-
     sin = np.sin
     cos = np.cos
+    pi = np.pi
+        
+    t2 = pi*(5.0/7.2e1)
+    t3 = t2 + th5
+    t4 = pi*(1.1e1/1.8e2)
+    t5 = t4 + th1
+    t6 = pi*(5.0/3.6e1)
+    t7 = t6 + th2
+    t8 = sin(t5)
+    t9 = pi*(1.4e1/4.5e1)
+    t10 = t9 + th3
+    t11 = cos(t7)
+    t12 = cos(t5)
+    t13 = sin(t7)
+    t14 = pi*(3.1e1/7.2e1)
+    t15 = t14 + th4
+    t16 = cos(t10)
+    t17 = 0.0 #t8*t11*6.123233995736766e-17
+    t18 = t12*t13
+    t19 = t17 + t18
+    t20 = sin(t10)
+    t21 = 0.0 #t8*t13*6.123233995736766e-17
+    t26 = t11*t12
+    t22 = t21 - t26
+    t23 = sin(t3)
+    t24 = cos(t15)
+    t25 = t16*t19
+    t33 = t20*t22
+    t27 = t25 - t33
+    t28 = sin(t15)
+    t29 = t16*t22
+    t30 = t19*t20
+    t31 = t29 + t30
+    t32 = cos(t3)
+    t34 = t24*t27
+    t38 = t28*t31
+    t35 = t34 - t38
+    t36 = t24*t31
+    t37 = t27*t28
+    t39 = t8*t13
+    t44 = 0.0 #t11*t12.*6.123233995736766e-17
+    t40 = t39 - t44
+    t41 = t8*t11
+    t42 = 0.0 #t12*t13.*6.123233995736766e-17
+    t43 = t41 + t42
+    t45 = t16*t40
+    t46 = t20*t43
+    t47 = t45 + t46
+    t48 = t16*t43
+    t51 = t20*t40
+    t49 = t48 - t51
+    t50 = t24*t47
+    t52 = t28*t49
+    t53 = t24*t49
+    t54 = t53 - t28*t47;
+    t57 = pi*(1.0/2.0e1)
+    t55 = -t57 + th2 + th3 + th4 + th5
+    t56 = th2 + th3 + th4 - th5 - pi*(1.7e1/9.0e1)
+    t58 = th2 + th3 + th4 - pi*(4.3e1/3.6e2)
+    t59 = cos(t58)
 
-    t2 = th1 + th2 + th3 + th4 + th5
-    t3 = th1 - th5
-    t4 = th1 + th2 + th3 + th4 - th5
-    t5 = -th1 + th2 + th3 + th4 + th5
-    t6 = th1 + th5
-    t7 = -th1 + th2 + th3 + th4 - th5
-    t8 = th1 + th2 + th3 + th4
-    t9 = sin(t8)
-    t10 = sin(th1)
-    t11 = -th1 + th2 + th3 + th4
-    t12 = sin(t11)
-    t13 = sin(t2)
-    t14 = t13 * 2.5e-1
-    t15 = sin(t3)
-    t16 = t15 * (1.0/2.0)
-    t17 = sin(t4)
-    t18 = sin(t5)
-    t19 = t18*2.5e-1
-    t20 = sin(t6)
-    t21 = t20*(1.0/2.0)
-    t22 = sin(t7)
-    t23 = cos(t2)
-    t24 = t23*2.5e-1
-    t25 = cos(t3)
-    t26 = cos(t4)
-    t27 = t26*2.5e-1
-    t28 = cos(t5)
-    t29 = t28*2.5e-1
-    t30 = cos(t6)
-    t31 = t30*(1.0/2.0)
-    t32 = cos(t7)
-    t33 = t32*2.5e-1
-    t34 = cos(th1)
-    t35 = -th1 + th2 + th3
-    t36 = cos(t8)
-    t37 = th1 + th2
-    t38 = cos(t11)
-    t39 = th1 - th2
-    t40 = th1 + th2 + th3
-    t41 = th2 + th3 + th4 + th5
-    t42 = th2 + th3 + th4 - th5
-    t43 = th2 + th3 + th4
-    t44 = cos(t43)
+    R11 = t32*(t36 + t37) - t8*t23 #+ t23*t35*6.123233995736766e-17
+    R12 = t23*(t36 + t37) + t8*t32 #- t32*t35*6.123233995736766e-17
+    R13 = t34 - t38 #+ t8*6.123233995736766e-17
+    R21 = -t12*t23 + t32*t54 #+ t23*(t50 + t52)*(-6.123233995736766e-17) 
+    R22 = t12*t32 + t23*t54 #+ t32*(t50 + t52)*6.123233995736766e-17
+    R23 = -t50 - t52 #+ t12*6.123233995736766e-17
+    R31 = sin(t55)*5.0e-1 + sin(t56)*5.0e-1 #+ t23*(-6.123233995736766e-17)
+    R32 = -cos(t55)*5.0e-1 + cos(t56)*5.0e-1 #+ t32*6.123233995736766e-17 
+    R33 = t59 #+ 3.749399456654644e-33
+    tx = -t12*(3.3e1/1.0e3) + t11*t12*(3.1e1/2.0e2) - t16*t19*(2.7e1/2.0e2) + t24*t27*(1.09e2/5.0e2) - t28*t31*(1.09e2/5.0e2) + t20*(t21 - t26)*(2.7e1/2.0e2) #+ t8*1.334865011070615e-17 - t8*t13*9.491012693391987e-18 
+    ty = t8*(3.3e1/1.0e3) - t8*t11*(3.1e1/2.0e2) + t20*t43*(2.7e1/2.0e2) - t24*t47*(1.09e2/5.0e2) - t28*t49*(1.09e2/5.0e2)+t16*(t39 - t44)*(2.7e1/2.0e2) #+ t12*1.334865011070615e-17 - t12*t13*9.491012693391987e-18
+    tz = t13*(3.1e1/2.0e2) + t59*(1.09e2/5.0e2) - sin(-t57 + th2 + th3)*(2.7e1/2.0e2) + 1.47e-1
 
-    r00 = t24 - t25*(1.0/2.0) + t27 + t29 + t31 + t33
-    r10 = -t14 + t16 - t17*2.5e-1 + t19 - t21+ t22*2.5e-1
-    r20 = sin(t41)*(-5.0e-1) - sin(t42)*5.0e-1 + sin(th5)*6.123233995736766e-17
-    r01 = t14 + t16 - t17*2.5e-1 + t19 + t21 - t22*2.5e-1
-    r11 = t24 + t25*(1.0/2.0) - t27 - t29 + t31 + t33
-    r21 = cos(t41)*5.0e-1 - cos(t42)*5.0e-1 - cos(th5)*6.123233995736766e-17
-    r02 = t9*5.0e-1 - t10*6.123233995736766e-17 + t12*5.0e-1
-    r12 = t34*(-6.123233995736766e-17) + t36*5.0e-1 - t38*5.0e-1
-    r22 = t44 + 3.749399456654644e-33
+    return np.array([[R11, R12, R13, tx],
+		     [R21, R22, R23, ty],
+		     [R31, R32, R33, tz],
+		     [0.0, 0.0, 0.0, 1.]])		     
+		     
+if __name__ == "__main__":
+
+    th_KUKA = np.array([0, 0, 0, 0, 0])
     
-    tx = d2*t34 + lend*t9*5.0e-1 - lend*t10*6.123233995736766e-17 + lend*t12*5.0e-1 + d4*sin(t35)*5.0e-1 + d3*sin(t37)*5.0e-1 - d3*sin(t39)*5.0e-1 + d4*sin(t40)*5.0e-1
-    ty = -d2*t10 - lend*t34*6.123233995736766e-17 + lend*t36*5.0e-1 - lend*t38*5.0e-1 - d4*cos(t35)*5.0e-1 + d3*cos(t37)*5.0e-1 - d3*cos(t39)*5.0e-1 + d4*cos(t40)*5.0e-1
-    tz = lend*3.749399456654644e-33 + r1 + lend*t44 + d4*cos(th2 + th3) + d3*cos(th2)
-    
-    return np.array([[r00, r10, r20, tx],
-                     [r01, r11, r21, ty],
-                     [r02, r12, r22, tz],
-                     [  0,   0,   0,  1]])
-    
+    print(forward_kinematic(th_KUKA))
+

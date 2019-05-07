@@ -13,11 +13,11 @@ sensor_data = WrenchStamped()
 BIAS = [-14.3223, 1.2478, -6.2585, 0.0271, 0.7662, 0.0359]
 GRAVITY = np.array([0., 0., 0.])
 LEVER = np.array([0., 0., 0.])
+AVG_VAL = 10 # will average the Bias estimation to avoid noise from z mainly
 
 # For rotation matrix, the inverse is the transpose matrix
-def weight_projection(matrix, m):
-
-    return [-matrix[0][2]*m*g, -matrix[1][2]*m*g, -matrix[2][2]*m*g]
+def weight_projection(matrix, z):
+    return [-matrix[0][2]*z, -matrix[1][2]*z, -matrix[2][2]*z]
 
 def getForceCallback(data):
     global sensor_data
@@ -32,20 +32,24 @@ if __name__=="__main__":
     
     rate = rospy.Rate(500.0)
     
-    sensor_frame = "sensor_mgd"
+    sensor_frame = "sensor"
     parent_frame = "arm_link_0"
     
     m = rospy.get_param('~sensor_mass', 0.1096) #mass in kg
-    l = 0.0103
-    not_initialized_bias = rospy.get_param('~bias', False) 
+    l = rospy.get_param('~sensor_arm_leevr', 0.0103) # in m
+    not_initialized_bias = rospy.get_param('~bias', True) 
     
-    z = g * m
+    z = g*m
                           
     sub_force = rospy.Subscriber("netft_data", WrenchStamped,
                                  getForceCallback)
     pub_force_cor = rospy.Publisher('force_sensor/grav_comp',
                                WrenchStamped, queue_size=1)  
     time.sleep(0.2)
+
+    if(not_initialized_bias):
+        BIAS = [0., 0., 0., 0., 0., 0.]
+        counter = AVG_VAL 
 
     while not rospy.is_shutdown():
 
@@ -59,7 +63,7 @@ if __name__=="__main__":
         tf_ROS = tf.TransformerROS()
         mat_w_gravity = tf_ROS.fromTranslationRotation(tf_sens[0], tf_sens[1])
         
-        GRAVITY = deepcopy(weight_projection(mat_w_gravity, m))
+        GRAVITY = deepcopy(weight_projection(mat_w_gravity, z))
         
         LEVER[0] = GRAVITY[1] * l
         LEVER[1] = GRAVITY[0] * (-l)
@@ -74,19 +78,25 @@ if __name__=="__main__":
         grav_comp_data.wrench.torque.z = grav_comp_data.wrench.torque.z - LEVER[2] - BIAS[5]
         
         if(not_initialized_bias):
-            BIAS[0] = grav_comp_data.wrench.force.x
-            BIAS[1] = grav_comp_data.wrench.force.y
-            BIAS[2] = grav_comp_data.wrench.force.z
+            BIAS[0] += grav_comp_data.wrench.force.x
+            BIAS[1] += grav_comp_data.wrench.force.y
+            BIAS[2] += grav_comp_data.wrench.force.z
             
-            BIAS[3] = grav_comp_data.wrench.torque.x
-            BIAS[4] = grav_comp_data.wrench.torque.y
-            BIAS[5] = grav_comp_data.wrench.torque.z            
+            BIAS[3] += grav_comp_data.wrench.torque.x
+            BIAS[4] += grav_comp_data.wrench.torque.y
+            BIAS[5] += grav_comp_data.wrench.torque.z            
             
-            grav_comp_data.wrench.force.x = grav_comp_data.wrench.force.x - BIAS[0]
-            grav_comp_data.wrench.force.y = grav_comp_data.wrench.force.y - BIAS[1]
-            grav_comp_data.wrench.force.z = grav_comp_data.wrench.force.z - BIAS[2]
+            #grav_comp_data.wrench.force.x = grav_comp_data.wrench.force.x - BIAS[0]
+            #grav_comp_data.wrench.force.y = grav_comp_data.wrench.force.y - BIAS[1]
+            #grav_comp_data.wrench.force.z = grav_comp_data.wrench.force.z - BIAS[2]
             
-            not_initialized_bias = False
+            counter -= 1
+            
+            if counter == 0:
+                not_initialized_bias = False
+                for bias in BIAS:
+                    bias = bias/AVG_VAL
+                
         
         pub_force_cor.publish(grav_comp_data)
 

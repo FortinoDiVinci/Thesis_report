@@ -24,7 +24,7 @@ if __name__=="__main__":
 
     size_frame = len(frames_id)	
     
-    ratio = rospy.get_param('tf_ratio', 1.) # multiply translation by ratio
+    ratio = rospy.get_param('tf_ratio', 3.) # multiply translation by ratio
     
     listener = tf.TransformListener()
     br = tf.TransformBroadcaster()
