@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <include file="$(find youbot_driver_ros_interface)/launch/youbot_driver.launch"/>
+  <include file="$(find ball_simulator)/launch/test.launch"/>
+  <include file="$(find youbot_ros_control)/launch/default.launch"/>
+
+</launch>

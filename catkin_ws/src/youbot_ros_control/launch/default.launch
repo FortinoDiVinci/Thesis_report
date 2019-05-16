@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<launch>
+	
+  <arg name="kinem_rate" default="1200.0" />
+  <arg name="tf_ratio" default="3.0" />
+  <arg name="sensor_rate" default="1000.0" />
+  <arg name="sensor_ip" default="192.168.1.1" />
+  <arg name="grav_comp_rate" default="1000.0" />
+  <arg name="sensor_mass" default="0.1096" />
+  <arg name="sensor_lever" default="0.0103" />
+  <arg name="bias" default="True" />
+  
+  <node name="netft_sensor" pkg="netft_utils" type="netft_node_u" output="screen" args=" --rate $(arg sensor_rate) --address $(arg sensor_ip)"/>
+
+  <node name="endpoint_pose" pkg="youbot_ros_control" type="endpoint" output="screen">
+    <param name="tf_ratio" value ="$(arg tf_ratio)"/>
+ 	  <param name="rate" value ="$(arg kinem_rate)"/>
+  </node>
+ 
+  <node name="gravity_compensation" pkg="youbot_ros_control" type="gravity_comp" output="screen"> 
+    <param name="rate" value="$(arg grav_comp_rate)"/>
+    <param name="sensor_mass" value="$(arg sensor_mass)"/>
+    <param name="sensor_arm_lever" value="$(arg sensor_lever)"/>
+    <param name="bias" value="$(arg bias)"/>
+    <param name="avg_values" value= "$(arg sensor_rate)"/>
+    <remap from="force_sensor/grav_comp" to="force_feedback"/>
+  </node> 
+
+	<!--
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find youbot_ros_control)/rviz/robot_transforms.rviz"/> -->
+  
+</launch>

@@ -25,11 +25,12 @@ if __name__=="__main__":
     size_frame = len(frames_id)	
     
     ratio = rospy.get_param('tf_ratio', 3.) # multiply translation by ratio
+    freq = rospy.get_param('rate', 500.)
     
     listener = tf.TransformListener()
     br = tf.TransformBroadcaster()
     
-    rate = rospy.Rate(500.0) # tf gets published at 500Hz approx
+    rate = rospy.Rate(freq) # tf gets published at 500Hz approx
     
     while not rospy.is_shutdown():
     
@@ -87,8 +88,8 @@ if __name__=="__main__":
             trans_sens = tf.transformations.translation_from_matrix(T_f_sensor)
             quat_sens = tf.transformations.quaternion_from_matrix(T_f_sensor)
        
-        br.sendTransform([0, 0, 0], [0, 0, 0, 1], rospy.Time.now(), "world", "base_link")    
-        br.sendTransform(ratio*trans, quat, rospy.Time.now(), "arm", "world")
+        br.sendTransform([0, 0, 0], [0, 0, 0, 1], rospy.Time.now(), "world2", "base_link")    
+        br.sendTransform(ratio*trans, quat, rospy.Time.now(), "arm2", "world2")
         #br.sendTransform(trans_sens, quat_sens, rospy.Time.now(), "sensor", "world")
         
         rate.sleep()

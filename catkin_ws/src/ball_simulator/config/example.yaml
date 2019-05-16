@@ -1,5 +1,5 @@
 sessions:
-  - test_a2_ses_1:
+  - test_balle_collante06_ses_1:
       duration: 25.0 # seconds
       initial_config:
         target_height: 2.0
@@ -12,7 +12,7 @@ sessions:
           config:
             target_height: 3.0
             gravity: 3.711
-  - test_a2_ses_2:
+  - test_balle_collante06_ses_2:
       duration: 25.0 # seconds
       initial_config:
         target_height: 2.0

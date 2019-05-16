@@ -9,11 +9,12 @@
 import rospy
 import numpy as np
 import time
-from copy import deepcopy
+from timeit import default_timer as timer
+from copy import deepcopy, copy
 
 import tf
 from sensor_msgs.msg import JointState
-from geometry_msgs.msg import QuaternionStamped
+from geometry_msgs.msg import PoseStamped, Point, Quaternion, Pose
 
 import forward_kinematic as fk
 
@@ -24,6 +25,7 @@ import forward_kinematic as fk
 
 
 thetas = np.array([0.,0.,0.,0.,0.])
+SEQ = 0
 
 def getJointPos(joint):
     global thetas
@@ -37,17 +39,33 @@ def getJointPos(joint):
     for i, theta in enumerate(thetas):
         thetas[i] = positions[i]
 
-def initQuaternion(q):
-
-    quat = QuaternionStamped()
-    quat.header.stamp = rospy.Time.now()
-    quat.header.frame_id = "sensor"
-    quat.quaternion.x = q[1]
-    quat.quaternion.y = q[2]
-    quat.quaternion.z = q[3]
-    quat.quaternion.w = q[0]
-
-    return quat
+def initPoseStamped(t, q):
+    
+    global SEQ
+    
+    posi = Point()
+    posi.x = t[0]
+    posi.y = t[1]
+    posi.z = t[2]
+    
+    quat = Quaternion() 
+    quat.x = q[1]
+    quat.y = q[2]
+    quat.z = q[3]
+    quat.w = q[0]
+    
+    pose = Pose()
+    pose.position = posi
+    pose.orientation = quat
+    
+    ps = PoseStamped()
+    ps.header.seq = SEQ
+    ps.header.stamp = rospy.Time.now()
+    ps.header.frame_id = 'sensor'
+    ps.pose = pose
+    
+    SEQ += 1
+    return ps
 
 def normalizeQuaternions(q):
     
@@ -68,11 +86,11 @@ if __name__=="__main__":
     
     global th
     
-    rospy.init_node('tf2endpoint_mgd')
+    rospy.init_node('kinematic_endpoint')
     
     sub = rospy.Subscriber("joint_states", JointState, getJointPos)
-    pub = rospy.Publisher('forward_kinematic/MM/sensor',
-                               QuaternionStamped, queue_size=1)  
+    pub = rospy.Publisher('forward_kinematic/sensor',
+                               PoseStamped, queue_size=1)  
     
     time.sleep(0.3) # make sur subscriber is ready
     
@@ -85,26 +103,61 @@ if __name__=="__main__":
     [0         , 0          , 0, 1]])   
     
     ratio = rospy.get_param('tf_ratio', 1.) # multiply translation by ratio
+    freq = rospy.get_param('rate', 1000.)
+    
+    ref_frame = "base_link"
 
     listener = tf.TransformListener()
     br = tf.TransformBroadcaster()
     
-    rate = rospy.Rate(500.0) # joint_states gets published at 500Hz approx
-    
+    rate = rospy.Rate(freq)
+    #"""TIMER INIT"""
+    #time_fk = np.empty([1000])
+    #time_matmul = np.empty([1000])
+    #time_quat = np.empty([1000])
+    #time_trans = np.empty([1000])
+    #time_transform = np.empty([1000])
+    #idx = 0
     while not rospy.is_shutdown():
+        #start = timer()
     	# the kinematic model used consider the gripper endpoint
-        rot_matrix = fk.forward_kinematic(deepcopy(thetas))
+        rot_matrix = fk.forward_kinematic(copy(thetas))
+        #time_fk[idx] = timer() - start
+        #start = timer()
         rot_matrix_sensor = np.matmul(rot_matrix, sensor_link)
+        #time_matmul[idx] = timer() - start
         #print(rot_matrix)
-        q = tf.transformations.quaternion_from_matrix(rot_matrix)
-        t = ratio*tf.transformations.translation_from_matrix(rot_matrix) 
-        
+        #start = timer()
+        #q = tf.transformations.quaternion_from_matrix(rot_matrix)
+        #time_quat[idx] = timer() - start  
+        #start = timer()
+        t = tf.transformations.translation_from_matrix(rot_matrix) 
+        #time_trans[idx] = timer() - start
         q_sens = tf.transformations.quaternion_from_matrix(rot_matrix_sensor)
         #q_sens = normalizeQuaternions(q_sens)
         #q = normalizeQuaternions(q)
-        #quat = initQuaternion(q)        
-        #pub.publish(quat)
-        br.sendTransform(t, q, rospy.Time.now(), "arm", "arm_link_0")
-        br.sendTransform(t, q_sens, rospy.Time.now(), "sensor", "arm_link_0")
-
+        
+        #pose = initPoseStamped(t, q_sens)        
+        #pub.publish(pose)
+        t *=  ratio
+        #start = timer()
+        #br.sendTransform(np.array([0, 0, 0]), np.array([0, 0, 0, 1]), rospy.Time.now(), "world", ref_frame)
+        #br.sendTransform(t, q, rospy.Time.now(), "arm", ref_frame)
+        br.sendTransform(t, q_sens, rospy.Time.now(), "sensor", ref_frame)
+        #time_transform[idx] = timer() - start
+        #idx += 1
         rate.sleep()
+            
+        #print("time_fk, min %f, max %f, mean %f" % (np.min(time_fk), np.max(time_fk), np.mean(time_fk)))
+        #print("time_matmul, min %f, max %f, mean %f" % (np.min(time_matmul), np.max(time_matmul), np.mean(time_matmul))) 
+        #print("time_quat, min %f, max %f, mean %f" % (np.min(time_quat), np.max(time_quat), np.mean(time_quat)))
+        #print("time_trans, min %f, max %f, mean %f" % (np.min(time_trans), np.max(time_trans), np.mean(time_trans)))
+        #print("time_transform, min %f, max %f, mean %f" % (np.min(time_transform), np.max(time_transform), np.mean(time_transform)))
+        #idx = 0
+        #time_fk = np.empty([1000])
+        #time_matmul = np.empty([1000])
+        #time_quat = np.empty([1000])
+        #time_trans = np.empty([1000])
+        #time_transform = np.empty([1000])
+            
+        

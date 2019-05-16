@@ -4,7 +4,7 @@ import time
 import rospy
 import tf 
 import numpy as np
-from copy import deepcopy
+from copy import deepcopy, copy
 from geometry_msgs.msg import WrenchStamped, Twist
 
 g = 9.80665
@@ -30,14 +30,19 @@ if __name__=="__main__":
     
     listener = tf.TransformListener()
     
-    rate = rospy.Rate(500.0)
-    
     sensor_frame = "sensor"
-    parent_frame = "arm_link_0"
+    parent_frame = "base_link"
     
     m = rospy.get_param('~sensor_mass', 0.1096) #mass in kg
-    l = rospy.get_param('~sensor_arm_leevr', 0.0103) # in m
+    l = rospy.get_param('~sensor_arm_lever', 0.0103) # in m
     not_initialized_bias = rospy.get_param('~bias', True) 
+    freq = rospy.get_param('~rate', 1000.)
+    
+    rate = rospy.Rate(freq)
+    #delay = 1./freq
+    
+    if not_initialized_bias:
+    	AVG_VAL = rospy.get_param('~avg_values', 100)
     
     z = g*m
                           
@@ -51,6 +56,9 @@ if __name__=="__main__":
         BIAS = [0., 0., 0., 0., 0., 0.]
         counter = AVG_VAL 
 
+    grav_comp_data = WrenchStamped()
+    grav_comp_data.header.frame_id = "sensor"
+
     while not rospy.is_shutdown():
 
         try:
@@ -63,19 +71,21 @@ if __name__=="__main__":
         tf_ROS = tf.TransformerROS()
         mat_w_gravity = tf_ROS.fromTranslationRotation(tf_sens[0], tf_sens[1])
         
-        GRAVITY = deepcopy(weight_projection(mat_w_gravity, z))
+        GRAVITY = weight_projection(mat_w_gravity, z)
         
         LEVER[0] = GRAVITY[1] * l
         LEVER[1] = GRAVITY[0] * (-l)
         
-        grav_comp_data = deepcopy(sensor_data) # deepcopy to avoid undesired thread behaviour
+        grav_comp_data.header = copy(sensor_data.header) # copy is faster and is enough here
+        grav_comp_data.wrench = deepcopy(sensor_data.wrench) # deepcopy to avoid undesired thread behaviour
+        
         grav_comp_data.wrench.force.x = grav_comp_data.wrench.force.x - GRAVITY[0] - BIAS[0]
         grav_comp_data.wrench.force.y = grav_comp_data.wrench.force.y - GRAVITY[1] - BIAS[1]
         grav_comp_data.wrench.force.z = grav_comp_data.wrench.force.z - GRAVITY[2] - BIAS[2]
         
         grav_comp_data.wrench.torque.x = grav_comp_data.wrench.torque.x - LEVER[0] - BIAS[3]
         grav_comp_data.wrench.torque.y = grav_comp_data.wrench.torque.y - LEVER[1] - BIAS[4]
-        grav_comp_data.wrench.torque.z = grav_comp_data.wrench.torque.z - LEVER[2] - BIAS[5]
+        grav_comp_data.wrench.torque.z = grav_comp_data.wrench.torque.z - BIAS[5]
         
         if(not_initialized_bias):
             BIAS[0] += grav_comp_data.wrench.force.x
