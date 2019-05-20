@@ -63,6 +63,8 @@
 
 \tableofcontents
 
+\newpage
+
 \section{Impédance humaine}
 
 \begin{flushright}
@@ -179,7 +181,7 @@ Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes 
 %\end{tabularx}
 
 
-\subsection{Modélisation}
+\subsection{Modélisation} \label{sec_modelisation}
 
 
 L'impédance d'une articulation est souvent présentée avec un \textbf{modèle viscoélastique du second ordre}, dit $KBI$ \citep{hogan_adaptive_1984, hogan_impedance_1985, flash_control_1987, bennett_time-varying_1992, abe_modulation_2003, ludvig_voluntary_2007}. Les cas d'étude plus complexes, avec plusieurs articulations, sont moins souvent étudiés dans le plan articulaire \citep{gomi_human_1997, gomi_task-dependent_1998}, mais plutôt dans un plan cartésien, où l'on s'intéresse principalement à l'impédance finale \citep{, burdet_method_2000, perreault_effects_2001, erden_hand_2015}, toujours avec un modèle $KBI$ équivalent. \cite{tsuji_human_1997} résume assez bien les différentes relations entre le plan musculaire, le plan articulaire et le plan cartésien. L'équation \eqref{equ_endpoint_impedance} décrit ce modèle, pour la position $p(t)$ qui correspond à la différence entre la position avec et sans perturbation.
@@ -469,13 +471,21 @@ Dans la plupart de la littérature, l'identification des propriétés mécanique
 
 \subsection{Interprétations}
 
+\cite{bennett_catching_1994} se sont intéressés aux propriétés dynamique du bras humain lors d'un mouvement uni-articulaire, la réception d'une balle. Pour cette étude, les auteurs ont cherché à différencier la raideur observée provenant des réflexes, de celle étant intrinsèque au bras. \cite{ludvig_voluntary_2007} ont aussi proposé une méthode pour différencier les propriétés visco-élastiques d'un membre, de celles induites par les réflexes. Cette volonté de différencier ces deux sources d'impédance, vient d'un désir de modéliser avec plus de précision et de justesse les propriétés dynamiques du corps humain. Dans notre cas, nous cherchons uniquement à reproduire un comportement dont les réflexes font partis, aucune différenciation ne sera donc établie.
+
+\newlineBlank
+
+Plusieurs auteurs \citep{bennett_time-varying_1992, gomi_human_1997, popescu_elbow_2003, ludvig_mechanisms_2017} se sont intéressés à l'évolution des paramètres de l'impédance lors de tâches statiques et de tâches en mouvement. Les conclusions des auteurs divergent, \cite{gomi_human_1997, ludvig_mechanisms_2017} trouvent une augmentation lors de mouvements par rapport à des tâches isométriques équivalentes. Or, en cherchant a développer une méthode d'identification dépendante du temps, \cite{bennett_time-varying_1992} semble observer une diminution significative de l'impédance lors de tâches en mouvement. De son côté, \cite{popescu_elbow_2003} se montre critique envers les méthodologies de \cite{bennett_time-varying_1992} et \cite{gomi_human_1997}, puisque de son côté, il ne semble pas observer de variations significatives des propriétés visco-élastiques, entre un mouvement relâché et une posture équivalente relâchée. Il attribut notamment les variations observées par ses confrères, à la non-différenciation des réflexes, et aussi à la source des perturbations. La méthodologie utilisée pour mesurer l'impédance, semble donc avoir une influence non négligeable sur les résultats observés, les résultats doivent donc être interprétés avec prudence.
+
+\newlineBlank
+
+Malgré les limites de la modélisation KBI discuté \cref{sec_modelisation}, \cite{dolan_dynamic_1993} ont démontré la fidélité du modèle linéaire de l'impédance, pour de petits mouvements. Ces derniers ont, pour une tâche isométrique à 2 degrés de libertés, comparé plusieurs modèles avec le modèle KBI. Ils ont notamment considéré un modèle sans viscosité, et un modèle avec les forces de Coriolis non linéaire. C'est le simple modèle KBI linéaire qui a reproduit le plus fidèlement les comportements observés.  
+ 
+\newlineBlank
+
+\cite{burdet_method_2000} ont démontré l'adaptation et l'apprentissage des paramètres d'impédance chez les humains. En effet, en utilisant des champs de force variés, les auteurs ont pu observé une évolution du comportement, même en l'absence du champ de force (sans que les sujets ne le sache). En utilisant ces observations, \cite{tee_model_2004} a pu proposer un modèle, pouvant reproduire le comportement humain avant ou après l'apprentissage d'une tâche, sans toutefois proposer de modèle pour expliquer la phase intermédiaire. De leur côté, \cite{erden_hand_2015} ont montré que des sujets experts, avaient des paramètres d'impédance différents de sujets novices pour une tâche de soudage.
 
 \begin{itemize}
-	\item Bennett 1994 (différenciation réflexes et raideur intrinsèque) : expliquer la problématique de la raideur intrinsèque et réflexe et pourquoi nous pouvons nous détacher de ce problème => on cherche à reproduire un comportement dont les réflexes font partis
-	\item Dolan (comparaison modèle non linéaire) => pertinence de cette information ? plusieurs indices semblent montrer un impédance réflexe non linéaire et une impédance intrinsèque plutôt linéaire (autres sources ??)
-	\item Burdet 2000 (nature) Apprentissage Impedance => modèle de KP Tee qui ajoute un élément au contrôle en impédance pour simuler l'apprentissage (possibilité de reproduire les comportements avant ou après la phase d'apprentissage) => autre modèle avec l'apprentissage
-	\item Franklin 2002 contrôleur en impédance 
-	\item Bennet 1992, Gomi\&Kawato 1997, Popescu 2003, Ludvig 2017 (impédance pdt mvt VS impédance en statique)
 	\item Tsuji \& Tanaka se sont intéressés à l'évolution de l'impédance en préparation de l'impact d'une balle => présenter leur résultat (task readiness)
 \end{itemize}
 
@@ -765,7 +775,7 @@ Il est aussi possible d'utiliser des lois de commande en impédance par anticipa
 
 \newlineBlank 
 
-\begin{figure}[h]
+\begin{figure} [h]
 
 	\centering
 	
@@ -836,19 +846,93 @@ Il est aussi possible d'utiliser des lois de commande en impédance par anticipa
 
 \subsubsection{Contrôle rythmique}
 
-Contrairement à la loi de commande proposée par \cite{hogan_impedance_1985}, qui remplace le comportement dynamique du bras par celui que l'on souhaite imposer en impédance, \cite{williamson_neural_1998, williamson_robot_1999}, dans ses travaux de thèse, cherche à exploiter les dynamiques du bras lors de tâches rythmiques. Il n'annule donc pas le comportement dynamique, comme on peut l'observer dans la \cref{bloc_schema_hogan_1985}.
+Contrairement à la loi de commande proposée par \cite{hogan_impedance_1985}, qui remplace le comportement dynamique du bras par celui que l'on souhaite imposer en impédance, \cite{williamson_neural_1998, williamson_robot_1999}, dans ses travaux de thèse, cherche à exploiter les dynamiques du bras lors de tâches rythmiques. Il n'annule donc pas le comportement dynamique, comme on peut l'observer dans la \cref{bloc_schema_hogan_1985}. 
 
 \newlineBlank 
 
-Creuser la thèse de Williamson => mais peut-être que ce contrôle devrait être placé dans la partie VIA (composant élastique + contrôle PD pour simuler comportement dynamique)  ?? auquel cas je n'ai pas encore trouvé d'exemple de contrôle rythmique lié à un contrôle en impédance, sans actionneur à raideur variable.
+En utilisant des actionneurs à impédance variable, - \textit{voir \cref{sec_via}} - conçus au MIT, combine les avantages d'actionneurs à impédance variable (ressort) tout en appliquant une correction proportionnelle dérivée, qu'il assimile à une version simplifiée d'un contrôle virtuel en impédance \cref{eq_williamson}, dont la sortie est le couple désiré au niveau articulaire. Ainsi, le gain proportionnel est assimilé à une raideur, et le gain de l'action dérivée à une viscosité, ce qui simule un comportement visco-élastique au niveau articulaire qui est par ailleurs "lissé" et rendu \textit{compliant} par l'action des ressorts séries au niveau global. Le schéma de la boucle de contrôle est donné en \cref{williamson_control}.
+
+\begin{equation} \label{eq_williamson}
+u_i = k_i (\theta_{vi} - \theta_i) - b_i \frac{d\theta_i}{dt}
+\end{equation}
+
+\newlineBlank 
+
+\begin{figure} %[h]
+	
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 2.8cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	
+	\begin{tikzpicture} [node distance = 2cm]
+	
+	\comp[b]{c}{(0, 0)};
+	
+	\node[block, left of = c, node distance = 2.5cm] (imp_ctrl) {$K(\theta_v-\theta)-B\dot{\theta}$};
+	
+	\node[block, right of = c1, align = center, node distance = 2.5cm] (via) {Series Elastic\\Actuator};
+	
+	\node[right of = via, node distance = 2.25cm](via_out) {};
+	\fill (via_out) circle[radius=1.75pt];
+	
+	\node[below of = via_out, node distance = 1.25cm](via_out_r) {};
+	
+	\node[block, right of = via_out, align = center, node distance = 2.25cm] (arm) {Arm\\Dynamics};
+	
+	\node[right of = arm, node distance = 2.25cm](arm_out) {};
+	\fill (arm_out) circle[radius=1.75pt];
+	
+	\node[above of = arm_out, node distance = 1.25cm](arm_out_r) {};
+	
+	\draw[{Latex[length=3mm]}-] (imp_ctrl.west) --+ (-1.0,0)
+		node[align = center, above] {$\theta_v$};
+	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (c.west)
+		node[above left] {$u_d$};
+	\draw[-{Latex[length=3mm]}] (c.east) -- (via.west);
+	\draw[{Latex[length=3mm]}-] (arm.west) -- (via.east)
+		node[above right] {$u$};
+	\draw[-{Latex[length=3mm]}] (via_out.center) -- (via_out_r.center) -| (c.south);
+	\draw[-{Latex[length=3mm]}] (arm.east) --+ (2.0,0)
+		node[align = right, above] {$\theta, \dot{\theta}$};
+	\draw[-{Latex[length=3mm]}] (arm_out.center) -- (arm_out_r.center) -| (imp_ctrl.north);
+	
+	\end{tikzpicture}
+	
+	\caption{Boucle de contrôle utilisée par \cite{williamson_neural_1998}} % Figure caption
+	\label{williamson_control} % Label 
+\end{figure}
 
 %------------------------------------------------
 
 
-\subsection{Actionneurs à impédance variable (VIA)}
+\subsection{Actionneurs à impédance variable (VIA)} \label{sec_via}
 
 
-Comme expliqué par le consortium VIACTORS \citep{vanderborght_variable_2013}, lorsque l'impédance est simulée par une loi de commande logiciel, les chocs ne peuvent pas être correctement gérés, à cause des limites en bande passante des contrôleurs.
+Comme expliqué par le consortium VIACTORS \citep{vanderborght_variable_2013}, lorsque l'impédance est simulée par une loi de commande logiciel, les chocs ne peuvent pas être correctement gérés, à cause des limites en bande passante des contrôleurs. Toutefois, ce type de contrôle offre la possibilité de faire varier les paramètres de manière virtuellement infinie, ce qui n'est pas possible avec des éléments ayant une réalité physique.
+
+D'autre part, l'utilisation d'actionneurs ayant une raideur intrinsèque permet aussi d'emmagasiner de l'énergie mécanique, ce qui est bien plus complexe à réaliser avec de simples moteurs.
 
 \begin{figure}[h]
 	\includegraphics[width=\linewidth]{variable_actuator.png} % Figure image
