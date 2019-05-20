@@ -14,7 +14,7 @@
 # to python by Vincent FORTINEAU (L2S - CentraleSupélec & Université
 # Paris-Sud) with minor modifications
 # execution time estimated around 29.99us +/- 0.005us
-# C++ code created to increase execution time of the main function
+# C++ code created to improve execution time of the main function
  */
 
 void forward_kinematic(const float th[5], float rot_matrix[][4]) {
