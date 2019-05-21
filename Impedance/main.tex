@@ -471,18 +471,19 @@ Dans la plupart de la littérature, l'identification des propriétés mécanique
 
 \subsection{Interprétations}
 
-\cite{bennett_catching_1994} se sont intéressés aux propriétés dynamique du bras humain lors d'un mouvement uni-articulaire, la réception d'une balle. Pour cette étude, les auteurs ont cherché à différencier la raideur observée provenant des réflexes, de celle étant intrinsèque au bras. \cite{ludvig_voluntary_2007} ont aussi proposé une méthode pour différencier les propriétés visco-élastiques d'un membre, de celles induites par les réflexes. Cette volonté de différencier ces deux sources d'impédance, vient d'un désir de modéliser avec plus de précision et de justesse les propriétés dynamiques du corps humain. Dans notre cas, nous cherchons uniquement à reproduire un comportement dont les réflexes font partis, aucune différenciation ne sera donc établie.
+Malgré les limites de la modélisation KBI discuté \cref{sec_modelisation}, \cite{dolan_dynamic_1993} ont démontré la fidélité du modèle linéaire de l'impédance, pour de petits déplacements. Ces derniers ont, pour une tâche isométrique à 2 degrés de libertés, comparé plusieurs modèles avec le modèle KBI. Ils ont notamment considéré des modèle sans viscosité, et avec les forces de Coriolis. C'est le simple modèle KBI linéaire qui a reproduit le plus fidèlement les comportements observés. 
 
-\newlineBlank
+\subsubsection{Influence des réflexes}
+\cite{bennett_catching_1994} se sont intéressés aux propriétés dynamiques du bras humain lors d'un mouvement uni-articulaire, la réception d'une balle. Pour cette étude, les auteurs ont cherché à différencier la raideur observée provenant des réflexes, de celle étant intrinsèque au bras. \cite{ludvig_voluntary_2007} ont aussi proposé une méthode pour différencier les propriétés visco-élastiques d'un membre, de celles induites par les réflexes. Cette volonté de différencier ces deux sources d'impédance, vient d'un désir de modéliser avec plus de précision et de justesse les propriétés dynamiques du corps humain. Dans notre cas, nous cherchons uniquement à reproduire un comportement dont les réflexes font partis, aucune différenciation ne sera donc établie.
 
-Plusieurs auteurs \citep{bennett_time-varying_1992, gomi_human_1997, popescu_elbow_2003, ludvig_mechanisms_2017} se sont intéressés à l'évolution des paramètres de l'impédance lors de tâches statiques et de tâches en mouvement. Les conclusions des auteurs divergent, \cite{gomi_human_1997, ludvig_mechanisms_2017} trouvent une augmentation lors de mouvements par rapport à des tâches isométriques équivalentes. Or, en cherchant a développer une méthode d'identification dépendante du temps, \cite{bennett_time-varying_1992} semble observer une diminution significative de l'impédance lors de tâches en mouvement. De son côté, \cite{popescu_elbow_2003} se montre critique envers les méthodologies de \cite{bennett_time-varying_1992} et \cite{gomi_human_1997}, puisque de son côté, il ne semble pas observer de variations significatives des propriétés visco-élastiques, entre un mouvement relâché et une posture équivalente relâchée. Il attribut notamment les variations observées par ses confrères, à la non-différenciation des réflexes, et aussi à la source des perturbations. La méthodologie utilisée pour mesurer l'impédance, semble donc avoir une influence non négligeable sur les résultats observés, les résultats doivent donc être interprétés avec prudence.
+\subsubsection{Évolution de l'impédance}
+Plusieurs auteurs 
+%\citep{bennett_time-varying_1992, gomi_human_1997, popescu_elbow_2003, ludvig_mechanisms_2017} 
+se sont intéressés à l'évolution des paramètres de l'impédance lors de tâches statiques et en mouvement. Les conclusions des auteurs divergent, \cite{gomi_human_1997, ludvig_mechanisms_2017} trouvent une augmentation lors de mouvements par rapport à des tâches isométriques équivalentes. Or, en cherchant à développer une méthode d'identification dépendante du temps, \cite{bennett_time-varying_1992} semble observer une diminution significative de l'impédance lors de tâches en mouvement. 
 
-\newlineBlank
+De son côté, \cite{popescu_elbow_2003} se montre critique envers les méthodologies de \cite{bennett_time-varying_1992} et \cite{gomi_human_1997}, puisque de son côté, il ne semble pas observer de variations significatives des propriétés visco-élastiques, entre un mouvement relâché et une posture équivalente relâchée. Il attribut notamment les variations observées par ses confrères, à la non-différenciation des réflexes, et aussi à la source des perturbations. La méthodologie utilisée pour mesurer l'impédance, semble donc avoir une influence non négligeable sur les résultats observés, les résultats doivent donc être interprétés avec prudence. 
 
-Malgré les limites de la modélisation KBI discuté \cref{sec_modelisation}, \cite{dolan_dynamic_1993} ont démontré la fidélité du modèle linéaire de l'impédance, pour de petits mouvements. Ces derniers ont, pour une tâche isométrique à 2 degrés de libertés, comparé plusieurs modèles avec le modèle KBI. Ils ont notamment considéré un modèle sans viscosité, et un modèle avec les forces de Coriolis non linéaire. C'est le simple modèle KBI linéaire qui a reproduit le plus fidèlement les comportements observés.  
- 
-\newlineBlank
-
+\subsubsection{Apprentissage}
 \cite{burdet_method_2000} ont démontré l'adaptation et l'apprentissage des paramètres d'impédance chez les humains. En effet, en utilisant des champs de force variés, les auteurs ont pu observé une évolution du comportement, même en l'absence du champ de force (sans que les sujets ne le sache). En utilisant ces observations, \cite{tee_model_2004} a pu proposer un modèle, pouvant reproduire le comportement humain avant ou après l'apprentissage d'une tâche, sans toutefois proposer de modèle pour expliquer la phase intermédiaire. De leur côté, \cite{erden_hand_2015} ont montré que des sujets experts, avaient des paramètres d'impédance différents de sujets novices pour une tâche de soudage.
 
 \begin{itemize}
@@ -844,19 +845,21 @@ Il est aussi possible d'utiliser des lois de commande en impédance par anticipa
 	\label{feedforward_control} % Label 
 \end{figure}
 
-\subsubsection{Contrôle rythmique}
+\subsubsection{Contrôle rythmique} \label{sec_imp_ctrl_ryth}
 
-Contrairement à la loi de commande proposée par \cite{hogan_impedance_1985}, qui remplace le comportement dynamique du bras par celui que l'on souhaite imposer en impédance, \cite{williamson_neural_1998, williamson_robot_1999}, dans ses travaux de thèse, cherche à exploiter les dynamiques du bras lors de tâches rythmiques. Il n'annule donc pas le comportement dynamique, comme on peut l'observer dans la \cref{bloc_schema_hogan_1985}. 
+Contrairement à la loi de commande proposée par \cite{hogan_impedance_1985}, qui remplace le comportement dynamique du bras par celui que l'on souhaite imposer en impédance, \cite{williamson_neural_1998, williamson_robot_1999}, dans ses travaux de thèse, cherche à exploiter les dynamiques du bras lors de tâches rythmiques. Il n'annule donc pas le comportement dynamique, contrairement à ce que l'on peut l'observer dans la \cref{bloc_schema_hogan_1985}. Il utilise un système contenant un moteur en série avec un ressort, et donc avec une interface d'une raideur faible, par rapport à un contact quasiment rigide.
 
 \newlineBlank 
 
-En utilisant des actionneurs à impédance variable, - \textit{voir \cref{sec_via}} - conçus au MIT, combine les avantages d'actionneurs à impédance variable (ressort) tout en appliquant une correction proportionnelle dérivée, qu'il assimile à une version simplifiée d'un contrôle virtuel en impédance \cref{eq_williamson}, dont la sortie est le couple désiré au niveau articulaire. Ainsi, le gain proportionnel est assimilé à une raideur, et le gain de l'action dérivée à une viscosité, ce qui simule un comportement visco-élastique au niveau articulaire qui est par ailleurs "lissé" et rendu \textit{compliant} par l'action des ressorts séries au niveau global. Le schéma de la boucle de contrôle est donné en \cref{williamson_control}.
+En utilisant des actionneurs à impédance intrinsèque, - \textit{voir \cref{sec_via}} - détaillé par \cite{pratt_series_1995}, il utilise les avantages de ce type de système, notamment pour la stabilité, tout en appliquant une correction proportionnelle dérivée. Il assimile ce correcteur à une version simplifiée d'un contrôle virtuel en impédance \cref{eq_williamson}, dont la sortie est le couple désiré au niveau articulaire. Ainsi, il peut faire varier les paramètres en impédance, le gain proportionnel est identifié à une raideur, et le gain de l'action dérivée à une viscosité. Le comportement visco-élastique qui est donc simulé au niveau articulaire, est par ailleurs "lissé" et rendu \textit{compliant} par l'action des ressorts en séries. Le schéma de la boucle de contrôle est donné en \cref{williamson_control}. 
 
 \begin{equation} \label{eq_williamson}
-u_i = k_i (\theta_{vi} - \theta_i) - b_i \frac{d\theta_i}{dt}
+u_i = K_i (\theta_{vi} - \theta_i) - B_i \frac{d\theta_i}{dt}
 \end{equation}
 
 \newlineBlank 
+
+La commande rythmique est générée par un oscillateur neuronale non linéaire proposé par \cite{matsuoka_sustained_1985}, qui fixe la consigne $\theta_v$ à l'entrée du contrôle en impédance. Aucun couplage n'est réalisé entre les différents oscillateurs présents à chaque articulation, l'auteur repose sur le couplage mécanique naturellement offert par la structure choisie. Ainsi, il combine un contrôle en impédance dont les points d'équilibre ()ou consigne en position) sont définis par un contrôle rythmique.
 
 \begin{figure} %[h]
 	
@@ -932,7 +935,13 @@ u_i = k_i (\theta_{vi} - \theta_i) - b_i \frac{d\theta_i}{dt}
 
 Comme expliqué par le consortium VIACTORS \citep{vanderborght_variable_2013}, lorsque l'impédance est simulée par une loi de commande logiciel, les chocs ne peuvent pas être correctement gérés, à cause des limites en bande passante des contrôleurs. Toutefois, ce type de contrôle offre la possibilité de faire varier les paramètres de manière virtuellement infinie, ce qui n'est pas possible avec des éléments ayant une réalité physique.
 
-D'autre part, l'utilisation d'actionneurs ayant une raideur intrinsèque permet aussi d'emmagasiner de l'énergie mécanique, ce qui est bien plus complexe à réaliser avec de simples moteurs.
+\newlineBlank
+
+L'utilisation d'actionneurs ayant une raideur inhérente permet en plus  d'emmagasiner de l'énergie mécanique, - \textit{ce qui est bien plus complexe à réaliser avec de simples moteurs}. Le stockage d'énergie permet d'exploiter les dynamiques d'une tâche, surtout dans le cadre de tâche cyclique, où il est fortement intéressant d'essayer de restituer de l'énergie accumulée, on pourrait citer l'exemple de la marche. Pour ce type de mécanisme, la variation du comportement en impédance est seulement réalisable par le contrôle logiciel, c'est le cas décrit \cref{sec_imp_ctrl_ryth}. L'élément mécanique donne des propriétés dynamiques qui ne peuvent pas varier au cours du temps.
+
+\newlineBlank
+
+Lorsqu'on parle d'actionneurs à impédance variable, on pense plutôt aux équipements possédant des raideurs ou amortissements mécaniquement implémenté, et qui sont contrôlables. La \cref{var_actuator} montre un exemple de système motorisé permettant de faire varier la raideur d'une articulation sur 1 et 2 degrés de liberté, en plus du contrôle en position habituel. 
 
 \begin{figure}[h]
 	\includegraphics[width=\linewidth]{variable_actuator.png} % Figure image
@@ -960,7 +969,7 @@ D'autre part, l'utilisation d'actionneurs ayant une raideur intrinsèque permet 
 
 \bibliographystyle{apalike}
 
-\bibliography{main_biblio}
+\bibliography{main_biblio,CPG}
 %\printbibliography[title={Bibliography}] % Print the bibliography, section title in curly brackets
 
 %----------------------------------------------------------------------------------------
