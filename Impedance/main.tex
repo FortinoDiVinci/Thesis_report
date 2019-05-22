@@ -943,7 +943,7 @@ L'utilisation d'actionneurs ayant une raideur inhérente permet en plus  d'emmag
 
 Lorsqu'on parle d'actionneurs à impédance variable, on pense plutôt aux équipements possédant des raideurs ou amortissements mécaniquement implémenté, et qui sont contrôlables. La \cref{var_actuator} montre un exemple de système motorisé permettant de faire varier la raideur d'une articulation sur 1 et 2 degrés de liberté, en plus du contrôle en position habituel. 
 
-\begin{figure}[h]
+\begin{figure}
 	\includegraphics[width=\linewidth]{variable_actuator.png} % Figure image
 	\caption{MACCEPA à 2 DDL et 1 raideur variable (a) et MACCEPA complet avec 2 DDL et 2 raideurs variables indépendantes (b), \citep{weckx_two-degree_2014}} % Figure caption
 	\label{var_actuator} % Label for referencing with \ref{bear}
@@ -951,11 +951,23 @@ Lorsqu'on parle d'actionneurs à impédance variable, on pense plutôt aux équi
 
 \subsubsection{Contrôle rythmique}
 
-\citep{huang_torque-stiffness-controlled_2016} => utilisation de CPGs contrôlant la raideur variable et le point d'équilibre (2 GPGs par articulation)
+\cite{huang_torquestiffness-controlled_2014, huang_torque-stiffness-controlled_2016} proposent dans leur travaux une méthode de contrôle qu'ils appellent \textit{torque stiffness controlled dynamic walking}. En utilisant une structure impliquant des \textit{Central Pattern Generator} (CPG), ils contrôlent à la fois le couple et la raideur de chaque articulation, avec une structure inspirée par les travaux de \cite{taga_self-organized_1991}. L'ajout du contrôle rythmique de la raideur, qui montre une évolution cyclique significative notamment pour l'articulation de la cheville, permet une optimisation de l'énergie \citep{ishikawa_muscle-tendon_2005, wang_passive_2010}, mais aussi une amélioration de la robustesse \citep{huang_torquestiffness-controlled_2014}.
+
+\newlineBlank
+
+Il peut être donc intéressant d'utiliser des structures rythmiques seulement pour contrôler le point d'équilibre d'une articulation, mais aussi pour contrôler ses paramètres d'impédance tel quel la raideur. Dans les travaux décrits ci-dessus, les résultats viennent toutefois uniquement de simulation, et pas d'implémentation sur des robots possédant des actionneurs à impédance variable. La structure de contrôle est résumée en \cref{cpg_torque_stiff}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.70\linewidth]{cpg_torque_stiffness_ctrl.png} % Figure image
+	\caption{A droite, le digramme décrivant le schéma de contrôle de \cite{huang_torquestiffness-controlled_2014}, à gauche le modèle de bipède à 7 liens, (a) les degrés de liberté, (b) les ressorts de torsion.} % Figure caption
+	\label{cpg_torque_stiff} % Label for referencing with \ref{bear}
+\end{figure}
 
 %----------------------------------------------------------------------------------------
 %	APPENDIX
 %----------------------------------------------------------------------------------------
+\newpage
 
 \begin{appendix}
 
