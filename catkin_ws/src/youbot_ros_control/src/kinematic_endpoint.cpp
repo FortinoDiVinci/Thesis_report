@@ -16,13 +16,17 @@
 //#include <matrix.h>
 
 #include <ros/ros.h>
+//#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 //#include <tf/transform_listener.h>
 #include <tf/transform_broadcaster.h>
 #include <sensor_msgs/JointState.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/QuaternionStamped.h>
+#include <geometry_msgs/Point.h>
 
 #include "youbot_ros_control/forward_kinematic.h"
 
+#define DEBUG 0
 
 /*****************
  *   FUNCTIONS   *
@@ -64,6 +68,7 @@ geometry_msgs::PoseStamped initPoseStamped(const float t[3], const float q[4])
 
 void matmul4X4(const float a[][4], const float b[][4], float c[][4])
 {
+	// no use of for loop for optimal reason
     float a00 = a[0][0];
     float a01 = a[0][1];
     float a02 = a[0][2];
@@ -213,9 +218,10 @@ int main(int argc, char** argv)
     ros::NodeHandle n;   
     ros::NodeHandle n1("~");  
     ros::Subscriber sub = n.subscribe("joint_states", 1, getJointPos);
-    ros::Publisher pub = n.advertise<geometry_msgs::PoseStamped>
-                            ("forward_kinematic/sensor", 1);
-
+    #if DEBUG
+    ros::Publisher pub = n.advertise<geometry_msgs::QuaternionStamped>("kinematic_endpoint/sensor_quaternion", 1);
+    //ros::Publisher pub2 = n.advertise<geometry_msgs::Point> ("kinematic_endpoint/sensor_translation_debug", 1);
+	#endif
     usleep(300000); //# make sure subscriber is ready by waiting 300ms
 
     const float th_sens = -110 * M_PI / 180; // rotation along z axis between sensor axis and robot end effector
@@ -229,12 +235,17 @@ int main(int argc, char** argv)
     float ratio;
     float freq;
     std::string ref_frame;
+    std::string child_frame;
     
     n1.param<float>("tf_ratio", ratio, 1.0);
     n1.param<float>("rate", freq, 1000.0);
     n1.param<std::string>("frame_id", ref_frame, "base_link");
+    n1.param<std::string>("frame_id", child_frame, "sensor");
 
     tf::TransformBroadcaster br;
+    geometry_msgs::QuaternionStamped q_s;
+    ros::Time t_q;
+    //geometry_msgs::Point ps2;
     //tf::Transform listener;
 
     ros::Rate rate(freq);
@@ -248,7 +259,7 @@ int main(int argc, char** argv)
     {
         
         forward_kinematic(THETAS, rot_matrix);  
-        matmul4X4(rot_matrix, sensor_link, rot_matrix_sensor);
+        matmul4X4(sensor_link, rot_matrix, rot_matrix_sensor);
         translation_from_matrix(rot_matrix, t);
         //rotation_from_matrix(rot_matrix_sensor, q);
         t[0] *= ratio;
@@ -256,9 +267,9 @@ int main(int argc, char** argv)
         t[2] *= ratio;
         
         tf::Vector3 trans(t[0], t[1], t[2]); //tf::tfScalar() cast ??
-        tf::Matrix3x3 rot(rot_matrix[0][0], rot_matrix[0][1], rot_matrix[0][2],
-                          rot_matrix[1][0], rot_matrix[1][1], rot_matrix[1][2],
-                          rot_matrix[2][0], rot_matrix[2][1], rot_matrix[2][2]);
+        tf::Matrix3x3 rot(rot_matrix_sensor[0][0], rot_matrix_sensor[0][1], rot_matrix_sensor[0][2],
+                          rot_matrix_sensor[1][0], rot_matrix_sensor[1][1], rot_matrix_sensor[1][2],
+                          rot_matrix_sensor[2][0], rot_matrix_sensor[2][1], rot_matrix_sensor[2][2]);
         
         #if 0 
         std::cout << "Homogenous matrix:\n";                  
@@ -280,8 +291,19 @@ int main(int argc, char** argv)
         #endif  
                         
         tf::Transform transform(rot, trans);
-        br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), ref_frame, "sensor"));
+        t_q = ros::Time::now();
+        br.sendTransform(tf::StampedTransform(transform, t_q, ref_frame, child_frame));
         
+        #if DEBUG
+        tf::quaternionTFToMsg(transform.getRotation(), q_s.quaternion);
+        q_s.header.stamp = t_q;
+        //ps2.x = transform.getOrigin().getX();
+        //ps2.y = transform.getOrigin().getY();
+        //ps2.z = transform.getOrigin().getZ();
+
+        pub.publish(q_s);
+        //pub2.publish(ps2);
+        #endif 
         ros::spinOnce();
         rate.sleep();
     }

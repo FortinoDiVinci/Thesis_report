@@ -94,9 +94,9 @@ def quaternionToMatrix(quaternions):
     qw = quaternions[3]         
 
     return np.array(
-        [[1 - 2*qy**2 - 2*qz**2,     2*qx*qy - 2*qz*qw,     2*qx*qz + 2*qy*qw],
-         [    2*qx*qy + 2*qz*qw, 1 - 2*qx**2 - 2*qz**2,     2*qy*qz - 2*qx*qw], 
-         [    2*qx*qz - 2*qy*qw,     2*qy*qz + 2*qx*qw, 1 - 2*qx**2 - 2*qy**2]])
+        [[1 - 2*(qy**2 + qz**2),     2*(qx*qy - qz*qw),     2*(qx*qz + qy*qw)],
+         [    2*(qx*qy + qz*qw), 1 - 2*(qx**2 + qz**2),     2*(qy*qz - qx*qw)], 
+         [    2*(qx*qz - qy*qw),     2*(qy*qz + qx*qw), 1 - 2*(qx**2 - qy**2)]])
  
 def lowPassFilter(data, freq, fs, order=10):
     
@@ -121,6 +121,39 @@ def lstsq(phi, y):
     
     return np.matmul(np.linalg.inv(a), b)
 
+def hamilton_product(q1, q2):
+    ret = np.array([0, 0, 0, 0])
+    print(q1)
+    a1 = q1[0]
+    b1 = q1[1]
+    c1 = q1[2]
+    d1 = q1[3]
+    
+    a2 = q2[0]
+    b2 = q2[1]
+    c2 = q2[2]
+    d2 = q2[3]
+    
+    ret[0] = a1*a2 - b1*b2 - c1*c2 - d1*d2
+    ret[1] = a1*b2 + b1*a2 + c1*d2 - d1*c2
+    ret[2] = a1*c2 - b1*d2 + c1*a2 + d1*b2
+    ret[3] = a1*d2 + b1*c2 - c1*b2 + d1*a2
+    
+    return ret
+    
+def quat_conj(q):
+    return np.array([q[0], -q[1], -q[2], q[3]])
+
+def quat_norm(q):
+    return np.sqrt(q[0]**2 + q[1]**2 + q[2]**2 + q[3]**2)
+
+def quat_inv(q):
+    return np.array(quat_conj(q)/quat_norm(q))
+
+def quat_rotation(q, v):
+    v_ = np.concatenate(([0], v), axis=None);
+    print(q)
+    return hamilton_product(hamilton_product(q, v_), quat_inv(q))
 
 #####################
 #       MAIN
@@ -169,10 +202,10 @@ try:
         del temp_sensor_torque
         
     with open(sys.argv[2], 'rU') as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',') # \t for tf
+        readCSV = csv.reader(csvfile, delimiter='\t') # \t for tf #, for quat
         stamp2 = []
         temp_arm_pose_trans = []
-        temp_arm_pose_rot = []
+        temp_arm_pose_rot = [] 
         temp_arm_pose_rot_euler = []
         arm_pose_rot_mat = []
         arm_pos_quat = []

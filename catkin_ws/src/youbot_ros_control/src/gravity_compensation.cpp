@@ -16,6 +16,7 @@
 #include <ros/console.h>
 #include <tf/transform_listener.h>
 #include <geometry_msgs/WrenchStamped.h>
+//#include <geometry_msgs/QuaternionStamped.h>
 
 #define G 9.80665
 #define SIZE 6
@@ -33,9 +34,9 @@ float LEVER[int(SIZE/2)] = {0., 0., 0.};
 // For rotation matrix, the inverse is the transpose matrix
 void weight_projection(const tf::Matrix3x3 matrix, const float z, float gravity[int(SIZE/2)])
 {
-    gravity[0] = -float(matrix.getColumn(2).getX())*z;
-    gravity[1] = -float(matrix.getColumn(2).getY())*z;
-    gravity[2] = -float(matrix.getColumn(2).getZ())*z;
+    gravity[0] = -float(matrix.getRow(2).getX())*z;
+    gravity[1] = -float(matrix.getRow(2).getY())*z;
+    gravity[2] = -float(matrix.getRow(2).getZ())*z;
 }
     
 void getForceCallback(const geometry_msgs::WrenchStamped::ConstPtr& data)
@@ -83,6 +84,7 @@ int main(int argc, char** argv)
     ros::Subscriber sub = n.subscribe("netft_data", 1, getForceCallback);
     ros::Publisher pub = n.advertise<geometry_msgs::WrenchStamped>
         ("force_sensor/grav_comp", 1);
+    
     tf::TransformListener listener;
 
     std::string sensor_frame = "sensor";
@@ -104,7 +106,7 @@ int main(int argc, char** argv)
     ros::Rate rate(freq);
 
     if (not_initialized_bias) {
-        n1.param<int>("avg_values", avg_val, 100);
+        n1.param<int>("avg_values", avg_val, freq);
         counter = avg_val;
         for (int i = 0; i < SIZE; i++) {
             BIAS[i] = 0.0;
@@ -116,19 +118,24 @@ int main(int argc, char** argv)
     usleep(300000); //# make sure subscriber is ready by waiting 300ms
 
     geometry_msgs::WrenchStamped grav_comp_data;
-    grav_comp_data.header.frame_id = "sensor";
+    grav_comp_data.header.frame_id = sensor_frame;
     tf::StampedTransform tf_sens;
+    
+    //geometry_msgs::QuaternionStamped q_s;
 
     while (n.ok()) {
 
         try {
-            listener.lookupTransform(sensor_frame, parent_frame, ros::Time(0), tf_sens);
+            listener.lookupTransform(parent_frame, sensor_frame, ros::Time(0), tf_sens);
         }
         
         catch (tf::TransformException e) {
             ROS_WARN_THROTTLE(1, "%s", e.what());
             continue;
         }
+
+        //tf::quaternionTFToMsg(tf_sens.getRotation(), q_s.quaternion);
+        //q_s.header.stamp = tf_sens.stamp_;
 
         weight_projection(tf_sens.getBasis(), z, GRAVITY);
         LEVER[0] = GRAVITY[1] * l;
@@ -150,7 +157,6 @@ int main(int argc, char** argv)
                 not_initialized_bias = false;
                 for (int i = 0; i < SIZE; i++) {
                     BIAS[i] = temp_bias[i]/avg_val;
-                    //ROS_INFO_STREAM("Sum: \n" << temp_bias[0] << ", " << temp_bias[1] << ", " << temp_bias[2] << "\nTorque bias: " << temp_bias[3] << ", " << temp_bias[4] << ", " << temp_bias[5] << "\n");
                 }
                 ROS_INFO_STREAM("Bias estimation for f/t sensor done.\nForce bias: " << BIAS[0] << ", " << BIAS[1] << ", " << BIAS[2] << "\nTorque bias: " << BIAS[3] << ", " << BIAS[4] << ", " << BIAS[5] << "\n");
             }
