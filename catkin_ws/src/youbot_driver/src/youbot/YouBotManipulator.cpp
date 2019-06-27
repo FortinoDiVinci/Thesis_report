@@ -316,11 +316,19 @@ void YouBotManipulator::calibrateSpeedControllers() {
 	DParameterCurrentControl dummy_d_cc;
 	d_current_control.assign(numberArmJoints, dummy_d_cc);
 	
+	std::vector <MotorAcceleration> target_acceleration;
+	MotorAcceleration dummy_acceleration;
+	target_acceleration.assign(numberArmJoints, dummy_acceleration);
+	
+	std::vector <RampGeneratorSpeedAndPositionControl> ramp_speed_control;
+	RampGeneratorSpeedAndPositionControl dummy_ramp;
+	ramp_speed_control.assign(numberArmJoints, dummy_ramp);
 	
 	int pid_val = 0;
 	int pid_val2 = 0;
 	int pid_val3 = 0;
-/*
+	bool ramp_on = false;
+	
 	for (unsigned int i = 0; i < numberArmJoints; i++) {
 
 		std::stringstream jointNameStream;
@@ -392,37 +400,57 @@ void YouBotManipulator::calibrateSpeedControllers() {
 		joints[i].setConfigurationParameter(d_current_control[i]);
 		
 	}
-	*/
+	
+	// desactivate ramp for joint 4
+	ramp_speed_control[3].setParameter(true);
+	joints[3].setConfigurationParameter(ramp_speed_control[3]);
+	
+	quantity<angular_acceleration> acc_value = 15.0 * si::radians_per_second / si::seconds;
+	
+	acc_value.value();
+	
+	target_acceleration[3].setParameter(acc_value);
+	joints[3].setConfigurationParameter(target_acceleration[3]);
+	
+	joints[3].getConfigurationParameter(target_acceleration[3]);
+	target_acceleration[3].getParameter(acc_value);
+	ROS_INFO("Joint 4 for arm 1 has acceleration value set to: %f", acc_value.value());
+	
+	
 	// boucle pour afficher les valeurs des paramètres des PID par défaut 
 	for (unsigned int i = 0; i < numberArmJoints; i++) {
 	
 	    joints[i].getConfigurationParameter(p_speed_control[i]);
 	    p_speed_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has P value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has speed_control P value set to: %i", i+1, pid_val);
 	    joints[i].getConfigurationParameter(i_speed_control[i]);
 	    i_speed_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has I value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has speed_control I value set to: %i", i+1, pid_val);
 	    joints[i].getConfigurationParameter(d_speed_control[i]);
 	    d_speed_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has D value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has speed_control D value set to: %i", i+1, pid_val);
 	    joints[i].getConfigurationParameter(p_speed_control2[i]);
 	    p_speed_control2[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has P value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has speed_control2 P value set to: %i", i+1, pid_val);
 	    joints[i].getConfigurationParameter(i_speed_control2[i]);
 	    i_speed_control2[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has I value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has speed_control2 I value set to: %i", i+1, pid_val);
 	    joints[i].getConfigurationParameter(d_speed_control2[i]);
 	    d_speed_control2[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has D value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has speed_control2 D value set to: %i", i+1, pid_val);
 	    joints[i].getConfigurationParameter(p_current_control[i]);
 	    p_current_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has P value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has current_control P value set to: %i", i+1, pid_val);
 	    joints[i].getConfigurationParameter(i_current_control[i]);
 	    i_current_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has I value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has current_control I value set to: %i", i+1, pid_val);
 	    joints[i].getConfigurationParameter(d_current_control[i]);
 	    d_current_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has D value set to: %i", i, pid_val);
+	    ROS_INFO("Joint %i for arm 1 has current_control D value set to: %i", i+1, pid_val);
+	    
+	    joints[i].getConfigurationParameter(ramp_speed_control[i]);
+	    ramp_speed_control[i].getParameter(ramp_on);
+	    ROS_INFO("Joint %i for arm 1 has ramp enable value set to: %i", i+1, ramp_on);
 	    
 	    }
 	
