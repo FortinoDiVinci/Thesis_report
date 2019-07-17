@@ -66,9 +66,10 @@ geometry_msgs::PoseStamped initPoseStamped(const float t[3], const float q[4])
     return ps;
 }
 
-void matmul4X4(const float a[][4], const float b[][4], float c[][4])
+void matmul4X4(const float b[][4], const float a[][4], float c[][4])
 {
-	// no use of for loop for optimal reason
+    // c = b x a
+    // no use of for loop for optimal reason
     float a00 = a[0][0];
     float a01 = a[0][1];
     float a02 = a[0][2];
@@ -259,7 +260,7 @@ int main(int argc, char** argv)
     {
         
         forward_kinematic(THETAS, rot_matrix);  
-        matmul4X4(sensor_link, rot_matrix, rot_matrix_sensor);
+        matmul4X4(rot_matrix, sensor_link, rot_matrix_sensor);
         translation_from_matrix(rot_matrix, t);
         //rotation_from_matrix(rot_matrix_sensor, q);
         t[0] *= ratio;
@@ -270,6 +271,15 @@ int main(int argc, char** argv)
         tf::Matrix3x3 rot(rot_matrix_sensor[0][0], rot_matrix_sensor[0][1], rot_matrix_sensor[0][2],
                           rot_matrix_sensor[1][0], rot_matrix_sensor[1][1], rot_matrix_sensor[1][2],
                           rot_matrix_sensor[2][0], rot_matrix_sensor[2][1], rot_matrix_sensor[2][2]);
+        
+        #if 0 
+        std::cout << "Matrix3x3:\n"; 
+        
+        std::cout << rot_matrix_sensor[0][0] << ' ' << rot_matrix_sensor[0][1] << ' ' << rot_matrix_sensor[0][2] << '\n';
+        std::cout << rot_matrix_sensor[1][0] << ' ' << rot_matrix_sensor[1][1] << ' ' << rot_matrix_sensor[1][2] << '\n';
+        std::cout << rot_matrix_sensor[2][0] << ' ' << rot_matrix_sensor[2][1] << ' ' << rot_matrix_sensor[2][2] << '\n' << '\n';
+        
+        #endif
         
         #if 0 
         std::cout << "Homogenous matrix:\n";                  
@@ -289,6 +299,8 @@ int main(int argc, char** argv)
             std::cout << '\n';
         }
         #endif  
+        
+        //std::cout << "X: " << trans.getX() << ", Y: " << trans.getY() << ", Z: " << trans.getZ() << '\n';
                         
         tf::Transform transform(rot, trans);
         t_q = ros::Time::now();

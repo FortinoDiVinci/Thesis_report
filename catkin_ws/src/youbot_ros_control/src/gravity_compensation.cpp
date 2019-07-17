@@ -71,6 +71,28 @@ void copyWrenchData(const geometry_msgs::WrenchStamped data, const float grav[in
     //ROS_INFO_THROTTLE(0.01, "force z: %f", g_comp->wrench.force.z);
 }
 
+// used to change force to the static frame
+void rotateWrenchData(geometry_msgs::WrenchStamped *g_comp, tf::Matrix3x3 rot_mat)
+{
+    float forces[3] = {g_comp->wrench.force.x, g_comp->wrench.force.y, g_comp->wrench.force.z};
+    float torques[3] = {g_comp->wrench.torque.x, g_comp->wrench.torque.y, g_comp->wrench.torque.z};
+    
+    float fx = rot_mat[0][0]*forces[0] + rot_mat[0][1]*forces[1] + rot_mat[0][2]*forces[2];
+    float fy = rot_mat[1][0]*forces[0] + rot_mat[1][1]*forces[1] + rot_mat[1][2]*forces[2];
+    float fz = rot_mat[2][0]*forces[0] + rot_mat[2][1]*forces[1] + rot_mat[2][2]*forces[2];
+    
+    float tx = rot_mat[0][0]*torques[0] + rot_mat[0][1]*torques[1] + rot_mat[0][2]*torques[2];
+    float ty = rot_mat[1][0]*torques[0] + rot_mat[1][1]*torques[1] + rot_mat[1][2]*torques[2];
+    float tz = rot_mat[2][0]*torques[0] + rot_mat[2][1]*torques[1] + rot_mat[2][2]*torques[2];
+    
+    g_comp->wrench.force.x = fx;
+    g_comp->wrench.force.y = fy;
+    g_comp->wrench.force.z = fz;
+    g_comp->wrench.torque.x = tx;
+    g_comp->wrench.torque.y = ty;
+    g_comp->wrench.torque.z = tz;    
+}
+
 /******************
  *      MAIN      *
  ******************/
@@ -82,8 +104,7 @@ int main(int argc, char** argv)
     ros::NodeHandle n;
     ros::NodeHandle n1("~");
     ros::Subscriber sub = n.subscribe("netft_data", 1, getForceCallback);
-    ros::Publisher pub = n.advertise<geometry_msgs::WrenchStamped>
-        ("force_sensor/grav_comp", 1);
+    ros::Publisher pub = n.advertise<geometry_msgs::WrenchStamped> ("force_sensor/grav_comp", 1);
     
     tf::TransformListener listener;
 
@@ -118,11 +139,62 @@ int main(int argc, char** argv)
     usleep(300000); //# make sure subscriber is ready by waiting 300ms
 
     geometry_msgs::WrenchStamped grav_comp_data;
-    grav_comp_data.header.frame_id = sensor_frame;
+    grav_comp_data.header.frame_id = parent_frame;
     tf::StampedTransform tf_sens;
     
     //geometry_msgs::QuaternionStamped q_s;
 
+    /******************
+     * Initialization *
+     ******************/
+     
+    if(not_initialized_bias)
+    {
+        bool tf_ok = false;
+
+        for (int i = 0; i < counter; i++)
+        {
+        
+            try {
+                listener.lookupTransform(parent_frame, sensor_frame, ros::Time(0), tf_sens);
+                tf_ok = true;
+            }
+            
+            catch (tf::TransformException e) {
+                ROS_WARN_THROTTLE(1, "%s", e.what());
+                i = i - 1;
+            }
+            
+            if (tf_ok == true) {
+                weight_projection(tf_sens.getBasis(), z, GRAVITY);
+                LEVER[0] = GRAVITY[1] * l;
+                LEVER[1] = GRAVITY[0] * (-l);
+
+                copyWrenchData(sensor_data, GRAVITY, LEVER, BIAS, &grav_comp_data);
+            
+                temp_bias[0] += grav_comp_data.wrench.force.x;
+                temp_bias[1] += grav_comp_data.wrench.force.y;
+                temp_bias[2] += grav_comp_data.wrench.force.z;
+                temp_bias[3] += grav_comp_data.wrench.torque.x;
+                temp_bias[4] += grav_comp_data.wrench.torque.y;
+                temp_bias[5] += grav_comp_data.wrench.torque.z;  
+                
+                tf_ok = false;
+                ros::spinOnce();
+                rate.sleep();  
+            }      
+        }
+        not_initialized_bias = false;
+        for (int i = 0; i < SIZE; i++) {
+            BIAS[i] = temp_bias[i]/avg_val;
+        }
+        ROS_INFO_STREAM("Bias estimation for f/t sensor done.\nForce bias: " << BIAS[0] << ", " << BIAS[1] << ", " << BIAS[2] << "\nTorque bias: " << BIAS[3] << ", " << BIAS[4] << ", " << BIAS[5] << "\n");
+    }
+
+    /*************
+     * Main Loop *
+     *************/
+    
     while (n.ok()) {
 
         try {
@@ -142,25 +214,9 @@ int main(int argc, char** argv)
         LEVER[1] = GRAVITY[0] * (-l);
 
         copyWrenchData(sensor_data, GRAVITY, LEVER, BIAS, &grav_comp_data);
+        rotateWrenchData(&grav_comp_data, tf_sens.getBasis());  // static frame      
         //ROS_INFO_THROTTLE(0.01, "force z: %f", grav_comp_data.wrench.force.x);
         
-        if(not_initialized_bias) {
-            temp_bias[0] += grav_comp_data.wrench.force.x;
-            temp_bias[1] += grav_comp_data.wrench.force.y;
-            temp_bias[2] += grav_comp_data.wrench.force.z;
-            temp_bias[3] += grav_comp_data.wrench.torque.x;
-            temp_bias[4] += grav_comp_data.wrench.torque.y;
-            temp_bias[5] += grav_comp_data.wrench.torque.z;
-        
-            counter -= 1;
-            if (counter == 0) {
-                not_initialized_bias = false;
-                for (int i = 0; i < SIZE; i++) {
-                    BIAS[i] = temp_bias[i]/avg_val;
-                }
-                ROS_INFO_STREAM("Bias estimation for f/t sensor done.\nForce bias: " << BIAS[0] << ", " << BIAS[1] << ", " << BIAS[2] << "\nTorque bias: " << BIAS[3] << ", " << BIAS[4] << ", " << BIAS[5] << "\n");
-            }
-        }
         pub.publish(grav_comp_data);
         ros::spinOnce();
         rate.sleep();
