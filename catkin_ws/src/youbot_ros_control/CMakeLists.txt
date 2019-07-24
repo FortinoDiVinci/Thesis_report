@@ -19,6 +19,12 @@ find_package(catkin REQUIRED COMPONENTS
   youbot_driver
 )
 
+find_package(Boost REQUIRED COMPONENTS 
+  thread 
+  date_time 
+  filesystem 
+  system)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -124,6 +130,7 @@ catkin_package(
 include_directories( 
   include
   ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIR}
 )
 
 ## Declare a C++ library
@@ -143,6 +150,11 @@ add_executable(${PROJECT_NAME}_gravity_comp src/gravity_compensation.cpp)
 add_executable(${PROJECT_NAME}_endpoint 
   src/forward_kinematic.cpp
   src/kinematic_endpoint.cpp)
+add_executable(${PROJECT_NAME}_debug_endpoint src/debug_transform.cpp)
+add_executable(${PROJECT_NAME}_control_loop 
+  src/jacobian.cpp
+  src/control_loop.cpp)
+add_executable(${PROJECT_NAME}_velocity_ctrl src/velocity_ctrl.cpp)
 
 
 ## Rename C++ executable without prefix
@@ -151,11 +163,17 @@ add_executable(${PROJECT_NAME}_endpoint
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(${PROJECT_NAME}_endpoint PROPERTIES OUTPUT_NAME endpoint PREFIX "")
 set_target_properties(${PROJECT_NAME}_gravity_comp PROPERTIES OUTPUT_NAME gravity_comp PREFIX "")
+set_target_properties(${PROJECT_NAME}_debug_endpoint PROPERTIES OUTPUT_NAME debug PREFIX "")
+set_target_properties(${PROJECT_NAME}_control_loop PROPERTIES OUTPUT_NAME control_loop PREFIX "")
+set_target_properties(${PROJECT_NAME}_velocity_ctrl PROPERTIES OUTPUT_NAME velocity_ctrl PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(${PROJECT_NAME}_endpoint ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_gravity_comp ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_debug_endpoint ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_control_loop ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_velocity_ctrl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_endpoint
@@ -164,7 +182,15 @@ target_link_libraries(${PROJECT_NAME}_endpoint
 target_link_libraries(${PROJECT_NAME}_gravity_comp
   ${catkin_LIBRARIES}
 )
-
+target_link_libraries(${PROJECT_NAME}_debug_endpoint
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_control_loop
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_velocity_ctrl
+  ${catkin_LIBRARIES} ${Boost_LIBRARIES}
+)
 #############
 ## Install ##
 #############
@@ -180,6 +206,7 @@ install(PROGRAMS
    scripts/tf_endpoint
    scripts/ATI_force_sensor_utils
    scripts/tf_endpoint_mgd
+   scripts/commande_sinusoidale.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -188,6 +215,8 @@ install(
   TARGETS
     ${PROJECT_NAME}_endpoint
     ${PROJECT_NAME}_gravity_comp
+    ${PROJECT_NAME}_control_loop
+    ${PROJECT_NAME}_velocity_ctrl
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
