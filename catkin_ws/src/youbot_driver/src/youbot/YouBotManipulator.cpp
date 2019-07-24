@@ -324,10 +324,15 @@ void YouBotManipulator::calibrateSpeedControllers() {
 	RampGeneratorSpeedAndPositionControl dummy_ramp;
 	ramp_speed_control.assign(numberArmJoints, dummy_ramp);
 	
+	std::vector <MaximumPositioningVelocity> max_velocity;
+	MaximumPositioningVelocity dummy_max_vel;
+	max_velocity.assign(numberArmJoints, dummy_max_vel);
+	
 	int pid_val = 0;
-	int pid_val2 = 0;
-	int pid_val3 = 0;
+	int acc_val = 0;
 	bool ramp_on = false;
+	quantity<angular_acceleration> acc_val_si;
+	quantity<angular_velocity> max_vel_si;
 	
 	for (unsigned int i = 0; i < numberArmJoints; i++) {
 
@@ -335,47 +340,46 @@ void YouBotManipulator::calibrateSpeedControllers() {
 		jointNameStream << "Joint_" << i + 1;
 		jointName = jointNameStream.str();
 		
+		// FirstParametersSpeedControl
 		configfile->readInto(pid_val, jointName, "PParameterFirstParametersSpeedControl");
 		p_speed_control[i].setParameter(pid_val);
 		configfile->readInto(pid_val, jointName, "IParameterFirstParametersSpeedControl");
 		i_speed_control[i].setParameter(pid_val);
 		configfile->readInto(pid_val, jointName, "DParameterFirstParametersSpeedControl");
 		d_speed_control[i].setParameter(pid_val);
-		
-		
-	}
-	
-	for (unsigned int i = 0; i < numberArmJoints; i++) {
-		
+
 		joints[i].setConfigurationParameter(p_speed_control[i]);
 		joints[i].setConfigurationParameter(i_speed_control[i]);
 		joints[i].setConfigurationParameter(d_speed_control[i]);
 		
-	}
-	
-	for (unsigned int i = 0; i < numberArmJoints; i++) {
+		// SecondParametersSpeedControl
+		configfile->readInto(pid_val, jointName, "PParameterSecondParametersSpeedControl");
+		p_speed_control2[i].setParameter(pid_val);
+		configfile->readInto(pid_val, jointName, "IParameterSecondParametersSpeedControl");
+		i_speed_control2[i].setParameter(pid_val);
+		configfile->readInto(pid_val, jointName, "DParameterSecondParametersSpeedControl");
+		d_speed_control2[i].setParameter(pid_val);
 
-		std::stringstream jointNameStream;
-		jointNameStream << "Joint_" << i + 1;
-		jointName = jointNameStream.str();
-		
-		configfile->readInto(pid_val2, jointName, "PParameterSecondParametersSpeedControl");
-		p_speed_control2[i].setParameter(pid_val2);
-		configfile->readInto(pid_val2, jointName, "IParameterSecondParametersSpeedControl");
-		i_speed_control2[i].setParameter(pid_val2);
-		configfile->readInto(pid_val2, jointName, "DParameterSecondParametersSpeedControl");
-		d_speed_control2[i].setParameter(pid_val2);
-		
-		
-	}
-	
-	for (unsigned int i = 0; i < numberArmJoints; i++) {
-		
 		joints[i].setConfigurationParameter(p_speed_control2[i]);
 		joints[i].setConfigurationParameter(i_speed_control2[i]);
 		joints[i].setConfigurationParameter(d_speed_control2[i]);
 		
+		// CurrentControl
+		configfile->readInto(pid_val, jointName, "PParameterCurrentControl");
+		p_current_control[i].setParameter(pid_val);
+		configfile->readInto(pid_val, jointName, "IParameterCurrentControl");
+		i_current_control[i].setParameter(pid_val);
+		configfile->readInto(pid_val, jointName, "DParameterCurrentControl");
+		d_current_control[i].setParameter(pid_val);
+
+		joints[i].setConfigurationParameter(p_current_control[i]);
+		joints[i].setConfigurationParameter(i_current_control[i]);
+		joints[i].setConfigurationParameter(d_current_control[i]);
 	}
+	
+	// desactivate ramp for joint 4
+	//ramp_speed_control[3].setParameter(false);
+	//joints[3].setConfigurationParameter(ramp_speed_control[3]);
 	
 	for (unsigned int i = 0; i < numberArmJoints; i++) {
 
@@ -383,41 +387,13 @@ void YouBotManipulator::calibrateSpeedControllers() {
 		jointNameStream << "Joint_" << i + 1;
 		jointName = jointNameStream.str();
 		
-		configfile->readInto(pid_val3, jointName, "PParameterCurrentControl");
-		p_current_control[i].setParameter(pid_val3);
-		configfile->readInto(pid_val3, jointName, "IParameterCurrentControl");
-		i_current_control[i].setParameter(pid_val3);
-		configfile->readInto(pid_val3, jointName, "DParameterCurrentControl");
-		d_current_control[i].setParameter(pid_val3);
-		
-		
+		configfile->readInto(acc_val, jointName, "MotorAcceleration");
+		acc_val_si = acc_val * si::radians_per_second / si::seconds;
+		target_acceleration[i].setParameter(acc_val_si);
+		joints[i].setConfigurationParameter(target_acceleration[i]);
 	}
 	
-	for (unsigned int i = 0; i < numberArmJoints; i++) {
-		
-		joints[i].setConfigurationParameter(p_current_control[i]);
-		joints[i].setConfigurationParameter(i_current_control[i]);
-		joints[i].setConfigurationParameter(d_current_control[i]);
-		
-	}
-	
-	// desactivate ramp for joint 4
-	ramp_speed_control[3].setParameter(true);
-	joints[3].setConfigurationParameter(ramp_speed_control[3]);
-	
-	quantity<angular_acceleration> acc_value = 15.0 * si::radians_per_second / si::seconds;
-	
-	acc_value.value();
-	
-	target_acceleration[3].setParameter(acc_value);
-	joints[3].setConfigurationParameter(target_acceleration[3]);
-	
-	joints[3].getConfigurationParameter(target_acceleration[3]);
-	target_acceleration[3].getParameter(acc_value);
-	ROS_INFO("Joint 4 for arm 1 has acceleration value set to: %f", acc_value.value());
-	
-	
-	// boucle pour afficher les valeurs des paramètres des PID par défaut 
+	// boucle pour afficher les valeurs des paramètres des PID 
 	for (unsigned int i = 0; i < numberArmJoints; i++) {
 	
 	    joints[i].getConfigurationParameter(p_speed_control[i]);
@@ -451,8 +427,14 @@ void YouBotManipulator::calibrateSpeedControllers() {
 	    joints[i].getConfigurationParameter(ramp_speed_control[i]);
 	    ramp_speed_control[i].getParameter(ramp_on);
 	    ROS_INFO("Joint %i for arm 1 has ramp enable value set to: %i", i+1, ramp_on);
-	    
-	    }
+        joints[i].getConfigurationParameter(target_acceleration[i]);
+        target_acceleration[i].getParameter(acc_val_si);
+        ROS_INFO("Joint %i for arm 1 has acceleration value set to: %f", i+1, acc_val_si.value());
+        joints[i].getConfigurationParameter(max_velocity[i]);
+        max_velocity[i].getParameter(max_vel_si);
+        ROS_INFO("Joint %i for arm 1 has max velocity value set to: %f", i+1, max_vel_si.value());
+        
+	}
 	
 }
 
