@@ -19,15 +19,9 @@
 class SpeedController
 {
     public:
-    SpeedController(int dof, int fst_jnt, ros::NodeHandle n);
-    brics_actuator::JointTorques initializeJointTorqueMsg(int dof, int fst_jnt);
-	
     ros::Publisher torque_cmd_pub;
-    ros::Subscriber speed_cmd_sub;
-    ros::Subscriber joint_state_sub;
-    // debug
-    ros::Publisher spld_speed_cmd_pub;
-    ros::Publisher ramp_speed_cmd_pub;
+    
+    SpeedController(int dof, int fst_jnt, ros::NodeHandle n);
 	
     bool isRampOn(int i) {return m_ramp_on[i];};
     void setRampOn(bool ramp_on, int i) {m_ramp_on[i] = ramp_on;};	
@@ -47,18 +41,28 @@ class SpeedController
     void checkJointsLimit(int dof, int fst_jnt);
 	
     private:
+	// topic subscriber
+    ros::Subscriber speed_cmd_sub;
+    ros::Subscriber joint_state_sub;
+    // debug
+    ros::Publisher spld_speed_cmd_pub;
+    ros::Publisher ramp_speed_cmd_pub;
+	// callback functions
     void jointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
     void jointVelocityCmdCallback(const brics_actuator::JointVelocities::ConstPtr& msg);
-    // Velocities setpoints are meant to be sent at an lower rate
+    // 
+	brics_actuator::JointTorques initializeJointTorqueMsg(int dof, int fst_jnt);
+	// Velocities setpoints are meant to be sent at an lower rate
     // typicaly 100Hz, while this loop should run at a rate 10 times greater
     void generateRamp(const int i);
-    bool IsJointLimit(int i);
+    bool IsJointLimitCritical(int i); // if joint limit is going to be reached
+    int IsJointLimit(int i); // if joint limit has been reached (and specify min, or max lim)
 
-    sensor_msgs::JointState m_joint_state;
-    brics_actuator::JointTorques m_joint_trq_msg;	
-    brics_actuator::JointVelocities m_joint_vel_cmd;
-    brics_actuator::JointVelocities m_joint_vel_cmd_spld; // over sampled signal typ: 1kHz
-    brics_actuator::JointVelocities m_joint_vel_cmd_ramp;
+    sensor_msgs::JointState m_joint_state; // joints position, velocity and effort
+    brics_actuator::JointTorques m_joint_trq_msg; // command signal generated (ampere) 
+    brics_actuator::JointVelocities m_joint_vel_cmd; // velocity set point (input)
+    brics_actuator::JointVelocities m_joint_vel_cmd_spld; // over sampled signal (typ 1kHz)
+    brics_actuator::JointVelocities m_joint_vel_cmd_ramp; // if ramp is used, n-1 setpoint
 	
     ros::Time last_t[NUMBER_ARM_JOINTS];	
     bool m_ramp_on[NUMBER_ARM_JOINTS];

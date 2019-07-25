@@ -5,6 +5,7 @@ template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
+
 SpeedController::SpeedController(int dof, int fst_jnt, ros::NodeHandle n1)
 {
     m_joint_state.name.assign(1, "arm_joint_x");
@@ -75,6 +76,7 @@ SpeedController::SpeedController(int dof, int fst_jnt, ros::NodeHandle n1)
 	}	
 }
 
+
 brics_actuator::JointTorques SpeedController::initializeJointTorqueMsg(int DOF, int first_joint)
 {
     brics_actuator::JointTorques m_joint_torques;
@@ -95,16 +97,18 @@ brics_actuator::JointTorques SpeedController::initializeJointTorqueMsg(int DOF, 
     return m_joint_torques;
 }
 
+
 void SpeedController::jointStateCallback(const sensor_msgs::JointState::ConstPtr& msg)
 {
     for (int i = 0; i < NUMBER_ARM_JOINTS; i++)
 	{
 		m_joint_state.position[i] = msg->position[i];
 		m_joint_state.velocity[i] = msg->velocity[i];
-		m_joint_state.effort[i] = msg->effort[i];
+		//m_joint_state.effort[i] = msg->effort[i]; // unused for now, uncomment if necessary
 	}
 }
 
+// this function is strongly inspired by the callback provided by kuka for the youbot driver
 void SpeedController::jointVelocityCmdCallback(const brics_actuator::JointVelocities::ConstPtr& msg)
 {
 	
@@ -154,6 +158,7 @@ void SpeedController::jointVelocityCmdCallback(const brics_actuator::JointVeloci
 	}
 }
 
+// For our project, the proportional controller is enough, implementation of PID could be considered
 void SpeedController::proportionalController(const int dof, const int fst_jnt)
 {
 	for (int i = fst_jnt; i < dof + fst_jnt; i++)
@@ -173,6 +178,7 @@ void SpeedController::proportionalController(const int dof, const int fst_jnt)
 		m_joint_trq_msg.torques[i - fst_jnt].value = m_Kv[i]*err; // only required torques are transmisted
 	}
 }
+
 
 void SpeedController::overSampling(int dof, int first_joint_ctrl)
 {
@@ -198,6 +204,7 @@ void SpeedController::overSampling(int dof, int first_joint_ctrl)
 	}
 }
 
+
 void SpeedController::generateRamp(const int i)
 {
 	float dt = (m_joint_vel_cmd_spld.velocities[i].timeStamp - last_t[i]).toSec();
@@ -205,46 +212,73 @@ void SpeedController::generateRamp(const int i)
 	//ROS_INFO_THROTTLE(1, "dt: %f", dt);
 	float acc = (m_joint_vel_cmd_spld.velocities[i].value - m_joint_state.velocity[i]) / dt;
 	//float acc = float(m_joint_vel_cmd.velocities[i].value - m_joint_vel_cmd_ramp.velocities[i].value) / dt;
-	ROS_INFO("acc: %f", acc);
+	//ROS_INFO("acc: %f", acc);
 	if (abs(acc) > m_acceleration_max[i])
 	{
-	    ROS_INFO("acc (act): %f", acc);
-		m_joint_vel_cmd_spld.velocities[i].value = sgn(acc) * m_acceleration_max[i]*dt + m_joint_vel_cmd_ramp.velocities[i].value;
+	    //ROS_INFO("acc (act): %f", acc);
+        m_joint_vel_cmd_spld.velocities[i].value = sgn(acc) * m_acceleration_max[i]*dt + m_joint_vel_cmd_ramp.velocities[i].value;
 	}
 	m_joint_vel_cmd_ramp.velocities[i].value = m_joint_vel_cmd_spld.velocities[i].value; // n-1 val
 }
 
-bool SpeedController::IsJointLimit(int i)
+
+bool SpeedController::IsJointLimitCritical(int i)
 {
     // if lower limit might be reached
     if(m_joint_state.position[i] - m_joint_limit_angle[0][i] < 0.3 && 
     m_joint_state.velocity[i] < -0.2)
     {
-        ROS_ERROR("Critical position %f and velocity %f reached on joint %i", m_joint_state.position[i], m_joint_state.velocity[i], i + 1);
+        ROS_WARN_THROTTLE(0.5, "Critical position %f and velocity %f reached on joint %i", m_joint_state.position[i], m_joint_state.velocity[i], i + 1);
         return true;
     }
     // if upper limit might be reached
     else if(m_joint_state.position[i] - m_joint_limit_angle[1][i] > -0.3 && 
     m_joint_state.velocity[i] > 0.2)
     {
-        ROS_ERROR("Critical position %f and velocity %f reached on joint %i", m_joint_state.position[i], m_joint_state.velocity[i], i + 1);
+        ROS_WARN_THROTTLE(0.5, "Critical position %f and velocity %f reached on joint %i", m_joint_state.position[i], m_joint_state.velocity[i], i + 1);
         return true;
     }
     else
         return false;
 }
 
+
+int SpeedController::IsJointLimit(int i)
+{
+    // if lower limit might be reached
+    if(m_joint_state.position[i] - m_joint_limit_angle[0][i] < 0.05)
+    {
+        ROS_WARN_THROTTLE(1, "Limit position %f has been reached on joint %i", m_joint_state.position[i], i + 1);
+        return -1;
+    }
+    // if upper limit might be reached
+    else if(m_joint_state.position[i] - m_joint_limit_angle[1][i] > -0.05)
+    {
+        ROS_WARN_THROTTLE(1, "Limit position %f has been reached on joint %i", m_joint_state.position[i], i + 1);
+        return 1;
+    }
+    else
+        return 0;
+}
+
+
 void SpeedController::checkJointsLimit(int dof, int fst_jnt)
 {
     for(int i = 0; i < dof; i++)
     {
-        if(IsJointLimit(i + fst_jnt))
+        if(IsJointLimitCritical(i + fst_jnt))
         {
             // brake (torque in the opposite direction)
             m_joint_trq_msg.torques[i].value = m_joint_trq_msg.torques[i].value * (-0.2);
         }
+		// cmd in the direction of the limit while the limit has been reached...
+		else if(IsJointLimit(i + fst_jnt) == sgn(m_joint_trq_msg.torques[i].value))
+		{
+			 m_joint_trq_msg.torques[i].value = 0; // avoid forcing against the jnt limit
+		}
     }
 }
+
 
  sig_atomic_t volatile g_request_shutdown = 0;
  
@@ -277,13 +311,13 @@ void SpeedController::checkJointsLimit(int dof, int fst_jnt)
 	{
 		// this error avoid launching the node with unconsistent input parameters
 		ROS_ERROR("The number of joints controlled and the first joint to be controlled are not consistent");
-		ROS_WARN("The first joint required to be controlled is the nb %d, and %d joint(s) were required to be controlled", fst_jnt, dof);
+		if (dof = 1 ) ROS_WARN("The first joint set is the nb %d, and 1 joint was required to be controlled", fst_jnt);
+		else ROS_WARN("The first joint set is the nb %d, and %d joints were required to be controlled", fst_jnt, dof);
 		return -1;
 	}
 	
 	SpeedController vel_ctrl(dof, fst_jnt, n1);
 	vel_ctrl.setRampOn(true, 4);
-	//vel_ctrl.setAccmax(5, 4);
 	ros::Rate rate(freq);
 	
 	while (!g_request_shutdown) 
