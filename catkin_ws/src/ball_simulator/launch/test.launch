@@ -9,9 +9,11 @@
   <arg name="log_file_path" default="$(find ball_simulator)/logs/" />
   <arg name="arm_frame_id" default="sensor" />
   <arg name="ref_frame_id" default="base_link" />
+  <arg name="scale_factor" default="3" />
 
 
   <param name="use_sim_time" value="true"/>
+  <rosparam file="$(find ball_simulator)/config/example.yaml"/>
 
   <node name="clock" pkg="ball_simulator" type="clock" output="screen">
   	<param name="rate" value="$(arg clock_rate)"/>
@@ -20,6 +22,7 @@
   <node name="ball_simulator" pkg="ball_simulator" type="ball_simulator_node" output="screen" required="true">
     <param name="enable_sine_paddle" value="$(arg enable_sine_paddle)"/>
     <param name="rate" value="$(arg sim_rate)"/>
+    <param name="scale" value="$(arg scale_factor)" />
     <param name="arm_frame_id" value="$(arg arm_frame_id)"/>
     <param name="parent_frame_id" value="$(arg ref_frame_id)"/>
   </node>
@@ -29,13 +32,12 @@
     <param name="world_frame" value="$(arg ref_frame_id)"/>
     <param name="arm_frame" value="$(arg arm_frame_id)"/>
     <remap from="arm_joint_states" to="joint_states"/>
-    <remap from="real_paddle_pose" to="sensor"/>
+    <remap from="real_paddle_pose" to="$(arg arm_frame_id)"/>
   </node>
 
   <node name="session_manager" pkg="ball_simulator" type="session_manager" output="screen">
     <param name="log_file_path" value ="$(arg log_file_path)"/>
-    <param name="arm_frame_id" value ="$(arg arm_frame_id)"/>
-    <rosparam file="$(find ball_simulator)/config/example.yaml"/>
+    <param name="arm_frame_id" value ="$(arg arm_frame_id)"/>  
   </node>
 
   <include file="$(find ball_simulator)/launch/viewer.launch"/>

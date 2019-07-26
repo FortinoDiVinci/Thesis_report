@@ -3,20 +3,20 @@
 
   <param name="use_sim_time" value="true"/>
 
+  <rosparam file="$(find ball_simulator)/config/example.yaml"/>
+
   <node name="ball_simulator" pkg="ball_simulator" type="ball_simulator_node" output="screen">
     <param name="enable_sine_paddle" value="false"/>
   </node>
 
   <node name="logger" pkg="ball_simulator" type="logger" output="screen"/>
 
-  <node name="session_manager" pkg="ball_simulator" type="session_manager" output="screen">
-    <rosparam file="$(find ball_simulator)/config/example.yaml"/>
-  </node>
+  <node name="session_manager" pkg="ball_simulator" type="session_manager" output="screen"/>
 
   <include file="$(find ball_simulator)/launch/viewer.launch"/>
 
   <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" args="ball_simulator"/>
 
-  <node name="player" pkg="rosbag" type="play" args="$(arg bag) --clock" required="true"/>
+  <node name="player" pkg="rosbag" type="play" args="$(arg bag) --clock --hz=500" required="true"/>
 
 </launch>

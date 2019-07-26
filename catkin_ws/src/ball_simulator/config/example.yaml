@@ -1,26 +1,26 @@
-sessions:
-  - test_balle_collante06_ses_1:
-      duration: 25.0 # seconds
-      initial_config:
-        target_height: 2.0
-        restitution: 0.6
-        gravity: 9.807
-      events:
-        higher_on_mars_after_sixth_bounce:
-          trigger: BOUNCE
-          value: 6
-          config:
-            target_height: 3.0
-            gravity: 3.711
-  - test_balle_collante06_ses_2:
-      duration: 25.0 # seconds
-      initial_config:
-        target_height: 2.0
-        restitution: 0.6
-        gravity: 9.807
-      events:
-        on_moon_after_10s:
-          trigger: DELAY
-          value: 10.0 # seconds
-          config:
-            gravity: 1.62
+session_manager:
+  sessions:
+    - session_1:
+        initial_config:
+          target_height: 2.0
+          restitution: 0.6
+          gravity: 9.807
+        events:
+          higher_on_mars_after_tenth_bounce:
+            trigger: BOUNCE
+            value: 10
+            config:
+              target_height: 3.0
+              gravity: 3.711
+    - session_2:
+        duration: 100.0 # seconds
+        initial_config:
+          target_height: 2.0
+          restitution: 0.6
+          gravity: 9.807
+        events:
+          on_moon_after_20s:
+            trigger: DELAY
+            value: 20.0 # seconds
+            config:
+              gravity: 1.62
