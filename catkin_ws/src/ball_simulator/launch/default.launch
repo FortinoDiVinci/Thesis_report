@@ -2,6 +2,8 @@
 
   <param name="use_sim_time" value="true"/>
 
+  <rosparam file="$(find ball_simulator)/config/example.yaml"/>
+
   <node name="clock" pkg="ball_simulator" type="clock" output="screen"/>
 
   <node name="ball_simulator" pkg="ball_simulator" type="ball_simulator_node" output="screen">
@@ -10,9 +12,7 @@
 
   <node name="logger" pkg="ball_simulator" type="logger" output="screen"/>
 
-  <node name="session_manager" pkg="ball_simulator" type="session_manager" output="screen">
-    <rosparam file="$(find ball_simulator)/config/example.yaml"/>
-  </node>
+  <node name="session_manager" pkg="ball_simulator" type="session_manager" output="screen"/>
 
   <include file="$(find ball_simulator)/launch/viewer.launch"/>
 

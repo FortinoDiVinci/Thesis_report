@@ -11,28 +11,25 @@ from std_msgs.msg import Float64
 def wait_for_enter():
     result = None
 
-    try:
-        while result != "\n":
-            if os.name == 'nt':
-                import msvcrt  # pylint: disable=import-error
-                result = msvcrt.getch()
-            else:
-                import termios  # pylint: disable=import-error
-                fd = sys.stdin.fileno()
+    while result != "\n":
+        if os.name == 'nt':
+            import msvcrt  # pylint: disable=import-error
+            result = msvcrt.getch()
+        else:
+            import termios  # pylint: disable=import-error
+            fd = sys.stdin.fileno()
 
-                oldterm = termios.tcgetattr(fd)
-                newattr = termios.tcgetattr(fd)
-                newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
-                termios.tcsetattr(fd, termios.TCSANOW, newattr)
+            oldterm = termios.tcgetattr(fd)
+            newattr = termios.tcgetattr(fd)
+            newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
+            termios.tcsetattr(fd, termios.TCSANOW, newattr)
 
-                try:
-                    result = sys.stdin.read(1)
-                except IOError:
-                    pass
-                finally:
-                    termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
-    except KeyboardInterrupt:
-        pass
+            try:
+                result = sys.stdin.read(1)
+            except IOError:
+                pass
+            finally:
+                termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
 
 
 def on_reconfiguration(config):
@@ -59,7 +56,11 @@ class BounceEvent:
             return
 
         if self.value < 0:
-            rospy.logerr("event value should be positive %s for event %s", self.value, event_name)
+            rospy.logerr(
+                "event value should be positive %s for event %s",
+                self.value,
+                event_name
+            )
             return
 
         self.sub = rospy.Subscriber("impulse", Float64, self.on_event)
@@ -92,7 +93,11 @@ class DelayEvent:
             return
 
         if self.value < 0.0:
-            rospy.logerr("event value should be positive %s for event %s", self.value, event_name)
+            rospy.logerr(
+                "event value should be positive %s for event %s",
+                self.value,
+                event_name
+            )
             return
 
         self.timer = rospy.Timer(rospy.Duration(self.value), self.on_event)
@@ -115,14 +120,19 @@ class EventFactory:
         try:
             trigger_name = event_config["trigger"]
         except KeyError:
-            rospy.logerr("trigger field is not defined for event %s", event_name)
+            rospy.logerr(
+                "trigger field is not defined for event %s", event_name)
             return None
 
         if trigger_name not in cls.TRIGGER_TYPES:
-            rospy.logerr("trigger should be one of %s", ", ".join(cls.TRIGGER_TYPES.keys()))
+            rospy.logerr(
+                "trigger should be one of %s",
+                ", ".join(cls.TRIGGER_TYPES.keys())
+            )
             return None
 
-        return cls.TRIGGER_TYPES[trigger_name](event_name, event_config, reconfigure_client)
+        return cls.TRIGGER_TYPES[trigger_name](
+            event_name, event_config, reconfigure_client)
 
 
 if __name__ == '__main__':
@@ -197,7 +207,8 @@ if __name__ == '__main__':
             else:
                 rospy.logwarn("event %s not registered", event_name)
 
-        start_logging(os.path.join(log_file_path, "{}.log".format(session_name)))
+        start_logging(
+            os.path.join(log_file_path, "{}.log".format(session_name)))
         reset_simulation()
         session_start = rospy.Time.now()
 
@@ -207,3 +218,5 @@ if __name__ == '__main__':
         except KeyError:
             rospy.loginfo("press enter to end this session")
             wait_for_enter()
+        except rospy.exceptions.ROSInterruptException:
+            pass

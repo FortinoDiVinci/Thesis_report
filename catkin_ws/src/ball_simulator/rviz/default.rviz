@@ -4,6 +4,8 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
+        - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 662
@@ -72,27 +74,60 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        arm:
+        arm_link_0:
+          Value: true
+        arm_link_1:
+          Value: true
+        arm_link_2:
+          Value: true
+        arm_link_3:
+          Value: true
+        arm_link_4:
+          Value: true
+        arm_link_5:
           Value: true
         ball:
-          Value: false
+          Value: true
+        base_footprint:
+          Value: true
+        base_laser_front_link:
+          Value: true
+        base_link:
+          Value: true
+        gripper_palm_link:
+          Value: true
         paddle:
-          Value: false
-        world:
-          Value: false
+          Value: true
+        plate_link:
+          Value: true
+        sensor:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: true
       Tree:
-        world:
-          arm:
-            {}
-          ball:
-            {}
-          paddle:
-            {}
+        base_footprint:
+          base_link:
+            arm_link_0:
+              arm_link_1:
+                arm_link_2:
+                  arm_link_3:
+                    arm_link_4:
+                      arm_link_5:
+                        gripper_palm_link:
+                          {}
+            ball:
+              {}
+            base_laser_front_link:
+              {}
+            paddle:
+              {}
+            plate_link:
+              {}
+            sensor:
+              {}
       Update Interval: 0
       Value: true
     - Class: rviz/MarkerArray
@@ -100,7 +135,7 @@ Visualization Manager:
       Marker Topic: /ball_simulator/markers
       Name: MarkerArray
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -123,7 +158,7 @@ Visualization Manager:
   Global Options:
     Background Color: 74; 74; 74
     Default Light: true
-    Fixed Frame: world
+    Fixed Frame: base_link
     Frame Rate: 60
   Name: root
   Tools:
@@ -147,9 +182,9 @@ Visualization Manager:
   Views:
     Current:
       Centre:
-        X: 0.09496567398309708
-        Y: 2.477318048477173e-07
-        Z: 1.730635643005371
+        X: 0.023862026631832123
+        Y: 2.421438694000244e-07
+        Z: 1.2329100370407104
       Class: rviz_ortho_view_controller/Ortho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -160,7 +195,7 @@ Visualization Manager:
       Name: Current View
       Near Clip Distance: 0.009999999776482582
       Plane: XZ
-      Scale: 192.45974731445312
+      Scale: 273.60052490234375
       Target Frame: <Fixed Frame>
       Value: Ortho (rviz_ortho_view_controller)
     Saved: ~
@@ -180,5 +215,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 956
-  X: 936
+  X: 924
   Y: 0

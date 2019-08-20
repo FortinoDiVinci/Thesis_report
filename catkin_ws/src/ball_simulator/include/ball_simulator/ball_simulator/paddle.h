@@ -9,6 +9,7 @@
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 #include <visualization_msgs/Marker.h>
+#include <algorithm>
 #include <string>
 
 namespace ball_simulator
@@ -120,8 +121,8 @@ public:
 
     try
     {
-      tf_listener_.lookupTransform(frame_id_, config().parent_frame_id, ros::Time(stamp), transform);
-      return -transform.getOrigin().getZ() * config().scale;
+      tf_listener_.lookupTransform(config().parent_frame_id, frame_id_, ros::Time(stamp), transform);
+      return transform.getOrigin().getZ() * config().scale;
     }
     catch (const tf::TransformException& e)
     {
@@ -136,13 +137,14 @@ public:
     double velocity = 0.0;
     std::string error_msg;
 
-    tf_listener_.waitForTransform(frame_id_, config().parent_frame_id, ros::Time(stamp), ros::Duration(0.1),
+    tf_listener_.waitForTransform(config().parent_frame_id, frame_id_, ros::Time(stamp), ros::Duration(0.1),
                                   ros::Duration(0.001));
 
     try
     {
-      tf_listener_.lookupTwist(config().parent_frame_id, frame_id_, ros::Time(stamp), averaging_interval_, twist);
-      velocity = twist.linear.z * config().scale;
+      lookup_twist(frame_id_, config().parent_frame_id, config().parent_frame_id, tf::Point(0, 0, 0), frame_id_,
+                   ros::Time(stamp), ros::Duration(averaging_interval_), twist, &tf_listener_);
+      return twist.linear.z * config().scale;
     }
     catch (const tf::TransformException& e)
     {
@@ -150,6 +152,53 @@ public:
     }
 
     return velocity;
+  }
+
+  void lookup_twist(const std::string& tracking_frame, const std::string& observation_frame,
+                    const std::string& reference_frame, const tf::Point& reference_point,
+                    const std::string& reference_point_frame, const ros::Time& time,
+                    const ros::Duration& averaging_interval, geometry_msgs::Twist& twist,
+                    const tf::TransformListener* listener) const
+  {
+    ros::Time latest_time, target_time;
+    listener->getLatestCommonTime(observation_frame, tracking_frame, latest_time, NULL);
+
+    if (ros::Time() == time)
+      target_time = latest_time;
+    else
+      target_time = time;
+
+    ros::Time end_time = std::min(target_time + averaging_interval * 0.5, latest_time);
+
+    ros::Time start_time = std::max(ros::Time().fromSec(.00001) + averaging_interval, end_time) -
+                           averaging_interval;  // don't collide with zero
+    ros::Duration corrected_averaging_interval =
+        end_time - start_time;  // correct for the possiblity that start time was truncated above.
+    tf::StampedTransform start, end;
+    listener->lookupTransform(observation_frame, tracking_frame, start_time, start);
+    listener->lookupTransform(observation_frame, tracking_frame, end_time, end);
+
+    tf::Matrix3x3 temp = start.getBasis().inverse() * end.getBasis();
+    tf::Quaternion quat_temp;
+    temp.getRotation(quat_temp);
+    tf::Vector3 o = start.getBasis() * quat_temp.getAxis();
+    tfScalar ang = quat_temp.getAngle();
+
+    double delta_x = end.getOrigin().getX() - start.getOrigin().getX();
+    double delta_y = end.getOrigin().getY() - start.getOrigin().getY();
+    double delta_z = end.getOrigin().getZ() - start.getOrigin().getZ();
+
+    tf::Vector3 twist_vel((delta_x) / corrected_averaging_interval.toSec(),
+                          (delta_y) / corrected_averaging_interval.toSec(),
+                          (delta_z) / corrected_averaging_interval.toSec());
+    tf::Vector3 twist_rot = o * (ang / corrected_averaging_interval.toSec());
+
+    twist.linear.x = twist_vel.x();
+    twist.linear.y = twist_vel.y();
+    twist.linear.z = twist_vel.z();
+    twist.angular.x = twist_rot.x();
+    twist.angular.y = twist_rot.y();
+    twist.angular.z = twist_rot.z();
   }
 
 private:
