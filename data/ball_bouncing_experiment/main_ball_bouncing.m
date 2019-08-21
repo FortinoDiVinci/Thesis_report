@@ -19,6 +19,7 @@ t_s = 0.003;                    % Sampling time (s)
 Ar0 = 14;                       % Excitability c
 Pt0 = 0.66;                     % Eigen period of the oscillator (s)
 p = 0.008;                      % disturbance (m)
+b_weight = 0.1;                 % ball weight (kg)
 
 % CPG --------------------------------------------------------------------
 delay = 16.0;                   % Delay upon the perception of the ball
@@ -53,6 +54,7 @@ Zb_d = zeros(n_step,1);                 % ball position along z
 Za_d = zeros(n_step,1);                 % arm position along z
 Vb_d = zeros(n_step,1);                 % ball speed along z 
 Va_d = zeros(n_step,1);                 % arm speed along z
+Tau_d = zeros(n_step,1);                % tau
 
 %% Initialization %%
 
@@ -71,10 +73,12 @@ for ii=1:length(t0)
     f1_out_d(ii) = cpg.f1_out;
     f2_out_d(ii) = cpg.f2_out;
     y_out_d(ii) = cpg.y_out;
-    arm.Tau = h1*cpg.y_out; %  entrainment of the arm comes from CPG
+    arm.Tau = h1*cpg.y_out; % entrainment of the arm comes from CPG
     Za_d(ii) = arm.pos;
     Va_d(ii) = arm.speed;
     impedance_output(arm);
+    Tau_d(ii) = arm.Tau;
+    %tee_arm_model(arm, 0.06*h1*cpg.y_out);
 end
 
 if DISP_INIT
@@ -85,7 +89,7 @@ if DISP_INIT
     title('Oscillator initialization')
     legend('f1','f2','x1','x2','y')
     figure(2)
-    plot(t0,Za_d,'-b',t0,Va_d,'--r','linewidth',1.5)
+    plot(t0,Za_d,'-b',t0,Va_d,'-r','linewidth',1.5)
     title('Arm initialization entrainment')
     legend('position', 'speed')
 end
@@ -99,18 +103,32 @@ cpg.input = 0;
 impact = 0;                                 % used as boolean
 t_i = 1;                                    % iteration since last impact
 Nb_impact = 0;
+Zb_d(1) = Zb0; 
+
+%Pt_d = [Pt0];
+%Ar_d = [Ar0];
+%input_cpg_d = [0];
 
 for ii=1:length(t_tot)
     % -------------------- Continuous loop ----------------------------- %
     if Nb_impact >= 1                       % starts at 2nd impact
-        cpg.input = h0*Vb_d(end-delay,1);   % entrainment of the CPG
+        cpg.input = h0*Vb_d(ii-delay);     % entrainment of the CPG
+        % input_cpg_d = [input_cpg_d, cpg.input];
     end
     if t_tot(ii) == 10
-        position_disturbance(arm, p);
+        %position_disturbance(arm, p);
     end
     matsuoka_output(cpg); 
+    x1_out_d(ii) = cpg.x1_out;
+    x2_out_d(ii) = cpg.x2_out;
+    f1_out_d(ii) = cpg.f1_out;
+    f2_out_d(ii) = cpg.f2_out;
+    y_out_d(ii) = cpg.y_out;
+    
     arm.Tau = h1*cpg.y_out;                 % coupling between arm and CPG
     impedance_output(arm);
+    Tau_d(ii) = arm.Tau;
+    %tee_arm_model(arm, 0.06*h1*cpg.y_out);
     Za_d(ii) = arm.pos; 
     Va_d(ii) = arm.speed;
     % balistic equations
@@ -121,6 +139,7 @@ for ii=1:length(t_tot)
     if Zb_d(ii+1) <= Za_d(ii)  
         t_i = 1;                            % reset impact time
         impact = 1;                         % boolean
+        %arm.Tau = arm.Tau + b_weight * 9.81;
         Nb_impact = Nb_impact + 1;
         Zb0 = Zb_d(ii);                     % ball pos af. impact
         Vb0 = -alpha*(Vb_d(ii) - Va_d(ii)) + Va_d(ii); % ball speed at impact
@@ -129,16 +148,47 @@ for ii=1:length(t_tot)
         Vb_d(ii) = (Zb_d(ii+1) - Zb_d(ii))/t_s;     % ball speed
         
         Pa = 2*Vb0/g;                       % ball period estimation
-        ha = (Vb0^2)/(2*g) + Zb0;           % ball apex estimation
+        Ha = (Vb0^2)/(2*g) + Zb0;           % ball apex estimation
+    else
+        %arm.Tau = 0;
     end
+    
+    % -------------------- CPG param correction ------------------------ %
+    if Nb_impact > 0 && Vb_d(ii) <= 0 && Vb_d(ii-1) > 0
+        err = Hp - Ha;
+        if err ~= 0
+            cpg.Ar = max(0, cpg.Ar + sigma*err);
+            if sign(err) > 0
+                disp('Augmentation de Ar')
+            else
+                disp('Diminution de Ar')
+            end
+            %cpg.Pt = max(0.20, Pa); % above 5 Hz the acceleration is too high
+            cpg.Pt = Pa;
+            %Pt_d = [Pt_d; cpg.Pt];
+            %Ar_d = [Ar_d; cpg.Ar];
+        end 
+    end
+    
     t_i = t_i + 1;
 end
 
 if not(DISP_INIT)
-    figure(1)
+    figure(2)
+    hold on, grid on
     Zb_d = Zb_d(1:end-1);
-    plot(t_tot,Zb_d,'-r',t_tot,Za_d,'--b','linewidth',2.5)
+    plot(t_tot,Zb_d,'-r',t_tot,Za_d,'-b','linewidth',2.5)
+    %plot(t_tot, Va_d, '-g','linewidth',0.7)
+    plot([0, t_max], [Hp, Hp], '--k', 'linewidth',1.5)
     title('Arm initialization entrainment')
-    legend('ball', 'paddle')
+    legend('ball', 'paddle', 'target height') %'paddle speed', 
+    xlabel('(s)'), ylabel('(m)')
+
+    figure(3)
+    grid on ,hold on,
+    plot(t_tot,f1_out_d,'--b',t_tot,f2_out_d,'--r',t_tot,x1_out_d,'-b',t_tot,x2_out_d,'-r','linewidth',1.5) 
+    plot(t_tot,y_out_d,'--k','linewidth',1.5) 
+    title('Oscillator')
+    legend('f1','f2','x1','x2','y')
 end
     
