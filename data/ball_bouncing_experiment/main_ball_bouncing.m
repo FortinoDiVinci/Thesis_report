@@ -6,6 +6,9 @@ clc
 
 % MACROS -----------------------------------------------------------------
 DISP_INIT = 0;
+MODEL_VERSION = 2;
+% 1) Impedance model, cpg entrains the torque of the simulated arm
+% 2) K.P. Tee model, cpg entrains the equilibrium position
 
 % Initial conditions -----------------------------------------------------
 Vb0 = 0;                        % Ball speed (m/s)
@@ -14,11 +17,12 @@ Hp = 0.55;                      % Target height (m)
 alpha = 0.48;                   % Restitution coeff paddle/ball
 g = 9.81;                       % Gravity acc (SI)
 t_max = 15;                     % Trial duration (s)
-t_init = 1.72;                  % Init duration of the oscillator (s)
+t_init = 5;%1.72;                  % Init duration of the oscillator (s)
 t_s = 0.003;                    % Sampling time (s)
 Ar0 = 14;                       % Excitability c
 Pt0 = 0.66;                     % Eigen period of the oscillator (s)
 p = 0.008;                      % disturbance (m)
+tau_e = 4;                      % force disturbance (N)
 b_weight = 0.1;                 % ball weight (kg)
 
 % CPG --------------------------------------------------------------------
@@ -36,6 +40,7 @@ I = 0.1;                        % Inertia
 B = 1.8;                        % Damping
 K = 25;                         % Stiffness
 h1 = 0.3981;                    % Gain of the torque input
+h2 = 0.1;                     % Gain of the equilibrium position input
 arm_pos_0 = 0.0;                % Arm position along z axis
 arm_speed_0 = 0.0;              % Arm speed along z axis
 
@@ -55,6 +60,8 @@ Za_d = zeros(n_step,1);                 % arm position along z
 Vb_d = zeros(n_step,1);                 % ball speed along z 
 Va_d = zeros(n_step,1);                 % arm speed along z
 Tau_d = zeros(n_step,1);                % tau
+Tau_ff = zeros(n_step,1);               % feedforward torque for model 2
+acc_d = zeros(n_step,1);
 
 %% Initialization %%
 
@@ -73,12 +80,17 @@ for ii=1:length(t0)
     f1_out_d(ii) = cpg.f1_out;
     f2_out_d(ii) = cpg.f2_out;
     y_out_d(ii) = cpg.y_out;
-    arm.Tau = h1*cpg.y_out; % entrainment of the arm comes from CPG
+    if MODEL_VERSION == 1
+        arm.Tau = h1*cpg.y_out; % entrainment of the arm comes from CPG
+        impedance_output(arm);
+    elseif MODEL_VERSION == 2
+        tee_arm_model(arm, h2*cpg.y_out);
+        Tau_ff(ii) = arm.tau_ff;
+    end
     Za_d(ii) = arm.pos;
     Va_d(ii) = arm.speed;
-    impedance_output(arm);
     Tau_d(ii) = arm.Tau;
-    %tee_arm_model(arm, 0.06*h1*cpg.y_out);
+    acc_d(ii) = arm.c_acc;
 end
 
 if DISP_INIT
@@ -92,6 +104,8 @@ if DISP_INIT
     plot(t0,Za_d,'-b',t0,Va_d,'-r','linewidth',1.5)
     title('Arm initialization entrainment')
     legend('position', 'speed')
+    
+    return;
 end
 
 %% Begining of the experiment %%
@@ -115,20 +129,31 @@ for ii=1:length(t_tot)
         cpg.input = h0*Vb_d(ii-delay);     % entrainment of the CPG
         % input_cpg_d = [input_cpg_d, cpg.input];
     end
-    if t_tot(ii) == 10
-        %position_disturbance(arm, p);
-    end
     matsuoka_output(cpg); 
     x1_out_d(ii) = cpg.x1_out;
     x2_out_d(ii) = cpg.x2_out;
     f1_out_d(ii) = cpg.f1_out;
     f2_out_d(ii) = cpg.f2_out;
     y_out_d(ii) = cpg.y_out;
+
+    % --------------------- Disturbance -------------------------------- %
+    if t_tot(ii) >= 10 && t_tot(ii) < 10.100  % 100ms, 4N disturbance
+        tau_e = 0;  % 4
+    else
+        tau_e = 0;
+    end    
+    if t_i <= 5 && Nb_impact > 0            % impact last between 5-30ms
+        %tau_e = tau_e - b_weight * 9.81;    % add ball weight    
+    end 
+    if MODEL_VERSION == 1
+        arm.Tau = h1*cpg.y_out + tau_e;     % coupling between arm and CPG
+        impedance_output(arm);
+    elseif MODEL_VERSION == 2
+        arm.tau_e = tau_e;                    % tau = dist in this version          
+        tee_arm_model(arm, h2*cpg.y_out); 
+    end    
     
-    arm.Tau = h1*cpg.y_out;                 % coupling between arm and CPG
-    impedance_output(arm);
     Tau_d(ii) = arm.Tau;
-    %tee_arm_model(arm, 0.06*h1*cpg.y_out);
     Za_d(ii) = arm.pos; 
     Va_d(ii) = arm.speed;
     % balistic equations
@@ -139,7 +164,6 @@ for ii=1:length(t_tot)
     if Zb_d(ii+1) <= Za_d(ii)  
         t_i = 1;                            % reset impact time
         impact = 1;                         % boolean
-        %arm.Tau = arm.Tau + b_weight * 9.81;
         Nb_impact = Nb_impact + 1;
         Zb0 = Zb_d(ii);                     % ball pos af. impact
         Vb0 = -alpha*(Vb_d(ii) - Va_d(ii)) + Va_d(ii); % ball speed at impact
@@ -186,7 +210,7 @@ if not(DISP_INIT)
 
     figure(3)
     grid on ,hold on,
-    plot(t_tot,f1_out_d,'--b',t_tot,f2_out_d,'--r',t_tot,x1_out_d,'-b',t_tot,x2_out_d,'-r','linewidth',1.5) 
+    plot(t_tot,f1_out_d,'-b',t_tot,f2_out_d,'-r',t_tot,x1_out_d,'--b',t_tot,x2_out_d,'--r','linewidth',1.5) 
     plot(t_tot,y_out_d,'--k','linewidth',1.5) 
     title('Oscillator')
     legend('f1','f2','x1','x2','y')
