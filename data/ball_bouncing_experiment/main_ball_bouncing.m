@@ -6,9 +6,10 @@ clc
 
 % MACROS -----------------------------------------------------------------
 DISP_INIT = 0;
-MODEL_VERSION = 2;
+MODEL_VERSION = 1;
 % 1) Impedance model, cpg entrains the torque of the simulated arm
 % 2) K.P. Tee model, cpg entrains the equilibrium position
+% 3) Sinusoïd stimuli, with K.P. Tee model
 
 % Initial conditions -----------------------------------------------------
 Vb0 = 0;                        % Ball speed (m/s)
@@ -16,8 +17,9 @@ Zb0 = 0.55;                     % Ball height (m)
 Hp = 0.55;                      % Target height (m)
 alpha = 0.48;                   % Restitution coeff paddle/ball
 g = 9.81;                       % Gravity acc (SI)
-t_max = 15;                     % Trial duration (s)
-t_init = 5;%1.72;                  % Init duration of the oscillator (s)
+t_max = 35;                     % Trial duration (s)
+t_init = 1.72;                  % Init duration of the oscillator (s)
+t_new_h = 20;                   % Time of new target height
 t_s = 0.003;                    % Sampling time (s)
 Ar0 = 14;                       % Excitability c
 Pt0 = 0.66;                     % Eigen period of the oscillator (s)
@@ -27,8 +29,13 @@ b_weight = 0.1;                 % ball weight (kg)
 
 % CPG --------------------------------------------------------------------
 delay = 16.0;                   % Delay upon the perception of the ball
-sigma = 4.4079;                 % Adaptation gain (amplitude)
+delay = 36.0;
+lambda = -4.4079;               % Adaptation gain of cpg input
+lambda = -3.4;
+% lambda = - 0.2/0.3981;  %/h1
 h0 = 111.5377;                  % Sensor input gain
+h0 = 96.54;
+% h0 = 6.0;
 y_out = 0;                      % Output of the oscillator
 x1_out = 0;                     % Init state of the oscillator
 x2_out = 1;                     % Init state of the oscillator
@@ -40,7 +47,9 @@ I = 0.1;                        % Inertia
 B = 1.8;                        % Damping
 K = 25;                         % Stiffness
 h1 = 0.3981;                    % Gain of the torque input
-h2 = 0.1;                     % Gain of the equilibrium position input
+h1 = 0.610;
+% h1 = 0.25/Ar0;
+h2 = 0.0170;                    % Gain of the equilibrium position input
 arm_pos_0 = 0.0;                % Arm position along z axis
 arm_speed_0 = 0.0;              % Arm speed along z axis
 
@@ -48,9 +57,10 @@ arm_speed_0 = 0.0;              % Arm speed along z axis
 if DISP_INIT
     n_step = uint32(t_init / t_s);
 else
-    n_step = uint32(t_max / t_s);
+    n_step = uint32((t_max - t_init) / t_s);
 end
 y_out_d = zeros(n_step, 1);
+dy_out_d = zeros(n_step, 1);
 x1_out_d = zeros(n_step, 1);
 x2_out_d = zeros(n_step, 1);
 f1_out_d = zeros(n_step, 1);
@@ -68,23 +78,28 @@ acc_d = zeros(n_step,1);
 t0 = (0:t_s:t_init);
 t_exp = (t_init:t_s:t_max);
 t_tot = [t0 , t_exp];
+t_1 = (t_init:t_s:t_new_h);
+t_2 = (t_new_h+t_s:t_s:t_max);
 
 cpg = CPG(Ar0, Pt0, x1_out, x2_out, f1_out, f2_out, t_s, 0);
 arm = ARM(K, B, I, arm_pos_0, arm_speed_0, t_s, 0);
 
+disp('Initializing Central Pattern Generator');
+
 for ii=1:length(t0)
     % CPG equation
     matsuoka_output(cpg); 
-    x1_out_d(ii) = cpg.x1_out;
-    x2_out_d(ii) = cpg.x2_out;
-    f1_out_d(ii) = cpg.f1_out;
-    f2_out_d(ii) = cpg.f2_out;
-    y_out_d(ii) = cpg.y_out;
+    x1_out_d(ii) = cpg.x1;
+    x2_out_d(ii) = cpg.x2;
+    f1_out_d(ii) = cpg.f1;
+    f2_out_d(ii) = cpg.f2;
+    y_out_d(ii) = cpg.y;
+    dy_out_d(ii) = cpg.dy;
     if MODEL_VERSION == 1
-        arm.Tau = h1*cpg.y_out; % entrainment of the arm comes from CPG
+        arm.Tau = h1*cpg.y; % entrainment of the arm comes from CPG
         impedance_output(arm);
     elseif MODEL_VERSION == 2
-        tee_arm_model(arm, h2*cpg.y_out);
+        tee_arm_model(arm, h2*cpg.y, h2*cpg.dy);
         Tau_ff(ii) = arm.tau_ff;
     end
     Za_d(ii) = arm.pos;
@@ -117,40 +132,55 @@ cpg.input = 0;
 impact = 0;                                 % used as boolean
 t_i = 1;                                    % iteration since last impact
 Nb_impact = 0;
-Zb_d(1) = Zb0; 
+Pa = 1/9.38;
+%Zb_d(1) = Zb0; 
 
 %Pt_d = [Pt0];
 %Ar_d = [Ar0];
-%input_cpg_d = [0];
+input_cpg_d = [0];
 
-for ii=1:length(t_tot)
+disp('Beginning of the simulated experiment');
+
+for ii=2:length(t_exp)
     % -------------------- Continuous loop ----------------------------- %
-    if Nb_impact >= 1                       % starts at 2nd impact
-        cpg.input = h0*Vb_d(ii-delay);     % entrainment of the CPG
-        % input_cpg_d = [input_cpg_d, cpg.input];
+    if Nb_impact >= 1                      % starts at 2nd impact
+%         if mod(ii, 0.06/t_s) == 0              % change input every 60 ms
+%             cpg.input = h0*Vb_d(ii-delay);     % entrainment of the CPG
+%         end
+        cpg.input = h0*Vb_d(ii-delay);
+        input_cpg_d = [input_cpg_d, cpg.input];
     end
     matsuoka_output(cpg); 
-    x1_out_d(ii) = cpg.x1_out;
-    x2_out_d(ii) = cpg.x2_out;
-    f1_out_d(ii) = cpg.f1_out;
-    f2_out_d(ii) = cpg.f2_out;
-    y_out_d(ii) = cpg.y_out;
+    x1_out_d(ii) = cpg.x1;
+    x2_out_d(ii) = cpg.x2;
+    f1_out_d(ii) = cpg.f1;
+    f2_out_d(ii) = cpg.f2;
+    y_out_d(ii) = cpg.y;
+    dy_out_d(ii) = cpg.dy;
 
+    if ii == length(t_1)
+        disp('Changing target height');
+        Hp = 0.75;
+    end
+    
     % --------------------- Disturbance -------------------------------- %
-    if t_tot(ii) >= 10 && t_tot(ii) < 10.100  % 100ms, 4N disturbance
+    if t_exp(ii) >= 10 && t_exp(ii) < 10.100  % 100ms, 4N disturbance
         tau_e = 0;  % 4
     else
         tau_e = 0;
     end    
     if t_i <= 5 && Nb_impact > 0            % impact last between 5-30ms
-        %tau_e = tau_e - b_weight * 9.81;    % add ball weight    
+        %tau_e = tau_e - b_weight * 9.81;    % add ball weight 
+        tau_e = 0;
     end 
     if MODEL_VERSION == 1
-        arm.Tau = h1*cpg.y_out + tau_e;     % coupling between arm and CPG
+        arm.Tau = h1*cpg.y + tau_e;     % coupling between arm and CPG
         impedance_output(arm);
     elseif MODEL_VERSION == 2
         arm.tau_e = tau_e;                    % tau = dist in this version          
-        tee_arm_model(arm, h2*cpg.y_out); 
+        tee_arm_model(arm, h2*cpg.y, h2*cpg.dy); 
+    elseif MODEL_VERSION == 3
+        tee_arm_model(arm, h2*sin(2*pi/Pa*t_exp(ii)), h2*2*pi/Pa*cos(2*pi/Pa*t_exp(ii)));
     end    
     
     Tau_d(ii) = arm.Tau;
@@ -178,15 +208,15 @@ for ii=1:length(t_tot)
     end
     
     % -------------------- CPG param correction ------------------------ %
-    if Nb_impact > 0 && Vb_d(ii) <= 0 && Vb_d(ii-1) > 0
-        err = Hp - Ha;
+    if Nb_impact > 0 && Vb_d(ii) <= 0 && Vb_d(ii - 1) > 0
+        err = Ha - Hp;
         if err ~= 0
-            cpg.Ar = max(0, cpg.Ar + sigma*err);
-            if sign(err) > 0
-                disp('Augmentation de Ar')
-            else
-                disp('Diminution de Ar')
-            end
+            cpg.Ar = max(0, cpg.Ar + lambda*err);
+%             if sign(err) < 0
+%                 disp('Augmentation de Ar')
+%             else
+%                 disp('Diminution de Ar')
+%             end
             %cpg.Pt = max(0.20, Pa); % above 5 Hz the acceleration is too high
             cpg.Pt = Pa;
             %Pt_d = [Pt_d; cpg.Pt];
@@ -201,18 +231,28 @@ if not(DISP_INIT)
     figure(2)
     hold on, grid on
     Zb_d = Zb_d(1:end-1);
-    plot(t_tot,Zb_d,'-r',t_tot,Za_d,'-b','linewidth',2.5)
-    %plot(t_tot, Va_d, '-g','linewidth',0.7)
-    plot([0, t_max], [Hp, Hp], '--k', 'linewidth',1.5)
-    title('Arm initialization entrainment')
-    legend('ball', 'paddle', 'target height') %'paddle speed', 
+    plot(t_exp,Zb_d,'-r',t_exp,Za_d,'-b','linewidth',2.5)
+    %plot(t_exp, Va_d, '-g','linewidth',0.7)   
+    target_height = [0.55*ones(1, length(t_1)), 0.75*ones(1, length(t_2))];
+    plot(t_exp, target_height, '--k', 'linewidth',1.5)
+    t_input = t_exp(length(t_exp) - length(input_cpg_d) + 1:length(t_exp));
+    plot(t_input, input_cpg_d./h0, '-c', 'linewidth',1.0)
+    title('Ball bouncing task, (alpha = 0.48, g = 9.81)')
+    legend('ball', 'paddle', 'target height', 'excitability input/h0')
     xlabel('(s)'), ylabel('(m)')
 
     figure(3)
     grid on ,hold on,
-    plot(t_tot,f1_out_d,'-b',t_tot,f2_out_d,'-r',t_tot,x1_out_d,'--b',t_tot,x2_out_d,'--r','linewidth',1.5) 
-    plot(t_tot,y_out_d,'--k','linewidth',1.5) 
+    plot(t_exp,f1_out_d,'-b',t_exp,f2_out_d,'-r',t_exp,x1_out_d,'--b',t_exp,x2_out_d,'--r','linewidth',1.5) 
+    plot(t_exp,y_out_d,'--k','linewidth',1.5) 
     title('Oscillator')
     legend('f1','f2','x1','x2','y')
 end
     
+
+% figure(4)
+% grid on ,hold on,
+% plot(t_exp,y_out_d,'-b','linewidth',1.5) 
+% plot(t_exp,dy_out_d,'--k','linewidth',1) 
+% title('Oscillator')
+% legend('y','dy')

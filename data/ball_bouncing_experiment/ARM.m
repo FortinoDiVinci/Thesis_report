@@ -18,6 +18,7 @@ classdef ARM < handle
         c_pos;      % commanded position
         c_speed;    % commanded speed
         c_acc;      % commanded acceleration
+        tau_f;      % filtering time cst for acceleration
         t_s;        % sampling time
         t;          % time
         t_d; %%
@@ -34,6 +35,7 @@ classdef ARM < handle
             self.tau_fb = 0;
             self.pos = z;
             self.speed = vz;
+            self.tau_f = 0.03;
             self.t_s = t_s;
             self.t = t;
             self.t_d = t;
@@ -61,14 +63,19 @@ classdef ARM < handle
             %dy(3) = 0; % torque is considered constant
         end
         
-        function tee_arm_model(self, q_p)
+        function tee_arm_model(self, q_p, dq_p)
             last_c_speed = self.c_speed;
             %self.c_speed = (q_p - self.c_pos)/self.t_s;
             %self.c_acc = (self.c_speed - last_c_speed)/self.t_s;
             %self.c_pos = q_p;
-            self.c_pos = self.c_pos + self.c_speed*self.t_s;
-            self.c_speed = q_p;
-            self.c_acc = (self.c_speed - last_c_speed)/self.t_s;
+            self.c_pos = q_p;
+            % filtereing speed
+            self.c_speed = (self.t_s/self.tau_f)/(1 + self.t_s/self.tau_f)*dq_p + ...
+                1/(1 + self.t_s/self.tau_f)*self.c_speed;
+            c_acc = (self.c_speed - last_c_speed)/self.t_s;
+            % filtering acceleration
+            self.c_acc = (self.t_s/(10*self.tau_f))/(1 + self.t_s/(10*self.tau_f))*c_acc + ...
+                1/(1 + self.t_s/(10*self.tau_f))*self.c_acc;
             
             % feedforward
             self.tau_ff = self.I*self.c_acc + self.C*self.c_speed + self.G;
@@ -76,7 +83,7 @@ classdef ARM < handle
             % impedance model (feedback)
             self.tau_fb = self.K*(self.c_pos - self.pos) + self.B*(self.c_speed - self.speed);
             
-            self.Tau = self.tau_ff + self.tau_fb - self.tau_e;
+            self.Tau = self.tau_ff + self.tau_fb + self.tau_e;
             
             %self.acc = (tau - self.G - self.C*self.speed) / self.I;
             %self.speed = self.acc*self.t_s + self.speed;
