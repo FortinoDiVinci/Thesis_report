@@ -6,8 +6,10 @@ classdef ARM < handle
         K;          % stiffness
         B;          % damping
         I;          % inertia
-        C;          % Coriolis effect
+        C;          % Centrifugal & Coriolis effect
         G;          % gravity
+        l;          % hand and forearm length
+        m;          % hand and forearm mass
         Tau;        % torque
         tau_e;      % dist torque
         tau_ff;     % feedforward computed torque
@@ -21,30 +23,41 @@ classdef ARM < handle
         tau_f;      % filtering time cst for acceleration
         t_s;        % sampling time
         t;          % time
-        t_d; %%
+        t_d;        % data recording (time)
     end
     
     methods
-        function self = ARM(K, B, I, z, vz, t_s, t)
+        function self = ARM(K, B, I, z, vz, az, t_s, t)
             self.K = K;
             self.B = B;
             self.I = I;
+            self.l = (0.146 + 0.108)*1.75;
+            self.m = (0.019 + 0.006)*70;
             self.Tau = 0;
             self.tau_e = 0;
             self.tau_ff = 0;
             self.tau_fb = 0;
             self.pos = z;
             self.speed = vz;
-            self.tau_f = 0.03;
+            self.acc = az;
+            self.tau_f = 2*0.03;
             self.t_s = t_s;
             self.t = t;
             self.t_d = t;
-            self.C = 0.5;
-            self.G = 9.81 * 1.6;
+            self.C = 0;
+            self.G = self.l*self.m*9.81; 
             self.c_pos = 0;
             self.c_speed = 0;
             self.c_acc = 0;
         end
+        
+        function self = inertial_coupling(self, theta, omega)
+            self.C = self.m*omega^2*sin(theta);
+        end
+        
+%         function self = positional_torque(self, theta)
+%             self.G = self.l*self.m*9.81;
+%         end
         
         function self = impedance_output(self)
             [t_int, y] = ode23(@self.impedance_diff_equ, [self.t, self.t+self.t_s], [self.pos, self.speed, self.Tau]);
@@ -58,6 +71,7 @@ classdef ARM < handle
             dy = zeros(3,1); % derivatives           
             dy(1) = y(2);
             dy(2) = (-self.B*y(2) - self.K*y(1) + y(3))/self.I;
+            self.acc = dy(2);
             %dy(1) = self.speed; % derivative of position            
             %dy(2) = (-self.B*self.speed - self.K*self.pos + self.Tau)/self.I; % impedance 2nd order equation
             %dy(3) = 0; % torque is considered constant
@@ -78,10 +92,12 @@ classdef ARM < handle
                 1/(1 + self.t_s/(10*self.tau_f))*self.c_acc;
             
             % feedforward
+            self.inertial_coupling(q_p, dq_p); % compute self.C 
             self.tau_ff = self.I*self.c_acc + self.C*self.c_speed + self.G;
+            %self.tau_ff = 0;
             
             % impedance model (feedback)
-            self.tau_fb = self.K*(self.c_pos - self.pos) + self.B*(self.c_speed - self.speed);
+            self.tau_fb = self.K*(self.c_pos - self.pos) + self.B*(self.c_speed - self.speed);% + self.I*(self.c_acc - self.acc);
             
             self.Tau = self.tau_ff + self.tau_fb + self.tau_e;
             
