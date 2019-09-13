@@ -6,7 +6,9 @@ clc
 
 % MACROS -----------------------------------------------------------------
 DISP_INIT = 0;
-MODEL_VERSION = 2;
+SAVE_DATA = 0;
+COMP_SAVED_DATA = 1;
+MODEL_VERSION = 1;
 % 1) Impedance model, cpg entrains the torque of the simulated arm
 % 2) K.P. Tee model, cpg entrains the equilibrium position
 % 3) Sinusoïd stimuli, with K.P. Tee model
@@ -22,18 +24,20 @@ t_init = 1.72;                  % Init duration of the oscillator (s)
 t_new_h = 20;                   % Time of new target height
 t_s_in = 0.03;                  % CPG input entrainment sampling period (s)
 % for now t_s_in should be a multiple of t_s
+t_pert = 5.0;                   % time of a disturbance
 t_s = 0.003;                    % Sampling time (s)
 Ar0 = 14;                       % Excitability c
 Pt0 = 0.66;                     % Eigen period of the oscillator (s)
-p = 0.008;                      % disturbance (m)
-tau_e = 4;                      % force disturbance (N)
+%p = 0.008;                      % disturbance (m) 
+pert_dur = 0.1;                 % duration of the disturbance (s)
+tau_e_0 = -4;                   % force disturbance (N)
 b_weight = 0.1;                 % ball weight (kg)
 
 % CPG --------------------------------------------------------------------
 delay = 36.0/3; %48             % Delay upon the perception of the ball 
 lambda = -4.4079;               % Adaptation gain of cpg input
 lambda = -3.4;
-lambda = -5;
+%lambda = -5;
 h0 = 111.5377;                  % Sensor input gain
 h0 = 96.54;
 % h0 = 6.0;
@@ -75,6 +79,7 @@ Vb_d = zeros(n_step,1);                 % ball speed along z
 Va_d = zeros(n_step,1);                 % arm speed along z
 Tau_d = zeros(n_step,1);                % tau
 Tau_ff = zeros(n_step,1);               % feedforward torque for model 2
+Tau_e_d = zeros(n_step,1);              % tau induced by the disturbance
 acc_d = zeros(n_step,1);
 
 %% Initialization %%
@@ -147,9 +152,9 @@ disp('Beginning of the simulated experiment');
 for ii=2:length(t_exp)
     % -------------------- Continuous loop ----------------------------- %
     if Nb_impact >= 1                      % starts at 2nd impact
-%         if mod(ii, t_s_in/t_s) == 0              % change input every xx ms
-%             cpg.input = h0*Vb_d(ii-delay);     % entrainment of the CPG
-%         end
+%          if mod(ii, t_s_in/t_s) == 0              % change input every xx ms
+%              cpg.input = h0*Vb_d(ii-delay);     % entrainment of the CPG
+%          end
         if ii <= delay
             cpg.input = 0;
         else
@@ -171,14 +176,14 @@ for ii=2:length(t_exp)
     end
     
     % --------------------- Disturbance -------------------------------- %
-    if t_exp(ii) >= 10 && t_exp(ii) < 10.100  % 100ms, 4N disturbance
-        tau_e = 0;  % 4
+    if t_exp(ii) >= t_pert && t_exp(ii) < t_pert + pert_dur  % 100ms, 4N disturbance
+        tau_e = tau_e_0;  % 4
     else
         tau_e = 0;
     end    
     if t_i <= 5 && Nb_impact > 0            % impact last between 5-30ms
-        %tau_e = tau_e - b_weight * 9.81;    % add ball weight 
-        tau_e = 0;
+        %tau_e = tau_e - b_weight*9.81;% add ball weight 
+        %tau_e = 0;
     end 
     if MODEL_VERSION == 1
         arm.Tau = h1*cpg.y + tau_e;     % coupling between arm and CPG
@@ -190,6 +195,7 @@ for ii=2:length(t_exp)
         tee_arm_model(arm, h2*sin(2*pi/Pa*t_exp(ii)), h2*2*pi/Pa*cos(2*pi/Pa*t_exp(ii)));
     end    
     
+    Tau_e_d(ii) = tau_e;
     Tau_d(ii) = arm.Tau;
     Za_d(ii) = arm.pos; 
     Va_d(ii) = arm.speed;
@@ -224,10 +230,10 @@ for ii=2:length(t_exp)
 %                 disp('Diminution de Ar')
 %             end
             %cpg.Pt = max(0.20, Pa); % above 5 Hz the acceleration is too high
-            cpg.Pt = Pa;
-            %Pt_d = [Pt_d; cpg.Pt];
             %Ar_d = [Ar_d; cpg.Ar];
         end 
+        cpg.Pt = Pa;
+        %Pt_d = [Pt_d; cpg.Pt];
     end
     
     t_i = t_i + 1;
@@ -246,7 +252,7 @@ if not(DISP_INIT)
     title('Ball bouncing task, (alpha = 0.48, g = 9.81)')
     legend('ball', 'paddle', 'target height')%, 'excitability input/(4*h0)')
     xlabel('(s)'), ylabel('(m)')
-
+    
     figure(3)
     grid on ,hold on,
     plot(t_exp,f1_out_d,'-b',t_exp,f2_out_d,'-r',t_exp,x1_out_d,'--b',t_exp,x2_out_d,'--r','linewidth',1.5) 
@@ -255,7 +261,92 @@ if not(DISP_INIT)
     legend('f1','f2','x1','x2','y')
 end
     
+if SAVE_DATA == 1
+    Zb_saved = Zb_d;
+    Za_saved = Za_d;
+    Vb_saved = Vb_d;
+    Va_saved = Va_d;
+    Tau_saved = Tau_d;
+    Hp_saved = target_height;
+    save('./data/ball_position.mat', 'Zb_saved');
+    save('./data/paddle_position.mat', 'Za_saved');
+    save('./data/ball_speed.mat', 'Vb_saved');
+    save('./data/paddle_speed.mat', 'Va_saved');
+    save('./data/torque.mat', 'Tau_saved');
+    save('./data/target_height.mat', 'Hp_saved');
+    save('./data/params', 'delay', 'lambda', 'h0', 'h1');
+end
 
+if COMP_SAVED_DATA == 1    
+    load('./data/ball_position.mat');
+    load('./data/paddle_position.mat');
+    load('./data/ball_speed.mat');
+    load('./data/paddle_speed.mat');
+    load('./data/torque.mat');
+    
+    figure(4)
+    hold on, grid on
+    plot(t_exp,Zb_d,'-r',t_exp,Za_d,'-b','linewidth',1.5);
+    plot(t_exp, target_height, '--k', 'linewidth',1.0);
+    
+    plot(t_exp,Zb_saved,'--m',t_exp,Za_saved,'--c','linewidth',0.75);
+    
+    title('Ball bouncing task, (alpha = 0.48, g = 9.81, p(t=' + string(t_pert) + 's) = '+ string(tau_e_0) + 'N)') %, ball mass = ' + string(b_weight) + ')')
+    legend('pert. ball', 'pert. paddle', 'target height', 'ball', 'paddle')
+    xlabel('(s)'), ylabel('(m)')
+    
+    figure(5)
+    hold on, grid on
+    yyaxis right
+    plot(t_exp, Tau_e_d, '-r', 'linewidth', 1.5);
+    ylabel('(Nm)')
+    ylim([-4.5, 4.5])
+    yyaxis left
+    plot(t_exp, Za_d - Za_saved, '-b', 'linewidth', 1.5);
+    title('Impedance experimental data')
+    legend('displacement', 'force')
+    xlabel('(s)'), ylabel('(m)')
+    
+    Za_tild = Za_d - Za_saved;
+    Va_tild = Va_d - Va_saved;
+    Aa_d = zeros(length(Va_d) - 1, 1);
+    Aa_saved = zeros(length(Va_saved) - 1, 1);
+    nb_fil = 1;         % nb of pts (bf&af) used to compute derivation
+    for ii=nb_fil+1:length(Va_d)-nb_fil
+        Aa_d(ii) = (sum(Va_d(ii-nb_fil:ii-1)) - sum(Va_d(ii+1:ii+nb_fil)))/t_s;
+        Aa_saved(ii) = (sum(Va_saved(ii-nb_fil:ii-1)) - sum(Va_saved(ii+1:ii+nb_fil)))/t_s;
+    end
+    Aa_tild = Aa_d - Aa_saved;
+    Va_tild = Va_tild(1:end-1);
+    Za_tild = Za_tild(1:end-1);
+    idx_1 = intersect(find(t_exp >= t_pert), find(t_exp < t_pert+t_s));
+    idx_2 = idx_1 + floor(0.25/t_s);
+    phi = [Za_tild(idx_1:idx_2), Va_tild(idx_1:idx_2), Aa_tild(idx_1:idx_2)];
+    y = Tau_e_d(idx_1:idx_2);
+    
+    impedance = (phi'*phi)\phi'*y;
+    
+    tau_e_res = phi*impedance;
+    tau_e_th = phi*[K; B; I];
+    
+    figure(6)
+    plot(t_exp(idx_1:idx_2), tau_e_res)
+    hold on, grid on
+    plot(t_exp(idx_1:idx_2), tau_e_th);
+    plot(t_exp(idx_1:idx_2), Tau_e_d(idx_1:idx_2));
+    legend('lstsq', 'arm dyn', 'real')
+    title('Disturbance force reconstruction')
+    xlabel('(s)'), ylabel('(N)')
+    
+    figure(7)
+    plot(t_exp(idx_1:idx_2), Aa_d(idx_1:idx_2), '-r', t_exp(idx_1:idx_2), Aa_saved(idx_1:idx_2), '--m', 'linewidth', 1.0);
+    ylabel('m.s^{-2}')
+    yyaxis right
+    plot(t_exp(idx_1:idx_2), Va_d(idx_1:idx_2), '-b', t_exp(idx_1:idx_2), Va_saved(idx_1:idx_2), '--c', 'linewidth', 1.0);
+    ylabel('m.s^{-1}')
+    legend('acc', 'ref. acc.', 'speed', 'ref. speed');
+    title('Speed and computed acceleration of both reference and perturbed simulation');
+end
 % figure(4)
 % grid on ,hold on,
 % plot(t_exp,y_out_d,'-b','linewidth',1.5) 
