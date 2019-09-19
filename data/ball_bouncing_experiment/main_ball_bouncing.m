@@ -6,13 +6,21 @@ clc
 
 % MACROS -----------------------------------------------------------------
 DISP_INIT = 0;
+DISP_DATA = 0;
 SAVE_DATA = 0;
 COMP_SAVED_DATA = 1;
 MODEL_VERSION = 1;
 % 1) Impedance model, cpg entrains the torque of the simulated arm
 % 2) K.P. Tee model, cpg entrains the equilibrium position
 % 3) Sinusoïd stimuli, with K.P. Tee model
+nb_iter = 1;
+lstsq_err_data = zeros(nb_iter, 1);
+imp_data = zeros(nb_iter, 4);
+imp_data_2 = zeros(nb_iter, 4);
+for jj = 1:1:nb_iter
 
+disp('Iteration ' + string(jj) + '/' + string(nb_iter));    
+    
 % Initial conditions -----------------------------------------------------
 Vb0 = 0;                        % Ball speed (m/s)
 Zb0 = 0.55;                     % Ball height (m)
@@ -24,13 +32,14 @@ t_init = 1.72;                  % Init duration of the oscillator (s)
 t_new_h = 20;                   % Time of new target height
 t_s_in = 0.03;                  % CPG input entrainment sampling period (s)
 % for now t_s_in should be a multiple of t_s
-t_pert = 5.0;                   % time of a disturbance
 t_s = 0.003;                    % Sampling time (s)
+t_1st_ms = 5.5;
+t_pert = t_1st_ms + (jj-1)*t_s; % time of a disturbance
 Ar0 = 14;                       % Excitability c
 Pt0 = 0.66;                     % Eigen period of the oscillator (s)
 %p = 0.008;                      % disturbance (m) 
 pert_dur = 0.1;                 % duration of the disturbance (s)
-tau_e_0 = -4;                   % force disturbance (N)
+tau_e_0 = -2;                   % force disturbance (N)
 b_weight = 0.1;                 % ball weight (kg)
 
 % CPG --------------------------------------------------------------------
@@ -239,7 +248,7 @@ for ii=2:length(t_exp)
     t_i = t_i + 1;
 end
 
-if not(DISP_INIT)
+if not(DISP_INIT) && DISP_DATA
     figure(2)
     hold on, grid on
     Zb_d = Zb_d(1:end-1);
@@ -284,68 +293,78 @@ if COMP_SAVED_DATA == 1
     load('./data/paddle_speed.mat');
     load('./data/torque.mat');
     
-    figure(4)
-    hold on, grid on
-    plot(t_exp,Zb_d,'-r',t_exp,Za_d,'-b','linewidth',1.5);
-    plot(t_exp, target_height, '--k', 'linewidth',1.0);
+    if DISP_DATA
     
-    plot(t_exp,Zb_saved,'--m',t_exp,Za_saved,'--c','linewidth',0.75);
-    
-    title('Ball bouncing task, (alpha = 0.48, g = 9.81, p(t=' + string(t_pert) + 's) = '+ string(tau_e_0) + 'N)') %, ball mass = ' + string(b_weight) + ')')
-    legend('pert. ball', 'pert. paddle', 'target height', 'ball', 'paddle')
-    xlabel('(s)'), ylabel('(m)')
-    
-    figure(5)
-    hold on, grid on
-    yyaxis right
-    plot(t_exp, Tau_e_d, '-r', 'linewidth', 1.5);
-    ylabel('(Nm)')
-    ylim([-4.5, 4.5])
-    yyaxis left
-    plot(t_exp, Za_d - Za_saved, '-b', 'linewidth', 1.5);
-    title('Impedance experimental data')
-    legend('displacement', 'force')
-    xlabel('(s)'), ylabel('(m)')
-    
+        figure(4)
+        hold on, grid on
+        plot(t_exp,Zb_d,'-r',t_exp,Za_d,'-b','linewidth',1.5);
+        plot(t_exp, target_height, '--k', 'linewidth',1.0);
+        plot(t_exp,Zb_saved,'--m',t_exp,Za_saved,'--c','linewidth',0.75);
+        title('Ball bouncing task, (alpha = 0.48, g = 9.81, p(t=' + string(t_pert) + 's) = '+ string(tau_e_0) + 'N)') %, ball mass = ' + string(b_weight) + ')')
+        legend('pert. ball', 'pert. paddle', 'target height', 'ball', 'paddle')
+        xlabel('(s)'), ylabel('(m)')
+
+        figure(5)
+        hold on, grid on
+        yyaxis right
+        plot(t_exp, Tau_e_d, '-r', 'linewidth', 1.5);
+        ylabel('(Nm)')
+        ylim([-4.5, 4.5])
+        yyaxis left
+        plot(t_exp, Za_d - Za_saved, '-b', 'linewidth', 1.5);
+        title('Impedance experimental data')
+        legend('displacement', 'force')
+        xlabel('(s)'), ylabel('(m)')
+    end
+    % computation of thetas tilde values, perturbed - reference trajectory
     Za_tild = Za_d - Za_saved;
     Va_tild = Va_d - Va_saved;
     Aa_d = zeros(length(Va_d) - 1, 1);
     Aa_saved = zeros(length(Va_saved) - 1, 1);
     nb_fil = 1;         % nb of pts (bf&af) used to compute derivation
+    % acceleration computed using central difference to avoid phase shift
     for ii=nb_fil+1:length(Va_d)-nb_fil
-        Aa_d(ii) = (sum(Va_d(ii-nb_fil:ii-1)) - sum(Va_d(ii+1:ii+nb_fil)))/t_s;
-        Aa_saved(ii) = (sum(Va_saved(ii-nb_fil:ii-1)) - sum(Va_saved(ii+1:ii+nb_fil)))/t_s;
+        Aa_d(ii) = (-sum(Va_d(ii-nb_fil:ii-1)) + sum(Va_d(ii+1:ii+nb_fil)))/(2*t_s);
+        Aa_saved(ii) = (-sum(Va_saved(ii-nb_fil:ii-1)) + sum(Va_saved(ii+1:ii+nb_fil)))/(2*t_s);
     end
     Aa_tild = Aa_d - Aa_saved;
     Va_tild = Va_tild(1:end-1);
     Za_tild = Za_tild(1:end-1);
+    % impedance is computed using a window of 250ms
     idx_1 = intersect(find(t_exp >= t_pert), find(t_exp < t_pert+t_s));
     idx_2 = idx_1 + floor(0.25/t_s);
-    phi = [Za_tild(idx_1:idx_2), Va_tild(idx_1:idx_2), Aa_tild(idx_1:idx_2)];
-    y = Tau_e_d(idx_1:idx_2);
-    
+    phi = [Za_tild(idx_1:idx_2), Va_tild(idx_1:idx_2), Aa_tild(idx_1:idx_2), ones(length(Aa_tild(idx_1:idx_2)),1)];
+    %phi2 = [Za_tild(idx_1:idx_2), Va_tild(idx_1:idx_2), ones(length(Aa_tild(idx_1:idx_2)),1)];
+    y = Tau_e_d(idx_1:idx_2);    
+    % least square algorithm
     impedance = (phi'*phi)\phi'*y;
+    %impedance_2 = (phi2'*phi2)\phi2'*y;
+    imp_data(jj,:) = impedance';
+    %imp_data_2(jj) = impedance_2;
     
     tau_e_res = phi*impedance;
-    tau_e_th = phi*[K; B; I];
+    lstsq_err = sum(abs(y - tau_e_res)); 
+    lstsq_err_data(jj) = lstsq_err;
+    %tau_e_res_2 = phi2*impedance_2;
+    tau_e_th = phi(:,1:3)*[K; B; I];
     
-    figure(6)
-    plot(t_exp(idx_1:idx_2), tau_e_res)
-    hold on, grid on
-    plot(t_exp(idx_1:idx_2), tau_e_th);
-    plot(t_exp(idx_1:idx_2), Tau_e_d(idx_1:idx_2));
-    legend('lstsq', 'arm dyn', 'real')
-    title('Disturbance force reconstruction')
-    xlabel('(s)'), ylabel('(N)')
-    
-    figure(7)
-    plot(t_exp(idx_1:idx_2), Aa_d(idx_1:idx_2), '-r', t_exp(idx_1:idx_2), Aa_saved(idx_1:idx_2), '--m', 'linewidth', 1.0);
-    ylabel('m.s^{-2}')
-    yyaxis right
-    plot(t_exp(idx_1:idx_2), Va_d(idx_1:idx_2), '-b', t_exp(idx_1:idx_2), Va_saved(idx_1:idx_2), '--c', 'linewidth', 1.0);
-    ylabel('m.s^{-1}')
-    legend('acc', 'ref. acc.', 'speed', 'ref. speed');
-    title('Speed and computed acceleration of both reference and perturbed simulation');
+%     figure(6)
+%     plot(t_exp(idx_1:idx_2), tau_e_res)
+%     hold on, grid on
+%     plot(t_exp(idx_1:idx_2), tau_e_th);
+%     plot(t_exp(idx_1:idx_2), Tau_e_d(idx_1:idx_2));
+%     legend('lstsq', 'arm dyn', 'real')
+%     title('Disturbance force reconstruction')
+%     xlabel('(s)'), ylabel('(N)')
+%     
+%     figure(7)
+%     plot(t_exp(idx_1:idx_2), Aa_d(idx_1:idx_2), '-r', t_exp(idx_1:idx_2), Aa_saved(idx_1:idx_2), '--m', 'linewidth', 1.0);
+%     ylabel('m.s^{-2}')
+%     yyaxis right
+%     plot(t_exp(idx_1:idx_2), Va_d(idx_1:idx_2), '-b', t_exp(idx_1:idx_2), Va_saved(idx_1:idx_2), '--c', 'linewidth', 1.0);
+%     ylabel('m.s^{-1}')
+%     legend('acc', 'ref. acc.', 'speed', 'ref. speed');
+%     title('Speed and computed acceleration of both reference and perturbed simulation');
 end
 % figure(4)
 % grid on ,hold on,
@@ -353,3 +372,49 @@ end
 % plot(t_exp,dy_out_d,'--k','linewidth',1) 
 % title('Oscillator')
 % legend('y','dy')
+
+end
+
+%% Evolution of impedance
+% plot the impedance during all the measuments done, starting at the first
+% perturbation and ending at the last one
+
+t_dif_pert = (1:1:nb_iter);
+t_dif_pert = (t_dif_pert-1)*t_s + t_1st_ms;
+
+idx_1b = intersect(find(t_exp >= t_dif_pert(1)), find(t_exp < t_dif_pert(1) + t_s));
+idx_2b = intersect(find(t_exp >= t_dif_pert(end)), find(t_exp < t_dif_pert(end) + t_s));
+
+figure(6)
+subplot(3,1,1);
+plot(t_dif_pert, imp_data(:,1)', '-x')
+ylabel('Stiffness (N/m)')
+yyaxis right
+plot(t_dif_pert, imp_data(:,2)', '-x')
+ylabel('Damping (N.s/m)')
+legend('Stiffness', 'Damping')
+title('Impedance Stiffness & Damping evolution')
+subplot(3,1,2);
+plot(t_dif_pert, imp_data(:,3)', '-x')
+ylabel('Inertia (N.s^2/m)')
+legend('Inertia')
+title('Impedance Inertia evolution')
+subplot(3,1,3);
+plot(t_exp(idx_1b:idx_2b), Za_saved(idx_1b:idx_2b), '-')
+legend('Arm')
+title('Position')
+xlabel('time (s)')
+ylabel('height (m)')
+
+figure(7)
+plot(y)
+hold on, grid on 
+plot(tau_e_res)
+title('Last estimation fit')
+
+figure(8)
+plot(t_exp(idx_1b:idx_2b), lstsq_err_data, 'r-x')
+legend('LSTSQ sum remainder')
+title('Identification reliability')
+xlabel('time (s)')
+ylabel('torque (Nm)')
