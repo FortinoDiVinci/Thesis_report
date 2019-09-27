@@ -5,20 +5,31 @@ close all
 % DATA EXTRACTION %
 %%%%%%%%%%%%%%%%%%%
 
-read_ft_sensor = importdata('2019_06_25_netft_data.txt');
-read_tf = importdata('2019_06_25_tf.txt');
+%read_ft_sensor = importdata('2019_06_25_netft_data.txt');
+%read_tf = importdata('2019_06_25_tf.txt');
+read_ft_sensor = importdata('bias_gravity_data\netft_sensor_data_2019_04_19.txt');
+read_tf = importdata('bias_gravity_data\fk_sensor_data_2019_04_19.txt');
+
+QUATERNION = 1;  % if no translation are in the file
 
 stamp_ft_sensor = str2double(read_ft_sensor.textdata(2:end, 3));
 stamp_ft_sensor = (stamp_ft_sensor)*1e-9;
 force = read_ft_sensor.data(:, 1:3);
 torque = read_ft_sensor.data(:, 4:6);
 
-% Only extract the transforms concerning the sensor (time, translation and
-% rotation)
-sensor_tf = read_tf.textdata(strcmp(read_tf.textdata(:,5), 'sensor'),[1,6,7,8,9,10,11,12]);
-stamp_tf =  str2double(sensor_tf(:,1));
-stamp_tf = (stamp_tf)*1e-9;
-quaternion = str2double([sensor_tf(:, end), sensor_tf(:, end-3:end-1)]);
+if QUATERNION == 1
+    sensor_tf = read_tf.data(:,:);
+    stamp_tf =  str2double(read_tf.textdata(2:end,1));
+    stamp_tf = (stamp_tf)*1e-9;
+    quaternion = [sensor_tf(:, end), sensor_tf(:, end-3:end-1)];
+else
+    % Only extract the transforms concerning the sensor (time, translation and
+    % rotation)
+    sensor_tf = read_tf.textdata(strcmp(read_tf.textdata(:,5), 'sensor'),[1,6,7,8,9,10,11,12]);
+    stamp_tf =  str2double(sensor_tf(:,1));
+    stamp_tf = (stamp_tf)*1e-9;
+    quaternion = str2double([sensor_tf(:, end), sensor_tf(:, end-3:end-1)]);
+end
 
 g = 9.81;
 
