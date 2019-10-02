@@ -63,6 +63,7 @@
 #include "brics_actuator/JointPositions.h"
 #include "brics_actuator/JointVelocities.h"
 #include "brics_actuator/JointTorques.h" // added by Vincent FORTINEAU
+#include <std_msgs/Float32MultiArray.h>  // added by Vincent FORTINEAU (vfo)
 
 /* OODL includes */
 #include "YouBotConfiguration.h"
@@ -199,6 +200,18 @@ public:
      * @brief Mapps OODL values to ROS messages
      */
     void computeOODLSensorReadings();
+    
+    /**
+     * @brief get additional sensor measurment (current)
+     * function was added by vfo in 2019
+     */
+    void getArmSensorData(std_msgs::Float32MultiArray* current);
+    
+    /**
+     * @brief get joint setpoint (current & velocity)
+     * function was added by vfo in 2019
+     */
+    void getArmSetPointData(std_msgs::Float32MultiArray* current, std_msgs::Float32MultiArray* velocity);
 
     bool switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 

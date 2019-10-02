@@ -995,6 +995,38 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
 
 }
 
+void YouBotOODLWrapper::getArmSensorData(std_msgs::Float32MultiArray* current)
+{
+	youbot::JointSensedCurrent j_current;
+    
+    for(int i = 0; i < youBotArmDoF; i++)
+	{
+        youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(j_current);
+        current->data[i] = j_current.current.value();         
+    }
+}
+
+void YouBotOODLWrapper::getArmSetPointData(std_msgs::Float32MultiArray* current, std_msgs::Float32MultiArray* velocity)
+{
+    //youbot::JointPWMSetpoint sp_pwm;
+    //youbot::JointTorqueSetpoint sp_torque;
+    youbot::JointCurrentSetpoint sp_current;
+    youbot::JointVelocitySetpoint sp_velocity;
+    
+    for(int i = 0; i < youBotArmDoF; i++)
+	{
+        //youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(sp_pwm);
+        //youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(sp_torque);
+        youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(sp_current);
+        youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(sp_velocity);
+        
+        //pwm->data[i] = sp_pwm.pwm;
+        //torque->data[i] = sp_torque.torque.value();
+        current->data[i] = sp_current.current.value();
+        velocity->data[i] = sp_velocity.angularVelocity.value();
+    }
+} 
+
 void YouBotOODLWrapper::publishOODLSensorReadings()
 {
       
