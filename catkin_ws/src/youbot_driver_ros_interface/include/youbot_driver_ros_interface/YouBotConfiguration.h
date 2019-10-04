@@ -142,15 +142,17 @@ public:
     /// Receives "brics_actuator/JointVelocities" for the arm joints 
     ros::Subscriber armTorqueCommandSubscriber;
 
-	/// Implements a "control_msgs/FollowJointTrajectory" action
-	actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> *armJointTrajectoryAction;
+    /// Implements a "control_msgs/FollowJointTrajectory" action
+    actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> *armJointTrajectoryAction;
 
     /// Receives "brics_actuator/JointPositions" for the gripper
     ros::Subscriber gripperPositionCommandSubscriber;
 
-
     /// Publishes JointState messages with angles for the arm.
     ros::Publisher armJointStatePublisher;
+    
+    /// Publishes JointState messages with angles setpoint for the arm. added by vfo
+    ros::Publisher armJointSetPointPublisher;
 
     /// Service to switch the motor off by setting the PWM value to zero
     ros::ServiceServer switchOffMotorsService;

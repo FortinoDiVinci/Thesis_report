@@ -75,6 +75,9 @@
 
 //typedef actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> Server;
 
+// set to 1 to avoid the position, velocity and torque setpoint publication, added by vfo
+#define PUBLISH_JOINT_SET_POINTS 1
+
 namespace youBot
 {
 
@@ -205,7 +208,7 @@ public:
      * @brief get additional sensor measurment (current)
      * function was added by vfo in 2019
      */
-    void getArmSensorData(std_msgs::Float32MultiArray* current);
+    void getArmSensorData(std_msgs::Float32MultiArray* current, std_msgs::Float32MultiArray* torque);
     
     /**
      * @brief get joint setpoint (current & velocity)
@@ -272,6 +275,17 @@ private:
 
     /// Vector of the published joint states of per arm with angles in [RAD]
     vector<sensor_msgs::JointState> armJointStateMessages;
+    
+    #if PUBLISH_JOINT_SET_POINTS == 1
+    /// Vector of the published joint set point per arm with angles in [RAD]
+    vector<sensor_msgs::JointState> armJointSetPointMessages;
+    
+    /// Vector of motor torque constant for each joint
+    vector<double> armJointTorqueConstant;
+    
+    /// Vector of gear ratio for each joint
+    vector<double> armJointGearRatio;
+    #endif
 
     /// The joint trajectory goal that is currently active.
     actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle armActiveJointTrajectoryGoal;

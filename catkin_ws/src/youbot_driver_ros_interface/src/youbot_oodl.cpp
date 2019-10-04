@@ -69,7 +69,7 @@ int main(int argc, char **argv)
     //modified by vfo
     ros::Publisher pub_current = n.advertise<std_msgs::Float32MultiArray>
         ("arm_1/sensedCurrent", 1);
-    //ros::Publisher pub_torque = n.advertise<std_msgs::Float32MultiArray>
+    ros::Publisher pub_torque = n.advertise<std_msgs::Float32MultiArray>
         ("arm_1/sensedTorque", 1);
     //ros::Publisher pub_velocity = n.advertise<std_msgs::Float32MultiArray>
         ("arm_1/sensedVelocity", 1);
@@ -121,15 +121,20 @@ int main(int argc, char **argv)
     // vfo modification
 	//std_msgs::Float32MultiArray j_pwm_pub;
 	std_msgs::Float32MultiArray j_current_pub;
+	std_msgs::Float32MultiArray j_torque_pub;
 	std_msgs::Float32MultiArray sp_current_pub;
 	std_msgs::Float32MultiArray sp_velocity_pub;
 	for(int i = 0; i<5; i++) {
 	    //j_pwm_pub.data.push_back(0.);
 	    j_current_pub.data.push_back(0.);
+	    j_torque_pub.data.push_back(0.);
 	    sp_current_pub.data.push_back(0.);
 	    sp_velocity_pub.data.push_back(0.);
 	}
-
+	
+	//youbot::TorqueConstant joint_tc[5];
+	
+	
     /* coordination */
     ros::Rate rate(youBotDriverCycleFrequencyInHz); //Input and output at the same time... (in Hz)
     while (n.ok())
@@ -140,12 +145,13 @@ int main(int argc, char **argv)
         youBot.publishArmAndBaseDiagnostics(2.0);    //publish only every 2 seconds
         
         //added by vfo
-        youBot.getArmSensorData(&j_current_pub);    
+        youBot.getArmSensorData(&j_current_pub, &j_torque_pub);    
         youBot.getArmSetPointData(&sp_current_pub, &sp_velocity_pub);
         //added by vfo
         pub_current.publish(j_current_pub);
+        pub_torque.publish(j_torque_pub);
         pub_current_sp.publish(sp_current_pub);
-         pub_velocity_sp.publish(sp_velocity_pub);
+        pub_velocity_sp.publish(sp_velocity_pub);
         
         rate.sleep();
     }
