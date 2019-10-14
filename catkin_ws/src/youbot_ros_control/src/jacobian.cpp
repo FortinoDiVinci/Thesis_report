@@ -156,7 +156,7 @@ void youBotJacobianTJoint4(const float th4, float jac_matrix[][6])
 
 void youBotJacobianTJoint3(const float th3, float jac_matrix[][6]) 
 {
-    float t2 = M_PI*(1.4e1/4.5e1);;
+    float t2 = M_PI*(1.4e1/4.5e1);
     float t3 = t2 + th3;
     float t4 = cos(t3);
     float t5 = sin(t3);
@@ -164,6 +164,21 @@ void youBotJacobianTJoint3(const float th3, float jac_matrix[][6])
     jac_matrix[0][0] = t4*(0.123) - t5*(2.7e1/2.0e2);
     jac_matrix[0][1] = 0;
     jac_matrix[0][2] = t4*(-2.7e1/2.0e2) - t5*(0.123);
+    jac_matrix[0][3] = 0;
+    jac_matrix[0][4] = 0; //-1;
+    jac_matrix[0][5] = 0.0;
+}
+
+void youBotJacobianTJoint2(const float th2, float jac_matrix[][6]) 
+{
+    float t2 = M_PI*(5.0/3.6e1);
+    float t3 = t2 + th2;
+    float t4 = cos(t3);
+    float t5 = sin(t3);
+ 
+    jac_matrix[0][0] = t4*(-0.123) + t5*(2.9e1/1.0e2);
+    jac_matrix[0][1] = 0;
+    jac_matrix[0][2] = 0.3150063491423625*cos(t2 + th2 - atan(123/290));
     jac_matrix[0][3] = 0;
     jac_matrix[0][4] = 0; //-1;
     jac_matrix[0][5] = 0.0;
@@ -183,7 +198,7 @@ void youBotJacobianTJoints34(const float thetas[5], float jac_matrix[][6])
     float t8 = cos(t3);
     float t9 = t8*(1.23e2/1.0e3);
 
-    jac_matrix[0][0] = t9 - sin(t5)*(2.7e1/2.0e2);;
+    jac_matrix[0][0] = t9 - sin(t5)*(2.7e1/2.0e2);
     jac_matrix[0][1] = 0;
     jac_matrix[0][2] = t6*(-0.123) - t7*(2.7e1/2.0e2);
     jac_matrix[0][3] = 0.0;
@@ -198,6 +213,50 @@ void youBotJacobianTJoints34(const float thetas[5], float jac_matrix[][6])
     jac_matrix[1][5] = 0;
 }
 
+void youBotJacobianTJoints34XYZDOF(const float thetas[5], float jac_matrix[][3]) 
+{
+    float th3 = thetas[2];
+    float th4 = thetas[3];
+
+    float t2 = M_PI*(2.9e1/1.2e2);
+    float t3 = t2 + th3 + th4;
+    float t4 = M_PI*(1.4e1/4.5e1);
+    float t5 = t4 + th3;
+    float t6 = sin(t3);
+    float t7 = cos(t5);
+    float t8 = cos(t3);
+    float t9 = t8*(1.23e2/1.0e3);
+        
+    jac_matrix[0][0] = t9 - sin(t5)*(2.7e1/2.0e2);
+    jac_matrix[0][1] = 0;
+    jac_matrix[0][2] = t6*(-0.123) - t7*(2.7e1/2.0e2);
+    
+    jac_matrix[1][0] = t9; //forced to 0
+    jac_matrix[1][1] = 0;
+    jac_matrix[1][2] = t6*(-0.123); 
+}
+
+
+void youBotJacobianTJoints34ZDOF(const float thetas[5], float jac_matrix[][3]) 
+{
+    float th3 = thetas[2];
+    float th4 = thetas[3];
+
+    float t2 = M_PI*(2.9e1/1.2e2);
+    float t3 = t2 + th3 + th4;
+    float t4 = M_PI*(1.4e1/4.5e1);
+    float t5 = t4 + th3;
+    float t6 = sin(t3);
+    float t7 = cos(t5);
+        
+    jac_matrix[0][0] = 0; //forced to 0
+    jac_matrix[0][1] = 0;
+    jac_matrix[0][2] = t6*(-0.123) - t7*(2.7e1/2.0e2);
+    
+    jac_matrix[1][0] = 0; //forced to 0
+    jac_matrix[1][1] = 0;
+    jac_matrix[1][2] = t6*(-0.123); 
+}
 
 void youBotJacobianTJoints234(const float thetas[5], float jac_matrix[][6]) 
 {
@@ -240,4 +299,32 @@ void youBotJacobianTJoints234(const float thetas[5], float jac_matrix[][6])
     jac_matrix[2][3] = 0.0;
     jac_matrix[2][4] = -1.0;
     jac_matrix[2][5] = 0;
+}
+
+void youBotJacobianTJoints234ZDOF(const float thetas[5], float jac_matrix[][3]) 
+{
+    float th2 = thetas[1];
+    float th3 = thetas[2];
+    float th4 = thetas[3];
+    
+    float t7 = M_PI*(4.3e1/3.6e2); 
+    float t4 = -t7 + th2 + th3 + th4; 
+    float t5 = M_PI*(5.0/3.6e1); 
+    float t6 = t5 + th2; 
+    float t8 = sin(t4)*(-0.123); 
+    float t9 = cos(t6); 
+    float t15 = th2 + th3 - M_PI*(0.05);
+    float t16 = cos(t15)*(0.135);
+    
+    jac_matrix[0][0] = 0; // forced to zero
+    jac_matrix[0][1] = 0;
+    jac_matrix[0][2] = t8* + t9*(0.155) - t16;
+    
+    jac_matrix[1][0] = 0; // forced to zero
+    jac_matrix[1][1] = 0;
+    jac_matrix[1][2] = t8 - t16;
+    
+    jac_matrix[2][0] = 0; // forced to zero
+    jac_matrix[2][1] = 0;
+    jac_matrix[2][2] = t8;
 }

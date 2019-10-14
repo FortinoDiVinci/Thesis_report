@@ -10,6 +10,7 @@
 #include <vector>
 
 #include <ros/ros.h>
+#include <ros/package.h>
 #include <signal.h>
 #include <brics_actuator/JointVelocities.h>
 #include <brics_actuator/JointPositions.h>
@@ -18,7 +19,12 @@
 #include <sensor_msgs/JointState.h>
 #include <std_msgs/Float32MultiArray.h>
 
+#include <boost/scoped_ptr.hpp>
+
 #include "youbot_ros_control/jacobian.h"
+#include "youbot_ros_control/forward_kinematic.h"
+
+#include "youbot_driver/generic/ConfigFile.hpp"
 
 /*****************
  *   FUNCTIONS   *
@@ -26,6 +32,8 @@
  
 #define DEBUG 0
 #define NUMBER_ARM_JOINTS 5
+#define DOF 3
+// set DOF to 6 to use both force & torque and to 3 to use only force feedback
 
 geometry_msgs::WrenchStamped sensor_data;
 float thetas[NUMBER_ARM_JOINTS] = {0.,0.,0.,0.,0.};
@@ -64,16 +72,16 @@ void getForceCallback(const geometry_msgs::WrenchStamped::ConstPtr& data)
 }
 
 // compute linear and rotational velocity of the robot end effector
-void getVelocityTensor(const float jac_transpose_matrix[][6], const float joint_velocity[], float velocity_tensor[][6], const int nb_joints)
+void getVelocityTensor(const float jac_transpose_matrix[][DOF], const float joint_velocity[], float velocity_tensor[][6], const int nb_joints)
 {
     //shift old value, n-1 values are kept in second row
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < DOF; i++)
     {
         velocity_tensor[1][i] = velocity_tensor[0][i];
     }
     // v = J(q)*q_d
     for (int i = 0; i < nb_joints; i++) {
-        for (int j = 0; j < 6; j++) {
+        for (int j = 0; j < DOF; j++) {
             velocity_tensor[0][j] += joint_velocity[i]*jac_transpose_matrix[i][j];
         }
     }
@@ -111,7 +119,9 @@ ros::Time getAcceleration(const float velocity_tensor[][6], const ros::Time last
     return t;
 }
 
-void compensateCoriolisCentrifugalForces(const float mass, const float center_of_mass, const float acc[6], const float velocity_tensor[][6], geometry_msgs::WrenchStamped* data)
+// computes Coriolis and Centrifugal force, considering that the center of mass of the handle is on the z axis
+// of the end effector, which induces several simplification for the computation
+geometry_msgs::WrenchStamped compensateCoriolisCentrifugalForces(const float mass, const float center_of_mass, const float acc[6], const float velocity_tensor[][6], geometry_msgs::WrenchStamped data)
 {
     //in our simplified case the center of mass coordinates are along the z axis of the sensor
     //the cross product are strongly simplified for computation purpose
@@ -129,25 +139,58 @@ void compensateCoriolisCentrifugalForces(const float mass, const float center_of
     centrifugal[1] = mass*rot_vel[2]*rot_vel[1]*center_of_mass;
     centrifugal[3] = mass*(-rot_vel[0]*rot_vel[0] - rot_vel[1]*rot_vel[1])*center_of_mass;
     
-    data->wrench.force.x = data->wrench.force.x - coriolis[0] - centrifugal[0];
-    data->wrench.force.y = data->wrench.force.y - coriolis[1] - centrifugal[1];
-    data->wrench.force.z = data->wrench.force.z - centrifugal[3];
+    geometry_msgs::WrenchStamped comp_data;
+    
+    comp_data.wrench.force.x = data.wrench.force.x + coriolis[0] + centrifugal[0];
+    comp_data.wrench.force.y = data.wrench.force.y + coriolis[1] + centrifugal[1];
+    comp_data.wrench.force.z = data.wrench.force.z + centrifugal[3];
+    
+    comp_data.wrench.torque.x = data.wrench.torque.x;
+    comp_data.wrench.torque.y = data.wrench.torque.y;
+    comp_data.wrench.torque.z = data.wrench.torque.z;
+    
+    comp_data.header.seq = data.header.seq;
+    comp_data.header.stamp = data.header.stamp;
+    comp_data.header.frame_id = data.header.frame_id;
+    
+    return comp_data;    
 }
 
 // from endpoint force torque data to joint torque data (Ti = J_t(q) * F)
-void copyWrenchData(const geometry_msgs::WrenchStamped data, const float jac_transpose_matrix[][6], float joints_torque[], int nb_joints, int fst_jnt)
+void copyWrenchData(const geometry_msgs::WrenchStamped data, const float jac_transpose_matrix[][DOF], float joints_torque[], int nb_joints, int fst_jnt)
 {
     float ft_sensor_d[6] = {data.wrench.force.x, data.wrench.force.y, data.wrench.force.z, data.wrench.torque.x, data.wrench.torque.y, data.wrench.torque.z};
     
     for (int i = 0; i < nb_joints; i++) {
         float temp = 0;
-        for (int j = 0; j < 6; j++) {
+        for (int j = 0; j < DOF; j++) {
             temp += jac_transpose_matrix[i][j]*ft_sensor_d[j]; 
         }
         joints_torque[fst_jnt + i] = temp;
     }
-    //joints_torque[0] = 0;
-    //joints_torque[4] = 0;
+}
+
+float* virtualGuideFixture_VerticalLine(const float x, const float vx, const float stiffness, const float damping, const float x0, geometry_msgs::WrenchStamped force_setpoint, const float jac_transpose_matrix[][DOF], float joints_torque_setpoint[], int nb_joints, int fst_jnt)
+{
+    // for proper use of this function, the other forces and torques should be initialized to zero !
+    force_setpoint.wrench.force.x = (x0 - x)*stiffness + (0 - vx)*damping; 
+    copyWrenchData(force_setpoint, jac_transpose_matrix, joints_torque_setpoint, nb_joints, fst_jnt);
+    return joints_torque_setpoint;
+}
+
+bool reachLimits(float theta, int joint)
+{
+    float joint_upper_limits[5] = {5.7401, 2.5179, -0.1157, 3.3292, 5.5415}; // 0.1 rad margin
+    float joint_lower_limits[5] = {1.101e-1, 1.101e-1, -4.9266, 1.221e-1, 2.106e-1}; // 0.1 rad margin
+    if (theta >= joint_upper_limits[joint]) return true;
+    else if (theta <= joint_lower_limits[joint]) return true;
+    else return false;
+}
+
+bool overMaxVelocity(float omega, float max_vel[], int joint)
+{
+    if (abs(omega) >= max_vel[joint]) return 1;
+    else return 0;
 }
  
 /******************
@@ -171,7 +214,22 @@ int main(int argc, char** argv)
         ("debug/joint_torque_from_jacobian", 10);
     ros::Publisher pub_debug_j = n.advertise<std_msgs::Float32MultiArray>
         ("debug/jacobian", 10);
+        
+    ros::Publisher pub_debug_force_comp = n.advertise<geometry_msgs::WrenchStamped> ("debug/force_comp",10);
     #endif
+
+    boost::scoped_ptr<youbot::ConfigFile> configfile;
+    std::string youbot_driver_path = ros::package::getPath("youbot_driver");
+    configfile.reset(new youbot::ConfigFile("youbot-manipulator.cfg", youbot_driver_path + "/config"));
+    float joint_max_velocity[5];
+
+    for (unsigned int i = 0; i < NUMBER_ARM_JOINTS; i++) 
+    {
+		std::stringstream jointNameStream;
+		jointNameStream << "Joint_" << i + 1;
+		std::string jointName = jointNameStream.str();
+		configfile->readInto(joint_max_velocity[i], jointName, "MaxVelocity");
+	}
 
     float freq;
     float K[5];
@@ -182,8 +240,8 @@ int main(int argc, char** argv)
     int joint_i;
     float l;
     float m;    
-    std::string sensor_l_param_name;
-    std::string sensor_m_param_name;
+    std::string sensor_l_param_name = "sensor_arm_lever";
+    std::string sensor_m_param_name = "sensor_mass";
     
     if (n.searchParam("force_sensor_utils", sensor_l_param_name))
     {
@@ -205,16 +263,16 @@ int main(int argc, char** argv)
     }
 
     n1.param<float>("rate", freq, 100.); 
-    n1.param<float>("K1_gain", K[0], 100.); 
-    n1.param<float>("Ki1_gain", Ki[0], 100.); 
-    n1.param<float>("K2_gain", K[1], 100.); 
-    n1.param<float>("Ki2_gain", Ki[1], 100.); 
-    n1.param<float>("K3_gain", K[2], 100); 
-    n1.param<float>("Ki3_gain", Ki[2], 100.); 
-    n1.param<float>("K4_gain", K[3], 100.); 
-    n1.param<float>("Ki4_gain", Ki[3], 100.); 
-    n1.param<float>("K5_gain", K[4], 100.); 
-    n1.param<float>("Ki5_gain", Ki[4], 100.); 
+    n1.param<float>("K1_gain", K[0], 1.); 
+    n1.param<float>("Ki1_gain", Ki[0], 1.); 
+    n1.param<float>("K2_gain", K[1], 1.); 
+    n1.param<float>("Ki2_gain", Ki[1], 1.); 
+    n1.param<float>("K3_gain", K[2], 1.); 
+    n1.param<float>("Ki3_gain", Ki[2], 1.); 
+    n1.param<float>("K4_gain", K[3], 1.); 
+    n1.param<float>("Ki4_gain", Ki[3], 1.); 
+    n1.param<float>("K5_gain", K[4], 1.); 
+    n1.param<float>("Ki5_gain", Ki[4], 1.); 
 	
     n1.param<int>("Nb_joints_ctrl", nb_jnt_crtl, 2);
     //n1.param<int>("First_axis_nb", joint_i, 2);
@@ -238,7 +296,7 @@ int main(int argc, char** argv)
     pos.resize(NUMBER_ARM_JOINTS);
     
     if (nb_jnt_crtl == 1) {
-        joint_i = 3;//2; // only controls joint 4
+        joint_i = 2;//3; // only controls joint 4
     }
     else if (nb_jnt_crtl == 2) {
         joint_i = 2; // controls joints 3 & 4
@@ -270,7 +328,7 @@ int main(int argc, char** argv)
     velocities_cmd.velocities = vel;
 
     float joints_torque_feedback[NUMBER_ARM_JOINTS];
-    float jacobian_t[nb_jnt_crtl][6];
+    float jacobian_t[nb_jnt_crtl][DOF];
     float sum_err[5] = {0., 0., 0., 0., 0.};
     float Te = 1/freq;              // sampling time
     ros::Time t;
@@ -292,8 +350,23 @@ int main(int argc, char** argv)
     pub_pos.publish(positions_cmd);
     usleep(2.0*1e6); // wait 2 seconds for the end of the movement
     
+    float robot_endpoint_xyz[3] = {0,0,0};
     float vel_tensor[2][6] = {{0,0,0,0,0,0}, {0,0,0,0,0,0}};
     float acc[6] = {0,0,0,0,0,0};
+    geometry_msgs::WrenchStamped comp_force;
+    geometry_msgs::WrenchStamped force_setpoint;
+    force_setpoint.wrench.force.x = 0;
+    force_setpoint.wrench.force.y = 0;
+    force_setpoint.wrench.force.z = 0;
+    force_setpoint.wrench.torque.x = 0;
+    force_setpoint.wrench.torque.y = 0;
+    force_setpoint.wrench.torque.z = 0;
+    
+    float joints_torque_setpoint[NUMBER_ARM_JOINTS];
+    for (int i = 0; i < NUMBER_ARM_JOINTS; i++) joints_torque_setpoint[i] = 0;
+    float K_vm = 1000; // virtual stiffness (N.m)
+    float B_vm = 300; // virtual damping (N.m.s^-1)
+    float x0 = -0.29; // virtual equilibrium position (m)
     
     l_t = ros::Time::now();
     /************
@@ -304,35 +377,59 @@ int main(int argc, char** argv)
     
         if (nb_jnt_crtl == 1)
         {
-            youBotJacobianTJoint4(thetas[joint_i], jacobian_t);
-            getVelocityTensor(jacobian_t, omegas, vel_tensor, nb_jnt_crtl);
-            l_t_acc = getAcceleration(vel_tensor, l_t_acc, acc);
-            compensateCoriolisCentrifugalForces(m, l, acc, vel_tensor, &sensor_data);
+            #if DOF == 6
+                youBotJacobianTJoint3(thetas[joint_i], jacobian_t);
+            #endif
+            //getVelocityTensor(jacobian_t, omegas, vel_tensor, nb_jnt_crtl);
+            //l_t_acc = getAcceleration(vel_tensor, l_t_acc, acc);
+            //comp_force = compensateCoriolisCentrifugalForces(m, l, acc, vel_tensor, sensor_data);
             copyWrenchData(sensor_data, jacobian_t, joints_torque_feedback, nb_jnt_crtl, joint_i);
         }
         else if (nb_jnt_crtl == 2)
         {
-            youBotJacobianTJoints34(thetas, jacobian_t);
+            #if DOF == 6
+                youBotJacobianTJoints34(thetas, jacobian_t);
+            #elif DOF == 3
+                youBotJacobianTJoints34XYZDOF(thetas, jacobian_t);
+            #endif
+            //non contact forces du to speed and acceleration can be neglected
+            //getVelocityTensor(jacobian_t, omegas, vel_tensor, nb_jnt_crtl);
+            //l_t_acc = getAcceleration(vel_tensor, l_t_acc, acc);
+            //comp_force = compensateCoriolisCentrifugalForces(m, l, acc, vel_tensor, sensor_data);
+            //forwardKinematicTranslationOnly(thetas, robot_endpoint_xyz);
+            //std::cout << "x : " << robot_endpoint_xyz[0] << std::endl;
+            //std::cout << "vx : " << vel_tensor[0][0] << std::endl;
+            //virtualGuideFixture_VerticalLine(robot_endpoint_xyz[0], vel_tensor[0][0], K_vm, B_vm, x0, force_setpoint, jacobian_t, joints_torque_setpoint, nb_jnt_crtl, joint_i);
             copyWrenchData(sensor_data, jacobian_t, joints_torque_feedback, nb_jnt_crtl, joint_i);
         }
         else if (nb_jnt_crtl == 3)
         {
-            youBotJacobianTJoints234(thetas, jacobian_t);
+            #if DOF == 6
+                youBotJacobianTJoints234(thetas, jacobian_t);
+            #elif DOF == 3
+                youBotJacobianTJoints234ZDOF(thetas, jacobian_t);
+            #endif
+            //getVelocityTensor(jacobian_t, omegas, vel_tensor, nb_jnt_crtl);
+            //forwardKinematicTranslationOnly(thetas, robot_endpoint_xyz);
+            //virtualGuideFixture_VerticalLine(robot_endpoint_xyz[0], vel_tensor[0][0], K_vm, B_vm, x0, force_setpoint, jacobian_t, joints_torque_setpoint, nb_jnt_crtl, joint_i);
             copyWrenchData(sensor_data, jacobian_t, joints_torque_feedback, nb_jnt_crtl, joint_i);
         }
         else
         {
-            youBotJacobianT(thetas, jacobian_t);
+            #if DOF == 6
+                youBotJacobianT(thetas, jacobian_t);
+            #endif
             copyWrenchData(sensor_data, jacobian_t, joints_torque_feedback, nb_jnt_crtl, 0);
         }
 
-        #if DEBUG
+        #if DEBUG == 1
             for (int i = 0; i < NUMBER_ARM_JOINTS; i++) {
                 joints_torque.data[i] = joints_torque_feedback[i];
                 jacobian_debug.data[i] = jacobian_t[0][i];
             }
             pub_debug.publish(joints_torque);
             pub_debug_j.publish(jacobian_debug);
+            pub_debug_force_comp.publish(comp_force);
         #endif
 
         t = ros::Time::now();
@@ -344,8 +441,27 @@ int main(int argc, char** argv)
         }
 		
         for (int i = 0; i < nb_jnt_crtl; i++) {
-            sum_err[joint_i + i] += joints_torque_feedback[joint_i + i];
-            velocities_cmd.velocities[i].value = K[joint_i + i]*joints_torque_feedback[joint_i + i] + Ki[joint_i + i]*delay*sum_err[joint_i + i];
+        
+            if (reachLimits(thetas[joint_i + i], joint_i + i)) sum_err[joint_i + i] = 0;
+            else sum_err[joint_i + i] += joints_torque_feedback[joint_i + i]*delay;
+            
+            velocities_cmd.velocities[i].value = K[joint_i + i]*joints_torque_feedback[joint_i + i] + Ki[joint_i + i]*sum_err[joint_i + i] + joints_torque_setpoint[joint_i + i];
+            
+            if (overMaxVelocity(velocities_cmd.velocities[i].value, joint_max_velocity, joint_i + i))
+            {
+                // recompute integral action val to reach max velocity
+                if (joint_max_velocity[joint_i + i] > 0)
+                {
+                    sum_err[joint_i + i] = (joint_max_velocity[joint_i + i] - K[joint_i + i]*joints_torque_feedback[joint_i + i] - joints_torque_setpoint[joint_i + i])/Ki[joint_i + i];
+                    velocities_cmd.velocities[i].value = joint_max_velocity[joint_i + i];
+                }
+                else
+                {
+                    sum_err[joint_i + i] = (-joint_max_velocity[joint_i + i] - K[joint_i + i]*joints_torque_feedback[joint_i + i] - joints_torque_setpoint[joint_i + i])/Ki[joint_i + i];
+                    velocities_cmd.velocities[i].value = -joint_max_velocity[joint_i + i];
+                }
+                
+            }
         }
         
         for(int i = 0; i < nb_jnt_crtl; i++){

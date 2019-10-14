@@ -1,5 +1,5 @@
 //
-//  forward_kinematic.hpp
+//  forward_kinematic.h
 //  
 //
 //  Created by Vincent Fortineau on 14/05/2019.
@@ -14,5 +14,6 @@
 
 //float (*forward_kinematic(const float* ))[4];
 void forward_kinematic(const float*, float (*)[4]);
+void forwardKinematicTranslationOnly(const float*, float*);
 
 #endif /* forward_kinematic_hpp */
