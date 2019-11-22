@@ -206,7 +206,8 @@ install(PROGRAMS
    scripts/tf_endpoint
    scripts/ATI_force_sensor_utils
    scripts/tf_endpoint_mgd
-   scripts/commande_sinusoidale.py
+   scripts/trajectories_from_file.py
+   scripts/generate_actionlib_trajectoriy.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

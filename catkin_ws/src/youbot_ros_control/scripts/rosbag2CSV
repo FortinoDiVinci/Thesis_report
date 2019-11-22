@@ -1,0 +1,19 @@
+#!/bin/bash
+
+file_path=$1
+
+echo "active path : " $PWD
+echo $1
+
+for file in $1
+do
+    base_name=${file##*/};
+    echo ${base_name}
+    rosbag reindex $file
+    for topic in `rostopic list -b  $file`
+    do 
+        rostopic echo -p -b $file $topic >bagfile_${base_name%.*.*}_${topic//\//_}.csv
+    done
+done
+
+

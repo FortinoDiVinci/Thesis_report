@@ -62,7 +62,7 @@ YouBotManipulator::YouBotManipulator(const std::string name, const std::string c
     this->supportedFirmwareVersions.push_back("148");
     this->supportedFirmwareVersions.push_back("200");
     this->actualFirmwareVersionAllJoints = "";
-	this->numberArmJoints = 5;
+    this->numberArmJoints = 5;
 
     string filename;
     filename = name;
@@ -280,6 +280,18 @@ void YouBotManipulator::calibrateSpeedControllers() {
 
 	std::string jointName;
 	
+	std::vector <PParameterFirstParametersPositionControl> p_posi_control;
+	PParameterFirstParametersPositionControl dummy_p_sc0;
+	p_posi_control.assign(numberArmJoints, dummy_p_sc0);
+	
+	std::vector <IParameterFirstParametersPositionControl> i_posi_control;
+	IParameterFirstParametersPositionControl dummy_i_sc0;
+	i_posi_control.assign(numberArmJoints, dummy_i_sc0);
+	
+	std::vector <DParameterFirstParametersPositionControl> d_posi_control;
+	DParameterFirstParametersPositionControl dummy_d_sc0;
+	d_posi_control.assign(numberArmJoints, dummy_d_sc0);
+	
 	std::vector <PParameterFirstParametersSpeedControl> p_speed_control;
 	PParameterFirstParametersSpeedControl dummy_p_sc;
 	p_speed_control.assign(numberArmJoints, dummy_p_sc);
@@ -328,17 +340,35 @@ void YouBotManipulator::calibrateSpeedControllers() {
 	MaximumPositioningVelocity dummy_max_vel;
 	max_velocity.assign(numberArmJoints, dummy_max_vel);
 	
+	std::vector <MaximumMotorCurrent> max_current;
+	MaximumMotorCurrent dummy_max_cur;
+	max_current.assign(numberArmJoints, dummy_max_cur);
+        
+	
 	int pid_val = 0;
 	int acc_val = 0;
 	bool ramp_on = false;
 	quantity<angular_acceleration> acc_val_si;
 	quantity<angular_velocity> max_vel_si;
+	quantity<current> max_current_val;
 	
 	for (unsigned int i = 0; i < numberArmJoints; i++) {
 
 		std::stringstream jointNameStream;
 		jointNameStream << "Joint_" << i + 1;
 		jointName = jointNameStream.str();
+		
+		// FirstParametersPositionControl
+		configfile->readInto(pid_val, jointName, "PParameterFirstParametersPositionControl");
+		p_posi_control[i].setParameter(pid_val);
+		configfile->readInto(pid_val, jointName, "IParameterFirstParametersPositionControl");
+		i_posi_control[i].setParameter(pid_val);
+		configfile->readInto(pid_val, jointName, "DParameterFirstParametersPositionControl");
+		d_posi_control[i].setParameter(pid_val);
+
+		joints[i].setConfigurationParameter(p_posi_control[i]);
+		joints[i].setConfigurationParameter(i_posi_control[i]);
+		joints[i].setConfigurationParameter(d_posi_control[i]);
 		
 		// FirstParametersSpeedControl
 		configfile->readInto(pid_val, jointName, "PParameterFirstParametersSpeedControl");
@@ -393,47 +423,58 @@ void YouBotManipulator::calibrateSpeedControllers() {
 		joints[i].setConfigurationParameter(target_acceleration[i]);
 	}
 	
-	// boucle pour afficher les valeurs des paramètres des PID 
+	// display joints parameters (PID, ...) 
 	for (unsigned int i = 0; i < numberArmJoints; i++) {
 	
-	    joints[i].getConfigurationParameter(p_speed_control[i]);
-	    p_speed_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has speed_control P value set to: %i", i+1, pid_val);
-	    joints[i].getConfigurationParameter(i_speed_control[i]);
-	    i_speed_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has speed_control I value set to: %i", i+1, pid_val);
-	    joints[i].getConfigurationParameter(d_speed_control[i]);
-	    d_speed_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has speed_control D value set to: %i", i+1, pid_val);
-	    joints[i].getConfigurationParameter(p_speed_control2[i]);
-	    p_speed_control2[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has speed_control2 P value set to: %i", i+1, pid_val);
-	    joints[i].getConfigurationParameter(i_speed_control2[i]);
-	    i_speed_control2[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has speed_control2 I value set to: %i", i+1, pid_val);
-	    joints[i].getConfigurationParameter(d_speed_control2[i]);
-	    d_speed_control2[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has speed_control2 D value set to: %i", i+1, pid_val);
-	    joints[i].getConfigurationParameter(p_current_control[i]);
-	    p_current_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has current_control P value set to: %i", i+1, pid_val);
-	    joints[i].getConfigurationParameter(i_current_control[i]);
-	    i_current_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has current_control I value set to: %i", i+1, pid_val);
-	    joints[i].getConfigurationParameter(d_current_control[i]);
-	    d_current_control[i].getParameter(pid_val);
-	    ROS_INFO("Joint %i for arm 1 has current_control D value set to: %i", i+1, pid_val);
-	    
-	    joints[i].getConfigurationParameter(ramp_speed_control[i]);
-	    ramp_speed_control[i].getParameter(ramp_on);
-	    ROS_INFO("Joint %i for arm 1 has ramp enable value set to: %i", i+1, ramp_on);
+        joints[i].getConfigurationParameter(p_posi_control[i]);
+        p_posi_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has position_control P value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(i_posi_control[i]);
+        i_posi_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has position_control I value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(d_posi_control[i]);
+        d_posi_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has position_control D value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(p_speed_control[i]);
+        p_speed_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has speed_control P value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(i_speed_control[i]);
+        i_speed_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has speed_control I value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(d_speed_control[i]);
+        d_speed_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has speed_control D value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(p_speed_control2[i]);
+        p_speed_control2[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has speed_control2 P value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(i_speed_control2[i]);
+        i_speed_control2[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has speed_control2 I value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(d_speed_control2[i]);
+        d_speed_control2[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has speed_control2 D value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(p_current_control[i]);
+        p_current_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has current_control P value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(i_current_control[i]);
+        i_current_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has current_control I value set to: %i", i+1, pid_val);
+        joints[i].getConfigurationParameter(d_current_control[i]);
+        d_current_control[i].getParameter(pid_val);
+        ROS_INFO("Joint %i for arm 1 has current_control D value set to: %i", i+1, pid_val);
+
+        joints[i].getConfigurationParameter(ramp_speed_control[i]);
+        ramp_speed_control[i].getParameter(ramp_on);
+        ROS_INFO("Joint %i for arm 1 has ramp enable value set to: %i", i+1, ramp_on);
         joints[i].getConfigurationParameter(target_acceleration[i]);
         target_acceleration[i].getParameter(acc_val_si);
         ROS_INFO("Joint %i for arm 1 has acceleration value set to: %f", i+1, acc_val_si.value());
         joints[i].getConfigurationParameter(max_velocity[i]);
         max_velocity[i].getParameter(max_vel_si);
         ROS_INFO("Joint %i for arm 1 has max velocity value set to: %f", i+1, max_vel_si.value());
-        
+        joints[i].getConfigurationParameter(max_current[i]);
+        max_current[i].getParameter(max_current_val);
+        ROS_INFO("Joint %i for arm 1 has max current value set to: %f", i+1, max_current_val.value());
 	}
 	
 }

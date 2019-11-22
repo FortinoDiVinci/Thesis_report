@@ -15,5 +15,6 @@
 //float (*forward_kinematic(const float* ))[4];
 void forward_kinematic(const float*, float (*)[4]);
 void forwardKinematicTranslationOnly(const float*, float*);
+void getYEndPointAngle(const float*, float*); 
 
 #endif /* forward_kinematic_hpp */

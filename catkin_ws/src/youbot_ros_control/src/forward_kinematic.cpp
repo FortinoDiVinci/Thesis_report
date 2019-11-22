@@ -183,3 +183,50 @@ void forwardKinematicTranslationOnly(const float th[5], float translation[])
     translation[1] = ty;
     translation[2] = tz;
 }
+
+// simplified version of the forward_kinematic function, it only give the y endpoint rotation 
+void getYEndPointAngle(const float th[5], float* y_angle) 
+{
+    float th1 = th[0];
+    float th2 = th[1];
+    float th3 = th[2];
+    float th4 = th[3];
+    float th5 = th[4];  
+    
+    float t2 = M_PI*(5.0/7.2e1);
+    float t3 = t2 + th5;
+    float t4 = M_PI*(1.1e1/1.8e2);
+    float t5 = t4 + th1;
+    float t6 = M_PI*(5.0/3.6e1);
+    float t7 = t6 + th2;
+    float t8 = sin(t5);
+    float t9 = M_PI*(1.4e1/4.5e1);
+    float t10 = t9 + th3;
+    float t11 = cos(t7);
+    float t12 = cos(t5);
+    float t13 = sin(t7);
+    float t14 = M_PI*(3.1e1/7.2e1);
+    float t15 = t14 + th4;
+    float t16 = cos(t10);
+    float t18 = t12*t13;
+    float t19 = t18;
+    float t20 = sin(t10);
+    float t26 = t11*t12;
+    float t22 = -t26; 
+    float t23 = sin(t3);
+    float t24 = cos(t15);
+    float t25 = t16*t19;
+    float t29 = t16*t22;
+    float t30 = t19*t20;
+    float t31 = t29 + t30;
+    float t33 = t20*t22;
+    float t27 = t25 - t33;
+    float t28 = sin(t15);
+    float t32 = cos(t3);
+    float t36 = t24*t31;
+    float t37 = t27*t28;
+    
+    float R11 = t32*(t36 + t37) - t8*t23;
+    
+    *y_angle = acos(R11);
+}
