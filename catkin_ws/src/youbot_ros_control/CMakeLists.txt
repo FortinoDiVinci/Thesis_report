@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   brics_actuator
   geometry_msgs
   roscpp
+  roslib
   rospy
   sensor_msgs
   std_msgs
@@ -152,10 +153,12 @@ add_executable(${PROJECT_NAME}_endpoint
   src/kinematic_endpoint.cpp)
 add_executable(${PROJECT_NAME}_debug_endpoint src/debug_transform.cpp)
 add_executable(${PROJECT_NAME}_control_loop 
-  src/jacobian.cpp
   src/control_loop.cpp)
+add_executable(${PROJECT_NAME}_old_control_loop 
+  src/control_loop_old.cpp
+  src/jacobian.cpp
+  src/forward_kinematic.cpp)
 add_executable(${PROJECT_NAME}_velocity_ctrl src/velocity_ctrl.cpp)
-
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -165,6 +168,7 @@ set_target_properties(${PROJECT_NAME}_endpoint PROPERTIES OUTPUT_NAME endpoint P
 set_target_properties(${PROJECT_NAME}_gravity_comp PROPERTIES OUTPUT_NAME gravity_comp PREFIX "")
 set_target_properties(${PROJECT_NAME}_debug_endpoint PROPERTIES OUTPUT_NAME debug PREFIX "")
 set_target_properties(${PROJECT_NAME}_control_loop PROPERTIES OUTPUT_NAME control_loop PREFIX "")
+set_target_properties(${PROJECT_NAME}_old_control_loop PROPERTIES OUTPUT_NAME old_control_loop PREFIX "")
 set_target_properties(${PROJECT_NAME}_velocity_ctrl PROPERTIES OUTPUT_NAME velocity_ctrl PREFIX "")
 
 ## Add cmake target dependencies of the executable
@@ -173,6 +177,7 @@ add_dependencies(${PROJECT_NAME}_endpoint ${${PROJECT_NAME}_EXPORTED_TARGETS} ${
 add_dependencies(${PROJECT_NAME}_gravity_comp ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_debug_endpoint ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_control_loop ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_old_control_loop ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_velocity_ctrl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
@@ -186,6 +191,9 @@ target_link_libraries(${PROJECT_NAME}_debug_endpoint
   ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_control_loop
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_old_control_loop
   ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_velocity_ctrl
@@ -207,7 +215,7 @@ install(PROGRAMS
    scripts/ATI_force_sensor_utils
    scripts/tf_endpoint_mgd
    scripts/trajectories_from_file.py
-   scripts/generate_actionlib_trajectoriy.py
+   scripts/generate_actionlib_trajectory.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -217,6 +225,7 @@ install(
     ${PROJECT_NAME}_endpoint
     ${PROJECT_NAME}_gravity_comp
     ${PROJECT_NAME}_control_loop
+    ${PROJECT_NAME}_old_control_loop
     ${PROJECT_NAME}_velocity_ctrl
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -224,11 +233,11 @@ install(
 )
 
 ## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+#install(DIRECTORY include/
+#  DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
+#  FILES_MATCHING PATTERN "*.h"
+#  PATTERN ".svn" EXCLUDE
+#)
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
