@@ -19,10 +19,11 @@
  * MACROS *
  **********/
 
-#define NB_JOINT_YOUBOT     5
-#define NB_ACTUATED_JOINTS  3
-#define DOF                 6
-#define REF_FRAME_ID        "base_link"
+#define WITH_VIRTUAL_MECH	true
+#define NB_JOINT_YOUBOT     	5
+#define NB_ACTUATED_JOINTS  	3
+#define DOF                 	6
+#define REF_FRAME_ID        	"base_link"
 const float TH_MAX[NB_JOINT_YOUBOT] = {5.7401, 25179, -0.1157, 3.3292, 5.5415}; //rad
 const float TH_MIN[NB_JOINT_YOUBOT] = {1.101e-1, 1.101e-1, -4.9266, 1.221e-1, 2.106e-1}; //rad
 const float TH_ON_D[NB_JOINT_YOUBOT] = {169, 65, -146, 102-90, 167.5-110}; //degree
@@ -81,9 +82,16 @@ int main(int argc, char** argv)
     
     float Kp[NB_JOINT_YOUBOT];
     float Ki[NB_JOINT_YOUBOT];
-    float frequency, Kx_vm, Bx_vm, x0, Kry_vm, Bry_vm, ry0;
+    float frequency, Kx_vm, Bx_vm, x0, Kry_vm, Bry_vm, ry0, alpha;
     
     std::string tmp_str = "Kx0_gain";
+    std::stringstream joint_pid_data;
+    
+    #if WITH_VIRTUAL_MECH
+    alpha = 0.35;
+    #else
+    alpha = 1.0;
+    #endif
     
     for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
     {
@@ -95,23 +103,22 @@ int main(int argc, char** argv)
         tmp_str = "Ki" + jointNameStream.str() + "_gain";
         n1.getParam(tmp_str, Ki[ii]);
         
-        ROS_INFO_STREAM("Kp: " << Kp[ii] << "\n");
-        ROS_INFO_STREAM("Ki: " << Ki[ii] << "\n");  
+        joint_pid_data << "Kp: " << Kp[ii] << "\n" << "Ki: " << Ki[ii] << "\n";  
     }
+    ROS_INFO_STREAM(joint_pid_data.str());
     tmp_str.clear();
 
     n1.getParam("rate", frequency);
-    n1.getParam("Stiffness", Kx_vm);
-    n1.getParam("Damping", Bx_vm);
-    n1.getParam("Stiffness", Kry_vm);
-    n1.getParam("Damping", Bry_vm);
-    n1.getParam("Equilibrium", x0);
-    ry0 = 1.5708; //90°
+    n1.getParam("Stiffness_x", Kx_vm);
+    n1.getParam("Damping_x", Bx_vm);
+    n1.getParam("Stiffness_ry", Kry_vm);
+    n1.getParam("Damping_ry", Bry_vm);
+    n1.getParam("Equilibrium_x", x0);
+    n1.getParam("Equilibrium_ry", ry0);
     
-    ROS_INFO_STREAM("freq: " << frequency << "\n");
-    ROS_INFO_STREAM("Stiffness: " << Kx_vm << "\n");
-    ROS_INFO_STREAM("Damping: " << Bx_vm << "\n");
-    ROS_INFO_STREAM("Damping2: " << Bry_vm << "\n");
+    ROS_INFO_STREAM("freq: " << frequency << "\n" << "Stiffness x: " << Kx_vm << "\n"
+    	<< "Damping x: " << Bx_vm << "\n" << "Stiffness ry: " << Kry_vm << "\n"
+    	<< "Damping ry: " << Bry_vm << "\n");
     
     //
     // ROBOT & VIRTUAL FIXTURE
@@ -124,7 +131,7 @@ int main(int argc, char** argv)
     
     for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
     {
-        PID joint_pid(Kp[ii], Ki[ii], 0.0);
+        PID joint_pid(Kp[ii]*alpha, Ki[ii]*alpha, 0.0);
         joints.push_back(Joint(TH_MAX[ii], TH_MIN[ii], joint_pid));
         
         std::stringstream jointNameStream;
@@ -135,7 +142,7 @@ int main(int argc, char** argv)
     }
     
     Jacobian youBot_jacobian(DOF, NB_ACTUATED_JOINTS, false, true); //working with transpose jac only
-    kuka_youBot = new Robot(joints, ACTUATED_JOINTS, youBot_jacobian, initVelocitiesCmd(ACTUATED_JOINTS), initPositionsCmd(), &n);
+    kuka_youBot = new Robot(joints, ACTUATED_JOINTS, youBot_jacobian, initPositionsCmd(), &n);
     
     joint_name.clear();
     joints.clear();
@@ -150,6 +157,8 @@ int main(int argc, char** argv)
     
     // Virtual Mechanism init
     
+    #if WITH_VIRTUAL_MECH
+    
     float K_vm[6] = {Kx_vm, 0, 0, 0, Kry_vm, 0};
     float B_vm[6] = {Bx_vm, 0, 0, 0, Bry_vm, 0};
     float I_vm[6] = {0, 0, 0, 0, 0, 0};
@@ -160,7 +169,9 @@ int main(int argc, char** argv)
     limits_vm[0].setEndpointPose(Pose(Point(0.05,0,0,"m"), Point()));
     limits_vm[1].setEndpointPose(Pose(Point(0.06,0,0,"m"), Point()));
     
-    VirtualMechanism vertical_guide(K_vm, B_vm, I_vm, equilibrium, true, limits_vm);
+    VirtualMechanism vm(K_vm, B_vm, I_vm, equilibrium, true, limits_vm);
+      
+    #endif
     
     Pose force_torque_vm(Point(0,0,0,"N"), Point(0,0,0,"N m"));
     
@@ -203,11 +214,21 @@ int main(int argc, char** argv)
 
     while (!g_request_shutdown)
     {
+    	#if WITH_VIRTUAL_MECH
+    	// kinematics
+    	kuka_youBot->computeEnpointOrientation(false, true); // only get rotation about y
+    	kuka_youBot->computeEnpointPosition();    	
         // compute VM
+        force_torque_vm = vm.verticalXLineFixture(kuka_youBot->getEndpoint().getPose().getPosition().x, kuka_youBot->getEndpoint().getPose().getOrientation().y, kuka_youBot->getEndpoint().getVelocities().getPosition().x, kuka_youBot->getEndpoint().getVelocities().getOrientation().y);
+        #endif
+        // forces to joint torques
         kuka_youBot->updateJacobianTranspose();
         kuka_youBot->setTorqueError(kuka_youBot->computeJointTorquesFromWrench(force_torque_sensor + force_torque_vm));
+        // PI
         kuka_youBot->computeVelocityCollaborativeCmd();
         kuka_youBot->publishVelocitiesCmd();
+
+	//ROS_INFO_STREAM_THROTTLE(0.2, "VM forces:\n" << force_torque_vm.getPoseVector());
 
         ros::spinOnce();
         rate.sleep();
@@ -269,7 +290,9 @@ void getForces(const geometry_msgs::WrenchStamped::ConstPtr& data)
     //header
     //TODO : check that headers are consistant
     if (data->header.frame_id != REF_FRAME_ID)
-        //ROS_WARN_THROTTLE(5, std::string("Reference frame of the force torque msg seems wrong, ") + REF_FRAME_ID + " is expected.");
+    {
+        ROS_WARN_STREAM_THROTTLE(5, "Reference frame of the force torque msg seems wrong, " << REF_FRAME_ID << " is expected.");
+    }
     // wrench
     force_torque_sensor.setPositionX(data->wrench.force.x);
     force_torque_sensor.setPositionY(data->wrench.force.y);

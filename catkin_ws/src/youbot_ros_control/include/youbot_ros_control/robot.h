@@ -2,6 +2,7 @@
 #define ROBOT_H
 
 #include <string.h>
+#include <math.h>
 #include <ros/ros.h>
 #include <eigen3/Eigen/Dense>
 
@@ -23,6 +24,7 @@ class PID
         static void setCurrentTimeSample();
         static void setCurrentTimeSample(const ros::Time);
         static ros::Time getTimeSample() {return t;};
+        static ros::Duration getTimeDelay() {return t - t_old;};
     
         void antiWindup(const float maxVal, const float error);
     
@@ -156,7 +158,7 @@ class Robot
 {
     public:
         //Robot() {;};
-        Robot(const std::vector<Joint>, const bool*, const Jacobian, brics_actuator::JointVelocities, brics_actuator::JointPositions, ros::NodeHandle*);
+        Robot(const std::vector<Joint>, const bool*, const Jacobian, brics_actuator::JointPositions, ros::NodeHandle*);
         bool jointLimitReached(const int joint_nb);
     
         Endpoint getEndpoint() const {return endpoint;};
@@ -168,6 +170,8 @@ class Robot
         void computeEnpointPosition();
         void computeEnpointOrientation(const bool onlyX, const bool onlyY, const bool onlyZ);
         void computeEndpoint();
+        void computeEndpointVelocities();
+        
         Eigen::VectorXf computeJointTorquesFromWrench(Pose);
         void setTorqueError(Eigen::VectorXf);
 
@@ -198,6 +202,7 @@ class Robot
         std::vector<bool> actuated_joints_table;
     
         Endpoint endpoint;
+        Endpoint old_endpoint;
     
         Jacobian jacobian;
     
@@ -221,7 +226,7 @@ class VirtualMechanism
         void setLimits(const Endpoint*);
     
         Pose trajectoryFixture(const Endpoint);
-        Pose verticalXLineFixture(const float x, const float ry);
+        Pose verticalXLineFixture(const float x, const float ry, const float vx, const float wy);
 
     private:
         int DOF;    // degree of freedom
@@ -293,7 +298,7 @@ float PID::compute(const float error, const bool limitReached)
     float cmd; // pid output
     
     limitReached ? error_sum = 0 : error_sum += error; // anti windup
-    cmd = Kp * error + Ki * error_sum * (t_old - t).toSec();
+    cmd = Kp * error + Ki * error_sum * (t - t_old).toSec();
     
     return cmd;
 }
@@ -599,7 +604,7 @@ void Jacobian::dispMatrix()
  * ROBOT
  ********/
  
-Robot::Robot(const std::vector<Joint> jnt, const bool act_jnts_tab[], const Jacobian jac, brics_actuator::JointVelocities vel_msg, brics_actuator::JointPositions pos_msg, ros::NodeHandle *n)
+Robot::Robot(const std::vector<Joint> jnt, const bool act_jnts_tab[], const Jacobian jac, brics_actuator::JointPositions pos_msg, ros::NodeHandle *n)
 {
     nb_joints = jnt.size();
     joints = jnt;
@@ -613,7 +618,26 @@ Robot::Robot(const std::vector<Joint> jnt, const bool act_jnts_tab[], const Jaco
     
     torque_ref.resize(jacobian.actuated_joints, 1);
     torque_feedback.resize(jacobian.actuated_joints, 1);
-    velocities_cmd_msg = vel_msg;
+    
+    velocities_cmd_msg.velocities.resize(jacobian.actuated_joints);
+    int idx = 0;
+
+    for (int ii = 0; ii < nb_joints; ii++)
+    {
+        if (actuated_joints_table[ii] == true)
+        {
+            std::stringstream jointNameStream;
+            jointNameStream << "" << ii + 1;        
+            velocities_cmd_msg.velocities[idx].joint_uri = "arm_joint_" + jointNameStream.str();
+            velocities_cmd_msg.velocities[idx].unit = "s^-1 rad";
+            velocities_cmd_msg.velocities[idx].value = 0.0;
+            idx++;
+        }
+        else continue;
+    }
+    
+    //ROS_INFO_STREAM("\n" << velocities_cmd_msg << "\n");
+    
     positions_cmd_msg = pos_msg;
     
     std::string topic_name = "";
@@ -637,6 +661,7 @@ void Robot::computeEnpointPosition()
     switch(jacobian.actuated_joints) 
     {
         case 3:
+            old_endpoint.pose.setPosition(endpoint.pose.getPosition());
             endpoint.pose.setPosition(getEndpointPosition());
             break;
         case 1:
@@ -655,6 +680,7 @@ void Robot::computeEnpointOrientation(const bool onlyX = false, const bool onlyY
         case 3:
             if(onlyY) 
             {
+                old_endpoint.pose.setOrientationY(endpoint.pose.getOrientation().y);
                 endpoint.pose.setOrientationY(getYEndpointAngle());
                 break;
             }
@@ -779,6 +805,18 @@ void Robot::computeEndpoint()
     this->computeEnpointOrientation();
 }
 
+// using derivative
+void Robot::computeEndpointVelocities()
+{
+    float delay = joints[0].impedance_control.getTimeDelay().toSec();
+    endpoint.velocities.setPositionX((endpoint.pose.getPosition().x - old_endpoint.pose.getPosition().x) / delay);
+    endpoint.velocities.setPositionY((endpoint.pose.getPosition().y - old_endpoint.pose.getPosition().y) / delay);
+    endpoint.velocities.setPositionZ((endpoint.pose.getPosition().z - old_endpoint.pose.getPosition().z) / delay);
+    endpoint.velocities.setOrientationX((endpoint.pose.getOrientation().x - old_endpoint.pose.getOrientation().x) / delay);
+    endpoint.velocities.setOrientationY((endpoint.pose.getOrientation().y - old_endpoint.pose.getOrientation().y) / delay);
+    endpoint.velocities.setOrientationZ((endpoint.pose.getOrientation().z - old_endpoint.pose.getOrientation().z) / delay);
+}
+
 Eigen::VectorXf Robot::computeJointTorquesFromWrench(Pose force_torque)
 {
     /*
@@ -791,7 +829,7 @@ Eigen::VectorXf Robot::computeJointTorquesFromWrench(Pose force_torque)
             torques[act_jnt] += jacobian.t_matrix[act_jnt][dof]*force_torque[dof];
         }
     }
-     */
+    */
     return jacobian.t_matrix * force_torque.getPoseVector();
 }
 
@@ -834,16 +872,19 @@ void Robot::computeVelocityCollaborativeCmd()
 {
     int i = 0;
     updateTimeSample();
+    //ROS_INFO_STREAM_THROTTLE(0.2, "delay: " << joints[0].impedance_control.getTimeDelay() << "\n");
     for (int jnt = 0; jnt < nb_joints; jnt++)
     {
         if(actuated_joints_table[jnt])
         {
             velocities_cmd_msg.velocities[i].value = joints[jnt].impedance_control.compute(torque_err(i, 0), jointLimitReached(jnt));
-            
-            if (abs(velocities_cmd_msg.velocities[i].value) > joints[jnt].maxAngle())
+            //ROS_INFO_STREAM_THROTTLE(0.2, "torque error " << i << " : " << torque_err(i, 0) << "\n");
+            //ROS_INFO_STREAM_THROTTLE(0.2, "vel cmd" << velocities_cmd_msg.velocities[i].value << "\n");
+           
+            if (abs(velocities_cmd_msg.velocities[i].value) > joints[jnt].maxVelocity())
             {
-                joints[jnt].impedance_control.antiWindup(joints[jnt].maxAngle()*sign(velocities_cmd_msg.velocities[i].value), velocities_cmd_msg.velocities[i].value);
-                velocities_cmd_msg.velocities[i].value = joints[jnt].maxAngle()*sign(velocities_cmd_msg.velocities[i].value);
+                joints[jnt].impedance_control.antiWindup(joints[jnt].maxVelocity()*sign(velocities_cmd_msg.velocities[i].value), velocities_cmd_msg.velocities[i].value);
+                velocities_cmd_msg.velocities[i].value = joints[jnt].maxVelocity()*sign(velocities_cmd_msg.velocities[i].value);
             }
             i++;
         }
@@ -863,7 +904,7 @@ void Robot::sendPositionCmd(const std::vector <float> joint_pos, const std::vect
     int cmd_name_size = joint_names.size();
     if (cmd_pos_size != cmd_name_size || cmd_pos_size > nb_joints || cmd_name_size > nb_joints)
     {
-        std::cout << "Error in sendPositionCmd input dimensions, " << cmd_pos_size << " positions given and " << cmd_name_size << " joint names given, while " << nb_joints << " are defined (max)";
+        ROS_WARN_STREAM("Error in sendPositionCmd input dimensions, " << cmd_pos_size << " positions given and " << cmd_name_size << " joint names given, while " << nb_joints << " are defined (max)");
     }
     else
     {
@@ -900,7 +941,7 @@ VirtualMechanism::VirtualMechanism(float K[6], float B[6], float I[6], Endpoint 
     {
         if (limits_e.size() > 2)
         {
-            std::cout << "A limit vector with more than 2 elements was given while initializing virtual mechanism, only the first two elements will be used";
+            ROS_WARN_STREAM("A limit vector with more than 2 elements was given while initializing virtual mechanism, only the first two elements will be used");
             for (int i = 0; i < 2; i++)
             {
                 epsilon_limits.push_back(limits_e[i]);
@@ -908,7 +949,7 @@ VirtualMechanism::VirtualMechanism(float K[6], float B[6], float I[6], Endpoint 
         }
         else if (limits_e.size() < 1)
         {
-            std::cout << "An empty limit vector was given while initializing virtual mechanism, no limits will be used";
+            ROS_WARN_STREAM("An empty limit vector was given while initializing virtual mechanism, no limits will be used");
             isLimited = lim;
         }
         else if (limits_e.size() == 1)
@@ -923,6 +964,7 @@ VirtualMechanism::VirtualMechanism(float K[6], float B[6], float I[6], Endpoint 
                 epsilon_limits.push_back(limits_e[i]);
             }
         }
+        //ROS_INFO_STREAM("First limit is:\n" << limits_e[0].getPose().getPoseVector() << "\nSecond limit is:\n" << limits_e[1].getPose().getPoseVector());
     }
 }
 
@@ -938,35 +980,40 @@ Pose VirtualMechanism::trajectoryFixture(const Endpoint ep)
     // TODO
 }
 
-Pose VirtualMechanism::verticalXLineFixture(const float x, const float ry)
+Pose VirtualMechanism::verticalXLineFixture(const float x, const float ry, const float vx, const float wy)
 {
-    Pose tmp;
+    Pose tmp(Point(0,0,0,"N"), Point(0,0,0,"N m"));
     float dx = x - equilibrium.getPose().getPosition().x;
-    float dry = ry - equilibrium.getVelocities().getOrientation().y;
-    float abs_dx = abs(dx);
+    float dry = ry - equilibrium.getPose().getOrientation().y;
+    float abs_dx = fabs(dx);
+    float x2 = epsilon_limits[1].getPose().getPosition().x;
+    float x1 = epsilon_limits[0].getPose().getPosition().x;
+    
+    //ROS_INFO_STREAM_THROTTLE(0.2, "dx: " << dx << ",\ndry: " << dry << ",\nabs(dx): " << abs_dx << ",\nry: " << ry);
     
     if(isLimited)
     {
-        if(abs_dx >= epsilon_limits[1].getPose().getPosition().x)
+        if(abs_dx >= x2)
         {
             return tmp; // no virtual mechanism force
         }
-        else if (abs_dx <= epsilon_limits[0].getPose().getPosition().x)
+        else if (abs_dx <= x1)
         {
-            tmp.setPositionX(-abs_dx*K[0] - dry*B[0]);
-            tmp.setOrientationY(-abs_dx*K[4] - dry*B[4]);
+            tmp.setPositionX(-dx*K[0] - vx*B[0]);
+            tmp.setOrientationY(-dry*K[4] - wy*B[4]);
         }
         else
         {
-            float alpha = (-abs_dx + epsilon_limits[1].getPose().getPosition().x)/(epsilon_limits[1].getPose().getPosition().x - epsilon_limits[0].getPose().getPosition().x);
-            tmp.setPositionX((-abs_dx*K[0] - dry*B[0])*alpha);
-            tmp.setOrientationY((-abs_dx*K[4] - dry*B[4])*alpha);
+            float alpha = (-abs_dx + x2)/(x2 - x1);
+            
+            tmp.setPositionX((-dx*K[0] - vx*B[0])*alpha);
+            tmp.setOrientationY((-dry*K[4] - wy*B[4])*alpha);
         }
     }
     else
     {
-        tmp.setPositionX(-abs_dx*K[0] - dry*B[0]);
-        tmp.setOrientationY(-abs_dx*K[4] - dry*B[4]);
+        tmp.setPositionX(-dx*K[0] - vx*B[0]);
+        tmp.setOrientationY(dry*K[4] + wy*B[4]);
     }
     return tmp;
 }

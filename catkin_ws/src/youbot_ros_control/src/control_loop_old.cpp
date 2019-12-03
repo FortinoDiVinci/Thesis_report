@@ -304,8 +304,10 @@ int main(int argc, char** argv)
     float Ki[5];
     float K_temp;
     float Ki_temp;
-    float K_vm;         // virtual stiffness (N.m)
-    float B_vm;         // virtual damping (N.m.s^-1)
+    float Kx_vm;         // virtual stiffness (N.m)
+    float Bx_vm;         // virtual damping (N.m.s^-1)
+    float Kry_vm;         // virtual stiffness (N.m)
+    float Bry_vm;         // virtual damping (N.m.s^-1)
     float x0;           // virtual equilibrium position (m)
     float ry0 = 1.5708; // virtual equilibrium orientation (rad)
     int nb_jnt_ctrl = NUMBER_ARM_JOINTS;
@@ -348,9 +350,12 @@ int main(int argc, char** argv)
 	
     n1.param<int>("Nb_joints_ctrl", nb_jnt_ctrl, 2);
     
-    n1.param<float>("Stiffness", K_vm, 100.); 
-    n1.param<float>("Damping", B_vm, 10.);
-    n1.param<float>("Equilibrium", x0, -0.29);
+    n1.param<float>("Stiffness_x", Kx_vm, 100.); 
+    n1.param<float>("Damping_x", Bx_vm, 10.);
+    n1.param<float>("Equilibrium_x", x0, -0.29);
+    n1.param<float>("Stiffness_ry", Kry_vm, 100.); 
+    n1.param<float>("Damping_ry", Bry_vm, 10.);
+    n1.param<float>("Equilibrium_ry", ry0, -0.29);    
     //n1.param<int>("First_axis_nb", joint_i, 2);
     joint_i--; // to adapt to c++
        
@@ -514,7 +519,7 @@ int main(int argc, char** argv)
             vel_tensor[4][0] = (robot_endpoint_angle[1] - old_robot_endpoint_angle[1]) / delay; 
             std::cout << "ry : " << robot_endpoint_angle[1] << std::endl;
             
-            virtualGuideFixture_VerticalLine(robot_endpoint_xyz[0], robot_endpoint_angle[1], vel_tensor[0][0], vel_tensor[4][0], K_vm, B_vm, x0, ry0, force_setpoint, jacobian_t, joints_torque_setpoint, nb_jnt_ctrl, joint_i);
+            virtualGuideFixture_VerticalLine(robot_endpoint_xyz[0], robot_endpoint_angle[1], vel_tensor[0][0], vel_tensor[4][0], Kx_vm, Bx_vm, x0, ry0, force_setpoint, jacobian_t, joints_torque_setpoint, nb_jnt_ctrl, joint_i);
             copyWrenchData(sensor_data, jacobian_t, joints_torque_feedback, nb_jnt_ctrl, joint_i);
         }
         else

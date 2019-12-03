@@ -128,6 +128,8 @@ Pose Pose::operator + (const Pose &val)
     tmp.position = position + val.position;
     tmp.orientation = orientation + val.orientation;
     
+    tmp.pose_vector = pose_vector + val.pose_vector;
+    
     return tmp;
 }
 
