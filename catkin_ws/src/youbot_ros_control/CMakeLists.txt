@@ -216,6 +216,7 @@ install(PROGRAMS
    scripts/tf_endpoint_mgd
    scripts/trajectories_from_file.py
    scripts/generate_actionlib_trajectory.py
+   scripts/trajectories_for_robot_model_identification.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
