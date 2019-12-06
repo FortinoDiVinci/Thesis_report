@@ -124,7 +124,7 @@ class Jacobian
     friend class Robot;
     public:
     	Jacobian();
-        Jacobian(int dof, int nb_joints, bool onlyM, bool onlyT);
+        Jacobian(int dof, int nb_joints, bool onlyM, bool onlyT, bool onlyI);
     
         // Eigen::MatrixXf = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>
         Eigen::MatrixXf getTransposeMatrix() const;
@@ -135,6 +135,7 @@ class Jacobian
         void setMatrix(float **jac);
     
         void computeTransposeMatrix(std::vector<Joint>);
+        void computeInverseMatrix(std::vector<Joint>);
         void computeMatrix(std::vector<Joint>);
 
         void dispTransposeMatrix();
@@ -150,8 +151,14 @@ class Jacobian
         //float** t_matrix;
         Eigen::MatrixXf matrix;
         Eigen::MatrixXf t_matrix;
+        Eigen::MatrixXf inv_matrix;
     private:
-        void youBotJoints234(const std::vector<Joint>);
+        void youBotTJoints234(const std::vector<Joint>);
+        // transpose jacobian considering linear x, z and angular y
+        void youBotTJoints234_3DOF(const std::vector<Joint>);
+        void youBotInvJoints234(const std::vector<Joint> joints); // TODO pseudo inverse
+        // inverse jacobian considering linear x, z and angular y, (3x3 matrix)
+        void youBotInvJoints234_3DOF(const std::vector<Joint>);
 };
 
 class Robot
@@ -390,9 +397,9 @@ Jacobian::Jacobian()
         
 }
 
-Jacobian::Jacobian(int dof, int nb_joints, bool onlyM = true, bool onlyT = false)
+Jacobian::Jacobian(int dof, int nb_joints, bool onlyM = true, bool onlyT = false, bool onlyI = false)
 {
-    if (onlyM && onlyT)
+    if ((onlyM && onlyT) || (onlyM && onlyI) || (onlyI && onlyT))
     {
         std::cout << "Inappropriate argument, please chose either only matrix, only transpose matrix or neither" << '\n';
     }
@@ -408,10 +415,15 @@ Jacobian::Jacobian(int dof, int nb_joints, bool onlyM = true, bool onlyT = false
     {
         t_matrix.resize(actuated_joints, degree_of_freedom);
     }
+    else if(onlyI)
+    {
+        inv_matrix.resize(actuated_joints, degree_of_freedom);
+    }
     else
     {
         matrix.resize(degree_of_freedom, actuated_joints);
         t_matrix.resize(actuated_joints, degree_of_freedom);
+        inv_matrix.resize(actuated_joints, degree_of_freedom);
     }
 }
 
@@ -475,11 +487,45 @@ void Jacobian::computeTransposeMatrix(std::vector<Joint> joints)
         case 3:
             if (degree_of_freedom == 6)
             {
-                youBotJoints234(joints);
+                youBotTJoints234(joints);
             }
             else if (degree_of_freedom == 3)
             {
-                // TODO
+                youBotTJoints234_3DOF(joints);
+            }
+            else
+            {
+                std::cout << "err msg" << '\n';
+            }
+            break;
+        case 1:
+            // TODO
+            break;
+        case 2:
+            //TODO
+            break;
+        default:
+            break;
+    }
+}
+
+void Jacobian::computeInverseMatrix(std::vector<Joint> joints)
+{
+    if (inv_matrix.rows() != actuated_joints)
+    {
+        std::cout << "error\n"; //TODO
+        return;
+    }
+
+    switch (actuated_joints) {
+        case 3:
+            if (degree_of_freedom == 6)
+            {
+                youBotInvJoints234(joints);
+            }
+            else if (degree_of_freedom == 3)
+            {
+                youBotInvJoints234_3DOF(joints);
             }
             else
             {
@@ -531,7 +577,7 @@ void Jacobian::computeMatrix(std::vector<Joint> joints)
     }
 }
 
-void Jacobian::youBotJoints234(const std::vector<Joint> joints) 
+void Jacobian::youBotTJoints234(const std::vector<Joint> joints) 
 {
     float th2 = joints[1].getAngle();
     float th3 = joints[2].getAngle();
@@ -572,6 +618,120 @@ void Jacobian::youBotJoints234(const std::vector<Joint> joints)
     t_matrix(2, 3) = 0.0;
     t_matrix(2, 4) = -1.0;
     t_matrix(2, 5) = 0;
+}
+
+void Jacobian::youBotTJoints234_3DOF(const std::vector<Joint> joints) 
+{
+    float th2 = joints[1].getAngle();
+    float th3 = joints[2].getAngle();
+    float th4 = joints[3].getAngle();
+    
+    float t2 = M_PI*(0.45); 
+    float t3 = t2 + th2 + th3; 
+    float t7 = M_PI*(4.3e1/3.6e2); 
+    float t4 = -t7 + th2 + th3 + th4; 
+    float t5 = M_PI*(5.0/3.6e1); 
+    float t6 = t5 + th2; 
+    float t8 = sin(t4)*(-0.123); 
+    float t9 = cos(t6); 
+    float t10 = cos(t3); 
+    float t11 = t10*(0.135); 
+    float t12 = cos(t4);
+    float t13 = t12*(0.123); 
+    float t15 = th2 + th3 - M_PI*(0.05);
+    float t16 = cos(t15)*(0.135);
+
+    t_matrix(0, 0) = t11 + t13 + sin(t6)*(0.155);
+    t_matrix(0, 2) = t8 + t9*(0.155) - t16;
+    t_matrix(0, 4) = -1.0;
+    
+    t_matrix(1, 0) = t11 + t13;
+    t_matrix(1, 2) = t8 - t16;      
+    t_matrix(1, 4) = -1.0;    
+
+    t_matrix(2, 0) = t13;
+    t_matrix(2, 2) = t8;
+    t_matrix(2, 4) = -1.0;
+}
+
+void Jacobian::youBotInvJoints234(const std::vector<Joint> joints) 
+{
+    float th2 = joints[1].getAngle();
+    float th3 = joints[2].getAngle();
+    float th4 = joints[3].getAngle();
+	
+    float t2 = M_PI*(9.0/2.0e1);
+    float t3 = t2 + th2 + th3;
+    float t4 = M_PI*(1.4e1/4.5e1);
+    float t5 = t4 + th3;
+    float t6 = cos(t5);
+    float t7 = 1.0/t6;
+    float t8 = sin(t3);
+    float t9 = cos(t3);
+    float t10 = M_PI*(5.0/3.6e1);
+    float t11 = t10 + th2;
+    float t12 = M_PI*(3.1e1/7.2e1);
+    float t13 = t12 + th4;
+    float t14 = sin(t13);
+    float t15 = cos(t11);
+    float t16 = sin(t11);
+    float t17 = M_PI*(2.9e1/1.2e2);
+    float t18 = t17 + th3 + th4;
+    float t19 = sin(t18);
+    
+    // TODO
+    
+    /*
+    inv_matrix(0, 0) = t7*t8*(2.0e2/3.1e1);
+    inv_matrix(0, 1) = t7*(t8*2.7e1 - t15*3.1e1)*(-2.0e2/8.37e2);
+    inv_matrix(0, 2) = t7*t15*(-2.0e2/2.7e1);
+
+    inv_matrix(1, 0) = t7*t9*(2.0e2/3.1e1);
+    inv_matrix(1, 1) = t7*(t9*2.7e1 + t16*3.1e1)*(-2.0e2/8.37e2);
+    inv_matrix(1, 2) = t7*t16*(2.0e2/2.7e1);
+
+    inv_matrix(2, 0) = t7*t14*(1.84e2/1.55e2);
+    inv_matrix(2, 1) = t7*(t14*2.7e1 - t19*3.1e1)*(-4.396654719235364e-2);
+    inv_matrix(2, 2) = t7*(t6*1.35e2 + t19*1.84e2)*(-1.0/1.35e2);
+    */
+}
+
+void Jacobian::youBotInvJoints234_3DOF(const std::vector<Joint> joints) 
+{
+    float th2 = joints[1].getAngle();
+    float th3 = joints[2].getAngle();
+    float th4 = joints[3].getAngle();
+	
+    float t2 = M_PI*(9.0/2.0e1);
+    float t3 = t2 + th2 + th3;
+    float t4 = M_PI*(1.4e1/4.5e1);
+    float t5 = t4 + th3;
+    float t6 = cos(t5);
+    float t7 = 1.0/t6;
+    float t8 = sin(t3);
+    float t9 = cos(t3);
+    float t10 = M_PI*(5.0/3.6e1);
+    float t11 = t10 + th2;
+    float t12 = M_PI*(3.1e1/7.2e1);
+    float t13 = t12 + th4;
+    float t14 = sin(t13);
+    float t15 = cos(t11);
+    float t16 = sin(t11);
+    float t17 = M_PI*(2.9e1/1.2e2);
+    float t18 = t17 + th3 + th4;
+    float t19 = sin(t18);
+
+    inv_matrix(0, 0) = t7*t8*(2.0e2/3.1e1);
+    inv_matrix(0, 1) = t7*(t8*2.7e1 - t15*3.1e1)*(-2.0e2/8.37e2);
+    inv_matrix(0, 2) = t7*t15*(-2.0e2/2.7e1);
+
+    inv_matrix(1, 0) = t7*t9*(2.0e2/3.1e1);
+    inv_matrix(1, 1) = t7*(t9*2.7e1 + t16*3.1e1)*(-2.0e2/8.37e2);
+    inv_matrix(1, 2) = t7*t16*(2.0e2/2.7e1);
+
+    inv_matrix(2, 0) = t7*t14*(1.84e2/1.55e2);
+    inv_matrix(2, 1) = t7*(t14*2.7e1 - t19*3.1e1)*(-4.396654719235364e-2);
+    inv_matrix(2, 2) = t7*(t6*1.35e2 + t19*1.84e2)*(-1.0/1.35e2);
 }
 
 void Jacobian::dispTransposeMatrix()
@@ -999,15 +1159,15 @@ Pose VirtualMechanism::verticalXLineFixture(const float x, const float ry, const
         }
         else if (abs_dx <= x1)
         {
-            tmp.setPositionX(-dx*K[0] - vx*B[0]);
-            tmp.setOrientationY(-dry*K[4] - wy*B[4]);
+            //tmp.setPositionX(-dx*K[0] - vx*B[0]);
+            tmp.setOrientationY(dry*K[4] + wy*B[4]);
         }
         else
         {
             float alpha = (-abs_dx + x2)/(x2 - x1);
             
-            tmp.setPositionX((-dx*K[0] - vx*B[0])*alpha);
-            tmp.setOrientationY((-dry*K[4] - wy*B[4])*alpha);
+            //tmp.setPositionX((-dx*K[0] - vx*B[0])*alpha);
+            tmp.setOrientationY((dry*K[4] + wy*B[4])*alpha);
         }
     }
     else
