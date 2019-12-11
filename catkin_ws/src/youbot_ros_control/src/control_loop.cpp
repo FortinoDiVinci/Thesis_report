@@ -12,18 +12,25 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#include "youbot_ros_control/robot.h"
+//#include "youbot_ros_control/robot.h"
+#include "robot.cpp"
 #include "youbot_driver/generic/ConfigFile.hpp"
 
 /**********
  * MACROS *
  **********/
 
-#define WITH_VIRTUAL_MECH	true
+#define WITH_VIRTUAL_MECH       false
+// setting the following macro with nullspace ctrl will have no effect
+#define WITH_Y_ORIENTATION      false
+#define NULLSPACE_CTRL_LOOP     true
+#define X_L_CTRL_LOOP           false
+#define INV_JAC_CTRL_LOOP       false
 #define NB_JOINT_YOUBOT     	5
 #define NB_ACTUATED_JOINTS  	3
-#define DOF                 	6
+#define DOF                 	3
 #define REF_FRAME_ID        	"base_link"
+
 const float TH_MAX[NB_JOINT_YOUBOT] = {5.7401, 25179, -0.1157, 3.3292, 5.5415}; //rad
 const float TH_MIN[NB_JOINT_YOUBOT] = {1.101e-1, 1.101e-1, -4.9266, 1.221e-1, 2.106e-1}; //rad
 const float TH_ON_D[NB_JOINT_YOUBOT] = {169, 65, -146, 102-90, 167.5-110}; //degree
@@ -82,13 +89,13 @@ int main(int argc, char** argv)
     
     float Kp[NB_JOINT_YOUBOT];
     float Ki[NB_JOINT_YOUBOT];
-    float frequency, Kx_vm, Bx_vm, x0, Kry_vm, Bry_vm, ry0, alpha;
+    float frequency, Kx_vm, Bx_vm, x0, Kry_vm, Bry_vm, ry0, alpha, Kq;
     
     std::string tmp_str = "Kx0_gain";
     std::stringstream joint_pid_data;
     
     #if WITH_VIRTUAL_MECH
-    alpha = 0.35;
+    alpha = 0.35; // lower PID gain for stability purpose
     #else
     alpha = 1.0;
     #endif
@@ -115,6 +122,7 @@ int main(int argc, char** argv)
     n1.getParam("Damping_ry", Bry_vm);
     n1.getParam("Equilibrium_x", x0);
     n1.getParam("Equilibrium_ry", ry0);
+    n1.getParam("Joint_equilibrium_gain", Kq);
     
     ROS_INFO_STREAM("freq: " << frequency << "\n" << "Stiffness x: " << Kx_vm << "\n"
     	<< "Damping x: " << Bx_vm << "\n" << "Stiffness ry: " << Kry_vm << "\n"
@@ -141,11 +149,37 @@ int main(int argc, char** argv)
         joints[ii].setMaxVelocity(tmp_max_vel);
     }
     
-    Jacobian youBot_jacobian(DOF, NB_ACTUATED_JOINTS, false, true); //working with transpose jac only
+    Jacobian youBot_jacobian(DOF, NB_ACTUATED_JOINTS);
     kuka_youBot = new Robot(joints, ACTUATED_JOINTS, youBot_jacobian, initPositionsCmd(), &n);
     
     joint_name.clear();
     joints.clear();
+    
+    // nullspace control method requires endpoint limit definition, 
+    // extra ctrl gain & joints prefered position
+    #if NULLSPACE_CTRL_LOOP
+    std::vector <Endpoint> ep_limits;
+    std::vector <float> qi_0;
+    float x_lim_min, z_lim_min, x_lim_max, z_lim_max;
+    x_lim_min = -0.21;
+    x_lim_max = -0.19;
+    z_lim_min = 0.226;
+    z_lim_max = 0.410;
+    
+    ep_limits.resize(2);
+    qi_0.resize(3);
+    
+    ep_limits[0].setEndpointPose(Pose(Point(x_lim_min,0,z_lim_min), Point(0,0,0)));
+    ep_limits[1].setEndpointPose(Pose(Point(x_lim_max,0,z_lim_max), Point(0,0,0)));
+    
+    qi_0[0] = 1.676;
+    qi_0[1] = -4.363;
+    qi_0[2] = 1.497;
+    
+    kuka_youBot->setNullspaceCtrlGains(Kx_vm, Kq);
+    kuka_youBot->setEndpointLimits(ep_limits);
+    kuka_youBot->setEndpointPID(PID(Kp[1]*0.2x, Ki[1]*0, 0));
+    #endif
     
     // Start listening to youBot msgs
     
@@ -193,6 +227,13 @@ int main(int argc, char** argv)
         init_off_pos.positions[ii].value = init_angle[ii] * M_PI/180;
     }
     
+    #if NULLSPACE_CTRL_LOOP
+    // initial position must be in the workspace for this loop
+    init_off_pos.positions[1].value = qi_0[0];
+    init_off_pos.positions[2].value = qi_0[1];
+    init_off_pos.positions[3].value = qi_0[2]; 
+    #endif
+    
     kuka_youBot->sendPositionCmd(init_off_pos);
     usleep(1.0*1e6); // this delay seems necessary..
     kuka_youBot->publishPositionsCmd();
@@ -214,18 +255,31 @@ int main(int argc, char** argv)
 
     while (!g_request_shutdown)
     {
-    	#if WITH_VIRTUAL_MECH
+    	#if WITH_VIRTUAL_MECH || NULLSPACE_CTRL_LOOP
     	// kinematics
-    	kuka_youBot->computeEnpointOrientation(false, true); // only get rotation about y
-    	kuka_youBot->computeEnpointPosition();    	
+    	kuka_youBot->computeEnpointPosition();
+    	#if WITH_Y_ORIENTATION  && !NULLSPACE_CTRL_LOOP
+    	kuka_youBot->computeEnpointOrientation(false, true, false); // only get rotation about y   	
         // compute VM
         force_torque_vm = vm.verticalXLineFixture(kuka_youBot->getEndpoint().getPose().getPosition().x, kuka_youBot->getEndpoint().getPose().getOrientation().y, kuka_youBot->getEndpoint().getVelocities().getPosition().x, kuka_youBot->getEndpoint().getVelocities().getOrientation().y);
+        #elif !NULLSPACE_CTRL_LOOP
+        force_torque_vm = vm.verticalXLineFixture(kuka_youBot->getEndpoint().getPose().getPosition().x, kuka_youBot->getEndpoint().getVelocities().getPosition().x);
+        #endif
         #endif
         // forces to joint torques
+        #if X_L_CTRL_LOOP
         kuka_youBot->updateJacobianTranspose();
-        kuka_youBot->setTorqueError(kuka_youBot->computeJointTorquesFromWrench(force_torque_sensor + force_torque_vm));
-        // PI
-        kuka_youBot->computeVelocityCollaborativeCmd();
+        kuka_youBot->setInputError(kuka_youBot->computeJointTorquesFromWrench(force_torque_sensor + force_torque_vm));
+        kuka_youBot->computeVelocityCollaborativeCmd(); 
+        #elif INV_JAC_CTRL_LOOP
+        kuka_youBot->updateJacobianInverse();
+        kuka_youBot->setInputError(kuka_youBot->computeJointVelocitiesFromEndpointVelocity());
+        #elif NULLSPACE_CTRL_LOOP
+        kuka_youBot->updateJacobianInverse();
+        kuka_youBot->updateJacobianTranspose();
+        kuka_youBot->computeNullspaceCollaborativeCmd(x0, force_torque_sensor.getPosition().z, qi_0);
+        #endif
+        // PI       
         kuka_youBot->publishVelocitiesCmd();
 
 	//ROS_INFO_STREAM_THROTTLE(0.2, "VM forces:\n" << force_torque_vm.getPoseVector());

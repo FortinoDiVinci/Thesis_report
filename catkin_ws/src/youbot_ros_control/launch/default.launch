@@ -18,32 +18,17 @@
   <arg name="I_gain_cmd3" default="5" />
   <arg name="P_gain_cmd2" default="0.1" />
   <arg name="I_gain_cmd2" default="3" />  
-  <arg name="Nb_joints" default="3" />
-  <!--
-  <arg name="Virtual_Mechanism_Kx" default="700" /> 
-  <arg name="Virtual_Mechanism_Bx" default="70" /> 
-  <arg name="Virtual_Mechanism_Kry" default="50" /> 
-  <arg name="Virtual_Mechanism_Bry" default="5" /> 
-  -->
-  <arg name="Virtual_Mechanism_Kx" default="1000" /> <!-- 1000 -->
-  <arg name="Virtual_Mechanism_Bx" default="100" /> <!-- 100 -->
-  <arg name="Virtual_Mechanism_Kry" default="1000" /> <!-- 1000 -->
-  <arg name="Virtual_Mechanism_Bry" default="100" /> <!-- 100 -->  
-  <arg name="Virtual_Mechanism_x0" default="-0.33" />
-  <arg name="Virtual_Mechanism_ry0" default="1.5708" /> <!-- 90° --> 
-  <!--
-  <arg name="Debug_1_axis" default="false" />
-  <arg name="Debug_axis_nb" default="2" />
-  <arg name="three_axis" default="false" />
-  <arg name="two_axis" default="true" />
+  <arg name="nb_joints" default="3" />
 
-  <param name="Debug_single_axis" value="$(arg Debug_1_axis)"/>
-  <param name="Debug_sngl_axis_nb" value="$(arg Debug_axis_nb)"/>
-  <param name="Three_axis" value="$(arg three_axis)"/>
-  <param name="Two_axis" value="$(arg two_axis)"/>
-	-->
+  <arg name="virtual_mechanism_Kx" default="0.1" /> <!-- 700 -->
+  <arg name="virtual_mechanism_Bx" default="70" /> 
+  <arg name="virtual_mechanism_Kry" default="50" /> 
+  <arg name="virtual_mechanism_Bry" default="5" /> 
+  <arg name="virtual_mechanism_x0" default="-0.33" />
+  <arg name="virtual_mechanism_ry0" default="1.5708" /> <!-- 90° --> 
+  <arg name="prefered_pose_gain" default="0.01" />
   
-  <!-- This delay is necessary to wait for the gravity computation 
+  <!-- This delay is necessary to wait for the gravity estimate. 
   The computation of the bias is achieved in a little more than 1s -->
   <arg name="node_control_delay" default="2.0" /> 
   
@@ -63,7 +48,7 @@
     <remap from="force_sensor/grav_comp" to="force_feedback"/>
   </node> 
   
-  <node name="old_control_loop" pkg="youbot_ros_control" type="old_control_loop" output="screen" launch-prefix="bash -c 'sleep $(arg node_control_delay); $0 $@' ">
+  <node name="control_loop" pkg="youbot_ros_control" type="control_loop" output="screen" launch-prefix="bash -c 'sleep $(arg node_control_delay); $0 $@' ">
     <param name="rate" value="$(arg control_loop_rate)"/>
     <param name="Kp4_gain" value="$(arg P_gain_cmd4)"/>
     <param name="Ki4_gain" value="$(arg I_gain_cmd4)"/>
@@ -71,13 +56,14 @@
     <param name="Ki3_gain" value="$(arg I_gain_cmd3)"/>
     <param name="Kp2_gain" value="$(arg P_gain_cmd2)"/>
     <param name="Ki2_gain" value="$(arg I_gain_cmd2)"/>    
-    <param name="Nb_joints_ctrl" value="$(arg Nb_joints)"/>
-    <param name="Stiffness_x" value="$(arg Virtual_Mechanism_Kx)"/>
-    <param name="Damping_x" value="$(arg Virtual_Mechanism_Bx)"/>
-    <param name="Equilibrium_x" value="$(arg Virtual_Mechanism_x0)"/>
-    <param name="Stiffness_ry" value="$(arg Virtual_Mechanism_Kry)"/>
-    <param name="Damping_ry" value="$(arg Virtual_Mechanism_Bry)"/>
-    <param name="Equilibrium_ry" value="$(arg Virtual_Mechanism_ry0)"/>    
+    <param name="Nb_joints_ctrl" value="$(arg nb_joints)"/>
+    <param name="Stiffness_x" value="$(arg virtual_mechanism_Kx)"/>
+    <param name="Damping_x" value="$(arg virtual_mechanism_Bx)"/>
+    <param name="Equilibrium_x" value="$(arg virtual_mechanism_x0)"/>
+    <param name="Stiffness_ry" value="$(arg virtual_mechanism_Kry)"/>
+    <param name="Damping_ry" value="$(arg virtual_mechanism_Bry)"/>
+    <param name="Equilibrium_ry" value="$(arg virtual_mechanism_ry0)"/>  
+    <param name="Joint_equilibrium_gain " value="$(arg prefered_pose_gain)"/>  
     <remap from="force_sensor/grav_comp" to="force_feedback"/>
   </node>
   <!--  
