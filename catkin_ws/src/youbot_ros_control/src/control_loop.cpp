@@ -178,7 +178,7 @@ int main(int argc, char** argv)
     
     kuka_youBot->setNullspaceCtrlGains(Kx_vm, Kq);
     kuka_youBot->setEndpointLimits(ep_limits);
-    kuka_youBot->setEndpointPID(PID(Kp[1]*0.2x, Ki[1]*0, 0));
+    kuka_youBot->setEndpointPID(PID(Kp[1], Ki[1], 0));
     #endif
     
     // Start listening to youBot msgs
@@ -277,6 +277,7 @@ int main(int argc, char** argv)
         #elif NULLSPACE_CTRL_LOOP
         kuka_youBot->updateJacobianInverse();
         kuka_youBot->updateJacobianTranspose();
+        kuka_youBot->computeEnpointPosition();
         kuka_youBot->computeNullspaceCollaborativeCmd(x0, force_torque_sensor.getPosition().z, qi_0);
         #endif
         // PI       

@@ -835,7 +835,7 @@ void Robot::computeNullspaceCollaborativeCmd(const float x0, const float Fz, con
     
     updateTimeSample();
     
-    cartesian_cmd(0,0) = 0;//Kx * (x0 - endpoint.pose.getPosition().x);
+    cartesian_cmd(0,0) = Kx * (x0 - endpoint.pose.getPosition().x);
     cartesian_cmd(1,0) = endpoint.cartesian_control.compute(Fz, false); //endpointLimitReached(2)
     cartesian_cmd(2,0) = 0;
     
@@ -860,7 +860,7 @@ void Robot::computeNullspaceCollaborativeCmd(const float x0, const float Fz, con
 Eigen::Matrix<float, 3, 3> Robot::zNullSpaceProjector()
 {
     // extract jacobian for the task in z (vector)
-    Eigen::Matrix<float, 3, 1> jac_z_task_t = jacobian.t_matrix.block<3,1>(0,2);
+    Eigen::Matrix<float, 3, 1> jac_z_task_t = jacobian.t_matrix.block<3,1>(0,1);
     
     return Eigen::Matrix<float, 3, 3>::Identity() - jac_z_task_t * ( jac_z_task_t * ( jac_z_task_t.transpose() * jac_z_task_t ).inverse() ).transpose();
     
