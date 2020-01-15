@@ -2,8 +2,25 @@ cmake_minimum_required(VERSION 2.8.3)
 project(youbot_driver_ros_interface)
 
 
-find_package(catkin REQUIRED COMPONENTS youbot_driver roscpp rosconsole actionlib tf control_msgs brics_actuator pr2_msgs diagnostic_msgs geometry_msgs nav_msgs pr2_msgs std_msgs std_srvs trajectory_msgs)
+find_package(catkin REQUIRED COMPONENTS youbot_driver roscpp rosconsole actionlib tf control_msgs brics_actuator pr2_msgs diagnostic_msgs geometry_msgs nav_msgs pr2_msgs std_msgs std_srvs trajectory_msgs message_generation)
 find_package(Boost REQUIRED COMPONENTS thread date_time filesystem system)
+
+# enable python teleop script
+catkin_python_setup()
+
+##custom msg added by vfo
+
+## Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+  MotorCurrent.msg
+)
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+  DEPENDENCIES
+  brics_actuator#   geometry_msgs#   sensor_msgs#   std_msgs
+)
 
 catkin_package(
 	CATKIN_DEPENDS youbot_driver rosconsole roscpp pr2_msgs brics_actuator tf control_msgs diagnostic_msgs geometry_msgs nav_msgs pr2_msgs std_msgs std_srvs trajectory_msgs
@@ -67,9 +84,6 @@ target_link_libraries(youbot_2nd_arm_test ${catkin_LIBRARIES} ${Boost_LIBRARIES}
 install(TARGETS youbot_driver_ros_interface youbot_arm_test
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
-
-# enable python teleop script
-catkin_python_setup()
 
 install(PROGRAMS src/examples/youbot_keyboard_teleop_joints.py
 		src/examples/youbot_keyboard_teleop.py

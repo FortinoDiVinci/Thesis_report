@@ -139,8 +139,12 @@ public:
     ros::Subscriber armVelocityCommandSubscriber;
     
     // Added by Vincent FORTINEAU
-    /// Receives "brics_actuator/JointVelocities" for the arm joints 
+    /// Receives "MotorCurrent" for the arm joints, custom message derived from brics_actuator/JointTorques
+    ros::Subscriber armCurrentCommandSubscriber;
+    
+    /// Receives "brics_actuator/JointTorques" for the arm joints
     ros::Subscriber armTorqueCommandSubscriber;
+    
 
     /// Implements a "control_msgs/FollowJointTrajectory" action
     actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> *armJointTrajectoryAction;

@@ -63,6 +63,7 @@
 #include "brics_actuator/JointPositions.h"
 #include "brics_actuator/JointVelocities.h"
 #include "brics_actuator/JointTorques.h" // added by Vincent FORTINEAU
+#include "youbot_driver_ros_interface/MotorCurrent.h" // added by Vincent FORTINEAU
 #include <std_msgs/Float32MultiArray.h>  // added by Vincent FORTINEAU (vfo)
 
 /* OODL includes */
@@ -156,6 +157,15 @@ public:
 
     /**
      * @brief Callback that is executed when a current command for the arm comes in.
+     * @param youbotArmCommand Message that contains the desired joint configuration.
+     * @param armIndex Index that identifies the arm
+     * This function was added by Vincent FORTINEAU
+     */
+
+    void armCurrentsCommandCallback(const youbot_driver_ros_interface::MotorCurrent::ConstPtr& youbotArmCommand, int armIndex);
+
+    /**
+     * @brief Callback that is executed when a torques command for the arm comes in.
      * @param youbotArmCommand Message that contains the desired joint configuration.
      * @param armIndex Index that identifies the arm
      * This function was added by Vincent FORTINEAU
