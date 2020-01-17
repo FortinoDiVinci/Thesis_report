@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
   tf
   youbot_driver
+  message_generation
 )
 
 find_package(Boost REQUIRED COMPONENTS 
@@ -60,11 +61,10 @@ catkin_python_setup()
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  StampedBool.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -81,10 +81,10 @@ catkin_python_setup()
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   geometry_msgs#   sensor_msgs#   std_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs#   geometry_msgs#   sensor_msgs#   brics_actuator
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -116,9 +116,10 @@ catkin_python_setup()
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES youbot_ros_control
 #  CATKIN_DEPENDS brics_actuator geometry_msgs roscpp rospy sensor_msgs std_msgs std_srvs tf youbot_driver
+#   CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
 
@@ -159,6 +160,8 @@ add_executable(${PROJECT_NAME}_old_control_loop
   src/jacobian.cpp
   src/forward_kinematic.cpp)
 add_executable(${PROJECT_NAME}_velocity_ctrl src/velocity_ctrl.cpp)
+add_executable(${PROJECT_NAME}_trajectory_generator src/trajectory_generator.cpp)
+add_executable(${PROJECT_NAME}_dynamic_model src/dynamic_model.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -170,6 +173,8 @@ set_target_properties(${PROJECT_NAME}_debug_endpoint PROPERTIES OUTPUT_NAME debu
 set_target_properties(${PROJECT_NAME}_control_loop PROPERTIES OUTPUT_NAME control_loop PREFIX "")
 set_target_properties(${PROJECT_NAME}_old_control_loop PROPERTIES OUTPUT_NAME old_control_loop PREFIX "")
 set_target_properties(${PROJECT_NAME}_velocity_ctrl PROPERTIES OUTPUT_NAME velocity_ctrl PREFIX "")
+set_target_properties(${PROJECT_NAME}_trajectory_generator PROPERTIES OUTPUT_NAME trajectory_generator PREFIX "")
+set_target_properties(${PROJECT_NAME}_dynamic_model PROPERTIES OUTPUT_NAME dynamic_model PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -179,6 +184,8 @@ add_dependencies(${PROJECT_NAME}_debug_endpoint ${${PROJECT_NAME}_EXPORTED_TARGE
 add_dependencies(${PROJECT_NAME}_control_loop ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_old_control_loop ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_velocity_ctrl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_trajectory_generator ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_dynamic_model ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_endpoint
@@ -199,6 +206,13 @@ target_link_libraries(${PROJECT_NAME}_old_control_loop
 target_link_libraries(${PROJECT_NAME}_velocity_ctrl
   ${catkin_LIBRARIES} ${Boost_LIBRARIES}
 )
+target_link_libraries(${PROJECT_NAME}_trajectory_generator
+  ${catkin_LIBRARIES} ${Boost_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_dynamic_model
+  ${catkin_LIBRARIES}
+)
+
 #############
 ## Install ##
 #############
@@ -228,6 +242,8 @@ install(
     ${PROJECT_NAME}_control_loop
     ${PROJECT_NAME}_old_control_loop
     ${PROJECT_NAME}_velocity_ctrl
+    ${PROJECT_NAME}_trajectory_generator
+    ${PROJECT_NAME}_dynamic_model
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

@@ -9,14 +9,17 @@
 #include <brics_actuator/JointValue.h>
 #include <geometry_msgs/WrenchStamped.h>
 #include <sensor_msgs/JointState.h>
+//#include "youbot_ros_control/StampedBool.h"
+#include <std_msgs/Bool.h>
 
 #include <boost/scoped_ptr.hpp>
 
 //#include "youbot_ros_control/robot.h"
 #include "robot.cpp"
 #include "youbot_driver/generic/ConfigFile.hpp"
+#include "utils/utils.h"
 
-/**********
+/**********	
  * MACROS *
  **********/
 
@@ -25,7 +28,6 @@
 #define WITH_Y_ORIENTATION      false
 #define NULLSPACE_CTRL_LOOP     true
 #define X_L_CTRL_LOOP           false
-#define INV_JAC_CTRL_LOOP       false
 #define NB_JOINT_YOUBOT     	5
 #define NB_ACTUATED_JOINTS  	3
 #define DOF                 	3
@@ -46,11 +48,50 @@ Pose force_torque_sensor(Point(0,0,0,"N"), Point(0,0,0,"N m"));
 sig_atomic_t volatile g_request_shutdown = 0;
 
 /*************
+ *  CLASSES  *
+ *************/
+
+class DisturbanceTimer
+{
+
+public:
+	
+	DisturbanceTimer(ros::NodeHandle*);
+	
+	void trigger(const ros::TimerEvent&);
+	void stop(const ros::TimerEvent&);
+	
+	float getDist() {return dist;};
+	
+private:
+	float dist;
+	ros::NodeHandle* nh;
+	
+	ros::Timer stop_dist_timer;
+	ros::Timer next_dist_timer;
+	
+	//youbot_ros_control::StampedBool dist_msg;
+	std_msgs::Bool dist_msg;
+	ros::Publisher pub_time_dist;
+};
+
+/*************
  * FUNCTIONS *
  *************/
 
+std::vector <float> nullSpaceCtrlInit(Robot* youBot, float, float, float);
+brics_actuator::JointPositions youBotInitializePosition(Robot*, std::vector<float>);
+brics_actuator::JointPositions youBotInitializePosition(Robot*);
+
+void youBotInitializationNSCtrl(Robot* &, boost::scoped_ptr<youbot::ConfigFile>&, ros::NodeHandle*);
+void youBotInitializationXLCtrl(Robot*, boost::scoped_ptr<youbot::ConfigFile>&, float*, float*, ros::NodeHandle*);
+void nullSpaceCtrlLoop(Robot*, Pose, float, std::vector<float>, float);
+void xavierLamyCtrlLoop(Robot*, Pose, Pose);
+Pose virtualLineGuide(Robot*, VirtualMechanism, bool);
+
 brics_actuator::JointVelocities initVelocitiesCmd(const bool*);
 brics_actuator::JointPositions initPositionsCmd();
+
 void getForces(const geometry_msgs::WrenchStamped::ConstPtr& data);
 void getJointStates(const sensor_msgs::JointState::ConstPtr& data);
 void sigIntHandler(int sig);
@@ -89,16 +130,10 @@ int main(int argc, char** argv)
     
     float Kp[NB_JOINT_YOUBOT];
     float Ki[NB_JOINT_YOUBOT];
-    float frequency, Kx_vm, Bx_vm, x0, Kry_vm, Bry_vm, ry0, alpha, Kq;
+    float frequency, Kx_vm, Bx_vm, x0, Kry_vm, Bry_vm, ry0, Kq;
     
     std::string tmp_str = "Kx0_gain";
     std::stringstream joint_pid_data;
-    
-    #if WITH_VIRTUAL_MECH
-    alpha = 0.35; // lower PID gain for stability purpose
-    #else
-    alpha = 1.0;
-    #endif
     
     for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
     {
@@ -126,59 +161,20 @@ int main(int argc, char** argv)
     
     ROS_INFO_STREAM("freq: " << frequency << "\n" << "Stiffness x: " << Kx_vm << "\n"
     	<< "Damping x: " << Bx_vm << "\n" << "Stiffness ry: " << Kry_vm << "\n"
-    	<< "Damping ry: " << Bry_vm << "\n");
+    	<< "Damping ry: " << Bry_vm << "\n" <<  "Joint eq gain: " << Kq << "\n");
     
     //
     // ROBOT & VIRTUAL FIXTURE
     //
+
+    #if X_L_CTRL_LOOP
     
-    std::vector<Joint> joints;
-    joints.reserve(NB_JOINT_YOUBOT);
-    float tmp_max_vel;
-    std::string joint_name;
-    
-    for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
-    {
-        PID joint_pid(Kp[ii]*alpha, Ki[ii]*alpha, 0.0);
-        joints.push_back(Joint(TH_MAX[ii], TH_MIN[ii], joint_pid));
+        youBotInitializationXLCtrl(kuka_youBot, config_file, Kp, Ki, &n);
         
-        std::stringstream jointNameStream;
-        jointNameStream << "" << ii + 1;
-        joint_name = "Joint_" + jointNameStream.str();
-        config_file->readInto(tmp_max_vel, joint_name, "MaxVelocity");
-        joints[ii].setMaxVelocity(tmp_max_vel);
-    }
-    
-    Jacobian youBot_jacobian(DOF, NB_ACTUATED_JOINTS);
-    kuka_youBot = new Robot(joints, ACTUATED_JOINTS, youBot_jacobian, initPositionsCmd(), &n);
-    
-    joint_name.clear();
-    joints.clear();
-    
-    // nullspace control method requires endpoint limit definition, 
-    // extra ctrl gain & joints prefered position
-    #if NULLSPACE_CTRL_LOOP
-    std::vector <Endpoint> ep_limits;
-    std::vector <float> qi_0;
-    float x_lim_min, z_lim_min, x_lim_max, z_lim_max;
-    x_lim_min = -0.21;
-    x_lim_max = -0.19;
-    z_lim_min = 0.226;
-    z_lim_max = 0.410;
-    
-    ep_limits.resize(2);
-    qi_0.resize(3);
-    
-    ep_limits[0].setEndpointPose(Pose(Point(x_lim_min,0,z_lim_min), Point(0,0,0)));
-    ep_limits[1].setEndpointPose(Pose(Point(x_lim_max,0,z_lim_max), Point(0,0,0)));
-    
-    qi_0[0] = 1.676;
-    qi_0[1] = -4.363;
-    qi_0[2] = 1.497;
-    
-    kuka_youBot->setNullspaceCtrlGains(Kx_vm, Kq);
-    kuka_youBot->setEndpointLimits(ep_limits);
-    kuka_youBot->setEndpointPID(PID(Kp[1], Ki[1], 0));
+    #elif NULLSPACE_CTRL_LOOP
+        youBotInitializationNSCtrl(kuka_youBot, config_file, &n);
+        std::vector<float> qi_0;
+        qi_0 = nullSpaceCtrlInit(kuka_youBot, Kx_vm, Kq, Kp[1]);
     #endif
     
     // Start listening to youBot msgs
@@ -209,40 +205,28 @@ int main(int argc, char** argv)
     
     Pose force_torque_vm(Point(0,0,0,"N"), Point(0,0,0,"N m"));
     
-    // youBot init position
+    // youBot position initialization
     
-    float init_angle[NB_JOINT_YOUBOT] = {169, 65, -146, 102.5-90, 167.5-110}; // °
-    float off_angle[NB_JOINT_YOUBOT] = {0.011, 0.011, -0.016, 0.023, 0.12}; // rad
     brics_actuator::JointPositions init_off_pos;
-    init_off_pos.positions.resize(NB_JOINT_YOUBOT);
-    
-    for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
-    {
-        std::stringstream jointNameStream;
-        jointNameStream << "" << ii + 1;
-        joint_name = "arm_joint_" + jointNameStream.str();
-        //init_off_pos.positions[ii].timeStamp = ros::Time::now();
-        init_off_pos.positions[ii].joint_uri = joint_name;
-        init_off_pos.positions[ii].unit = "rad";
-        init_off_pos.positions[ii].value = init_angle[ii] * M_PI/180;
-    }
     
     #if NULLSPACE_CTRL_LOOP
-    // initial position must be in the workspace for this loop
-    init_off_pos.positions[1].value = qi_0[0];
-    init_off_pos.positions[2].value = qi_0[1];
-    init_off_pos.positions[3].value = qi_0[2]; 
-    #endif
+
+        // initial position must be in the workspace for this loop
+        init_off_pos = youBotInitializePosition(kuka_youBot, qi_0);
+        
+    #elif X_L_CTRL_LOOP
     
-    kuka_youBot->sendPositionCmd(init_off_pos);
-    usleep(1.0*1e6); // this delay seems necessary..
-    kuka_youBot->publishPositionsCmd();
-    usleep(2.0*1e6); // wait 2 seconds for the end of the movement
+        init_off_pos = youBotInitializePosition(kuka_youBot);
+        
+    #endif
     
     // Time & frequency
     
     float Te = 1/frequency;
     float delay = Te;           //the ideal is: delay = Te
+    
+   	DisturbanceTimer dist_timer(&n);
+   	ros::Timer timer = n.createTimer(ros::Duration(5.), &DisturbanceTimer::trigger, &dist_timer, true);
 
     ros::Rate rate(frequency);
     kuka_youBot->updateTimeSample();
@@ -255,35 +239,20 @@ int main(int argc, char** argv)
 
     while (!g_request_shutdown)
     {
-    	#if WITH_VIRTUAL_MECH || NULLSPACE_CTRL_LOOP
-    	// kinematics
-    	kuka_youBot->computeEnpointPosition();
-    	#if WITH_Y_ORIENTATION  && !NULLSPACE_CTRL_LOOP
-    	kuka_youBot->computeEnpointOrientation(false, true, false); // only get rotation about y   	
-        // compute VM
-        force_torque_vm = vm.verticalXLineFixture(kuka_youBot->getEndpoint().getPose().getPosition().x, kuka_youBot->getEndpoint().getPose().getOrientation().y, kuka_youBot->getEndpoint().getVelocities().getPosition().x, kuka_youBot->getEndpoint().getVelocities().getOrientation().y);
-        #elif !NULLSPACE_CTRL_LOOP
-        force_torque_vm = vm.verticalXLineFixture(kuka_youBot->getEndpoint().getPose().getPosition().x, kuka_youBot->getEndpoint().getVelocities().getPosition().x);
+    	
+        #if WITH_VIRTUAL_MECH
+            force_torque_vm = virtualLineGuide(kuka_youBot, vm, WITH_Y_ORIENTATION);
         #endif
-        #endif
-        // forces to joint torques
+        
         #if X_L_CTRL_LOOP
-        kuka_youBot->updateJacobianTranspose();
-        kuka_youBot->setInputError(kuka_youBot->computeJointTorquesFromWrench(force_torque_sensor + force_torque_vm));
-        kuka_youBot->computeVelocityCollaborativeCmd(); 
-        #elif INV_JAC_CTRL_LOOP
-        kuka_youBot->updateJacobianInverse();
-        kuka_youBot->setInputError(kuka_youBot->computeJointVelocitiesFromEndpointVelocity());
+            xavierLamyCtrlLoop(kuka_youBot, force_torque_sensor, force_torque_vm);
         #elif NULLSPACE_CTRL_LOOP
-        kuka_youBot->updateJacobianInverse();
-        kuka_youBot->updateJacobianTranspose();
-        kuka_youBot->computeEnpointPosition();
-        kuka_youBot->computeNullspaceCollaborativeCmd(x0, force_torque_sensor.getPosition().z, qi_0);
-        #endif
-        // PI       
+            nullSpaceCtrlLoop(kuka_youBot, force_torque_sensor, x0, qi_0, dist_timer.getDist());
+        #endif    
+          
         kuka_youBot->publishVelocitiesCmd();
 
-	//ROS_INFO_STREAM_THROTTLE(0.2, "VM forces:\n" << force_torque_vm.getPoseVector());
+        //ROS_INFO_STREAM_THROTTLE(0.2, "VM forces:\n" << force_torque_vm.getPoseVector());
 
         ros::spinOnce();
         rate.sleep();
@@ -296,6 +265,182 @@ int main(int argc, char** argv)
 /*************
  * FUNCTIONS *
  *************/
+
+// Init functions
+
+void youBotInitializationXLCtrl(Robot* youBot, boost::scoped_ptr<youbot::ConfigFile>& cfg_file, float* Kp, float* Ki, ros::NodeHandle* nh)
+{
+    std::vector<Joint> joints;
+    joints.reserve(NB_JOINT_YOUBOT);
+    float tmp_max_vel;
+    std::string joint_name;
+    float alpha;
+    #if WITH_VIRTUAL_MECH
+        alpha = 0.35; // lower PID gain for stability purpose
+    #else
+        alpha = 1.0;
+    #endif
+    
+    for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
+    {
+        PID joint_pid(Kp[ii]*alpha, Ki[ii]*alpha, 0.0);
+        joints.push_back(Joint(TH_MAX[ii], TH_MIN[ii], joint_pid));
+        
+        std::stringstream jointNameStream;
+        jointNameStream << "" << ii + 1;
+        joint_name = "Joint_" + jointNameStream.str();
+        cfg_file->readInto(tmp_max_vel, joint_name, "MaxVelocity");
+        joints[ii].setMaxVelocity(tmp_max_vel);
+    }
+    
+    Jacobian youBot_jacobian(DOF, NB_ACTUATED_JOINTS);
+    youBot = new Robot(joints, ACTUATED_JOINTS, youBot_jacobian, initPositionsCmd(), nh);
+}
+
+void youBotInitializationNSCtrl(Robot* &youBot, boost::scoped_ptr<youbot::ConfigFile>& cfg_file, ros::NodeHandle* nh)
+{
+    std::vector<Joint> joints;
+    joints.reserve(NB_JOINT_YOUBOT);
+    float tmp_max_vel;
+    std::string joint_name;
+    
+    for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
+    {
+        joints.push_back(Joint(TH_MAX[ii], TH_MIN[ii], PID()));
+        
+        std::stringstream jointNameStream;
+        jointNameStream << "" << ii + 1;
+        joint_name = "Joint_" + jointNameStream.str();
+        cfg_file->readInto(tmp_max_vel, joint_name, "MaxVelocity");
+        joints[ii].setMaxVelocity(tmp_max_vel);
+    }
+    
+    Jacobian youBot_jacobian(DOF, NB_ACTUATED_JOINTS);
+    youBot = new Robot(joints, ACTUATED_JOINTS, youBot_jacobian, initPositionsCmd(), nh);
+}
+
+std::vector <float> nullSpaceCtrlInit(Robot* youBot, float Kx_gain, float Kq_gain, float Kz_gain)
+{
+    std::vector <Endpoint> ep_limits;
+    std::vector <float> qi_0;
+    float x_lim_min, z_lim_min, x_lim_max, z_lim_max;
+    
+    // endpoint limits
+    x_lim_min = -0.21;
+    x_lim_max = -0.19;
+    z_lim_min = 0.226;
+    z_lim_max = 0.410;
+    
+    ep_limits.resize(2);
+    qi_0.resize(3);
+    
+    ep_limits[0].setEndpointPose(Pose(Point(x_lim_min,0,z_lim_min), Point(0,0,0)));
+    ep_limits[1].setEndpointPose(Pose(Point(x_lim_max,0,z_lim_max), Point(0,0,0)));
+    
+    // joints equilibrium angles
+    qi_0[0] = 1.676;
+    qi_0[1] = -4.363;
+    qi_0[2] = 1.497;
+    
+    youBot->setNullspaceCtrlGains(Kx_gain, Kq_gain);
+    youBot->setEndpointLimits(ep_limits);
+    youBot->setEndpointPID(PID(Kz_gain, 0, 0));
+    
+    return qi_0;
+}
+
+brics_actuator::JointPositions youBotInitializePosition(Robot* youBot, std::vector<float> qi_0)
+{
+    brics_actuator::JointPositions init_off_pos;
+    init_off_pos.positions.resize(NB_JOINT_YOUBOT);
+    
+    std::string joint_name;
+    
+    for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
+    {
+        std::stringstream jointNameStream;
+        jointNameStream << "" << ii + 1;
+        joint_name = "arm_joint_" + jointNameStream.str();
+        //init_off_pos.positions[ii].timeStamp = ros::Time::now();
+        init_off_pos.positions[ii].joint_uri = joint_name;
+        init_off_pos.positions[ii].unit = "rad";
+        init_off_pos.positions[ii].value = TH_ON_D[ii] * M_PI/180;
+    }
+   
+    // initial position must be in the workspace for this ctrl method
+    init_off_pos.positions[1].value = qi_0[0];
+    init_off_pos.positions[2].value = qi_0[1];
+    init_off_pos.positions[3].value = qi_0[2]; 
+    
+    youBot->sendPositionCmd(init_off_pos);
+    usleep(1.0*1e6); // this delay seems necessary..
+    youBot->publishPositionsCmd();
+    usleep(3.0*1e6); // waits 3 seconds for the end of the movement
+    
+    return init_off_pos;
+}
+
+brics_actuator::JointPositions youBotInitializePosition(Robot* youBot)
+{
+    brics_actuator::JointPositions init_off_pos;
+    init_off_pos.positions.resize(NB_JOINT_YOUBOT);
+    
+    std::string joint_name;
+    
+    for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
+    {
+        std::stringstream jointNameStream;
+        jointNameStream << "" << ii + 1;
+        joint_name = "arm_joint_" + jointNameStream.str();
+        //init_off_pos.positions[ii].timeStamp = ros::Time::now();
+        init_off_pos.positions[ii].joint_uri = joint_name;
+        init_off_pos.positions[ii].unit = "rad";
+        init_off_pos.positions[ii].value = TH_ON_D[ii] * M_PI/180;
+    }
+    
+    youBot->sendPositionCmd(init_off_pos);
+    usleep(1.0*1e6); // this delay seems necessary..
+    youBot->publishPositionsCmd();
+    usleep(3.0*1e6); // waits 3 seconds for the end of the movement
+    
+    return init_off_pos;
+}
+
+// main functions
+
+void nullSpaceCtrlLoop(Robot* youBot, Pose ft_sens, float x_eq, std::vector<float> qi_eq, float dist)
+{
+    youBot->updateJacobianInverse();
+    youBot->updateJacobianTranspose();
+    youBot->computeEnpointPosition();
+    // to allow perturbation/disturbance replace 0. by dist
+    youBot->computeNullspaceCollaborativeCmd(x_eq, ft_sens.getPosition().z, 0., qi_eq);
+}
+
+void xavierLamyCtrlLoop(Robot* youBot, Pose ft_sens, Pose ft_virt_guide)
+{
+    youBot->updateJacobianTranspose();
+    youBot->setInputError(youBot->computeJointTorquesFromWrench(ft_sens + ft_virt_guide));
+    youBot->computeVelocityCollaborativeCmd(); 
+}
+
+Pose virtualLineGuide(Robot* youBot, VirtualMechanism vm, bool orientation) 
+{
+    Pose ft_guide(Point(0,0,0,"N"), Point(0,0,0,"N m"));
+    kuka_youBot->computeEnpointPosition();
+    
+    if (orientation)
+    {
+    youBot->computeEnpointOrientation(false, true, false);
+    ft_guide = vm.verticalXLineFixture(youBot->getEndpoint().getPose().getPosition().x, youBot->getEndpoint().getPose().getOrientation().y, youBot->getEndpoint().getVelocities().getPosition().x, youBot->getEndpoint().getVelocities().getOrientation().y);
+    }
+    else
+    {
+    ft_guide = vm.verticalXLineFixture(youBot->getEndpoint().getPose().getPosition().x, youBot->getEndpoint().getVelocities().getPosition().x);
+    }
+    
+    return ft_guide;
+}
 
 /* Initialize joint velocities msg to be send through ros topic,
  * only actuated joints are controlled by velocity msgs */
@@ -340,6 +485,8 @@ brics_actuator::JointPositions initPositionsCmd()
     return pos_cmd;
 }
 
+// Callback functions
+
 void getForces(const geometry_msgs::WrenchStamped::ConstPtr& data)
 {
     //header
@@ -365,7 +512,45 @@ void getJointStates(const sensor_msgs::JointState::ConstPtr& data)
     }
 }
 
+//
+
 void sigIntHandler(int sig)
 {
     g_request_shutdown = 1;
+}
+
+// timers
+
+DisturbanceTimer::DisturbanceTimer(ros::NodeHandle* n)
+{
+	this->nh = n;
+	
+	dist = 0.0;
+	
+	std::string topic_name = "";
+    topic_name = "arm_1/disturbance_time";
+    //pub_time_dist = nh->advertise<youbot_ros_control::StampedBool>(topic_name, 1);
+    pub_time_dist = nh->advertise<std_msgs::Bool>(topic_name, 1);
+}
+
+void DisturbanceTimer::trigger(const ros::TimerEvent& e)
+{
+	//ROS_INFO("TRIGGERED");
+	dist_msg.data = true;
+	//dist_msg.stamp = ros::Time::now();
+	pub_time_dist.publish(dist_msg);
+	
+	dist = -0.5;
+	stop_dist_timer = nh->createTimer(ros::Duration(1.), &DisturbanceTimer::stop, this, true);
+}
+
+void DisturbanceTimer::stop(const ros::TimerEvent& e)
+{
+	//ROS_INFO("STOPED");
+	dist_msg.data = false;
+	//dist_msg.stamp = ros::Time::now();
+	pub_time_dist.publish(dist_msg);
+	
+	dist = 0.0;
+	next_dist_timer = nh->createTimer(ros::Duration(2.), &DisturbanceTimer::trigger, this, true);
 }

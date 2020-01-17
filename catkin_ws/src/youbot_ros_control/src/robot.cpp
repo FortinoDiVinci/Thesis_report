@@ -632,6 +632,7 @@ void Robot::computeEnpointOrientation(const bool onlyX = false, const bool onlyY
     }
 }
 
+/*
 Point Robot::getEndpointPosition() 
 {
     float t4 = M_PI*(1.1e1/1.8e2);
@@ -679,6 +680,44 @@ Point Robot::getEndpointPosition()
     float tx = -t12*(a2) + t11*t12*(a3) - t16*t18*(a1) + t24*t27*(a4) - t28*t31*(a4) + t20*(-t26)*(a1); 
     float ty = t8*(a2) - t8*t11*(a3) + t20*t41*(a1) - t24*t47*(a4) - t28*t49*(a4)+t16*(t39)*(a1); 
     float tz = t13*(a3) + t59*(a4) - sin(-t57 + joints[1].getAngle() + joints[2].getAngle())*(a1) + 1.47e-1;
+    
+    ROS_INFO_STREAM(Point(tx, ty, tz, "m"));
+    
+    return Point(tx, ty, tz, "m");
+} */
+
+Point Robot::getEndpointPosition() 
+{
+    float th2 = joints[1].getAngle();
+    float th3 = joints[2].getAngle();
+    float th4 = joints[3].getAngle();
+
+    float t2 = M_PI*(1.1e1/1.8e2);
+    float t3 = t2 + joints[0].getAngle();
+    float t4 = cos(t3);
+    float t5 = M_PI*(5.0/3.6e1);
+    float t6 = t5 + th2;
+    float t7 = sin(t3);
+    float t8 = cos(t6);
+    float t9 = sin(t6);
+    float t10 = M_PI*(1.4e1/4.5e1);
+    float t11 = t10 + th3;
+    float t12 = cos(t11);
+    float t14 = t4*t9;
+    float t16 = sin(t11);
+    float t17 = t4*t8;
+    float t19 = M_PI*(3.1e1/7.2e1);
+    float t20 = t19 + th4;
+    float t22 = cos(t20);
+    float t29 = -t7*t9;
+    float t25 = t7*t8;
+    float t28 = sin(t20);
+
+    float tx = t4*(-0.033) + + t4*t8*(0.155) - t12*t14*(0.135) - t16*t17*(0.135) + t22*(t12*t14 + t16*t17)*(0.184) + t28*(t12*t17 - t14*t16)*(0.184);
+    float ty = t7*(0.033) - t7*t8*(0.155) - t12*t29*(0.135) + t16*t25*(0.135) + t22*(t12*t29 - t16*t25)*(0.184) - t28*(t12*t25 + t16*t29)*(0.184);
+    float tz = t9*(0.155) - sin(th2 + th3 - M_PI*(0.05))*(0.135) + cos(th2 + th3 + th4 - M_PI*(0.1194))*(0.184) + 1.47e-1;
+
+    ROS_INFO_STREAM(Point(tx, ty, tz, "m"));
     
     return Point(tx, ty, tz, "m");
 }
@@ -828,18 +867,30 @@ void Robot::computeVelocityCollaborativeCmd()
     
 }
 
-void Robot::computeNullspaceCollaborativeCmd(const float x0, const float Fz, const std::vector <float> q_i0)
+void Robot::computeNullspaceCollaborativeCmd(const float x0, const float Fz, const float Fr, const std::vector <float> q_i0)
 {
     Eigen::Matrix<float, 3, 1> cartesian_cmd;
     Eigen::Matrix<float, 3, 1> joint_ctrl;
+    bool wind_up = false;
+    bool limit_reached = false;
     
     updateTimeSample();
     
+    float z = endpoint.pose.getPosition().z;
+    
+    if( z > endpoint_limits[1].pose.getPosition().z || 
+        z < endpoint_limits[0].pose.getPosition().z ) 
+    {
+        limit_reached = true;
+        ROS_WARN("Z axis limit reached");
+    }
+    
     cartesian_cmd(0,0) = Kx * (x0 - endpoint.pose.getPosition().x);
-    cartesian_cmd(1,0) = endpoint.cartesian_control.compute(Fz, false); //endpointLimitReached(2)
+    cartesian_cmd(1,0) = endpoint.cartesian_control.compute(Fr + Fz, false); //endpointLimitReached(2) 
     cartesian_cmd(2,0) = 0;
     
-    //ROS_INFO_STREAM_THROTTLE(0.5, "FZ impedance ctrl: " << cartesian_cmd(1,0));
+    ROS_INFO_STREAM("Z ctrl: " << cartesian_cmd(1,0));
+    ROS_INFO_STREAM("X ctrl: " << cartesian_cmd(0,0));
     
     // Nullspace subtask in joint space
     joint_ctrl(0,0) = q_i0[0] - joints[1].angle;
@@ -848,19 +899,35 @@ void Robot::computeNullspaceCollaborativeCmd(const float x0, const float Fz, con
  
     joint_ctrl = Kq*zNullSpaceProjector()*joint_ctrl;
     
+    //ROS_INFO_STREAM("projector: \n: " << joint_ctrl << '\n');
+    
     //jacobian must be defined as follow x,z,ry (robot in a 2D plane)
     joint_ctrl += jacobian.inv_matrix * cartesian_cmd;
     
+    //ROS_INFO_STREAM("all: \n: " << joint_ctrl << '\n');
+    
     for (int i = 0; i <3; i++)
     {
+    	if( fabs(joint_ctrl(i,0)) > joints[i + 1].maxVelocity() )
+    	{
+            //joint_ctrl(i,0) = sign(joint_ctrl(i,0))*joints[i + 1].maxVelocity();
+            wind_up = true;
+        }
         velocities_cmd_msg.velocities[i].value = joint_ctrl(i,0);
+    }
+    if(wind_up)
+    {
+        cartesian_cmd(1,0) = jacobian.t_matrix(0,1)*joint_ctrl(0,0) + jacobian.t_matrix(1,1)*joint_ctrl(1,0) + jacobian.t_matrix(2,1)*joint_ctrl(2,0);
+        
+        //endpoint.cartesian_control.antiWindup(cartesian_cmd(1,0), Fz + Fr);
+        ROS_WARN("Windup !");
     }
 }
 
 Eigen::Matrix<float, 3, 3> Robot::zNullSpaceProjector()
 {
     // extract jacobian for the task in z (vector)
-    Eigen::Matrix<float, 3, 1> jac_z_task_t = jacobian.t_matrix.block<3,1>(0,1);
+    Eigen::Matrix<float, 3, 1> jac_z_task_t = jacobian.t_matrix.block<3,1>(0,2);
     
     return Eigen::Matrix<float, 3, 3>::Identity() - jac_z_task_t * ( jac_z_task_t * ( jac_z_task_t.transpose() * jac_z_task_t ).inverse() ).transpose();
     

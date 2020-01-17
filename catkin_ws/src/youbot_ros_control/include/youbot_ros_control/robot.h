@@ -109,6 +109,8 @@ class Endpoint
             velocities = val.velocities;
             accelerations = val.accelerations;
             forces = val.forces;
+            
+            cartesian_control = val.cartesian_control;
         };
    
     protected:
@@ -168,6 +170,9 @@ class Robot
     public:
         //Robot() {;};
         Robot(const std::vector<Joint>, const bool*, const Jacobian, brics_actuator::JointPositions, ros::NodeHandle*);
+        
+        void dispRobot() {std::cout << "Nb jnts: " << nb_joints << '\n';};
+        
         bool jointLimitReached(const int joint_nb);
         bool endpointLimitReached(const int dof_nb);
     
@@ -203,17 +208,17 @@ class Robot
     	
         // compute velocity cmd msgs
         void computeVelocityCollaborativeCmd();
-        void computeNullspaceCollaborativeCmd(const float, const float, const std::vector <float>);
+        void computeNullspaceCollaborativeCmd(const float, const float, const float, const std::vector <float>);
         void sendPositionCmd(const brics_actuator::JointPositions);
         void sendPositionCmd(const std::vector <float>, const std::vector <std::string>);
     
         void publishVelocitiesCmd();
         void publishPositionsCmd();
-    
+
     private:
         float getYEndpointAngle();
         Point getEndpointPosition();
-	// nullspace projector for z (using jacobian transpose, 3rd col must be Z)
+        // nullspace projector for z (using jacobian transpose, 3rd col must be Z)
         Eigen::Matrix<float, 3, 3> zNullSpaceProjector();
     
         int nb_joints;
@@ -226,8 +231,8 @@ class Robot
     
         Jacobian jacobian;
 
-	float Kx; //gain for nullspace ctrl (equivalent to virtual guide in x)
-	float Kq; //gain for nullspace ctrl (joint pose gain)
+        float Kx; //gain for nullspace ctrl (equivalent to virtual guide in x)
+        float Kq; //gain for nullspace ctrl (joint pose gain)
 
         Eigen::VectorXf input_err; // t_ref - t_feedback
         brics_actuator::JointVelocities velocities_cmd_msg;
