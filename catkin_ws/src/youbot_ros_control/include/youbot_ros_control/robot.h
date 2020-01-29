@@ -205,6 +205,7 @@ class Robot
     	
     	// update joint data
     	void updateJointData(int, float, float, float);
+    	std::vector<Joint> getJoints() {return joints;};
     	
         // compute velocity cmd msgs
         void computeVelocityCollaborativeCmd();

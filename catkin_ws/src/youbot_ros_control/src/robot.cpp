@@ -717,7 +717,7 @@ Point Robot::getEndpointPosition()
     float ty = t7*(0.033) - t7*t8*(0.155) - t12*t29*(0.135) + t16*t25*(0.135) + t22*(t12*t29 - t16*t25)*(0.184) - t28*(t12*t25 + t16*t29)*(0.184);
     float tz = t9*(0.155) - sin(th2 + th3 - M_PI*(0.05))*(0.135) + cos(th2 + th3 + th4 - M_PI*(0.1194))*(0.184) + 1.47e-1;
 
-    ROS_INFO_STREAM(Point(tx, ty, tz, "m"));
+    //ROS_INFO_STREAM(Point(tx, ty, tz, "m"));
     
     return Point(tx, ty, tz, "m");
 }
@@ -830,6 +830,7 @@ void Robot::updateTimeSample()
 
 void Robot::updateJointData(int i, float th, float v_th = 0, float e_th = 0)
 {
+    //ROS_INFO_STREAM_THROTTLE(0.05, "Joint update");
     if (i < nb_joints)
     {
         joints[i].angle = th;
@@ -882,15 +883,15 @@ void Robot::computeNullspaceCollaborativeCmd(const float x0, const float Fz, con
         z < endpoint_limits[0].pose.getPosition().z ) 
     {
         limit_reached = true;
-        ROS_WARN("Z axis limit reached");
+        ROS_WARN_THROTTLE(0.2, "Z axis limit reached");
     }
     
     cartesian_cmd(0,0) = Kx * (x0 - endpoint.pose.getPosition().x);
     cartesian_cmd(1,0) = endpoint.cartesian_control.compute(Fr + Fz, false); //endpointLimitReached(2) 
     cartesian_cmd(2,0) = 0;
     
-    ROS_INFO_STREAM("Z ctrl: " << cartesian_cmd(1,0));
-    ROS_INFO_STREAM("X ctrl: " << cartesian_cmd(0,0));
+    //ROS_INFO_STREAM_THROTTLE(0.05, "Z ctrl: " << cartesian_cmd(1,0));
+    //ROS_INFO_STREAM_THROTTLE(0.05, "X ctrl: " << cartesian_cmd(0,0));
     
     // Nullspace subtask in joint space
     joint_ctrl(0,0) = q_i0[0] - joints[1].angle;
@@ -899,12 +900,12 @@ void Robot::computeNullspaceCollaborativeCmd(const float x0, const float Fz, con
  
     joint_ctrl = Kq*zNullSpaceProjector()*joint_ctrl;
     
-    //ROS_INFO_STREAM("projector: \n: " << joint_ctrl << '\n');
+    //ROS_INFO_STREAM_THROTTLE(0.05, "projector: \n: " << joint_ctrl << '\n');
     
     //jacobian must be defined as follow x,z,ry (robot in a 2D plane)
     joint_ctrl += jacobian.inv_matrix * cartesian_cmd;
     
-    //ROS_INFO_STREAM("all: \n: " << joint_ctrl << '\n');
+    //ROS_INFO_STREAM_THROTTLE(0.05, "all: \n: " << joint_ctrl << '\n');
     
     for (int i = 0; i <3; i++)
     {
@@ -917,10 +918,9 @@ void Robot::computeNullspaceCollaborativeCmd(const float x0, const float Fz, con
     }
     if(wind_up)
     {
-        cartesian_cmd(1,0) = jacobian.t_matrix(0,1)*joint_ctrl(0,0) + jacobian.t_matrix(1,1)*joint_ctrl(1,0) + jacobian.t_matrix(2,1)*joint_ctrl(2,0);
         
         //endpoint.cartesian_control.antiWindup(cartesian_cmd(1,0), Fz + Fr);
-        ROS_WARN("Windup !");
+        //ROS_WARN("Windup !");
     }
 }
 

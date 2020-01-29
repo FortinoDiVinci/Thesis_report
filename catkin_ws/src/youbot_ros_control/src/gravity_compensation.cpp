@@ -18,14 +18,21 @@
 #include <geometry_msgs/WrenchStamped.h>
 //#include <geometry_msgs/QuaternionStamped.h>
 
+#include "utils/filter.h"
+
 #define G 9.80665
 #define SIZE 6
-
+#define BANDSTOP_FILTER     1
+#define LOWPASS_FILTER      0
 
 geometry_msgs::WrenchStamped sensor_data;
 float BIAS[SIZE] = {-14.3223, 1.2478, -6.2585, 0.0271, 0.7662, 0.0359};
 float GRAVITY[int(SIZE/2)] = {0., 0., 0.};
 float LEVER[int(SIZE/2)] = {0., 0., 0.};
+
+const int _f_ord = 4;
+double _f_num[_f_ord+1] = {1.73273711695787e-05, 6.93094846783149e-05, 0.000103964227017472, 6.93094846783149e-05, 1.73273711695787e-05};
+double _f_den[_f_ord+1] = {1, -3.64829756145213, 5.00542495625879, -3.06003016908075, 0.703180012212798};
 
 /*****************
  *   FUNCTIONS   *
@@ -105,6 +112,7 @@ int main(int argc, char** argv)
     ros::NodeHandle n1("~");
     ros::Subscriber sub = n.subscribe("netft_data", 1, getForceCallback);
     ros::Publisher pub = n.advertise<geometry_msgs::WrenchStamped> ("force_sensor/grav_comp", 1);
+    ros::Publisher pub_unfil = n.advertise<geometry_msgs::WrenchStamped> ("force_sensor/grav_comp_unfiltered", 1);
     
     tf::TransformListener listener;
 
@@ -119,8 +127,14 @@ int main(int argc, char** argv)
     int counter; // used only if bias need init.
     float temp_bias[SIZE] = {0., 0., 0., 0., 0., 0.};
 
+    int f_ord = _f_ord;
+    std::vector<double> num (_f_num, _f_num + sizeof(_f_num) / sizeof(_f_num[0]) );
+    std::vector<double> den (_f_den, _f_den + sizeof(_f_den) / sizeof(_f_den[0]) );   
+    
+    Filter bw_filter(num, den, f_ord);
+
     n1.param<float>("sensor_mass", m, 0.1096); //mass in kg
-    n1.param<float>("sensor_arm_lever", l, 0.0103);
+    n1.param<float>("sensor_arm_lever", l, 0.0103); //arm lever im m
     n1.param<float>("rate", freq, 1000.);
     n1.param<bool>("bias", not_initialized_bias, true);
     
@@ -215,7 +229,11 @@ int main(int argc, char** argv)
 
         copyWrenchData(sensor_data, GRAVITY, LEVER, BIAS, &grav_comp_data);
         rotateWrenchData(&grav_comp_data, tf_sens.getBasis());  // static frame      
-        //ROS_INFO_THROTTLE(0.01, "force z: %f", grav_comp_data.wrench.force.x);
+        //ROS_INFO_THROTTLE(0.1, "force z: %f", grav_comp_data.wrench.force.z);
+        pub_unfil.publish(grav_comp_data);
+        
+        // data on z is filter after gravity compensation
+        grav_comp_data.wrench.force.z = bw_filter.filter(grav_comp_data.wrench.force.z);
         
         pub.publish(grav_comp_data);
         ros::spinOnce();
