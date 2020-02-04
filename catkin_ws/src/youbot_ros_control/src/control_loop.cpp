@@ -44,9 +44,11 @@ const bool ACTUATED_JOINTS[NB_JOINT_YOUBOT] = {false, true, true, true, false};
  **************/
 
 Robot* kuka_youBot;
+float joint_effort_set_point[NB_JOINT_YOUBOT] = {0., 0., 0., 0., 0.};
 Pose force_torque_sensor(Point(0,0,0,"N"), Point(0,0,0,"N m"));
 sig_atomic_t volatile g_request_shutdown = 0;
 bool unlocked = false;
+bool perturbation_lock = false;
 
 /*************
  *  CLASSES  *
@@ -62,10 +64,13 @@ public:
 	void trigger(const ros::TimerEvent&);
 	void stop(const ros::TimerEvent&);
 	
-	float getDist() {return dist;};
+	float getDisturbance() {return dist;};
+	float isDisturbance() {return dist_msg.data;};
+	std::vector<float> getLastEffCmd() {return last_eff_cmd;};
 	
 private:
 	float dist;
+	std::vector<float> last_eff_cmd;
 	ros::NodeHandle* nh;
 	
 	ros::Timer stop_dist_timer;
@@ -95,6 +100,7 @@ brics_actuator::JointPositions initPositionsCmd();
 
 void getForces(const geometry_msgs::WrenchStamped::ConstPtr& data);
 void getJointStates(const sensor_msgs::JointState::ConstPtr& data);
+void getJointSetpoints(const sensor_msgs::JointState::ConstPtr& data);
 
 bool checkXLimits(const Robot youBot, const float max_x, const float min_x, const float max_z, const float min_z);
 void safeStop(Robot* youBot);
@@ -123,6 +129,7 @@ int main(int argc, char** argv)
     std::string topic_name;
     ros::Subscriber sub_force;
     ros::Subscriber sub_joint;
+    ros::Subscriber sub_joint_set_point;
 
     // Config File in youbot driver package for youbot hw params
     
@@ -187,6 +194,8 @@ int main(int argc, char** argv)
     sub_force = n.subscribe(topic_name, 1, getForces);
     topic_name = "/joint_states";
     sub_joint = n.subscribe(topic_name, 1, getJointStates);
+    topic_name = "/arm_1/joint_set_points";
+    sub_joint_set_point = n.subscribe(topic_name, 1, getJointSetpoints);
     topic_name.clear();
     
     // Virtual Mechanism init
@@ -256,8 +265,19 @@ int main(int argc, char** argv)
         #if X_L_CTRL_LOOP
             xavierLamyCtrlLoop(kuka_youBot, force_torque_sensor, force_torque_vm);
         #elif NULLSPACE_CTRL_LOOP
-            nullSpaceCtrlLoop(kuka_youBot, force_torque_sensor, x0, qi_0, dist_timer.getDist());
+            // disturbance is set to 0 (it will be set in the inner loop)
+            nullSpaceCtrlLoop(kuka_youBot, force_torque_sensor, x0, qi_0, dist_timer.getDisturbance());
         #endif    
+        
+        if( !dist_timer.isDisturbance() ) // no disturbance
+        {
+            kuka_youBot->publishVelocitiesCmd();
+        }
+        else // disturbance 
+        {
+            kuka_youBot->setTorqueDisturbanceCmd(dist_timer.getLastEffCmd());
+            kuka_youBot->publishTorquesCmd();
+        }
 
         //ROS_INFO_STREAM_THROTTLE(0.2, "VM forces:\n" << force_torque_vm.getPoseVector());
         
@@ -277,7 +297,7 @@ int main(int argc, char** argv)
         safeStop(kuka_youBot);
     }
     
-    kuka_youBot->sendPositionCmd(init_off_pos);
+    kuka_youBot->setPositionCmd(init_off_pos);
     kuka_youBot->publishPositionsCmd();
 }
 
@@ -391,7 +411,7 @@ brics_actuator::JointPositions youBotInitializePosition(Robot* youBot, std::vect
     init_off_pos.positions[2].value = qi_0[1];
     init_off_pos.positions[3].value = qi_0[2]; 
     
-    youBot->sendPositionCmd(init_off_pos);
+    youBot->setPositionCmd(init_off_pos);
     usleep(1.0*1e6); // this delay seems necessary..
     youBot->publishPositionsCmd();
     usleep(3.0*1e6); // waits 3 seconds for the end of the movement
@@ -417,7 +437,7 @@ brics_actuator::JointPositions youBotInitializePosition(Robot* youBot)
         init_off_pos.positions[ii].value = TH_ON_D[ii] * M_PI/180;
     }
     
-    youBot->sendPositionCmd(init_off_pos);
+    youBot->setPositionCmd(init_off_pos);
     usleep(1.0*1e6); // this delay seems necessary..
     youBot->publishPositionsCmd();
     usleep(3.0*1e6); // waits 3 seconds for the end of the movement
@@ -533,6 +553,14 @@ void getJointStates(const sensor_msgs::JointState::ConstPtr& data)
     unlocked = true;
 }
 
+void getJointSetpoints(const sensor_msgs::JointState::ConstPtr& data)
+{
+    for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
+    {
+        joint_effort_set_point[ii] = data->effort[ii];
+    }    
+}
+
 // security
 
 bool checkXLimits(const Robot youBot, const float max_x, const float min_x, const float max_z, const float min_z)
@@ -571,7 +599,7 @@ void safeStop(Robot* youBot)
         pos_cmd.positions[i].value = joints[i].getAngle();
     }
     
-    youBot->sendPositionCmd(pos_cmd);
+    youBot->setPositionCmd(pos_cmd);
     youBot->publishPositionsCmd();
     
     // wait for keyboard to return to initial position
@@ -597,6 +625,7 @@ DisturbanceTimer::DisturbanceTimer(ros::NodeHandle* n)
 	this->nh = n;
 	
 	dist = 0.0;
+	last_eff_cmd.resize(NB_ACTUATED_JOINTS);
 	
 	std::string topic_name = "";
     topic_name = "arm_1/disturbance_time";
@@ -607,11 +636,21 @@ DisturbanceTimer::DisturbanceTimer(ros::NodeHandle* n)
 void DisturbanceTimer::trigger(const ros::TimerEvent& e)
 {
 	ROS_INFO("TRIGGERED");
+	
+	int idx = 0;
+	for (int i = 0; i < NB_ACTUATED_JOINTS; i++)
+	{
+	    if ( ACTUATED_JOINTS[i] )
+	    {
+	        last_eff_cmd[idx] = joint_effort_set_point[i];
+	        idx++;
+	    }
+	}
+	
 	dist_msg.data = true;
 	//dist_msg.stamp = ros::Time::now();
 	pub_time_dist.publish(dist_msg);
 	
-	dist = -0.5;
 	stop_dist_timer = nh->createTimer(ros::Duration(0.03), &DisturbanceTimer::stop, this, true);
 }
 
@@ -622,6 +661,5 @@ void DisturbanceTimer::stop(const ros::TimerEvent& e)
 	//dist_msg.stamp = ros::Time::now();
 	pub_time_dist.publish(dist_msg);
 	
-	dist = 0.0;
 	next_dist_timer = nh->createTimer(ros::Duration(1.), &DisturbanceTimer::trigger, this, true);
 }

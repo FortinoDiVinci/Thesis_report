@@ -537,6 +537,8 @@ Robot::Robot(const std::vector<Joint> jnt, const bool act_jnts_tab[], const Jaco
     jacobian = jac;
     
     velocities_cmd_msg.velocities.resize(jacobian.actuated_joints);
+    torques_cmd_msg.torques.resize(jacobian.actuated_joints);
+    
     int idx = 0;
 
     for (int ii = 0; ii < nb_joints; ii++)
@@ -548,6 +550,11 @@ Robot::Robot(const std::vector<Joint> jnt, const bool act_jnts_tab[], const Jaco
             velocities_cmd_msg.velocities[idx].joint_uri = "arm_joint_" + jointNameStream.str();
             velocities_cmd_msg.velocities[idx].unit = "s^-1 rad";
             velocities_cmd_msg.velocities[idx].value = 0.0;
+            
+            torques_cmd_msg.torques[idx].joint_uri = "arm_joint_" + jointNameStream.str();
+            torques_cmd_msg.torques[idx].unit = "m^2 kg s^-2 rad^-1";
+            torques_cmd_msg.torques[idx].value = 0.0;
+            
             idx++;
         }
         else continue;
@@ -558,11 +565,12 @@ Robot::Robot(const std::vector<Joint> jnt, const bool act_jnts_tab[], const Jaco
     positions_cmd_msg = pos_msg;
     
     std::string topic_name = "";
+    topic_name = "arm_1/arm_controller/torque_command";
+    pub_tor_cmd_msg = n->advertise<brics_actuator::JointTorques>(topic_name, 1);
     topic_name = "arm_1/arm_controller/velocity_command";
     pub_vel_cmd_msg = n->advertise<brics_actuator::JointVelocities>(topic_name, 1);
     topic_name = "arm_1/arm_controller/position_command";
-    pub_pos_cmd_msg = n->advertise<brics_actuator::JointPositions>(topic_name, 1);
-  
+    pub_pos_cmd_msg = n->advertise<brics_actuator::JointPositions>(topic_name, 1); 
 }
 
 bool Robot::jointLimitReached(const int joint_nb)
@@ -934,12 +942,12 @@ Eigen::Matrix<float, 3, 3> Robot::zNullSpaceProjector()
     //Id - J_1^T*(J_1^#)^T //with superscripts # being pseudo inverse, and T transpose
 }
 
-void Robot::sendPositionCmd(const brics_actuator::JointPositions pos_vect)
+void Robot::setPositionCmd(const brics_actuator::JointPositions pos_vect)
 {
     positions_cmd_msg = pos_vect;
 }
 
-void Robot::sendPositionCmd(const std::vector <float> joint_pos, const std::vector <std::string> joint_names)
+void Robot::setPositionCmd(const std::vector <float> joint_pos, const std::vector <std::string> joint_names)
 {
     int cmd_pos_size = joint_pos.size();
     int cmd_name_size = joint_names.size();
@@ -951,6 +959,29 @@ void Robot::sendPositionCmd(const std::vector <float> joint_pos, const std::vect
     {
         // TODO
     }
+}
+
+void Robot::setTorqueDisturbanceCmd(std::vector<float> torque_set_point_before_disturb)
+{
+    int gear_ratio[3] = {156, 100, 71}; // TODO !!
+    
+    Eigen::Matrix<float, 3, 1> F_disturb;
+    
+    F_disturb(0,0) = 0.0;
+    F_disturb(1,0) = 0.5; // disturbance on z
+    F_disturb(2,0) = 0.0;
+    
+    F_disturb = jacobian.t_matrix * F_disturb; // from endpoint to joint space
+    
+    for (int idx = 0; idx < jacobian.actuated_joints; idx++)
+    {
+        torques_cmd_msg.torques[idx].value = F_disturb(idx, 0)/gear_ratio[idx] + torque_set_point_before_disturb[idx];
+    }
+}
+
+void Robot::publishTorquesCmd()
+{
+    pub_tor_cmd_msg.publish(torques_cmd_msg);
 }
 
 void Robot::publishVelocitiesCmd()

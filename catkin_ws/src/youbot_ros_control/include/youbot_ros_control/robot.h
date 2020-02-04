@@ -6,6 +6,7 @@
 #include <ros/ros.h>
 #include <eigen3/Eigen/Dense>
 
+#include <brics_actuator/JointTorques.h>
 #include <brics_actuator/JointVelocities.h>
 #include <brics_actuator/JointPositions.h>
 
@@ -210,9 +211,12 @@ class Robot
         // compute velocity cmd msgs
         void computeVelocityCollaborativeCmd();
         void computeNullspaceCollaborativeCmd(const float, const float, const float, const std::vector <float>);
-        void sendPositionCmd(const brics_actuator::JointPositions);
-        void sendPositionCmd(const std::vector <float>, const std::vector <std::string>);
+        void setPositionCmd(const brics_actuator::JointPositions);
+        void setPositionCmd(const std::vector <float>, const std::vector <std::string>);
+        
+        void setTorqueDisturbanceCmd(std::vector<float>);
     
+    	void publishTorquesCmd();
         void publishVelocitiesCmd();
         void publishPositionsCmd();
 
@@ -236,9 +240,11 @@ class Robot
         float Kq; //gain for nullspace ctrl (joint pose gain)
 
         Eigen::VectorXf input_err; // t_ref - t_feedback
+        brics_actuator::JointTorques torques_cmd_msg;
         brics_actuator::JointVelocities velocities_cmd_msg;
         brics_actuator::JointPositions positions_cmd_msg;
     
+    	ros::Publisher pub_tor_cmd_msg;
         ros::Publisher pub_vel_cmd_msg;
         ros::Publisher pub_pos_cmd_msg;
 };

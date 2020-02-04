@@ -2,9 +2,9 @@
 
 <launch>
 	
-  <arg name="kinem_rate" default="1200.0" />
+  <arg name="kinem_rate" default="1500.0" />
   <arg name="tf_ratio" default="1.0" />
-  <arg name="sensor_rate" default="1000.0" />
+  <arg name="sensor_rate" default="1500.0" />
   <arg name="control_loop_rate" default="1000.0" />
   <arg name="sensor_ip" default="192.168.1.1" />
   <arg name="grav_comp_rate" default="1000.0" />
@@ -16,8 +16,8 @@
   <arg name="I_gain_cmd4" default="10" /> <!-- 10 -->
   <arg name="P_gain_cmd3" default="0.4" />
   <arg name="I_gain_cmd3" default="5" />
-  <arg name="P_gain_cmd2" default="0.050" /> <!-- 0.1 -->
-  <arg name="I_gain_cmd2" default="0.0" /> <!-- 3 -->
+  <arg name="P_gain_cmd2" default="0.035" /> <!-- 0.07 -->
+  <arg name="I_gain_cmd2" default="0.00" /> <!-- 3 -->
   <arg name="nb_joints" default="3" />
 
   <arg name="virtual_mechanism_Kx" default="20" /> <!-- 700 -->
@@ -47,7 +47,7 @@
     <param name="avg_values" value= "$(arg sensor_rate)"/>
     <remap from="force_sensor/grav_comp" to="force_feedback"/>
   </node> 
-  
+
   <node name="control_loop" pkg="youbot_ros_control" type="control_loop" output="screen" launch-prefix="bash -c 'sleep $(arg node_control_delay); $0 $@' ">
     <param name="rate" value="$(arg control_loop_rate)"/>
     <param name="Kp4_gain" value="$(arg P_gain_cmd4)"/>
@@ -66,6 +66,7 @@
     <param name="Joint_equilibrium_gain " value="$(arg prefered_pose_gain)"/>  
     <remap from="force_sensor/grav_comp" to="force_feedback"/>
   </node>
+
   <!--  
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find youbot_ros_control)/rviz/robot_transforms.rviz"/> -->
   
