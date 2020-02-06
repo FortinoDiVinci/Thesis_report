@@ -289,6 +289,8 @@ private:
     #if PUBLISH_JOINT_SET_POINTS == 1
     /// Vector of the published joint set point per arm with angles in [RAD]
     vector<sensor_msgs::JointState> armJointSetPointMessages;
+    /// Vector of the ramp generator velocity joint set point per arm with velocities in [RAD/s]
+    vector<sensor_msgs::JointState> armJointRampSetPointMessages;
     
     /// Vector of motor torque constant for each joint
     vector<double> armJointTorqueConstant;

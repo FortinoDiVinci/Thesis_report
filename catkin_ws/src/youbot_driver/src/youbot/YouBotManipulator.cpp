@@ -336,6 +336,14 @@ void YouBotManipulator::calibrateSpeedControllers() {
 	RampGeneratorSpeedAndPositionControl dummy_ramp;
 	ramp_speed_control.assign(numberArmJoints, dummy_ramp);
 	
+	std::vector <SpeedControlSwitchingThreshold> vel_pid_switching_thresh;
+	SpeedControlSwitchingThreshold dummy_vel_pid_swit_thr;
+	vel_pid_switching_thresh.assign(numberArmJoints, dummy_vel_pid_swit_thr);
+	
+	std::vector <PIDControlTime> pid_sampling_t;
+	PIDControlTime dummy_pid_t;
+	pid_sampling_t.assign(numberArmJoints, dummy_pid_t);
+	
 	std::vector <MaximumPositioningVelocity> max_velocity;
 	MaximumPositioningVelocity dummy_max_vel;
 	max_velocity.assign(numberArmJoints, dummy_max_vel);
@@ -350,7 +358,9 @@ void YouBotManipulator::calibrateSpeedControllers() {
 	bool ramp_on = false;
 	quantity<angular_acceleration> acc_val_si;
 	quantity<angular_velocity> max_vel_si;
+	quantity<angular_velocity> vel_thresh_si;
 	quantity<current> max_current_val;
+	quantity<si::time> samp_time;
 	
 	for (unsigned int i = 0; i < numberArmJoints; i++) {
 
@@ -466,6 +476,12 @@ void YouBotManipulator::calibrateSpeedControllers() {
         joints[i].getConfigurationParameter(ramp_speed_control[i]);
         ramp_speed_control[i].getParameter(ramp_on);
         ROS_INFO("Joint %i for arm 1 has ramp enable value set to: %i", i+1, ramp_on);
+        joints[i].getConfigurationParameter(vel_pid_switching_thresh[i]);
+        vel_pid_switching_thresh[i].getParameter(vel_thresh_si);
+        ROS_INFO("Joint %i for arm 1 has velocity PID Switching Threshold set to: %f", i+1, vel_thresh_si.value());    
+        joints[i].getConfigurationParameter(pid_sampling_t[i]);
+        pid_sampling_t[i].getParameter(samp_time);
+        ROS_INFO("Joint %i for arm 1 has PID control time set to: %f", i+1, samp_time.value());
         joints[i].getConfigurationParameter(target_acceleration[i]);
         target_acceleration[i].getParameter(acc_val_si);
         ROS_INFO("Joint %i for arm 1 has acceleration value set to: %f", i+1, acc_val_si.value());
@@ -564,6 +580,19 @@ void YouBotManipulator::setJointData(const std::vector<JointVelocitySetpoint>& J
         joints[i].setData(JointData[i]);
     ethercatMaster.AutomaticSendOn(true);
   // Bouml preserved body end 0008FEF1
+}
+
+///gets the ramp velocities commands of all manipulator joints (if ramp generator is off, this should be the same as the velocities commands
+///These values are all read at the same time from the different joints 
+///@param data returns the velocities by reference
+void YouBotManipulator::getJointData(std::vector<JointRampGeneratorVelocity>& data) {
+  // function added by V. FORTINEAU
+    data.resize(numberArmJoints);
+    ethercatMaster.AutomaticReceiveOn(false);
+    for (unsigned int i = 0; i < numberArmJoints; i++)
+        joints[i].getData(data[i]);
+    ethercatMaster.AutomaticReceiveOn(true);
+  // function added by V. FORTINEAU
 }
 
 ///gets the velocities of all manipulator joints which have been calculated from the actual encoder values

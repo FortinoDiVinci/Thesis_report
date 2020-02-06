@@ -157,6 +157,9 @@ public:
     
     /// Publishes JointState messages with angles setpoint for the arm. added by vfo
     ros::Publisher armJointSetPointPublisher;
+    
+    /// Publishes JointState messages with velocity ramp generator setpoint for the arm. added by vfo
+    ros::Publisher armJointRampSetPointPublisher;
 
     /// Service to switch the motor off by setting the PWM value to zero
     ros::ServiceServer switchOffMotorsService;
