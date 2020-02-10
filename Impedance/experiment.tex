@@ -1,0 +1,374 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wenneker Article
+% LaTeX Template
+% Version 2.0 (28/2/17)
+%
+% This template was downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@LaTeXTemplates.com)
+% Frits Wenneker
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt, a4paper]{article} % 12pt font size (11 and 12 also possible), A4 paper (letterpaper for US letter) and two column layout (remove for one column)
+
+\input{structure.tex} % Specifies the document structure and loads requires packages
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Impédance mécanique} % The article title
+
+\author{
+	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2}, Maria MAKAROV\textsuperscript{2}, Pedro RODRIGUEZ\textsuperscript{2}, Isabelle Siegler\textsuperscript{1}} % Authors
+	\newline\newline % Space before institutions
+	\textsuperscript{1}\institution{Université Paris Sud - CIAMS}\\ % Institution 1
+	\textsuperscript{2}\institution{CentraleSupélec - L2S}\\ % Institution 2
+}
+
+
+\date{Février 2020} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title
+
+\thispagestyle{firstpage} % Apply the page style for the first page (no headers and footers)
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\lettrine{I}{\textbf{n}} \textbf{order to evaluate the endpoint impedance behaviour of the human arm, during a cyclic task, a human robot interface experiment is presented. The ball bouncing task is a simple and complete benchmark in Human movement science. It involves both rythmic control of the arm and physical interactions with an environment. A simulated environment with a paddle, a ball and other visual signs is proposed for a better control of the experiment. To control the virtual paddle, a motorized 5 degrees of freedom (DOF) robotic arm, acquired from the Kuka company, the youBot, is used. For an anthropomorphic handling of the robot and to minimize the dynamics of the robot, a control loop operating with a 6 axis force/torque sensor is presented.}
+
+\estheticline
+
+\lettrine{A}{\textbf{fin}} d'estimer le comportement cartésien en impédance du bras humain, lors d'une tâche rythmique, une expérience utilisant une interface homme machine est proposée. La tâche de jonglerie est un cas d'étude à la fois simple et complet en science du mouvement humain, faisant à la fois appelle à un contrôle rythmique du bras, et à des interactions avec un environnement physique au cours du cycle de jongle. Pour une meilleur maitrise de la tâche, un environnement simulé contenant à la fois une raquette, une balle et des indications complémentaires est utilisé. Pour pouvoir manipuler la raquette virtuelle, un robot articulé avec 5 axes motorisés de Kuka est utilisé, le youBot. Pour rendre la manipulation du robot anthropomorphe, et minimiser ses dynamiques, un boucle de contrôle utilisant un capteur de force 6 axes est proposée.
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\tableofcontents
+
+\newpage
+
+\section{La tâche de jonglerie}
+
+\begin{flushright}
+	{\color{DarkGoldenrod} \textit{\textbf{Question à laquelle répond cette section}}}
+\end{flushright}
+
+%------------------------------------------------
+
+\subsection{Travaux précédents}
+
+G. Avrin, I. Siegler ... texte texte texte texte.
+
+\subsection{Ajout d'interactions physiques}
+
+\section{Transparence du robot}
+
+\begin{flushright}
+	{\color{DarkGoldenrod} \textit{\textbf{Comment utiliser un robot motorisé en minimisant ses effets sur la tâche étudiée ?}}}
+\end{flushright}
+
+\subsection{Boucle de contrôle}
+
+Étant donné que les interactions entre l'humain et le robot sont localisées en son effecteur, un contrôle en impédance utilisant un capteur de force se prête bien à l'expérience. La littérature existante pour ce type de contrôle est assez riche, que ce soit dans les travaux de thèse de \cite{lamy_conception_2011}, pour la minimisation de l'inertie lors de tâches collaboratives \citep{Lamy_achieving_2009}, pour des tâches de téléopération \citep{ajoudani_tele-impedance_2012}, ou dans la cas de robots redondants \citep{ficuciello_cartesian_2014}. Plusieurs revues de l'état de l'art ont par ailleurs été publiées, pour le cas particulier des composants à impédance variable \citep{vanderborght_variable_2013}, dans le cas spécifique du contrôle en admittance \citep{keemink_admittance_2018}, pour essayer d'unifier les contrôles en impédance et admittance \citep{ott_unified_2010}, et aussi dans le cas de mouvements bio-inspirés \citep{al-shuka_active_2018}.
+
+\newlineBlank 
+
+Dans le cas du contrôle en admittance articulaire d'abord décrit par \cite{newman_stability_1992}, il est possible d'imposer à un système physique un comportement en impédance en utilisant un capteur de force. Dans le cas étudié, le capteur de force étant placé sur l'effecteur, on parlera de retour d'effort non colocalisé, les efforts n'étant pas mesurés au niveau articulaire. La \cref{lamy_control} présente la boucle de contrôle permettant avec des réglages adéquats décrits notamment par \cite{Lamy_achieving_2009}, de donner un comportement en impédance avec une raideur et un amortissement nuls, tout en minimisant l'inertie. 
+
+\newlineBlank
+
+\begin{figure} [h]
+	
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	
+	\begin{tikzpicture} [node distance = 2cm]
+	
+	\comp[a]{c1}{(0, 0)};
+	
+	\node[left of = c1, node distance = 1.5cm] (tau_r) {};
+	
+	\node[block, right of = c1] (imp_ctrl) {$K_p + \frac{K_i}{s}$};
+	
+	\comp[b]{c2}{($(imp_ctrl) + (2.5,0)$)};
+	
+	\node[block, above of = c2, align = center, node distance = 2cm] (neg) {$-1$};
+	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\mathcal{J}^t(\theta)$};
+	
+	\node[block, right of = c2] (kv) {$K_v$};
+	
+	\node[big_block, right of = kv, node distance = 2.6cm] (robot) {$Robot$};
+	
+	\node[right of = robot, node distance = 1.75cm] (force) {};
+	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];
+	
+	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
+	
+	\draw[{Latex[length=3mm]}-] (c1.west) --+ (-1.5,0)
+	node[align = center, above] {$\tau_r = 0$};
+	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
+	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
+	
+	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (c2.west)
+	node[midway, align = center, above] {$\dot{q}_d$};
+	\draw[-{Latex[length=3mm]}] (c2.east) -- (kv.west);
+	
+	\draw[-{Latex[length=3mm]}] (kv.east) -- (robot.west)
+	node[midway, above] {$\tau_d$};
+	
+	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
+	
+	\draw[-{Latex[length=3mm]}] (robot.south) --+ (0,-0.5)  
+	node[below] {$\dot{q}_m$}
+	-| (c2.south);
+	
+	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
+	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
+	node[midway, align = center, below] {$F_e$};
+	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
+	node[midway, align = center, below] {$V_e$};
+	
+	\end{tikzpicture}
+	
+	\caption{Schéma bloc de contrôle en transparence avec capteur de force proposé par \cite{Lamy_achieving_2009}} % Figure caption
+	\label{lamy_control} % Label 
+\end{figure}
+
+Sur le schéma, on distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot. La boucle de contrôle se situe au niveau articulaire et permet une commande en vitesse. $\mathcal{J}$ est le jacobien du robot, $F_e$ les forces d'interaction mesurées par le capteur, exprimées dans la même base que le robot, $V_e$ les vitesses d'interaction générées par le robot. Le correcteur de la boucle interne en vitesse, $K_v$ permet de minimiser les effets dûs aux frottements. Le gain $K_i$ du correcteur en admittance de la boucle en couple d'interaction, permet de réduire l'inertie apparente. [détails ?] 
+
+\newlineBlank
+
+La réduction apparente de l'inertie est limitée par des flexibilités présentes dans les articulations. En effet, les gains permettant son annulation sont limités par la stabilité de la boucle. [creuser les détails de la stabilité proposés par X.L ??]
+
+\newlineBlank 
+
+Dans le cadre de l'expérience devant être mise en place, seuls des mouvements sur l'axe vertical $\mathbf{z}$ sont souhaités. Un contrôle dans le plan cartésien semblerait donc mieux convenir. En effet, si l'on considère la boucle de contrôle proposée par \cite{Lamy_achieving_2009}, des phénomènes de couplage mise en évidence par l'équation \ref{eq_1} interviennent entre les différents axes.
+%
+\newlineBlank
+%
+Considérons le cas simplifié où $K_i$ est nul :
+%
+\begin{equation} \label{eq_vel_setpoint}
+	\begin{split}
+	\dot{q}_d = K_p \mathcal{J}^t(q) F_e
+	\end{split}
+\end{equation}
+%
+Or :
+%
+\begin{equation} \label{eq_link_joint_endpoint_velocity}
+	\begin{split}
+	\dot{X} = \mathcal{J}(q) \dot{q}
+	\end{split}
+\end{equation}
+%
+En associant \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoint_velocity}, et en notant la pseudo inverse par l'exposant $*$ :
+\begin{equation} \label{eq_1}
+	\begin{split}
+	\mathcal{J}^*(q_d) \dot{X_d} = K_p \mathcal{J}^t(q) F_e \\	
+	\dot{X_d} = K_p (\mathcal{J}^*(q_d))^{-1} \mathcal{J}^t(q) F_e
+	\end{split}
+\end{equation}
+%
+Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ (\mathcal{J}^*(q_d))^{-1} \mathcal{J}^t(q) $ soit diagonal. Or même dans le cas où $\mathcal{J}(q)$ est inversible, $\mathcal{J}(q)\mathcal{J}^t$ n'est pas diagonal. [à démontrer] 
+
+\begin{figure} [h]
+	
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	
+	\begin{tikzpicture} [node distance = 2cm]
+	
+	\comp[a]{c1}{(0, 0)};
+	
+	\node[block, left of = c1, node distance = 1.55cm] (jac_virtual_guide) {$\mathcal{J}^t(\theta)$};
+	
+	\comp[a]{c2}{($(tau_r) + (-1.55,0)$)};
+	
+	\node[block, left of = c2, node distance = 1.55cm] (K) {$K$};
+	
+	\node[block, above of = K] (B) {$B$};
+	
+	\comp[a]{c3}{($(K) + (-1.55,0)$)};
+	
+	\node[block, right of = c1] (imp_ctrl) {$K_p + \frac{K_i}{s}$};
+	
+	\node[block, above of = imp_ctrl, align = center, node distance = 2cm] (neg) {$-1$};
+	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\mathcal{J}^t(\theta)$};
+	
+	\node[big_block, right of = imp_ctrl, node distance = 3cm] (robot) {$Robot$};
+	
+	\node[right of = robot, node distance = 1.75cm] (force) {};
+	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];
+	
+	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
+
+	\draw[{Latex[length=3mm]}-] (c3.west) --+ (-1, 0)
+	node[left, align = center, above] {$X_0$};
+	\draw[{Latex[length=3mm]}-] (c3.north) |-+ (-1.25, 0.75)
+	node[left, align = center, above] {$X$};
+	\draw[{Latex[length=3mm]}-] (B.west) --+ (-2.25, 0)
+	node[left, align = center, above] {$\dot{X}$};
+
+	\draw[-{Latex[length=3mm]}] (c3.east) -- (K.west);
+	
+	\draw[-{Latex[length=3mm]}] (K.east) -- (c2.west);
+	\draw[-{Latex[length=3mm]}] (B.east) -| (c2.north);
+	\draw[-{Latex[length=3mm]}] (c2.east) -- (jac_virtual_guide.west);
+	
+	\draw[-{Latex[length=3mm]}] (jac_virtual_guide.east) -- (c1.west)
+	node[midway, align = center, above] {$\tau_r$};
+
+	\draw[dashed, rounded corners=5pt] ($ (B) + (-3.15, 1) $) rectangle ($ (c1) + (-0.25, -1.25) $)
+	node [pos=.85, below] {\footnotesize guide virtuel};
+
+	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
+	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
+	
+	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (robot.west)
+	node[midway, align = center, above] {$\dot{q}_d$};
+	
+	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
+	
+	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
+	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
+	node[midway, align = center, below] {$F_e$};
+	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
+	node[midway, align = center, below] {$V_e$};	
+	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south east) + 0.5*(robot.south) $) -- +(0,-0.55)
+	node[below] {$X$};
+	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south west) + 0.5*(robot.south) $) -- +(0,-0.55)
+	node[below] {$\dot{X}$};
+	
+	\end{tikzpicture}
+	
+	\caption{Ajout d'un guide virtuel (Proportionnel Dérivé) à la boucle de transparence} % Figure caption
+	\label{virtual_guide_control} % Label 
+\end{figure}
+
+Une solution envisageable pour limiter les mouvements à l'axe vertical $\mathbf{z}$ réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \cite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\mathbf{z}$, entrainerait alors des effets résiduels sur la transparence toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{virtual_guide_control} a permis d'observer la dégradation de la transparence.
+
+\newlineBlank
+
+La tâche étudiée étant limitée dans un espace de travail cartésien, il est intéressant de réaliser l'asservissement directement dans cette espace. On génèrera des commandes cartésiennes en vitesse, qui seront passées au niveau articulaire à l'aide de l'équation \cref{eq_link_joint_endpoint_velocity}. On vérifie ainsi que dans le cas d'un asservissement idéal, aucun phénomène de couplage n'a lieu.
+
+\newlineBlank
+
+Considérons un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{pmatrix} x & z & \theta \end{pmatrix} $ loin de toutes configurations singulières, dans ce cas $\mathcal{J}$ est inversible de dimension $3\times3$, alors :
+%
+\begin{equation} \label{eq_Fz_endpoint}
+\begin{split}
+\dot{X}_d &= \begin{bmatrix} 0 & K_z & 0 \end{bmatrix} \cdot F_e \\
+\dot{q}_d &= \mathcal{J}^{-1}(q) \begin{bmatrix} 0 & K_z & 0 \end{bmatrix} \cdot F_e
+\end{split}
+\end{equation}
+%
+Maintenant, considérons l'erreur $ \dot{X}_\epsilon = \dot{X_d} - \dot{X} $, avec $\mathcal{J}$ le jacobien réel du robot, et $\hat{\mathcal{J}}$ le jacobien estimé :
+\begin{equation} \label{eq_Fz_endpoint_coupling}
+\begin{split}
+	\dot{X}_\epsilon &= \hat{\mathcal{J}}(q)\dot{q_d} - \mathcal{J}(q)\dot{q} \\
+	\dot{X}_\epsilon &= \mathcal{J}(\dot{q_d} - \dot{q}) + \hat{\mathcal{J}}(q)\dot{q_d} - \mathcal{J}(q)\dot{q_d} \\
+	\dot{X}_\epsilon &= \mathcal{J}\dot{q}_{\epsilon} + \Delta\mathcal{J}(q)\dot{q_d}
+\end{split}
+\end{equation}
+
+On distingue donc deux sources d'erreur pouvant donner lieu à des couplages, l'erreur de trainage provoquée par la dynamique de la boucle en vitesse articulaire du robot et les erreurs d'estimation du jacobien, qui sont multipliés par la consigne de vitesse articulaire. La deuxième source d'erreur est difficile à quantifier. [quantification de la première en simulation ?? présenter les résultats] Après simulation, en considérant l'erreur de trainage, on constate bien des déplacements sur l'axe $\mathbf{x}$. Or, en ayant choisi d'asservir le contrôle uniquement sur les forces en $\mathbf{z}$, les forces exercées sur l'axe $\mathbf{x}$ ne sont plus perçues par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la comanipulation.
+
+\newlineBlank
+
+Pour remédier à cette problématique, il suffit d'ajouter un gain proportionnel sur la tâche en $\mathbf{x}$. Cette dernière étant découplée de la tâche principale - \textit{dans un cas idéal} - la transparence n'en est pas affectée. L'équation \cref{eq_Fz_endpoint} devient alors :
+%
+\begin{equation} \label{eq_Fz_endpoint_total}
+\begin{split}
+\dot{q}_d &= \mathcal{J}^{-1}(q) \begin{bmatrix} K_x & K_z & 0 \end{bmatrix} \cdot F_e
+\end{split}
+\end{equation}
+
+Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement.
+
+\subsection{Influence sur la tâche}
+
+\section{Estimation de l'impédance}
+
+\begin{flushright}
+	{\color{DarkGoldenrod} \textit{\textbf{Comprendre les stratégies de modulation de l'impédance lors d'interaction cyclique prévisible.}}}
+\end{flushright}
+
+\subsection{Rappel littérature}
+
+\subsection{Outil de mesures et d'introduction des perturbations}
+
+
+
+
+\bibliographystyle{apalike} %abbrvnat
+
+\bibliography{impedance_ctrl}
+
+\end{document}
