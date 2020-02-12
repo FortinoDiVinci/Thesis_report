@@ -27,7 +27,7 @@
 %	ARTICLE INFORMATION
 %----------------------------------------------------------------------------------------
 
-\title{Impédance mécanique} % The article title
+\title{Expérience de comanipulation} % The article title
 
 \author{
 	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2}, Maria MAKAROV\textsuperscript{2}, Pedro RODRIGUEZ\textsuperscript{2}, Isabelle Siegler\textsuperscript{1}} % Authors
@@ -87,6 +87,8 @@ G. Avrin, I. Siegler ... texte texte texte texte.
 
 \subsection{Boucle de contrôle}
 
+\subsubsection{Transparence}
+
 Étant donné que les interactions entre l'humain et le robot sont localisées en son effecteur, un contrôle en impédance utilisant un capteur de force se prête bien à l'expérience. La littérature existante pour ce type de contrôle est assez riche, que ce soit dans les travaux de thèse de \cite{lamy_conception_2011}, pour la minimisation de l'inertie lors de tâches collaboratives \citep{Lamy_achieving_2009}, pour des tâches de téléopération \citep{ajoudani_tele-impedance_2012}, ou dans la cas de robots redondants \citep{ficuciello_cartesian_2014}. Plusieurs revues de l'état de l'art ont par ailleurs été publiées, pour le cas particulier des composants à impédance variable \citep{vanderborght_variable_2013}, dans le cas spécifique du contrôle en admittance \citep{keemink_admittance_2018}, pour essayer d'unifier les contrôles en impédance et admittance \citep{ott_unified_2010}, et aussi dans le cas de mouvements bio-inspirés \citep{al-shuka_active_2018}.
 
 \newlineBlank 
@@ -135,7 +137,7 @@ Dans le cas du contrôle en admittance articulaire d'abord décrit par \cite{new
 	\comp[b]{c2}{($(imp_ctrl) + (2.5,0)$)};
 	
 	\node[block, above of = c2, align = center, node distance = 2cm] (neg) {$-1$};
-	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\mathcal{J}^t(\theta)$};
+	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\jacobian{q}{}{t}$};
 	
 	\node[block, right of = c2] (kv) {$K_v$};
 	
@@ -147,28 +149,30 @@ Dans le cas du contrôle en admittance articulaire d'abord décrit par \cite{new
 	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
 	
 	\draw[{Latex[length=3mm]}-] (c1.west) --+ (-1.5,0)
-	node[align = center, above] {$\tau_r = 0$};
+	node[align = center, above] {$\vect{\tau}_r = 0$};
 	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
 	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
 	
 	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (c2.west)
-	node[midway, align = center, above] {$\dot{q}_d$};
+	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
 	\draw[-{Latex[length=3mm]}] (c2.east) -- (kv.west);
 	
 	\draw[-{Latex[length=3mm]}] (kv.east) -- (robot.west)
-	node[midway, above] {$\tau_d$};
+	node[midway, above] {$\vect{\tau}_d$};
 	
 	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
 	
 	\draw[-{Latex[length=3mm]}] (robot.south) --+ (0,-0.5)  
-	node[below] {$\dot{q}_m$}
+	node[below] {$\dot{\vect{q}}_m$}
 	-| (c2.south);
 	
 	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
 	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
-	node[midway, align = center, below] {$F_e$};
+	node[midway, align = center, below] {$\vect{F}_e$};
 	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
-	node[midway, align = center, below] {$V_e$};
+	node[midway, align = center, below] {$\vect{V}_e$};
+	
+	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
 	
 	\end{tikzpicture}
 	
@@ -176,7 +180,7 @@ Dans le cas du contrôle en admittance articulaire d'abord décrit par \cite{new
 	\label{lamy_control} % Label 
 \end{figure}
 
-Sur le schéma, on distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot. La boucle de contrôle se situe au niveau articulaire et permet une commande en vitesse. $\mathcal{J}$ est le jacobien du robot, $F_e$ les forces d'interaction mesurées par le capteur, exprimées dans la même base que le robot, $V_e$ les vitesses d'interaction générées par le robot. Le correcteur de la boucle interne en vitesse, $K_v$ permet de minimiser les effets dûs aux frottements. Le gain $K_i$ du correcteur en admittance de la boucle en couple d'interaction, permet de réduire l'inertie apparente. [détails ?] 
+Sur le schéma, on distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot. La boucle de contrôle se situe au niveau articulaire et permet une commande en vitesse. $\jacobian{}{}{}$ est le jacobien du robot, $\vect{F}_e$ les forces d'interaction mesurées par le capteur, exprimées dans la même base que le robot, $\vect{V}_e$ les vitesses d'interaction générées par le robot. Le correcteur de la boucle interne en vitesse, $K_v$ permet de minimiser les effets dûs aux frottements. Le gain $K_i$ du correcteur en admittance de la boucle en couple d'interaction, permet de réduire l'inertie apparente. [détails ?] 
 
 \newlineBlank
 
@@ -184,7 +188,7 @@ La réduction apparente de l'inertie est limitée par des flexibilités présent
 
 \newlineBlank 
 
-Dans le cadre de l'expérience devant être mise en place, seuls des mouvements sur l'axe vertical $\mathbf{z}$ sont souhaités. Un contrôle dans le plan cartésien semblerait donc mieux convenir. En effet, si l'on considère la boucle de contrôle proposée par \cite{Lamy_achieving_2009}, des phénomènes de couplage mise en évidence par l'équation \ref{eq_1} interviennent entre les différents axes.
+Dans le cadre de l'expérience devant être mise en place, seuls des mouvements sur l'axe vertical $\vect{z}$ sont souhaités. Un contrôle dans le plan cartésien semblerait donc mieux convenir. En effet, si l'on considère la boucle de contrôle proposée par \cite{Lamy_achieving_2009}, des phénomènes de couplage mise en évidence par l'équation \ref{eq_1} interviennent entre les différents axes.
 %
 \newlineBlank
 %
@@ -192,7 +196,7 @@ Considérons le cas simplifié où $K_i$ est nul :
 %
 \begin{equation} \label{eq_vel_setpoint}
 	\begin{split}
-	\dot{q}_d = K_p \mathcal{J}^t(q) F_e
+	\dot{\vect{q}}_d = K_p \jacobian{q}{}{t} \vect{F}_e
 	\end{split}
 \end{equation}
 %
@@ -200,19 +204,19 @@ Or :
 %
 \begin{equation} \label{eq_link_joint_endpoint_velocity}
 	\begin{split}
-	\dot{X} = \mathcal{J}(q) \dot{q}
+	\dot{\vect{X}} = \jacobian{q}{}{} \dot{\vect{q}}
 	\end{split}
 \end{equation}
 %
 En associant \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoint_velocity}, et en notant la pseudo inverse par l'exposant $*$ :
 \begin{equation} \label{eq_1}
 	\begin{split}
-	\mathcal{J}^*(q_d) \dot{X_d} = K_p \mathcal{J}^t(q) F_e \\	
-	\dot{X_d} = K_p (\mathcal{J}^*(q_d))^{-1} \mathcal{J}^t(q) F_e
+	\jacobian{q_d}{}{*} \dot{\vect{X}}_d = K_p \jacobian{q}{}{t} \vect{F}_e \\	
+	\dot{\vect{X}}_d = K_p (\jacobian{q_d}{}{*})^{-1} \jacobian{q}{}{t} \vect{F}_e
 	\end{split}
 \end{equation}
 %
-Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ (\mathcal{J}^*(q_d))^{-1} \mathcal{J}^t(q) $ soit diagonal. Or même dans le cas où $\mathcal{J}(q)$ est inversible, $\mathcal{J}(q)\mathcal{J}^t$ n'est pas diagonal. [à démontrer] 
+Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ (\jacobian{q_d}{}{*})^{-1} \jacobian{q}{}{t} $ soit diagonal. Or même dans le cas où $\jacobian{q}{}{}$ est inversible, $\jacobian{q}{}{}\jacobian{q}{}{t}$ n'est pas diagonal. [à démontrer] 
 
 \begin{figure} [h]
 	
@@ -247,7 +251,7 @@ Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ (\mathcal{J}^*(q_d
 	
 	\comp[a]{c1}{(0, 0)};
 	
-	\node[block, left of = c1, node distance = 1.55cm] (jac_virtual_guide) {$\mathcal{J}^t(\theta)$};
+	\node[block, left of = c1, node distance = 1.55cm] (jac_virtual_guide) {$\jacobian{q}{}{t}$};
 	
 	\comp[a]{c2}{($(tau_r) + (-1.55,0)$)};
 	
@@ -270,11 +274,11 @@ Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ (\mathcal{J}^*(q_d
 	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
 
 	\draw[{Latex[length=3mm]}-] (c3.west) --+ (-1, 0)
-	node[left, align = center, above] {$X_0$};
+	node[left, align = center, above] {$\vect{X}_0$};
 	\draw[{Latex[length=3mm]}-] (c3.north) |-+ (-1.25, 0.75)
-	node[left, align = center, above] {$X$};
+	node[left, align = center, above] {$\vect{X}$};
 	\draw[{Latex[length=3mm]}-] (B.west) --+ (-2.25, 0)
-	node[left, align = center, above] {$\dot{X}$};
+	node[left, align = center, above] {$\dot{\vect{X}}$};
 
 	\draw[-{Latex[length=3mm]}] (c3.east) -- (K.west);
 	
@@ -283,28 +287,31 @@ Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ (\mathcal{J}^*(q_d
 	\draw[-{Latex[length=3mm]}] (c2.east) -- (jac_virtual_guide.west);
 	
 	\draw[-{Latex[length=3mm]}] (jac_virtual_guide.east) -- (c1.west)
-	node[midway, align = center, above] {$\tau_r$};
+	node[midway, align = center, above] {$\vect{\tau}_r$};
 
-	\draw[dashed, rounded corners=5pt] ($ (B) + (-3.15, 1) $) rectangle ($ (c1) + (-0.25, -1.25) $)
-	node [pos=.85, below] {\footnotesize guide virtuel};
+	\draw[dashed, rounded corners=5pt] ($ (B) + (-3.15, 1) $) 
+	node [right = 6.2cm, below = 0.2cm] {\footnotesize guide virtuel}
+	rectangle ($ (c1) + (-0.25, -1.25) $);
 
 	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
 	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
 	
 	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (robot.west)
-	node[midway, align = center, above] {$\dot{q}_d$};
+	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
 	
 	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
 	
 	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
 	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
-	node[midway, align = center, below] {$F_e$};
+	node[midway, align = center, below] {$\vect{F}_e$};
 	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
 	node[midway, align = center, below] {$V_e$};	
 	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south east) + 0.5*(robot.south) $) -- +(0,-0.55)
-	node[below] {$X$};
+	node[below] {$\vect{X}$};
 	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south west) + 0.5*(robot.south) $) -- +(0,-0.55)
-	node[below] {$\dot{X}$};
+	node[below] {$\dot{\vect{X}}$};
+	
+	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
 	
 	\end{tikzpicture}
 	
@@ -318,39 +325,279 @@ Une solution envisageable pour limiter les mouvements à l'axe vertical $\mathbf
 
 La tâche étudiée étant limitée dans un espace de travail cartésien, il est intéressant de réaliser l'asservissement directement dans cette espace. On génèrera des commandes cartésiennes en vitesse, qui seront passées au niveau articulaire à l'aide de l'équation \cref{eq_link_joint_endpoint_velocity}. On vérifie ainsi que dans le cas d'un asservissement idéal, aucun phénomène de couplage n'a lieu.
 
-\newlineBlank
+\begin{figure} [h]
+	
+	\centering
+	
+	\begin{tikzpicture} [node distance = 2cm]
+	
+	\path (0,0) coordinate (origin) 
+	node[below left] {$ \mathcal{O} $};
+	
+	\path ($ (origin) + (0.5,1) $) coordinate (joint1)
+	node[below right] {$ q_1 $};
+	
+	\path ($ (joint1) + (1.75,1) $) coordinate (joint2)
+	node[below right] {$ q_2 $};
+	
+	\path ($ (joint2) + (-0.75,1.5) $) coordinate (joint3)
+	node[below left] {$ q_3 $};
+	
+	\path ($ (joint3) + (1.55,0.45) $) coordinate (endeffector);
+	
+	\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (0, 4) $)
+	node[at end, left] {$\vect{z}$};
+	\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (4, 0) $)
+	node[at end, below] {$\vect{x}$};
+	
+	\draw (origin.center) -- (joint1.center);
+	\fill (joint1) circle[radius=2.75pt];
+	
+	\draw (joint1.center) -- (joint2.center);
+	\fill (joint2) circle[radius=2.75pt];
+	
+	\draw (joint2.center) -- (joint3.center);
+	\fill (joint3) circle[radius=2.75pt];
+	
+	\draw (joint3.center) -- (endeffector.center);
+	
+	\draw  [gray, loosely dotted] ($ (joint3.center) + (-0.5,0) $) -- ($ (joint3.center) + (2,0) $) coordinate (refD);
+	
+	\pgfExtractAngle{\thetal}{joint3}{endeffector}
+	
+	\draw[-{Latex[length=2mm]}] ($(joint3.center) + (1.5, 0)$) arc (0:\thetal:1.5)
+	node[midway, right] {$\theta$};
+	
+	\end{tikzpicture}
+	
+	\caption{Robot plan redondant} % Figure caption
+	\label{2D_plan_robot} % Label 
+\end{figure}
 
-Considérons un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{pmatrix} x & z & \theta \end{pmatrix} $ loin de toutes configurations singulières, dans ce cas $\mathcal{J}$ est inversible de dimension $3\times3$, alors :
+
+Considérons un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{pmatrix} x & z \end{pmatrix} $, avec le couple de degrés de liberté $ \begin{pmatrix} x & z & \theta \end{pmatrix} $, hors de toutes configurations singulières, dans ce cas, $\jacobian{}{}{}$ est inversible de dimension $3\times3$, alors :
 %
 \begin{equation} \label{eq_Fz_endpoint}
-\begin{split}
-\dot{X}_d &= \begin{bmatrix} 0 & K_z & 0 \end{bmatrix} \cdot F_e \\
-\dot{q}_d &= \mathcal{J}^{-1}(q) \begin{bmatrix} 0 & K_z & 0 \end{bmatrix} \cdot F_e
-\end{split}
+	\begin{split}
+	\dot{\vect{X}}_d &= \begin{bmatrix} 0 & K_z & 0 \end{bmatrix} \cdot \vect{F_e} \\
+	\dot{\vect{q}}_d &= \jacobian{q}{}{-1} \begin{bmatrix} 0 & K_z & 0 \end{bmatrix} \cdot \vect{F_e}
+	\end{split}
 \end{equation}
 %
-Maintenant, considérons l'erreur $ \dot{X}_\epsilon = \dot{X_d} - \dot{X} $, avec $\mathcal{J}$ le jacobien réel du robot, et $\hat{\mathcal{J}}$ le jacobien estimé :
+Maintenant, considérons l'erreur $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot, et $\jacobianHat{}{}{}$ le jacobien estimé :
 \begin{equation} \label{eq_Fz_endpoint_coupling}
 \begin{split}
-	\dot{X}_\epsilon &= \hat{\mathcal{J}}(q)\dot{q_d} - \mathcal{J}(q)\dot{q} \\
-	\dot{X}_\epsilon &= \mathcal{J}(\dot{q_d} - \dot{q}) + \hat{\mathcal{J}}(q)\dot{q_d} - \mathcal{J}(q)\dot{q_d} \\
-	\dot{X}_\epsilon &= \mathcal{J}\dot{q}_{\epsilon} + \Delta\mathcal{J}(q)\dot{q_d}
+	\dot{\vect{X}}_\epsilon &= \jacobianHat{q}{}{}\dot{\vect{q}}_d - \jacobian{q}{}{}\dot{\vect{q}} \\
+	\dot{\vect{X}}_\epsilon &= \jacobian{q}{}{}(\dot{\vect{q}}_d - \dot{\vect{q}}) + \jacobianHat{q}{}{}\dot{\vect{q}}_d - \jacobian{q}{}{}\dot{\vect{q}}_d \\
+	\dot{\vect{X}}_\epsilon &= \jacobian{q}{}{}\dot{\vect{q}}_{\epsilon} + \Delta\jacobian{q}{}{}\dot{\vect{q}}_d
 \end{split}
 \end{equation}
 
-On distingue donc deux sources d'erreur pouvant donner lieu à des couplages, l'erreur de trainage provoquée par la dynamique de la boucle en vitesse articulaire du robot et les erreurs d'estimation du jacobien, qui sont multipliés par la consigne de vitesse articulaire. La deuxième source d'erreur est difficile à quantifier. [quantification de la première en simulation ?? présenter les résultats] Après simulation, en considérant l'erreur de trainage, on constate bien des déplacements sur l'axe $\mathbf{x}$. Or, en ayant choisi d'asservir le contrôle uniquement sur les forces en $\mathbf{z}$, les forces exercées sur l'axe $\mathbf{x}$ ne sont plus perçues par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la comanipulation.
+On distingue donc deux sources d'erreur pouvant donner lieu à des couplages, 
+\begin{enumerate}
+	\item l'erreur de trainage $ \dot{q}_{\epsilon} $ provoquée par la dynamique de la boucle en vitesse articulaire du robot, et multipliée par le jacobien $ \jacobian{q}{}{} $
+	\item les erreurs d'estimation du jacobien $ \Delta\jacobian{q}{}{} $, qui sont multipliées par les consignes de vitesses articulaires $ \dot{q_d} $.
+\end{enumerate}
+La deuxième source d'erreur est difficile à quantifier. On pourrait aussi ajouter l'erreur entre l'estimée des vitesses articulaires et leur vitesse réelle, qui comme la seconde erreur, nécessiterait des équipements d'observation externes au robot (\textit{eg. caméra}). [quantification de la première en simulation ?? présenter les résultats] 
+
+\newlineBlank
+
+Après simulation, en considérant l'erreur de trainage, on constate bien des déplacements sur l'axe $\mathbf{x}$. Or, en ayant choisi d'asservir le contrôle uniquement sur les forces en $\mathbf{z}$, les forces exercées sur l'axe $\mathbf{x}$ ne sont plus perçues par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la comanipulation.
 
 \newlineBlank
 
 Pour remédier à cette problématique, il suffit d'ajouter un gain proportionnel sur la tâche en $\mathbf{x}$. Cette dernière étant découplée de la tâche principale - \textit{dans un cas idéal} - la transparence n'en est pas affectée. L'équation \cref{eq_Fz_endpoint} devient alors :
 %
 \begin{equation} \label{eq_Fz_endpoint_total}
-\begin{split}
-\dot{q}_d &= \mathcal{J}^{-1}(q) \begin{bmatrix} K_x & K_z & 0 \end{bmatrix} \cdot F_e
-\end{split}
+	\begin{split}
+	\dot{\vect{q}}_d &= \jacobian{q}{}{-1} \begin{bmatrix} K_x & K_z & 0 \end{bmatrix} \cdot \mathbf{\vect{F}_e}
+	\end{split}
 \end{equation}
 
-Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement.
+Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - \textit{tâche en $\mathbf{z}$ et tâche en $\mathbf{x}$} -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On veut donc maintenir le robot dans une certaine configuration, qui reflète les positions articulaires médianes lors de la tâche de jonglerie. Toutefois, on ne veut pas que cette nouvelle tâche nuise à la transparence du robot. 
+
+\newlineBlank
+
+Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâche en $\mathbf{z}$. La méthodologie détaillée de projection de tâches dans les noyaux d'autres tâches est très bien résumée dans l'article de \cite{dietrich_overview_2015}. Ainsi on peut écrire $ \jacobian{}{1}{} $ le jacobien de la tâche en principale, et noter l'exposant $ \mathbf{W}+ $ pour la pseudo-inverse pondérée définie par l'équation \cref{eq_pseudo_inverse}.
+%
+\begin{equation} \label{eq_pseudo_inverse}
+	\begin{split}
+	\matr{A}^{\matr{W}+} = \matr{W}^{-1}\matr{A}^t(\matr{AW}^{-1}\matr{A}^t)^{-1}
+	\end{split}
+\end{equation}
+%
+Ainsi, comme défini par \cite{dietrich_overview_2015}, le projecteur $ \matr{N}_2 $ dans noyau d'une tâche principale en couple $ \vect{\tau}_1 $ s'écrit :
+%
+\begin{equation} \label{eq_null_space_proj}
+	\begin{split}
+	\vect{\tau}_2^p = \matr{N}_2^\tau(q)\vect{\tau}_2	
+	\end{split}
+\end{equation}
+%
+avec $ \vect{\tau}_2^p \in \rm I\!R^n $ le couple de la tâche projetée qui n'interfère pas avec le couple de la tâche principale $ \vect{\tau}_1 $, et $ \matr{N}_2^\tau(q) $ défini comme suit :
+%
+\begin{equation} \label{eq_null_space_proj_2}
+	\begin{split}
+	\matr{N}_2^\tau(q) = \matr{I} - \jacobian{q}{1}{t}(\jacobian{q}{1}{\matr{W}+})^t
+	\end{split}
+\end{equation}
+
+La boucle de commande considérée pour l'expérience est réalisée en vitesse et non en couple comme c'est le cas dans l'article cité. Comme expliqué par \cite{sadeghian_multi-priority_2011}, la relation est alors : [démonstration ??]
+\begin{equation} \label{eq_null_space_proj_velocities}
+	\begin{split}
+	\dot{\vect{q}}_2^p = (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{})\dot{\vect{q}}_2
+	\end{split}
+\end{equation}
+%
+avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection de $ \dot{\vect{q}}_2 $ dans le noyau de la tâche $ \dot{\vect{q}}_1 $, et $ \jacobian{}{1}{} $ le jacobien de cette dernière tâche.
+
+\newlineBlank
+
+Ainsi en combinant les 3 tâches, on obtient le schéma de contrôle présenté en \cref{fig_comanipulation_ctrl} :
+
+\begin{figure} [h]
+	
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	
+	\begin{tikzpicture} [node distance = 2cm]
+	
+	\comp[]{c1}{(0, 0)};
+	
+	\node[block, left of = c1] (inverse_jac) {$\jacobian{q}{}{-1}$};
+	
+	%\node[block, left of = inverse_jac, align=center] (mux) {M \\ U \\ X};
+	
+	\comp[]{c2}{($ (inverse_jac) + (-2.,0) $)};
+	
+	\node[block, left of = c2] (vect1) {$ \begin{pmatrix}1 & 0 & 0\end{pmatrix}^t $};
+	
+	\node[block, above of = vect1] (vect2) {$ \begin{pmatrix}0 & 1 & 0\end{pmatrix}^t $};
+	
+	\node[block, left of = vect1, node distance = 2.5cm] (p) {$ K_p^x $};
+	
+	\node[block, left of = vect2, node distance = 2.5cm] (pi) {$C^z(s)$};
+	
+	\comp[a]{cpi}{($(pi) + (-1.75,0)$)};
+	
+	\comp[b]{cp}{($(p) + (-1.75,0)$)};
+	
+	\node[block, below of = inverse_jac] (null_proj) {$ \matr{N}_2(q) $};
+	
+	\node[block, left of = null_proj] (p2) {$ K_p^2 $};
+	
+	\comp[b]{cp2}{($(p2) + (-1.75,0)$)};
+	
+	\node[big_block, right of = c1, node distance = 2.5cm] (robot) {$Robot$};
+
+	\draw[-{Latex[length=3mm]}] (inverse_jac.east) -- (c1.west);
+	\draw[-{Latex[length=3mm]}] (null_proj.east) -| (c1.south);
+	
+	\draw[-{Latex[length=3mm]}] (c2.east) -- (inverse_jac.west);
+	\draw[-{Latex[length=3mm]}] (vect2.east) -| (c2.north);
+	\draw[-{Latex[length=3mm]}] (vect1.east) -- (c2.west);
+	
+	\draw[-{Latex[length=3mm]}] (p.east) -- (vect1.west);
+	\draw[-{Latex[length=3mm]}] (cp.east) -- (p.west);
+	\draw[{Latex[length=3mm]}-] (cp.west) --+ ($ (-1, 0) $)
+	node[near end, above] {$x_0$};
+	\draw[{Latex[length=3mm]}-] (cp.south) --+ ($ (0, -1) $)
+	node[near end, left] {$\vect{x}(1)$};
+
+	\draw[-{Latex[length=3mm]}] (pi.east) -- (vect2.west);
+	\draw[-{Latex[length=3mm]}] (cpi.east) -- (pi.west);
+	\draw[{Latex[length=3mm]}-] (cpi.west) --+ ($ (-1, 0) $)
+	node[near end, above] {$f_{z} = 0$};
+	\draw[{Latex[length=3mm]}-] (cpi.north) --+ ($ (0, 1) $)
+	node[near end, right] {$-\vect{F}_e(2)$};
+
+	\draw[-{Latex[length=3mm]}] (p2.east) -- (null_proj.west);
+	\draw[-{Latex[length=3mm]}] (cp2.east) -- (p2.west);
+	\draw[{Latex[length=3mm]}-] (cp2.west) --+ ($ (-1, 0) $)
+	node[near end, above] {$\vect{q}_0$};
+	\draw[{Latex[length=3mm]}-] (cp2.south) --+ ($ (0, -1) $)
+	node[near end, left] {$\vect{q}$};
+
+	\draw[-{Latex[length=3mm]}] (c1.east) -- (robot.west)
+	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
+	
+	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south east) + 0.5*(robot.south) $) -- +(0,-0.55)
+	node[below] {$\vect{X}$};
+	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south west) + 0.5*(robot.south) $) -- +(0,-0.55)
+	node[below] {$\dot{\vect{X}}$};
+	\draw[-{Latex[length=3mm]}] (robot.north) -- +(0,0.55)
+	node[left] {$(\vect{q}, \dot{\vect{q}}, \vect{\tau})$};
+	
+	\end{tikzpicture}
+	
+	\caption{Schéma bloc de la boucle de contrôle en transparence pour une tâche guidée sur une trajectoire virtuelle d'une dimension, sur un axe vertical parallèle à $ \vect{z} $} % Figure caption
+	\label{fig_comanipulation_ctrl} % Label 
+\end{figure}
+%
+avec : 
+\begin{enumerate}
+	\item $ \vect{x} $ le vecteur 3D des coordonnées cartésiennes de l'effecteur dans le référentiel fixe - \textit{base du robot} -, défini par 2 translations et une rotation $ \begin{pmatrix} x & z & \theta \end{pmatrix} $, 
+	\item $ \vect{f}_e $ le vecteur 3D des forces d'interaction entre l'effecteur et l'environnement toujours dans le référentiel fixe - \textit{une transformation est donc nécessaire, pour sortir du référentiel du capteur} - défini par 2 forces et 1 couple, 
+	\item $ \vect{q} $ les 3 positions articulaires,
+	\item $ \vect{q}_0 $ les consignes de positions articulaires,
+	\item $ x_0 $ la consigne en position sur l'axe $x$,
+	\item $ C^z(s) $ le correcteur pour la transparence le long de l'axe $z$,
+	\item $ \jacobian{q}{}{} $ le jacobien $ 3\times3 $ de l'effecteur,
+	\item $ \matr{N}_2(q) $ le projecteur dans le noyau de la tâche en $z$.	
+\end{enumerate}
+
+\newlineBlank
+
+[Présenter résultat de la transparence] ?
+
+\subsubsection{Perturbations}
+
+Comme expliqué dans la section 1.3 sur les méthodes d'estimation de l'impédance, l'introduction de perturbations est nécessaire pour l'expérience. Étant donné la boucle de contrôle présentée en \cref{fig_comanipulation_ctrl}, 3 solutions pour introduire des perturbations en force qui soient maîtrisées, peuvent être proposées, sans équipement externe au robot - \textit{outre le capteur de force}.
+
+\begin{enumerate}
+	\item Modifier la référence de force $ f_z $,
+	\item Introduire des perturbations en vitesse
+	\item Introduire des perturbations en courant, au niveau des asservissement internes du robot 
+\end{enumerate}
+
+La première solution est la plus facile à implémenter. Elle permet d'obtenir sans aucune transformation, ni calcul supplémentaire une perturbation de l'amplitude choisie. Le régime transitoire des perturbations est soumis à la dynamique de la boucle externe en force. 
+
+\newlineBlank
+
+La deuxième solution nécessite de pouvoir compenser la boucle interne en vitesse du robot. De cette manière, en introduisant une perturbation en vitesse et compensant la dynamique de la boucle, on est capable de maîtriser l'introduction indirecte d'une perturbation en courant, et donc en couple articulaire. Une transformation sera nécessaire pour transformer la perturbation cartésienne, en perturbation articulaire. Cette fois ci, la régime transitoire de la perturbation sera soumis à la dynamique de la boucle de vitesse.
+
+\newlineBlank
+
+La dernière solution nécessite de pouvoir introduire des perturbations aux consignes de courant directement dans les boucles internes du robot, d'une part. D'autre part, de continuer à faire tourner les boucles de plus haut niveau, pour maintenir la transparence du robot. 
+
+\newlineBlank
+
+Selon la nature des perturbations on préfèrera certaines des solutions proposées. En effet, si l'on souhaite introduire des perturbations lente voire statique la première solution est la plus simple et la moins gourmande en calcul. Au contraire, pour des perturbations courtes, de l'ordre de la dizaine de millisecondes opter pour la première solution n'est plus envisageable, dans ce cas on préfèrera l'une des deux autres solutions, selon qu'on ait ou non, accès aux boucles en courant du robot.  
+
 
 \subsection{Influence sur la tâche}
 
@@ -363,8 +610,6 @@ Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche
 \subsection{Rappel littérature}
 
 \subsection{Outil de mesures et d'introduction des perturbations}
-
-
 
 
 \bibliographystyle{apalike} %abbrvnat
