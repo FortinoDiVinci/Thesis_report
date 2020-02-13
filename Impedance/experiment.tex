@@ -79,17 +79,19 @@ G. Avrin, I. Siegler ... texte texte texte texte.
 
 \subsection{Ajout d'interactions physiques}
 
+[s'inspirer de la présentation faite à FeDeV]
+
 \section{Transparence du robot}
 
 \begin{flushright}
-	{\color{DarkGoldenrod} \textit{\textbf{Comment utiliser un robot motorisé en minimisant ses effets sur la tâche étudiée ?}}}
+	{\color{DarkGoldenrod} \textit{\textbf{Comment utiliser un robot motorisé en minimisant ses effets sur la tâche étudiée lors d'une comanipulation ?}}}
 \end{flushright}
 
 \subsection{Boucle de contrôle}
 
-\subsubsection{Transparence}
-
 Étant donné que les interactions entre l'humain et le robot sont localisées en son effecteur, un contrôle en impédance utilisant un capteur de force se prête bien à l'expérience. La littérature existante pour ce type de contrôle est assez riche, que ce soit dans les travaux de thèse de \cite{lamy_conception_2011}, pour la minimisation de l'inertie lors de tâches collaboratives \citep{Lamy_achieving_2009}, pour des tâches de téléopération \citep{ajoudani_tele-impedance_2012} [dois-je détailler sur l'utilisation notamment de capteur EMG pour estimer l'impédance ??], ou dans la cas de robots redondants \citep{ficuciello_cartesian_2014}. Plusieurs revues de l'état de l'art ont par ailleurs été publiées, pour le cas particulier des composants à impédance variable \citep{vanderborght_variable_2013}, dans le cas spécifique du contrôle en admittance \citep{keemink_admittance_2018}, pour essayer d'unifier les contrôles en impédance et admittance \citep{ott_unified_2010}, et aussi dans le cas de mouvements bio-inspirés \citep{al-shuka_active_2018}.
+
+\subsubsection{Contrôle articulaire}
 
 \paragraph{Natural Admittance Controller}
 
@@ -323,7 +325,7 @@ Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ (\jacobian{q_d}{}{
 
 Une solution envisageable pour limiter les mouvements à l'axe vertical $\mathbf{z}$ réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \cite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\mathbf{z}$, entrainerait alors des effets résiduels sur la transparence toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{virtual_guide_control} a permis d'observer la dégradation de la transparence. [détailler ??]
 
-\paragraph{Asservissement dans l'espace cartésien}
+\subsubsection{Contrôle cartésien}
 
 La tâche étudiée étant limitée dans un espace de travail cartésien, il est intéressant de réaliser l'asservissement directement dans cette espace. On génèrera des commandes cartésiennes en vitesse, qui seront passées au niveau articulaire à l'aide de l'équation \cref{eq_link_joint_endpoint_velocity}. On vérifie ainsi que dans le cas d'un asservissement idéal, aucun phénomène de couplage n'a lieu.
 
@@ -412,7 +414,7 @@ Pour remédier à cette problématique, il suffit d'ajouter un asservissement pr
 %
 \begin{equation} \label{eq_Fz_endpoint_total}
 	\begin{split}
-	\dot{\vect{q}}_d &= \jacobian{q}{}{-1} \begin{bmatrix} 0 & K_z & 0 \end{bmatrix} \cdot {\vect{F}_e} + \begin{bmatrix} K_x & 0 & 0 \end{bmatrix} \cdot (\vect{X}_0 - {\vect{X}})
+	\dot{\vect{q}}_d &= \jacobian{q}{}{-1} \left(\begin{bmatrix} 0 & K_z & 0 \end{bmatrix} \cdot {\vect{F}_e} + \begin{bmatrix} K_x & 0 & 0 \end{bmatrix} \cdot (\vect{X}_0 - {\vect{X}})\right)
 	\end{split}
 \end{equation}
 
@@ -426,7 +428,7 @@ Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâ
 %
 \begin{equation} \label{eq_pseudo_inverse}
 	\begin{split}
-	\matr{A}^{\matr{W}+} = \matr{W}^{-1}\matr{A}^t(\matr{AW}^{-1}\matr{A}^t)^{-1}
+	\matr{A}^{\matr{W}+} = \matr{W}^{-1}\matr{A}^t\left(\matr{AW}^{-1}\matr{A}^t\right)^{-1}
 	\end{split}
 \end{equation}
 %
@@ -442,14 +444,14 @@ avec $ \vect{\tau}_2^p \in \rm I\!R^n $ le couple de la tâche projetée qui n'i
 %
 \begin{equation} \label{eq_null_space_proj_2}
 	\begin{split}
-	\matr{N}_2^\tau(q) = \matr{I} - \jacobian{q}{1}{t}(\jacobian{q}{1}{\matr{W}+})^t
+	\matr{N}_2^\tau(q) = \matr{I} - \jacobian{q}{1}{t}\left(\jacobian{q}{1}{\matr{W}+}\right)^t
 	\end{split}
 \end{equation}
 
 La boucle de commande considérée pour l'expérience est réalisée en vitesse et non en couple comme c'est le cas dans l'article cité. Comme expliqué par \cite{sadeghian_multi-priority_2011}, la relation est alors : [démonstration ??]
 \begin{equation} \label{eq_null_space_proj_velocities}
 	\begin{split}
-	\dot{\vect{q}}_2^p = (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{})\dot{\vect{q}}_2
+	\dot{\vect{q}}_2^p = \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2
 	\end{split}
 \end{equation}
 %
@@ -578,7 +580,23 @@ avec :
 
 [Présenter résultat de la transparence] ?
 
-\subsubsection{Perturbations}
+\subsection{Influence sur la tâche}
+
+\section{Estimation de l'impédance}
+
+\begin{flushright}
+	{\color{DarkGoldenrod} \textit{\textbf{Comprendre les stratégies de modulation de l'impédance lors d'interaction cyclique prévisible.}}}
+\end{flushright}
+
+\subsection{Rappel littérature}
+
+[préciser les données chiffrées concernant l'outillage, capteur, amplitude durée perturbations, ... mais aussi l'ordre de grandeur des résultats obtenus ??]
+
+\subsection{Outil de mesures et d'introduction des perturbations}
+
+[présenter le set up expérimental, capteur (compensation gravité...), robot, noeuds ROS utilisés, avec leur fréquence de fonctionnement..]
+
+\paragraph{Perturbations}
 
 Comme expliqué dans la section 1.3 sur les méthodes d'estimation de l'impédance, l'introduction de perturbations est nécessaire pour l'expérience. Étant donné la boucle de contrôle présentée en \cref{fig_comanipulation_ctrl}, 3 solutions pour introduire des perturbations en force qui soient maîtrisées, peuvent être proposées, sans équipement externe au robot - \textit{outre le capteur de force}.
 
@@ -600,21 +618,9 @@ La dernière solution nécessite de pouvoir introduire des perturbations aux con
 
 \newlineBlank
 
-Selon la nature des perturbations on préfèrera certaines des solutions proposées. En effet, si l'on souhaite introduire des perturbations lente voire statique la première solution est la plus simple et la moins gourmande en calcul. Au contraire, pour des perturbations courtes, de l'ordre de la dizaine de millisecondes opter pour la première solution n'est plus envisageable, dans ce cas on préfèrera l'une des deux autres solutions, selon qu'on ait ou non, accès aux boucles en courant du robot.  
+Selon la nature des perturbations on préfèrera certaines des solutions proposées. En effet, si l'on souhaite introduire des perturbations lente voire statique, la première solution est la plus simple et la moins gourmande en calcul. Au contraire, pour des perturbations courtes, inférieur ou de l'ordre de la dizaine de millisecondes, opter pour la première solution n'est plus envisageable. Dans ce cas, on préfèrera l'une des deux autres solutions, selon qu'on ait ou non, accès aux boucles en courant du robot.  
 
-
-\subsection{Influence sur la tâche}
-
-\section{Estimation de l'impédance}
-
-\begin{flushright}
-	{\color{DarkGoldenrod} \textit{\textbf{Comprendre les stratégies de modulation de l'impédance lors d'interaction cyclique prévisible.}}}
-\end{flushright}
-
-\subsection{Rappel littérature}
-
-\subsection{Outil de mesures et d'introduction des perturbations}
-
+\subsection{Résultats}
 
 \bibliographystyle{apalike} %abbrvnat
 
