@@ -213,6 +213,9 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
                     boost::bind(&YouBotOODLWrapper::armJointTrajectoryGoalCallback, this, _1, armIndex),
                     boost::bind(&YouBotOODLWrapper::armJointTrajectoryCancelCallback, this, _1, armIndex), false);
 
+    topicName.str("");
+    topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "arm_controller/PID_reconfiguration";
+    youBotConfiguration.youBotArmConfigurations[armIndex].pidReconfigCommandSubscriber = node.subscribe<youbot_driver_ros_interface::YouBotPID > (topicName.str(), 1000, boost::bind(&YouBotOODLWrapper::pidReconfigCommandCallback, this, _1, armIndex));
 
     topicName.str("");
     topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "joint_states";
@@ -605,7 +608,7 @@ void YouBotOODLWrapper::armCurrentsCommandCallback(const youbot_driver_ros_inter
             {
 
                 /* set the desired joint value */
-                ROS_DEBUG("Trying to set joint %s to new velocity value %f", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), jointIterator->second);
+                ROS_DEBUG("Trying to set joint %s to new current value %f", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), jointIterator->second);
                 desiredCurrent.current = jointIterator->second * ampere;
                 try
                 {
@@ -672,7 +675,7 @@ void YouBotOODLWrapper::armTorquesCommandCallback(const brics_actuator::JointTor
             {
 
                 /* set the desired joint value */
-                ROS_DEBUG("Trying to set joint %s to new velocity value %f", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), jointIterator->second);
+                ROS_DEBUG("Trying to set joint %s to new torque value %f", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), jointIterator->second);
                 desiredCurrent.current = jointIterator->second * armJointGearRatio[i] / armJointTorqueConstant[i] * ampere;
                 try
                 {
@@ -694,6 +697,88 @@ void YouBotOODLWrapper::armTorquesCommandCallback(const brics_actuator::JointTor
     }
 }
 
+void YouBotOODLWrapper::pidReconfigCommandCallback(const youbot_driver_ros_interface::YouBotPID::ConstPtr& youbotArmCommand, int armIndex)
+{
+    ROS_DEBUG("New PID config for arm%i received", armIndex + 1);
+    ROS_ASSERT(0 <= armIndex && armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
+
+    if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0)
+    { // in case stop has been invoked
+
+        if (youbotArmCommand->positions.size() < 1)
+        {
+            ROS_WARN("youBot driver received an invalid joint PID config.");
+            return;
+        }
+
+        int p_value, i_value, d_value = 0;      
+        youbot::PParameterSecondParametersPositionControl p_pos_2;
+        youbot::IParameterSecondParametersPositionControl i_pos_2;
+        youbot::DParameterSecondParametersPositionControl d_pos_2;
+
+        /* populate mapping between joint names and values  */
+        typedef std::tuple<unsigned int, unsigned int, unsigned int> youBotPIDs_t;
+        std::map<string, youBotPIDs_t> jointNameToValueMappingPosition;
+        for (int i = 0; i < static_cast<int> (youbotArmCommand->positions.size()); ++i)
+        {
+            jointNameToValueMappingPosition.insert(make_pair(youbotArmCommand->positions[i].joint_uri, make_tuple(youbotArmCommand->positions[i].P_value, youbotArmCommand->positions[i].I_value, youbotArmCommand->positions[i].D_value)));
+        }
+
+        /* loop over all youBot arm joints and check if something is in the received message that requires action */
+        ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames.size() == static_cast<unsigned int> (youBotArmDoF));
+        youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
+
+        for (int i = 0; i < youBotArmDoF; ++i)
+        {
+            /* check what is in map */
+            std::map<string, youBotPIDs_t>::const_iterator jointIterator = jointNameToValueMappingPosition.find(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]);
+            if (jointIterator != jointNameToValueMappingPosition.end())
+            {
+                /* set the desired joint value */
+                ROS_DEBUG("Trying to set joint %s to new position PID values: %i, %i, %i", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), std::get<0>(jointIterator->second), std::get<1>(jointIterator->second), std::get<2>(jointIterator->second));
+                
+                p_pos_2.setParameter(std::get<0>(jointIterator->second));
+                i_pos_2.setParameter(std::get<1>(jointIterator->second));
+                d_pos_2.setParameter(std::get<2>(jointIterator->second));
+                
+                try
+                {                
+                    youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).setConfigurationParameter(p_pos_2); //youBot joints start with 1 not with 0 -> i + 1
+                    youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).setConfigurationParameter(i_pos_2); 
+                    youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).setConfigurationParameter(d_pos_2); 
+                }
+                catch (std::exception& e)
+                {
+                    std::string errorMessage = e.what();
+                    ROS_WARN("Cannot set arm joint %i: %s", i + 1, errorMessage.c_str());
+                }
+            }
+        }
+        youbot::EthercatMaster::getInstance().AutomaticSendOn(true); // ensure that all joint values will be send at the same time
+        int pid_val = 0;
+        for (int i = 0; i < youBotArmDoF; ++i)
+        {
+            /* check what is in map */
+            std::map<string, youBotPIDs_t>::const_iterator jointIterator = jointNameToValueMappingPosition.find(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]);
+            if (jointIterator != jointNameToValueMappingPosition.end())
+            {
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getConfigurationParameter(p_pos_2);
+                p_pos_2.getParameter(pid_val);
+                ROS_INFO("Joint %i for arm 1 has position_control P value set to: %i", i+1, pid_val);
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getConfigurationParameter(i_pos_2);
+                i_pos_2.getParameter(pid_val);
+                ROS_INFO("Joint %i for arm 1 has position_control I value set to: %i", i+1, pid_val);
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getConfigurationParameter(d_pos_2);
+                d_pos_2.getParameter(pid_val);
+                ROS_INFO("Joint %i for arm 1 has position_control D value set to: %i", i+1, pid_val);
+            }
+        }   
+    }
+    else
+    {
+        ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
+    }
+}
 
 void YouBotOODLWrapper::armJointTrajectoryGoalCallback(actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle youbotArmGoal, unsigned int armIndex) {
     ROS_INFO("Goal for arm%i received", armIndex + 1);

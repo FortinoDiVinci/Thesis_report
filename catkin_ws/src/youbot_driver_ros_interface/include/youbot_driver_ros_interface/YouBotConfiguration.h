@@ -145,6 +145,9 @@ public:
     /// Receives "brics_actuator/JointTorques" for the arm joints
     ros::Subscriber armTorqueCommandSubscriber;
     
+    // Added by Vincent FORTINEAU
+    /// Receives "YouBotPID" for reconfiguring online the position, velocity, and effort PIDs
+    ros::Subscriber pidReconfigCommandSubscriber;
 
     /// Implements a "control_msgs/FollowJointTrajectory" action
     actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> *armJointTrajectoryAction;

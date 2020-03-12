@@ -64,12 +64,14 @@
 #include "brics_actuator/JointVelocities.h"
 #include "brics_actuator/JointTorques.h" // added by Vincent FORTINEAU
 #include "youbot_driver_ros_interface/MotorCurrent.h" // added by Vincent FORTINEAU
-#include <std_msgs/Float32MultiArray.h>  // added by Vincent FORTINEAU (vfo)
+#include "youbot_driver_ros_interface/YouBotPID.h" // added by Vincent FORTINEAU
+#include <std_msgs/Float32MultiArray.h>  // added by Vincent FORTINEAU
 
 /* OODL includes */
 #include "YouBotConfiguration.h"
 #include <youbot_driver/youbot/JointTrajectoryController.hpp>
 #include <youbot_driver/youbot/DataTrace.hpp>
+#include <youbot_driver/youbot/YouBotJointParameter.hpp>
 
 //#include <control_msgs/FollowJointTrajectoryAction.h>
 //#include <actionlib/server/simple_action_server.h>
@@ -172,6 +174,15 @@ public:
      */
 
     void armTorquesCommandCallback(const brics_actuator::JointTorquesConstPtr& youbotArmCommand, int armIndex);
+
+    /**
+     * @brief Callback that is executed when a new PID config for the arm comes in.
+     * @param youbotArmCommand Message that contains the desired joint configuration.
+     * @param armIndex Index that identifies the arm
+     * This function was added by Vincent FORTINEAU
+     */
+
+    void pidReconfigCommandCallback(const youbot_driver_ros_interface::YouBotPID::ConstPtr& youbotArmCommand, int armIndex);
 
     /**
      * @brief Callback that is executed when an action goal to perform a joint trajectory with the arm comes in.
