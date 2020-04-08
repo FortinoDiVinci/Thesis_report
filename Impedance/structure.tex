@@ -35,6 +35,8 @@
 
 \usepackage{graphicx} % Required for adding images
 
+\usepackage{svg} % For svg pictures
+
 \usepackage{enumitem} % Required for customising lists
 \setlist{noitemsep} % Remove spacing between bullet/numbered list elements
 
@@ -50,10 +52,10 @@
 \usepackage{xstring}
 
 \usepackage{tikz} % figure de façon générale - T. Chevet (la référence)
-	\usetikzlibrary{babel}
 	\usetikzlibrary{shapes}
 	\usetikzlibrary{arrows.meta}
-	\usetikzlibrary{calc}	
+	\usetikzlibrary{calc}
+	\usetikzlibrary{babel}
 	\usetikzlibrary{patterns}
 	
 \usepackage{circuitikz}
@@ -138,8 +140,8 @@
 %compute get angle for arc
 \newcommand{\pgfExtractAngle}[3]{%
 	\pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}
-						      {\pgfpointanchor{#3}{center}}
-    \global\let#1\pgfmathresult
+	{\pgfpointanchor{#3}{center}}
+	\global\let#1\pgfmathresult
 }
 
 %----------------------------------------------------------------------------------------

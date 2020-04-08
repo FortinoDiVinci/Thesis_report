@@ -117,6 +117,9 @@ G. Avrin, I. Siegler ... texte texte texte texte.
 	
 	\path ($ (joint3) + \coeff*(0.113*\alp, {0.113*(1 - \alp)}) $) coordinate (endeffector);
 	
+	\node[right of = endeffector](hand) 
+	{\includesvg[width=2in]{misc/hand}};
+	
 	\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (0, 4) $)
 	node[at end, left] {$\vect{z}$};
 	\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (4, 0) $)
@@ -642,7 +645,7 @@ avec :
 	\item[•] $ \vect{q} $ les 3 positions articulaires,
 	\item[•] $ \vect{q}_0 $ les consignes de positions articulaires,
 	\item[•] $ x_0 $ la consigne en position sur l'axe $x$,
-	\item[•] $ C^z(s) $ le correcteur pour la transparence le long de l'axe $z$,
+	\item[•] $ C_z(s) $ le correcteur pour la transparence le long de l'axe $z$,
 	\item[•] $ \jacobian{q}{}{} $ le jacobien $ 3\times3 $ de l'effecteur,
 	\item[•] $ \matr{N}_2(q) $ le projecteur dans le noyau de la tâche en $z$.	
 \end{enumerate}
