@@ -14,11 +14,11 @@
 # to python by Vincent FORTINEAU (L2S - CentraleSupélec & Université
 # Paris-Sud) with minor modifications
 # execution time estimated around 29.99us +/- 0.005us
-# C++ code created to improve execution time of the main function
+# C++ code created to decrease execution time of the main function
  */
 
-void forward_kinematic(const float th[5], float rot_matrix[][4]) {
-
+void forward_kinematic(const float th[5], float rot_matrix[][4]) 
+{
     float th1 = th[0];
     float th2 = th[1];
     float th3 = th[2];
@@ -120,7 +120,113 @@ void forward_kinematic(const float th[5], float rot_matrix[][4]) {
     #if 0
     std::cout << R11 << ' ' << R12 << ' ' << R13 << ' ' << tx << '\n';
     std::cout << R21 << ' ' << R22 << ' ' << R23 << ' ' << ty << '\n';
-    std::cout << R31 << ' ' << R32 << ' ' << R33 << ' ' << tz << '\n';
+    std::cout << R31 << ' ' << R32 << ' ' << R33 << ' ' << tz << '\n' << '\n';
     #endif
 }
 
+// simplified version of the forward_kinematic function, it only set the translation coordinates of the robot endpoint
+void forwardKinematicTranslationOnly(const float th[5], float translation[]) 
+{
+    float th1 = th[0];
+    float th2 = th[1];
+    float th3 = th[2];
+    float th4 = th[3];
+    float th5 = th[4];    
+    
+    float t4 = M_PI*(1.1e1/1.8e2);
+    float t5 = t4 + th1;
+    float t6 = M_PI*(5.0/3.6e1);
+    float t7 = t6 + th2;
+    float t8 = sin(t5);
+    float t9 = M_PI*(1.4e1/4.5e1);
+    float t10 = t9 + th3;
+    float t11 = cos(t7);
+    float t12 = cos(t5);
+    float t13 = sin(t7);
+    float t14 = M_PI*(3.1e1/7.2e1);
+    float t15 = t14 + th4;
+    float t16 = cos(t10);
+    float t18 = t12*t13;
+    float t20 = sin(t10);
+    float t26 = t11*t12;
+    float t22 = -t26;
+    float t24 = cos(t15);
+    float t25 = t16*t18;
+    float t33 = t20*t22;
+    float t27 = t25 - t33;
+    float t28 = sin(t15);
+    float t29 = t16*t22;
+    float t30 = t18*t20;
+    float t31 = t29 + t30;
+    float t39 = t8*t13;
+    float t41 = t8*t11;
+    float t45 = t16*t39;
+    float t46 = t20*t41;
+    float t47 = t45 + t46;
+    float t48 = t16*t41;
+    float t51 = t20*t39;
+    float t49 = t48 - t51;
+    float t57 = M_PI*(1.0/2.0e1);
+    float t58 = th2 + th3 + th4 - M_PI*(4.3e1/3.6e2);
+    float t59 = cos(t58);
+    
+    float a1 = 2.7e1/2.0e2;
+    float a2 = 3.3e1/1.0e3;
+    float a3 = 3.1e1/2.0e2;
+    float a4 = 1.09e2/5.0e2;
+    
+    float tx = -t12*(a2) + t11*t12*(a3) - t16*t18*(a1) + t24*t27*(a4) - t28*t31*(a4) + t20*(-t26)*(a1); 
+    float ty = t8*(a2) - t8*t11*(a3) + t20*t41*(a1) - t24*t47*(a4) - t28*t49*(a4)+t16*(t39)*(a1); 
+    float tz = t13*(a3) + t59*(a4) - sin(-t57 + th2 + th3)*(a1) + 1.47e-1;
+    
+    translation[0] = tx;
+    translation[1] = ty;
+    translation[2] = tz;
+}
+
+// simplified version of the forward_kinematic function, it only give the y endpoint rotation 
+void getYEndPointAngle(const float th[5], float* y_angle) 
+{
+    float th1 = th[0];
+    float th2 = th[1];
+    float th3 = th[2];
+    float th4 = th[3];
+    float th5 = th[4];  
+    
+    float t2 = M_PI*(5.0/7.2e1);
+    float t3 = t2 + th5;
+    float t4 = M_PI*(1.1e1/1.8e2);
+    float t5 = t4 + th1;
+    float t6 = M_PI*(5.0/3.6e1);
+    float t7 = t6 + th2;
+    float t8 = sin(t5);
+    float t9 = M_PI*(1.4e1/4.5e1);
+    float t10 = t9 + th3;
+    float t11 = cos(t7);
+    float t12 = cos(t5);
+    float t13 = sin(t7);
+    float t14 = M_PI*(3.1e1/7.2e1);
+    float t15 = t14 + th4;
+    float t16 = cos(t10);
+    float t18 = t12*t13;
+    float t19 = t18;
+    float t20 = sin(t10);
+    float t26 = t11*t12;
+    float t22 = -t26; 
+    float t23 = sin(t3);
+    float t24 = cos(t15);
+    float t25 = t16*t19;
+    float t29 = t16*t22;
+    float t30 = t19*t20;
+    float t31 = t29 + t30;
+    float t33 = t20*t22;
+    float t27 = t25 - t33;
+    float t28 = sin(t15);
+    float t32 = cos(t3);
+    float t36 = t24*t31;
+    float t37 = t27*t28;
+    
+    float R11 = t32*(t36 + t37) - t8*t23;
+    
+    *y_angle = acos(R11);
+}

@@ -63,16 +63,23 @@
 #include "brics_actuator/JointPositions.h"
 #include "brics_actuator/JointVelocities.h"
 #include "brics_actuator/JointTorques.h" // added by Vincent FORTINEAU
+#include "youbot_driver_ros_interface/MotorCurrent.h" // added by Vincent FORTINEAU
+#include "youbot_driver_ros_interface/YouBotPID.h" // added by Vincent FORTINEAU
+#include <std_msgs/Float32MultiArray.h>  // added by Vincent FORTINEAU
 
 /* OODL includes */
 #include "YouBotConfiguration.h"
 #include <youbot_driver/youbot/JointTrajectoryController.hpp>
 #include <youbot_driver/youbot/DataTrace.hpp>
+#include <youbot_driver/youbot/YouBotJointParameter.hpp>
 
 //#include <control_msgs/FollowJointTrajectoryAction.h>
 //#include <actionlib/server/simple_action_server.h>
 
 //typedef actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> Server;
+
+// set to 1 to avoid the position, velocity and torque setpoint publication, added by vfo
+#define PUBLISH_JOINT_SET_POINTS 1
 
 namespace youBot
 {
@@ -157,7 +164,25 @@ public:
      * This function was added by Vincent FORTINEAU
      */
 
+    void armCurrentsCommandCallback(const youbot_driver_ros_interface::MotorCurrent::ConstPtr& youbotArmCommand, int armIndex);
+
+    /**
+     * @brief Callback that is executed when a torques command for the arm comes in.
+     * @param youbotArmCommand Message that contains the desired joint configuration.
+     * @param armIndex Index that identifies the arm
+     * This function was added by Vincent FORTINEAU
+     */
+
     void armTorquesCommandCallback(const brics_actuator::JointTorquesConstPtr& youbotArmCommand, int armIndex);
+
+    /**
+     * @brief Callback that is executed when a new PID config for the arm comes in.
+     * @param youbotArmCommand Message that contains the desired joint configuration.
+     * @param armIndex Index that identifies the arm
+     * This function was added by Vincent FORTINEAU
+     */
+
+    void pidReconfigCommandCallback(const youbot_driver_ros_interface::YouBotPID::ConstPtr& youbotArmCommand, int armIndex);
 
     /**
      * @brief Callback that is executed when an action goal to perform a joint trajectory with the arm comes in.
@@ -199,6 +224,18 @@ public:
      * @brief Mapps OODL values to ROS messages
      */
     void computeOODLSensorReadings();
+    
+    /**
+     * @brief get additional sensor measurment (current)
+     * function was added by vfo in 2019
+     */
+    void getArmSensorData(std_msgs::Float32MultiArray* current, std_msgs::Float32MultiArray* torque);
+    
+    /**
+     * @brief get joint setpoint (current & velocity)
+     * function was added by vfo in 2019
+     */
+    void getArmSetPointData(std_msgs::Float32MultiArray* current, std_msgs::Float32MultiArray* velocity);
 
     bool switchOffBaseMotorsCallback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
 
@@ -259,6 +296,19 @@ private:
 
     /// Vector of the published joint states of per arm with angles in [RAD]
     vector<sensor_msgs::JointState> armJointStateMessages;
+    
+    #if PUBLISH_JOINT_SET_POINTS == 1
+    /// Vector of the published joint set point per arm with angles in [RAD]
+    vector<sensor_msgs::JointState> armJointSetPointMessages;
+    /// Vector of the ramp generator velocity joint set point per arm with velocities in [RAD/s]
+    vector<sensor_msgs::JointState> armJointRampSetPointMessages;
+    
+    /// Vector of motor torque constant for each joint
+    vector<double> armJointTorqueConstant;
+    
+    /// Vector of gear ratio for each joint
+    vector<double> armJointGearRatio;
+    #endif
 
     /// The joint trajectory goal that is currently active.
     actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle armActiveJointTrajectoryGoal;

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<launch>
+	
+  <arg name="kinem_rate" default="1200.0" />
+  <arg name="tf_ratio" default="1.0" />
+  <arg name="sensor_rate" default="1000.0" />
+  <arg name="control_loop_rate" default="150.0" />
+  <arg name="sensor_ip" default="192.168.1.1" />
+  <arg name="grav_comp_rate" default="1000.0" />
+  <arg name="sensor_mass" default="0.1096" />
+  <arg name="sensor_lever" default="0.0103" />
+  <arg name="bias" default="True" />
+  
+  <arg name="P_gain_cmd4" default="0.8" /> <!-- 2.3 -->
+  <arg name="I_gain_cmd4" default="10" /> <!-- 10 -->
+  <arg name="P_gain_cmd3" default="0.4" />
+  <arg name="I_gain_cmd3" default="5" />
+  <arg name="P_gain_cmd2" default="0.1" />
+  <arg name="I_gain_cmd2" default="3" />  
+  <arg name="Nb_joints" default="3" />
+  <!--
+  <arg name="Virtual_Mechanism_Kx" default="700" /> 
+  <arg name="Virtual_Mechanism_Bx" default="70" /> 
+  <arg name="Virtual_Mechanism_Kry" default="50" /> 
+  <arg name="Virtual_Mechanism_Bry" default="5" /> 
+  -->
+  <arg name="Virtual_Mechanism_Kx" default="1000" />
+  <arg name="Virtual_Mechanism_Bx" default="100" />
+  <arg name="Virtual_Mechanism_Kry" default="1000" />
+  <arg name="Virtual_Mechanism_Bry" default="100" />
+  <arg name="Virtual_Mechanism_x0" default="-0.33" />
+  <arg name="Virtual_Mechanism_ry0" default="1.5708" /> <!-- 90° --> 
+  <!--
+  <arg name="Debug_1_axis" default="false" />
+  <arg name="Debug_axis_nb" default="2" />
+  <arg name="three_axis" default="false" />
+  <arg name="two_axis" default="true" />
+
+  <param name="Debug_single_axis" value="$(arg Debug_1_axis)"/>
+  <param name="Debug_sngl_axis_nb" value="$(arg Debug_axis_nb)"/>
+  <param name="Three_axis" value="$(arg three_axis)"/>
+  <param name="Two_axis" value="$(arg two_axis)"/>
+	-->
+  
+  <!-- This delay is necessary to wait for the gravity computation 
+  The computation of the bias is achieved in a little more than 1s -->
+  <arg name="node_control_delay" default="2.0" /> 
+  
+  <node name="netft_sensor" pkg="netft_utils" type="netft_node_u" output="screen" args=" --rate $(arg sensor_rate) --address $(arg sensor_ip)"/>
+
+  <node name="endpoint_pose" pkg="youbot_ros_control" type="endpoint" output="screen">
+    <param name="tf_ratio" value ="$(arg tf_ratio)"/>
+    <param name="rate" value ="$(arg kinem_rate)"/>
+  </node>
+ 
+  <node name="gravity_compensation" pkg="youbot_ros_control" type="gravity_comp" output="screen"> 
+    <param name="rate" value="$(arg grav_comp_rate)"/>
+    <param name="sensor_mass" value="$(arg sensor_mass)"/>
+    <param name="sensor_arm_lever" value="$(arg sensor_lever)"/>
+    <param name="bias" value="$(arg bias)"/>
+    <param name="avg_values" value= "$(arg sensor_rate)"/>
+    <remap from="force_sensor/grav_comp" to="force_feedback"/>
+  </node> 
+  
+  <node name="old_control_loop" pkg="youbot_ros_control" type="old_control_loop" output="screen" launch-prefix="bash -c 'sleep $(arg node_control_delay); $0 $@' ">
+    <param name="rate" value="$(arg control_loop_rate)"/>
+    <param name="Kp4_gain" value="$(arg P_gain_cmd4)"/>
+    <param name="Ki4_gain" value="$(arg I_gain_cmd4)"/>
+    <param name="Kp3_gain" value="$(arg P_gain_cmd3)"/>
+    <param name="Ki3_gain" value="$(arg I_gain_cmd3)"/>
+    <param name="Kp2_gain" value="$(arg P_gain_cmd2)"/>
+    <param name="Ki2_gain" value="$(arg I_gain_cmd2)"/>    
+    <param name="Nb_joints_ctrl" value="$(arg Nb_joints)"/>
+    <param name="Stiffness_x" value="$(arg Virtual_Mechanism_Kx)"/>
+    <param name="Damping_x" value="$(arg Virtual_Mechanism_Bx)"/>
+    <param name="Equilibrium_x" value="$(arg Virtual_Mechanism_x0)"/>
+    <param name="Stiffness_ry" value="$(arg Virtual_Mechanism_Kry)"/>
+    <param name="Damping_ry" value="$(arg Virtual_Mechanism_Bry)"/>
+    <param name="Equilibrium_ry" value="$(arg Virtual_Mechanism_ry0)"/>    
+    <remap from="force_sensor/grav_comp" to="force_feedback"/>
+  </node>
+  <!--  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find youbot_ros_control)/rviz/robot_transforms.rviz"/> -->
+  
+</launch>

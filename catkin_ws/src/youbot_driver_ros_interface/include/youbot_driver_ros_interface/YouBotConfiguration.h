@@ -139,18 +139,30 @@ public:
     ros::Subscriber armVelocityCommandSubscriber;
     
     // Added by Vincent FORTINEAU
-    /// Receives "brics_actuator/JointVelocities" for the arm joints 
+    /// Receives "MotorCurrent" for the arm joints, custom message derived from brics_actuator/JointTorques
+    ros::Subscriber armCurrentCommandSubscriber;
+    
+    /// Receives "brics_actuator/JointTorques" for the arm joints
     ros::Subscriber armTorqueCommandSubscriber;
+    
+    // Added by Vincent FORTINEAU
+    /// Receives "YouBotPID" for reconfiguring online the position, velocity, and effort PIDs
+    ros::Subscriber pidReconfigCommandSubscriber;
 
-	/// Implements a "control_msgs/FollowJointTrajectory" action
-	actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> *armJointTrajectoryAction;
+    /// Implements a "control_msgs/FollowJointTrajectory" action
+    actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> *armJointTrajectoryAction;
 
     /// Receives "brics_actuator/JointPositions" for the gripper
     ros::Subscriber gripperPositionCommandSubscriber;
 
-
     /// Publishes JointState messages with angles for the arm.
     ros::Publisher armJointStatePublisher;
+    
+    /// Publishes JointState messages with angles setpoint for the arm. added by vfo
+    ros::Publisher armJointSetPointPublisher;
+    
+    /// Publishes JointState messages with velocity ramp generator setpoint for the arm. added by vfo
+    ros::Publisher armJointRampSetPointPublisher;
 
     /// Service to switch the motor off by setting the PWM value to zero
     ros::ServiceServer switchOffMotorsService;

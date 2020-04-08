@@ -106,6 +106,11 @@ class YouBotManipulator {
     ///@param JointData the to command velocities
     virtual void setJointData(const std::vector<JointVelocitySetpoint>& JointData);
 
+    ///gets the ramp velocities of all manipulator joints
+    ///These values are all read at the same time from the different joints 
+    ///@param data returns the velocities by reference
+    virtual void getJointData(std::vector<JointRampGeneratorVelocity>& data);
+
     ///gets the velocities of all manipulator joints which have been calculated from the actual encoder values
     ///These values are all read at the same time from the different joints 
     ///@param data returns the velocities by reference

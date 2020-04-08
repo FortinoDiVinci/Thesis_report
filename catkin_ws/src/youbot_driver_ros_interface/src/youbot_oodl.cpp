@@ -38,6 +38,11 @@
  ******************************************************************************/
 
 #include "youbot_driver_ros_interface/YouBotOODLWrapper.h"
+#include <std_msgs/Float32MultiArray.h>
+
+//added by vfo
+//void getArmSensorData(youBot::YouBotOODLWrapper yB, std_msgs::Float32MultiArray* current);
+void getArmSetPointData(youBot::YouBotOODLWrapper yB, std_msgs::Float32MultiArray* current, std_msgs::Float32MultiArray* velocity);
 
 int main(int argc, char **argv)
 {
@@ -61,6 +66,19 @@ int main(int argc, char **argv)
 	n.param<std::string>("youBotConfigurationFilePath", youBot.youBotConfiguration.configurationFilePath, mkstr(YOUBOT_CONFIGURATIONS_DIR));
 	n.param<std::string>("youBotBaseName", youBot.youBotConfiguration.baseConfiguration.baseID, "youbot-base");
 
+    //modified by vfo
+    ros::Publisher pub_current = n.advertise<std_msgs::Float32MultiArray>
+        ("arm_1/sensedCurrent", 1);
+    ros::Publisher pub_torque = n.advertise<std_msgs::Float32MultiArray>
+        ("arm_1/sensedTorque", 1);
+    //ros::Publisher pub_velocity = n.advertise<std_msgs::Float32MultiArray>
+        ("arm_1/sensedVelocity", 1);
+    //ros::Publisher pub_angle = n.advertise<std_msgs::Float32MultiArray>
+        ("arm_1/sensedAngle", 1);
+    ros::Publisher pub_velocity_sp = n.advertise<std_msgs::Float32MultiArray>
+        ("arm_1/SetPointVelocity", 1);
+    ros::Publisher pub_current_sp = n.advertise<std_msgs::Float32MultiArray>
+        ("arm_1/SetPointCurrent", 1);
 
 	// Retrieve all defined arm names from the launch file params
 	int i = 1;
@@ -100,7 +118,23 @@ int main(int argc, char **argv)
 		}
 	}
  
-
+    // vfo modification
+	//std_msgs::Float32MultiArray j_pwm_pub;
+	std_msgs::Float32MultiArray j_current_pub;
+	std_msgs::Float32MultiArray j_torque_pub;
+	std_msgs::Float32MultiArray sp_current_pub;
+	std_msgs::Float32MultiArray sp_velocity_pub;
+	for(int i = 0; i<5; i++) {
+	    //j_pwm_pub.data.push_back(0.);
+	    j_current_pub.data.push_back(0.);
+	    j_torque_pub.data.push_back(0.);
+	    sp_current_pub.data.push_back(0.);
+	    sp_velocity_pub.data.push_back(0.);
+	}
+	
+	//youbot::TorqueConstant joint_tc[5];
+	
+	
     /* coordination */
     ros::Rate rate(youBotDriverCycleFrequencyInHz); //Input and output at the same time... (in Hz)
     while (n.ok())
@@ -109,6 +143,16 @@ int main(int argc, char **argv)
         youBot.computeOODLSensorReadings();
         youBot.publishOODLSensorReadings();
         youBot.publishArmAndBaseDiagnostics(2.0);    //publish only every 2 seconds
+        
+        //added by vfo
+        youBot.getArmSensorData(&j_current_pub, &j_torque_pub);    
+        youBot.getArmSetPointData(&sp_current_pub, &sp_velocity_pub);
+        //added by vfo
+        pub_current.publish(j_current_pub);
+        pub_torque.publish(j_torque_pub);
+        pub_current_sp.publish(sp_current_pub);
+        pub_velocity_sp.publish(sp_velocity_pub);
+        
         rate.sleep();
     }
 
@@ -116,4 +160,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-

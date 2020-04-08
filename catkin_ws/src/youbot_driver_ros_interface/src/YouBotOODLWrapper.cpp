@@ -61,6 +61,10 @@ node(n)
 
     youBotChildFrameID = "base_link"; //holds true for both: base and arm
     armJointStateMessages.clear();
+    #if PUBLISH_JOINT_SET_POINTS == 1
+    armJointSetPointMessages.clear();
+    armJointRampSetPointMessages.clear();
+    #endif 
 
     n.param("youBotDriverCycleFrequencyInHz", youBotDriverCycleFrequencyInHz, 50.0);
     //n.param("trajectoryActionServerEnable", trajectoryActionServerEnable, false);
@@ -147,7 +151,6 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
 
         }
 
-
         youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->doJointCommutation();
         youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->calibrateManipulator();
        	youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->calibrateSpeedControllers(); // added by vfo
@@ -192,7 +195,11 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "arm_controller/velocity_command";
     youBotConfiguration.youBotArmConfigurations[armIndex].armVelocityCommandSubscriber = node.subscribe<brics_actuator::JointVelocities > (topicName.str(), 1000, boost::bind(&YouBotOODLWrapper::armVelocitiesCommandCallback, this, _1, armIndex));
 
-    // Added by Vincent FORTINEAU for force control //
+    // Added by Vincent FORTINEAU for current/torque control //
+    topicName.str("");
+    topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "arm_controller/current_command";
+    youBotConfiguration.youBotArmConfigurations[armIndex].armCurrentCommandSubscriber = node.subscribe<youbot_driver_ros_interface::MotorCurrent > (topicName.str(), 1000, boost::bind(&YouBotOODLWrapper::armCurrentsCommandCallback, this, _1, armIndex));
+    
     topicName.str("");
     topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "arm_controller/torque_command";
     youBotConfiguration.youBotArmConfigurations[armIndex].armTorqueCommandSubscriber = node.subscribe<brics_actuator::JointTorques > (topicName.str(), 1000, boost::bind(&YouBotOODLWrapper::armTorquesCommandCallback, this, _1, armIndex));
@@ -206,10 +213,23 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
                     boost::bind(&YouBotOODLWrapper::armJointTrajectoryGoalCallback, this, _1, armIndex),
                     boost::bind(&YouBotOODLWrapper::armJointTrajectoryCancelCallback, this, _1, armIndex), false);
 
+    topicName.str("");
+    topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "arm_controller/PID_reconfiguration";
+    youBotConfiguration.youBotArmConfigurations[armIndex].pidReconfigCommandSubscriber = node.subscribe<youbot_driver_ros_interface::YouBotPID > (topicName.str(), 1000, boost::bind(&YouBotOODLWrapper::pidReconfigCommandCallback, this, _1, armIndex));
 
     topicName.str("");
     topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "joint_states";
     youBotConfiguration.youBotArmConfigurations[armIndex].armJointStatePublisher = node.advertise<sensor_msgs::JointState > (topicName.str(), 1); //TODO different names or one topic?
+    #if PUBLISH_JOINT_SET_POINTS == 1
+    topicName.str("");
+    topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "/joint_set_points";
+	youBotConfiguration.youBotArmConfigurations[armIndex].armJointSetPointPublisher = node.advertise<sensor_msgs::JointState > (topicName.str(), 1);
+	
+	topicName.str("");
+    topicName << youBotConfiguration.youBotArmConfigurations[armIndex].commandTopicName << "/joint_ramp_set_points";
+	youBotConfiguration.youBotArmConfigurations[armIndex].armJointRampSetPointPublisher = node.advertise<sensor_msgs::JointState > (topicName.str(), 1);
+	
+	#endif
 
     if (enableStandardGripper)
     {
@@ -256,7 +276,30 @@ void YouBotOODLWrapper::initializeArm(std::string armName, bool enableStandardGr
     /* initialize message vector for arm joint states */
     sensor_msgs::JointState dummyMessage;
     armJointStateMessages.push_back(dummyMessage);
-
+    
+    #if PUBLISH_JOINT_SET_POINTS == 1
+    armJointSetPointMessages.push_back(dummyMessage);
+    armJointRampSetPointMessages.push_back(dummyMessage);
+    youbot::TorqueConstant dummyTorqueConstant;
+    youbot::GearRatio dummyGearRatio;
+    double torqueConstant;
+    double gearRatio;
+         
+    for (int i = 0; i < youBotArmDoF; i++)
+    {
+    	youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getConfigurationParameter(dummyTorqueConstant);   	
+    	youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getConfigurationParameter(dummyGearRatio);
+    	// get values
+    	dummyTorqueConstant.getParameter(torqueConstant);
+    	dummyGearRatio.getParameter(gearRatio);  	
+    	armJointTorqueConstant.push_back(torqueConstant);
+    	armJointGearRatio.push_back(gearRatio);
+    	
+    	//std::cout <<  "Torque constant joint " << i+1 << ": " << armJointTorqueConstant[i] << std::endl;
+    	//std::cout <<  "Gear ratio joint " << i+1 << ": " << armJointGearRatio[i] << std::endl;
+    }
+	#endif
+	
     /* setup frame_ids */
     youBotArmFrameID = "arm"; //TODO find default topic name
     ROS_INFO("Arm \"%s\" is initialized.", armName.c_str());
@@ -314,6 +357,10 @@ void YouBotOODLWrapper::stop()
         }
 
         youBotConfiguration.youBotArmConfigurations[armIndex].armJointStatePublisher.shutdown();
+        #if PUBLISH_JOINT_SET_POINTS == 1
+        youBotConfiguration.youBotArmConfigurations[armIndex].armJointSetPointPublisher.shutdown();
+        youBotConfiguration.youBotArmConfigurations[armIndex].armJointRampSetPointPublisher.shutdown();
+        #endif
         youBotConfiguration.youBotArmConfigurations[armIndex].armPositionCommandSubscriber.shutdown();
         youBotConfiguration.youBotArmConfigurations[armIndex].armVelocityCommandSubscriber.shutdown();
         youBotConfiguration.youBotArmConfigurations[armIndex].calibrateService.shutdown();
@@ -326,7 +373,10 @@ void YouBotOODLWrapper::stop()
     areArmMotorsSwitchedOn = false;
     youBotConfiguration.youBotArmConfigurations.clear();
     armJointStateMessages.clear();
-
+    #if PUBLISH_JOINT_SET_POINTS == 1
+    armJointSetPointMessages.clear();
+    armJointRampSetPointMessages.clear();
+    #endif
     youbot::EthercatMaster::destroy();
 }
 
@@ -511,7 +561,74 @@ void YouBotOODLWrapper::armVelocitiesCommandCallback(const brics_actuator::Joint
     }
 }
 
-// Added by Vincent FORTINEAU for torque control //
+// Added by Vincent FORTINEAU for current/torque control //
+
+void YouBotOODLWrapper::armCurrentsCommandCallback(const youbot_driver_ros_interface::MotorCurrent::ConstPtr& youbotArmCommand, int armIndex)
+{
+    ROS_DEBUG("Command for arm%i received", armIndex + 1);
+    ROS_ASSERT(0 <= armIndex && armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
+
+    if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0)
+    { // in case stop has been invoked
+
+
+        if (youbotArmCommand->currents.size() < 1)
+        {
+            ROS_WARN("youBot driver received an invalid joint current command.");
+            return;
+        }
+
+        youbot::JointCurrentSetpoint desiredCurrent;
+        string unit = boost::units::to_string(boost::units::si::ampere);
+
+        /* populate mapping between joint names and values  */
+        std::map<string, double> jointNameToValueMapping;
+        for (int i = 0; i < static_cast<int> (youbotArmCommand->currents.size()); ++i)
+        {
+            if (unit == youbotArmCommand->currents[i].unit)
+            {
+                jointNameToValueMapping.insert(make_pair(youbotArmCommand->currents[i].joint_uri, youbotArmCommand->currents[i].value));
+            }
+            else
+            {
+                ROS_WARN("Unit incompatibility. Are you sure you want to command %s instead of %s ?", youbotArmCommand->currents[i].unit.c_str(), unit.c_str());
+            }
+
+        }
+
+        /* loop over all youBot arm joints and check if something is in the received message that requires action */
+        ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames.size() == static_cast<unsigned int> (youBotArmDoF));
+        youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
+        for (int i = 0; i < youBotArmDoF; ++i)
+        {
+
+            /* check what is in map */
+            map<string, double>::const_iterator jointIterator = jointNameToValueMapping.find(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]);
+            if (jointIterator != jointNameToValueMapping.end())
+            {
+
+                /* set the desired joint value */
+                ROS_DEBUG("Trying to set joint %s to new current value %f", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), jointIterator->second);
+                desiredCurrent.current = jointIterator->second * ampere;
+                try
+                {
+                    youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).setData(desiredCurrent); //youBot joints start with 1 not with 0 -> i + 1
+
+                }
+                catch (std::exception& e)
+                {
+                    std::string errorMessage = e.what();
+                    ROS_WARN("Cannot set arm joint %i: %s", i + 1, errorMessage.c_str());
+                }
+            }
+        }
+        youbot::EthercatMaster::getInstance().AutomaticSendOn(true); // ensure that all joint values will be send at the same time
+    }
+    else
+    {
+        ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
+    }
+}
 
 void YouBotOODLWrapper::armTorquesCommandCallback(const brics_actuator::JointTorquesConstPtr& youbotArmCommand, int armIndex)
 {
@@ -524,12 +641,12 @@ void YouBotOODLWrapper::armTorquesCommandCallback(const brics_actuator::JointTor
 
         if (youbotArmCommand->torques.size() < 1)
         {
-            ROS_WARN("youBot driver received an invalid joint velocities command.");
+            ROS_WARN("youBot driver received an invalid joint torques command.");
             return;
         }
 
         youbot::JointCurrentSetpoint desiredCurrent;
-        string unit = boost::units::to_string(boost::units::si::ampere);
+        string unit = boost::units::to_string(boost::units::si::newton_meter);
 
         /* populate mapping between joint names and values  */
         std::map<string, double> jointNameToValueMapping;
@@ -558,8 +675,8 @@ void YouBotOODLWrapper::armTorquesCommandCallback(const brics_actuator::JointTor
             {
 
                 /* set the desired joint value */
-                ROS_DEBUG("Trying to set joint %s to new velocity value %f", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), jointIterator->second);
-                desiredCurrent.current = jointIterator->second * ampere;
+                ROS_DEBUG("Trying to set joint %s to new torque value %f", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), jointIterator->second);
+                desiredCurrent.current = jointIterator->second * armJointGearRatio[i] / armJointTorqueConstant[i] * ampere;
                 try
                 {
                     youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).setData(desiredCurrent); //youBot joints start with 1 not with 0 -> i + 1
@@ -580,6 +697,88 @@ void YouBotOODLWrapper::armTorquesCommandCallback(const brics_actuator::JointTor
     }
 }
 
+void YouBotOODLWrapper::pidReconfigCommandCallback(const youbot_driver_ros_interface::YouBotPID::ConstPtr& youbotArmCommand, int armIndex)
+{
+    ROS_DEBUG("New PID config for arm%i received", armIndex + 1);
+    ROS_ASSERT(0 <= armIndex && armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()));
+
+    if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm != 0)
+    { // in case stop has been invoked
+
+        if (youbotArmCommand->positions.size() < 1)
+        {
+            ROS_WARN("youBot driver received an invalid joint PID config.");
+            return;
+        }
+
+        int p_value, i_value, d_value = 0;      
+        youbot::PParameterSecondParametersPositionControl p_pos_2;
+        youbot::IParameterSecondParametersPositionControl i_pos_2;
+        youbot::DParameterSecondParametersPositionControl d_pos_2;
+
+        /* populate mapping between joint names and values  */
+        typedef std::tuple<unsigned int, unsigned int, unsigned int> youBotPIDs_t;
+        std::map<string, youBotPIDs_t> jointNameToValueMappingPosition;
+        for (int i = 0; i < static_cast<int> (youbotArmCommand->positions.size()); ++i)
+        {
+            jointNameToValueMappingPosition.insert(make_pair(youbotArmCommand->positions[i].joint_uri, make_tuple(youbotArmCommand->positions[i].P_value, youbotArmCommand->positions[i].I_value, youbotArmCommand->positions[i].D_value)));
+        }
+
+        /* loop over all youBot arm joints and check if something is in the received message that requires action */
+        ROS_ASSERT(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames.size() == static_cast<unsigned int> (youBotArmDoF));
+        youbot::EthercatMaster::getInstance().AutomaticSendOn(false); // ensure that all joint values will be send at the same time
+
+        for (int i = 0; i < youBotArmDoF; ++i)
+        {
+            /* check what is in map */
+            std::map<string, youBotPIDs_t>::const_iterator jointIterator = jointNameToValueMappingPosition.find(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]);
+            if (jointIterator != jointNameToValueMappingPosition.end())
+            {
+                /* set the desired joint value */
+                ROS_DEBUG("Trying to set joint %s to new position PID values: %i, %i, %i", (youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]).c_str(), std::get<0>(jointIterator->second), std::get<1>(jointIterator->second), std::get<2>(jointIterator->second));
+                
+                p_pos_2.setParameter(std::get<0>(jointIterator->second));
+                i_pos_2.setParameter(std::get<1>(jointIterator->second));
+                d_pos_2.setParameter(std::get<2>(jointIterator->second));
+                
+                try
+                {                
+                    youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).setConfigurationParameter(p_pos_2); //youBot joints start with 1 not with 0 -> i + 1
+                    youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).setConfigurationParameter(i_pos_2); 
+                    youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).setConfigurationParameter(d_pos_2); 
+                }
+                catch (std::exception& e)
+                {
+                    std::string errorMessage = e.what();
+                    ROS_WARN("Cannot set arm joint %i: %s", i + 1, errorMessage.c_str());
+                }
+            }
+        }
+        youbot::EthercatMaster::getInstance().AutomaticSendOn(true); // ensure that all joint values will be send at the same time
+        int pid_val = 0;
+        for (int i = 0; i < youBotArmDoF; ++i)
+        {
+            /* check what is in map */
+            std::map<string, youBotPIDs_t>::const_iterator jointIterator = jointNameToValueMappingPosition.find(youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]);
+            if (jointIterator != jointNameToValueMappingPosition.end())
+            {
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getConfigurationParameter(p_pos_2);
+                p_pos_2.getParameter(pid_val);
+                ROS_INFO("Joint %i for arm 1 has position_control P value set to: %i", i+1, pid_val);
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getConfigurationParameter(i_pos_2);
+                i_pos_2.getParameter(pid_val);
+                ROS_INFO("Joint %i for arm 1 has position_control I value set to: %i", i+1, pid_val);
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getConfigurationParameter(d_pos_2);
+                d_pos_2.getParameter(pid_val);
+                ROS_INFO("Joint %i for arm 1 has position_control D value set to: %i", i+1, pid_val);
+            }
+        }   
+    }
+    else
+    {
+        ROS_ERROR("Arm%i is not correctly initialized!", armIndex + 1);
+    }
+}
 
 void YouBotOODLWrapper::armJointTrajectoryGoalCallback(actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle youbotArmGoal, unsigned int armIndex) {
     ROS_INFO("Goal for arm%i received", armIndex + 1);
@@ -779,6 +978,12 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
     youbot::JointSensedAngle currentAngle;
     youbot::JointSensedVelocity currentVelocity;
     youbot::JointSensedTorque currentTorque;
+    #if PUBLISH_JOINT_SET_POINTS == 1
+    youbot::JointAngleSetpoint angleSetPoint;
+    youbot::JointVelocitySetpoint velocitySetPoint;
+    youbot::JointRampGeneratorVelocity velocityRampSetPoint;
+    youbot::JointCurrentSetpoint currentSetPoint;
+    #endif
 
     youbot::EthercatMaster::getInstance().AutomaticReceiveOn(false); // ensure that all joint values will be received at the same time
 
@@ -896,6 +1101,18 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
             armJointStateMessages[armIndex].velocity.resize(youBotArmDoF + youBotNumberOfFingers);
             armJointStateMessages[armIndex].effort.resize(youBotArmDoF + youBotNumberOfFingers);
 
+            #if PUBLISH_JOINT_SET_POINTS == 1
+            armJointSetPointMessages[armIndex].header.stamp = currentTime;
+            armJointSetPointMessages[armIndex].name.resize(youBotArmDoF + youBotNumberOfFingers);
+            armJointSetPointMessages[armIndex].position.resize(youBotArmDoF + youBotNumberOfFingers);
+            armJointSetPointMessages[armIndex].velocity.resize(youBotArmDoF + youBotNumberOfFingers);
+            armJointSetPointMessages[armIndex].effort.resize(youBotArmDoF + youBotNumberOfFingers);
+            
+            armJointRampSetPointMessages[armIndex].header.stamp = currentTime;
+            armJointRampSetPointMessages[armIndex].name.resize(youBotArmDoF + youBotNumberOfFingers);
+            armJointRampSetPointMessages[armIndex].velocity.resize(youBotArmDoF + youBotNumberOfFingers);
+            #endif
+
             if (youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm == 0)
             {
                 ROS_ERROR("Arm%i is not correctly initialized! Cannot publish data.", armIndex + 1);
@@ -913,6 +1130,25 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
                 armJointStateMessages[armIndex].position[i] = currentAngle.angle.value();
                 armJointStateMessages[armIndex].velocity[i] = currentVelocity.angularVelocity.value();
                 armJointStateMessages[armIndex].effort[i] = currentTorque.torque.value();
+                
+                #if PUBLISH_JOINT_SET_POINTS == 1
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getData(angleSetPoint);
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getData(velocitySetPoint);
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getData(currentSetPoint);
+
+                armJointSetPointMessages[armIndex].name[i] = youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i]; //TODO no unique names for URDF yet
+                armJointSetPointMessages[armIndex].position[i] = angleSetPoint.angle.value();
+                armJointSetPointMessages[armIndex].velocity[i] = velocitySetPoint.angularVelocity.value();
+                armJointSetPointMessages[armIndex].effort[i] = currentSetPoint.current.value() / armJointGearRatio[i] * armJointTorqueConstant[i];
+                
+                // RAMP
+                youBotConfiguration.youBotArmConfigurations[armIndex].youBotArm->getArmJoint(i + 1).getData(velocityRampSetPoint);
+                
+                armJointRampSetPointMessages[armIndex].name[i] = youBotConfiguration.youBotArmConfigurations[armIndex].jointNames[i];
+                armJointRampSetPointMessages[armIndex].velocity[i] = velocityRampSetPoint.angularVelocity.value();
+                
+                #endif
+                
             }
 
             // check if trajectory controller is finished
@@ -995,6 +1231,41 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
 
 }
 
+void YouBotOODLWrapper::getArmSensorData(std_msgs::Float32MultiArray* current, std_msgs::Float32MultiArray* torque)
+{
+	youbot::JointSensedCurrent j_current;
+	youbot::JointSensedTorque j_torque;
+    
+    for(int i = 0; i < youBotArmDoF; i++)
+	{
+		youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(j_current);
+        current->data[i] = j_current.current.value();   
+        youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(j_torque);
+        torque->data[i] = j_torque.torque.value();        
+    }
+}
+
+void YouBotOODLWrapper::getArmSetPointData(std_msgs::Float32MultiArray* current, std_msgs::Float32MultiArray* velocity)
+{
+    //youbot::JointPWMSetpoint sp_pwm;
+    //youbot::JointTorqueSetpoint sp_torque;
+    youbot::JointCurrentSetpoint sp_current;
+    youbot::JointVelocitySetpoint sp_velocity;
+    
+    for(int i = 0; i < youBotArmDoF; i++)
+	{
+        //youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(sp_pwm);
+        //youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(sp_torque);
+        youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(sp_current);
+        youBotConfiguration.youBotArmConfigurations[0].youBotArm->getArmJoint(i+1).getData(sp_velocity);
+        
+        //pwm->data[i] = sp_pwm.pwm;
+        //torque->data[i] = sp_torque.torque.value();
+        current->data[i] = sp_current.current.value();
+        velocity->data[i] = sp_velocity.angularVelocity.value();
+    }
+} 
+
 void YouBotOODLWrapper::publishOODLSensorReadings()
 {
       
@@ -1010,6 +1281,11 @@ void YouBotOODLWrapper::publishOODLSensorReadings()
         for (int armIndex = 0; armIndex < static_cast<int> (youBotConfiguration.youBotArmConfigurations.size()); armIndex++)
         {
             youBotConfiguration.youBotArmConfigurations[armIndex].armJointStatePublisher.publish(armJointStateMessages[armIndex]);
+            #if PUBLISH_JOINT_SET_POINTS == 1
+            youBotConfiguration.youBotArmConfigurations[armIndex].armJointSetPointPublisher.publish(armJointSetPointMessages[armIndex]);
+            
+            youBotConfiguration.youBotArmConfigurations[armIndex].armJointRampSetPointPublisher.publish(armJointRampSetPointMessages[armIndex]);
+            #endif
         }
     }
 
