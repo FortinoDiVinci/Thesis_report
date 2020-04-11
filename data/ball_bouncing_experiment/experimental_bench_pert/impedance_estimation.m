@@ -23,6 +23,7 @@ load(file_name);
 
 DISP_NORMALIZED_TRAJECTORIES = 0
 DISP_TIME_FRAMES_OF_INTEREST = 1
+DISP_RECONSTRUCTED_FORCES    = 1
 
 min_time_distance_to_peak = 0.050;    % 050ms 
 % time evaluation variables
@@ -30,7 +31,10 @@ idx_traj_fit        = ceil(0.100/dt); % 100ms before and after the window
 idx_window          = ceil(0.200/dt); % 200ms
 idx_delay           = ceil(0.015/dt); % 015ms
 
-nb_param            = 4;
+nb_param            = 4; % for the impedance model, should be between 2 & 4
+                         % - 2: F = Kx + e
+                         % - 3: F = Kx + Bdx + e
+                         % - 4: F = Kx + Bdx + Iddx + e
 
 exp_nb = 2; % select the experience
 % timing of the perturbations introduced
@@ -409,8 +413,12 @@ delta_dz = zeros(idx_window, 1);
 delta_dz_val = zeros(idx_window, 1);
 delta_ddz = zeros(idx_window, 1);
 delta_ddz_val = zeros(idx_window, 1);
-delta_fz = zeros(idx_window, 1);
-delta_fz_val = zeros(idx_window, 1);
+delta_fz = zeros(idx_window, nb);
+delta_fz_val = zeros(idx_window, nb);
+% reconstruction forces
+delta_fz_rec = zeros(idx_window, nb);
+delta_fz_rec_val = zeros(idx_window, nb);
+
 
 % indexes to select only the intersection between idx_tot and idx_fit, 
 % that is the window of interest
@@ -426,8 +434,8 @@ for pert_idx = 1:length(idx_perts)
     delta_ddz = ddz_virt(idx1:idx2, pert_idx) - ddz_fit(idx1:idx2, pert_idx);
     delta_ddz_val = ddz_virt_val(idx1:idx2, pert_idx) - ddz_fit_val(idx1:idx2, pert_idx);
     
-    delta_fz = -(fz_fit(idx1:idx2, pert_idx) - z_virt(idx1:idx2, pert_idx));
-    delta_fz_val = -(fz_fit_val(idx1:idx2, pert_idx) - z_virt_val(idx1:idx2, pert_idx));
+    delta_fz(:, pert_idx) = -(fz_fit(idx1:idx2, pert_idx) - fz_virt(idx1:idx2, pert_idx));
+    delta_fz_val(:, pert_idx) = -(fz_fit_val(idx1:idx2, pert_idx) - fz_virt_val(idx1:idx2, pert_idx));
     
     switch nb_param
         case 2 % stiffness and artifacts
@@ -443,10 +451,38 @@ for pert_idx = 1:length(idx_perts)
             warning('Number of parameters not implemented')
     end
     
-    impedance(:, pert_idx) = phi\delta_fz;
-    impedance_val(:, pert_idx) = phi_val\delta_fz_val;
+    impedance(:, pert_idx) = phi\delta_fz(:, pert_idx);
+    impedance_val(:, pert_idx) = phi_val\delta_fz_val(:, pert_idx);
 
-    mdl = fitlm(phi,delta_fz);
-    mdl_val = fitlm(phi_val,delta_fz_val);
+    mdl = fitlm(phi,delta_fz(:, pert_idx));
+    mdl_val = fitlm(phi_val,delta_fz_val(:, pert_idx));
+    
+    r2(pert_idx) = mdl.Rsquared.Adjusted;
+    r2_val(pert_idx) = mdl_val.Rsquared.Adjusted;
+    
+    % reconstruction for quality evaluation    
+    delta_fz_rec(:, pert_idx) = phi*impedance(:, pert_idx);
+    delta_fz_rec_val(:, pert_idx) = phi_val*impedance_val(:, pert_idx);
+    
+end
+
+
+% Display results
+if DISP_RECONSTRUCTED_FORCES
+    figure(3)
+    for pert_idx = 1:nb
+        subplot(4, ceil(nb/4), pert_idx)
+        hold on, grid on
+        plot(delta_fz(:, pert_idx), 'Color', [0    0.4470    0.7410], 'linewidth', 2)
+        plot(delta_fz_rec(:, pert_idx), 'Color', [0.8500    0.3250    0.0980], 'linewidth', 2)        
+        plot(delta_fz_val(:, pert_idx), 'Color', [0    0.4470    0.7410])
+        plot(delta_fz_rec_val(:, pert_idx), 'Color', [0.8500    0.3250    0.0980])
+        if isnan(r2(pert_idx))
+            str_r2 = "NaN";
+        else
+            str_r2 = num2str(r2(pert_idx), '%1.3f');
+        end
+        title("Pert n°" + pert_idx + ", R^2=" + str_r2)
+    end
     
 end
