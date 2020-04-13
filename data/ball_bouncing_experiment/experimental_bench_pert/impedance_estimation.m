@@ -20,10 +20,13 @@ load(file_name);
 %%%%%%%%%%%%%%%%%%
 %% MACROS & variables
 %%%%%%%%%%%%%%%%%%
-
+% display macros
 DISP_NORMALIZED_TRAJECTORIES = 0
-DISP_TIME_FRAMES_OF_INTEREST = 1
+DISP_TIME_FRAMES_OF_INTEREST = 0
 DISP_RECONSTRUCTED_FORCES    = 1
+DISP_NORMAL_ERRORS_HISTOGRAM = 1
+
+ONLY_DECREASING_CYCLES_PERT  = 1
 
 min_time_distance_to_peak = 0.050;    % 050ms 
 % time evaluation variables
@@ -116,8 +119,10 @@ end
 
 
 cyc_np_idx = 1;
-z_cycle_type = zeros(size(t_cycle));
-idx_pert_cycle = zeros(size(t_cycle));
+z_cycle_type = zeros(size(t_cycle)); % classify 1/2 by type (/ or \)
+idx_pert_cycle = zeros(size(t_cycle)); % classify 1/2 cycles by perturbation
+pert_cycle_type = zeros(length(t_on_dist), 1); % classify perturbation (/ or \)
+pert_idx = 0; % start at zero because of the position of the increment 
 
 % sort normalized cycles according to the presence of perturbation or not 
 % and if they are rising or decreasing (for position only)
@@ -131,13 +136,20 @@ for cyc_idx = 1:length(zn_cycle)
         cyc_np_idx = cyc_np_idx + 1;
     else
         idx_pert_cycle(cyc_idx) = 1;
+        pert_idx = pert_idx + 1;
     end
     
     % rising or decreasing phase 
     if zn_cycle{cyc_idx}(1) < zn_cycle{cyc_idx}(end)
         z_cycle_type(cyc_idx) = 1; % rising
+        if idx_pert_cycle(cyc_idx)
+            pert_cycle_type(pert_idx) = 1;
+        end           
     else
         z_cycle_type(cyc_idx) = 0; % decreasing
+        if idx_pert_cycle(cyc_idx)
+            pert_cycle_type(pert_idx) = 0;
+        end
     end
     
 end
@@ -392,7 +404,6 @@ for pert_idx = 1:length(idx_perts) % indexes whithin the perturbations
     
 end
 
-
 %%%%%%%%%%%%%%%%%%
 %% Impedance estimation
 %%%%%%%%%%%%%%%%%%
@@ -415,10 +426,15 @@ delta_ddz = zeros(idx_window, 1);
 delta_ddz_val = zeros(idx_window, 1);
 delta_fz = zeros(idx_window, nb);
 delta_fz_val = zeros(idx_window, nb);
+% r squares
+r2 = NaN(nb,1);
+r2_val = NaN(nb,1);
 % reconstruction forces
-delta_fz_rec = zeros(idx_window, nb);
-delta_fz_rec_val = zeros(idx_window, nb);
-
+delta_fz_rec = NaN(idx_window, nb);
+delta_fz_rec_val = NaN(idx_window, nb);
+% reconstruction errors
+err_rec_n = NaN(idx_window, nb);
+err_rec_n_val = NaN(idx_window, nb);
 
 % indexes to select only the intersection between idx_tot and idx_fit, 
 % that is the window of interest
@@ -426,6 +442,11 @@ idx1 = idx_traj_fit + 1;
 idx2 = idx1 + idx_window - 1;
 
 for pert_idx = 1:length(idx_perts)
+    
+    if pert_cycle_type(pert_idx) && ONLY_DECREASING_CYCLES_PERT
+        disp("Pert N°"+pert_idx+" skipped")
+        continue
+    end
     
     delta_z = z_virt(idx1:idx2, pert_idx) - z_fit(idx1:idx2, pert_idx);
     delta_z_val = z_virt_val(idx1:idx2, pert_idx) - z_fit_val(idx1:idx2, pert_idx);
@@ -464,6 +485,11 @@ for pert_idx = 1:length(idx_perts)
     delta_fz_rec(:, pert_idx) = phi*impedance(:, pert_idx);
     delta_fz_rec_val(:, pert_idx) = phi_val*impedance_val(:, pert_idx);
     
+    % reconstruction error
+    mag_fz = abs(max(delta_fz(:, pert_idx)) - min(delta_fz(:, pert_idx))); % force magnitude
+    mag_fz_val = abs(max(delta_fz_val(:, pert_idx)) - min(delta_fz_val(:, pert_idx)));
+    err_rec_n(:, pert_idx) = (delta_fz_rec(:, pert_idx) - delta_fz(:, pert_idx)) / mag_fz;   
+    err_rec_n_val(:, pert_idx) = (delta_fz_rec_val(:, pert_idx) - delta_fz_val(:, pert_idx)) / mag_fz_val;
 end
 
 
@@ -486,3 +512,16 @@ if DISP_RECONSTRUCTED_FORCES
     end
     
 end
+
+
+if DISP_NORMAL_ERRORS_HISTOGRAM
+    figure(4)
+    histHandle = histogram(err_rec_n(:),50);
+    hold on, grid on
+    avg_tot = nanmean(err_rec_n(:));
+    std_tot = nanstd(err_rec_n(:));
+    line([avg_tot+std_tot, avg_tot+std_tot], [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
+    line([avg_tot-std_tot, avg_tot-std_tot], [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
+    line([avg_tot, avg_tot], [0, max(histHandle.Values)], 'Color','red','LineStyle','--','linewidth',2);
+end
+
