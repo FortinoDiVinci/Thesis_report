@@ -1,0 +1,100 @@
+\begin{figure} [h]
+	
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	
+	\begin{tikzpicture} [node distance = 2cm]
+	
+	\comp[a]{c1}{(0, 0)};
+	
+	\node[block, left of = c1, node distance = 1.55cm] (jac_virtual_guide) {$\jacobian{q}{}{t}$};
+	
+	\comp[a]{c2}{($(tau_r) + (-1.55,0)$)};
+	
+	\node[block, left of = c2, node distance = 1.55cm] (K) {$K$};
+	
+	\node[block, above of = K] (B) {$B$};
+	
+	\comp[a]{c3}{($(K) + (-1.55,0)$)};
+	
+	\node[block, right of = c1] (imp_ctrl) {$K_p + \frac{K_i}{s}$};
+	
+	\node[block, above of = imp_ctrl, align = center, node distance = 2cm] (neg) {$-1$};
+	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\mathcal{J}^t(\theta)$};
+	
+	\node[big_block, right of = imp_ctrl, node distance = 3cm] (robot) {$Robot$};
+	
+	\node[right of = robot, node distance = 1.75cm] (force) {};
+	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];
+	
+	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
+
+	\draw[{Latex[length=3mm]}-] (c3.west) --+ (-1, 0)
+	node[left, align = center, above] {$\vect{X}_0$};
+	\draw[{Latex[length=3mm]}-] (c3.north) |-+ (-1.25, 0.75)
+	node[left, align = center, above] {$\vect{X}$};
+	\draw[{Latex[length=3mm]}-] (B.west) --+ (-2.25, 0)
+	node[left, align = center, above] {$\dot{\vect{X}}$};
+
+	\draw[-{Latex[length=3mm]}] (c3.east) -- (K.west);
+	
+	\draw[-{Latex[length=3mm]}] (K.east) -- (c2.west);
+	\draw[-{Latex[length=3mm]}] (B.east) -| (c2.north);
+	\draw[-{Latex[length=3mm]}] (c2.east) -- (jac_virtual_guide.west);
+	
+	\draw[-{Latex[length=3mm]}] (jac_virtual_guide.east) -- (c1.west)
+	node[midway, align = center, above] {$\vect{\tau}_r$};
+
+	\draw[dashed, rounded corners=5pt] ($ (B) + (-3.15, 1) $) 
+	node [right = 6.2cm, below = 0.2cm] {\footnotesize guide virtuel}
+	rectangle ($ (c1) + (-0.25, -1.25) $);
+
+	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
+	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
+	
+	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (robot.west)
+	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
+	
+	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
+	
+	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
+	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
+	node[midway, align = center, below] {$\vect{F}_e$};
+	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
+	node[midway, align = center, below] {$V_e$};	
+	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south east) + 0.5*(robot.south) $) -- +(0,-0.55)
+	node[below] {$\vect{X}$};
+	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south west) + 0.5*(robot.south) $) -- +(0,-0.55)
+	node[below] {$\dot{\vect{X}}$};
+	
+	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
+	
+	\end{tikzpicture}
+	
+	\caption{Ajout d'un guide virtuel (Proportionnel Dérivé) à la boucle de transparence} % Figure caption
+	\label{virtual_guide_control} % Label 
+\end{figure}

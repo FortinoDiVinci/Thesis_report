@@ -65,7 +65,7 @@
 
 \newpage
 
-\section{La tâche de jonglerie}
+\section{La tâche de jonglerie avec un robot}
 
 \begin{flushright}
 	{\color{DarkGoldenrod} \textit{\textbf{Question à laquelle répond cette section}}}
@@ -75,85 +75,68 @@
 
 \subsection{Travaux précédents}
 
-G. Avrin, I. Siegler ... texte texte texte texte.
+\subsubsection{Mouvements rythmiques} A la rencontre de la robotique, de l'automatique et des sciences du mouvement humain, \cite{siegler_passive_2010, avrin_model_2017}, se sont intéressés au névraxe (CNS, \textit{Central Nervous System}) lors de mouvements rythmiques, pour la tâche de jonglerie, dans un environnement simulé purement cinématique. Ils ont été capables de reproduire des performances proches de celles de l'humain, en utilisant une structure de contrôle se basant sur des réseau locomoteur spinaux, plus connus sous l'anglicisme \textit{Central Pattern Generators} (CPG). Le choix s'est porté sur un oscillateur non-linéaire \cite{matsuoka_sustained_1985}, pour jouer le rôle du CPG. En effet, il est admit qu'il s'agit d'un oscillateur bio-inspiré pouvant répliquer des comportements d'animaux dont celui de l'humain (\cite{zhang_analysis_2006,ijspeert_central_2008, pelc_resonant_2008, roy_chowdhury_finding_2015, avrin_model_2017}). Dans ces simulations, l'oscillateur non-linéaire, dont les équations sont rappelées \cref{eq_cpg_matsuoka} prenait en entrée les données cinématiques de la balle pour à la fois contrôler l'amplitude et la fréquence du mouvement uni-articulaire du coude d'un bras humain simulé. Le réglage des paramètres de l'oscillateur de Matsuoka a été obtenu grâce à un algorithme d'optimisation de type essaim particulaire (PSO, \textit{Particule Swarm Optimization}). \cite{avrin_particle_2016}.
+
+\begin{equation} \label{eq_cpg_matsuoka}
+\begin{split}
+	\tau_r \dot{x}_1(t) &= -x_1(t)-\beta \nu_1(t) - \omega y_2(t) - h\max(0,m(t)) + c \\
+	\tau_a \dot{\nu}_1(t) &=-\nu_1(t)+y_1(t) \\
+	\tau_r \dot{x}_2(t) &= -x_2(t)-\beta \nu_2(t) - \omega y_1(t) - h\min(0,m(t)) + c \\
+	\tau_a \dot{\nu}_2(t) &=-\nu_2(t)+y_2(t) \\
+	y_{out} &= \max(x_1,0) - \max(x_2,0)
+\end{split}
+\end{equation}
+
+La sortie de l'oscillateur est donnée par $y_{out}$, les $x_i$ et $\nu_i$ correspondent à ... [+ peut-être serait-il intéressant d'y joindre un schéma de l'oscillateur de Matsuoka peut-être plus parlant que les équations \& explications ?]
+
+\subsubsection{Jonglerie} La tâche de jonglerie est bien connue en science du mouvement humain, dans cette tâche, des sujets souvent experts doivent faire rebondir la ball pour atteindre une hauteur cible $h$, soit en utilisant leur main comme le ferait un jongleur, soit en utilisant une raquette comme le ferait un pongiste. La tâche est illustrée par \cref{fig_ball_bouncing_task}.
+% 
+\input{latex_figures/figure_ball_bouncing}
+
+Entre deux impacts $k$ et $k+1$ aux instants $t_k$ et $t_{k+1}$, le mouvment de la balle est décrit par l'équation balistique \cref{eq_ballistic}, avec $ z(t) $ la position de la balle le long d'un axe vertical $ \vect{z} $, $ \dot{z}_k^+ $ la vitesse de la balle juste après l'impact à $t_k$, $ z_k $ la position de la balle à ce même instant $t_k$, $ t $ le temps qui s'est écoulé depuis le dernier impact $k$ et enfin, $g$ l'accélération gravitationnelle. 
+
+\begin{equation} \label{eq_ballistic}
+z(t) = -\frac{1}{2}gt^2+\dot{z}_k^+ t+z_k
+\end{equation}
+
+L'impact de la balle sur la raquette est modélisée d'une manière simplifiée par \cref{eq_ballistic_impact}, avec l'utilisation d'un coefficient de restitution $ \alpha $ décrit notamment dans \cite{avrin_self-organization_2018} pour modéliser le transfert d'énergie entre la balle et la raquette. La position de la raquette est notée $ z^p $, les masses respectives de la balle et de la raquette, $ m_b $ et $ m_p $ et $ \dot{z}_{k}^- = \dot{z}^+_{k-1}-gt $ est la vitesse de la balle à l'instant juste avant l'impact $ k $.
+
+\begin{equation} \label{eq_ballistic_impact}
+\dot{z}^+_{k} = \max\left(\dot{z}^p_k, \frac{m_p}{m_p+m_b}\left((1+\alpha)\dot{z}^p_k-\alpha\dot{z}_{k}^-\right)\right)
+\end{equation}
+
+Les équations précédentes permettent d'extraire des caractéristiques notables, comme le temps de l'apex entre deux impacts $ k $ et $ k+1 $, $ t_a = \dot{z}_k^+/g $, représenté en \cref{fig_ball_bouncing_task}. De cette durée, il est facile de déduire la fréquence de la tâche $ f = 1/(2t_a) $, que l'on peut aussi écrire $ f = g/(2\dot{z}_k^+) $ en injectant l'équation du temps de l'apex $ t_a $. Il est ensuite possible de lier la hauteur de la balle à l'apex $ z_a $, la vitesse de la balle post-impact et la fréquence du cycle \cref{eq_apex}.
+%
+\begin{equation} \label{eq_apex}
+z_a - z_k = \frac{(\dot{z}_k^+)^2}{2g} = \frac{\dot{z}_k^+}{4f}
+\end{equation} 
+
+\cite{zawadzki_maximal_2010} se sont intéressés aux liens entre l'amplitude et la fréquence d'un mouvement, dans leur cas, le coude a été étudié. Ainsi, en imposant une fréquence, ils ont pu observer l'amplitude maximale qui pouvait être atteinte, ainsi à 2 Hz, l'amplitude maximale observée était de 1.25 rad. En augmentant la fréquence du mouvement graduellement, la limite du mouvement a été atteinte à 8.4 Hz, où les amplitudes étaient presque devenues nulles. Étant donné que la tâche de jonglerie nécessite une synchronisation active entre les mouvements de la balle et du bras, des fréquences et amplitudes inférieures devraient être considérées pour éviter de concevoir une tâche irréalisable ou contraignant des mouvements combinatoires complexes des différentes articulations du bras. Toutefois, cette thèse s'intéresse aux mouvements rythmiques, et non aux mouvements discrets, dont les différences ont été discutées par \cite{hogan_rhythmic_2007}. Il est donc important que la fréquence de la tâche soit suffisante pour générer un mouvement rythmique, en effet, comme observé par [besoin de citation] en dessous de 0.8 Hz (???), les mouvements cycliques sont interrompus par des phases statiques.
+
+En considérant des vitesses post-impacts proches de celles obtenues et observées par \cite{avrin_stability}, et en les injectant dans l'équation \cref{eq_apex} déduite de la balistique, il est possible de définir des intervalles de hauteurs cibles $ h $ réalisables. Ainsi pour $\alpha = 0.6$, $g = 9.81$ m.s\textsuperscript{-2}, $\dot{z}_k^+ = 3.5$ m.s\textsuperscript{-1}, $z_k=0$ et des fréquences $ f $ situées entre 1 et 2 Hz, les apex $ z_a $ que la balles peut atteindre et donc les hauteurs cibles $ h $ qui sont réalisables sont contenus dans l'intervalle $[0.5;1]$m.
 
 \subsection{Ajout d'interactions physiques}
 
 [s'inspirer de la présentation faite à FeDeV]
 
+%This paper proposes a robotic experimental set-up to identify the human impedance by means of an interactive robot. The experience is designed to identify the human arm endpoint impedance variations during a cyclic task, requiring eye-hand coordination, \textit{i.e.} the ball bouncing task. Compared to the previous works \cite{siegler_passive_2010,avrin_self-organization_2018} on the same task, the modeling objective thus goes beyond the kinematic level, and concentrates now on the interaction forces.
+%intermittent physical interactions are added to reproduce the physical impact of the ball, and also to estimate the impedance in different position of the rhythmic cycle. %strengthening the need of dynamic variables. 
+%Studying the behaviour of the human arm during this kind of tasks could yield new robust strategies for robotics.
+
 \subsection{Cadre expérimental}
 
-[Description de l'expérience détaillé, choix de l'espace de travail, simulation, interface etc...]
+%The ball bouncing task takes place in a simulated environment in which experimental conditions (gravity, restitution coefficient...) are easier to control. The paddle vertical position is connected to the robot's endpoint position along the z axis (\cref{fig_exp_bench}). The robot is operated by the human thanks to a handle connected to its end-effector with an interface including a force/torque (f/t) sensor (see \cref{sec_apparatus} for further details). %Its endpoint position along the z axis controls the movements of a paddle in a simulated environment. 
+%A scaling factor can be applied between real robot movement and the simulated environment to adjust the simulated kinematics. 
 
-\begin{figure} [h]
-	
-	\centering
-	
-	\begin{tikzpicture} [node distance = 2cm]
-	
-	\path (0,0) coordinate (origin) 
-	node[below left] {$ \mathcal{O} $};
-	
-	\path ($ (origin) + (2,0) $) coordinate (originR);
-	
-	\newcommand{\coeff}{15}
-	
-	\path ($ (originR) + \coeff*(0,0.147/2) $) coordinate (joint0);
-		
-	\path ($ (joint0) + \coeff*(-0.033,0) $) coordinate (joint1)
-	node[below left] {$ q_1 $};
-	
-	\newcommand{\alp}{0.35}
-	
-	\path ($ (joint1) + \coeff*(-0.155*\alp, {0.155*(1 - \alp)}) $) coordinate (joint2)
-	node[below left] {$ q_2 $};
-	
-	\renewcommand{\alp}{0.75}
-	
-	\path ($ (joint2) + \coeff*(0.135*\alp, {0.135*(1 - \alp)}) $) coordinate (joint3)
-	node[above left] {$ q_3 $};
-	
-	\renewcommand{\alp}{0.55}
-	
-	\path ($ (joint3) + \coeff*(0.113*\alp, {0.113*(1 - \alp)}) $) coordinate (endeffector);
-	
-	\node[right of = endeffector](hand) 
-	{\includesvg[width=2in]{misc/hand}};
-	
-	\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (0, 4) $)
-	node[at end, left] {$\vect{z}$};
-	\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (4, 0) $)
-	node[at end, below] {$\vect{x}$};
-	
-	\draw (originR.center) -- (joint0.center);
-	
-	\draw (joint0.center) -- (joint1.center);
-	\fill (joint1) circle[radius=2.75pt];
-	
-	\draw (joint1.center) -- (joint2.center);
-	\fill (joint2) circle[radius=2.75pt];
-	
-	\draw (joint2.center) -- (joint3.center);
-	\fill (joint3) circle[radius=2.75pt];
-	
-	\draw (joint3.center) -- (endeffector.center);
-	\fill[blue] (endeffector) circle[radius=2.75pt];
-	
-	\draw  [loosely dotted] ($ (joint3.center) + (-0.5,0) $) -- ($ (joint3.center) + (2,0) $);
-	
-	\pgfExtractAngle{\thetal}{joint3}{endeffector}
-	
-	\draw[-{Latex[length=2mm]}] ($(joint3.center) + (1.5, 0)$) arc (0:\thetal:1.5)
-	node[midway, right] {$\theta$};
-	
-	\draw[blue] [loosely dotted] ( $ (endeffector.center) + (0, 0.5) $ )  --+ (0,-4.75) 
-	node[at end, right] {$ x_0 $};
-	
-	\end{tikzpicture}
-	
-	\caption{Robot plan redondant} % Figure caption
-	\label{schema_experiment} % Label 
-\end{figure}
+%As shown in \cref{fig_exp_bench}, the simulated environment is projected on a screen seen by the human operator and comprises: \begin{enumerate*}[label=\roman*),itemjoin={,\quad}] 
+%	\item the paddle, only moving along the vertical axis
+%	\item the ball, also locked in a 1 DOF movement
+%	\item the target height $h$, shown by a red dashed line.
+%	%\item \textcolor{blue}{\sout{two positional limits materialized with lines to avoid singular configuration of the robot.} - PAS REPRESENTES, PAS UTILE?}
+%\end{enumerate*} 
+%The goal is to reach a cyclic behaviour on the human side, while bouncing the ball at the given target height in the simulated environment. Since the considered bouncing task is one dimensional, a planar 3 DOF robot evolving in the vertical plane $(\mathcal{O}\vect{x}\vect{z})$ is sufficient for the task.
+
+\input{latex_figures/fig_exp_bench}
 
 \section{Transparence du robot}
 
@@ -173,88 +156,7 @@ Dans le cas du contrôle en admittance articulaire d'abord décrit par \cite{new
 
 \newlineBlank
 
-\begin{figure} [h]
-	
-	\centering
-	
-	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
-	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
-	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
-	
-	\newcommand{\comp}[3][]{ % comparator command
-		\node[comp] (#2) at #3 {};
-		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
-		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
-		\ifthenelse{
-			\isempty{#1}{}
-		}{}
-		{
-			\ifthenelse{
-				\equal{#1}{a}
-			}{
-				\node[above right] at (#2) {$-$\phantom{p}};
-			}{}
-			\ifthenelse{
-				\equal{#1}{b}
-			}{
-				\node[below right] at (#2) {$-$\phantom{l}};
-			}{}
-		}
-	}
-	
-	\begin{tikzpicture} [node distance = 2cm]
-	
-	\comp[a]{c1}{(0, 0)};
-	
-	\node[left of = c1, node distance = 1.5cm] (tau_r) {};
-	
-	\node[block, right of = c1] (imp_ctrl) {$K_p + \frac{K_i}{s}$};
-	
-	\comp[b]{c2}{($(imp_ctrl) + (2.5,0)$)};
-	
-	\node[block, above of = c2, align = center, node distance = 2cm] (neg) {$-1$};
-	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\jacobian{q}{}{t}$};
-	
-	\node[block, right of = c2] (kv) {$K_v$};
-	
-	\node[big_block, right of = kv, node distance = 2.6cm] (robot) {$Robot$};
-	
-	\node[right of = robot, node distance = 1.75cm] (force) {};
-	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];
-	
-	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
-	
-	\draw[{Latex[length=3mm]}-] (c1.west) --+ (-1.5,0)
-	node[align = center, above] {$\vect{\tau}_r = 0$};
-	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
-	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
-	
-	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (c2.west)
-	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
-	\draw[-{Latex[length=3mm]}] (c2.east) -- (kv.west);
-	
-	\draw[-{Latex[length=3mm]}] (kv.east) -- (robot.west)
-	node[midway, above] {$\vect{\tau}_d$};
-	
-	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
-	
-	\draw[-{Latex[length=3mm]}] (robot.south) --+ (0,-0.5)  
-	node[below] {$\dot{\vect{q}}_m$}
-	-| (c2.south);
-	
-	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
-	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
-	node[midway, align = center, below] {$\vect{F}_e$};
-	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
-	node[midway, align = center, below] {$\vect{V}_e$};
-	
-	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
-	
-	\end{tikzpicture}
-	
-	\caption{Schéma bloc de contrôle en transparence avec capteur de force proposé par \cite{Lamy_achieving_2009}} % Figure caption
-	\label{lamy_control} % Label 
-\end{figure}
+\input{latex_figures/fig_ctrl_scheme_lamy}
 
 Sur le schéma, on distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot. La boucle de contrôle se situe au niveau articulaire et permet une commande en vitesse. $\jacobian{}{}{}$ est le jacobien du robot, $\vect{F}_e$ les forces d'interaction mesurées par le capteur, exprimées dans la même base que le robot, $\vect{V}_e$ les vitesses d'interaction générées par le robot. Le correcteur de la boucle interne en vitesse, $K_v$ permet de minimiser les effets dûs aux frottements. Le gain $K_i$ du correcteur en admittance de la boucle en couple d'interaction, permet de réduire l'inertie apparente. [détails ?] 
 
@@ -294,106 +196,7 @@ En associant \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoint_velocity}, e
 %
 Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ (\jacobian{q_d}{}{*})^{-1} \jacobian{q}{}{t} $ soit diagonal. Or même dans le cas où $\jacobian{q}{}{}$ est inversible, $\jacobian{q}{}{}\jacobian{q}{}{t}$ n'est pas diagonal. [à démontrer] 
 
-\begin{figure} [h]
-	
-	\centering
-	
-	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
-	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
-	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
-	
-	\newcommand{\comp}[3][]{ % comparator command
-		\node[comp] (#2) at #3 {};
-		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
-		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
-		\ifthenelse{
-			\isempty{#1}{}
-		}{}
-		{
-			\ifthenelse{
-				\equal{#1}{a}
-			}{
-				\node[above right] at (#2) {$-$\phantom{p}};
-			}{}
-			\ifthenelse{
-				\equal{#1}{b}
-			}{
-				\node[below right] at (#2) {$-$\phantom{l}};
-			}{}
-		}
-	}
-	
-	\begin{tikzpicture} [node distance = 2cm]
-	
-	\comp[a]{c1}{(0, 0)};
-	
-	\node[block, left of = c1, node distance = 1.55cm] (jac_virtual_guide) {$\jacobian{q}{}{t}$};
-	
-	\comp[a]{c2}{($(tau_r) + (-1.55,0)$)};
-	
-	\node[block, left of = c2, node distance = 1.55cm] (K) {$K$};
-	
-	\node[block, above of = K] (B) {$B$};
-	
-	\comp[a]{c3}{($(K) + (-1.55,0)$)};
-	
-	\node[block, right of = c1] (imp_ctrl) {$K_p + \frac{K_i}{s}$};
-	
-	\node[block, above of = imp_ctrl, align = center, node distance = 2cm] (neg) {$-1$};
-	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\mathcal{J}^t(\theta)$};
-	
-	\node[big_block, right of = imp_ctrl, node distance = 3cm] (robot) {$Robot$};
-	
-	\node[right of = robot, node distance = 1.75cm] (force) {};
-	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];
-	
-	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
-
-	\draw[{Latex[length=3mm]}-] (c3.west) --+ (-1, 0)
-	node[left, align = center, above] {$\vect{X}_0$};
-	\draw[{Latex[length=3mm]}-] (c3.north) |-+ (-1.25, 0.75)
-	node[left, align = center, above] {$\vect{X}$};
-	\draw[{Latex[length=3mm]}-] (B.west) --+ (-2.25, 0)
-	node[left, align = center, above] {$\dot{\vect{X}}$};
-
-	\draw[-{Latex[length=3mm]}] (c3.east) -- (K.west);
-	
-	\draw[-{Latex[length=3mm]}] (K.east) -- (c2.west);
-	\draw[-{Latex[length=3mm]}] (B.east) -| (c2.north);
-	\draw[-{Latex[length=3mm]}] (c2.east) -- (jac_virtual_guide.west);
-	
-	\draw[-{Latex[length=3mm]}] (jac_virtual_guide.east) -- (c1.west)
-	node[midway, align = center, above] {$\vect{\tau}_r$};
-
-	\draw[dashed, rounded corners=5pt] ($ (B) + (-3.15, 1) $) 
-	node [right = 6.2cm, below = 0.2cm] {\footnotesize guide virtuel}
-	rectangle ($ (c1) + (-0.25, -1.25) $);
-
-	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
-	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
-	
-	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (robot.west)
-	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
-	
-	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
-	
-	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
-	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
-	node[midway, align = center, below] {$\vect{F}_e$};
-	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
-	node[midway, align = center, below] {$V_e$};	
-	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south east) + 0.5*(robot.south) $) -- +(0,-0.55)
-	node[below] {$\vect{X}$};
-	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south west) + 0.5*(robot.south) $) -- +(0,-0.55)
-	node[below] {$\dot{\vect{X}}$};
-	
-	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
-	
-	\end{tikzpicture}
-	
-	\caption{Ajout d'un guide virtuel (Proportionnel Dérivé) à la boucle de transparence} % Figure caption
-	\label{virtual_guide_control} % Label 
-\end{figure}
+\input{latex_figures/fig_ctrl_scheme_virt_guide}
 
 \paragraph{Guide virtuel}
 
@@ -535,108 +338,7 @@ avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection
 
 Ainsi en combinant les 3 tâches, on obtient le schéma de contrôle présenté en \cref{fig_comanipulation_ctrl} :
 
-\begin{figure} [h]
-	
-	\centering
-	
-	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
-	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
-	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
-	
-	\newcommand{\comp}[3][]{ % comparator command
-		\node[comp] (#2) at #3 {};
-		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
-		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
-		\ifthenelse{
-			\isempty{#1}{}
-		}{}
-		{
-			\ifthenelse{
-				\equal{#1}{a}
-			}{
-				\node[above right] at (#2) {$-$\phantom{p}};
-			}{}
-			\ifthenelse{
-				\equal{#1}{b}
-			}{
-				\node[below right] at (#2) {$-$\phantom{l}};
-			}{}
-		}
-	}
-	
-	\begin{tikzpicture} [node distance = 2cm]
-	
-	\comp[]{c1}{(0, 0)};
-	
-	\node[block, left of = c1] (inverse_jac) {$\jacobian{q}{}{-1}$};
-	
-	%\node[block, left of = inverse_jac, align=center] (mux) {M \\ U \\ X};
-	
-	\comp[]{c2}{($ (inverse_jac) + (-2.,0) $)};
-	
-	\node[block, left of = c2] (vect1) {$ \begin{pmatrix}1 & 0 & 0\end{pmatrix}^t $};
-	
-	\node[block, above of = vect1] (vect2) {$ \begin{pmatrix}0 & 1 & 0\end{pmatrix}^t $};
-	
-	\node[block, left of = vect1, node distance = 2.5cm] (p) {$ K_x $};
-	
-	\node[block, left of = vect2, node distance = 2.5cm] (pi) {$C_z(s)$};
-	
-	\comp[a]{cpi}{($(pi) + (-1.75,0)$)};
-	
-	\comp[b]{cp}{($(p) + (-1.75,0)$)};
-	
-	\node[block, below of = inverse_jac] (null_proj) {$ \matr{N}_2(q) $};
-	
-	\node[block, left of = null_proj] (p2) {$ K_2^p $};
-	
-	\comp[b]{cp2}{($(p2) + (-1.75,0)$)};
-	
-	\node[big_block, right of = c1, node distance = 2.5cm] (robot) {$Robot$};
-
-	\draw[-{Latex[length=3mm]}] (inverse_jac.east) -- (c1.west);
-	\draw[-{Latex[length=3mm]}] (null_proj.east) -| (c1.south);
-	
-	\draw[-{Latex[length=3mm]}] (c2.east) -- (inverse_jac.west);
-	\draw[-{Latex[length=3mm]}] (vect2.east) -| (c2.north);
-	\draw[-{Latex[length=3mm]}] (vect1.east) -- (c2.west);
-	
-	\draw[-{Latex[length=3mm]}] (p.east) -- (vect1.west);
-	\draw[-{Latex[length=3mm]}] (cp.east) -- (p.west);
-	\draw[{Latex[length=3mm]}-] (cp.west) --+ ($ (-1, 0) $)
-	node[near end, above] {$x_0$};
-	\draw[{Latex[length=3mm]}-] (cp.south) --+ ($ (0, -1) $)
-	node[near end, left] {$\vect{x}(1)$};
-
-	\draw[-{Latex[length=3mm]}] (pi.east) -- (vect2.west);
-	\draw[-{Latex[length=3mm]}] (cpi.east) -- (pi.west);
-	\draw[{Latex[length=3mm]}-] (cpi.west) --+ ($ (-1, 0) $)
-	node[near end, above] {$f_{z} = 0$};
-	\draw[{Latex[length=3mm]}-] (cpi.north) --+ ($ (0, 1) $)
-	node[near end, right] {$-\vect{F}_e(2)$};
-
-	\draw[-{Latex[length=3mm]}] (p2.east) -- (null_proj.west);
-	\draw[-{Latex[length=3mm]}] (cp2.east) -- (p2.west);
-	\draw[{Latex[length=3mm]}-] (cp2.west) --+ ($ (-1, 0) $)
-	node[near end, above] {$\vect{q}_0$};
-	\draw[{Latex[length=3mm]}-] (cp2.south) --+ ($ (0, -1) $)
-	node[near end, left] {$\vect{q}$};
-
-	\draw[-{Latex[length=3mm]}] (c1.east) -- (robot.west)
-	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
-	
-	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south east) + 0.5*(robot.south) $) -- +(0,-0.55)
-	node[below] {$\vect{X}$};
-	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south west) + 0.5*(robot.south) $) -- +(0,-0.55)
-	node[below] {$\dot{\vect{X}}$};
-	\draw[-{Latex[length=3mm]}] (robot.north) -- +(0,0.55)
-	node[left] {$(\vect{q}, \dot{\vect{q}}, \vect{\tau})$};
-	
-	\end{tikzpicture}
-	
-	\caption{Schéma bloc de la boucle de contrôle en transparence pour une tâche guidée sur une trajectoire virtuelle d'une dimension, sur un axe vertical parallèle à $ \vect{z} $} % Figure caption
-	\label{fig_comanipulation_ctrl} % Label 
-\end{figure}
+\input{latex_figures/fig_ctrl_scheme}
 %
 avec : 
 \begin{enumerate}
@@ -698,6 +400,6 @@ Selon la nature des perturbations on préfèrera certaines des solutions propos�
 
 \bibliographystyle{apalike} %abbrvnat
 
-\bibliography{impedance_ctrl}
+\bibliography{impedance_ctrl,CPG,ball_bouncing,human_motor_ctrl}
 
 \end{document}

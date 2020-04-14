@@ -1,0 +1,81 @@
+\begin{figure} [thpb]
+\centering
+    \subfloat[]{
+        \centering
+        \begin{tikzpicture}
+        \definecolor{matlabBlue}{RGB}{0,114,189}
+        % perturbation
+        \draw[dotted, line width=0.25mm] (rel axis cs:0.147, 0) -- (rel axis cs:0.147, 0.43);
+        \begin{axis}[%
+			width=.38\columnwidth,
+			scale only axis,    
+			xlabel={$t (s)$},
+			ymin=-4.8,
+			ymax = 1.5,
+			%ymax=2.5,
+			ylabel={$z (cm)$},
+			xlabel style={font=\footnotesize,yshift=0.65em},
+			ylabel style={font=\footnotesize,yshift=-1.5em},
+			tick label style={font=\footnotesize, fill=white},
+			axis lines=middle,
+			grid=both,
+            grid style={line width=.1pt, draw=gray!10},
+            major grid style={line width=.2pt,draw=gray!50},
+            minor tick num=4,
+			]
+			% perturbation
+            %\draw[dashed, line width=0.4mm] (rel axis cs:0.313, 1) -- (rel axis cs:0.313, 0);
+			%
+			\addplot [
+			dashed,
+			orange,
+			line width=1.25pt,
+			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
+			\addplot [
+			solid,
+			matlabBlue,
+			%blue!60!black,
+			line width=.5pt,
+			] table [x=t, y=z, col sep=comma] {misc/data_perturbed_trajec.csv};
+        \end{axis}
+        \end{tikzpicture}
+    }
+    \subfloat[]{
+        \centering
+        \begin{tikzpicture}
+        \definecolor{matlabBlue}{RGB}{0,114,189}
+        % perturbation
+        \draw[dotted, line width=0.25mm] (rel axis cs:0.313, 0) -- (rel axis cs:0.313, 1);    
+        \begin{axis}[%
+			width=.38\columnwidth,
+			scale only axis,    
+			xlabel={$t (s)$},
+			ymin=-5.5,
+			ymax=8.5,
+			ylabel={$f_z (N)$},
+			xlabel style={font=\footnotesize,yshift=0.65em},
+			ylabel style={font=\footnotesize,yshift=-1.5em},
+			tick label style={font=\footnotesize, fill=white},
+			axis lines=middle,
+			grid=both,
+            grid style={line width=.1pt, draw=gray!10},
+            major grid style={line width=.2pt,draw=gray!50},
+            minor tick num=4,
+			]
+			%
+			\addplot [
+			dashed,
+			orange,
+			line width=1.25pt,
+			] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
+			\addplot [
+			solid,
+			matlabBlue,
+			line width=.5pt,
+			] table [x=t, y=f, col sep=comma] {misc/data_perturbed_trajec.csv};
+        \end{axis}
+        \end{tikzpicture}
+    }
+    \caption{(a) Hand position and (b) Interaction force, both along the $\vect{z}$-axis: realized perturbed trajectories (blue solid lines), versus estimated virtual trajectories (orange dotted ones lines), with the onset time of the perturbation of 30ms duration (vertical black dotted line).} \vspace{-16pt}
+    \label{fig_perturbed_virtual_traj}
+\end{figure}
