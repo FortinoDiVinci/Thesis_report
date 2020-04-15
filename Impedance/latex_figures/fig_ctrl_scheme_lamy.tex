@@ -33,16 +33,16 @@
 	
 	\node[left of = c1, node distance = 1.5cm] (tau_r) {};
 	
-	\node[block, right of = c1] (imp_ctrl) {$K_p + \frac{K_i}{s}$};
+	\node[block, right of = c1] (imp_ctrl) {$\vect{K}_p + \frac{\vect{K}_i}{s}$};
 	
 	\comp[b]{c2}{($(imp_ctrl) + (2.5,0)$)};
 	
 	\node[block, above of = c2, align = center, node distance = 2cm] (neg) {$-1$};
 	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\jacobian{q}{}{t}$};
 	
-	\node[block, right of = c2] (kv) {$K_v$};
+	\node[block, right of = c2] (kv) {$\vect{K}_v$};
 	
-	\node[big_block, right of = kv, node distance = 2.6cm] (robot) {$Robot$};
+	\node[big_block, right of = kv, node distance = 2.7cm] (robot) {$Robot$};
 	
 	\node[right of = robot, node distance = 1.75cm] (force) {};
 	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];

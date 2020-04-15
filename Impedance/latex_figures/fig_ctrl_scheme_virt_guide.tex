@@ -41,7 +41,7 @@
 	
 	\comp[a]{c3}{($(K) + (-1.55,0)$)};
 	
-	\node[block, right of = c1] (imp_ctrl) {$K_p + \frac{K_i}{s}$};
+	\node[block, right of = c1] (imp_ctrl) {$\vect{K}_p + \frac{\vect{K}_i}{s}$};
 	
 	\node[block, above of = imp_ctrl, align = center, node distance = 2cm] (neg) {$-1$};
 	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\mathcal{J}^t(\theta)$};
@@ -54,11 +54,11 @@
 	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
 
 	\draw[{Latex[length=3mm]}-] (c3.west) --+ (-1, 0)
-	node[left, align = center, above] {$\vect{X}_0$};
+	node[left, align = center, above] {$\vect{x}_0$};
 	\draw[{Latex[length=3mm]}-] (c3.north) |-+ (-1.25, 0.75)
-	node[left, align = center, above] {$\vect{X}$};
+	node[left, align = center, above] {$\vect{x}$};
 	\draw[{Latex[length=3mm]}-] (B.west) --+ (-2.25, 0)
-	node[left, align = center, above] {$\dot{\vect{X}}$};
+	node[left, align = center, above] {$\dot{\vect{x}}$};
 
 	\draw[-{Latex[length=3mm]}] (c3.east) -- (K.west);
 	
@@ -83,13 +83,13 @@
 	
 	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
 	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
-	node[midway, align = center, below] {$\vect{F}_e$};
+	node[midway, align = center, below] {$\vect{f}_e$};
 	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
-	node[midway, align = center, below] {$V_e$};	
+	node[midway, align = center, below] {$\vect{v}_e$};	
 	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south east) + 0.5*(robot.south) $) -- +(0,-0.55)
-	node[below] {$\vect{X}$};
+	node[below] {$\vect{x}$};
 	\draw[-{Latex[length=3mm]}] ($0.5*(robot.south west) + 0.5*(robot.south) $) -- +(0,-0.55)
-	node[below] {$\dot{\vect{X}}$};
+	node[below] {$\dot{\vect{x}}$};
 	
 	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
 	

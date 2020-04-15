@@ -426,7 +426,7 @@ Comme pour l'étude précédente, \cite{dolan_dynamic_1993} et \cite{tsuji_human
 \subsubsection{Tâches de pointage ou cycliques}
 
 
-Pour les tâches en mouvement, l'estimation de l'impédance s'avère plus complexe. En effet, contrairement au cas statique où la matrice d'inertie pouvait être considérée constante et calculée analytiquement, dans ces cas d'études, non seulement cette dernière varie en fonction de la posture, mais les autres paramètres peuvent être amenés à évoluer en fonction de l'activation des muscles, de la fréquence du mouvement et d'autres paramètres \citep{milner_dependence_1993, abe_modulation_2003, kuxhaus_dependence_2014}. 
+Pour les tâches en mouvement, l'estimation de l'impédance s'avère plus complexe. En effet, contrairement au cas statique où la matrice d'inertie pouvait être considérée constante et calculée analytiquement, dans ces cas d'étude, non seulement cette dernière varie en fonction de la posture, mais les autres paramètres peuvent être amenés à évoluer en fonction de l'activation des muscles, de la fréquence du mouvement et d'autres paramètres \citep{milner_dependence_1993, abe_modulation_2003, kuxhaus_dependence_2014}. 
 
 \newlineBlank
 
@@ -772,7 +772,7 @@ La \cref{bloc_feedback_linearization} montre le cas de la commande en impédance
 
 \newlineBlank 
 
-Il est aussi possible d'utiliser des lois de commande en impédance par anticipation, souvent appelées \textit{feedforward}. L'intégration du modèle dynamique à l'intérieur de la boucle de contrôle est remplacée par un (\textit{feedforward}) modèle prédictif. Ainsi, le modèle dynamique du bras est calculé à partir de la consigne et non en fonction de l'état réel, on suppose donc que l'état est proche de ce qui est imposé par la consigne. Le contrôle en impédance permet de corriger les erreurs de modélisation par une rétroaction. Dans son étude, \cite{tee_model_2004} a réussi à reproduire, en simulation, les résultats observés chez des humains, lors d'expérimentations conduites par \cite{gomi_human_1997}, avec ce type de commande en impédance.
+Il est aussi possible d'utiliser des lois de commande en impédance par anticipation, souvent appelées \textit{feedforward}. L'intégration du modèle dynamique à l'intérieur de la boucle de contrôle est remplacée par un modèle prédictif (\textit{feedforward}). Ainsi, le modèle dynamique du bras est calculé à partir de la consigne et non en fonction de l'état réel, on suppose donc que l'état est proche de ce qui est imposé par la consigne. Le contrôle en impédance permet de corriger les erreurs de modélisation par une rétroaction. Dans son étude, \cite{tee_model_2004} a réussi à reproduire, en simulation, les résultats observés chez des humains, lors d'expérimentations conduites par \cite{gomi_human_1997}, avec ce type de commande en impédance.
 
 \newlineBlank 
 
@@ -812,7 +812,7 @@ Il est aussi possible d'utiliser des lois de commande en impédance par anticipa
 		\node[left of = feed, node distance = 4cm](feed_cmd) {};
 		\fill (feed_cmd) circle[radius=1.75pt];
 		
-		\node[block, below of = feed] (imp) {impedance};
+		\node[block, below of = feed] (imp) {impédance};
 		
 		\node[block, right of = c1, align = center, node distance = 3.5cm] (arm) {dynamiques\\bras};
 		\node[right of = arm, node distance = 2.5cm](arm_out) {};
