@@ -28,7 +28,7 @@ DISP_NORMAL_ERRORS_HISTOGRAM = 1
 
 ONLY_DECREASING_CYCLES_PERT  = 1
 
-min_time_distance_to_peak = 0.050;    % 050ms 
+min_time_distance_to_peak = 0.100;    % 050ms 
 % time evaluation variables
 idx_traj_fit        = ceil(0.100/dt); % 100ms before and after the window
 idx_window          = ceil(0.200/dt); % 200ms
@@ -410,8 +410,8 @@ end
 
 nb = length(idx_perts);
 
-impedance = zeros(nb_param, nb);
-impedance_val = zeros(nb_param, nb);
+impedance = NaN(nb_param, nb);
+impedance_val = NaN(nb_param, nb);
 
 % input vector for least square identification
 phi = zeros(idx_window, nb_param);
@@ -513,7 +513,6 @@ if DISP_RECONSTRUCTED_FORCES
     
 end
 
-
 if DISP_NORMAL_ERRORS_HISTOGRAM
     figure(4)
     histHandle = histogram(err_rec_n(:),50);
@@ -525,3 +524,47 @@ if DISP_NORMAL_ERRORS_HISTOGRAM
     line([avg_tot, avg_tot], [0, max(histHandle.Values)], 'Color','red','LineStyle','--','linewidth',2);
 end
 
+if nb_param > 1
+    K_max = max(impedance(1,:));
+    K_min = min(impedance(1,:));
+    K_mean = nanmean(impedance(1,:));
+    K_std = nanstd(impedance(1,:));
+    disp('------- K --------')
+    disp('------------------')
+    disp("min: " + num2str(K_min, '%4.1f') + "N/m")
+    disp("max: " + num2str(K_max, '%4.1f') + "N/m")
+    disp("mean: " + num2str(K_mean, '%4.1f') + "N/m")
+    disp("relative std: " + num2str(round(100*K_std/K_mean),'%i') + "%")
+end
+if nb_param > 2
+    B_max = max(impedance(2,:));
+    B_min = min(impedance(2,:));
+    B_mean = nanmean(impedance(2,:));
+    B_std = nanstd(impedance(2,:));
+    disp('------- B --------')
+    disp('------------------')
+    disp("min: " + num2str(B_min, '%2.2f') + "N.s/m")
+    disp("max: " + num2str(B_max, '%2.2f') + "N.s/m")
+    disp("mean: " + num2str(B_mean, '%2.2f') + "N.s/m")
+    disp("relative std: " + num2str(round(100*B_std/B_mean),'%i') + "%")
+end
+if nb_param > 3
+    I_max = max(impedance(3,:));
+    I_min = nanmin(impedance(3,:));
+    I_mean = nanmean(impedance(3,:));
+    I_std = nanstd(impedance(3,:));
+    disp('------- I --------')
+    disp('------------------')
+    disp("min: " + num2str(I_min, '%1.3f') + "kg")
+    disp("max: " + num2str(I_max, '%1.3f') + "kg")
+    disp("mean: " + num2str(I_mean, '%1.3f') + "kg")
+    disp("relative std: " + num2str(round(100*I_std/I_mean),'%i') + "%")
+end
+
+r2_mean = nanmean(r2);
+r2_val_mean = nanmean(r2_val);
+
+disp('------- R^2 -------')
+disp('------------------')
+disp("perturbed mean: " + num2str(r2_mean, '%1.3f'))
+disp("non perturbed mean: " + num2str(r2_val_mean, '%1.3f'))
