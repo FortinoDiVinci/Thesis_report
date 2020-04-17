@@ -124,8 +124,6 @@
 		\end{split}
 	\end{equation}
 		
-	% l0 + l2*cos(off2 + off3 - th2 - th3) + l3*cos(off2 + off3 + off4 - th2 - th3 - th4) + l1*cos(off2 - th2)
-		
 	\newpage
 	\section{Calcul du Jacobien} \label{app_jacobian}
 	
@@ -162,9 +160,9 @@
 		\end{pmatrix} \dot{\vect{q}}, 
 	\end{equation}
 	
-	avec $ \vect{z}^0_i \in \R^3 $, les éléments de la dernière colonne de la matrice de rotation $ \matrCal{R}^0_i $ entre la référence $ 0 $ et la rotation $ i $, données en %\cref{}.
+	avec $ \vect{z}^0_i \in \R^3 $, les éléments de la dernière colonne de la matrice de rotation $ \matrCal{R}^0_i $ entre la référence $ 0 $ et la rotation $ i $, données en \cref{eq_angular_jacobian}.
 	
-	\begin{equation}
+	\begin{equation} \label{eq_angular_jacobian}
 		\begin{split}
 			\vect{z}^0_1 &=  
 			\begin{pmatrix}
@@ -200,7 +198,116 @@
 		\jacobian{}{vi}{} = \frac{\partial \vect{p}^0_s}{\partial q_i} = 
 		\begin{pmatrix}
 			\frac{\partial x_s^0}{\partial q_i} & \frac{\partial y_s^0}{\partial q_i} & \frac{\partial z_s^0}{\partial q_i} 
-		\end{pmatrix}^t
+		\end{pmatrix}^t,
 	\end{equation}
+
+	avec $ x^0_s $, $ y^0_s $ et $ z^0_s $ les coordonnées cartésiennes de l'effecteur du robot, qui peuvent être obtenues à partir du vecteur de translation $ \vect{t}^0_s $ contenu dans la matrice de transformation homogène $ \matrCal{T}^0_s $. Ainsi on obtient les éléments du jacobien des vitesses linéaires en équation \cref{eq_linear_jacobian}.
+	
+	\begin{equation} \label{eq_linear_jacobian}
+		\begin{matrix}
+		\begin{matrix*}[l]
+			\frac{\partial x_s^0}{\partial q_1} = s_1 (l_1 s_2 - a_0 + l_2 s_{23} + l_3 s_{234}) & 
+			%
+			\frac{\partial y_s^0}{\partial q_1} = -c_1 (l_1 s_{2} - a_0 + l_2 s_{23} + l_3 s_{234}) \\
+			%
+			\frac{\partial x_s^0}{\partial q_2} = -c_1 (l_1 c_2 + l_2 c_{23} + l_3 c_{234}) &
+			%
+			\frac{\partial y_s^0}{\partial q_2} = -s_1 (l_1 c_{2} + l_2 s_{23} + l_3 s_{234}) \\
+			%
+			\frac{\partial x_s^0}{\partial q_3} = -c_1 (l_2 c_{23} + l_3 c_{234}) &
+			%
+			\frac{\partial y_s^0}{\partial q_3} = -s_1 (l_2 s_{23} + l_3 s_{234}) \\
+			%
+			\frac{\partial x_s^0}{\partial q_4} = -c_1 (l_3 c_{234}) &
+			%
+			\frac{\partial y_s^0}{\partial q_4} = -s_1 (l_3 s_{234}) \\
+			%
+			\frac{\partial x_s^0}{\partial q_5} = 0 &
+			%
+			\frac{\partial y_s^0}{\partial q_5} = 0 \\
+		\end{matrix*} \\
+		\begin{matrix*}[l]
+			\frac{\partial z_s^0}{\partial q_1} = 0 \\
+			%
+			\frac{\partial z_s^0}{\partial q_2} = -l_1 s_2 - l_2 s_{23} - l_3 s_{234} \\
+			%
+			\frac{\partial z_s^0}{\partial q_3} = -l_2 s_{23} - l_3 s_{234} \\
+			%
+			\frac{\partial z_s^0}{\partial q_4} = -l_3 s_{234} \\
+			%
+			\frac{\partial z_s^0}{\partial q_5} = 0 \\
+		\end{matrix*}
+		\end{matrix}
+	\end{equation}
+
+	\newpage
+	\section{Effet de couplage} \label{app_coupling_effect}
+	
+	On souhaite vérifier si la matrice résultant de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équation \cref{eq_elem_coupling}, on obtient alors l'équation \cref{eq_coupling_effect_jacobian}.
+	
+	\begin{equation} \label{eq_elem_coupling}
+		\begin{split}
+			A &= (l_2 \sin(q_a + q_b) + l_3 \sin(q_a + q_b + q_c)) \\
+			B &= (l_2 \sin(q_1 + q_2) + l_3 \sin(q_1 + q_2 + 3)) \\
+			C &= (l_2 \sin(q_a + q_b) + l_1 \sin(q_a) + l_3 \sin(q_a + q_b + q_c)) \\
+			D &= (l_2 \sin(q_1 + q_2) + l_1 \sin(q_1) + l_3 \sin(q_1 + q_2 + q_3)) \\
+			E &= (l_2 \cos(q_1 + q_2) + l_3 \cos(q_1 + q_2 + q_3)) \\
+			F &= (l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) + l_3 \cos(q_1 + q_2 + q_3)) \\
+			G &= (l_2 \cos(q_a + q_b) + l_3 \cos(q_a + q_b + q_c)) \\
+			H &= (l_2 \cos(q_a + q_b) + l_1 \cos(q_a) + l_3 \cos(q_a + q_b + q_c)) \\
+			I &= \sin(q_1 + q_2 + q_3) \\
+			J &= \cos(q_1 + q_2 + q_3) \\
+			K &= -2 l_2 \sin(q_1 + q_2) - l_1 \sin(q_1) \\
+			L &=  2 l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) \\
+		\end{split}
+	\end{equation}
+	
+	\begin{equation} \label{eq_coupling_effect_jacobian}
+	\begin{split}
+	\jacobian{q_d}{}{} \jacobian{q}{}{t} &= 
+	\begin{pmatrix}
+	-l_1 s_a - l_2 s_{ab} - l_3 s_{abc} & -l_2 s_{ab} - l_3 s_{abc}  & -l_3 s_{abc} \\
+	l_1 c_a + l_2 c_{ab} + l_3 c_{abc} & l_2 c_{ab} + l_3 c_{abc}  & l_3 c_{abc} \\
+	1 & 1 & 1 \\
+	\end{pmatrix} \\&
+	\begin{pmatrix}
+	-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & l_1 c_1 + l_2 c_{12} + l_3 c_{123} & 1 \\
+	-l_2 s_{12} - l_3 s_{123} & l_2 c_{12} + l_3 c_{123}  & 1 \\
+	 -l_3 s_{123} & l_3 c_{123} & 1 \\
+	\end{pmatrix}	\\
+	\jacobian{q_d}{}{} \jacobian{q}{}{t} &= 
+	\begin{pmatrix}
+		A B + C D + l_3^2 s_{abc} I &
+		-E A - C F + l_3^2 s_{abc} J &
+		-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc} \\
+		-G B - D H - l_3^2 c_{abc} I &
+		G E + H F + l_3^2 c_{abc} J &
+		2 l_2 c_{ab} + l_1 c_{a} + 3 l_3 c_{abc} \\
+		K - 3 l_3 I &
+		L + 3 l_3 J &
+		3 \\
+	\end{pmatrix}
+	\end{split}
+	\end{equation}
+	
+	Pour que la matrice soit diagonale, il faut donc que les éléments hors de la diagonale soient nuls, ce qui donne un système à 6 équations et 6 variables.
+	
+	\begin{equation}	
+		\left.\begin{array}{r}
+			-E A - C F + l_3^2 s_{abc} J = 0 \\
+			-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc} = 0 \\
+			-G B - D H - l_3^2 c_{abc} I = 0 \\
+			2 l_2 c_{ab} + l_1 c_{a} + 3 l_3 c_{abc}  = 0 \\
+			K - 3 l_3 I = 0 \\
+			L + 3 l_3 J = 0 \\
+		\end{array} \right\} = \kappa(q_1, q_2, q_3, q_a, q_b, q_c)
+	\end{equation}
+	
+	Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est à dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale.
+
+	\newpage
+	\section{Effets de l'erreur de trainage} \label{app_latency_error_effect}
+
+	On s'intéresse ici à $ \jacobian{q}{}{}\dot{\vect{q}}_{\epsilon} $.
 
 \end{appendices}
