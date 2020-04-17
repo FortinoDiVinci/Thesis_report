@@ -1,0 +1,100 @@
+\begin{figure}[!htb] 
+		\centering
+		%\includegraphics[width=3in]{misc/exp_bench.png}
+		
+		\begin{tikzpicture} [node distance = 2cm, scale = 1.25]
+		
+		\path (0,0) coordinate (origin) 
+		node[below left] {$ \mathcal{O} $};
+		
+		\path ($ (origin) + (2.5,0) $) coordinate (originR);
+		
+		\newcommand{\coeff}{20}
+		\newcommand{\exceeding}{0.035}
+		
+		\path ($ (originR) + \coeff*(0,0.147/2) $) coordinate (joint0);
+		
+		\path ($ (joint0) + \coeff*(-0.033,0) $) coordinate (joint1);
+		%node[below left] {$ q_1 $};
+		
+		\newcommand{\alpA}{0.35}
+		
+		\path ($ (joint1) + \coeff*(-0.155*\alpA, {0.155*(1 - \alpA)}) $) coordinate (joint2);
+		
+		\path ($ (joint1) + \coeff*({(-0.155-\exceeding)*\alpA}, {(0.155+\exceeding)*(1 - \alpA)}) $) coordinate (joint2Exceed);
+		
+		\newcommand{\alpB}{0.75}
+		
+		\path ($ (joint2) + \coeff*(0.135*\alpB, {0.135*(1 - \alpB)}) $) coordinate (joint3);
+		
+		\path ($ (joint3) + \coeff*({(2*\exceeding)*\alpB}, {(2*\exceeding)*(1 - \alpB)}) $) coordinate (joint3Exceed);
+		
+		\newcommand{\alpC}{0.55}
+		
+		\path ($ (joint3) + \coeff*(0.113*\alpC, {0.113*(1 - \alpC)}) $) coordinate (endeffector);
+	
+		%% end of impedance drawing
+		
+		\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (0, 6) $)
+		node[at end, left] {$\vect{z}$};
+		\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (5, 0) $)
+		node[at end, below] {$\vect{x}$};
+		
+		\draw[line width=0.5mm] (originR.center) node[below]{$ x_0 $} -- 
+		node[right, midway]{$ l_0 $} (joint0.center);
+		\fill (joint0) circle[radius=0.55pt];
+		
+		\draw[line width=0.5mm] (joint0.center) -- 
+		node[below, midway]{$ a_0 $} (joint1.center);
+		\fill (joint1) circle[radius=2.75pt];
+		
+		\draw[line width=0.5mm] (joint1.center) -- 
+		node[left, midway]{$ l_1 $} (joint2.center);
+		\fill (joint2) circle[radius=2.75pt];
+		
+		\draw[line width=0.5mm] (joint2.center) -- 
+		node[below, midway]{$ l_2 $} (joint3.center);
+		\fill (joint3) circle[radius=2.75pt];
+		
+		\draw[line width=0.5mm] (joint3.center) -- 
+		node[above, midway, xshift=-1mm, yshift=-1mm]{$ l_3 $} (endeffector.center);
+		
+		\draw[loosely dashed, line width=0.45mm] ( $ (endeffector.center) + (0, 0.3) $ )  --+ (0,-5.7) 
+		node[at end, right] {$ x_e $};
+		\draw[loosely dashed, line width=0.45mm] ( $ (endeffector.center) + (0.3, 0) $ )  --+ (-4.5,0) 
+		node[at end, above, yshift=-0.8mm] {$ z_e $};
+		
+		\fill[blue] (endeffector) circle[radius=2.75pt];
+		
+		\draw  [loosely dotted] ($ (joint3.center) + (-0.5,0) $) -- ($ (joint3.center) + (2,0) $);
+		
+		\draw[dashed] (joint2.center) -- ($(joint2Exceed.center) + (-0.5*\alpA, {0.5*(1 - \alpA)})$);
+		\draw[dashed] (joint2.center) -- ($(joint3Exceed.center) + (0.5*\alpB, {0.5*(1 - \alpB)})$);
+		
+		\pgfExtractAngle{\thetaEnd}{joint1}{joint2}
+		
+		\draw[-{>[length=1.25mm]}] ($(joint1.center) + (0.5, 0)$) arc (0:\thetaEnd:0.5)
+		node[midway, above] {$ q_1 $};
+		
+		\pgfExtractAngle{\thetaStart}{joint1}{joint2Exceed}
+		\pgfExtractAngle{\thetaEnd}{joint2}{joint3}
+		
+		\draw[-{>[length=1.25mm]}] ($(joint2Exceed.center)$) arc (\thetaStart:\thetaEnd:0.5)
+		node[midway, above] {$ q_2 $};
+		
+		\pgfExtractAngle{\thetaStart}{joint2}{joint3Exceed}
+		\pgfExtractAngle{\thetaEnd}{joint3}{endeffector}
+		
+		\draw[-{>[length=1.25mm]}] ($(joint3Exceed.center)$) arc (\thetaStart:\thetaEnd:1.1)
+		node[near start, below, xshift=-1mm, yshift=-1mm] {$ q_3 $};
+		
+		\pgfExtractAngle{\thetal}{joint3}{endeffector}
+		
+		\draw[-{Latex[length=2mm]}] ($(joint3.center) + (1.5, 0)$) arc (0:\thetal:1.5)
+		node[midway, right] {$ \theta_e $};	
+		
+		\end{tikzpicture}
+		
+		\caption{Modèle simplifié du robot avec 3 articulations actionnées et 3 degrés de liberté} %\vspace{-20pt}
+		\label{fig_robot_simplified_model}
+	\end{figure}

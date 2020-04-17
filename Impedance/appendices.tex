@@ -1,0 +1,206 @@
+%annexe
+
+\begin{appendices}
+	\newpage
+	\section{Calcul du Modèle Géométrique Direct} \label{app_direct_kinem}
+	
+	\subsection{Modèle à 3 articulations colinéaires} \label{app_direct_kinem_sub_3}
+	
+	Dans le cas très simple du robot plan, dont on rappelle la structure simplifiée, avec les notations des différentes longueurs et conventions d'angles en \cref{fig_robot_simplified_model}, le calcul du modèle géométrique direct ne nécessite pas de passer par la convention de Denavit-Hartenberg, et les combinaisons de transformations homogènes.
+	
+	\input{latex_figures/fig_robot_model}
+	
+	Ainsi, en cherchant à calculer géométriquement les coordonnées $ x_e $, $ z_e $ et $ \theta_e $, par rapport à la base du robot $ ( x_0, 0 ) $ on obtient les résultats présentés dans l'équation \cref{eq_direct_kinematic}.
+	
+	\begin{equation} \label{eq_direct_kinematic}
+		\begin{split}
+			x_e &= (x_0 - a) + l_1\cos(q_1) + l_2\cos(q_1 + q_2) + l_3\cos(q_1 + q_2 + q_3) \\
+			z_e &= l_0 + l_1\sin(q_1) + l_2\sin(q_1 + q_2) + l_3\sin(q_1 + q_2 + q_3) \\
+			\theta_e &= q_1 + q_2 + q_3
+		\end{split}
+	\end{equation}
+	
+	Les conversions par rapport aux conventions du robot réel, le youBot arm de KUKA\textsuperscript{TM}, sont décrites dans le tableau \cref{tab_kuka_conventions}.
+	
+ 	\begin{table}[htbp] 
+ 		\newcommand{\specialcell}[2][c]{%
+ 			\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}
+				\hline
+				\specialcell{numéro de \\ l'articulation} & 1 & 2 & 3 & 4 & 5 \\
+				\hline
+				conversion & $ 169^{\circ} $ & $ q_1 + 65^{\circ}$ & $ q_2 - 146^{\circ} $ & $ q_3 + 102.5^{\circ} $ & $ 167.5^{\circ} $ \\
+				\hline
+			\end{tabular}
+		\end{center}
+		\caption{Conversion entre la convention utilisée, et la convention réelle des angles articulaires du youBot arm de KUKA\textsuperscript{TM}}
+		\label{tab_kuka_conventions}	
+	\end{table}
+	
+	\subsection{Modèle complet du youBot arm de KUKA\textsuperscript{TM}} \label{app_direct_kinem_sub_5}
+	
+	Pour passer du modèle géométrique direct réduit, au modèle à 5 articulations actionnées, il faut ajouter deux liaisons rotoïdes. La première liaison au niveau de la base du robot a son axe de rotation autour de l'axe $ \vect{z} $ défini dans le repère du robot. La deuxième rotation se place au niveau de l'effecteur final du robot, avec un axe de rotation dans le prolongement du bras. 
+	%
+	\newlineBlank
+	%
+	Le modèle n'est cette fois ci plus contenu dans un plan, et le formalisme proposé par Denavit-Hartenberg permet d'exprimer les coordonnées de l'effecteur dans l'espace, le choix de la convention de Khalil-Kleinfinger [référence ?] est fait avec les paramètres des cinq liaisons rotoïdes donnés dans la \cref{tab_DH_params}, avec la matrice de passage homogène $ \matrCal{T} $ donnée par l'équation \cref{eq_matrix_khalil}.
+	
+	\begin{equation} \label{eq_matrix_khalil}
+	\mathcal{T}_{n-1}^n = 
+		\begin{pmatrix}
+			\cos(\theta) & -\sin(\theta) & 0 & d \\
+			\cos(\alpha)\sin(\theta) & \cos(\alpha)\cos(\theta) & -\sin(\alpha) & -r\sin(\alpha) \\
+			\sin(\alpha)\sin(\theta) & \sin(\alpha)\cos(\theta) & \cos(\alpha) & r\cos(\alpha) \\
+			0 & 0 & 0 & 1 \\
+		\end{pmatrix}
+	\end{equation}
+
+	\begin{table}[htbp] 
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+				J$^{\circ}$ & $ d $ & $ \alpha $ & $ r $ & $ \theta_{DH} $ \\
+				\hline
+				1 & 0    & 0        & $l_0$ & 0\\
+				2 & $a_0$& $\pi/2$  & 0     & $-\pi/2$\\
+				3 & $l_1$& 0        & 0     & 0 \\
+				4 & $l_2$& 0        & 0     & $\pi/2$\\
+				5 & 0    & $-\pi/2$ & $l_3$ & 0\\
+				\hline
+				%\multicolumn{5}{r}{$^{a}$ Synchronisation avec les axes du capteurs de forces.}
+			\end{tabular}
+		\end{center}
+		\caption{Paramètres de Denavit-Hartenberg, dans la convention de Khalil-Kleinfinger}
+		\label{tab_DH_params}	
+	\end{table}
+	
+	En posant $ \theta_i = \text{yB}_i - q_i - \theta_{DH} $, et $ \theta_s $, la rotation constante de -110$^{\circ}$ liée à l'orientation des axes du capteur de force,  on obtient alors le modèle données par la forme générale \cref{eq_homogen_matrix}. 
+	
+	\begin{equation} \label{eq_homogen_matrix}
+		\matrCal{T}_s^0 =
+		\begin{pmatrix}
+			\matrCal{R}^0_s & \vect{t}^0_s \\ 0_{1\times 3} & 1 \\
+		\end{pmatrix} = 
+		\begin{pmatrix}
+			 r_{11} & r_{12} & r_{13} & t_{1} \\
+			 r_{21} & r_{22} & r_{23} & t_{2} \\
+			 r_{31} & r_{32} & r_{33} & t_{3} \\
+			 0 & 0 & 0 & 1 \\
+		\end{pmatrix}
+	\end{equation}
+	
+	Les détails de la matrice de rotation sont présentées à l'équation \cref{eq_rotation_matrix}, et de la translation en équation \cref{eq_translation_matrix}.
+	
+	\begin{equation} \label{eq_rotation_matrix}
+		\begin{split}
+			r_{11} &= -s_{s}((c_{234}(s_{15} - s_{1-5})))/2 + c_{5}s_{1}) - c_{s}(s_{1}s_{5} - (c_{234}(c_{15} + c_{1-5}))/2) \\
+			%			
+			r_{12} &= s_{s}(s_{1} s_5 - (c_{234} c_{15} + c_{1-5}))/2 - c_s ((c_{234} (s_{15} - s_{1-5}))/2 + c_5 s_1) \\	
+			%	
+			r_{13} &= s_{1-(234)}/2 - s_{1234}/2 \\
+			%	
+			r_{21} &= c_s (c_1 s_5 + (c_{234} (s_{15} + s_{1-5}))/2) + s_s ((c_{234} (c_{15} - c_{1-5}))/2 + c_{1} c_{5}) \\ 
+			%	
+			r_{22} &= c_s ((c_{234} (c_{15} - c_{1-5}))/2 + c_1 c_5) - s_s (c_1 s_5 + (c_{234} (s_{15} + s_{1-5}))/2) \\
+			%
+			r_{23} &= c_{1234}/2 - c_{1-(234)}/2 \\
+			%
+			r_{31} &= s_{2345s}/2 - s_{5s-(234)}/2 \\
+			%
+			r_{32} &= c_{2345s}/2 - c_{5s-(234)}/2 \\
+			%
+			r_{33} &= c_{234}\\
+		\end{split}
+	\end{equation}
+	
+	\begin{equation} \label{eq_translation_matrix}
+		\begin{split}
+		t_1 &= -c_1 (l_1 s_2 - a_0 + l_2 s_{23} + l_3 s_{234}) \\
+		%
+		t_2 &= -s_1 (l_1 s_{2} - a_0 + l_2 s_{23} + l_3 s_{234}) \\
+		%
+		t_3 &= l_0 + l_1 c_2 + l_2 c_{23} + l_3 c_{234} \\
+		\end{split}
+	\end{equation}
+		
+	% l0 + l2*cos(off2 + off3 - th2 - th3) + l3*cos(off2 + off3 + off4 - th2 - th3 - th4) + l1*cos(off2 - th2)
+		
+	\newpage
+	\section{Calcul du Jacobien} \label{app_jacobian}
+	
+	\subsection{Jacobien du modèle réduit} \label{app_jacobian_sub_3}
+	
+	En dérivant le modèle géométrique direct proposé en \cref{app_direct_kinem_sub_3}, par chacune des articulations actionnables $ ( q_1, q_2, q_3 ) $, et en simplifiant l'écriture des cosinus et sinus respectivement par $ c $ et $ s $ avec les indices désignant les articulations - \textit{eg. $ \sin(q_1+q_2) $ est donné par $ s_{12} $} - pour une meilleure lisibilité, on obtient le résultat présenté en équation \cref{eq_jacobian_detailed}, pour $ \jacobian{}{}{} \in \R^{3 \times 3} $.
+	
+	\begin{equation} \label{eq_jacobian_detailed}
+		\jacobian{q}{}{} = 
+		\begin{pmatrix}
+			-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & -l_2 s_{12} - l_3 s_{123}  & -l_3 s_{123} \\
+			l_1 c_1 + l_2 c_{12} + l_3 c_{123} & l_2 c_{12} + l_3 c_{123}  & l_3 c_{123} \\
+			1 & 1 & 1 \\
+		\end{pmatrix}
+	\end{equation}
+	
+	\subsection{Jacobien du youBot arm} \label{app_jacobian_sub_5}
+	
+	On rappelle en équation \cref{eq_jacobian_joint_space}, la relation liant les vitesses articulaires aux vitesses cartésiennes à l'aide du jacobien, avec $ \vect{v} \in \R^3 $ et $ \vect{\omega} \in \R^3 $, respectivement les vitesses cartésiennes linéaires et angulaires de l'effecteur. On note $ \jacobian{}{v}{}, \in \R^{3\times n} $ et $ \jacobian{}{\omega}{} \in \R^{3\times n} $, les jacobiens linéaire et angulaire, et $ \jacobian{}{}{} \in \R^{6\times n} $ le jacobien du robot, avec $ n $, le nombre d'articulations actionnées. 
+	
+	\begin{equation} \label{eq_jacobian_joint_space}
+		\jacobian{q}{}{} \dot{\vect{q}} = \begin{pmatrix} \vect{v} \\ \vect{\omega} \end{pmatrix} = \begin{pmatrix} \jacobian{q}{v}{} \\ \jacobian{q}{\omega}{} \end{pmatrix} \dot{\vect{q}}
+	\end{equation}
+	
+	Les vitesses angulaires peuvent être obtenues directement en utilisant la loi de composition des vitesses, à partir des différentes matrices homogènes composant le modèle géométrique direct. Il s'agit en effet des éléments des dernières colonnes des matrices de rotation $r_{13} $, $ r_{23} $ et $ r_{33} $ de chacune des transformations (dans le cas de liaisons rotoïdes). Ainsi, dans le cas de rotation la relation pour obtenir le jacobien angulaire est donnée par l'équation \cref{eq_angular_jacobian_composition}.
+	
+	\begin{equation} \label{eq_angular_jacobian_composition}
+		\jacobian{}{\omega}{} \dot{\vect{q}} = \sum_{i=1}^{n}\omega_i^0 = 
+		\begin{pmatrix}
+		\jacobian{}{\omega 1}{} & ... & \jacobian{}{\omega n}{}
+		\end{pmatrix} \dot{\vect{q}} =
+		\begin{pmatrix}
+		\vect{z}^0_1 & ... & \vect{z}^0_n
+		\end{pmatrix} \dot{\vect{q}}, 
+	\end{equation}
+	
+	avec $ \vect{z}^0_i \in \R^3 $, les éléments de la dernière colonne de la matrice de rotation $ \matrCal{R}^0_i $ entre la référence $ 0 $ et la rotation $ i $, données en %\cref{}.
+	
+	\begin{equation}
+		\begin{split}
+			\vect{z}^0_1 &=  
+			\begin{pmatrix}
+				0 & 0 & 1 \\
+			\end{pmatrix}^t \\
+			%
+			\vect{z}^0_2 &=  
+			\begin{pmatrix}
+				s_1 & c_1 & 0 \\
+			\end{pmatrix}^t \\
+			%
+			\vect{z}^0_3 &=  
+			\begin{pmatrix}
+				s_1 & c_1 & 0 \\
+			\end{pmatrix}^t \\
+			%
+			\vect{z}^0_4 &=  
+			\begin{pmatrix}
+				s_1 & c_1 & 0 \\
+			\end{pmatrix}^t \\
+			%
+			\vect{z}^0_s &=  
+			\begin{pmatrix}
+				\frac{s_{1-(234)} - s_{1234}}{2} & \frac{c_{1234} - c_{1-(234)}}{2} & c_{234}
+			\end{pmatrix}^t \\
+			%
+		\end{split}
+	\end{equation}
+	
+	Le jacobien des vitesses linéaires $ \jacobian{}{v}{} $, de son côté, est plus simplement obtenu par la dérivation partielle de la position de l'effecteur $ \vect{p}^0_s $ du robot. 
+	
+	\begin{equation}
+		\jacobian{}{vi}{} = \frac{\partial \vect{p}^0_s}{\partial q_i} = 
+		\begin{pmatrix}
+			\frac{\partial x_s^0}{\partial q_i} & \frac{\partial y_s^0}{\partial q_i} & \frac{\partial z_s^0}{\partial q_i} 
+		\end{pmatrix}^t
+	\end{equation}
+
+\end{appendices}

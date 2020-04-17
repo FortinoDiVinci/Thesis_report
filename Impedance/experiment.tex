@@ -255,7 +255,7 @@ La tâche étudiée étant limitée dans un espace de travail cartésien, il est
 %
 \newlineBlank
 %
-Si l'on considère un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{matrix}( x & z )\end{matrix} $, avec le couple de degrés de liberté $ \begin{matrix}( x & z & \theta )\end{matrix} $, hors de toutes configurations singulières, comme présenté en \cref{fig_exp_bench}, alors le jacobien $\jacobian{}{}{} \in \R^{3\times3}$ est défini et inversible, son expression est donnée en [annexe détaillant le calcul du jacobien].
+Si l'on considère un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{matrix}( x & z )\end{matrix} $, avec le couple de degrés de liberté $ \begin{matrix}( x & z & \theta )\end{matrix} $, hors de toutes configurations singulières, comme présenté en \cref{fig_exp_bench}, alors le jacobien $\jacobian{}{}{} \in \R^{3\times3}$ est défini et inversible, son expression est donnée en \cref{app_jacobian_sub_3}.
 %
 \paragraph{Boucle de contrôle principale} 
 
@@ -361,7 +361,7 @@ avec :
 
 \subsection{Influence sur la tâche} \label{sec_robot_sub_task_influence}
 
-Calcul de la réduction d'inertie...
+Calcul de la réduction d'inertie apparente...
 
 \section{Estimation de l'impédance} \label{sec_impedance_estimation}
 
@@ -405,8 +405,11 @@ Selon la nature des perturbations on préfèrera certaines des solutions propos�
 
 \subsection{Résultats} \label{sec_impedance_estimation_sub_results}
 
+\input{appendices}
+
 \bibliographystyle{apalike} %abbrvnat
 
+\newpage
 \bibliography{Biblio/impedance_ctrl,Biblio/CPG,Biblio/ball_bouncing,Biblio/human_motor_ctrl,Biblio/human_impedance}
 
 \end{document}
