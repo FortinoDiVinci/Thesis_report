@@ -195,7 +195,7 @@ L'objectif de la manipulation est d'observer un comportement rythmique chez l'hu
 
 \subsubsection{Contrôle articulaire} \label{sec_robot_sub_ctrl_loop_sub_joint}
 
-\paragraph{Natural Admittance Controller}
+\paragraph{Natural Admittance Controller} 
 
 Dans le cas du contrôle en admittance articulaire d'abord décrit par \cite{newman_stability_1992}, il est possible d'imposer à un système physique un comportement en impédance en utilisant un capteur de force. Dans le cas étudié, le capteur de force étant placé sur l'effecteur, on parlera de retour d'effort non colocalisé, les efforts n'étant pas mesurés au niveau articulaire. La \cref{lamy_control} présente la boucle de contrôle permettant avec des réglages adéquats décrits notamment par \cite{Lamy_achieving_2009}, de donner un comportement en impédance avec une raideur et un amortissement nuls, tout en minimisant l'inertie. 
 %
@@ -239,7 +239,7 @@ En associant les équations \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoi
 	\end{split}
 \end{equation}
 %
-Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ soit diagonal. Or il ne s'agit pas d'une propriété du jacobien en robotique. Dans le cas du robot étudié, ayant 3 degrés de liberté et 3 articulations actionnées, il est assez direct d'invalider la garantie de la diagonalité matricielle [calcul à faire en annexe]. 
+Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ soit diagonal. Or il ne s'agit pas d'une propriété du jacobien en robotique. Dans le cas du robot étudié, ayant 3 degrés de liberté et 3 articulations actionnées, il est assez direct d'invalider la garantie de la diagonalité matricielle. La \cref{app_coupling_effect} démontre la non diagonalité, puis propose une estimation des effets de couplages sur l'axe $ \vect{x} $.
 
 \paragraph{Guide virtuel}
 
@@ -267,7 +267,7 @@ L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, p
 %
 \paragraph{Boucle de contrôle secondaire autour de x\textsubscript{0}} 
 
-Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un contrôle cartésien permet d'annuler les effets de couplages théoriques dans le cas d'un contrôle idéal. Maintenant, si l'on considère l'erreur $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot, et $\jacobianHat{}{}{}$ le jacobien estimé l'équation \cref{eq_Fz_endpoint_coupling} décrit les phénomènes induits :
+Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un contrôle cartésien permet d'annuler les effets de couplages théoriques dans le cas d'un contrôle idéal. Si l'on considère l'erreur $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot et $\jacobianHat{}{}{}$ le jacobien estimé, alors l'équation \cref{eq_Fz_endpoint_coupling} décrit les phénomènes induits :
 %
 \begin{equation} \label{eq_Fz_endpoint_coupling}
 \begin{split}
@@ -277,16 +277,16 @@ Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un con
 \end{split}
 \end{equation}
 
-On distingue alors deux sources d'erreurs pouvant donner lieu à des couplages : 
+On distingue deux sources d'erreurs pouvant donner lieu à des phénomènes de couplage : 
 \begin{enumerate}
 	\item l'erreur de trainage $ \dot{q}_{\epsilon} $ provoquée par la dynamique de la boucle en vitesse articulaire du robot, et multipliée par le jacobien réel du robot $ \jacobian{q}{}{} $
 	\item les erreurs d'estimation du jacobien $ \Delta\jacobian{q}{}{} $, qui sont multipliées par les consignes de vitesses articulaires $ \dot{q_d} $.
 \end{enumerate}
-La deuxième source d'erreur est difficile à quantifier. On pourrait aussi ajouter l'erreur entre la mesure des vitesses articulaires et leur vitesse réelle, qui comme la seconde erreur, nécessiterait des équipements d'observation externes au robot (\textit{eg. caméra}), et un calibrage précis. [ajouter en annexe le calcul de l'erreur de trainage]
+La deuxième source d'erreur est difficile à quantifier, puisqu'elle provient d'une erreur potentielle de modélisation. On peut aussi considérer l'erreur entre de mesure des vitesses articulaires, qui comme l'erreur précédente, nécessite des équipements d'observation externes au robot (\textit{eg. caméra}), et un calibrage précis pour une évaluation.
 %
 \newlineBlank
 %
-Après simulation, en considérant l'erreur de trainage, on constate bien des déplacements sur l'axe $\vect{x}$. Or, en ayant choisi d'asservir le contrôle uniquement sur les forces en $\vect{z}$, les forces exercées sur l'axe $\vect{x}$ ne sont plus perçues par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la comanipulation. [montrer sans passer par la simu qu'une erreur résiduelle sur les q entraine une erreur sur x, MM]
+Les calculs théoriques de l'évaluation la première erreur décrite, montrent son influence sur l'axe $ \vect{x} $ en \cref{app_latency_error_effect}. Or, en ayant choisi d'asservir le contrôle uniquement sur les forces en $ \vect{z} $, les forces exercées sur l'axe $ \vect{x} $ ne sont plus perçues par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la co-manipulation.
 %
 \newlineBlank
 %
@@ -298,13 +298,13 @@ Pour remédier à cette problématique, il suffit d'ajouter un asservissement pr
 	\end{split}
 \end{equation}
 
-\paragraph{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}}
+\paragraph{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}
 
 Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - \textit{tâche en $\mathbf{z}$ et tâche en $\mathbf{x}$} -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On souhaite donc maintenir le robot dans une certaine configuration, qui reflète les positions articulaires médianes lors de la tâche de jonglerie. Toutefois, on ne veut pas que cette nouvelle tâche nuise à la transparence du robot. 
 %
 \newlineBlank
 %
-Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâche en $\mathbf{z}$. La méthodologie détaillée de projection de tâches dans les noyaux d'autres tâches est très bien résumée dans l'article de \cite{dietrich_overview_2015}. Ainsi on peut écrire $ \jacobian{}{1}{} $ le jacobien de la tâche en principale, qui se résume en fait à la deuxième ligne du jacobien $ \jacobian{}{}{} $, et noter l'exposant $ \mathbf{W}+ $ pour la pseudo-inverse pondérée, définie par l'équation \cref{eq_pseudo_inverse}.
+Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâche en $\mathbf{z}$. La méthodologie détaillée de projection de tâches dans les noyaux d'autres tâches est très bien résumée dans l'article de \cite{dietrich_overview_2015}. Ainsi on peut écrire $ \jacobian{}{1}{} $ le jacobien de la tâche en principale, qui se résume en fait à la deuxième ligne du jacobien $ \jacobian{}{}{} $ (\cref{app_jacobian_sub_3}), et noter l'exposant $ \mathbf{W}+ $ pour la pseudo-inverse pondérée, définie par l'équation \cref{eq_pseudo_inverse}.
 %
 \begin{equation} \label{eq_pseudo_inverse}
 	\begin{split}

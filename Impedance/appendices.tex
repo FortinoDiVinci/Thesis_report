@@ -75,7 +75,7 @@
 		\label{tab_DH_params}	
 	\end{table}
 	
-	En posant $ \theta_i = \text{yB}_i - q_i - \theta_{DH} $, et $ \theta_s $, la rotation constante de -110$^{\circ}$ liée à l'orientation des axes du capteur de force,  on obtient alors le modèle données par la forme générale \cref{eq_homogen_matrix}. 
+	En posant $ \theta_i = \text{yB}_i - q_i - \theta_{DH} $, et $ \theta_s $, la rotation constante de -110$^{\circ}$ liée à l'orientation des axes du capteur de force,  on obtient alors le modèle donné par la forme générale \cref{eq_homogen_matrix}. 
 	
 	\begin{equation} \label{eq_homogen_matrix}
 		\matrCal{T}_s^0 =
@@ -241,14 +241,14 @@
 	\end{equation}
 
 	\newpage
-	\section{Effet de couplage} \label{app_coupling_effect}
+	\section{Effets de couplage du contrôle articulaire en transparence} \label{app_coupling_effect}
 	
-	On souhaite vérifier si la matrice résultant de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équation \cref{eq_elem_coupling}, on obtient alors l'équation \cref{eq_coupling_effect_jacobian}.
+	On souhaite vérifier si la matrice résultant de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors l'équation \cref{eq_coupling_effect_jacobian}.
 	
 	\begin{equation} \label{eq_elem_coupling}
 		\begin{split}
 			A &= (l_2 \sin(q_a + q_b) + l_3 \sin(q_a + q_b + q_c)) \\
-			B &= (l_2 \sin(q_1 + q_2) + l_3 \sin(q_1 + q_2 + 3)) \\
+			B &= (l_2 \sin(q_1 + q_2) + l_3 \sin(q_1 + q_2 + q_3)) \\
 			C &= (l_2 \sin(q_a + q_b) + l_1 \sin(q_a) + l_3 \sin(q_a + q_b + q_c)) \\
 			D &= (l_2 \sin(q_1 + q_2) + l_1 \sin(q_1) + l_3 \sin(q_1 + q_2 + q_3)) \\
 			E &= (l_2 \cos(q_1 + q_2) + l_3 \cos(q_1 + q_2 + q_3)) \\
@@ -290,24 +290,47 @@
 	\end{split}
 	\end{equation}
 	
-	Pour que la matrice soit diagonale, il faut donc que les éléments hors de la diagonale soient nuls, ce qui donne un système à 6 équations et 6 variables.
+	Pour que la matrice soit diagonale, il faut donc que les éléments hors de la diagonale soient nuls, ce qui donne un système à 6 équations et 6 variables. Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est à dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. Si l'on compare les éléments de la diagonale et hors de la diagonale de l'équation \cref{eq_coupling_effect_jacobian}, qui ont un effet sur x. On peut étudier l'amplitude des phénomènes de couplages comparativement aux effets de transmission souhaités, dans l'équation \cref{eq_coupling_effects}. On pose alors l'équation unidimensionnelle \cref{jacobian_coupling_effect_x}.
 	
-	\begin{equation}	
-		\left.\begin{array}{r}
-			-E A - C F + l_3^2 s_{abc} J = 0 \\
-			-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc} = 0 \\
-			-G B - D H - l_3^2 c_{abc} I = 0 \\
-			2 l_2 c_{ab} + l_1 c_{a} + 3 l_3 c_{abc}  = 0 \\
-			K - 3 l_3 I = 0 \\
-			L + 3 l_3 J = 0 \\
-		\end{array} \right\} = \kappa(q_1, q_2, q_3, q_a, q_b, q_c)
+	\begin{equation}  \label{jacobian_coupling_effect_x}
+		x_d = k_p \left(
+		(A B + C D + l_3^2 s_{abc} I) f_x +
+		(-E A - C F + l_3^2 s_{abc} J) f_z + 
+		(-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc}) \tau_\theta \right)	
 	\end{equation}
 	
-	Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est à dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale.
-
+	En faisant la supposition que l'erreur de trainage entre $ q_d $ et $ q $ est négligeable, on peut écrire \cref{jacobian_coupling_effect_x} sous une nouvelle forme, en notant $ x_d^t $ et $ x_d^c $, respectivement les effets souhaités et les effets de couplages sur la consignes en $ x $.
+	
+	\begin{equation} \label{eq_coupling_effect_x_2}
+		\begin{split}
+			x_d^t &= k_p (A^2 + C^2 + (l_3 s_{abc})^2) f_x \\
+			x_d^c &= -k_p \left( l_1^2 \frac{s_{2a}}{2} + l_2^2 s_{2(ab)} + 3 l_3^2  \frac{s_{2(abc)}}{2} + l_1 l_2 s_{2ab} + l_1 l_3 s_{2abc} + 2 l_2 l_3 s_{2(ab)c} \right) f_z - ...\\
+			... \  & k_p \left(2 l_2 s_{ab} + l_1 s_{a} + 3 l_3 s_{abc} \right) \tau_\theta
+		\end{split}		
+	\end{equation}
+	
+	La \cref{fig_coupling_effect_joint_ctrl_b} 
+	montre la variation du terme non linéaire entre $ k_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires.  La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}, et les valeurs des 2 autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonal (\cref{fig_coupling_effect_joint_ctrl_a}), mais qu'il reste d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associés aux couples $ \tau_\theta $. 
+	%
+	\input{latex_figures/fig_coupling_effect_joint_ctrl}
+	\newlineBlank
+	%
+	La mise en place expérimentale de la stratégie de contrôle articulaire décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} est venue valider la théorie décrite dans cette annexe. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités par l'utilisateur. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre" (P. Rodriguez).
+	
 	\newpage
 	\section{Effets de l'erreur de trainage} \label{app_latency_error_effect}
 
-	On s'intéresse ici à $ \jacobian{q}{}{}\dot{\vect{q}}_{\epsilon} $.
+	L'erreur de trainage montré dans l'équation \cref{app_latency_error_effect}, entraîne des effets indésirables sur tous les axes, et notamment l'axe $ \vect{x} $, que cette section va chercher à quantifier. Il faut donc regarder la première ligne du jacobien $ \jacobian{}{}{} $ multiplié par l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ sur les 3 articulations.
+	
+	\begin{equation}
+		\dot{x}_\epsilon = \begin{pmatrix}
+		-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & -l_2 s_{12} - l_3 s_{123}  & -l_3 s_{123}
+		\end{pmatrix} \dot{\vect{q}}_\epsilon
+	\end{equation}
+
+	\newpage
+	\section{Effets de la projection dans le noyau de la tâche principale, sur cette tâche} \label{app_projection_effects_on_main_task}
+
+	La projection dans le noyau de la tâche principale de transparence le long de l'axe $ \vect{z} $, décrite au \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0} est supposée annuler les effets de la tâche secondaire de maintient de configuration, sur la tâche principale. Cette annexe se propose de vérifier et quantifier les effets engendrés.
 
 \end{appendices}

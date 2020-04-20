@@ -1,0 +1,47 @@
+\begin{figure} %[thpb]
+	\centering
+	\shorthandoff{;} 
+	\subfloat[\label{fig_coupling_effect_joint_ctrl_a}]{
+		\centering
+		\begin{tikzpicture} [%
+			declare function = {%
+				xTerm(\x,\y) =  ((27*sin(deg(\x) + deg(\y)))/200 + (113*sin(deg(\x) + deg(\y) + deg(1497/1000)))/1000)^2 + ((27*sin(deg(\x) + deg(\y)))/200 + (113*sin(deg(\x) + deg(\y) + deg(1497/1000)))/1000 + (31*sin(deg(\x)))/200)^2 + (12769*sin(deg(\x) + deg(\y) + deg(1497/1000))^2)/1000000;
+			}%
+			]%
+			\begin{axis}[%
+			domain=1.33:2.03,
+			y domain=-4.7:-4.01,
+			xlabel={$ q_1 $},
+			ylabel={$ q_2 $},
+			%view={25}{40},
+			]
+			%
+				\addplot3 [surf] {xTerm(x,y)};
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\subfloat[\label{fig_coupling_effect_joint_ctrl_b}]{
+		\centering
+		\begin{tikzpicture}  [%
+		declare function = {%
+			zTerm(\x,\y) =  -(961*sin(2*deg(\x)))/80000 - (729*sin(2*deg(\x) + 2*deg(\y)))/40000 - (38307*sin(2*deg(\x) + 2*deg(\y) + deg(1497/500)))/2000000 - (3051*sin(2*deg(\x) + 2*deg(\y) + deg(1497/1000)))/100000 - (837*sin(2*deg(\x) + deg(\y)))/40000 - (3503*sin(2*deg(\x) + deg(\y) + deg(1497/1000)))/200000;
+		}%
+		]%
+		\begin{axis}[%
+		domain=1.33:2.03,
+		y domain=-4.7:-4.01,
+		xlabel={$ q_1 $},
+		ylabel={$ q_2 $},
+		%view={25}{40}, 
+		]
+		%
+			\addplot3 [surf] {zTerm(x,y)};
+		\end{axis}
+		\end{tikzpicture}
+	}
+	\shorthandon{;} 
+	\caption{Variation of term of the matrix \cref{eq_coupling_effect_jacobian}, for $ q_3 = 1.5 $ (a) Diagonal term on x (b) Coupling term on x multiplied by $ f_z $. Joint values are given in radians.}
+	\label{fig_coupling_effect_joint_ctrl}
+\end{figure}
+
+% 
