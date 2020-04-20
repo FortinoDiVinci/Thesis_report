@@ -77,7 +77,7 @@
 
 \subsubsection{Mouvements rythmiques} \label{sec_bouncing_sub_previous_sub_rhythmic}
 
-A la rencontre de la robotique, de l'automatique et des sciences du mouvement humain, \cite{siegler_passive_2010, avrin_model_2017}, se sont intéressés au névraxe (CNS, \textit{Central Nervous System}) lors de mouvements rythmiques, pour la tâche de jonglerie, dans un environnement simulé purement cinématique. Ils ont été capables de reproduire des performances proches de celles de l'humain, en utilisant une structure de contrôle se basant sur des réseau locomoteur spinaux, plus connus sous l'anglicisme \textit{Central Pattern Generators} (CPG). Le choix s'est porté sur un oscillateur non-linéaire \cite{matsuoka_sustained_1985}, pour jouer le rôle du CPG. En effet, il est admit qu'il s'agit d'un oscillateur bio-inspiré pouvant répliquer des comportements d'animaux dont celui de l'humain (\cite{zhang_analysis_2006,ijspeert_central_2008, pelc_resonant_2008, roy_chowdhury_finding_2015, avrin_model_2017}). Dans ces simulations, l'oscillateur non-linéaire, dont les équations sont rappelées \cref{eq_cpg_matsuoka} prenait en entrée les données cinématiques de la balle pour à la fois contrôler l'amplitude et la fréquence du mouvement uni-articulaire du coude d'un bras humain simulé. Le réglage des paramètres de l'oscillateur de Matsuoka a été obtenu grâce à un algorithme d'optimisation de type essaim particulaire (PSO, \textit{Particule Swarm Optimization}). \cite{avrin_particle_2016}.
+A la rencontre de la robotique, de l'automatique et des sciences du mouvement humain, \cite{siegler_passive_2010, avrin_model_2017}, se sont intéressés au névraxe (CNS, \textit{Central Nervous System}) lors de mouvements rythmiques, pour la tâche de jonglerie, dans un environnement simulé purement cinématique. Ils ont été capables de reproduire des performances proches de celles de l'humain, en utilisant une structure de contrôle se basant sur des réseau locomoteur spinaux, plus connus sous l'anglicisme \textit{Central Pattern Generators} (CPG). Le choix s'est porté sur un oscillateur non-linéaire \cite{matsuoka_sustained_1985}, pour jouer le rôle du CPG. En effet, il est admit qu'il s'agit d'un oscillateur bio-inspiré pouvant répliquer des comportements d'animaux dont celui de l'humain (\cite{zhang_analysis_2006,ijspeert_central_2008, pelc_resonant_2008, roy_chowdhury_finding_2015, avrin_model_2017}). Dans ces simulations, l'oscillateur non-linéaire, dont les équations sont rappelées \cref{eq_cpg_matsuoka} prenait en entrée les données cinématiques de la balle pour à la fois contrôler l'amplitude et la fréquence du mouvement uni-articulaire du coude d'un bras humain simulé. Le réglage des paramètres de l'oscillateur de Matsuoka a été obtenu grâce à un algorithme d'optimisation de type essaim particulaire (PSO, \textit{Particule Swarm Optimization}), \cite{avrin_particle_2016}.
 
 \begin{equation} \label{eq_cpg_matsuoka}
 \begin{split}
@@ -93,19 +93,19 @@ La sortie de l'oscillateur est donnée par $y_{out}$, les $x_i$ et $\nu_i$ corre
 
 \subsubsection{Jonglerie} \label{sec_bouncing_sub_previous_sub_bouncing}
 
-La tâche de jonglerie est bien connue en science du mouvement humain, dans cette tâche, des sujets souvent experts doivent faire rebondir la ball pour atteindre une hauteur cible $h$, soit en utilisant leur main comme le ferait un jongleur, soit en utilisant une raquette comme le ferait un pongiste. La tâche est illustrée par \cref{fig_ball_bouncing_task}.
+La tâche de jonglerie est bien connue en science du mouvement humain, dans cette tâche, des sujets souvent experts doivent faire rebondir la balle pour atteindre une hauteur cible $h$, soit en utilisant leur main comme le ferait un jongleur, soit en utilisant une raquette comme le ferait un pongiste. La tâche est illustrée par la \cref{fig_ball_bouncing_task}.
 % 
 \newlineBlank
 %
 \input{latex_figures/figure_ball_bouncing}
 
-Entre deux impacts $k$ et $k+1$ aux instants $t_k$ et $t_{k+1}$, le mouvment de la balle est décrit par l'équation balistique \cref{eq_ballistic}, avec $ z(t) $ la position de la balle le long d'un axe vertical $ \vect{z} $, $ \dot{z}_k^+ $ la vitesse de la balle juste après l'impact à $t_k$, $ z_k $ la position de la balle à ce même instant $t_k$, $ t $ le temps qui s'est écoulé depuis le dernier impact $k$ et enfin, $g$ l'accélération gravitationnelle. 
+Entre deux impacts $k$ et $k+1$ aux instants $t_k$ et $t_{k+1}$, le mouvement de la balle est décrit par l'équation balistique \cref{eq_ballistic}, avec $ z(t) $ la position de la balle le long d'un axe vertical $ \vect{z} $, $ \dot{z}_k^+ $ la vitesse de la balle juste après l'impact à $t_k$, $ z_k $ la position de la balle à ce même instant $t_k$, $ t $ le temps qui s'est écoulé depuis le dernier impact $k$ et enfin, $g$ l'accélération gravitationnelle. 
 
 \begin{equation} \label{eq_ballistic}
 z(t) = -\frac{1}{2}gt^2+\dot{z}_k^+ t+z_k
 \end{equation}
 
-L'impact de la balle sur la raquette est modélisée d'une manière simplifiée par \cref{eq_ballistic_impact}, avec l'utilisation d'un coefficient de restitution $ \alpha $ décrit notamment dans \cite{avrin_self-organization_2018} pour modéliser le transfert d'énergie entre la balle et la raquette. La position de la raquette est notée $ z^p $ et $ \dot{z}_{k}^- = \dot{z}^+_{k-1}-gt $ est la vitesse de la balle à l'instant juste avant l'impact $ k $.
+L'impact de la balle sur la raquette est modélisé d'une manière simplifiée par l'équation \cref{eq_ballistic_impact}, avec l'utilisation d'un coefficient de restitution $ \alpha $, décrit notamment dans \cite{avrin_self-organization_2018}, pour modéliser le transfert d'énergie entre la balle et la raquette. La position de la raquette est notée $ z^p $ et $ \dot{z}_{k}^- = \dot{z}^+_{k-1}-gt $ est la vitesse de la balle à l'instant juste avant l'impact $ k $.
 
 \begin{equation} \label{eq_ballistic_impact}
 \dot{z}^+_{k} = \max\left(\dot{z}^p_k, \left((1+\alpha)\dot{z}^p_k-\alpha\dot{z}_{k}^-\right)\right)
@@ -117,7 +117,7 @@ Les équations précédentes permettent d'extraire des caractéristiques notable
 z_a - z_k = \frac{(\dot{z}_k^+)^2}{2g} = \frac{\dot{z}_k^+}{4f}
 \end{equation} 
 
-\cite{zawadzki_maximal_2010} se sont intéressés aux liens entre l'amplitude et la fréquence d'un mouvement, dans leur cas, le coude a été étudié. Ainsi, en imposant une fréquence, ils ont pu observer l'amplitude maximale qui pouvait être atteinte, ainsi à 2 Hz, l'amplitude maximale observée était de 1.25 rad. En augmentant la fréquence du mouvement graduellement, la limite du mouvement a été atteinte à 8.4 Hz, où les amplitudes étaient presque devenues nulles. Étant donné que la tâche de jonglerie nécessite une synchronisation active entre les mouvements de la balle et du bras, des fréquences et amplitudes inférieures devraient être considérées pour éviter de concevoir une tâche irréalisable ou contraignant des mouvements combinatoires complexes des différentes articulations du bras. Toutefois, cette thèse s'intéresse aux mouvements rythmiques, et non aux mouvements discrets, dont les différences ont été discutées par \cite{hogan_rhythmic_2007}. Il est donc important que la fréquence de la tâche soit suffisante pour générer un mouvement rythmique. En effet, lorsque la fréquence de la balle devient trop faible, les mouvements cycliques sont interrompus par des phases statiques, ce qui est une manière de différencier les mouvements rythmiques et discrets selon \cite{sternad_transitions_2013}.
+\cite{zawadzki_maximal_2010} se sont intéressés aux liens entre l'amplitude et la fréquence d'un mouvement, dans leur cas, le coude a été étudié. Ainsi, en imposant une fréquence, ils ont pu observer l'amplitude maximale qui pouvait être atteinte, ainsi à 2 Hz, l'amplitude maximale observée était de 1.25 rad. En augmentant la fréquence du mouvement graduellement, la limite du mouvement a été atteinte à 8.4 Hz, où les amplitudes étaient presque devenues nulles. Étant donné que la tâche de jonglerie nécessite une synchronisation active entre les mouvements de la balle et du bras, des fréquences et amplitudes inférieures devraient être considérées, pour éviter de concevoir une tâche irréalisable ou contraignant des mouvements combinatoires complexes des différentes articulations du bras. De plus, cette thèse s'intéresse aux mouvements rythmiques, et non aux mouvements discrets, dont les différences ont été discutées par \cite{hogan_rhythmic_2007}. Il est donc important que la fréquence de la tâche soit suffisante pour générer un mouvement rythmique. En effet, lorsque la fréquence de la balle devient trop faible, les mouvements cycliques sont interrompus par des phases statiques, ce qui est une manière de différencier les mouvements rythmiques et discrets selon \cite{sternad_transitions_2013}.
 %
 \newlineBlank
 %
@@ -128,7 +128,7 @@ En considérant des vitesses post-impacts proches de celles obtenues et observé
 
 \subsubsection{Impact balistique}  \label{sec_bouncing_sub_interactions_sub_bouncing}
 
-Comme expliqué dans \cref{sec_bouncing_sub_previous} les travaux précédents se sont intéressés uniquement aux variables cinématiques, hors la tâche de jonglerie implique ponctuellement des interactions physiques avec une balle. Si l'on considère qu'il s'agit d'une balle pesante, lors de l'impact décrit par \cref{eq_cpg_matsuoka}, les masses respectives de la balle et de la raquette, $ m_b $ et $ m_p $, auront une influence sur le mouvement du bras et donc sur la trajectoire de la balle. L'équation de l'impact pour prendre en compte ces masses devient alors \cref{eq_ballistic_impact_phy}.
+Comme expliqué dans \cref{sec_bouncing_sub_previous} les travaux précédents se sont intéressés uniquement aux variables cinématiques, or la tâche de jonglerie implique ponctuellement des interactions physiques avec une balle. Si l'on considère qu'il s'agit d'une balle pesante, lors de l'impact décrit par \cref{eq_cpg_matsuoka}, les masses respectives de la balle et de la raquette, $ m_b $ et $ m_p $, auront une influence sur le mouvement du bras et donc sur la trajectoire de la balle. L'équation de l'impact pour prendre en compte ces masses devient alors \cref{eq_ballistic_impact_phy}.
 
 \begin{equation} \label{eq_ballistic_impact_phy}
 \dot{z}^+_{k} = \max\left(\dot{z}^p_k, \frac{m_p}{m_p+m_b}\left((1+\alpha)\dot{z}^p_k-\alpha\dot{z}_{k}^-\right)\right)
@@ -146,11 +146,11 @@ Ainsi suite à l'impact de la balle, le bras va être dévié de sa trajectoire 
 %
 \newlineBlank
 %
-La modélisation par l'impédance mécanique permet de répliquer le comportement du bras perturbé par une interaction physique. L'impédance peut-être vue comme un mécanisme fictif attaché à la trajectoire virtuelle, permettant de résister avec plus ou moins d'intensité, à de potentielle perturbations ou interactions physiques. Pour évaluer l'impédance d'un membre, par exemple la raideur ou souplesse d'un mouvement, il faut perturber ce membre et observer la réaction suite à la perturbation pour la comparer à la réaction qui aurait eu lieu en l'absence de perturbation.
+La modélisation par l'impédance mécanique permet de répliquer le comportement du bras perturbé par une interaction physique. L'impédance peut-être vue comme un mécanisme fictif attaché à la trajectoire virtuelle, permettant de résister avec plus ou moins d'intensité, à de potentielles perturbations ou interactions physiques. Pour évaluer l'impédance d'un membre, il faut le perturber et observer sa réaction suite à la perturbation, pour la comparer à la réaction qui aurait eu lieu en l'absence de perturbations.
 %
 \newlineBlank
 %
-Dans le cas spécifique de l'étude de jonglerie à un seul degré de liberté, on ne s'intéressera qu'au comportement dynamique du bras le long de l'axe considéré. Ainsi, l'impédance du bras est étudiée au niveau cartésien, les composantes des comportements sur les axes perpendiculaires ne sont pas considérés (\textit{aucun effet de couplage entre les différents axes n'est considéré}), et les impédances liées aux couples ne sont pas non plus considérées. L'équation du modèle KBI est alors simplifiée, donnant la simple équation \cref{eq_impedance_z}. On retrouve alors $ \delta f_z $ le différentiel entre la force virtuelle et la force suite à la perturbation, $ \delta z $ le différentiel entre la position virtuelle et la position perturbée et $ K_z $, $ B_z $ et $ I_z $ les paramètres unidimensionnels du modèle KBI pour l'axe $ \vect{z} $.
+Dans le cas spécifique de l'étude de jonglerie à un seul degré de liberté, on ne s'intéressera qu'au comportement dynamique du bras le long de l'axe considéré. Ainsi, l'impédance du bras est étudiée au niveau cartésien, les composantes des comportements sur les axes perpendiculaires ne sont pas considérés (\textit{aucun effet de couplage entre les différents axes n'est considéré}), et les impédances liées aux couples ne sont pas non plus considérées. L'équation du modèle visco-élastique KBI est alors simplifiée, donnant l'équation \cref{eq_impedance_z}. On trouve alors $ \delta f_z $ le différentiel entre la force virtuelle et la force suite à la perturbation, $ \delta z $ le différentiel entre la position virtuelle et la position perturbée et $ K_z $, $ B_z $ et $ I_z $ les paramètres unidimensionnels du modèle KBI pour l'axe $ \vect{z} $.
 
 \begin{equation} \label{eq_impedance_z}
 	\delta f_z = K_z\delta z + B_z\delta\dot{z} + I_z\delta\ddot{z} 
@@ -162,11 +162,11 @@ Pour réaliser des estimations d'impédance du bras au court de la tâche jongle
 %
 \newlineBlank
 %
-La position verticale de la raquette dans l'environnement simulé est liée à la position cartésienne de l'effecteur du robot le long de l'axe z. Un gain pourra être appliquer entre le mouvement réel du robot, et le mouvement simulé de la raquette pour ajuster les variables cinématiques simulées. Comme montré sur la \cref{fig_comanipulation_ctrl} le robot peut être manipulé par un humain grâce à une une poignée. Cette poignée est reliée à l'effecteur du robot par une interface physique, intégrant un capteur de force qui permet la mesure des forces d'interactions entre le robot et l'humain.
+La position verticale de la raquette dans l'environnement simulé est liée à la position cartésienne de l'effecteur du robot le long de l'axe z. Un gain pourra être appliqué entre le mouvement réel du robot, et le mouvement simulé de la raquette pour ajuster les variables cinématiques simulées. Comme montré sur la \cref{fig_comanipulation_ctrl}, le robot peut être manipulé par un humain grâce à une poignée. Cette poignée est reliée à l'effecteur du robot par une interface physique, intégrant un capteur de force qui permet la mesure des forces d'interactions entre le robot et l'humain.
 %
 \newlineBlank
 %
-Comme on peut le voir sur la \cref{fig_comanipulation_ctrl}, l'environnement simulé est projeté sur un écran que l'opérateur humain doit regarder, cette environnement comprend : 
+Comme on peut le voir sur la \cref{fig_comanipulation_ctrl}, l'environnement simulé est projeté sur un écran que l'opérateur humain doit regarder, cet environnement comprend : 
 \begin{enumerate*}[label=\roman*),itemjoin={,\quad}] 
 	\item la raquette, qui se déplace uniquement le long de l'axe vertical
 	\item une balle, elle aussi limitée à un mouvement unidimensionnel
@@ -177,7 +177,7 @@ Comme on peut le voir sur la \cref{fig_comanipulation_ctrl}, l'environnement sim
 %
 \input{latex_figures/fig_exp_bench}
 
-L'objectif de la manipulation est d'observer un comportement rythmique chez l'humain, pendant qu'il essaie de maintenir l'apex de la balle $ z_a $, proche de la hauteur cible $ h $ dans l'environnement simulé. Au cours de cette manipulation, des perturbations pseudo-aléatoires interviendront à des instants maîtrisés du cyclique, pour ensuite permettre des estimations d'impédance.
+L'objectif de la manipulation est d'observer un comportement rythmique chez l'humain, pendant qu'il essaie de maintenir l'apex de la balle $ z_a $, proche de la hauteur cible $ h $ dans l'environnement simulé. Au cours de cette manipulation, des perturbations pseudo-aléatoires interviendront à des instants maîtrisés du cycle, pour ensuite permettre des estimations d'impédance.
 %
 \newlineBlank
 %
@@ -203,7 +203,7 @@ Dans le cas du contrôle en admittance articulaire d'abord décrit par \cite{new
 %
 \input{latex_figures/fig_ctrl_scheme_lamy}
 
-Le schéma décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ le jacobien du robot, $\vect{f}_e$ les forces d'interaction mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interaction générées par le robot. En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, de gains $ \vect{K}_v \in \R^n $,  permettent de minimiser les effets dûs aux frottements. Les gains $ \vect{K}_i \in \R^n $ des correcteurs en admittance de la boucle en couple d'interaction, permettent de réduire l'inertie apparente.
+Le schéma décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ le jacobien du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, de gains $ \vect{K}_v \in \R^n $,  permettent de minimiser les effets dûs aux frottements. Les gains $ \vect{K}_i \in \R^n $ des correcteurs en admittance de la boucle en couple d'interaction, permettent de réduire l'inertie apparente.
 %
 \newlineBlank
 %
@@ -243,7 +243,7 @@ Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{q_d}{}{}
 
 \paragraph{Guide virtuel}
 
-Une solution envisageable pour limiter les mouvements à l'axe vertical $\mathbf{z}$ réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \cite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\mathbf{z}$, entrainerait alors des effets résiduels sur la transparence toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{virtual_guide_control} a permis d'observer la dégradation de la transparence.
+Une solution envisageable pour limiter les mouvements à l'axe vertical $\mathbf{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \cite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\mathbf{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{virtual_guide_control} a permis d'observer la dégradation de la transparence.
 %
 \newlineBlank
 %
@@ -259,7 +259,7 @@ Si l'on considère un robot avec 3 articulations d'actionnées, opérant dans le
 %
 \paragraph{Boucle de contrôle principale} 
 
-L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé, fortement inspirée par la méthodologie décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p $ et $ K_i $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant le jacobien inverse estimé $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
+L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé, fortement inspirée par la méthodologie décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p $ et $ K_i $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
 %
 \begin{equation} \label{eq_Fz_endpoint}
 	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \begin{pmatrix} 0 & \left(K_z + \frac{K_i}{s}\right)f_z & 0 \end{pmatrix}^t
@@ -267,7 +267,7 @@ L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, p
 %
 \paragraph{Boucle de contrôle secondaire autour de x\textsubscript{0}} 
 
-Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un contrôle cartésien permet d'annuler les effets de couplages théoriques dans le cas d'un contrôle idéal. Si l'on considère l'erreur $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot et $\jacobianHat{}{}{}$ le jacobien estimé, alors l'équation \cref{eq_Fz_endpoint_coupling} décrit les phénomènes induits :
+Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un contrôle cartésien permet d'annuler les effets de couplages théoriques dans le cas d'un contrôle idéal. Toutefois, si l'on considère l'erreur $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot et $\jacobianHat{}{}{}$ le jacobien estimé, alors l'équation \cref{eq_Fz_endpoint_coupling} décrit les phénomènes induits :
 %
 \begin{equation} \label{eq_Fz_endpoint_coupling}
 \begin{split}
@@ -282,11 +282,11 @@ On distingue deux sources d'erreurs pouvant donner lieu à des phénomènes de c
 	\item l'erreur de trainage $ \dot{q}_{\epsilon} $ provoquée par la dynamique de la boucle en vitesse articulaire du robot, et multipliée par le jacobien réel du robot $ \jacobian{q}{}{} $
 	\item les erreurs d'estimation du jacobien $ \Delta\jacobian{q}{}{} $, qui sont multipliées par les consignes de vitesses articulaires $ \dot{q_d} $.
 \end{enumerate}
-La deuxième source d'erreur est difficile à quantifier, puisqu'elle provient d'une erreur potentielle de modélisation. On peut aussi considérer l'erreur entre de mesure des vitesses articulaires, qui comme l'erreur précédente, nécessite des équipements d'observation externes au robot (\textit{eg. caméra}), et un calibrage précis pour une évaluation.
+La deuxième source d'erreur est difficile à quantifier, puisqu'elle provient d'une erreur de modélisation. On peut aussi considérer l'erreur de mesure des vitesses articulaires, qui comme l'erreur précédente, nécessite des équipements d'observation externes au robot (\textit{eg. caméra}), et un calibrage précis pour une évaluation.
 %
 \newlineBlank
 %
-Les calculs théoriques de l'évaluation la première erreur décrite, montrent son influence sur l'axe $ \vect{x} $ en \cref{app_latency_error_effect}. Or, en ayant choisi d'asservir le contrôle uniquement sur les forces en $ \vect{z} $, les forces exercées sur l'axe $ \vect{x} $ ne sont plus perçues par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la co-manipulation.
+Les calculs théoriques de l'évaluation de la première erreur décrite, montrent son influence sur l'axe $ \vect{x} $ en \cref{app_latency_error_effect}. Or, en ayant choisi d'asservir le contrôle uniquement sur les forces en $ \vect{z} $, les forces exercées sur l'axe $ \vect{x} $ ne sont plus perçues par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la co-manipulation.
 %
 \newlineBlank
 %
@@ -300,11 +300,11 @@ Pour remédier à cette problématique, il suffit d'ajouter un asservissement pr
 
 \paragraph{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}
 
-Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - \textit{tâche en $\mathbf{z}$ et tâche en $\mathbf{x}$} -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On souhaite donc maintenir le robot dans une certaine configuration, qui reflète les positions articulaires médianes lors de la tâche de jonglerie. Toutefois, on ne veut pas que cette nouvelle tâche nuise à la transparence du robot. 
+Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - \textit{pour les tâches en $\mathbf{z}$ et en $\mathbf{x}$} -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On souhaite donc maintenir le robot dans une certaine configuration, qui reflète les positions articulaires médianes lors de la tâche de jonglerie. Toutefois, on ne veut pas que cette nouvelle tâche nuise à la transparence du robot. 
 %
 \newlineBlank
 %
-Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâche en $\mathbf{z}$. La méthodologie détaillée de projection de tâches dans les noyaux d'autres tâches est très bien résumée dans l'article de \cite{dietrich_overview_2015}. Ainsi on peut écrire $ \jacobian{}{1}{} $ le jacobien de la tâche en principale, qui se résume en fait à la deuxième ligne du jacobien $ \jacobian{}{}{} $ (\cref{app_jacobian_sub_3}), et noter l'exposant $ \mathbf{W}+ $ pour la pseudo-inverse pondérée, définie par l'équation \cref{eq_pseudo_inverse}.
+Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâche de transparence en $\mathbf{z}$. La méthodologie détaillée de projection de tâches dans les noyaux d'autres tâches est très bien résumée dans l'article de \cite{dietrich_overview_2015}. Ainsi on peut écrire $ \jacobian{}{1}{} $ le jacobien de la tâche en principale, qui se résume en fait à la deuxième ligne du jacobien $ \jacobian{}{}{} $ (\cref{app_jacobian_sub_3}), et noter l'exposant $ \mathbf{W}+ $ pour la pseudo-inverse pondérée, définie par l'équation \cref{eq_pseudo_inverse}.
 %
 \begin{equation} \label{eq_pseudo_inverse}
 	\begin{split}
@@ -328,6 +328,8 @@ avec $ \vect{\tau}_2^p \in \R^n $ le couple de la tâche projetée qui n'interf�
 	\end{split}
 \end{equation}
 
+[ajouter la notion de dynamique et le choix de W comme identité dans notre cas.]
+
 La boucle de commande considérée pour l'expérience est réalisée en vitesse et non en couple comme c'est le cas dans l'article cité. Comme expliqué par \cite{sadeghian_multi-priority_2011}, la relation est alors : [démonstration => la relation est équivalente MM]
 \begin{equation} \label{eq_null_space_proj_velocities}
 	\begin{split}
@@ -345,8 +347,8 @@ Ainsi en combinant les 3 tâches, on obtient le schéma de contrôle présenté 
 %
 avec : 
 \begin{enumerate}
-	\item[•] $ \vect{x} $ le vecteur 3D des coordonnées cartésiennes de l'effecteur dans le référentiel fixe - \textit{base du robot} -, défini par 2 translations et une rotation $ \begin{pmatrix} x & z & \theta \end{pmatrix} $, 
-	\item[•] $ \vect{f}_e $ le vecteur 3D des forces d'interactions entre l'effecteur et l'environnement toujours dans le référentiel fixe - \textit{une transformation est donc nécessaire, pour sortir du référentiel du capteur} - défini par 2 forces et 1 couple, 
+	\item[•] $ \vect{x} \in \R^3 $ les coordonnées cartésiennes de l'effecteur dans le référentiel fixe - \textit{base du robot} -, défini par 2 translations et une rotation $ \begin{pmatrix} x & z & \theta \end{pmatrix} $, 
+	\item[•] $ \vect{f}_e \in \R^3 $ les forces d'interactions entre l'effecteur et l'environnement toujours dans le référentiel fixe - \textit{une transformation est donc nécessaire, pour sortir du référentiel du capteur} - défini par 2 forces et 1 couple, 
 	\item[•] $ \vect{q} $ les 3 positions articulaires,
 	\item[•] $ \vect{q}_0 $ les 3 consignes de positions articulaires,
 	\item[•] $ x_0 $ la consigne en position sur l'axe $ \vect{x} $,

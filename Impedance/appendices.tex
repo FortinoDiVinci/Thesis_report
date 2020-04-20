@@ -20,7 +20,7 @@
 		\end{split}
 	\end{equation}
 	
-	Les conversions par rapport aux conventions du robot réel, le youBot arm de KUKA\textsuperscript{TM}, sont décrites dans le tableau \cref{tab_kuka_conventions}.
+	Les conversions par rapport aux conventions du robot réel, le youBot arm de KUKA\textsuperscript{TM}, sont décrites dans la \cref{tab_kuka_conventions}.
 	
  	\begin{table}[htbp] 
  		\newcommand{\specialcell}[2][c]{%
@@ -40,7 +40,7 @@
 	
 	\subsection{Modèle complet du youBot arm de KUKA\textsuperscript{TM}} \label{app_direct_kinem_sub_5}
 	
-	Pour passer du modèle géométrique direct réduit, au modèle à 5 articulations actionnées, il faut ajouter deux liaisons rotoïdes. La première liaison au niveau de la base du robot a son axe de rotation autour de l'axe $ \vect{z} $ défini dans le repère du robot. La deuxième rotation se place au niveau de l'effecteur final du robot, avec un axe de rotation dans le prolongement du bras. 
+	Pour passer du modèle géométrique direct réduit, au modèle à 5 articulations actionnées, il faut ajouter deux liaisons rotoïdes. La première liaison au niveau de la base du robot, a son axe de rotation autour de l'axe $ \vect{z} $ défini dans le repère du robot. La deuxième rotation se place au niveau de l'effecteur final du robot, avec un axe de rotation dans le prolongement du bras. 
 	%
 	\newlineBlank
 	%
@@ -192,7 +192,7 @@
 		\end{split}
 	\end{equation}
 	
-	Le jacobien des vitesses linéaires $ \jacobian{}{v}{} $, de son côté, est plus simplement obtenu par la dérivation partielle de la position de l'effecteur $ \vect{p}^0_s $ du robot. 
+	Le jacobien des vitesses linéaires $ \jacobian{}{v}{} $, de son côté, est  obtenu par la dérivation partielle de la position de l'effecteur $ \vect{p}^0_s $ du robot, par rapport aux différentes articulations. 
 	
 	\begin{equation}
 		\jacobian{}{vi}{} = \frac{\partial \vect{p}^0_s}{\partial q_i} = 
@@ -310,7 +310,7 @@
 	\end{equation}
 	
 	La \cref{fig_coupling_effect_joint_ctrl_b} 
-	montre la variation du terme non linéaire entre $ k_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires.  La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}, et les valeurs des 2 autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonal (\cref{fig_coupling_effect_joint_ctrl_a}), mais qu'il reste d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associés aux couples $ \tau_\theta $. 
+	montre la variation du terme non linéaire entre $ k_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires.  La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}, et les valeurs des 2 autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{fig_coupling_effect_joint_ctrl_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associés aux couples $ \tau_\theta $. 
 	%
 	\input{latex_figures/fig_coupling_effect_joint_ctrl}
 	\newlineBlank
@@ -320,7 +320,7 @@
 	\newpage
 	\section{Effets de l'erreur de trainage} \label{app_latency_error_effect}
 
-	L'erreur de trainage montré dans l'équation \cref{app_latency_error_effect}, entraîne des effets indésirables sur tous les axes, et notamment l'axe $ \vect{x} $, que cette section va chercher à quantifier. Il faut donc regarder la première ligne du jacobien $ \jacobian{}{}{} $ multiplié par l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ sur les 3 articulations.
+	L'erreur de trainage montrée dans l'équation \cref{eq_Fz_endpoint_coupling}, entraîne des effets indésirables sur tous les axes, et notamment l'axe $ \vect{x} $, que cette section va chercher à quantifier. Il faut donc regarder la première ligne du jacobien $ \jacobian{}{}{} $ multiplié par l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ sur les 3 articulations.
 	
 	\begin{equation}
 		\dot{x}_\epsilon = \begin{pmatrix}
@@ -331,6 +331,6 @@
 	\newpage
 	\section{Effets de la projection dans le noyau de la tâche principale, sur cette tâche} \label{app_projection_effects_on_main_task}
 
-	La projection dans le noyau de la tâche principale de transparence le long de l'axe $ \vect{z} $, décrite au \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0} est supposée annuler les effets de la tâche secondaire de maintient de configuration, sur la tâche principale. Cette annexe se propose de vérifier et quantifier les effets engendrés.
+	La projection dans le noyau de la tâche principale de transparence le long de l'axe $ \vect{z} $, décrite au \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0} est supposée annuler les effets de la tâche secondaire, sur la tâche principale. Cette annexe se propose de vérifier et quantifier les effets engendrés.
 
 \end{appendices}
