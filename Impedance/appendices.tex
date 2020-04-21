@@ -331,6 +331,48 @@
 	\newpage
 	\section{Effets de la projection dans le noyau de la tâche principale, sur cette tâche} \label{app_projection_effects_on_main_task}
 
-	La projection dans le noyau de la tâche principale de transparence le long de l'axe $ \vect{z} $, décrite au \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0} est supposée annuler les effets de la tâche secondaire, sur la tâche principale. Cette annexe se propose de vérifier et quantifier les effets engendrés.
-
+	La projection dans le noyau de la tâche principale de transparence le long de l'axe $ \vect{z} $, décrite au \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0} est supposée annuler les effets de la tâche secondaire, sur la tâche principale. Cette annexe se propose de vérifier et quantifier les effets engendrés, pour le jacobien donné en \cref{app_jacobian_sub_3}.
+	%
+	\newlineBlank
+	%
+	Le jacobien de la tâche principale $ \jacobian{}{1}{} $ est donné par le seconde ligne du jacobien du robot, on le donne en équation \cref{eq_jacobian_main_task}.
+	
+	\begin{equation} \label{eq_jacobian_main_task}
+		\jacobian{q}{1}{} = 
+		\begin{pmatrix}
+			l_1 c_1 + l_2 c_{12} + l_3 c_{123} & l_2 c_{12} + l_3 c_{123}  & l_3 c_{123}
+		\end{pmatrix}
+	\end{equation}
+	
+	En injectant $ \jacobian{}{1}{} $ dans chacune des projections décrites par les équations \cref{eq_null_space_proj_2,eq_null_space_proj_velocities}, on peut vérifier leur validité. On s'intéresse alors aux effets de cette projection au niveau cartésien, comme le montrent les équations \cref{eq_null_space_cartesian_proj_2,eq_null_space_proj_cartesian_velocities}.
+	%
+	\begin{equation} \label{eq_null_space_cartesian_proj_2}
+		\vect{f}_2^p = \left( \jacobian{q}{}{t} \right)^{-1} \vect{\tau}^p_2 = \left( \jacobian{q}{}{t} \right)^{-1} \left( \matr{I} - \jacobian{q}{1}{t}\left(\jacobian{q}{1}{\matr{W}+}\right)^t \right) \vect{\tau}_2
+	\end{equation}
+	%	
+	\begin{equation} \label{eq_null_space_proj_cartesian_velocities}
+		\dot{\vect{x}}_2^p = \jacobian{q}{}{} \dot{\vect{q}}_2^p = \jacobian{q}{}{} \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2
+	\end{equation}
+	
+	Ainsi, on veut vérifier si les précédentes équations génèrent des effets sur $ \dot{z} $, la vitesse cartésienne en $ \vect{z} $. On s'intéresse donc à la deuxième ligne de la matrice de la projection de l'équation \cref{eq_null_space_proj_cartesian_velocities}, qu'on obtient en considérant la deuxième ligne de la matrice $ \jacobian{}{}{} $, que l'on a déjà défini sous le nom $ \jacobian{}{1}{} $, on a alors en utilisant la définition de la pseudo inverse donnée en équation \cref{eq_pseudo_inverse}, avec l'identité $ \matr{I} \in \R^{3\times3} $ comme matrice de pondération :
+	
+	\begin{equation}
+		\begin{split}
+			\dot{\vect{x}}_2^p(2) &= \dot{z}_2^p = \jacobian{q}{1}{} \dot{\vect{q}}_2^p = \jacobian{q}{}{} \left(\matr{I} - \jacobian{q}{1}{\matr{I}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2 \\
+			%
+			\dot{z}_2^p &= \left( \jacobian{q}{1}{} - \jacobian{q}{1}{} \matr{I}^{-1} \jacobian{q}{1}{t} \left( \jacobian{q}{1}{} \matr{I}^{-1} \jacobian{q}{1}{t} \right)^{-1} \jacobian{q}{1}{} \right) \dot{\vect{q}}_2 \\
+			%
+			\dot{z}_2^p &= \left( \jacobian{q}{1}{} - \jacobian{q}{1}{} \jacobian{q}{1}{t} \left( \jacobian{q}{1}{} \jacobian{q}{1}{t} \right)^{-1} \jacobian{q}{1}{} \right) \dot{\vect{q}}_2 
+			%
+		\end{split}
+	\end{equation} 	
+	
+	Or :
+	%
+	\begin{equation*}
+		\jacobian{q}{1}{} \matr{I}^{-1} \jacobian{q}{1}{t} \left( \jacobian{q}{1}{} \matr{I}^{-1} \jacobian{q}{1}{t} \right)^{-1} = \matr{I},
+	\end{equation*} 
+	%
+	d'où $ \dot{z}_2^p = 0 $. On a donc bien une projection dans le noyau de la tâche principale décrite dans le \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_main}.
+	
 \end{appendices}

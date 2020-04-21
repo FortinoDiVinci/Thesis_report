@@ -71,6 +71,8 @@
 	{\color{DarkGoldenrod} \textit{\textbf{Comment se place l'expérience par rapport aux travaux antérieurs ?}}}
 \end{flushright}
 
+This section presents some context about human rhythmic motor control, and previous work conducted by G. Avrin, then the ball bouncing task is detailed with the newly implication of physical interactions, and finally the experimental set-up is introduced.
+
 %------------------------------------------------
 
 \subsection{Travaux précédents} \label{sec_bouncing_sub_previous}
@@ -189,6 +191,10 @@ L'objectif de la manipulation est d'observer un comportement rythmique chez l'hu
 	{\color{DarkGoldenrod} \textit{\textbf{Comment minimiser les effets d'un robot en interaction avec un humain sur la tâche étudiée?}}}
 \end{flushright}
 
+This section presents some admittance and impedance control strategies for intuitive human robot interactions. The admittance control with force feedback is described at both joint and endpoint levels to finally disclose the tuning of the proposed control.
+
+%-------------------------------------------------
+
 \subsection{Boucle de contrôle} \label{sec_robot_sub_ctrl_loop}
 
 Étant donné que les interactions entre l'humain et le robot sont localisées en son effecteur, un contrôle en impédance utilisant un capteur de force se prête bien à l'expérience. La littérature existante pour ce type de contrôle est assez riche, que ce soit dans les travaux de thèse de \cite{lamy_conception_2011}, pour la minimisation de l'inertie lors de tâches collaboratives \citep{Lamy_achieving_2009}, pour des tâches de téléopération \citep{ajoudani_tele-impedance_2012} où l'on cherche à imiter l'impédance du bras humain, ou dans la cas de robots redondants \citep{ficuciello_cartesian_2014}. Plusieurs revues de l'état de l'art ont par ailleurs été publiées, pour le cas particulier des composants à impédance variable \citep{vanderborght_variable_2013}, dans le cas spécifique du contrôle en admittance \citep{keemink_admittance_2018}, pour essayer d'unifier les contrôles en impédance et admittance \citep{ott_unified_2010}, et aussi dans le cas de mouvements bio-inspirés \citep{al-shuka_active_2018}.
@@ -257,7 +263,7 @@ La tâche étudiée étant limitée dans un espace de travail cartésien, il est
 %
 Si l'on considère un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{matrix}( x & z )\end{matrix} $, avec le couple de degrés de liberté $ \begin{matrix}( x & z & \theta )\end{matrix} $, hors de toutes configurations singulières, comme présenté en \cref{fig_exp_bench}, alors le jacobien $\jacobian{}{}{} \in \R^{3\times3}$ est défini et inversible, son expression est donnée en \cref{app_jacobian_sub_3}.
 %
-\paragraph{Boucle de contrôle principale} 
+\paragraph{Boucle de contrôle principale} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_main}
 
 L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé, fortement inspirée par la méthodologie décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p $ et $ K_i $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
 %
@@ -320,24 +326,23 @@ Ainsi, comme défini par \cite{dietrich_overview_2015}, le projecteur $ \matr{N}
 	\end{split}
 \end{equation}
 %
-avec $ \vect{\tau}_2^p \in \R^n $ le couple de la tâche projetée qui n'interfère pas avec le couple de la tâche principale $ \vect{\tau}_1 $, et $ \matr{N}_2^\tau(q) $ défini comme suit :
+avec $ \vect{\tau}_2^p \in \R^n $ le couple de la tâche projetée qui n'interfère pas avec le couple de la tâche principale $ \vect{\tau}_1 $, et $ \matr{N}_2^\tau(q) $ défini dans l'équation \cref{eq_null_space_proj_2} :
 %
 \begin{equation} \label{eq_null_space_proj_2}
-	\begin{split}
 	\matr{N}_2^\tau(q) = \matr{I} - \jacobian{q}{1}{t}\left(\jacobian{q}{1}{\matr{W}+}\right)^t
-	\end{split}
-\end{equation}
-
-[ajouter la notion de dynamique et le choix de W comme identité dans notre cas.]
-
-La boucle de commande considérée pour l'expérience est réalisée en vitesse et non en couple comme c'est le cas dans l'article cité. Comme expliqué par \cite{sadeghian_multi-priority_2011}, la relation est alors : [démonstration => la relation est équivalente MM]
-\begin{equation} \label{eq_null_space_proj_velocities}
-	\begin{split}
-	\dot{\vect{q}}_2^p = \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2
-	\end{split}
 \end{equation}
 %
-avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection de $ \dot{\vect{q}}_2 $ dans le noyau de la tâche $ \dot{\vect{q}}_1 $, et $ \jacobian{}{1}{} $ [montrer explicitement les effet sur la tâche secondaire MM] le jacobien de cette dernière tâche.
+\cite{dietrich_overview_2015} se sont intéressés aux effets de la matrice de pondération $ \matr{W} $. Ainsi, ils montrent que dans un cas statique, la projection est bien vérifiée en utilisant la matrice identité comme poids. Toutefois, ils montrent aussi que lorsque des dynamiques non négligeables rentre en compte pour le robot, alors, la relation n'est plus vérifiée avec cette pondération. Il faut alors utiliser comme matrice de pondération la matrice d'inertie du robot.
+%
+\newlineBlank
+%
+La boucle de commande considérée pour l'expérience est réalisée en vitesse et non en couple comme c'est le cas dans l'article cité. Comme expliqué par \cite{sadeghian_multi-priority_2011}, la relation est alors :
+%
+\begin{equation} \label{eq_null_space_proj_velocities}
+	\dot{\vect{q}}_2^p = \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2,
+\end{equation}
+%
+avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection de $ \dot{\vect{q}}_2 $ dans le noyau de la tâche $ \dot{\vect{q}}_1 $. La \cref{app_projection_effects_on_main_task} s'intéresse plus en détails aux effets de cette projection sur la tâche principale.
 
 \paragraph{Contrôle en transparence complet}
 
@@ -375,33 +380,37 @@ Calcul de la réduction d'inertie apparente...
 
 [préciser les données chiffrées concernant l'outillage, capteur, amplitude durée perturbations, ... mais aussi l'ordre de grandeur des résultats obtenus ??]
 
-\subsection{Outil de mesures et d'introduction des perturbations} \label{sec_impedance_estimation_sub_tools}
+\subsection{Outil de mesures et d'introduction des perturbations - titre à changer..} \label{sec_impedance_estimation_sub_tools}
 
 [présenter le set up expérimental, capteur (compensation gravité...), robot, noeuds ROS utilisés, avec leur fréquence de fonctionnement..]
 
 \subsubsection{Perturbations} \label{sec_impedance_estimation_sub_tools_sub_perturbations}
 
-Comme expliqué dans la section 1.3 sur les méthodes d'estimation de l'impédance, l'introduction de perturbations est nécessaire pour l'expérience. Étant donné la boucle de contrôle présentée en \cref{fig_comanipulation_ctrl}, 3 solutions pour introduire des perturbations en force qui soient maîtrisées, peuvent être proposées, sans équipement supplémentaire qui soit externe au robot.
+\paragraph{Nature des perturbations en force}
+
+Comme expliqué dans la \cref{sec_bouncing_sub_interactions_sub_arm}, l'introduction de perturbations est nécessaire pour l'expérience. Étant donné la boucle de contrôle présentée en \cref{fig_comanipulation_ctrl}, trois solutions pour introduire des perturbations en force qui soient maîtrisées, peuvent être proposées, sans équipement supplémentaire externe au robot.
 
 \begin{enumerate}
-	\item Modifier la référence de force $ f_z $,
+	\item Modifier la référence de force $ f_{z0} $,
 	\item Introduire des perturbations en vitesse
 	\item Introduire des perturbations en courant, au niveau des asservissement internes du robot 
 \end{enumerate}
 
-La première solution est la plus facile à implémenter. Elle permet d'obtenir sans aucune transformation, ni calcul supplémentaire une perturbation de l'amplitude choisie. Le régime transitoire des perturbations est soumis à la dynamique de la boucle externe en force. 
-
+La première solution est la plus facile à implémenter. Elle permet d'obtenir sans aucune transformation, ni calcul supplémentaire une perturbation de l'amplitude choisie. Le régime transitoire des perturbations est soumis à la dynamique de la boucle externe en force, et donc la dynamique la plus lente du système.
+%
 \newlineBlank
-
-La deuxième solution nécessite de pouvoir compenser la boucle interne en vitesse du robot. De cette manière, en introduisant une perturbation en vitesse et compensant la dynamique de la boucle, on est capable de maîtriser l'introduction indirecte d'une perturbation en courant, et donc en couple articulaire. Une transformation sera nécessaire pour transformer la perturbation cartésienne, en perturbation articulaire. Cette fois ci, la régime transitoire de la perturbation sera soumis à la dynamique de la boucle de vitesse.
-
+%
+La deuxième solution nécessite de pouvoir compenser la boucle interne en vitesse du robot. De cette manière, en introduisant une perturbation en vitesse et compensant la dynamique de cette boucle, on est capable de maîtriser l'introduction indirecte d'une perturbation en courant, et donc en couple articulaire. Une transformation sera nécessaire pour transformer la perturbation cartésienne, en perturbation articulaire. Cette fois ci, le régime transitoire de la perturbation sera soumis à la dynamique de la boucle de vitesse, à priori plus rapide que la boucle externe en force.
+%
 \newlineBlank
-
-La dernière solution nécessite de pouvoir introduire des perturbations aux consignes de courant directement dans les boucles internes du robot, d'une part. D'autre part, de continuer à faire tourner les boucles de plus haut niveau, pour maintenir la transparence du robot. Aussi, il faut bien maîtriser les perturbations introduites en courant/couple moteur, pour être capable de prédire l'amplitude de la perturbation introduite en force sur l'effecteur.  [parler des problématiques soulevées par les frottements secs ??]
-
+%
+La dernière solution nécessite d'une part, de pouvoir introduire des perturbations aux consignes de courant directement dans les boucles internes du robot. D'autre part, de maintenir les boucles de plus haut niveau, pour garantir la transparence du robot. Aussi, dans le cas de robots aux dynamiques non-négligeables, introduire une perturbation au niveau du couple moteur ne permettra pas de garantir l'amplitude de la perturbation en force au niveau de l'effecteur final, à moins de compenser les dynamiques internes du robot. 
+%
 \newlineBlank
-
+%
 Selon la nature des perturbations on préfèrera certaines des solutions proposées. En effet, si l'on souhaite introduire des perturbations lente voire statique, la première solution est la plus simple et la moins gourmande en calcul. Au contraire, pour des perturbations courtes, inférieur ou de l'ordre de la dizaine de millisecondes, opter pour la première solution n'est plus envisageable. Dans ce cas, on préfèrera l'une des deux autres solutions, selon qu'on ait ou non, accès aux boucles en courant du robot.  
+
+\paragraph{Choix du type de perturbation}
 
 \subsubsection{Trajectoire virtuelle} \label{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}
 
