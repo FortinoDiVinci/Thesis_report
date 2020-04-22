@@ -19,6 +19,7 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
+\usepackage{natbib}
 \usepackage[english, main=french]{babel} % English language hyphenation
 \usepackage{microtype} % Better typography
 \usepackage{amsmath,amsfonts,amsthm} % Math packages for equations
@@ -53,6 +54,7 @@
 	\usetikzlibrary{calc}
 	\usetikzlibrary{babel}
 	\usetikzlibrary{patterns}
+	\usetikzlibrary{matrix}
 	
 \usepackage{circuitikz}
 
@@ -127,6 +129,16 @@
 	}
 	{%
 		\boldsymbol{\hat{\mathcal{J}}_{#2}}(#1)^{#3} %
+	}	
+}
+
+\newcommand{\jacobianDot}[3]{ %
+	\ifthenelse{\isempty{#1}}
+	{%
+		\boldsymbol{\dot{\mathcal{J}}_{#2}^{#3}} %
+	}
+	{%
+		\boldsymbol{\dot{\mathcal{J}}_{#2}}(#1)^{#3} %
 	}	
 }
 
@@ -264,7 +276,7 @@
 
 %\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
-\usepackage{natbib}
+% \usepackage{natbib}
 
 %\addbibresource{main_biblio} % The filename of the bibliography
 

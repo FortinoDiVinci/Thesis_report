@@ -44,7 +44,7 @@
 	%
 	\newlineBlank
 	%
-	Le modèle n'est cette fois ci plus contenu dans un plan, et le formalisme proposé par Denavit-Hartenberg permet d'exprimer les coordonnées de l'effecteur dans l'espace, le choix de la convention de Khalil-Kleinfinger [référence ?] est fait avec les paramètres des cinq liaisons rotoïdes donnés dans la \cref{tab_DH_params}, avec la matrice de passage homogène $ \matrCal{T} $ donnée par l'équation \cref{eq_matrix_khalil}.
+	Le modèle n'est cette fois ci plus contenu dans un plan, et le formalisme proposé par Denavit-Hartenberg permet d'exprimer les coordonnées de l'effecteur dans l'espace, le choix de la convention de Khalil-Kleinfinger [référence ?] est fait avec les paramètres des cinq liaisons rotoïdes données dans la \cref{tab_DH_params}, avec la matrice de passage homogène $ \matrCal{T} $ donnée par l'équation \cref{eq_matrix_khalil}.
 	
 	\begin{equation} \label{eq_matrix_khalil}
 	\mathcal{T}_{n-1}^n = 
@@ -90,7 +90,7 @@
 		\end{pmatrix}
 	\end{equation}
 	
-	Les détails de la matrice de rotation sont présentées à l'équation \cref{eq_rotation_matrix}, et de la translation en équation \cref{eq_translation_matrix}.
+	Les détails de la matrice de rotation sont présentés à l'équation \cref{eq_rotation_matrix}, et de la translation en équation \cref{eq_translation_matrix}.
 	
 	\begin{equation} \label{eq_rotation_matrix}
 		\begin{split}
@@ -290,7 +290,7 @@
 	\end{split}
 	\end{equation}
 	
-	Pour que la matrice soit diagonale, il faut donc que les éléments hors de la diagonale soient nuls, ce qui donne un système à 6 équations et 6 variables. Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est à dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. Si l'on compare les éléments de la diagonale et hors de la diagonale de l'équation \cref{eq_coupling_effect_jacobian}, qui ont un effet sur x. On peut étudier l'amplitude des phénomènes de couplages comparativement aux effets de transmission souhaités, dans l'équation \cref{eq_coupling_effects}. On pose alors l'équation unidimensionnelle \cref{jacobian_coupling_effect_x}.
+	Pour que la matrice soit diagonale, il faut donc que les éléments hors de la diagonale soient nuls, ce qui donne un système à 6 équations et 6 variables. Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est à dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. Si l'on compare les éléments de la diagonale et hors de la diagonale de l'équation \cref{eq_coupling_effect_jacobian}, qui ont un effet sur x, on peut étudier l'amplitude des phénomènes de couplages comparativement aux effets de transmission souhaités, dans l'équation \cref{eq_coupling_effects}. On pose alors l'équation unidimensionnelle \cref{jacobian_coupling_effect_x}.
 	
 	\begin{equation}  \label{jacobian_coupling_effect_x}
 		x_d = k_p \left(
@@ -310,7 +310,7 @@
 	\end{equation}
 	
 	La \cref{fig_coupling_effect_joint_ctrl_b} 
-	montre la variation du terme non linéaire entre $ k_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires.  La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}, et les valeurs des 2 autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{fig_coupling_effect_joint_ctrl_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associés aux couples $ \tau_\theta $. 
+	montre la variation du terme non linéaire entre $ k_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires.  La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}, et les valeurs des 2 autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{fig_coupling_effect_joint_ctrl_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associé aux couples $ \tau_\theta $. 
 	%
 	\input{latex_figures/fig_coupling_effect_joint_ctrl}
 	\newlineBlank
@@ -354,11 +354,11 @@
 		\dot{\vect{x}}_2^p = \jacobian{q}{}{} \dot{\vect{q}}_2^p = \jacobian{q}{}{} \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2
 	\end{equation}
 	
-	Ainsi, on veut vérifier si les précédentes équations génèrent des effets sur $ \dot{z} $, la vitesse cartésienne en $ \vect{z} $. On s'intéresse donc à la deuxième ligne de la matrice de la projection de l'équation \cref{eq_null_space_proj_cartesian_velocities}, qu'on obtient en considérant la deuxième ligne de la matrice $ \jacobian{}{}{} $, que l'on a déjà défini sous le nom $ \jacobian{}{1}{} $, on a alors en utilisant la définition de la pseudo inverse donnée en équation \cref{eq_pseudo_inverse}, avec l'identité $ \matr{I} \in \R^{3\times3} $ comme matrice de pondération :
+	Ainsi, on veut vérifier si les précédentes équations génèrent des effets sur $ \dot{z} $, la vitesse cartésienne en $ \vect{z} $. On s'intéresse donc à la deuxième ligne de la matrice de la projection de l'équation \cref{eq_null_space_proj_cartesian_velocities}, qu'on obtient en considérant la deuxième ligne de la matrice $ \jacobian{}{}{} $, que l'on a déjà définie sous le nom $ \jacobian{}{1}{} $, on a alors en utilisant la définition de la pseudo inverse donnée en équation \cref{eq_pseudo_inverse}, avec l'identité $ \matr{I} \in \R^{3\times3} $ comme matrice de pondération :
 	
 	\begin{equation}
 		\begin{split}
-			\dot{\vect{x}}_2^p(2) &= \dot{z}_2^p = \jacobian{q}{1}{} \dot{\vect{q}}_2^p = \jacobian{q}{}{} \left(\matr{I} - \jacobian{q}{1}{\matr{I}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2 \\
+			\dot{\vect{x}}_2^p(2) &= \dot{z}_2^p = \jacobian{q}{1}{} \dot{\vect{q}}_2^p = \jacobian{q}{1}{} \left(\matr{I} - \jacobian{q}{1}{\matr{I}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2 \\
 			%
 			\dot{z}_2^p &= \left( \jacobian{q}{1}{} - \jacobian{q}{1}{} \matr{I}^{-1} \jacobian{q}{1}{t} \left( \jacobian{q}{1}{} \matr{I}^{-1} \jacobian{q}{1}{t} \right)^{-1} \jacobian{q}{1}{} \right) \dot{\vect{q}}_2 \\
 			%

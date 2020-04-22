@@ -20,6 +20,8 @@
 			]
 			%
 				\addplot3 [mesh] {xTerm(x,y)};
+				\addplot3 [only marks, samples at={1.68}%, y samples at={-4.355}
+				, opacity = 0.5] {xTerm(x,y)};
 			\end{axis}
 		\end{tikzpicture}
 	}
@@ -42,11 +44,13 @@
 		]
 		%
 			\addplot3 [mesh] {zTerm(x,y)};
+			\addplot3 [only marks, samples at={1.68}%, y samples at={-4.355}
+			, opacity = 0.5] {zTerm(x,y)};
 		\end{axis}
 		\end{tikzpicture}
 	}
 	\shorthandon{;} 
-	\caption{Variation of terms from matrix \cref{eq_coupling_effect_jacobian}, for $ q_3 = 1.5 $ (a) Diagonal term on $ x $, (b) Coupling term on $ x $ multiplied by $ f_z $. Joint values are provided in radians.}
+	\caption{Variation of terms from matrix \cref{eq_coupling_effect_jacobian}, for $ q_3 = 1.5 $, $ q_1 = 1.68 $ is notified by the circular black markers (a) Diagonal term on $ x $, (b) Coupling term on $ x $ multiplied by $ f_z $. Joint values are provided in radians.}
 	\label{fig_coupling_effect_joint_ctrl}
 \end{figure}
 
