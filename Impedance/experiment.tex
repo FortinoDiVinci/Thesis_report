@@ -317,7 +317,7 @@ Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâ
 	\matr{A}^{\matr{W}+} = \matr{W}^{-1}\matr{A}^t\left(\matr{AW}^{-1}\matr{A}^t\right)^{-1}
 	\end{split}
 \end{equation}
-%
+
 Ainsi, comme défini par \cite{dietrich_overview_2015}, le projecteur $ \matr{N}_2 $ dans le noyau d'une tâche principale en couple $ \vect{\tau}_1 $ s'écrit :
 %
 \begin{equation} \label{eq_null_space_proj}
@@ -331,7 +331,7 @@ avec $ \vect{\tau}_2^p \in \R^n $ le couple de la tâche projetée qui n'interf�
 \begin{equation} \label{eq_null_space_proj_2}
 	\matr{N}_2^\tau(q) = \matr{I} - \jacobian{q}{1}{t}\left(\jacobian{q}{1}{\matr{W}+}\right)^t
 \end{equation}
-%
+
 \cite{dietrich_overview_2015} se sont intéressés aux effets de la matrice de pondération $ \matr{W} $. Ainsi, ils montrent que dans un cas statique, la projection est bien vérifiée en utilisant la matrice identité comme poids. Toutefois, ils montrent aussi que lorsque des dynamiques non négligeables rentrent en compte pour le robot, alors, la relation n'est plus vérifiée avec cette pondération. Il faut alors utiliser comme matrice de pondération la matrice d'inertie du robot.
 %
 \newlineBlank
@@ -377,7 +377,7 @@ Les gains du correcteur $ C_z $ en admittance sont soumis au compromis performan
 On donne le modèle dynamique général d'un robot en contact avec un environnement \cref{eq_dyn_model_robot}, avec $ \matr{M} $ la matrice d'inertie du robot, $ \matr{H} $ la matrice regroupant les phénomènes liées à la position et à la vitesse - \textit{eg. forces centrifuges, poids}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur.
 %
 \begin{equation} \label{eq_dyn_model_robot}
-	\matr{M}\ddot{\vect{q}} + \matr{H}(\dot{\vect{q}}, \vect{q}) = \vect{\tau}_r + \vect{\tau}_{e}
+	\matr{M}(\vect{q})\ddot{\vect{q}} + \matr{H}(\dot{\vect{q}}, \vect{q}) = \vect{\tau}_r + \vect{\tau}_{e}
 \end{equation}
 %
 En utilisant la relation \cref{eq_link_joint_endpoint_velocity} pour passer des variables articulaires à des variables cartésiennes, et en notant que la dérivée est donnée par \cref{eq_link_joint_endpoint_acceleration}, on peut alors écrire l'équation \cref{eq_dyn_model_robot_2}.
@@ -390,16 +390,16 @@ En utilisant la relation \cref{eq_link_joint_endpoint_velocity} pour passer des 
 	\begin{split}
 	%\ddot{\vect{x}} - \jacobianDot{q}{}{} \dot{\vect{q}} &= \jacobian{\vect{q}}{}{} \matr{M}^{-1} \left( \vect{\tau}_r + \jacobian{\vect{q}}{}{t} \vect{f}_{ext} - \matr{H}(\dot{\vect{q}}, \vect{q}) \right) \\
 	%
-	\ddot{\vect{x}} - \jacobianDot{\vect{q}}{}{} \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} &= \jacobian{\vect{q}}{}{} \matr{M}^{-1} \left( \vect{\tau}_r + \jacobian{\vect{q}}{}{t} \vect{f}_{e} - \matr{H}(\dot{\vect{q}}, \vect{q}) \right)
+	\ddot{\vect{x}} - \jacobianDot{\vect{q}}{}{} \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} &= \jacobian{\vect{q}}{}{} \matr{M}(\vect{q})^{-1} \left( \vect{\tau}_r + \jacobian{\vect{q}}{}{t} \vect{f}_{e} - \matr{H}(\dot{\vect{q}}, \vect{q}) \right)
 	\end{split}
 \end{equation}
-%
+
 Si on néglige les effets liées aux forces centrifuges et aux forces de Coriolis, et aussi la gravité qui est compensée par la boucle de contrôle, alors on peut considérer que $ \matr{H} $ se résume aux phénomènes frottements, on ne prendra en compte que les frottements visqueux $ \vect{f}_v $, \cref{eq_dyn_model_robot_2} devient alors \cref{eq_dyn_model_robot_3}.
 %
 \begin{equation} \label{eq_dyn_model_robot_3}
-	\ddot{\vect{x}} - \jacobianDot{\vect{q}}{}{} \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} = \jacobian{\vect{q}}{}{} \matr{M}^{-1} \left( \vect{\tau}_r + \jacobian{\vect{q}}{}{t} \vect{f}_{e} - \vect{f}_v \dot{\vect{q}} ) \right)
+	\ddot{\vect{x}} - \jacobianDot{\vect{q}}{}{} \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} = \jacobian{\vect{q}}{}{} \matr{M}(\vect{q})^{-1} \left( \vect{\tau}_r + \jacobian{\vect{q}}{}{t} \vect{f}_{e} - \vect{f}_v \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} ) \right)
 \end{equation}
-%
+
 Il ne reste alors plus qu'à exprimer $ \vect{\tau}_r $ qui est donné par le contrôle en admittance, et la boucle interne en vitesses articulaires du robot, dont on note le correcteur $ \matr{C}_v \in \R^{3\times3} $. Il est important de noter pour la suite des calculs que $ \matr{C}_v $ est diagonal. Les boucles secondaires, qui ne devraient pas avoir d'effet sur la transparence, sont négligées pour alléger les calculs.
 %
 \begin{equation}
@@ -409,15 +409,24 @@ Il ne reste alors plus qu'à exprimer $ \vect{\tau}_r $ qui est donné par le co
 \begin{equation}
 	\vect{\tau}_r \approx \vect{\tau}_d = \matr{C}_v(s) \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right)
 \end{equation}
+
+Les matrices $ \matr{M}, \jacobian{}{}{}, \jacobianHat{}{}{} $ et $ \jacobianDot{}{}{} $ sont considérées constantes autour de la configuration $ \vect{q}_0 $, on peut donc écrire \cref{eq_dyn_model_robot_imp_ctrl} :
 %
 \begin{equation} \label{eq_dyn_model_robot_imp_ctrl}
-	\ddot{\vect{x}} - \jacobianDot{\vect{q}}{}{} \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} = \jacobian{\vect{q}}{}{} \matr{M}^{-1} \left( 
-	\matr{C}_v(s) \left( \jacobianHat{\vect{q}}{}{-1} \begin{pmatrix} 0 & C_z(s) f_z & 0 \end{pmatrix}^{t} - \dot{\vect{q}} \right)
-	+ \jacobian{\vect{q}}{}{t} \vect{f}_{e} - \vect{f}_v \dot{\vect{q}} ) \right)
+		\ddot{\vect{x}} - \jacobianDot{}{}{} \jacobian{}{}{-1} \dot{\vect{x}} = \jacobian{}{}{} \matr{M}^{-1} \left( 
+		\matr{C}_v(s) \left( \jacobianHat{}{}{-1} \begin{pmatrix} 0 & C_z(s) f_z & 0 \end{pmatrix}^{t} - \jacobian{}{}{-1} \dot{\vect{x}} \right)
+		+ \jacobian{}{}{t} \vect{f}_{e} - \vect{f}_v \jacobian{}{}{-1} \dot{\vect{x}} ) \right) \text{,}
+\end{equation}
+%
+que l'on peut réarranger pour grouper les termes liés au mouvement et les termes liés à la force, et en exprimant la relation entre la force et la vitesse :
+%
+\begin{equation} \label{eq_dyn_model_robot_imp_ctrl_2}
+	\frac{F_e(s)}{V(s)} = 
+	\frac{ \jacobian{}{}{} \matr{M}^{-1} \left( \matr{C}_v(s) \jacobianHat{}{}{-1} \begin{pmatrix} 0 & C_z(s) & 0 \end{pmatrix}^{t} + \jacobian{}{}{t} \right) s } 
+	{ 1 + \jacobian{}{}{} \matr{M}^{-1} \left( \matr{C}_v(s) \jacobianHat{}{}{-1} + \vect{f}_v - \left( \jacobian{}{}{} \matr{M}^{-1} \right)^{-1}\jacobianDot{}{}{} \right) \jacobian{}{}{-1 } s }
 \end{equation}
 
-
-\paragraph{Pratique}
+\paragraph{Validation expérimentale}
 
 Pour assurer des interactions sécurisé et robuste, une cartographie de la stabilité a été déterminée empiriquement sous deux conditions expérimentales. Premièrement on a opéré avec la co-manipulation la plus contraignante, ce qui correspond à un déplacement rythmique du robot avec des co-contractions intentionnelles du bras et de la main aussi intenses que possible. Ensuite, la deuxième condition correspond à une exécution nominal de la tâche de jonglerie, avec des co-contractions plus faibles. Pour chacune de ces conditions, le comportement de la boucle fermée est classé dans quatre catégories : 
 \begin{enumerate*} [label=\roman*),itemjoin={,\quad}]
@@ -479,6 +488,21 @@ Selon la nature des perturbations on préfèrera certaines des solutions propos�
 \paragraph{Choix du type de perturbation}
 
 \subsubsection{Trajectoire virtuelle} \label{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}
+
+La méthode d'estimation d'impédance décrite, repose sur les déviations en forces $ \delta \vect{f} $ et en trajectoires $ \delta \vect{x} $ produites par les perturbations, par rapport aux forces et trajectoires virtuelles (\cref{sec_bouncing_sub_interactions_sub_arm}). Par essence, ces trajectoires virtuelles en forces et positions sont inaccessibles et nécessitent donc d'être estimées. 
+%
+\newlineBlank
+%
+Dans la littérature \cite{bennett_time-varying_1992} ont utilisé la moyenne des trajectoires non perturbées précédentes pour estimer la trajectoire virtuelle suite à une perturbation, pour un mouvement cyclique du bras. De leur côté, \cite{abe_modulation_2003} ont modélisé la trajectoire virtuelle d'un motif rythmique par une expression sinusoïdale dont les paramètres ont été déterminés à l'aide de trajectoires non perturbées. \cite{burdet_method_2000} ont proposé un algorithme capable de prédire une trajectoire avec une erreur inférieur à 1 cm après 200 ms, en s'aidant aussi des trajectoires précédentes.
+%
+\newlineBlank
+%
+%The considered impedance estimation method is based on the fact that the perturbations induce deviations $\delta \vect{f}$ and $\delta \vect{x}$  (cf \cref{eq_impedance_KBI}) from the \emph{virtual trajectories}, which would have taken place without perturbations. By essence unknown, these virtual trajectories both in hand positions and forces need to be reconstructed. In the literature, the average previous unperturbed trajectories were used in \cite{bennett_time-varying_1992}, to estimate the virtual trajectory, while \cite{abe_modulation_2003} fitted the cyclic patterns of previous data to a sinusoidal expression. A prediction algorithm with an unbiased error estimation, lesser than 1cm after 200ms, was proposed  in \cite{burdet_method_2000}.	Since the impedance evaluation is done offline, the trajectory of the arm \emph{after} the perturbation is available. Looking at the arm unperturbed trajectory given in \cref{fig_perturbed_virtual_traj}, it can be observed that the movement can be approached using cubic splines. %is close to a sinusoidal function but has an asymmetric behaviour between the rising and declining phases. It is therefore not sufficient to approach the trajectory with a simple sine, however natural cubic splines can fit the whole trajectory. 
+%\cref{fig_perturbed_virtual_traj} presents an example of an estimated virtual trajectory against a real perturbed trajectory. More details about this spline-based reconstruction and it's influence on the results are given in \cref{resImp}.
+%
+%%%%%%%%%%%%
+%% INPUT VIRTUAL ESTIMATION FIG HERE
+%\input{tex_figure/fig_virt_trajec_estim}
 
 \subsection{Résultats} \label{sec_impedance_estimation_sub_results}
 
