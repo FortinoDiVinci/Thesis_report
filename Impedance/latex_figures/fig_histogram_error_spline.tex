@@ -1,0 +1,126 @@
+\begin{figure} [thpb]
+\centering
+	\shorthandoff{;} 
+	\renewcommand{\thesubfigure}{\roman{subfigure}}
+	\subfloat[\label{fig_hist_err_i}]{
+    \begin{tikzpicture}
+    \definecolor{matlabBlue}{RGB}{0,114,189}
+    \begin{axis}[%
+		width=.28\columnwidth,
+		scaled ticks=true,
+		tick label style={font=\footnotesize},
+		%tick label style={/pgf/number format/fixed},
+		scaled y ticks={base 10:-3},
+		%ytick = {\empty},
+        ybar,
+        ymin=0,
+        xlabel={error (\%)},
+        xlabel style={font=\footnotesize},
+        ylabel={samples},
+        ylabel style={font=\footnotesize, yshift=-5mm},
+		]
+		\addplot +[
+		x filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		%y filter/.code={\pgfmathparse{#1/1000}\pgfmathresult},
+		hist={
+		bins=20,
+		%data min =-0.07,
+		%data max =0.07
+		}
+		%matlabBlue,
+		] table [y index=0, col sep=semicolon] {misc/spline_z_norm_error_histograms.csv};
+    \end{axis}
+    \end{tikzpicture}  
+	}
+	%
+	\subfloat[\label{fig_hist_err_ii}]{
+		\begin{tikzpicture}
+		\definecolor{matlabBlue}{RGB}{0,114,189}
+		\begin{axis}[%
+		width=.28\columnwidth,
+		scaled ticks=true,
+		tick label style={font=\footnotesize},
+		%tick label style={/pgf/number format/fixed},
+		scaled y ticks={base 10:-3},
+		%ytick = {\empty},
+		ybar,
+		ymin=0,
+		xlabel={error (\%)},
+		xlabel style={font=\footnotesize},
+		]
+		\addplot +[
+		x filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		%y filter/.code={\pgfmathparse{#1/1000}\pgfmathresult},
+		hist={
+			bins=20,
+			%data min =-0.07,
+			%data max =0.07
+		}
+		%matlabBlue,
+		] table [y index=1, col sep=semicolon] {misc/spline_z_norm_error_histograms.csv};
+		\end{axis}
+		\end{tikzpicture}  
+	}
+	%
+	\subfloat[\label{fig_hist_err_iii}]{
+		\begin{tikzpicture}
+		\definecolor{matlabBlue}{RGB}{0,114,189}
+		\begin{axis}[%
+		width=.28\columnwidth,
+		scaled ticks=true,
+		tick label style={font=\footnotesize},
+		%tick label style={/pgf/number format/fixed},
+		scaled y ticks={base 10:-3},
+		%ytick = {\empty},
+		ybar,
+		ymin=0,
+		xlabel={error (\%)},
+		xlabel style={font=\footnotesize},
+		]
+		\addplot +[
+		x filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		%y filter/.code={\pgfmathparse{#1/1000}\pgfmathresult},
+		hist={
+			bins=20,
+			%data min =-0.07,
+			%data max =0.07
+		}
+		%matlabBlue,
+		] table [y index=2, col sep=semicolon] {misc/spline_z_norm_error_histograms.csv};
+		\end{axis}
+		\end{tikzpicture}  
+	}
+	%
+	\subfloat[\label{fig_hist_err_iv}]{
+		\begin{tikzpicture}
+		\definecolor{matlabBlue}{RGB}{0,114,189}
+		\begin{axis}[%
+		width=.28\columnwidth,
+		scaled ticks=true,
+		tick label style={font=\footnotesize},
+		%tick label style={/pgf/number format/fixed},
+		scaled y ticks={base 10:-3},
+		%ytick = {\empty},
+		ybar,
+		ymin=0,
+		xlabel={error (\%)},
+		xlabel style={font=\footnotesize},
+		]
+		\addplot +[
+		x filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		%y filter/.code={\pgfmathparse{#1/1000}\pgfmathresult},
+		hist={
+			bins=20,
+			%data min =-0.07,
+			%data max =0.07
+		}
+		%matlabBlue,
+		] table [y index=3, col sep=semicolon] {misc/spline_z_norm_error_histograms.csv};
+		\end{axis}
+		\end{tikzpicture}  
+	}
+	%\renewcommand*\thesubfloatfigure{\themainfigure--\alpha{subfloatfigure}}
+	\shorthandon{;} 
+    \caption{Normalized error histograms}
+    \label{fig_hist_err}
+\end{figure}

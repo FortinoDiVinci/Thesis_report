@@ -1,0 +1,181 @@
+\begin{figure} [thpb]
+\centering
+	\shorthandoff{;} 
+	\renewcommand{\thesubfigure}{\roman{subfigure}}
+    \subfloat[\label{fig_traj_spline_evaluation_i}]{
+        \centering
+        \begin{tikzpicture}
+        \definecolor{matlabBlue}{RGB}{0,114,189}
+
+        \begin{axis}[%
+			width=.25\columnwidth,
+			scale only axis,   
+			axis x line = bottom,
+			axis y line = left, 
+			xlabel={$t (ms)$},
+			ylabel={$z (cm)$},
+			xlabel style={font=\footnotesize},
+			ylabel style={font=\footnotesize,yshift=-0.5em},
+			tick label style={font=\footnotesize},
+			%axis lines=middle,
+			grid=both,
+            grid style={line width=.1pt, draw=gray!10},
+            major grid style={line width=.2pt,draw=gray!50},
+            minor tick num=4,
+            table/col sep=semicolon,
+			]
+			% real trajectory
+			\addplot [
+			y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+			solid,
+			matlabBlue,
+			%blue!60!black,
+			line width=.5pt,
+			] table [x index= 0, y index=1] {misc/data_traj_real_virt_typical.csv};
+			% estimated trajectory
+			\addplot [
+			y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+			solid,
+			orange,
+			%blue!60!black,
+			dashed,
+			line width=.pt,
+			] table [x index= 0, y index=2] {misc/data_traj_real_virt_typical.csv};
+			
+        \end{axis}
+        \end{tikzpicture}
+    }
+	%
+	\subfloat[\label{fig_traj_spline_evaluation_ii}]{
+		\centering
+		\begin{tikzpicture}
+		\definecolor{matlabBlue}{RGB}{0,114,189}
+		
+		\begin{axis}[%
+		width=.25\columnwidth,
+		scale only axis,   
+		axis x line = bottom,
+		axis y line = left, 
+		xlabel={$t (ms)$},
+		xlabel style={font=\footnotesize},
+		tick label style={font=\footnotesize},
+		%axis lines=middle,
+		grid=both,
+		grid style={line width=.1pt, draw=gray!10},
+		major grid style={line width=.2pt,draw=gray!50},
+		minor tick num=4,
+		table/col sep=semicolon,
+		]
+		% real trajectory
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		solid,
+		solid,
+		matlabBlue,
+		%blue!60!black,
+		line width=.5pt,
+		] table [x index= 0, y index=3] {misc/data_traj_real_virt_typical.csv};
+		% estimated trajectory
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		solid,
+		orange,
+		%blue!60!black,
+		dashed,
+		line width=.pt,
+		] table [x index= 0, y index=4] {misc/data_traj_real_virt_typical.csv};
+		
+		\end{axis}
+		\end{tikzpicture}
+	}	
+	\\%
+	\subfloat[\label{fig_traj_spline_evaluation_iii}]{
+		\centering
+		\begin{tikzpicture}
+		\definecolor{matlabBlue}{RGB}{0,114,189}
+		
+		\begin{axis}[%
+		width=.25\columnwidth,
+		scale only axis,   
+		axis x line = bottom,
+		axis y line = left, 
+		xlabel={$t (ms)$},	
+		xlabel style={font=\footnotesize},
+		ylabel={$z (cm)$},
+		ylabel style={font=\footnotesize,yshift=-0.5em},
+		tick label style={font=\footnotesize},
+		%axis lines=middle,
+		grid=both,
+		grid style={line width=.1pt, draw=gray!10},
+		major grid style={line width=.2pt,draw=gray!50},
+		minor tick num=4,
+		table/col sep=semicolon,
+		]
+		% real trajectory
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		solid,
+		matlabBlue,
+		%blue!60!black,
+		line width=.5pt,
+		] table [x index= 0, y index=5] {misc/data_traj_real_virt_typical.csv};
+		% estimated trajectory
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		solid,
+		orange,
+		%blue!60!black,
+		dashed,
+		line width=.pt,
+		] table [x index= 0, y index=6] {misc/data_traj_real_virt_typical.csv};
+		
+		\end{axis}
+		\end{tikzpicture}
+	}
+	%
+	\subfloat[\label{fig_traj_spline_evaluation_iv}]{
+		\centering
+		\begin{tikzpicture}
+		\definecolor{matlabBlue}{RGB}{0,114,189}
+		
+		\begin{axis}[%
+		width=.25\columnwidth,
+		scale only axis,   
+		axis x line = bottom,
+		axis y line = left, 
+		xlabel={$t (ms)$},
+		xlabel style={font=\footnotesize},
+		tick label style={font=\footnotesize},
+		%axis lines=middle,
+		grid=both,
+		grid style={line width=.1pt, draw=gray!10},
+		major grid style={line width=.2pt,draw=gray!50},
+		minor tick num=4,
+		table/col sep=semicolon,
+		]
+		% real trajectory
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		solid,
+		matlabBlue,
+		%blue!60!black,
+		line width=.5pt,
+		] table [x index= 0, y index=7] {misc/data_traj_real_virt_typical.csv};
+		% estimated trajectory
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		solid,
+		orange,
+		%blue!60!black,
+		dashed,
+		line width=.pt,
+		] table [x index= 0, y index=8] {misc/data_traj_real_virt_typical.csv};
+		
+		\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\shorthandon{;} 
+    \caption{...} %\vspace{-16pt}
+    \label{fig_traj_spline_evaluation}
+\end{figure}

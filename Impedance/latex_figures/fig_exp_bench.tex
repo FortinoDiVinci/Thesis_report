@@ -34,7 +34,7 @@
 		
 		\node[right of = endeffector, node distance = 0.5cm](hand) 
 		{\includegraphics[width=0.75in]{misc/hand}};
-		\node[right of = hand]{perturbed hand};
+		\node[right of = hand, font=\footnotesize]{perturbed hand};
 		
 		%% impedance circuittikz schema
 		\coordinate (hand_imp) at ($ (hand) + (0.5, -0.5) $);
@@ -47,7 +47,7 @@
 		\coordinate (mt) at ($ (mb) + (0,-0.25) $);
 		
 		\node[left of = mt, node distance = 0.5cm, opacity=0.5](virt_hand) {\includegraphics[width=0.75in, angle=20]{misc/hand}};
-		\node[right of = virt_hand, yshift=-4mm]{virtual hand};
+		\node[right of = virt_hand, yshift=-4mm, font=\footnotesize]{virtual hand};
 		
 		\draw (hand_imp)
 		to[mass=$M$] (M);
@@ -112,7 +112,7 @@
 			--  ($(screen) + (0.3, -0.4) + (0.2, -0.3)$) ;
 		\fill ($(screen) + (0, 0.2)$) circle[radius=2.5pt];
 		\draw [dashed, red] ($(screen) + (-0.3, 0.4)$) -- ($(screen) + (0.3, 0.4)$); 
-		\node [] at ($(screen) + (0, 1.1)$) {Simulated  environment};
+		\node [font=\footnotesize] at ($(screen) + (0, 1.1)$) {Simulated  environment};
 		\end{tikzpicture}
 		
 		\caption{Proposed interactive system for impedance estimation: a human interacts with the 3 DOF robot thanks to a handle. $ q_i $ are the joint positions of the robot, $ \theta $ is the endpoint orientation, $ z $ is the endpoint position along the $ \vect{z} $ axis, \textit{represented here after a perturbation responsible for the hand deviation from it's nominal trajectory} denoted by $ z_v $, the virtual position.} %\vspace{-20pt}

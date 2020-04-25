@@ -1,11 +1,11 @@
 \begin{figure} [thpb]
 \centering
-    \subfloat[]{
+	\shorthandoff{;} 
+    \subfloat[\label{fig_perturbed_virtual_traj_a}]{
         \centering
         \begin{tikzpicture}
         \definecolor{matlabBlue}{RGB}{0,114,189}
-        % perturbation
-        \draw[dotted, line width=0.25mm] (rel axis cs:0.147, 0) -- (rel axis cs:0.147, 0.43);
+
         \begin{axis}[%
 			width=.38\columnwidth,
 			scale only axis,    
@@ -24,28 +24,53 @@
             minor tick num=4,
 			]
 			% perturbation
-            %\draw[dashed, line width=0.4mm] (rel axis cs:0.313, 1) -- (rel axis cs:0.313, 0);
+            \draw[dotted, line width=0.25mm] (rel axis cs:0.333, 1) -- (rel axis cs:0.333, 0);
 			%
+			%
+			\begin{scope} %fit before window
+			\path [clip] (axis cs: \pgfkeysvalueof{/pgfplots/xmin}, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymax});
 			\addplot [
 			dashed,
 			orange,
 			line width=1.25pt,
 			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
+			\end{scope}
+			\begin{scope} %fit after window
+			\path [clip] (axis cs: 109.588, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, \pgfkeysvalueof{/pgfplots/ymax});
+			\addplot [
+			dashed,
+			orange,
+			line width=1.25pt,
+			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
+			\end{scope} 
+			\begin{scope} % estimated window
+			\path [clip] (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.588, \pgfkeysvalueof{/pgfplots/ymax});
+			\addplot [
+			dotted,
+			orange,
+			line width=1.35pt,
+			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
+			\addplot [
+			orange,
+			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
+			\end{scope}
+			% real trajectory
 			\addplot [
 			solid,
 			matlabBlue,
 			%blue!60!black,
 			line width=.5pt,
 			] table [x=t, y=z, col sep=comma] {misc/data_perturbed_trajec.csv};
+			
         \end{axis}
         \end{tikzpicture}
     }
-    \subfloat[]{
+    \subfloat[\label{fig_perturbed_virtual_traj_b}]{
         \centering
         \begin{tikzpicture}
         \definecolor{matlabBlue}{RGB}{0,114,189}
         % perturbation
-        \draw[dotted, line width=0.25mm] (rel axis cs:0.313, 0) -- (rel axis cs:0.313, 1);    
+        \draw[dotted, line width=0.25mm] (rel axis cs:0.333, 0) -- (rel axis cs:0.333, 1);    
         \begin{axis}[%
 			width=.38\columnwidth,
 			scale only axis,    
@@ -63,11 +88,34 @@
             minor tick num=4,
 			]
 			%
-			\addplot [
-			dashed,
-			orange,
-			line width=1.25pt,
-			] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
+			\begin{scope} %fit before window
+				\path [clip] (axis cs: \pgfkeysvalueof{/pgfplots/xmin}, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymax});
+				\addplot [
+				dashed,
+				orange,
+				line width=1.25pt,
+				] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
+			\end{scope}
+			\begin{scope} %fit after window
+				\path [clip] (axis cs: 109.588, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, \pgfkeysvalueof{/pgfplots/ymax});
+				\addplot [
+				dashed,
+				orange,
+				line width=1.25pt,
+				] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
+			\end{scope} 
+			\begin{scope} % estimated window
+				\path [clip] (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.588, \pgfkeysvalueof{/pgfplots/ymax});
+				\addplot [
+				dotted,
+				orange,
+				line width=1.35pt,
+				] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
+				\addplot [
+				orange,
+				] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
+			\end{scope}
+			% real trajectory
 			\addplot [
 			solid,
 			matlabBlue,
@@ -76,6 +124,7 @@
         \end{axis}
         \end{tikzpicture}
     }
-    \caption{(a) Hand position and (b) Interaction force, both along the $\vect{z}$-axis: realized perturbed trajectories (blue solid lines), versus estimated virtual trajectories (orange dotted ones lines), with the onset time of the perturbation of 30ms duration (vertical black dotted line).} \vspace{-16pt}
+	\shorthandon{;} 
+    \caption{(a) Hand position and (b) Interaction force, both along the $\vect{z}$-axis: realized perturbed trajectories (blue solid lines), versus estimated virtual trajectories (orange dotted lines), with the onset time of the perturbation of 30ms duration (vertical black dotted lines).} %\vspace{-16pt}
     \label{fig_perturbed_virtual_traj}
 \end{figure}
