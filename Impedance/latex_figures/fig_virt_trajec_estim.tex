@@ -5,6 +5,7 @@
         \centering
         \begin{tikzpicture}
         \definecolor{matlabBlue}{RGB}{0,114,189}
+        \definecolor{vermillon}{RGB}{213,94,0}
 
         \begin{axis}[%
 			width=.38\columnwidth,
@@ -31,7 +32,7 @@
 			\path [clip] (axis cs: \pgfkeysvalueof{/pgfplots/xmin}, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymax});
 			\addplot [
 			dashed,
-			orange,
+			vermillon,
 			line width=1.25pt,
 			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
 			\end{scope}
@@ -39,7 +40,7 @@
 			\path [clip] (axis cs: 109.588, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, \pgfkeysvalueof{/pgfplots/ymax});
 			\addplot [
 			dashed,
-			orange,
+			vermillon,
 			line width=1.25pt,
 			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
 			\end{scope} 
@@ -47,7 +48,7 @@
 			\path [clip] (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.588, \pgfkeysvalueof{/pgfplots/ymax});
 			\addplot [
 			dotted,
-			orange,
+			vermillon,
 			line width=1.35pt,
 			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
 			\addplot [
@@ -69,7 +70,8 @@
         \centering
         \begin{tikzpicture}
         \definecolor{matlabBlue}{RGB}{0,114,189}
-        % perturbation
+        \definecolor{vermillon}{RGB}{213,94,0}
+        
         \draw[dotted, line width=0.25mm] (rel axis cs:0.333, 0) -- (rel axis cs:0.333, 1);    
         \begin{axis}[%
 			width=.38\columnwidth,
@@ -92,7 +94,7 @@
 				\path [clip] (axis cs: \pgfkeysvalueof{/pgfplots/xmin}, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymax});
 				\addplot [
 				dashed,
-				orange,
+				vermillon,
 				line width=1.25pt,
 				] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
 			\end{scope}
@@ -100,7 +102,7 @@
 				\path [clip] (axis cs: 109.588, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, \pgfkeysvalueof{/pgfplots/ymax});
 				\addplot [
 				dashed,
-				orange,
+				vermillon,
 				line width=1.25pt,
 				] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
 			\end{scope} 
@@ -108,7 +110,7 @@
 				\path [clip] (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.588, \pgfkeysvalueof{/pgfplots/ymax});
 				\addplot [
 				dotted,
-				orange,
+				vermillon,
 				line width=1.35pt,
 				] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
 				\addplot [

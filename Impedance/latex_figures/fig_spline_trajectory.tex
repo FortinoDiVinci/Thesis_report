@@ -6,6 +6,7 @@
         \centering
         \begin{tikzpicture}
         \definecolor{matlabBlue}{RGB}{0,114,189}
+        \definecolor{vermillon}{RGB}{213,94,0}
 
         \begin{axis}[%
 			width=.25\columnwidth,
@@ -26,21 +27,23 @@
 			]
 			% real trajectory
 			\addplot [
-			y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+			/pgf/number format/read comma as period,
+			%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 			solid,
 			matlabBlue,
 			%blue!60!black,
 			line width=.5pt,
-			] table [x index= 0, y index=1] {misc/data_traj_real_virt_typical.csv};
+			] table [x index= 0, y index=1] {misc/data_traj_real_virt_typical_2.csv};
 			% estimated trajectory
 			\addplot [
-			y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+			/pgf/number format/read comma as period,
+			%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 			solid,
-			orange,
+			vermillon,
 			%blue!60!black,
 			dashed,
 			line width=.pt,
-			] table [x index= 0, y index=2] {misc/data_traj_real_virt_typical.csv};
+			] table [x index= 0, y index=2] {misc/data_traj_real_virt_typical_2.csv};
 			
         \end{axis}
         \end{tikzpicture}
@@ -50,6 +53,7 @@
 		\centering
 		\begin{tikzpicture}
 		\definecolor{matlabBlue}{RGB}{0,114,189}
+		\definecolor{vermillon}{RGB}{213,94,0}
 		
 		\begin{axis}[%
 		width=.25\columnwidth,
@@ -68,22 +72,23 @@
 		]
 		% real trajectory
 		\addplot [
-		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
-		solid,
+		/pgf/number format/read comma as period,
+		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
 		matlabBlue,
 		%blue!60!black,
 		line width=.5pt,
-		] table [x index= 0, y index=3] {misc/data_traj_real_virt_typical.csv};
+		] table [x index= 0, y index=3] {misc/data_traj_real_virt_typical_2.csv};
 		% estimated trajectory
 		\addplot [
-		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		/pgf/number format/read comma as period,
+		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
-		orange,
+		vermillon,
 		%blue!60!black,
 		dashed,
 		line width=.pt,
-		] table [x index= 0, y index=4] {misc/data_traj_real_virt_typical.csv};
+		] table [x index= 0, y index=4] {misc/data_traj_real_virt_typical_2.csv};
 		
 		\end{axis}
 		\end{tikzpicture}
@@ -93,6 +98,7 @@
 		\centering
 		\begin{tikzpicture}
 		\definecolor{matlabBlue}{RGB}{0,114,189}
+		\definecolor{vermillon}{RGB}{213,94,0}
 		
 		\begin{axis}[%
 		width=.25\columnwidth,
@@ -113,21 +119,23 @@
 		]
 		% real trajectory
 		\addplot [
-		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		/pgf/number format/read comma as period,
+		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
 		matlabBlue,
 		%blue!60!black,
 		line width=.5pt,
-		] table [x index= 0, y index=5] {misc/data_traj_real_virt_typical.csv};
+		] table [x index= 0, y index=5] {misc/data_traj_real_virt_typical_2.csv};
 		% estimated trajectory
 		\addplot [
-		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		/pgf/number format/read comma as period,
+		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
-		orange,
+		vermillon,
 		%blue!60!black,
 		dashed,
 		line width=.pt,
-		] table [x index= 0, y index=6] {misc/data_traj_real_virt_typical.csv};
+		] table [x index= 0, y index=6] {misc/data_traj_real_virt_typical_2.csv};
 		
 		\end{axis}
 		\end{tikzpicture}
@@ -137,6 +145,7 @@
 		\centering
 		\begin{tikzpicture}
 		\definecolor{matlabBlue}{RGB}{0,114,189}
+		\definecolor{vermillon}{RGB}{213,94,0}
 		
 		\begin{axis}[%
 		width=.25\columnwidth,
@@ -155,27 +164,29 @@
 		]
 		% real trajectory
 		\addplot [
-		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		/pgf/number format/read comma as period,
+		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
 		matlabBlue,
 		%blue!60!black,
 		line width=.5pt,
-		] table [x index= 0, y index=7] {misc/data_traj_real_virt_typical.csv};
+		] table [x index= 0, y index=7] {misc/data_traj_real_virt_typical_2.csv};
 		% estimated trajectory
 		\addplot [
-		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		/pgf/number format/read comma as period,
+		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
-		orange,
+		vermillon,
 		%blue!60!black,
 		dashed,
 		line width=.pt,
-		] table [x index= 0, y index=8] {misc/data_traj_real_virt_typical.csv};
+		] table [x index= 0, y index=8] {misc/data_traj_real_virt_typical_2.csv};
 		
 		\end{axis}
 		\end{tikzpicture}
 	}
 	
 	\shorthandon{;} 
-    \caption{...} %\vspace{-16pt}
+    \caption{Real trajectories (solid blue lines) and estimated trajectories (dashed orange lines), for the 4 different phases, i) rising, ii) decreasing, iii) upper peak; iv) lower peak. The interpolation is done using the trajectories both before \SI{100}{\milli\second} and after \SI{300}{\milli\second}. The estimated window is therefore, the data between \SI{100}{\milli\second} and \SI{300}{\milli\second}.} %\vspace{-16pt}
     \label{fig_traj_spline_evaluation}
 \end{figure}

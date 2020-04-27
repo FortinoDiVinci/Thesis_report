@@ -119,18 +119,18 @@ Les équations précédentes permettent d'extraire des caractéristiques notable
 z_a - z_k = \frac{(\dot{z}_k^+)^2}{2g} = \frac{\dot{z}_k^+}{4f}
 \end{equation} 
 
-\cite{zawadzki_maximal_2010} se sont intéressés aux liens entre l'amplitude et la fréquence d'un mouvement, dans leur cas, le coude a été étudié. Ainsi, en imposant une fréquence, ils ont pu observer l'amplitude maximale qui pouvait être atteinte, ainsi à 2 Hz, l'amplitude maximale observée était de 1.25 rad. En augmentant la fréquence du mouvement graduellement, la limite du mouvement a été atteinte à 8.4 Hz, où les amplitudes étaient presque devenues nulles. Étant donné que la tâche de jonglerie nécessite une synchronisation active entre les mouvements de la balle et du bras, des fréquences et amplitudes inférieures devraient être considérées, pour éviter de concevoir une tâche irréalisable ou contraignant des mouvements combinatoires complexes des différentes articulations du bras. De plus, cette thèse s'intéresse aux mouvements rythmiques, et non aux mouvements discrets, dont les différences ont été discutées par \cite{hogan_rhythmic_2007}. Il est donc important que la fréquence de la tâche soit suffisante pour générer un mouvement rythmique. En effet, lorsque la fréquence de la balle devient trop faible, les mouvements cycliques sont interrompus par des phases statiques, ce qui est une manière de différencier les mouvements rythmiques et discrets selon \cite{sternad_transitions_2013}.
+\cite{zawadzki_maximal_2010} se sont intéressés aux liens entre l'amplitude et la fréquence d'un mouvement, dans le cas du coude. Ainsi, en imposant une fréquence, ils ont pu observer l'amplitude maximale qui pouvait être atteinte. De cette manière, à \SI{2}{\hertz}, l'amplitude maximale observée était de \SI{1.25}{\radian}. En augmentant la fréquence du mouvement graduellement, la limite du mouvement a été atteinte à \SI{8.4}{\hertz}, où les amplitudes étaient presque devenues nulles. Étant donné que la tâche de jonglerie nécessite une synchronisation active entre les mouvements de la balle et du bras, des fréquences et amplitudes inférieures devraient être considérées, pour éviter de concevoir une tâche irréalisable ou contraignant des mouvements combinatoires complexes des différentes articulations du bras. De plus, cette thèse s'intéresse aux mouvements rythmiques, et non aux mouvements discrets, dont les différences ont été discutées par \cite{hogan_rhythmic_2007}. Il est donc important que la fréquence de la tâche soit suffisante pour générer un mouvement rythmique. En effet, lorsque la fréquence de la balle devient trop faible, les mouvements cycliques sont interrompus par des phases statiques, ce qui est une manière de différencier les mouvements rythmiques et discrets selon \cite{sternad_transitions_2013}.
 %
 \newlineBlank
 %
-En considérant des vitesses post-impacts proches de celles obtenues et observées par \cite{avrin_dynamic_2017}, et en les injectant dans l'équation \cref{eq_apex} déduite de la balistique, il est possible de définir des intervalles de hauteurs cibles $ h $ réalisables. Ainsi pour $\alpha = 0.6$, $g = 9.81$ m.s\textsuperscript{-2}, $\dot{z}_k^+ = 3.5$ m.s\textsuperscript{-1}, $z_k=0$ et des fréquences $ f $ situées entre 1 et 2 Hz, les apex $ z_a $ que la balle peut atteindre et donc, les hauteurs cibles $ h $ qui sont réalisables sont contenues dans l'intervalle $[0.5;1]$ m.
+En considérant des vitesses post-impacts proches de celles obtenues et observées par \cite{avrin_dynamic_2017}, et en les injectant dans l'équation \cref{eq_apex} déduite de la balistique, il est possible de définir des intervalles de hauteurs cibles $ h $ réalisables. Ainsi pour $\alpha = 0.6$, $g = 9.81$ \si{\metre\per\second\squared}, $\dot{z}_k^+ = 3.5$ \si{\metre\per\second}, $z_k=0$ \si{\metre} et des fréquences $ f $ situées entre \SI{1}{} et \SI{2}{\hertz}, les apex $ z_a $ que la balle peut atteindre et donc, les hauteurs cibles $ h $ qui sont réalisables sont contenues dans l'intervalle $[$\SI{0.5}{}$ ; $\SI{1}{}$]$ \si{\metre}. 
 
 
 \subsection{Ajout d'interactions physiques}  \label{sec_bouncing_sub_interactions}
 
 \subsubsection{Impact balistique}  \label{sec_bouncing_sub_interactions_sub_bouncing}
 
-Comme expliqué dans \cref{sec_bouncing_sub_previous} les travaux précédents se sont intéressés uniquement aux variables cinématiques, or la tâche de jonglerie implique ponctuellement des interactions physiques avec une balle. Si l'on considère qu'il s'agit d'une balle pesante, lors de l'impact décrit par \cref{eq_cpg_matsuoka}, les masses respectives de la balle et de la raquette, $ m_b $ et $ m_p $, auront une influence sur le mouvement du bras et donc sur la trajectoire de la balle. L'équation de l'impact pour prendre en compte ces masses devient alors \cref{eq_ballistic_impact_phy}.
+Comme expliqué dans la \cref{sec_bouncing_sub_previous}, les travaux précédents se sont intéressés uniquement aux variables cinématiques, or la tâche de jonglerie implique ponctuellement des interactions physiques avec une balle. Si l'on considère qu'il s'agit d'une balle pesante, lors de l'impact décrit par \cref{eq_cpg_matsuoka}, les masses respectives de la balle et de la raquette, $ m_b $ et $ m_p $, auront une influence sur le mouvement du bras et donc sur la trajectoire de la balle. L'équation de l'impact pour prendre en compte ces masses devient alors \cref{eq_ballistic_impact_phy}.
 
 \begin{equation} \label{eq_ballistic_impact_phy}
 \dot{z}^+_{k} = \max\left(\dot{z}^p_k, \frac{m_p}{m_p+m_b}\left((1+\alpha)\dot{z}^p_k-\alpha\dot{z}_{k}^-\right)\right)
@@ -152,7 +152,7 @@ La modélisation par l'impédance mécanique permet de répliquer le comportemen
 %
 \newlineBlank
 %
-Dans le cas spécifique de l'étude de jonglerie à un seul degré de liberté, on ne s'intéressera qu'au comportement dynamique du bras le long de l'axe considéré. Ainsi, l'impédance du bras est étudiée au niveau cartésien, les composantes des comportements sur les axes perpendiculaires ne sont pas considérés (\textit{aucun effet de couplage entre les différents axes n'est considéré}), et les impédances liées aux couples ne sont pas non plus considérées. L'équation du modèle visco-élastique KBI est alors simplifiée, donnant l'équation \cref{eq_impedance_z}. On trouve alors $ \delta f_z $ le différentiel entre la force virtuelle et la force suite à la perturbation, $ \delta z $ le différentiel entre la position virtuelle et la position perturbée et $ K_z $, $ B_z $ et $ I_z $ les paramètres unidimensionnels du modèle KBI pour l'axe $ \vect{z} $.
+Dans le cas spécifique de l'étude de jonglerie à un seul degré de liberté, on ne s'intéressera qu'au comportement dynamique du bras le long de l'axe considéré. Ainsi, l'impédance du bras est étudiée au niveau cartésien, les composantes des comportements sur les axes perpendiculaires ne sont pas considérés (\textit{aucun effet de couplage entre les différents axes n'est considéré}), et les impédances liées aux couples ne sont pas non plus considérées. L'équation du modèle visco-élastique KBI est alors simplifiée, donnant l'équation \cref{eq_impedance_z}. On trouve alors $ \delta f_z $ le différentiel entre la force virtuelle et la force suite à la perturbation, $ \delta z $ le différentiel entre la position virtuelle et la position perturbée et $ K_z $, $ B_z $ et $ I_z $ les paramètres unidimensionnels du modèle KBI pour l'axe $ \vect{z} $, respectivement en \si{\newton\per\metre}, \si{\newton\second\per\metre} et \si{\kilogram}.
 
 \begin{equation} \label{eq_impedance_z}
 	\delta f_z = K_z\delta z + B_z\delta\dot{z} + I_z\delta\ddot{z} 
@@ -164,7 +164,7 @@ Pour réaliser des estimations d'impédance du bras au court de la tâche jongle
 %
 \newlineBlank
 %
-La position verticale de la raquette dans l'environnement simulé est liée à la position cartésienne de l'effecteur du robot le long de l'axe z. Un gain pourra être appliqué entre le mouvement réel du robot, et le mouvement simulé de la raquette pour ajuster les variables cinématiques simulées. Comme montré sur la \cref{fig_comanipulation_ctrl}, le robot peut être manipulé par un humain grâce à une poignée. Cette poignée est reliée à l'effecteur du robot par une interface physique, intégrant un capteur de force qui permet la mesure des forces d'interactions entre le robot et l'humain.
+La position verticale de la raquette dans l'environnement simulé est liée à la position cartésienne de l'effecteur du robot le long de l'axe z. Un gain $ k_G $ pourra être appliqué entre le mouvement réel du robot, et le mouvement simulé de la raquette pour ajuster les variables cinématiques simulées. Comme montré sur la \cref{fig_comanipulation_ctrl}, le robot peut être manipulé par un humain grâce à une poignée. Cette poignée est reliée à l'effecteur du robot par une interface physique, intégrant un capteur de force qui permet la mesure des forces d'interactions entre le robot et l'humain.
 %
 \newlineBlank
 %
@@ -394,7 +394,7 @@ En utilisant la relation \cref{eq_link_joint_endpoint_velocity} pour passer des 
 	\end{split}
 \end{equation}
 
-Si on néglige les effets liées aux forces centrifuges et aux forces de Coriolis, et aussi la gravité qui est compensée par la boucle de contrôle, alors on peut considérer que $ \matr{H} $ se résume aux phénomènes frottements, on ne prendra en compte que les frottements visqueux $ \vect{f}_v $, \cref{eq_dyn_model_robot_2} devient alors \cref{eq_dyn_model_robot_3}.
+Si on néglige les effets liées aux forces centrifuges et aux forces de Coriolis, et aussi la gravité qui est compensée par la boucle de contrôle, alors on peut considérer que $ \matr{H} $ se résume aux phénomènes frottements, on ne prendra en compte que les frottements visqueux $ \vect{f}_v $, l'équation \cref{eq_dyn_model_robot_2} devient alors \cref{eq_dyn_model_robot_3}.
 %
 \begin{equation} \label{eq_dyn_model_robot_3}
 	\ddot{\vect{x}} - \jacobianDot{\vect{q}}{}{} \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} = \jacobian{\vect{q}}{}{} \matr{M}(\vect{q})^{-1} \left( \vect{\tau}_r + \jacobian{\vect{q}}{}{t} \vect{f}_{e} - \vect{f}_v \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} ) \right)
@@ -451,7 +451,7 @@ Des exemples théoriques des comportements décrits de la réponse en boucle fer
 	{\color{DarkGoldenrod} \textit{\textbf{Comprendre les stratégies de modulation de l'impédance lors d'interactions cycliques prévisibles.}}}
 \end{flushright}
 
-This section presents the methodologies and tools used for the impedance estimation. First results are analysed.
+This section presents the methodologies and tools used for the impedance estimation. First results are analysed, demonstrating the feasibility of the task under the proposed protocol and first insights into impedance identification.
 
 \subsection{Rappel littérature} \label{sec_impedance_estimation_sub_litterature}
 
@@ -562,7 +562,7 @@ Les principaux réflexes biologiques qui interviennent chez l'humain lorsqu'un m
 %
 \newlineBlank
 %
-D'un côté quantitatif, \cite{erden_end-point_2015, erden_hand_2015} bien conscients de cette problématique, n'ont pas pu conduire d'identification en utilisant une centaine de millisecondes, puisque les variations de mouvement étaient trop faibles sur cet intervalle. Cependant, ils ont estimé les actions volontaires négligeables sur une fenêtre de \SI{200}{\milli\second} à \SI{250}{\milli\second}. Cette supposition se base sur des résultats précédents conduits par \cite{mussa-ivaldi_neural_1985,tsuji_human_1995,gomi_human_1997,burdet_method_2000}, où le bras et la main humaine ont pu être modélisés comme des systèmes dynamiques passifs, avec des durées de calculs semblables ou supérieurs.
+D'un côté quantitatif, \cite{erden_end-point_2015, erden_hand_2015} bien conscients de cette problématique, n'ont pas pu conduire d'identification en utilisant une centaine de millisecondes, puisque les variations de mouvement étaient trop faibles sur cet intervalle. Cependant, ils ont estimé les actions volontaires négligeables sur une fenêtre de \SI{200}{\milli\second} à \SI{250}{\milli\second}, et ont pu réaliser leur identification sur cet intervalle. Cette supposition se base sur des résultats précédents conduits par \cite{mussa-ivaldi_neural_1985,tsuji_human_1995,gomi_human_1997,burdet_method_2000}, où le bras et la main humaine ont pu être modélisés comme des systèmes dynamiques passifs, avec des durées de calculs semblables ou supérieurs.
 %
 \newlineBlank
 %
@@ -578,23 +578,132 @@ Une fenêtre d'une durée de \SI{200}{\milli\second} a donc été choisie. L'int
 %
 \newlineBlank
 %
-Sur l'essai donné en [figure ball bouncing] %\cref{fig_ball_bouncing}
-les pics de positions ont été repérés, afin de permettre la classification des phases de cycle. Le début de l'estimation est défini par un délai (pouvant être négatif) à partir de ces pics. Pour obtenir une trajectoire sur un pic iii) et iv), un délai négatif de \SI{100}{\milli\second} est injecté de manière à centrer la fenêtre d'estimation sur le pic. Pour les autres phases i) et ii), la durée moyenne ainsi que l'écart type des 93 cycles ont été calculés. Avec une moyenne de cycle de \SI{434}{\milli\second}, et un écart type de \SI{62}{\milli\second}, un délai de \SI{155}{\milli\second} est choisi. La différenciation entre les phases pré-déterminées est ensuite facilement obtenue à l'aide de la vitesse ou des valeurs initiale et finale.
+Sur l'essai donné en \cref{fig_ball_bouncing_experiment}, les pics de positions ont été repérés, afin de permettre la classification des cycles en phases. Le début de l'estimation est défini par un délai (pouvant être négatif) à partir de ces pics. Pour obtenir une trajectoire sur un pic iii) et iv), un délai négatif de \SI{100}{\milli\second} est injecté de manière à centrer la fenêtre d'estimation sur le pic. Pour les autres phases i) et ii), la durée moyenne, ainsi que l'écart type des 93 cycles ont été calculés. Avec une moyenne de cycle de \SI{434}{\milli\second}, et un écart type de \SI{62}{\milli\second}, un délai de \SI{155}{\milli\second} est choisi. La différenciation entre les phases pré-déterminées est ensuite facilement obtenue à l'aide de la vitesse ou des valeurs initiale et finale.
 %
 %%%%%%%%
 \input{latex_figures/fig_spline_trajectory.tex}
 
-text text text...
+L'ensemble des données classées donne 33 jeux de données pour chacune des phases ii) et iii) et 45 jeux de données pour chacune des phase i) et iv). Chacun des jeux de données contient \SI{200}{\milli\second} échantillonnées à \SI{1}{\kilo\hertz}. Les écarts entre la position mesurée avec le système de vision, et la position estimée à l'aide de l'interpolation, sont normalisés par rapport à l'amplitude du mouvement. Les résultats de cette analyse sont affichés sous forme d'histogrammes en \cref{fig_hist_err_spline_position}. 
 %
 \input{latex_figures/fig_histogram_error_spline.tex}
 
-\subsection{Résultats} \label{sec_impedance_estimation_sub_results}
+Pour les phases i), ii) et iv) une forme gaussienne centrée proche de 0 semble se dégager. On remarque par ailleurs, que l'erreur de position sur les phases i) et ii) semble moins dispersée, puisque les écarts type pour ces deux premières phases, donnés dans la \cref{tab_sline_position_errors}, sont inférieurs aux deux dernières. On reste toutefois, même dans le moins bon cas, pour les pics supérieurs iii), sur un écart type inférieur à 3\%.
+%
+\newlineBlank
+%
+Il est toutefois important de noter que les splines cubiques sont des fonctions $ C^2 $. Par conséquent, lorsqu'on cherche à obtenir l'accélération en dérivant deux fois la trajectoire approchée par des splines, on obtient une fonction affine qui ne correspond pas à l'allure de l'accélération réelle. [à développer sur les pistes envisagée, avec notamment l'utilisation de la vitesse plutôt que la position, l'utilisation de méthode base sur la normalisation des trajectoires précédentes...].
+%
+\begin{table}[]
+	\centering
+	\begin{tabular}{|l|c|c|c|c|c|}
+		\cline{2-6}
+		\multicolumn{1}{c|}{} & i)   & ii)  & iii) & iv) & total \\
+		\hline
+		std (\%)             & 1.26 & 1.17 & 2.81 & 1.84 & 2.13  \\
+		mean (\%)            &-0.25 & 0.64 & 2.75 & 0.51 & 0.76  \\
+		\hline
+	\end{tabular}
+	\caption{Normalized errors, for position estimation using cubic splines}
+	\label{tab_sline_position_errors}
+\end{table}
+%
+\newlineBlank
+%
+Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalente, dont on a un exemple en \cref{fig_perturbed_virtual_traj_b}, on obtient alors des résultats plus éloignés de la réalité. En effet, le comportement en force mesuré est bien plus volatil et variable que le comportement en position, puisqu'il est en effet non seulement influencé par la position, mais aussi la vitesse et l'accélération. La \cref{fig_hist_err_spline_force} et la \cref{tab_sline_force_errors} récapitulent les écarts trouvés ainsi que leur dispersion. Une meilleur maitrise des perturbations introduites pourrait permettre de se dédouaner de cette estimation entachée d'erreurs.
+%
+\input{latex_figures/fig_histogram_force_error_spline.tex}
+%
+\begin{table}[]
+	\centering
+	\begin{tabular}{|l|c|c|c|c|c|}
+		\cline{2-6}
+		\multicolumn{1}{c|}{} & i)   & ii)  & iii) & iv) & total \\
+		\hline
+		std (\%)             & 8.44 & 6.48 & 7.90 & 7.19 & 7.96  \\
+		mean (\%)            & 1.18 & 3.36 &-3.76 & 1.39 & 0.66  \\
+		\hline
+	\end{tabular}
+	\caption{Normalized errors, for force estimation using cubic splines}
+	\label{tab_sline_force_errors}
+\end{table}
+%
+\newlineBlank
+%
 
+\subsection{Résultats préliminaires} \label{sec_impedance_estimation_sub_results}
+
+Avant de commencer cette partie, il est important de noter que les mesures réalisées doivent être consolidées pour obtenir des résultats statistiques significatifs, sur une population plus large. A ce stade, seules 2 expériences ont pu être menées de manière préliminaire, avec un seul participant. De plus, une calibration avec un système masse-ressort-amortissement connu, permettrait une validation qualitative de la méthodologie proposée.
+
+\subsubsection{Faisabilité de la tâche}
+\label{sec_impedance_estimation_sub_results_sub_task_feasibility}
+
+Le domaine de validité défini en \cref{sec_bouncing_sub_previous_sub_bouncing} pour la tâche de jonglerie, a été vérifié expérimentalement en 2 expériences. La deuxième est présentée partiellement en \cref{fig_ball_bouncing_experiment}. Chacun de ces essais a duré moins d'une minute, avec une trentaine de secondes de données utilisables. Les deux essais contiennent 13 et 17 perturbations dans l'intervalle de temps utile. Les conditions expérimentales sont récapitulées dans la \cref{tab_task_constraints}. Aucun retour de force n'a été généré par le robot, suite aux impacts de la balle.
+%
+\begin{table}[htbp] 
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			$f$ (\si{\hertz}) & $h$ (\si{\metre})$^{\mathrm{a}}$ & $g$ (\si{\metre\per\second\squared}) & $\dot{z}_k^+$ (\si{\metre\per\second})$^{\mathrm{a}}$ & $\alpha$ & $ k_G $ \\
+			\hline
+			[0.9;1.7] & [0.8;1.0] & 9.81 & [1.32;3.34] & 0.6 & 3 \\
+			\hline
+			\multicolumn{4}{l}{$^{\mathrm{a}}$Dans l'environnement simulé.}
+		\end{tabular}
+	\end{center}
+	\caption{Tested conditions} %\vspace{-10pt}
+	\label{tab_task_constraints}	
+\end{table}
+%
+
+Comme on peut l'observer sur la \cref{fig_ball_bouncing_experiment}, le participant a réussi a atteindre un comportement rythmique sans phase statique, comme expliqué dans la \cref{sec_bouncing_sub_previous_sub_bouncing}. Sur les deux expériences qui représentent un ensemble de 70 rebonds pour la hauteur cible $ h $ de \SI{1}{\metre}, l'apex de la balle a pu être maintenu dans une erreur RMS de 8.3\%. Cette valeur est supérieur aux observations de \cite{siegler_passive_2010}, qui ont trouvé des erreurs moyennes comprises entre 3.4\% et 4.5\% pour une hauteur cible de \SI{0.5}{\metre}, dans des conditions environnementales simulées variées. Ces résultats peuvent indiquer que la tâche bien que réalisable, est encore trop complexe, une hauteur cible plus faible, cohérente avec l'intervalle défini en  \cref{sec_bouncing_sub_previous_sub_bouncing} est envisagé pour la suite.
+%
+\newlineBlank
+% 
+Il est intéressant de noter, que sur des essais non utilisés ici, les participants pratiquant la jonglerie étaient plus à l'aise avec le protocole proposé dès les premiers essais, bien que gênés par l'absence de retour de force lors de l'impact de la balle.
+%
+\input{latex_figures/fig_ball_bouncing_experiment.tex}
+
+\subsubsection{Premiers résultats d'estimation d'impédance}
+\label{sec_impedance_estimation_sub_results_sub_impedance_results}
+
+Les résultats exposés dans cette partie, sont issus du deuxième essai, dont les perturbations aléatoires sont pour 11 d'entre-elles survenues dans la phase de cycle ii), définie en \cref{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}.
+%
+\newlineBlank
+% 
+Comme expliqué dans la \cref{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}, les actions volontaires peuvent intervenir dès \SI{100}{\milli\second} et ne sont pas modélisables correctement avec le modèle proposé \cref{eq_impedance_z}, puisqu'elles impliquent un processus cognitifs, plus complexe. 
+%
+\newlineBlank
+% 
+[déplacé le paragraphe concernant les réflexes ici ?? le choix des 200ms pour l'estimation de trajectoire ne devrait pas avoir la même justification que le choix de 200ms pour l'identification ??]
+%
+\newlineBlank
+% 
+Pour vérifier que l'estimation d'impédance observée avait bien du sens, on s'est  intéressé, pour chacune des perturbations étudiées, au même instant du cycle suivant, non perturbé. En l'absence de perturbation, l'identification réalisée n'a pas de sens physique et le processus proposé ne devrait pas dégager de sens de cette seconde expérience. On souhaite donc vérifier l'adéquation de l'identification avec et sans perturbation, avec le modèle KBI \cref{eq_impedance_z}. Si aucune différence n'est observée entre les deux estimations, notamment au niveau de la variance des paramètres et aussi au niveau des erreurs de reconstructions, alors la méthode d'estimation d'impédance proposée serait invalide, ou du moins incomplète.
+
+% To evaluate the quality of this reconstruction, it was applied both on perturbed and non-perturbed cycles (see \cref{pert_non_pert_pos} for an example). An additional parameter, a delay $\delta t$ between the beginning of the reconstructed interval with respect to $t_{pert}$ was introduced for comparison purposes. This delay parameter was found to have non negligible influence on the parameter estimation results. Especially, for $0 \leq \delta t\leq 5$ms, negative parameters were obtained with low determination coefficient $R^2$ ($\leq 0.5$) for the linear fit. Incrementally increasing $\delta t$ to 20ms shows, for the perturbed intervals, a convergence of the mean estimated parameters to constant mean values with significantly reduced relative standard deviations and a dramatically improved mean $R^2$ of 0.96, against no significant changes on non-perturbed intervals where $R^2$ remains smaller that 0.6. 
+
+%\cref{eq_impedance_KBI}. Voluntary reactions response time is typically of 100ms. %Yet, to compute the impedance parameters with a sufficient consistence, enough data are required. 
+%Yet, at a 1kHz rate, \cite{erden_end-point_2015} found that using only 100ms of data after the perturbation did not bring satisfying results. Indeed to compute the impedance parameters with a sufficient consistence, enough data are required. Therefore, they assumed that voluntary actions were not dominant in the first 200ms, and used that time window for the evaluation. In the present work, a time window $T_{estim}$ of 200ms was selected for the estimation, based on the literature, and on the direct observation that this time window concentrated the main perturbation effects during the task (see \cref{fig_perturbed_virtual_traj}).%When they found negative impedance parameters, those results were discarded because it was assumed that the cause were either too low movement variations, or dominant behaviours of reflexes or/and voluntary actions.
+%
+%
+%\subsubsection{Virtual trajectories parameters selection} 
+%The virtual trajectories were obtained using cubic spline interpolation in MATLAB. The interpolation was done at 1kHz, to estimate the virtual trajectory on $T_{estim}$ after a perturbation onset $t_{pert}$, using data immediately before and after the interval of interest to be reconstructed. To evaluate the quality of this reconstruction, it was applied both on perturbed and non-perturbed cycles (see \cref{pert_non_pert_pos} for an example). An additional parameter, a delay $\delta t$ between the beginning of the reconstructed interval with respect to $t_{pert}$ was introduced for comparison purposes. This delay parameter was found to have non negligible influence on the parameter estimation results. Especially, for $0 \leq \delta t\leq 5$ms, negative parameters were obtained with low determination coefficient $R^2$ ($\leq 0.5$) for the linear fit. Incrementally increasing $\delta t$ to 20ms shows, for the perturbed intervals, a convergence of the mean estimated parameters to constant mean values with significantly reduced relative standard deviations and a dramatically improved mean $R^2$ of 0.96, against no significant changes on non-perturbed intervals where $R^2$ remains smaller that 0.6. 
+%
+%
+%\subsubsection{Parameters estimation}
+%
+%In \cite{dolan_dynamic_1993, tsuji_bio-mimetic_2008, mussa-ivaldi_neural_1985, erden_end-point_2015} endpoint parameters for the stiffness were found with a magnitude ranging between 40 and 700N.m\textsuperscript{-1}, under static and moving configurations, with and without load for the human arm. Moreover \cite{tsuji_bio-mimetic_2008, dolan_dynamic_1993, erden_end-point_2015} found damping parameters ranging between 8 and 44N.s.m\textsuperscript{-1}, and mass parameters between 0.6 and 2.5kg. 
+%
+%Preliminary results from the authors' trials show most promising results using 200ms for the impedance identification, with $\delta t\geq15$ms, possibly to abide by latency in the system.
+%%The impedance parameters are, comparable to those mentioned above, with. 
+%The stiffnesses $K_z$ found are higher than those mentioned above, with an average of 1337N.m\textsuperscript{-1} and relative standard deviation of 26\% on the $n_p$ perturbed intervals. Corresponding average damping $B_z$ and mass $I_z$ coefficients are 3.4N.s.m\textsuperscript{-1} and 0.04kg respectively, however with relative standard deviation slightly higher than 100\%. For more significant values, further experiments are to be conducted.  \cref{forcesRec} and \cref{histRec} show that the reconstructed forces using the identified parameters seem to be able to explain most of the relation between force and movement on perturbed intervals.
+
+\newpage
 \input{appendices}
 
 \bibliographystyle{apalike} %abbrvnat
 
 \newpage
-\bibliography{Biblio/impedance_ctrl,Biblio/CPG,Biblio/ball_bouncing,Biblio/human_motor_ctrl,Biblio/human_impedance}
+\bibliography{Biblio/impedance_ctrl,Biblio/CPG,Biblio/ball_bouncing,Biblio/human_motor_ctrl,Biblio/human_impedance,Biblio/robotics}
 
 \end{document}

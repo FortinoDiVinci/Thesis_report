@@ -1,0 +1,49 @@
+\begin{figure} [thpb]
+\centering
+    \centering
+    \begin{tikzpicture}
+    %\definecolor{matlabBlue}{RGB}{0,114,189}
+	%\definecolor{vermillon}{RGB}{213,94,0}
+    \begin{axis}[%
+		width=.60\columnwidth,
+		scale only axis,     
+		axis x line = bottom,
+		axis y line = left, 
+		xlabel={$t (s)$},
+		xmin=75,
+		xmax=109.99,
+		ymin=-0.19,,
+		%ymax = 1.5,
+		%ymax=2.5,
+		ylabel={$z (m)$},
+		xlabel style={font=\footnotesize},
+		ylabel style={font=\footnotesize,yshift=-0.5em},
+		tick label style={font=\footnotesize},
+		%grid=both,
+        %grid style={line width=.1pt, draw=gray!10},
+        %major grid style={line width=.2pt,draw=gray!50},
+        %minor tick num=4,
+		]
+		% perturbation
+        %\draw[dotted, line width=0.25mm] (rel axis cs:0.333, 1) -- (rel axis cs:0.333, 0);
+		% real trajectory
+		\addplot [
+		solid,
+		blue,
+		%blue!60!black,
+		line width=.5pt,
+		] table [col sep=comma, x=t, y=paddle] {misc/ball_boucing_exp2.csv};
+		\addplot [
+		solid,
+		red,
+		%blue!60!black,
+		line width=.5pt,
+		] table [col sep=comma, x=t, y=ball] {misc/ball_boucing_exp2.csv};
+		 \draw[dashed, line width=0.25mm] (axis cs:75, 0.8) -- (axis cs:82.7, 0.8);
+		 \draw[dashed, line width=0.25mm] (axis cs:82.7, 1) -- (axis cs:110, 1);
+    \end{axis}
+    \end{tikzpicture}
+  
+    \caption{Ball bouncing experiment, with random perturbations, downsampled at \SI{50}{\hertz}. The simulated ball and paddle height ($ z $, $ z^p $) against time are displayed respectectively in orange and blue. The black dashed lines represent target heights ($ h $).} %\vspace{-16pt}
+    \label{fig_ball_bouncing_experiment}
+\end{figure}
