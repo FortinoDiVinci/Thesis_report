@@ -1,0 +1,39 @@
+\begin{figure} [thpb]
+\centering
+	\shorthandoff{;} 
+    \centering
+    \begin{tikzpicture}
+    \definecolor{vermillon}{RGB}{213,94,0}
+    \definecolor{blueishGreen}{RGB}{0,158,15}
+	
+    \begin{axis}[%
+		%width=.25\columnwidth,
+		scale only axis,   
+		axis x line = bottom,
+		axis y line = left, 
+		xlabel={$ \delta t (ms) $},
+		xlabel style={font=\footnotesize},
+		tick label style={font=\footnotesize},
+		]
+		\addplot [
+		vermillon,
+		mark=*,
+		%mark options={scale=0.5},
+		] plot [error bars/.cd, y dir=both, y explicit] 
+		table [col sep=semicolon, x = delay, y = R2, y error plus=R2_std, y error minus=R2_std] {misc/r_square.csv};
+		\addplot [
+		blueishGreen,
+		mark=*,
+		%mark options={scale=0.5},
+		] plot [error bars/.cd, y dir=both, y explicit]  table [col sep=semicolon, x = delay, y = R2_pert, , y error plus=R2_pert_std, y error minus=R2_pert_std] {misc/r_square.csv};
+
+		%\draw[dashed, line width=0.15mm, black!75] (axis cs:95.2156, 28) -- node[midway, right] (tp) {$ t_p $} (axis cs:95.2156, 35);
+    \end{axis}
+    %   
+    
+    \end{tikzpicture}
+         
+    \caption{Mean $ R^2 $ related to the identification of the KBI model, against $ \delta t $ delay, for impedance evaluations both for the 11 perturbed trajectories selected (green) and non perturbed trajectories at the same position in the next cycle (orange). Standard deviation are indicated with bars.}
+    	%$ R^2 $ de l'identification du modèle KBI en fonction du délai $ \delta t $ pour une évaluation suite à un perturbation (vert) et une évaluation positionnée de la même manière sur le cycle suivant, non perturbé (orange).}
+    \label{fig_r_square}
+\end{figure}

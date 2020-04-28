@@ -595,13 +595,13 @@ Il est toutefois important de noter que les splines cubiques sont des fonctions 
 %
 \begin{table}[]
 	\centering
-	\begin{tabular}{|l|c|c|c|c|c|}
-		\cline{2-6}
+	\begin{tabular}{l|c c c c|c }
+		%\cline{2-6}
 		\multicolumn{1}{c|}{} & i)   & ii)  & iii) & iv) & total \\
 		\hline
 		std (\%)             & 1.26 & 1.17 & 2.81 & 1.84 & 2.13  \\
 		mean (\%)            &-0.25 & 0.64 & 2.75 & 0.51 & 0.76  \\
-		\hline
+		%\hline
 	\end{tabular}
 	\caption{Normalized errors, for position estimation using cubic splines}
 	\label{tab_sline_position_errors}
@@ -615,13 +615,13 @@ Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalen
 %
 \begin{table}[]
 	\centering
-	\begin{tabular}{|l|c|c|c|c|c|}
-		\cline{2-6}
+	\begin{tabular}{l|c c c c|c}
+		%\cline{2-6}
 		\multicolumn{1}{c|}{} & i)   & ii)  & iii) & iv) & total \\
 		\hline
 		std (\%)             & 8.44 & 6.48 & 7.90 & 7.19 & 7.96  \\
 		mean (\%)            & 1.18 & 3.36 &-3.76 & 1.39 & 0.66  \\
-		\hline
+		%\hline
 	\end{tabular}
 	\caption{Normalized errors, for force estimation using cubic splines}
 	\label{tab_sline_force_errors}
@@ -629,6 +629,9 @@ Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalen
 %
 \newlineBlank
 %
+\subsubsection{Identification des paramètres en impédance} \label{sec_impedance_estimation_sub_tools_sub_optimization}
+
+[Ajouter les méthodologies existantes, et expliquer le choix des moindres carrés.]
 
 \subsection{Résultats préliminaires} \label{sec_impedance_estimation_sub_results}
 
@@ -641,12 +644,12 @@ Le domaine de validité défini en \cref{sec_bouncing_sub_previous_sub_bouncing}
 %
 \begin{table}[htbp] 
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|c|c|c|}
-			\hline
+		\begin{tabular}{c|c|c|c|c|c}
+			%\hline
 			$f$ (\si{\hertz}) & $h$ (\si{\metre})$^{\mathrm{a}}$ & $g$ (\si{\metre\per\second\squared}) & $\dot{z}_k^+$ (\si{\metre\per\second})$^{\mathrm{a}}$ & $\alpha$ & $ k_G $ \\
 			\hline
 			[0.9;1.7] & [0.8;1.0] & 9.81 & [1.32;3.34] & 0.6 & 3 \\
-			\hline
+			%\hline
 			\multicolumn{4}{l}{$^{\mathrm{a}}$Dans l'environnement simulé.}
 		\end{tabular}
 	\end{center}
@@ -674,12 +677,22 @@ Comme expliqué dans la \cref{sec_impedance_estimation_sub_tools_sub_virtual_tra
 %
 \newlineBlank
 % 
-[déplacé le paragraphe concernant les réflexes ici ?? le choix des 200ms pour l'estimation de trajectoire ne devrait pas avoir la même justification que le choix de 200ms pour l'identification ??]
+[déplacer le paragraphe concernant les réflexes ici ?? le choix des 200ms pour l'estimation de trajectoire ne devrait pas avoir la même justification que le choix de 200ms pour l'identification ??]
 %
 \newlineBlank
 % 
-Pour vérifier que l'estimation d'impédance observée avait bien du sens, on s'est  intéressé, pour chacune des perturbations étudiées, au même instant du cycle suivant, non perturbé. En l'absence de perturbation, l'identification réalisée n'a pas de sens physique et le processus proposé ne devrait pas dégager de sens de cette seconde expérience. On souhaite donc vérifier l'adéquation de l'identification avec et sans perturbation, avec le modèle KBI \cref{eq_impedance_z}. Si aucune différence n'est observée entre les deux estimations, notamment au niveau de la variance des paramètres et aussi au niveau des erreurs de reconstructions, alors la méthode d'estimation d'impédance proposée serait invalide, ou du moins incomplète.
-
+Pour vérifier que l'estimation d'impédance observée a bien du sens, on s'intéresse, pour chacune des perturbations étudiées, au même instant du cycle suivant, non perturbé, comme montré sur la \cref{fig_imp_est_pert_nonpert_splines}. En l'absence de perturbations, l'identification réalisée n'a pas de sens physique et le processus proposé ne devrait pas dégager de sens de cette seconde expérience. On souhaite donc vérifier l'adéquation de l'identification avec et sans perturbations, avec le modèle KBI \cref{eq_impedance_z}. Si aucune différence n'est observée entre les deux estimations, notamment au niveau de la variance des paramètres et des erreurs de reconstructions, alors la méthode d'estimation d'impédance proposée serait invalide, ou du moins incomplète.
+%
+\input{latex_figures/fig_imp_est_pert_nonpert_splines.tex}
+%
+\newlineBlank
+% 
+Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $ des onze perturbations évaluées atteignent un pic pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'introduire ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant introduites au niveau articulaire, la chaîne de transmission jusqu'au niveau de l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
+%
+\input{latex_figures/fig_r_square.tex}
+%
+\newlineBlank
+% 
 % To evaluate the quality of this reconstruction, it was applied both on perturbed and non-perturbed cycles (see \cref{pert_non_pert_pos} for an example). An additional parameter, a delay $\delta t$ between the beginning of the reconstructed interval with respect to $t_{pert}$ was introduced for comparison purposes. This delay parameter was found to have non negligible influence on the parameter estimation results. Especially, for $0 \leq \delta t\leq 5$ms, negative parameters were obtained with low determination coefficient $R^2$ ($\leq 0.5$) for the linear fit. Incrementally increasing $\delta t$ to 20ms shows, for the perturbed intervals, a convergence of the mean estimated parameters to constant mean values with significantly reduced relative standard deviations and a dramatically improved mean $R^2$ of 0.96, against no significant changes on non-perturbed intervals where $R^2$ remains smaller that 0.6. 
 
 %\cref{eq_impedance_KBI}. Voluntary reactions response time is typically of 100ms. %Yet, to compute the impedance parameters with a sufficient consistence, enough data are required. 
@@ -698,7 +711,6 @@ Pour vérifier que l'estimation d'impédance observée avait bien du sens, on s'
 %%The impedance parameters are, comparable to those mentioned above, with. 
 %The stiffnesses $K_z$ found are higher than those mentioned above, with an average of 1337N.m\textsuperscript{-1} and relative standard deviation of 26\% on the $n_p$ perturbed intervals. Corresponding average damping $B_z$ and mass $I_z$ coefficients are 3.4N.s.m\textsuperscript{-1} and 0.04kg respectively, however with relative standard deviation slightly higher than 100\%. For more significant values, further experiments are to be conducted.  \cref{forcesRec} and \cref{histRec} show that the reconstructed forces using the identified parameters seem to be able to explain most of the relation between force and movement on perturbed intervals.
 
-\newpage
 \input{appendices}
 
 \bibliographystyle{apalike} %abbrvnat

@@ -1,0 +1,68 @@
+\begin{figure} [thpb]
+\centering
+	\shorthandoff{;} 
+    \centering
+    \begin{tikzpicture}
+    \definecolor{matlabBlue}{RGB}{0,114,189}
+    \definecolor{vermillon}{RGB}{213,94,0}
+    \definecolor{blueishGreen}{RGB}{0,158,15}
+	
+    \begin{axis}[%
+		%width=.25\columnwidth,
+		scale only axis,   
+		axis x line = bottom,
+		axis y line = left, 
+		xlabel={$t (s)$},
+		ylabel={$z (cm)$},
+		xlabel style={font=\footnotesize},
+		ylabel style={font=\footnotesize,yshift=-0.5em},
+		tick label style={font=\footnotesize},
+		%axis lines=middle,
+		grid=both,
+        grid style={line width=.1pt, draw=gray!10},
+        major grid style={line width=.2pt,draw=gray!50},
+        minor tick num=4,
+        table/col sep=semicolon,
+		]
+		% real trajectory
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		solid,
+		matlabBlue,
+		line width=.5pt,
+		] table [x = t_tot, y = z_tot] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		vermillon,
+		only marks,
+		mark options={scale=0.5},
+		] table [x = t_fit_est, y = z_fit_est] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		densely dotted,
+		vermillon,
+		line width=1pt,
+		] table [x = t_est, y = z_est] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		blueishGreen,
+		only marks,
+		mark options={scale=0.5},
+		] table [x = t_fit_val, y = z_fit_val] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		\addplot [
+		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
+		densely dotted,
+		blueishGreen,
+		line width=1pt,
+		] table [x = t_val, y = z_val] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		
+		\addplot[color=black,mark=triangle*] coordinates { (95.2156, 31.41) };
+		\draw[dashed, line width=0.15mm, black!75] (axis cs:95.2156, 28) -- node[midway, right] (tp) {$ t_p $} (axis cs:95.2156, 35);
+    \end{axis}
+    %   
+    
+    \end{tikzpicture}
+         
+    \caption{Example of the mocap position trajectory reconstruction, with and without perturbation. Motion capture position is given in blue, thick colored curves indicate the portion used for the spline interpolation, while the colored dotted curves notify the results of the interpolation. The black triangle shows the timing the perturbation was introduced.} %\vspace{-16pt}
+    \label{fig_imp_est_pert_nonpert_splines}
+\end{figure}
