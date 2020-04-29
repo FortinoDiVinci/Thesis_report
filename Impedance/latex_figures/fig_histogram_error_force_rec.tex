@@ -1,0 +1,29 @@
+\begin{figure} [thpb]
+	\centering
+		\begin{tikzpicture}
+		\begin{axis}[%
+		%width=.28\columnwidth,
+		scaled ticks=true,
+		tick label style={font=\footnotesize},
+		%tick label style={/pgf/number format/fixed},
+		%scaled y ticks={base 10:-3},
+		%ytick = {\empty},
+		ybar,
+		ymin=0,
+		xlabel={error (N)},
+		xlabel style={font=\footnotesize},
+		ylabel={samples},
+		ylabel style={font=\footnotesize, yshift=-4mm},
+		]
+		\addplot +[
+		hist={
+			bins=50,
+			%data min =-0.07,
+			%data max =0.07
+		}
+		] table [y index=0, col sep=semicolon] {misc/forces_reconstruction_err.csv};
+		\end{axis}
+		\end{tikzpicture}  
+	\caption{Force reconstruction error histogram.}
+	\label{fig_hist_err_force_rec}
+\end{figure}

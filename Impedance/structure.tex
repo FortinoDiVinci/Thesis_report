@@ -40,13 +40,13 @@
 %----------------------------------------------------------------------------------------
 %\usepackage{breqn}
 
-\usepackage{siunitx}
+\usepackage{siunitx} % for SI units
 
 \usepackage{mathtools}
 
-\usepackage[title]{appendix}
+\usepackage[title]{appendix} % for appendices
 
-\usepackage{pgfplots}
+\usepackage{pgfplots} % for plots using data
 
 \usepackage{xstring}
 
@@ -163,6 +163,15 @@
 	\pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}
 	{\pgfpointanchor{#3}{center}}
 	\global\let#1\pgfmathresult
+}
+
+\newcommand\modulo[2]{%
+	\@tempcnta=#1
+	\divide\@tempcnta by #2
+	\multiply\@tempcnta by #2
+	\multiply\@tempcnta by -1
+	\advance\@tempcnta by #1\relax
+	\the\@tempcnta%
 }
 
 %----------------------------------------------------------------------------------------

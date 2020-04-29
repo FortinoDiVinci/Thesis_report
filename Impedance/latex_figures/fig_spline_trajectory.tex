@@ -28,7 +28,6 @@
 			% real trajectory
 			\addplot [
 			/pgf/number format/read comma as period,
-			%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 			solid,
 			matlabBlue,
 			%blue!60!black,
@@ -37,8 +36,6 @@
 			% estimated trajectory
 			\addplot [
 			/pgf/number format/read comma as period,
-			%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
-			solid,
 			vermillon,
 			%blue!60!black,
 			dashed,
@@ -73,19 +70,14 @@
 		% real trajectory
 		\addplot [
 		/pgf/number format/read comma as period,
-		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
 		matlabBlue,
-		%blue!60!black,
 		line width=.5pt,
 		] table [x index= 0, y index=3] {misc/data_traj_real_virt_typical_2.csv};
 		% estimated trajectory
 		\addplot [
 		/pgf/number format/read comma as period,
-		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
-		solid,
 		vermillon,
-		%blue!60!black,
 		dashed,
 		line width=.pt,
 		] table [x index= 0, y index=4] {misc/data_traj_real_virt_typical_2.csv};
@@ -120,19 +112,14 @@
 		% real trajectory
 		\addplot [
 		/pgf/number format/read comma as period,
-		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
 		matlabBlue,
-		%blue!60!black,
 		line width=.5pt,
 		] table [x index= 0, y index=5] {misc/data_traj_real_virt_typical_2.csv};
 		% estimated trajectory
 		\addplot [
 		/pgf/number format/read comma as period,
-		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
-		solid,
 		vermillon,
-		%blue!60!black,
 		dashed,
 		line width=.pt,
 		] table [x index= 0, y index=6] {misc/data_traj_real_virt_typical_2.csv};
@@ -165,19 +152,14 @@
 		% real trajectory
 		\addplot [
 		/pgf/number format/read comma as period,
-		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
 		matlabBlue,
-		%blue!60!black,
 		line width=.5pt,
 		] table [x index= 0, y index=7] {misc/data_traj_real_virt_typical_2.csv};
 		% estimated trajectory
 		\addplot [
 		/pgf/number format/read comma as period,
-		%y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
-		solid,
 		vermillon,
-		%blue!60!black,
 		dashed,
 		line width=.pt,
 		] table [x index= 0, y index=8] {misc/data_traj_real_virt_typical_2.csv};

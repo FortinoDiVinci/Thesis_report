@@ -1,0 +1,68 @@
+\begin{figure} [h]
+\centering
+	\shorthandoff{;} 
+	\renewcommand{\thesubfigure}{\arabic{subfigure}}
+	\foreach \i in {1,...,11} {%
+    	\subfloat[]{%
+        \centering
+        \begin{tikzpicture}
+        \definecolor{matlabBlue}{RGB}{0,114,189}
+        \definecolor{vermillon}{RGB}{213,94,0}
+
+        \begin{axis}[%
+			width=.25\columnwidth,
+			scale only axis,   
+			axis x line = middle,
+			axis y line = middle, 
+			xlabel={$ t (ms) $},
+%			\ifthenelse{%
+%				\equal{\i}{1}%
+%				\OR%
+%				\equal{\i}{4}%
+%				\OR%
+%				\equal{\i}{7}%
+%				\OR%
+%				\equal{\i}{10}%
+%				}%
+%				{}%
+%				{}%			
+			xlabel style={font=\footnotesize},
+			ylabel style={font=\footnotesize,yshift=-0.7em},
+			tick label style={font=\footnotesize, fill=white},
+			grid=both,
+            grid style={line width=.1pt, draw=gray!10},
+            major grid style={line width=.2pt,draw=gray!50},
+            minor tick num=4,
+            table/col sep=semicolon,
+			]
+			% delta force
+			\addplot [
+			solid,
+			matlabBlue,
+			line width=.5pt,
+			] table [x index= 0, y index=\number\numexpr\i*2-1\relax] 
+			{misc/forces_reconstruction.csv};
+			% reconstructed delta force
+			\addplot [
+			densely dashed,
+			vermillon,
+			line width=.pt,
+			] table [x index=0, y index=\number\numexpr\i*2\relax] {misc/forces_reconstruction.csv};
+			
+        \end{axis}
+        \end{tikzpicture}
+    	}
+    	\ifthenelse{%
+    		\equal{\i}{3}%
+    		\OR%
+    		\equal{\i}{6}%
+    		\OR%
+    		\equal{\i}{9}%
+    		}%
+    	{\\}%
+    	{}%
+	}%	
+	\shorthandon{;} 
+    \caption{} 
+    \label{fig_force_reconstruction}
+\end{figure}

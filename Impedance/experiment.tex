@@ -631,7 +631,7 @@ Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalen
 %
 \subsubsection{Identification des paramètres en impédance} \label{sec_impedance_estimation_sub_tools_sub_optimization}
 
-[Ajouter les méthodologies existantes, et expliquer le choix des moindres carrés.]
+[Ajouter les méthodologies existantes, et expliquer le choix des moindres carrés. Détailler l'optimisation...]
 
 \subsection{Résultats préliminaires} \label{sec_impedance_estimation_sub_results}
 
@@ -658,11 +658,11 @@ Le domaine de validité défini en \cref{sec_bouncing_sub_previous_sub_bouncing}
 \end{table}
 %
 
-Comme on peut l'observer sur la \cref{fig_ball_bouncing_experiment}, le participant a réussi a atteindre un comportement rythmique sans phase statique, comme expliqué dans la \cref{sec_bouncing_sub_previous_sub_bouncing}. Sur les deux expériences qui représentent un ensemble de 70 rebonds pour la hauteur cible $ h $ de \SI{1}{\metre}, l'apex de la balle a pu être maintenu dans une erreur RMS de 8.3\%. Cette valeur est supérieur aux observations de \cite{siegler_passive_2010}, qui ont trouvé des erreurs moyennes comprises entre 3.4\% et 4.5\% pour une hauteur cible de \SI{0.5}{\metre}, dans des conditions environnementales simulées variées. Ces résultats peuvent indiquer que la tâche bien que réalisable, est encore trop complexe, une hauteur cible plus faible, cohérente avec l'intervalle défini en  \cref{sec_bouncing_sub_previous_sub_bouncing} est envisagé pour la suite.
+Comme on peut l'observer sur la \cref{fig_ball_bouncing_experiment}, le participant a réussi a atteindre un comportement rythmique sans phase statique, comme expliqué dans la \cref{sec_bouncing_sub_previous_sub_bouncing}. Sur les deux expériences qui représentent un ensemble de 70 rebonds pour la hauteur cible $ h $ de \SI{1}{\metre}, l'apex de la balle a pu être maintenu dans une erreur quadratique moyenne (RMS, \textit{Root Mean Square}) de 8.3\%. Cette valeur est supérieure aux observations de \cite{siegler_passive_2010}, qui ont trouvé des erreurs moyennes comprises entre 3.4\% et 4.5\% pour une hauteur cible de \SI{0.5}{\metre}, dans des conditions environnementales simulées variées. Ces résultats peuvent indiquer que la tâche bien que réalisable, est encore trop complexe, une hauteur cible plus faible, cohérente avec l'intervalle défini en  \cref{sec_bouncing_sub_previous_sub_bouncing} peut-être envisagée pour la suite, ou un gain $ k_G $ plus important.
 %
 \newlineBlank
 % 
-Il est intéressant de noter, que sur des essais non utilisés ici, les participants pratiquant la jonglerie étaient plus à l'aise avec le protocole proposé dès les premiers essais, bien que gênés par l'absence de retour de force lors de l'impact de la balle.
+Il est intéressant de noter, que sur des essais non utilisés ici, les participants pratiquant la jonglerie étaient plus à l'aise avec le protocole proposé dès les premiers essais. Bien que gênés par l'absence de retour de force lors de l'impact de la balle, ils ont su plus rapidement que les participants naïfs, prendre en main l'expérience robotisée.
 %
 \input{latex_figures/fig_ball_bouncing_experiment.tex}
 
@@ -677,40 +677,61 @@ Comme expliqué dans la \cref{sec_impedance_estimation_sub_tools_sub_virtual_tra
 %
 \newlineBlank
 % 
-[déplacer le paragraphe concernant les réflexes ici ?? le choix des 200ms pour l'estimation de trajectoire ne devrait pas avoir la même justification que le choix de 200ms pour l'identification ??]
-%
-\newlineBlank
-% 
+[déplacer le paragraphe concernant les réflexes ici ?? le choix des 200ms pour l'estimation de trajectoire ne devrait pas avoir la même justification que le choix de 200ms pour l'identification ?? Ou alors, je pense ajouter une sous partie 3.2.4 qui s'intéressera spécifiquement à cette problématique]
+
+\paragraph{Validation des résultats} \label{sec_impedance_estimation_sub_results_sub_impedance_results_par_validity}
+
 Pour vérifier que l'estimation d'impédance observée a bien du sens, on s'intéresse, pour chacune des perturbations étudiées, au même instant du cycle suivant, non perturbé, comme montré sur la \cref{fig_imp_est_pert_nonpert_splines}. En l'absence de perturbations, l'identification réalisée n'a pas de sens physique et le processus proposé ne devrait pas dégager de sens de cette seconde expérience. On souhaite donc vérifier l'adéquation de l'identification avec et sans perturbations, avec le modèle KBI \cref{eq_impedance_z}. Si aucune différence n'est observée entre les deux estimations, notamment au niveau de la variance des paramètres et des erreurs de reconstructions, alors la méthode d'estimation d'impédance proposée serait invalide, ou du moins incomplète.
 %
 \input{latex_figures/fig_imp_est_pert_nonpert_splines.tex}
 %
 \newlineBlank
 % 
-Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $ des onze perturbations évaluées atteignent un pic pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'introduire ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant introduites au niveau articulaire, la chaîne de transmission jusqu'au niveau de l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
+Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $ des onze perturbations évaluées atteignent un pic pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'ajouter ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant injectées au niveau articulaire, la chaîne de transmission jusqu'à l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
 %
 \input{latex_figures/fig_r_square.tex}
 %
 \newlineBlank
 % 
-% To evaluate the quality of this reconstruction, it was applied both on perturbed and non-perturbed cycles (see \cref{pert_non_pert_pos} for an example). An additional parameter, a delay $\delta t$ between the beginning of the reconstructed interval with respect to $t_{pert}$ was introduced for comparison purposes. This delay parameter was found to have non negligible influence on the parameter estimation results. Especially, for $0 \leq \delta t\leq 5$ms, negative parameters were obtained with low determination coefficient $R^2$ ($\leq 0.5$) for the linear fit. Incrementally increasing $\delta t$ to 20ms shows, for the perturbed intervals, a convergence of the mean estimated parameters to constant mean values with significantly reduced relative standard deviations and a dramatically improved mean $R^2$ of 0.96, against no significant changes on non-perturbed intervals where $R^2$ remains smaller that 0.6. 
+Il est aussi intéressant de noter que le coefficient de détermination moyen de l'identification proposée, pour $ \delta t $ compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second} est très proche de 1 (entre 9.6 et 9.4), avec des écarts-types compris entre 0.04 et 0.08. Ce même coefficient, pour une identification, en dehors des plages de perturbations, oscille entre 0.48 et 0.65, avec des écarts types moyen de 0.25. Ces éléments ne permettent donc pas d'invalider la méthodologie proposée, et semblent plutôt la soutenir. Ainsi, pour la suite de l'analyse, un délai $ \delta t $ de \SI{15}{\milli\second} sera utilisé, comme c'est le cas sur la \cref{fig_imp_est_pert_nonpert_splines}.
+%
+\newlineBlank
+% 
+La \cref{fig_force_reconstruction} montre les résultats de reconstruction de force $ \delta f_z $ avec les paramètres identifiés, pour les onze perturbations sélectionnées. L'amplitude des forces générées est comprise entre \SI{4}{\newton} et \SI{7}{\newton}. Les erreurs de reconstruction que l'on peut observer sur les courbes présentées sont aussi récapitulées sous la forme d'un histogramme en \cref{fig_hist_err_force_rec}. On constate que les erreurs décrivent une forme presque gaussienne, avec une moyenne nulle (\SI{-8e-17}{\newton}) et un écart type de \SI{0.35}{\newton}.
+%
+\input{latex_figures/fig_histogram_error_force_rec.tex} 
+%
+\input{latex_figures/fig_force_reconstruction.tex}
 
-%\cref{eq_impedance_KBI}. Voluntary reactions response time is typically of 100ms. %Yet, to compute the impedance parameters with a sufficient consistence, enough data are required. 
-%Yet, at a 1kHz rate, \cite{erden_end-point_2015} found that using only 100ms of data after the perturbation did not bring satisfying results. Indeed to compute the impedance parameters with a sufficient consistence, enough data are required. Therefore, they assumed that voluntary actions were not dominant in the first 200ms, and used that time window for the evaluation. In the present work, a time window $T_{estim}$ of 200ms was selected for the estimation, based on the literature, and on the direct observation that this time window concentrated the main perturbation effects during the task (see \cref{fig_perturbed_virtual_traj}).%When they found negative impedance parameters, those results were discarded because it was assumed that the cause were either too low movement variations, or dominant behaviours of reflexes or/and voluntary actions.
-%
-%
-%\subsubsection{Virtual trajectories parameters selection} 
-%The virtual trajectories were obtained using cubic spline interpolation in MATLAB. The interpolation was done at 1kHz, to estimate the virtual trajectory on $T_{estim}$ after a perturbation onset $t_{pert}$, using data immediately before and after the interval of interest to be reconstructed. To evaluate the quality of this reconstruction, it was applied both on perturbed and non-perturbed cycles (see \cref{pert_non_pert_pos} for an example). An additional parameter, a delay $\delta t$ between the beginning of the reconstructed interval with respect to $t_{pert}$ was introduced for comparison purposes. This delay parameter was found to have non negligible influence on the parameter estimation results. Especially, for $0 \leq \delta t\leq 5$ms, negative parameters were obtained with low determination coefficient $R^2$ ($\leq 0.5$) for the linear fit. Incrementally increasing $\delta t$ to 20ms shows, for the perturbed intervals, a convergence of the mean estimated parameters to constant mean values with significantly reduced relative standard deviations and a dramatically improved mean $R^2$ of 0.96, against no significant changes on non-perturbed intervals where $R^2$ remains smaller that 0.6. 
-%
-%
-%\subsubsection{Parameters estimation}
-%
-%In \cite{dolan_dynamic_1993, tsuji_bio-mimetic_2008, mussa-ivaldi_neural_1985, erden_end-point_2015} endpoint parameters for the stiffness were found with a magnitude ranging between 40 and 700N.m\textsuperscript{-1}, under static and moving configurations, with and without load for the human arm. Moreover \cite{tsuji_bio-mimetic_2008, dolan_dynamic_1993, erden_end-point_2015} found damping parameters ranging between 8 and 44N.s.m\textsuperscript{-1}, and mass parameters between 0.6 and 2.5kg. 
-%
-%Preliminary results from the authors' trials show most promising results using 200ms for the impedance identification, with $\delta t\geq15$ms, possibly to abide by latency in the system.
-%%The impedance parameters are, comparable to those mentioned above, with. 
-%The stiffnesses $K_z$ found are higher than those mentioned above, with an average of 1337N.m\textsuperscript{-1} and relative standard deviation of 26\% on the $n_p$ perturbed intervals. Corresponding average damping $B_z$ and mass $I_z$ coefficients are 3.4N.s.m\textsuperscript{-1} and 0.04kg respectively, however with relative standard deviation slightly higher than 100\%. For more significant values, further experiments are to be conducted.  \cref{forcesRec} and \cref{histRec} show that the reconstructed forces using the identified parameters seem to be able to explain most of the relation between force and movement on perturbed intervals.
+\paragraph{Analyse des résultats}
 
+\cite{mussa-ivaldi_neural_1985, dolan_dynamic_1993, tsuji_bio-mimetic_2008, erden_end-point_2015} ont présenté des résultats d'estimation de paramètres d'impédance cartésienne dans leurs travaux étalés sur 4 décennies. Ils ont obtenu des raideurs d'amplitudes comprises entre \SI{40}{\newton\per\metre} et \SI{700}{\newton\per\metre}, dans des configurations isométriques mais aussi en mouvement, avec ou sans charges, pour le membre supérieur humain. En plus, \cite{dolan_dynamic_1993, tsuji_bio-mimetic_2008, erden_end-point_2015} ont trouvé des paramètres visqueux allant de \SI{8}{\newton\second\per\metre} à \SI{44}{\newton\second\per\metre} et de masse entre \SI{0.6}{\kilogram} et \SI{2.5}{\kilogram}.
+%
+\newlineBlank
+% 
+Les résultats préliminaires dont la validité a été étudiée au \cref{sec_impedance_estimation_sub_results_sub_impedance_results_par_validity} sont présentés dans la \cref{tab_param_identification}. On peut constater que la raideur moyenne obtenue est presque deux fois supérieures aux valeurs moyennes observés dans la littérature, dès que $ \delta t \geq 10 $ et qu'au contraire, les autres paramètres sont bien inférieurs. Ces différences trouvent peut-être leur source dans l'estimation de la trajectoire virtuelle, qui ne semble pas valide pour l'accélération, et dont la validité pour la vitesse reste discutable [non encore étudié]. En effet, si on s'intéresse de plus près à l'amortissement et à la masse, on constate que leur écart type respectif sont supérieurs à 100\%, contre seulement 26\% pour la raideur.
+%
+\begin{table}[htbp] 
+	\begin{center}
+		\begingroup
+		\setlength{\tabcolsep}{10pt} % Default value: 6pt
+		\renewcommand{\arraystretch}{1.5} % Default value: 1
+		\begin{tabular}{c|c c c c}
+			%\hline
+			$ \delta t $ (\si{\milli\second}) & $ K_z $ (\si{\newton\per\metre}) & $ B_z $ (\si{\newton\second\per\metre}) & $ I_z $ (\si{\kilogram}) &  $ \rho $ (\si{\newton})\\
+			\hline
+			0 & 644.3 (212.6) & -3.26 (5.12) & -0.045 (0.055) & \\
+			5 & 897.3 (260.2) & -0.08 (4.45) & -0.007 (0.050) & \\
+			10 & 1157.0 (324.0) & 2.17 (4.10) & 0.027 (0.054) & \\
+			15 & 1319.4 (356.2) & 2.81 (4.24) & 0.043 (0.049) & \\
+			20 & 1371.1 (383.9) & 2.55 (4.82) & 0.046 (0.045) & \\ 
+		\end{tabular}
+	\endgroup
+	\end{center}
+	\caption{Paramètres identifiés, les écarts type sont donnés entre parenthèse.} %\vspace{-10pt}
+	\label{tab_param_identification}	
+\end{table}
+%
 \input{appendices}
 
 \bibliographystyle{apalike} %abbrvnat
