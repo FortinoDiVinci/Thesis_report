@@ -25,9 +25,14 @@
 %				\equal{\i}{10}%
 %				}%
 %				{}%
-%				{}%			
-			xlabel style={font=\footnotesize},
-			ylabel style={font=\footnotesize,yshift=-0.7em},
+%				{}%	
+			xlabel style={font=\footnotesize},	
+			xlabel near ticks,	
+			%xlabel style={font=\footnotesize, at={(axis description cs:0.5,-0.01)}, anchor=north},
+			ylabel={$ \delta f_z (N) $},
+			ylabel style={font=\footnotesize},
+			%ylabel style={font=\footnotesize, at={(axis description cs:-0.1,.5)},rotate=90, anchor=north},
+			ylabel near ticks,			
 			tick label style={font=\footnotesize, fill=white},
 			grid=both,
             grid style={line width=.1pt, draw=gray!10},
@@ -35,19 +40,34 @@
             minor tick num=4,
             table/col sep=semicolon,
 			]
+			% perturbed trajectory
 			% delta force
 			\addplot [
 			solid,
 			matlabBlue,
-			line width=.5pt,
-			] table [x index= 0, y index=\number\numexpr\i*2-1\relax] 
+			line width=1.25pt,
+			] table [x index= 0, y index=\number\numexpr\i*4-3\relax] 
 			{misc/forces_reconstruction.csv};
 			% reconstructed delta force
 			\addplot [
 			densely dashed,
 			vermillon,
-			line width=.pt,
-			] table [x index=0, y index=\number\numexpr\i*2\relax] {misc/forces_reconstruction.csv};
+			line width=1.25pt,
+			] table [x index=0, y index=\number\numexpr\i*4-2\relax] {misc/forces_reconstruction.csv};
+			% non perturbed trajectory
+			% delta force
+			\addplot [
+			solid,
+			matlabBlue,
+			line width=.5pt,
+			] table [x index= 0, y index=\number\numexpr\i*4-1\relax] 
+			{misc/forces_reconstruction.csv};
+			% reconstructed delta force
+			\addplot [
+			densely dashed,
+			vermillon,
+			line width=.5pt,
+			] table [x index=0, y index=\number\numexpr\i*4\relax] {misc/forces_reconstruction.csv};
 			
         \end{axis}
         \end{tikzpicture}
@@ -63,6 +83,6 @@
     	{}%
 	}%	
 	\shorthandon{;} 
-    \caption{} 
+    \caption{Reconstructed forces for the 11 perturbations selected. Solid lines represent $ \delta f_z $ and dashed lines reresent the reconstructed force using the identified parameters of KBI model. Thiner lines are for the evaluation when no perturbation occured.} 
     \label{fig_force_reconstruction}
 \end{figure}

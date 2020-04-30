@@ -29,35 +29,35 @@
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		solid,
 		matlabBlue,
-		line width=.5pt,
-		] table [x = t_tot, y = z_tot] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		line width=1pt,
+		] table [x = t_tot, y = z_tot] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		\addplot [
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		vermillon,
 		only marks,
-		mark options={scale=0.5},
-		] table [x = t_fit_est, y = z_fit_est] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		mark options={scale=0.7},
+		] table [x = t_fit_est, y = z_fit_est] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		\addplot [
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		densely dotted,
 		vermillon,
-		line width=1pt,
-		] table [x = t_est, y = z_est] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		line width=1.5pt,
+		] table [x = t_est, y = z_est] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		\addplot [
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		blueishGreen,
 		only marks,
 		mark options={scale=0.5},
-		] table [x = t_fit_val, y = z_fit_val] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		] table [x = t_fit_val, y = z_fit_val] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		\addplot [
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		densely dotted,
 		blueishGreen,
 		line width=1pt,
-		] table [x = t_val, y = z_val] {misc/impedance_estimation_pert_nonpert_spline_comp.csv};
+		] table [x = t_val, y = z_val] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		
-		\addplot[color=black,mark=triangle*] coordinates { (95.2156, 31.41) };
-		\draw[dashed, line width=0.15mm, black!75] (axis cs:95.2156, 28) -- node[midway, right] (tp) {$ t_p $} (axis cs:95.2156, 35);
+		\addplot[color=black,mark=triangle*] coordinates { (95.2156, 1.41) };
+		\draw[dashed, line width=0.15mm, black!75] (axis cs:95.2156, -2) -- node[midway, right] (tp) {$ t_p $} (axis cs:95.2156, 5);
     \end{axis}
     %   
     

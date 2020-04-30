@@ -24,6 +24,13 @@
             major grid style={line width=.2pt,draw=gray!50},
             minor tick num=4,
 			]
+			% real trajectory
+			\addplot [
+			solid,
+			matlabBlue,
+			%blue!60!black,
+			line width=.9pt,
+			] table [x=t, y=z, col sep=comma] {misc/data_perturbed_trajec.csv};
 			% perturbation
             \draw[dotted, line width=0.25mm] (rel axis cs:0.333, 1) -- (rel axis cs:0.333, 0);
 			%
@@ -54,14 +61,7 @@
 			\addplot [
 			orange,
 			] table [x=t, y=z, col sep=comma] {misc/data_virtual_trajec.csv};
-			\end{scope}
-			% real trajectory
-			\addplot [
-			solid,
-			matlabBlue,
-			%blue!60!black,
-			line width=.5pt,
-			] table [x=t, y=z, col sep=comma] {misc/data_perturbed_trajec.csv};
+			\end{scope}			
 			
         \end{axis}
         \end{tikzpicture}
@@ -89,6 +89,12 @@
             major grid style={line width=.2pt,draw=gray!50},
             minor tick num=4,
 			]
+			% real trajectory
+			\addplot [
+			solid,
+			matlabBlue,
+			line width=.5pt,
+			] table [x=t, y=f, col sep=comma] {misc/data_perturbed_trajec.csv};
 			%
 			\begin{scope} %fit before window
 				\path [clip] (axis cs: \pgfkeysvalueof{/pgfplots/xmin}, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs: 109.388, \pgfkeysvalueof{/pgfplots/ymax});
@@ -117,12 +123,6 @@
 				orange,
 				] table [x=t, y=f, col sep=comma] {misc/data_virtual_trajec.csv};
 			\end{scope}
-			% real trajectory
-			\addplot [
-			solid,
-			matlabBlue,
-			line width=.5pt,
-			] table [x=t, y=f, col sep=comma] {misc/data_perturbed_trajec.csv};
         \end{axis}
         \end{tikzpicture}
     }

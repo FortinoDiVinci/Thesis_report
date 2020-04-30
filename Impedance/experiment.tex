@@ -144,11 +144,11 @@ L'impédance mécanique décrite en [ref chapitre impédance mécanique] est un 
 %
 \newlineBlank
 %
-Ainsi suite à l'impact de la balle, le bras va être dévié de sa trajectoire nominale, ce qui ne peut avoir lieu qu'avec une balle pesante. Effectivement, si la masse de la balle est négligée, alors, la trajectoire n'est pas déviée, et on observe alors la trajectoire nominale ou virtuelle, comme décrit dans les expériences de \cite{tsuji_bio-mimetic_2008}. Dans ces expériences, une balle virtuelle est frappée à l'aide d'une interface mécanique, tantôt un retour de force est exercé sur le bras de la personne manipulant le mécanisme, tantôt aucun retour de force n'est appliqué pour permettre l'observation de la trajectoire virtuelle, cette dernière ne pouvant pas être observée lorsque le mouvement est perturbé (\textit{d'où le nom donné de trajectoire virtuelle}). 
+Aussi, suite à l'impact de la balle, le bras va être dévié de sa trajectoire nominale, ce qui ne peut avoir lieu qu'avec une balle pesante. Effectivement, si la masse de la balle est négligée, alors, la trajectoire n'est pas déviée, et on observe alors la trajectoire nominale ou virtuelle, comme décrit dans les expériences de \cite{tsuji_bio-mimetic_2008}. Dans ces expériences, une balle virtuelle est frappée à l'aide d'une interface mécanique, tantôt un retour de force est exercé sur le bras de la personne manipulant le mécanisme, tantôt aucun retour de force n'est appliqué pour permettre l'observation de la trajectoire virtuelle, cette dernière ne pouvant pas être observée lorsque le mouvement est perturbé (\textit{d'où le nom donné de trajectoire virtuelle}). 
 %
 \newlineBlank
 %
-La modélisation par l'impédance mécanique permet de répliquer le comportement du bras perturbé par une interaction physique. L'impédance peut-être vue comme un mécanisme fictif attaché à la trajectoire virtuelle, permettant de résister avec plus ou moins d'intensité, à de potentielles perturbations ou interactions physiques. Pour évaluer l'impédance d'un membre, il faut le perturber et observer sa réaction suite à la perturbation, pour la comparer à la réaction qui aurait eu lieu en l'absence de perturbations.
+La modélisation par l'impédance mécanique permet de répliquer le comportement du bras perturbé par une interaction physique. L'impédance peut-être vue comme un mécanisme fictif attaché à la trajectoire virtuelle, permettant de résister avec plus ou moins d'intensité, à de potentielles perturbations ou interactions physiques. Pour évaluer l'impédance d'un membre, il faut le perturber et observer sa réaction, pour la comparer à la réaction qui aurait eu lieu en l'absence de perturbations.
 %
 \newlineBlank
 %
@@ -426,6 +426,8 @@ que l'on peut réarranger pour grouper les termes liés au mouvement et les term
 	{ 1 + \jacobian{}{}{} \matr{M}^{-1} \left( \matr{C}_v(s) \jacobianHat{}{}{-1} + \vect{f}_v - \left( \jacobian{}{}{} \matr{M}^{-1} \right)^{-1}\jacobianDot{}{}{} \right) \jacobian{}{}{-1 } s }
 \end{equation}
 
+[analyse à terminer...]
+
 \paragraph{Validation expérimentale}
 
 Pour assurer des interactions sécurisé et robuste, une cartographie de la stabilité a été déterminée empiriquement sous deux conditions expérimentales. Premièrement on a opéré avec la co-manipulation la plus contraignante, ce qui correspond à un déplacement rythmique du robot avec des co-contractions intentionnelles du bras et de la main aussi intenses que possible. Ensuite, la deuxième condition correspond à une exécution nominal de la tâche de jonglerie, avec des co-contractions plus faibles. Pour chacune de ces conditions, le comportement de la boucle fermée est classé dans quatre catégories : 
@@ -455,7 +457,29 @@ This section presents the methodologies and tools used for the impedance estimat
 
 \subsection{Rappel littérature} \label{sec_impedance_estimation_sub_litterature}
 
-[préciser les données chiffrées concernant l'outillage, capteur, amplitude durée perturbations, ... mais aussi l'ordre de grandeur des résultats obtenus ??]
+[le découpage de cette partie est à revoir...]
+
+Tout un écosystème de la littérature s'est intéressé à l'impédance du membre supérieur en utilisant un système robotisé à 2 degrés de liberté, évoluant dans le plan horizontal, souvent appelé \textit{Manipulandum}. Ainsi, \cite{mussa-ivaldi_neural_1985,dolan_dynamic_1993, tsuji_human_1995,gomi_human_1997,burdet_method_2000} utilisent ce type de banc expérimental, permettant aussi bien de réaliser des tâches isométriques (\cite{mussa-ivaldi_neural_1985,dolan_dynamic_1993,tsuji_human_1995,gomi_human_1997}) que des tâches en mouvement (\cite{gomi_human_1997,burdet_method_2000}). Par ailleurs, il est aussi bien possible d'introduire les perturbations en force (\cite{dolan_dynamic_1993,gomi_human_1997}) qu'en position (\cite{mussa-ivaldi_neural_1985,tsuji_human_1995,gomi_human_1997,burdet_method_2000}).
+%
+\newlineBlank
+%
+%\subsubsection{Utilisation de perturbation en position} \label{sec_impedance_estimation_sub_litterature_sub_pert_position}
+%
+Ainsi pour les perturbations en position, \cite{mussa-ivaldi_neural_1985}, alors que la main de l'utilisateur vient se placer sur l'une des cibles visibles, déplacent le robot dans une direction aléatoire (parmi 8 directions planaires) d'une distance de \SI{5}{} à \SI{8}{\milli\metre} sur une durée de \SI{120}{\milli\second}, avec maintient de la position perturbée \SI{1}{\second}. La force de réaction générée est obtenue à l'aide de la mesure des couples moteurs. De leur côté, \cite{tsuji_human_1995} ajoutent à cette manipulation un capteur de force d'une précision de \SI{0.05}{\newton} et modifient les perturbations de \SI{10}{\milli\metre} en les concluant par un retour à la position initiale, pour une durée totale de \SI{400}{\milli\second}. %Dans leur première expérience, \cite{gomi_human_1997} utilisent une méthodologie similaire. 
+Toutefois, dans tous les cas cités, l'utilisateur maintient une posture connue, et la tâche ne peut pas être réalisée en mouvement. C'est \cite{burdet_method_2000} qui proposent une méthode fonctionnelle pour les tâches en mouvement avec ce type de perturbation. L'identification est à chaque fois réalisée avec une régression.
+%
+\newlineBlank
+%
+Dans des travaux plus récent, \cite{guarin_unbiased_2018} introduisent de faibles perturbations en position, de l'ordre de \SI{0.03}{\radian}, niveau articulaire. Leur analyse est conduite au niveau articulaire, l'objectif de cette étude étant de proposer une méthode d'identification non biaisée des paramètres en impédance des articulations humaines, en séparant notamment les phénomènes induits par les réflexes. Il est toutefois important de préciser que cette étude est conduite en simulation, en s'appuyant des résultats d'une publication précédente. 
+%\subsubsection{Utilisation de perturbation en force} \label{sec_impedance_estimation_sub_litterature_sub_pert_force}
+%
+\newlineBlank
+%
+Dans leur deuxième expérience, \cite{gomi_human_1997} proposent une tâche de pointage et utilisent la trajectoire moyenne comme référence en l'affichant sur un écran. De faibles perturbations en force d'une durée d'environs \SI{0.2}{\second} sont utilisées pour perturber le bras humain. \cite{abe_modulation_2003} dans une expérience de tâche cyclique à un degré de liberté, avec un banc expérimental assez différent, introduisent des perturbations en couples d'une période d'environs \SI{200}{\milli\second}, et de l'ordre d'une dizaine de Newton mètre, avec un mécanisme externe. \cite{erden_hand_2015} pour une tâche de soudure planaire, impliquant d'exercer des forces verticales, ont réalisé des mesures d'impédance à l'aide d'un robot à 7 articulations, dont le contrôle est rendu collaboratif grâce à l'utilisation d'un capteur de forces, ils introduisent des perturbations en force grâce au robot, et obtiennent la position de l'effecteur grâce au données articulaires. Les perturbations sont de l'ordre de \SI{4}{\newton} pour une durée de \SI{100}{\milli\second}.
+%
+%\newlineBlank
+%
+%Pour les travaux décrit dans cette thèse, le bras robotisé youBot de KUKA a des flexibilités non négligeables, les mesures de position devront donc être opérées avec un équipement externe. Aucun dispositif extérieur n'est utilisé pour les perturbations, elles seront donc appliquées à l'aide du robot dont le contrôle vient d'être détaillé dans la \cref{sec_robot}. Pour maintenir une fréquence de fonctionnement assez élevée, d'environ \SI{1}{\kilo\hertz}, les calculs permettant l'estimation d'impédance sont proposés hors-ligne. 
 
 \subsection{Mise en place de l'identification d'impédance} \label{sec_impedance_estimation_sub_tools}
 
@@ -504,6 +528,30 @@ La force le long de $ \vect{z} $, $ f_z $, obtenue grâce à l'équation \cref{e
 %
 Lors de l'analyse hors ligne des données pour l'estimation d'impédance, seules les données brutes sont utilisées. Toutes les données sont interpolées à une fréquence fixe de \SI{1}{\kilo\hertz} puis, un filtrage sans déphasage est utilisé, à la fois sur les forces et positions données par le système de \textit{motion capture}, toujours avec le même filtre passe-bas, mais à une fréquence de coupure de \SI{25}{\hertz}.
 
+\subsubsection{Identification des paramètres en impédance} \label{sec_impedance_estimation_sub_tools_sub_optimization}
+
+L'identification d'impédance peut être opérée au niveau articulaire, ce qui impose une maîtrise ou mesure complète du mouvement, et plus seulement une mesure de la trajectoire de l'effecteur. Dans le cadre de cette étude, c'est le comportement global en impédance au niveau de l'effecteur qui est étudié, cette partie de la littérature n'est donc pas plus détaillée. 
+%
+\newlineBlank
+%
+Les travaux décrit en \cref{sec_impedance_estimation_sub_litterature} utilisent pour une grande majorité des méthodes d'identification régressives basées sur les moindres carrés. Dans le cadre de perturbations en position, cette régression peut-être effectuée uniquement sur la raideur, la position perturbée pouvant être maintenue grâce à contrôle précis. \cite{burdet_method_2000} a donc pu proposer une identification de la raideur seule en utilisant \SI{60}{\milli\second} de données stables, suite à la perturbation. A l'inverse, les perturbations en force imposent l'identification simultanée de la raideur, de l'amortissement et de la masse, et donc nécessite plus d'échantillons, mais leur mise en place est plus simple pour des identifications en mouvement.
+%
+\newlineBlank
+%
+Il est intéressant de signaler que des méthodes d'identification différentes ont été proposées dans la littérature. \cite{piovesan_measuring_2012} ont en effet proposé d'utiliser une approche fréquentielle, permettant d'éviter les nombreuses répétitions nécessaires avec les méthodes précédentes. Par ailleurs, des méthodes plus complexes proposées par \cite{kearney_identification_1997} avec une analyse impulsionnelle et non linéaire en utilisant un modèle de Hammerstein, ou \cite{guarin_unbiased_2018} avec une identification non paramétrique, ont pour vocation de séparer la raideur intrinsèques de la raideur induite par les réflexes. En effet, la raideur due aux différents réflexes ne peut pas être modélisée intégralement avec un modèle linéaire. Toutefois, des travaux précédemment évoqués ont réussi à modéliser et reproduire des comportements en impédance avec des modèles linéarisés pour de faibles déviations. 
+%
+\newlineBlank
+%
+L'objectif \textit{in fine} de la thèse est d'observer des variations du comportement en impédance pendant une tâche rythmique, avec un robot poly-articulé, pour ensuite en déduire des commandes bio-inspirées. Les travaux conduits par \cite{erden_end-point_2015,erden_hand_2015} proposent une méthodologie qui a fortement inspiré la mise en place de l'estimation d'impédance. En étudiant l'impédance cartésienne de manière découplée comme dans leurs travaux, on peut utiliser le modèle KBI \cref{eq_impedance_z} en s'intéressant uniquement aux effets de l'impédance sur le degré de liberté de la tâche de jonglerie. Une identification par les moindres carrés permet d'identifier des paramètres constants. Toutefois, en réalisant plusieurs estimations à différents instants du cyclique de jonglerie, il est possible d'observer des variations, en comparant chaque identification, à la manière de \cite{tsuji_bio-mimetic_2008}.
+%
+\newlineBlank
+%
+L'équation \cref{eq_impedance_z}, devient donc \cref{eq_impedance_z_real}, avec $ f_{z}^c $ la force d'interaction mesurée par le capteur, $ \hat{f}_z^0 $ l'estimation de la force virtuelle et $ \hat{z}^0 $ l'estimation de la position virtuelle. \cite{erden_end-point_2015} ont montré que la régression linéaire par les moindres carrés, pouvait être réalisé en utilisant une fenêtre de 200 échantillons. 
+
+\begin{equation} \label{eq_impedance_z_real}
+	-(f_{z}^c - \hat{f}_z^0) = K_z (\hat{z}^0 - z) + B_z (\dot{\hat{z}}^0 - \dot{z}) + I_z (\ddot{\hat{z}}^0 - \ddot{z})
+\end{equation}
+
 \subsubsection{Introduction des perturbations} \label{sec_impedance_estimation_sub_tools_sub_perturbations}
 
 \paragraph{Nature des perturbations en force}
@@ -542,7 +590,7 @@ La méthode d'estimation d'impédance décrite, repose sur les déviations en fo
 %
 \newlineBlank
 %
-Dans la littérature \cite{bennett_time-varying_1992} ont utilisé la moyenne des trajectoires non perturbées précédentes pour estimer la trajectoire virtuelle suite à une perturbation, pour un mouvement cyclique du bras. De leur côté, \cite{abe_modulation_2003} ont modélisé la trajectoire virtuelle d'un motif rythmique par une expression sinusoïdale dont les paramètres ont été déterminés à l'aide de trajectoires non perturbées. \cite{burdet_method_2000} ont proposé un algorithme capable de prédire une trajectoire avec une erreur inférieur à 1 cm après 200 ms, en s'aidant aussi des trajectoires précédentes.
+Dans la littérature \cite{bennett_time-varying_1992} ont utilisé la moyenne des trajectoires non perturbées précédentes pour estimer la trajectoire virtuelle suite à une perturbation, pour un mouvement cyclique du bras. De leur côté, \cite{abe_modulation_2003} ont modélisé la trajectoire virtuelle d'un motif rythmique par une expression sinusoïdale dont les paramètres ont été déterminés à l'aide de trajectoires non perturbées. \cite{burdet_method_2000} ont proposé un algorithme capable de prédire une trajectoire avec une erreur inférieure à 1 cm après 200 ms, en normalisant et moyennant, les 10 profils de vitesses précédents.
 %
 \newlineBlank
 %
@@ -562,11 +610,11 @@ Les principaux réflexes biologiques qui interviennent chez l'humain lorsqu'un m
 %
 \newlineBlank
 %
-D'un côté quantitatif, \cite{erden_end-point_2015, erden_hand_2015} bien conscients de cette problématique, n'ont pas pu conduire d'identification en utilisant une centaine de millisecondes, puisque les variations de mouvement étaient trop faibles sur cet intervalle. Cependant, ils ont estimé les actions volontaires négligeables sur une fenêtre de \SI{200}{\milli\second} à \SI{250}{\milli\second}, et ont pu réaliser leur identification sur cet intervalle. Cette supposition se base sur des résultats précédents conduits par \cite{mussa-ivaldi_neural_1985,tsuji_human_1995,gomi_human_1997,burdet_method_2000}, où le bras et la main humaine ont pu être modélisés comme des systèmes dynamiques passifs, avec des durées de calculs semblables ou supérieurs.
+D'un côté quantitatif, \cite{erden_end-point_2015, erden_hand_2015} bien conscients de cette problématique, n'ont pas pu conduire d'identification en utilisant une centaine de millisecondes, puisque les variations de mouvement étaient trop faibles sur cet intervalle. Cependant, ils ont estimé les actions volontaires négligeables sur une fenêtre de \SI{200}{\milli\second} à \SI{250}{\milli\second}, et ont pu réaliser leur identification sur ces intervalles. Cette supposition se base sur des résultats précédents conduits par \cite{mussa-ivaldi_neural_1985,tsuji_human_1995,gomi_human_1997,burdet_method_2000}, où le bras et la main humaine ont pu être modélisés comme des systèmes dynamiques passifs, avec des durées de calculs semblables ou supérieures.
 %
 \newlineBlank
 %
-Une fenêtre d'une durée de \SI{200}{\milli\second} a donc été choisie. L'interpolation de la trajectoire virtuelle réalisée avec Matlab\textsuperscript{TM} en utilisant des splines cubiques, utilise les données \SI{100}{\milli\second} avant et après (tirets oranges sur la \cref{fig_perturbed_virtual_traj}) pour réaliser l'estimation de la trajectoire sur la fenêtre de \SI{200}{\milli\second} (lignes avec des points oranges sur la \cref{fig_perturbed_virtual_traj}).
+Une fenêtre d'une durée de \SI{200}{\milli\second} a donc été choisie [ce qui correspond au temps de réponse du bras humain ??]. L'interpolation de la trajectoire virtuelle réalisée avec Matlab\textsuperscript{TM} en utilisant des splines cubiques, utilise les données \SI{100}{\milli\second} avant et après (tirets oranges sur la \cref{fig_perturbed_virtual_traj}) pour réaliser l'estimation de la trajectoire sur la fenêtre de \SI{200}{\milli\second} (lignes avec des points oranges sur la \cref{fig_perturbed_virtual_traj}).
 
 \paragraph{Évaluation} Afin de valider la fiabilité de la trajectoire virtuelle estimée, la procédure d'estimation a été conduite sur des trajectoires non perturbées. De cette manière, si cette méthode permet de reproduire le mouvement humain, les écarts entre la trajectoire prédite et la trajectoire réelle devraient tendre vers zéro. Pour ne pas masquer des erreurs, le mouvement cyclique a été découpé en 4 phases, montrées en \cref{fig_traj_spline_evaluation}, qui seront évaluées séparément dans un premier temps : 
 \begin{enumerate*}[label=\roman*),itemjoin={,\quad}] 
@@ -627,11 +675,8 @@ Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalen
 	\label{tab_sline_force_errors}
 \end{table}
 %
-\newlineBlank
+%\newlineBlank
 %
-\subsubsection{Identification des paramètres en impédance} \label{sec_impedance_estimation_sub_tools_sub_optimization}
-
-[Ajouter les méthodologies existantes, et expliquer le choix des moindres carrés. Détailler l'optimisation...]
 
 \subsection{Résultats préliminaires} \label{sec_impedance_estimation_sub_results}
 
@@ -673,7 +718,7 @@ Les résultats exposés dans cette partie, sont issus du deuxième essai, dont l
 %
 \newlineBlank
 % 
-Comme expliqué dans la \cref{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}, les actions volontaires peuvent intervenir dès \SI{100}{\milli\second} et ne sont pas modélisables correctement avec le modèle proposé \cref{eq_impedance_z}, puisqu'elles impliquent un processus cognitifs, plus complexe. 
+% Comme expliqué dans la \cref{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}, les actions volontaires peuvent intervenir dès \SI{100}{\milli\second} et ne sont pas modélisables correctement avec le modèle proposé \cref{eq_impedance_z}, puisqu'elles impliquent un processus cognitifs, plus complexe. 
 %
 \newlineBlank
 % 
@@ -687,13 +732,13 @@ Pour vérifier que l'estimation d'impédance observée a bien du sens, on s'int�
 %
 \newlineBlank
 % 
-Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $ des onze perturbations évaluées atteignent un pic pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'ajouter ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant injectées au niveau articulaire, la chaîne de transmission jusqu'à l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
+Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $ des onze perturbations évaluées, atteignent un pic pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'ajouter ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant injectées au niveau articulaire, la chaîne de transmission jusqu'à l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
 %
 \input{latex_figures/fig_r_square.tex}
 %
 \newlineBlank
 % 
-Il est aussi intéressant de noter que le coefficient de détermination moyen de l'identification proposée, pour $ \delta t $ compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second} est très proche de 1 (entre 9.6 et 9.4), avec des écarts-types compris entre 0.04 et 0.08. Ce même coefficient, pour une identification, en dehors des plages de perturbations, oscille entre 0.48 et 0.65, avec des écarts types moyen de 0.25. Ces éléments ne permettent donc pas d'invalider la méthodologie proposée, et semblent plutôt la soutenir. Ainsi, pour la suite de l'analyse, un délai $ \delta t $ de \SI{15}{\milli\second} sera utilisé, comme c'est le cas sur la \cref{fig_imp_est_pert_nonpert_splines}.
+Il est aussi intéressant de noter que le coefficient de détermination moyen de l'identification proposée, pour $ \delta t $ compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second} est très proche de 1 (entre 9.6 et 9.4), avec des écarts-types compris entre 0.04 et 0.08. Ce même coefficient, pour une identification, en dehors des plages de perturbations, oscille entre 0.48 et 0.65, avec des écarts types moyen de 0.25. Ces éléments ne permettent donc pas d'invalider la méthodologie proposée, et semblent plutôt la soutenir. Ainsi, pour la suite de l'analyse, un délai $ \delta t $ de \SI{15}{\milli\second} est utilisé, comme c'est le cas sur la \cref{fig_imp_est_pert_nonpert_splines}.
 %
 \newlineBlank
 % 
@@ -705,11 +750,11 @@ La \cref{fig_force_reconstruction} montre les résultats de reconstruction de fo
 
 \paragraph{Analyse des résultats}
 
-\cite{mussa-ivaldi_neural_1985, dolan_dynamic_1993, tsuji_bio-mimetic_2008, erden_end-point_2015} ont présenté des résultats d'estimation de paramètres d'impédance cartésienne dans leurs travaux étalés sur 4 décennies. Ils ont obtenu des raideurs d'amplitudes comprises entre \SI{40}{\newton\per\metre} et \SI{700}{\newton\per\metre}, dans des configurations isométriques mais aussi en mouvement, avec ou sans charges, pour le membre supérieur humain. En plus, \cite{dolan_dynamic_1993, tsuji_bio-mimetic_2008, erden_end-point_2015} ont trouvé des paramètres visqueux allant de \SI{8}{\newton\second\per\metre} à \SI{44}{\newton\second\per\metre} et de masse entre \SI{0.6}{\kilogram} et \SI{2.5}{\kilogram}.
+\cite{mussa-ivaldi_neural_1985, dolan_dynamic_1993, tsuji_bio-mimetic_2008, erden_end-point_2015} ont présenté des résultats d'estimation de paramètres d'impédance cartésienne dans leurs travaux étalés sur 4 décennies. Ils ont obtenu des raideurs d'amplitudes comprises entre \SI{40}{\newton\per\metre} et \SI{700}{\newton\per\metre}, dans des configurations isométriques mais aussi en mouvement, avec ou sans charges, pour le membre supérieur humain. En plus, \cite{dolan_dynamic_1993, tsuji_bio-mimetic_2008, erden_end-point_2015} ont trouvé des paramètres d'amortissement allant de \SI{8}{\newton\second\per\metre} à \SI{44}{\newton\second\per\metre} et de masse entre \SI{0.6}{\kilogram} et \SI{2.5}{\kilogram}.
 %
 \newlineBlank
 % 
-Les résultats préliminaires dont la validité a été étudiée au \cref{sec_impedance_estimation_sub_results_sub_impedance_results_par_validity} sont présentés dans la \cref{tab_param_identification}. On peut constater que la raideur moyenne obtenue est presque deux fois supérieures aux valeurs moyennes observés dans la littérature, dès que $ \delta t \geq 10 $ et qu'au contraire, les autres paramètres sont bien inférieurs. Ces différences trouvent peut-être leur source dans l'estimation de la trajectoire virtuelle, qui ne semble pas valide pour l'accélération, et dont la validité pour la vitesse reste discutable [non encore étudié]. En effet, si on s'intéresse de plus près à l'amortissement et à la masse, on constate que leur écart type respectif sont supérieurs à 100\%, contre seulement 26\% pour la raideur.
+Les résultats préliminaires dont la validité a été étudiée au \cref{sec_impedance_estimation_sub_results_sub_impedance_results_par_validity} sont présentés dans la \cref{tab_param_identification}. On peut constater que la raideur moyenne obtenue est presque deux fois supérieures aux valeurs moyennes observées dans la littérature, dès que $ \delta t \geq 10 $ et qu'au contraire, les autres paramètres sont bien inférieurs. Ces différences trouvent peut-être leur source dans l'estimation de la trajectoire virtuelle, qui ne semble pas valide pour l'accélération, et dont la validité pour la vitesse reste discutable [non encore étudié]. En effet, si on s'intéresse de plus près à l'amortissement et à la masse, on constate que leur écart type respectif sont supérieurs à 100\%, contre seulement 26\% pour la raideur.
 %
 \begin{table}[htbp] 
 	\begin{center}
@@ -720,18 +765,30 @@ Les résultats préliminaires dont la validité a été étudiée au \cref{sec_i
 			%\hline
 			$ \delta t $ (\si{\milli\second}) & $ K_z $ (\si{\newton\per\metre}) & $ B_z $ (\si{\newton\second\per\metre}) & $ I_z $ (\si{\kilogram}) &  $ \rho $ (\si{\newton})\\
 			\hline
-			0 & 644.3 (212.6) & -3.26 (5.12) & -0.045 (0.055) & \\
-			5 & 897.3 (260.2) & -0.08 (4.45) & -0.007 (0.050) & \\
-			10 & 1157.0 (324.0) & 2.17 (4.10) & 0.027 (0.054) & \\
-			15 & 1319.4 (356.2) & 2.81 (4.24) & 0.043 (0.049) & \\
-			20 & 1371.1 (383.9) & 2.55 (4.82) & 0.046 (0.045) & \\ 
+			0 & 644.3 (212.6) & -3.26 (5.12) & -0.045 (0.055) & 0.02 (0.40) \\
+			5 & 897.3 (260.2) & -0.08 (4.45) & -0.007 (0.050) & 0.05 (0.29) \\
+			10 & 1157.0 (324.0) & 2.17 (4.10) & 0.027 (0.054) & 0.23 (0.21)\\
+			15 & 1319.4 (356.2) & 2.81 (4.24) & 0.043 (0.049) & 0.19 (0.27) \\
+			20 & 1371.1 (383.9) & 2.55 (4.82) & 0.046 (0.045) & 0.20 (0.42) \\ 
 		\end{tabular}
 	\endgroup
 	\end{center}
-	\caption{Paramètres identifiés, les écarts type sont donnés entre parenthèse.} %\vspace{-10pt}
+	\caption{Moyenne des paramètres identifiés, les écarts types sont donnés entre parenthèses.} 
 	\label{tab_param_identification}	
 \end{table}
 %
+\section{Conclusion} \label{sec_conclusion}
+
+[à traduire...]
+%
+\newlineBlank
+% 
+The presented first results demonstrate the feasibility of using interactive robotics for human impedance estimation. Several aspects of the proposed procedure can however be improved. The use of cubic splines for trajectory estimation yields acceptable results for both the positions and velocities, but since cubic splines are $C^2$, poorly estimated accelerations were obtained since they were approached with affine functions. Using similar trajectory reconstruction techniques as those described in \cite{burdet_method_2000} could improve both virtual trajectory and force estimations. The virtual force estimation is another potential source of errors. Introducing longer perturbations in the outer control loop, directly as a reference $f_{z0}$ in \cref{fig_comanipulation_ctrl}, would simplify the force deviation estimation and could bring more realistic parameters. Other techniques than the presented least squares could be considered to improve the KBI model identification, for example based on linear dynamic system identification methods.  
+%
+\newlineBlank
+% 
+Finally, larger-scale data acquisition on a statistically significant number of experiments with several participants is expected to provide more in-depth insights on the possible cyclic variations of the human endpoint impedance, during a task with physical interaction. Understanding these variations could be used for bio-mimetic rhythmic control design for collaborative robots in interaction with their environment.
+
 \input{appendices}
 
 \bibliographystyle{apalike} %abbrvnat
