@@ -27,7 +27,9 @@
 %	ARTICLE INFORMATION
 %----------------------------------------------------------------------------------------
 
-\title{Expérience de comanipulation} % The article title
+%\title{Expérience de comanipulation} % The article title
+
+\title{Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment}
 
 \author{
 	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2}, Maria MAKAROV\textsuperscript{2}, Pedro RODRIGUEZ\textsuperscript{2}, Isabelle Siegler\textsuperscript{1}} % Authors
@@ -37,7 +39,7 @@
 }
 
 
-\date{Février 2020} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date
+\date{Mai 2020} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date % first edit feb 2020
 
 %----------------------------------------------------------------------------------------
 
@@ -50,12 +52,40 @@
 %----------------------------------------------------------------------------------------
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
+%
+%\lettrine{I}{\textbf{n}} \textbf{order to evaluate the endpoint impedance behaviour of the human arm, during a cyclic task, a human robot interface experiment is presented. The ball bouncing task is a simple and complete benchmark in Human movement science. It involves both rythmic control of the arm and physical interactions with an environment. A simulated environment with a paddle, a ball and other visual signs is proposed for a better control of the experiment. To control the virtual paddle, a polyarticulated robotic arm is used. For a transparent and intuitive handling of the robot and to minimize its perceived dynamics, a control loop operating with force/torque sensor is presented.}
+%
+%\estheticline
+%
+%\lettrine{A}{\textbf{fin}} d'estimer le comportement cartésien en impédance du bras humain, lors d'une tâche rythmique, une expérience utilisant une interface homme machine est proposée. La tâche de jonglerie est un cas d'étude à la fois simple et complet en science du mouvement humain, faisant à la fois appel à un contrôle rythmique du bras, et à des interactions avec un environnement physique au cours du cycle de jongle. Pour une meilleur maitrise de la tâche, un environnement simulé contenant à la fois une raquette, une balle et des indications complémentaires est utilisé. Pour pouvoir manipuler la raquette virtuelle, un robot articulé est utilisé. Pour rendre la manipulation du robot transparente intuitive, et minimiser ses dynamiques apparentes, une boucle de contrôle utilisant un capteur de force est proposée.
 
-\lettrine{I}{\textbf{n}} \textbf{order to evaluate the endpoint impedance behaviour of the human arm, during a cyclic task, a human robot interface experiment is presented. The ball bouncing task is a simple and complete benchmark in Human movement science. It involves both rythmic control of the arm and physical interactions with an environment. A simulated environment with a paddle, a ball and other visual signs is proposed for a better control of the experiment. To control the virtual paddle, a polyarticulated robotic arm is used. For a transparent and intuitive handling of the robot and to minimize its perceived dynamics, a control loop operating with force/torque sensor is presented.}
+\lettrine{S}{\textbf{ince}} robots have populated the industry in the late 20\textsuperscript{th} century, they have earned precious and precise skills to achieve repeated tasks in controlled environments. Most robots used in plants are able to outperform humans in very specific tasks under restrained conditions. In fact, there are still lot to learn about humans ability to adapt to various environments, and strikingly their capacities to reach stable behaviour during physical interaction are still unrivalled. However, the dawn of robot services is already in the past, late development such as exoskeletons, surgical robots, industrial cobots have already emerged. Understanding and reproducing the robustness of humans physical interactions is therefore a matter of energy efficiency, safety, adaptability and resilience. %
+%
+\newlineBlank
+%
+It is in such a perspective that human motor control has been studied for decades, under both the neural sciences and control prisms. One approach is to study the mechanical impedance which is the relation between forces and kinematics. Very simple models of impedance have accomplished human like performances, but the identification of the consistant elements of those representations is still tedious. %
+%
+\newlineBlank
+%
+Using a human movement science benchmark, this study proposes an approach to evaluate the human impedance variations during a rhythmic task with intermittent physical interactions. This fits the ambition to match human like behaviour, using bio-inspired control laws, for robots during cyclic task with environmental interactions.
 
-\estheticline
+\newpage
+\hspace{0pt}
+\vfill
 
-\lettrine{A}{\textbf{fin}} d'estimer le comportement cartésien en impédance du bras humain, lors d'une tâche rythmique, une expérience utilisant une interface homme machine est proposée. La tâche de jonglerie est un cas d'étude à la fois simple et complet en science du mouvement humain, faisant à la fois appel à un contrôle rythmique du bras, et à des interactions avec un environnement physique au cours du cycle de jongle. Pour une meilleur maitrise de la tâche, un environnement simulé contenant à la fois une raquette, une balle et des indications complémentaires est utilisé. Pour pouvoir manipuler la raquette virtuelle, un robot articulé est utilisé. Pour rendre la manipulation du robot transparente intuitive, et minimiser ses dynamiques apparentes, une boucle de contrôle utilisant un capteur de force est proposée.
+\lettrine{D}{\textbf{epuis}} la fin du 20\textsuperscript{ème} siècle, les robots sont devenus indispensables dans l'industrie, grâce à leurs capacités à abattre des tâches répétitives avec précision dans des environnements maîtrisés. La plupart des robots industriels surpassent les humains sur des compétences spécifiques pour la réalisation de tâches dans des conditions restreintes. Dans les faits, les capacités humaines d'adaptation à des environnements variés ont encore beaucoup à enseigner à la robotique, avec notamment l'habilité humaine inégalée, à maintenir des comportements stables pendant des interactions physiques. Toutefois, l'aube de la robotique de service fait déjà partie intégrante du passé, avec le développement d'exosquelettes, de robots chirurgicaux, et de robots industriels collaboratifs qui a déjà émergé. Comprendre et reproduire la robustesse des interactions physiques humaines est donc un sujet important pour la sécurité, la résilience et l'efficacité énergétique des robots. %
+%
+\newlineBlank
+%
+C'est en gardant ces objectifs à l'esprit que le contrôle moteur humain est étudié depuis plusieurs décennies sous le prismes des neurosciences et de l'automatique. L'une des approches qui s'inscrit dans cette démarche est l'étude de l'impédance mécanique comme modèle des relations reliant les forces d'interactions aux variables cinématiques lors de contacts physiques. Des modèles assez simples ont été capables de reproduire des performances proches de l'humain, mais l'identification des éléments constitutifs de ces représentations reste laborieuse. %
+%
+\newlineBlank
+%
+En s'intéressant à une étude classique en sciences du mouvement humain, cette thèse propose une approche pour évaluer les variations du comportement humain en impédance, pendant une tâche rythmique avec des interactions physiques intermittentes. L'ambition \textit{in fine} est d'atteindre des comportements proches de l'humain en avançant des lois de contrôles bio-inspirées de robot pour des tâches cycliques en interaction avec l'environnement.
+
+\vfill
+\hspace{0pt}
+\pagebreak
 
 %----------------------------------------------------------------------------------------
 %	ARTICLE CONTENTS
@@ -217,7 +247,7 @@ La réduction apparente de l'inertie est limitée du fait de la présence de fle
 %
 \newlineBlank 
 %
-Dans le cadre de l'expérience devant être mise en place, seuls des mouvements sur l'axe vertical $\vect{z}$ sont souhaités. Or des phénomènes de couplage mis en évidence par l'équation \ref{eq_coupling_effects} interviennent entre les différents axes avec ce type de contrôle.
+Dans le cadre de l'expérience devant être mise en place, seuls des mouvements sur l'axe vertical $\vect{z}$ sont souhaités. Or des phénomènes de couplage mis en évidence par l'équation \cref{eq_coupling_effects} interviennent entre les différents axes avec ce type de contrôle.
 %
 \newlineBlank
 %
@@ -363,8 +393,6 @@ avec :
 \end{enumerate}
 
 \newlineBlank
-
-[Présenter résultat de la transparence] ?
 
 \subsection{Influence sur la tâche} \label{sec_robot_sub_task_influence}
 
@@ -639,7 +667,7 @@ Pour les phases i), ii) et iv) une forme gaussienne centrée proche de 0 semble 
 %
 \newlineBlank
 %
-Il est toutefois important de noter que les splines cubiques sont des fonctions $ C^2 $. Par conséquent, lorsqu'on cherche à obtenir l'accélération en dérivant deux fois la trajectoire approchée par des splines, on obtient une fonction affine qui ne correspond pas à l'allure de l'accélération réelle. [à développer sur les pistes envisagée, avec notamment l'utilisation de la vitesse plutôt que la position, l'utilisation de méthode base sur la normalisation des trajectoires précédentes...].
+Il est toutefois important de noter que les splines cubiques sont des fonctions $ C^2 $. Par conséquent, lorsqu'on cherche à obtenir l'accélération en dérivant deux fois la trajectoire approchée par des splines, on obtient une fonction affine qui ne correspond pas à l'allure de l'accélération réelle. L'utilisation d'une stratégie similaire pour estimer la vitesse à partir de splines cubiques, permettrait en théorie d'améliorer l'estimation de l'accélération. Toutefois, les essais réalisés ont montré que dès l'estimation de vitesse, les trajectoires approchées étaient de qualité inférieure en utilisant l'interpolation sur la vitesse. Cette observation peut-être provoquée par la dérivation numérique de la position pour obtenir la vitesse, qui entache les données de bruits. 
 %
 \begin{table}[]
 	\centering
@@ -777,17 +805,17 @@ Les résultats préliminaires dont la validité a été étudiée au \cref{sec_i
 	\label{tab_param_identification}	
 \end{table}
 %
-\section{Conclusion} \label{sec_conclusion}
+\section{Conclusion et Perspectives} \label{sec_conclusion}
 
-[à traduire...]
+Les résultats présentés démontrent la faisabilité de la tâche avec le contrôle en admittance proposé, toutefois, ils montrent aussi que l'influence du robot sur la tâche n'est pas négligeable. En effet, les erreurs de jonglerie observées sont supérieures à celles de la littérature. Une étude plus poussée de la stabilité et de la transparence du contrôle en admittance pourrait permettre un meilleur réglage du schéma de commande, ou l'adoption d'une nouvelle stratégie de contrôle (eg. commande robuste). Par ailleurs, une maîtrise de la dynamique apparente du robot ouvrirait un nouveau champ expérimental pour cette thèse, en se proposant d'étudier l'influence de la dynamique du robot sur l'impédance humaine.
 %
 \newlineBlank
 % 
-The presented first results demonstrate the feasibility of using interactive robotics for human impedance estimation. Several aspects of the proposed procedure can however be improved. The use of cubic splines for trajectory estimation yields acceptable results for both the positions and velocities, but since cubic splines are $C^2$, poorly estimated accelerations were obtained since they were approached with affine functions. Using similar trajectory reconstruction techniques as those described in \cite{burdet_method_2000} could improve both virtual trajectory and force estimations. The virtual force estimation is another potential source of errors. Introducing longer perturbations in the outer control loop, directly as a reference $f_{z0}$ in \cref{fig_comanipulation_ctrl}, would simplify the force deviation estimation and could bring more realistic parameters. Other techniques than the presented least squares could be considered to improve the KBI model identification, for example based on linear dynamic system identification methods.  
+D'un côté, des expériences avec plus de participants ont toujours l'espoir d'être menées -\textit{ au vu du contexte actuel }-, elles permettraient d'observer des variations statistiquement significatives de la raideur. D'un autre côté, des expériences avec un nombre de sujets beaucoup plus restreints peuvent être imaginées, en s'intéressant à l'influence de l'environnement sur un même utilisateur, avec plus d'essais. Une amélioration de la stratégie d'identification peut aussi être envisagée, en utilisant notamment des méthodes plus avancées que les moindres carrés.
 %
 \newlineBlank
 % 
-Finally, larger-scale data acquisition on a statistically significant number of experiments with several participants is expected to provide more in-depth insights on the possible cyclic variations of the human endpoint impedance, during a task with physical interaction. Understanding these variations could be used for bio-mimetic rhythmic control design for collaborative robots in interaction with their environment.
+La jonction entre les travaux de G. Avrin et les travaux de cette thèse doit aussi être réalisée, pour permettre dans un premier temps en simulation, de proposer une stratégie de commande prenant en compte les défis apportés par l'intégration de la dynamique. Les lois de commande proposés seront inspirées par les résultats des observations expérimentales, avec pour objectif d'améliorer la robustesse de la tâche de jonglerie, dont la stabilité a été étudiée au niveau cinématique par G. Avrin.
 
 \input{appendices}
 
