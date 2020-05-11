@@ -65,12 +65,14 @@
 \usepackage{cleveref}
 	\crefname{figure}{Figure}{Figures}
 	\crefname{section}{Section}{Sections}
+	\crefname{appendix}{Annexe}{Annexes}
 	\crefname{chapter}{Chapitre}{Chapitres}
 	\crefname{equation}{}{}
 	\crefname{paragraph}{Paragraphe}{Paragraphes}
 	\crefmultiformat{equation}{#2(#1)#3}{ et #2(#1)#3}{, #2(#1)#3}{ et #2(#1)#3}
 	
 \setcounter{secnumdepth}{4} % to be able to reference paragraphs 
+%\Crefformat{appendix}{\S#2#1#3} % for appendix
 	
 \usepackage{pgffor} %for loop	
 
@@ -224,7 +226,7 @@
 % Footers
 \lfoot{} % Left footer
 \cfoot{} % Center footer
-\rfoot{\footnotesize Page \thepage\ of \pageref{LastPage}} % Right footer, "Page 1 of 2"
+\rfoot{\footnotesize Page \thepage\ sur \pageref{LastPage}} % Right footer, "Page 1 of 2"
 
 \fancypagestyle{firstpage}{ % Page style for the first page with the title
 	\fancyhf{}

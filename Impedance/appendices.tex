@@ -1,6 +1,7 @@
 %annexe
 \clearpage
 \begin{appendices}
+	\crefalias{section}{appendix}
 	\section{Calcul du Modèle Géométrique Direct} \label{app_direct_kinem}
 	
 	\subsection{Modèle à 3 articulations colinéaires} \label{app_direct_kinem_sub_3}
@@ -242,7 +243,7 @@
 	\newpage
 	\section{Effets de couplage du contrôle articulaire en transparence} \label{app_coupling_effect}
 	
-	On souhaite vérifier si la matrice résultant de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors l'équation \cref{eq_coupling_effect_jacobian}.
+	On souhaite vérifier les effets de couplage résultant des termes hors de la diagonale de  $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors l'équation \cref{eq_coupling_effect_jacobian}.
 	
 	\begin{equation} \label{eq_elem_coupling}
 		\begin{split}
@@ -319,12 +320,18 @@
 	\newpage
 	\section{Effets de l'erreur de trainage} \label{app_latency_error_effect}
 
-	L'erreur de trainage montrée dans l'équation \cref{eq_Fz_endpoint_coupling}, entraîne des effets indésirables sur tous les axes, et notamment l'axe $ \vect{x} $, que cette section va chercher à quantifier. Il faut donc regarder la première ligne du jacobien $ \jacobian{}{}{} $ multiplié par l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ sur les 3 articulations.
+	L'erreur de trainage montrée dans l'équation \cref{eq_Fz_endpoint_coupling}, entraîne des effets indésirables sur tous les axes. Sur l'axe $ \vect{x} $, l'erreur cartésienne $ \dot{x}_\epsilon $, peut être estimée en prenant la première ligne du jacobien $ \jacobian{}{}{} $ multipliée par l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ sur les 3 articulations.
 	
 	\begin{equation}
 		\dot{x}_\epsilon = \begin{pmatrix}
 		-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & -l_2 s_{12} - l_3 s_{123}  & -l_3 s_{123}
 		\end{pmatrix} \dot{\vect{q}}_\epsilon
+	\end{equation}
+
+	Si l'on considère une erreur de trainage égale sur chaque articulation, que l'on nomme $ \dot{q}_\epsilon $, et qu'on fixe les angles à leur position $ \vect{q}_0 $, alors comme le montre l'équation \cref{eq_following_err_x} on obtient un coefficient qui est multiplié par $ \dot{q}_\epsilon $. Ce coefficient pour les valeurs données en \cref{app_coupling_effect} vaut 0.279, ce qui revient à dire, que dans le cas considéré, plus d'un quart de l'erreur de trainage articulaire est directement projeté en vitesse cartésienne sur l'axe $ \vect{x} $.
+	
+	\begin{equation} \label{eq_following_err_x}
+	\dot{x}_\epsilon = -(l_1 s_1 + l_2 s_{12} + l_3 s_{123} + l_2 s_{12} + l_3 s_{123} + l_3 s_{123}) \dot{q}_\epsilon
 	\end{equation}
 
 	\newpage

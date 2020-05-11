@@ -32,7 +32,7 @@
 \title{Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment}
 
 \author{
-	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2}, Maria MAKAROV\textsuperscript{2}, Pedro RODRIGUEZ\textsuperscript{2}, Isabelle Siegler\textsuperscript{1}} % Authors
+	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2}, Maria MAKAROV\textsuperscript{2}, Pedro RODRIGUEZ-AYERBE\textsuperscript{2}, Isabelle SIEGLER\textsuperscript{1}} % Authors
 	\newline\newline % Space before institutions
 	\textsuperscript{1}\institution{Université Paris Sud - CIAMS}\\ % Institution 1
 	\textsuperscript{2}\institution{CentraleSupélec - L2S}\\ % Institution 2
@@ -43,6 +43,7 @@
 
 %----------------------------------------------------------------------------------------
 
+\numberwithin{equation}{section}
 \begin{document}
 
 \maketitle % Print the title
@@ -68,20 +69,24 @@ It is in such a perspective that human motor control has been studied for decade
 \newlineBlank
 %
 Using a human movement science benchmark, this study proposes an approach to evaluate the human impedance variations during a rhythmic task with intermittent physical interactions. This fits the ambition to match human like behaviour, using bio-inspired control laws, for robots during cyclic task with environmental interactions.
-
-\newpage
-\hspace{0pt}
-\vfill
+%
+\newpage %
+\hspace{0pt} %
+\vfill %
+%
+\textcolor{DarkRed}{\fontsize{28}{32}\usefont{OT1}{phv}{b}{n}\selectfont \noindent Commande bio-inspirée de robot pour des tâches rythmiques en interaction avec l'environnement.}
+%
+\vspace{60pt}
 
 \lettrine{D}{\textbf{epuis}} la fin du 20\textsuperscript{ème} siècle, les robots sont devenus indispensables dans l'industrie, grâce à leurs capacités à abattre des tâches répétitives avec précision dans des environnements maîtrisés. La plupart des robots industriels surpassent les humains sur des compétences spécifiques pour la réalisation de tâches dans des conditions restreintes. Dans les faits, les capacités humaines d'adaptation à des environnements variés ont encore beaucoup à enseigner à la robotique, avec notamment l'habilité humaine inégalée, à maintenir des comportements stables pendant des interactions physiques. Toutefois, l'aube de la robotique de service fait déjà partie intégrante du passé, avec le développement d'exosquelettes, de robots chirurgicaux, et de robots industriels collaboratifs qui a déjà émergé. Comprendre et reproduire la robustesse des interactions physiques humaines est donc un sujet important pour la sécurité, la résilience et l'efficacité énergétique des robots. %
 %
 \newlineBlank
 %
-C'est en gardant ces objectifs à l'esprit que le contrôle moteur humain est étudié depuis plusieurs décennies sous le prismes des neurosciences et de l'automatique. L'une des approches qui s'inscrit dans cette démarche est l'étude de l'impédance mécanique comme modèle des relations reliant les forces d'interactions aux variables cinématiques lors de contacts physiques. Des modèles assez simples ont été capables de reproduire des performances proches de l'humain, mais l'identification des éléments constitutifs de ces représentations reste laborieuse. %
+C'est en gardant, entre autres, ces objectifs à l'esprit que le contrôle moteur humain est étudié depuis plusieurs décennies sous le prismes des neurosciences et de l'automatique. L'une des approches qui s'inscrit dans cette démarche est l'étude de l'impédance mécanique comme modèle des relations reliant les forces d'interactions aux variables cinématiques lors de contacts physiques. Des modèles assez simples ont été capables de reproduire des performances proches de l'humain, mais l'identification des éléments constitutifs de ces représentations reste laborieuse. %
 %
 \newlineBlank
 %
-En s'intéressant à une étude classique en sciences du mouvement humain, cette thèse propose une approche pour évaluer les variations du comportement humain en impédance, pendant une tâche rythmique avec des interactions physiques intermittentes. L'ambition \textit{in fine} est d'atteindre des comportements proches de l'humain en avançant des lois de contrôles bio-inspirées de robot pour des tâches cycliques en interaction avec l'environnement.
+En s'intéressant à une étude classique en sciences du mouvement humain, cette thèse propose une approche pour évaluer les variations du comportement humain en impédance, pendant une tâche rythmique avec des interactions physiques intermittentes. L'ambition \textit{in fine} est d'atteindre des comportements proches de l'humain en avançant des lois de commandes bio-inspirées de robot pour des tâches cycliques en interaction avec l'environnement.
 
 \vfill
 \hspace{0pt}
@@ -95,13 +100,39 @@ En s'intéressant à une étude classique en sciences du mouvement humain, cette
 
 \newpage
 
+\section*{Introduction}  \label{sec_intro}
+
+Les sciences du mouvement humain regroupent des connaissances en psychologie, biomécanique, neurosciences et physiologie pour étudier le contrôle, la structuration ainsi que l'apprentissage du mouvement chez l'humain ainsi que d'autres espèces animales. L'unité de recherche CIAMS pour \textit{Complexité, Innovation, Activités Motrices et Sportives}, sous les tutelles des universités Paris-Saclay et Orléans, a positionné l'un de ses axes de recherches sur la modélisation et la compréhension de la performance et de la motricité. 
+%Un intérêt particulier est porté sur la modélisation des lois de commande du membre supérieur. Notamment
+%
+\newlineBlank
+%
+C'est bien souvent en observant son environnement, et en trouvant ses muses dans la nature que l'esprit humain trouve une inspiration créatrice. Ainsi Sénèque disait \textit{omnis ars naturae imitatio est}, repris plus d'un millénaire après par Pablo Picasso, \textit{La peinture ce n'est pas copier la nature mais c'est apprendre à travailler comme elle}. Ainsi, ces deux citations reflètent les deux approches différentes que sont le bio-mimétisme et la bio-inspiration. Le système neuro-musculo-squelettique humain, dont la complexité limite les méthodes mimétiques reste une grande source d'inspiration, notamment pour la robotique.
+%
+\newlineBlank
+%
+paragraphe sur l'utilisation pour la robotique et des travaux de G. Avrin (collaboration CIAMS L2S)
+%
+\newlineBlank
+%
+objectifs de l'expérience
+%
+\newlineBlank
+%
+plan : 1 - Mesure de l’impédance pour plusieurs participants ;
+2 - Étude de la variation d’impédance ;
+3 - Analyse de la robustesse obtenu grâce à cette variation et application en robotique ;
+4 - Établir le banc de test pour faire mesure d’impédance ;
+5 - Brève résume du rapport (comme dans les articles, chapitre 1 jonglerie et travaux de Guillaume, 2 mise en place du banc, 3 mesure d’impédance, 4 conclusions et perspectives).
+
 \section{La tâche de jonglerie avec un robot}  \label{sec_bouncing}
 
 \begin{flushright}
 	{\color{DarkGoldenrod} \textit{\textbf{Comment se place l'expérience par rapport aux travaux antérieurs ?}}}
 \end{flushright}
 
-This section presents some context about human rhythmic motor control, and previous work conducted by G. Avrin, then the ball bouncing task is detailed with the newly implication of physical interactions, and finally the experimental set-up is introduced.
+%This section presents some context about human rhythmic motor control, and previous work conducted by G. Avrin, then the ball bouncing task is detailed with the newly implication of physical interactions, and finally the experimental set-up is introduced.
+Cette section présente quelques éléments du contrôle moteur humain lors de tâches rythmiques, ainsi que les précédents travaux conduits par G. Avrin. La tâche de jonglerie est ensuite détaillée, avec les nouvelles implications dues aux interactions physiques, et enfin, la mise en place expérimentale est présentée.
 
 %------------------------------------------------
 
@@ -109,23 +140,24 @@ This section presents some context about human rhythmic motor control, and previ
 
 \subsubsection{Mouvements rythmiques} \label{sec_bouncing_sub_previous_sub_rhythmic}
 
-A la rencontre de la robotique, de l'automatique et des sciences du mouvement humain, \cite{siegler_passive_2010, avrin_model_2017}, se sont intéressés au névraxe (CNS, \textit{Central Nervous System}) lors de mouvements rythmiques, pour la tâche de jonglerie, dans un environnement simulé purement cinématique. Ils ont été capables de reproduire des performances proches de celles de l'humain, en utilisant une structure de contrôle se basant sur des réseaux locomoteurs spinaux, plus connus sous l'anglicisme \textit{Central Pattern Generators} (CPG). Le choix s'est porté sur un oscillateur non-linéaire \cite{matsuoka_sustained_1985}, pour jouer le rôle du CPG. En effet, il est admis qu'il s'agit d'un oscillateur bio-inspiré pouvant répliquer des comportements d'animaux dont celui de l'humain (\cite{zhang_analysis_2006,ijspeert_central_2008, pelc_resonant_2008, roy_chowdhury_finding_2015, avrin_model_2017}). Dans ces simulations, l'oscillateur non-linéaire, dont les équations sont rappelées \cref{eq_cpg_matsuoka} prenait en entrée les données cinématiques de la balle pour à la fois contrôler l'amplitude et la fréquence du mouvement uni-articulaire du coude d'un bras humain simulé. Le réglage des paramètres de l'oscillateur de Matsuoka a été obtenu grâce à un algorithme d'optimisation de type essaim particulaire (PSO, \textit{Particule Swarm Optimization}), \cite{avrin_particle_2016}.
+A la rencontre de la robotique, de l'automatique et des sciences du mouvement humain, \cite{siegler_passive_2010, avrin_model_2017}, se sont intéressés au névraxe (CNS, \textit{Central Nervous System}) lors de mouvements rythmiques, pour la tâche de jonglerie, dans un environnement simulé purement cinématique. Ils ont été capables de reproduire des performances proches de celles de l'humain, en utilisant une structure de contrôle se basant sur des réseaux locomoteurs spinaux, plus connus sous l'anglicisme \textit{Central Pattern Generators} (CPG). Le choix s'est porté sur un oscillateur non-linéaire de \cite{matsuoka_sustained_1985}, pour jouer le rôle du CPG. En effet, il est admis qu'il s'agit d'un oscillateur bio-inspiré pouvant répliquer des comportements d'animaux dont celui de l'humain (\cite{zhang_analysis_2006,ijspeert_central_2008, pelc_resonant_2008, roy_chowdhury_finding_2015, avrin_model_2017}). Dans ces simulations, l'oscillateur non-linéaire%, dont les équations sont rappelées \cref{eq_cpg_matsuoka} 
+prenait en entrée les données cinématiques de la balle pour contrôler à la fois l'amplitude et la fréquence du mouvement uni-articulaire du coude d'un bras humain simulé. Le réglage des paramètres de l'oscillateur de Matsuoka a été obtenu grâce à un algorithme d'optimisation de type essaim particulaire (PSO, \textit{Particule Swarm Optimization}), \cite{avrin_particle_2016}.
 
-\begin{equation} \label{eq_cpg_matsuoka}
-\begin{split}
-	\tau_r \dot{x}_1(t) &= -x_1(t)-\beta \nu_1(t) - \omega y_2(t) - h\max(0,m(t)) + c \\
-	\tau_a \dot{\nu}_1(t) &=-\nu_1(t)+y_1(t) \\
-	\tau_r \dot{x}_2(t) &= -x_2(t)-\beta \nu_2(t) - \omega y_1(t) - h\min(0,m(t)) + c \\
-	\tau_a \dot{\nu}_2(t) &=-\nu_2(t)+y_2(t) \\
-	y_{out} &= \max(x_1,0) - \max(x_2,0)
-\end{split}
-\end{equation}
-
-La sortie de l'oscillateur est donnée par $y_{out}$, les $x_i$ et $\nu_i$ correspondent à ... [+ peut-être serait-il intéressant d'y joindre un schéma de l'oscillateur de Matsuoka peut-être plus parlant que les équations \& explications ?]
+%\begin{equation} \label{eq_cpg_matsuoka}
+%\begin{split}
+%	\tau_r \dot{x}_1(t) &= -x_1(t)-\beta \nu_1(t) - \omega y_2(t) - h\max(0,m(t)) + c \\
+%	\tau_a \dot{\nu}_1(t) &=-\nu_1(t)+y_1(t) \\
+%	\tau_r \dot{x}_2(t) &= -x_2(t)-\beta \nu_2(t) - \omega y_1(t) - h\min(0,m(t)) + c \\
+%	\tau_a \dot{\nu}_2(t) &=-\nu_2(t)+y_2(t) \\
+%	y_{out} &= \max(x_1,0) - \max(x_2,0)
+%\end{split}
+%\end{equation}
+%
+%La sortie de l'oscillateur est donnée par $y_{out}$, les $x_i$ et $\nu_i$ correspondent à ... [+ peut-être serait-il intéressant d'y joindre un schéma de l'oscillateur de Matsuoka peut-être plus parlant que les équations \& explications ?]
 
 \subsubsection{Jonglerie} \label{sec_bouncing_sub_previous_sub_bouncing}
 
-La tâche de jonglerie est bien connue en science du mouvement humain, dans cette tâche, des sujets souvent experts doivent faire rebondir la balle pour atteindre une hauteur cible $h$, soit en utilisant leur main comme le ferait un jongleur, soit en utilisant une raquette comme le ferait un pongiste. La tâche est illustrée par la \cref{fig_ball_bouncing_task}.
+La tâche de jonglerie est bien connue en sciences du mouvement humain. Dans cette tâche, des sujets souvent experts doivent faire rebondir la balle pour atteindre une hauteur cible $h$, soit en utilisant leur main comme le ferait un jongleur, soit en utilisant une raquette comme le ferait un pongiste. La tâche est illustrée par la \cref{fig_ball_bouncing_task}.
 % 
 \newlineBlank
 %
@@ -143,7 +175,7 @@ L'impact de la balle sur la raquette est modélisé d'une manière simplifiée p
 \dot{z}^+_{k} = \max\left(\dot{z}^p_k, \left((1+\alpha)\dot{z}^p_k-\alpha\dot{z}_{k}^-\right)\right)
 \end{equation}
 
-Les équations précédentes permettent d'extraire des caractéristiques notables, comme le temps de l'apex entre deux impacts $ k $ et $ k+1 $, $ t_a = \dot{z}_k^+/g $, représenté en \cref{fig_ball_bouncing_task}. De cette durée, il est facile de déduire la fréquence de la tâche $ f = 1/(2t_a) $, que l'on peut aussi écrire $ f = g/(2\dot{z}_k^+) $ en injectant l'équation du temps de l'apex $ t_a $. Il est ensuite possible de lier la hauteur de la balle à l'apex $ z_a $, la vitesse de la balle post-impact et la fréquence du cycle \cref{eq_apex}.
+Les équations précédentes permettent d'extraire des caractéristiques principales, comme l'instant où la balle atteint son apex entre deux instant $ k $ et $ k+1 $, $ t_a = \dot{z}_k^+/g $, représenté en \cref{fig_ball_bouncing_task}. De cette durée, il est facile de déduire la fréquence de la tâche $ f = 1/(2t_a) $, que l'on peut aussi écrire $ f = g/(2\dot{z}_k^+) $ en injectant l'équation du temps de l'apex $ t_a $. Il est ensuite possible de lier la hauteur de la balle à l'apex $ z_a $, la vitesse de la balle post-impact et la fréquence du cycle \cref{eq_apex}.
 %
 \begin{equation} \label{eq_apex}
 z_a - z_k = \frac{(\dot{z}_k^+)^2}{2g} = \frac{\dot{z}_k^+}{4f}
@@ -182,7 +214,7 @@ La modélisation par l'impédance mécanique permet de répliquer le comportemen
 %
 \newlineBlank
 %
-Dans le cas spécifique de l'étude de jonglerie à un seul degré de liberté, on ne s'intéressera qu'au comportement dynamique du bras le long de l'axe considéré. Ainsi, l'impédance du bras est étudiée au niveau cartésien, les composantes des comportements sur les axes perpendiculaires ne sont pas considérés (\textit{aucun effet de couplage entre les différents axes n'est considéré}), et les impédances liées aux couples ne sont pas non plus considérées. L'équation du modèle visco-élastique KBI est alors simplifiée, donnant l'équation \cref{eq_impedance_z}. On trouve alors $ \delta f_z $ le différentiel entre la force virtuelle et la force suite à la perturbation, $ \delta z $ le différentiel entre la position virtuelle et la position perturbée et $ K_z $, $ B_z $ et $ I_z $ les paramètres unidimensionnels du modèle KBI pour l'axe $ \vect{z} $, respectivement en \si{\newton\per\metre}, \si{\newton\second\per\metre} et \si{\kilogram}.
+Dans le cas spécifique de l'étude de jonglerie à un seul degré de liberté, on ne s'intéressera qu'au comportement dynamique du bras le long de l'axe cartésien vertical $ \vect{z} $. Ainsi, l'impédance du bras est étudiée au niveau cartésien, les composantes des comportements sur les axes perpendiculaires ne sont pas considérés (\textit{aucun effet de couplage entre les différents axes n'est considéré}), et les impédances liées aux couples ne sont pas non plus considérées. L'équation du modèle visco-élastique KBI (raideur, amortissement et masse) est alors simplifiée, donnant l'équation \cref{eq_impedance_z}. On trouve alors $ \delta f_z $ le différentiel entre la force virtuelle et la force suite à la perturbation, $ \delta z $ le différentiel entre la position virtuelle et la position perturbée et $ K_z $, $ B_z $ et $ I_z $ les paramètres unidimensionnels du modèle KBI pour l'axe $ \vect{z} $, respectivement en \si{\newton\per\metre}, \si{\newton\second\per\metre} et \si{\kilogram}.
 
 \begin{equation} \label{eq_impedance_z}
 	\delta f_z = K_z\delta z + B_z\delta\dot{z} + I_z\delta\ddot{z} 
@@ -190,15 +222,15 @@ Dans le cas spécifique de l'étude de jonglerie à un seul degré de liberté, 
 
 \subsection{Cadre expérimental} \label{sec_bouncing_sub_experiment}
 
-Pour réaliser des estimations d'impédance du bras au court de la tâche jonglerie, cette dernière sera simulée dans un environnement virtuel dans lequel les conditions expérimentales (accélération gravitationnelle, coefficient de restitution de la raquette, masse de la balle, hauteur cible...) sont facilement contrôlables.
+Pour réaliser des estimations d'impédance du bras au cours de la tâche jonglerie, cette dernière sera simulée dans un environnement virtuel dans lequel les conditions expérimentales (accélération gravitationnelle, coefficient de restitution de la raquette, masse de la balle, hauteur cible...) sont facilement contrôlables.
 %
 \newlineBlank
 %
-La position verticale de la raquette dans l'environnement simulé est liée à la position cartésienne de l'effecteur du robot le long de l'axe z. Un gain $ k_G $ pourra être appliqué entre le mouvement réel du robot, et le mouvement simulé de la raquette pour ajuster les variables cinématiques simulées. Comme montré sur la \cref{fig_comanipulation_ctrl}, le robot peut être manipulé par un humain grâce à une poignée. Cette poignée est reliée à l'effecteur du robot par une interface physique, intégrant un capteur de force qui permet la mesure des forces d'interactions entre le robot et l'humain.
+La position verticale de la raquette dans l'environnement simulé est liée à la position cartésienne de l'effecteur du robot le long de l'axe z. Un gain $ k_G $ pourra être appliqué entre le mouvement réel du robot, et le mouvement simulé de la raquette pour ajuster les variables cinématiques simulées. Comme montré sur la \cref{fig_exp_bench}, le robot peut être manipulé par un humain grâce à une poignée. Cette poignée est reliée à l'effecteur du robot par une interface physique, intégrant un capteur de force qui permet la mesure des forces d'interactions entre le robot et l'humain.
 %
 \newlineBlank
 %
-Comme on peut le voir sur la \cref{fig_comanipulation_ctrl}, l'environnement simulé est projeté sur un écran que l'opérateur humain doit regarder, cet environnement comprend : 
+Comme on peut le voir sur la \cref{fig_exp_bench}, l'environnement simulé est projeté sur un écran que l'opérateur humain doit regarder, cet environnement comprend : 
 \begin{enumerate*}[label=\roman*),itemjoin={,\quad}] 
 	\item la raquette, qui se déplace uniquement le long de l'axe vertical
 	\item une balle, elle aussi limitée à un mouvement unidimensionnel
@@ -221,13 +253,14 @@ L'objectif de la manipulation est d'observer un comportement rythmique chez l'hu
 	{\color{DarkGoldenrod} \textit{\textbf{Comment minimiser les effets d'un robot en interaction avec un humain sur la tâche étudiée?}}}
 \end{flushright}
 
-This section presents some admittance and impedance control strategies for intuitive human robot interactions. The admittance control with force feedback is described at both joint and endpoint levels to finally disclose the tuning of the proposed control.
+%This section presents some admittance and impedance control strategies for intuitive human robot interactions. The admittance control with force feedback is described at both joint and endpoint levels to finally disclose the tuning of the proposed control.
+Cette section présente des stratégies de commande en admittance et impédance pour des interactions homme-robot intuitives. Les contrôles en admittance est décrit aux niveaux articulaires et cartésien, avec le détail des réglages choisis pour l'expérience proposée.
 
 %-------------------------------------------------
 
 \subsection{Boucle de contrôle} \label{sec_robot_sub_ctrl_loop}
 
-Étant donné que les interactions entre l'humain et le robot sont localisées en son effecteur, un contrôle en impédance utilisant un capteur de force se prête bien à l'expérience. La littérature existante pour ce type de contrôle est assez riche, que ce soit dans les travaux de thèse de \cite{lamy_conception_2011}, pour la minimisation de l'inertie lors de tâches collaboratives \citep{Lamy_achieving_2009}, pour des tâches de téléopération \citep{ajoudani_tele-impedance_2012} où l'on cherche à imiter l'impédance du bras humain, ou dans la cas de robots redondants \citep{ficuciello_cartesian_2014}. Plusieurs revues de l'état de l'art ont par ailleurs été publiées, pour le cas particulier des composants à impédance variable \citep{vanderborght_variable_2013}, dans le cas spécifique du contrôle en admittance \citep{keemink_admittance_2018}, pour essayer d'unifier les contrôles en impédance et admittance \citep{ott_unified_2010}, et aussi dans le cas de mouvements bio-inspirés \citep{al-shuka_active_2018}.
+Étant donné que les interactions entre l'humain et le robot sont localisées en son effecteur, un contrôle en impédance utilisant un capteur de force se prête bien à l'expérience. La littérature existante pour ce type de contrôle est assez riche, que ce soit dans les travaux de thèse de \cite{lamy_conception_2011}, pour la minimisation de l'inertie lors de tâches collaboratives \citep{Lamy_achieving_2009}, pour des tâches de téléopération \citep{ajoudani_tele-impedance_2012} où l'on cherche à imiter l'impédance du bras humain, ou dans le cas de robots redondants \citep{ficuciello_cartesian_2014}. Plusieurs revues de l'état de l'art ont par ailleurs été publiées, pour le cas particulier des composants à impédance variable \citep{vanderborght_variable_2013}, dans le cas spécifique du contrôle en admittance \citep{keemink_admittance_2018}, pour essayer d'unifier les contrôles en impédance et admittance \citep{ott_unified_2010}, et aussi dans le cas de mouvements bio-inspirés \citep{al-shuka_active_2018}.
 
 \subsubsection{Contrôle articulaire} \label{sec_robot_sub_ctrl_loop_sub_joint}
 
@@ -255,7 +288,7 @@ Considérons le cas simplifié où $K_i$ est nul :
 %
 \begin{equation} \label{eq_vel_setpoint}
 	\begin{split}
-	\dot{\vect{q}}_d = K_p \jacobian{q}{}{t} \vect{F}_e
+	\dot{\vect{q}}_d = k_p \jacobian{q}{}{t} \vect{F}_e
 	\end{split}
 \end{equation}
 %
@@ -275,7 +308,7 @@ En associant les équations \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoi
 	\end{split}
 \end{equation}
 %
-Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ soit diagonal. Or il ne s'agit pas d'une propriété du jacobien en robotique. Dans le cas du robot étudié, ayant 3 degrés de liberté et 3 articulations actionnées, il est assez direct d'invalider la garantie de la diagonalité matricielle. La \cref{app_coupling_effect} démontre la non diagonalité, puis propose une estimation des effets de couplages sur l'axe $ \vect{x} $.
+Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ soit diagonal. Or il ne s'agit pas d'une propriété du jacobien en robotique. Dans le cas du robot étudié, ayant 3 degrés de liberté et 3 articulations actionnées, il est assez direct d'invalider la garantie de la diagonalité matricielle. L'\cref{app_coupling_effect} démontre la non diagonalité, puis propose une estimation des effets de couplages sur l'axe $ \vect{x} $.
 
 \paragraph{Guide virtuel}
 
@@ -295,10 +328,10 @@ Si l'on considère un robot avec 3 articulations d'actionnées, opérant dans le
 %
 \paragraph{Boucle de contrôle principale} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_main}
 
-L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé, fortement inspiré par la méthodologie décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p $ et $ K_i $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
+L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé (\cref{fig_comanipulation_ctrl}), fortement inspiré par la méthodologie décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p $ et $ K_i $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
 %
 \begin{equation} \label{eq_Fz_endpoint}
-	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \begin{pmatrix} 0 & \left(K_z + \frac{K_i}{s}\right)f_z & 0 \end{pmatrix}^t
+	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \begin{pmatrix} 0 & \left(K_p + \frac{K_i}{s}\right)f_z & 0 \end{pmatrix}^t
 \end{equation}
 %
 \paragraph{Boucle de contrôle secondaire autour de x\textsubscript{0}} 
@@ -315,7 +348,7 @@ Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un con
 
 On distingue deux sources d'erreurs pouvant donner lieu à des phénomènes de couplage : 
 \begin{enumerate}
-	\item l'erreur de trainage $ \dot{q}_{\epsilon} $ provoquée par la dynamique de la boucle en vitesse articulaire du robot, et multipliée par le jacobien réel du robot $ \jacobian{q}{}{} $
+	\item l'erreur de trainage $ \dot{q}_{\epsilon} $ provoquée par la dynamique de la boucle en vitesse articulaire du robot, et multipliée par le jacobien réel du robot $ \jacobian{q}{}{} $,
 	\item les erreurs d'estimation du jacobien $ \Delta\jacobian{q}{}{} $, qui sont multipliées par les consignes de vitesses articulaires $ \dot{q_d} $.
 \end{enumerate}
 La deuxième source d'erreur est difficile à quantifier, puisqu'elle provient d'une erreur de modélisation. On peut aussi considérer l'erreur de mesure des vitesses articulaires, qui comme l'erreur précédente, nécessite des équipements d'observation externes au robot (\textit{eg. caméra}), et un calibrage précis pour une évaluation.
@@ -372,7 +405,7 @@ La boucle de commande considérée pour l'expérience est réalisée en vitesse 
 	\dot{\vect{q}}_2^p = \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2,
 \end{equation}
 %
-avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection de $ \dot{\vect{q}}_2 $ dans le noyau de la tâche $ \dot{\vect{q}}_1 $. La \cref{app_projection_effects_on_main_task} s'intéresse plus en détails aux effets de cette projection sur la tâche principale.
+avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection de $ \dot{\vect{q}}_2 $ dans le noyau de la tâche $ \dot{\vect{q}}_1 $. L'\cref{app_projection_effects_on_main_task} s'intéresse plus en détails aux effets de cette projection sur la tâche principale.
 
 \paragraph{Contrôle en transparence complet}
 
@@ -402,7 +435,7 @@ Les gains du correcteur $ C_z $ en admittance sont soumis au compromis performan
 
 \paragraph{Analyse théorique} 
 
-On donne le modèle dynamique général d'un robot en contact avec un environnement \cref{eq_dyn_model_robot}, avec $ \matr{M} $ la matrice d'inertie du robot, $ \matr{H} $ la matrice regroupant les phénomènes liées à la position et à la vitesse - \textit{eg. forces centrifuges, poids}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur.
+On donne le modèle dynamique général d'un robot en contact avec un environnement \cref{eq_dyn_model_robot}, avec $ \matr{M} $ la matrice d'inertie du robot, $ \matr{H} $ la matrice regroupant les phénomènes liées à la position et à la vitesse - \textit{e.g., forces centrifuges, poids}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur.
 %
 \begin{equation} \label{eq_dyn_model_robot}
 	\matr{M}(\vect{q})\ddot{\vect{q}} + \matr{H}(\dot{\vect{q}}, \vect{q}) = \vect{\tau}_r + \vect{\tau}_{e}
@@ -422,7 +455,7 @@ En utilisant la relation \cref{eq_link_joint_endpoint_velocity} pour passer des 
 	\end{split}
 \end{equation}
 
-Si on néglige les effets liées aux forces centrifuges et aux forces de Coriolis, et aussi la gravité qui est compensée par la boucle de contrôle, alors on peut considérer que $ \matr{H} $ se résume aux phénomènes frottements, on ne prendra en compte que les frottements visqueux $ \vect{f}_v $, l'équation \cref{eq_dyn_model_robot_2} devient alors \cref{eq_dyn_model_robot_3}.
+Si on néglige les effets liées aux forces centrifuges et aux forces de Coriolis, et aussi la gravité qui est compensée par la boucle de contrôle, alors on peut considérer que $ \matr{H} $ se résume aux phénomènes frottements. En ne prenant en compte que les frottements visqueux $ \vect{f}_v $, l'équation \cref{eq_dyn_model_robot_2} devient alors \cref{eq_dyn_model_robot_3}.
 %
 \begin{equation} \label{eq_dyn_model_robot_3}
 	\ddot{\vect{x}} - \jacobianDot{\vect{q}}{}{} \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} = \jacobian{\vect{q}}{}{} \matr{M}(\vect{q})^{-1} \left( \vect{\tau}_r + \jacobian{\vect{q}}{}{t} \vect{f}_{e} - \vect{f}_v \jacobian{\vect{q}}{}{-1} \dot{\vect{x}} ) \right)
@@ -458,7 +491,7 @@ que l'on peut réarranger pour grouper les termes liés au mouvement et les term
 
 \paragraph{Validation expérimentale}
 
-Pour assurer des interactions sécurisé et robuste, une cartographie de la stabilité a été déterminée empiriquement sous deux conditions expérimentales. Premièrement on a opéré avec la co-manipulation la plus contraignante, ce qui correspond à un déplacement rythmique du robot avec des co-contractions intentionnelles du bras et de la main aussi intenses que possible. Ensuite, la deuxième condition correspond à une exécution nominal de la tâche de jonglerie, avec des co-contractions plus faibles. Pour chacune de ces conditions, le comportement de la boucle fermée est classé dans quatre catégories : 
+Pour assurer des interactions sûres et robustes, une cartographie de la stabilité a été déterminée empiriquement sous deux conditions expérimentales. Premièrement on a opéré avec la co-manipulation la plus contraignante, ce qui correspond à un déplacement rythmique du robot avec des co-contractions intentionnelles du bras et de la main aussi intenses que possible. Ensuite, la deuxième condition correspond à une exécution nominal de la tâche de jonglerie, avec des co-contractions plus faibles. Pour chacune de ces conditions, le comportement de la boucle fermée est classé dans quatre catégories : 
 \begin{enumerate*} [label=\roman*),itemjoin={,\quad}]
 	\item Instable, impraticable
 	\item Critique, à peine praticable 
@@ -481,13 +514,12 @@ Des exemples théoriques des comportements décrits de la réponse en boucle fer
 	{\color{DarkGoldenrod} \textit{\textbf{Comprendre les stratégies de modulation de l'impédance lors d'interactions cycliques prévisibles.}}}
 \end{flushright}
 
-This section presents the methodologies and tools used for the impedance estimation. First results are analysed, demonstrating the feasibility of the task under the proposed protocol and first insights into impedance identification.
+%This section presents the methodologies and tools used for the impedance estimation. First results are analysed, demonstrating the feasibility of the task under the proposed protocol and first insights into impedance identification.
+Cette section présente les outils et méthodes utilisées pour l'estimation d'impédance. Des résultats préliminaires sont analysés, et démontrent la faisabilité de la tâche avec le protocole proposé.
 
-\subsection{Rappel littérature} \label{sec_impedance_estimation_sub_litterature}
+\subsection{Etat de l'art} \label{sec_impedance_estimation_sub_litterature}
 
-[le découpage de cette partie est à revoir...]
-
-Tout un écosystème de la littérature s'est intéressé à l'impédance du membre supérieur en utilisant un système robotisé à 2 degrés de liberté, évoluant dans le plan horizontal, souvent appelé \textit{Manipulandum}. Ainsi, \cite{mussa-ivaldi_neural_1985,dolan_dynamic_1993, tsuji_human_1995,gomi_human_1997,burdet_method_2000} utilisent ce type de banc expérimental, permettant aussi bien de réaliser des tâches isométriques (\cite{mussa-ivaldi_neural_1985,dolan_dynamic_1993,tsuji_human_1995,gomi_human_1997}) que des tâches en mouvement (\cite{gomi_human_1997,burdet_method_2000}). Par ailleurs, il est aussi bien possible d'introduire les perturbations en force (\cite{dolan_dynamic_1993,gomi_human_1997}) qu'en position (\cite{mussa-ivaldi_neural_1985,tsuji_human_1995,gomi_human_1997,burdet_method_2000}).
+Tout un écosystème dans le domaine s'est intéressé à l'impédance du membre supérieur en utilisant un système robotisé à 2 degrés de liberté, évoluant dans le plan horizontal, souvent appelé \textit{Manipulandum}. Ainsi, \cite{mussa-ivaldi_neural_1985,dolan_dynamic_1993, tsuji_human_1995,gomi_human_1997,burdet_method_2000} utilisent ce type de banc expérimental, permettant aussi bien de réaliser des tâches isométriques (\cite{mussa-ivaldi_neural_1985,dolan_dynamic_1993,tsuji_human_1995,gomi_human_1997}) que des tâches en mouvement (\cite{gomi_human_1997,burdet_method_2000}). Par ailleurs, il est aussi bien possible d'introduire les perturbations en force (\cite{dolan_dynamic_1993,gomi_human_1997}) qu'en position (\cite{mussa-ivaldi_neural_1985,tsuji_human_1995,gomi_human_1997,burdet_method_2000}).
 %
 \newlineBlank
 %
@@ -503,7 +535,7 @@ Dans des travaux plus récent, \cite{guarin_unbiased_2018} introduisent de faibl
 %
 \newlineBlank
 %
-Dans leur deuxième expérience, \cite{gomi_human_1997} proposent une tâche de pointage et utilisent la trajectoire moyenne comme référence en l'affichant sur un écran. De faibles perturbations en force d'une durée d'environs \SI{0.2}{\second} sont utilisées pour perturber le bras humain. \cite{abe_modulation_2003} dans une expérience de tâche cyclique à un degré de liberté, avec un banc expérimental assez différent, introduisent des perturbations en couples d'une période d'environs \SI{200}{\milli\second}, et de l'ordre d'une dizaine de Newton mètre, avec un mécanisme externe. \cite{erden_hand_2015} pour une tâche de soudure planaire, impliquant d'exercer des forces verticales, ont réalisé des mesures d'impédance à l'aide d'un robot à 7 articulations, dont le contrôle est rendu collaboratif grâce à l'utilisation d'un capteur de forces, ils introduisent des perturbations en force grâce au robot, et obtiennent la position de l'effecteur grâce au données articulaires. Les perturbations sont de l'ordre de \SI{4}{\newton} pour une durée de \SI{100}{\milli\second}.
+Dans leur deuxième expérience, \cite{gomi_human_1997} proposent une tâche de pointage et utilisent la trajectoire moyenne comme référence en l'affichant sur un écran. De faibles perturbations en force d'une durée d'environs \SI{0.2}{\second} sont utilisées pour perturber le bras humain. \cite{abe_modulation_2003} dans une expérience de tâche cyclique à un degré de liberté, avec un banc expérimental assez différent, introduisent des perturbations en couples d'une période d'environs \SI{200}{\milli\second}, et de l'ordre d'une dizaine de Newton mètre, avec un mécanisme externe. \cite{erden_hand_2015} pour une tâche de soudure planaire, impliquant d'exercer des forces verticales, ont réalisé des mesures d'impédance à l'aide d'un robot à 7 articulations, dont le contrôle est rendu collaboratif grâce à l'utilisation d'un capteur de forces. Ils introduisent des perturbations en force grâce au robot, et obtiennent la position de l'effecteur grâce au données articulaires. Les perturbations sont de l'ordre de \SI{4}{\newton} pour une durée de \SI{100}{\milli\second}.
 %
 %\newlineBlank
 %
@@ -513,7 +545,7 @@ Dans leur deuxième expérience, \cite{gomi_human_1997} proposent une tâche de 
 
 \subsubsection{Équipements} \label{sec_impedance_estimation_sub_tools_sub_apparatus}
 
-Dans le cadre de cette thèse, un robot articulé à 5 degrés de liberté est utilisé, le youBot arm de KUKA\textsuperscript{TM}. Ses boucles de contrôle bas niveau en courants et vitesses articulaires sont embarqués sur des cartes de contrôle internes, qui permettent d'atteindre des temps de cycles faibles (jusqu'à \SI{50}{\micro\second} pour le courant). Le réglage des correcteurs reste accessibles grâce à l'API fournie par KUKA\textsuperscript{TM}. Ces derniers fournissent par ailleurs une interface ROS pour contrôler le robot. Après quelques modifications, il est possible de contrôler le robot en courant. Les boucles plus haut niveau, détaillée notamment en \cref{fig_comanipulation_ctrl} sont donc implémentées en utilisant ROS sur un ordinateur dédié. Une fréquence d'environ \SI{1.00}{\kilo\hertz} a pu être atteinte.
+Dans le cadre de cette thèse, un robot articulé à 5 degrés de liberté est utilisé, le youBot arm de KUKA\textsuperscript{TM}. Ses boucles de contrôle bas niveau en courants et vitesses articulaires sont embarqués sur des cartes de contrôle internes, qui permettent d'atteindre des temps de cycles faibles (jusqu'à \SI{50}{\micro\second} pour le courant). Le réglage des correcteurs reste accessible grâce à l'interface de programmation (API, \textit{Application Programming Interface}) fournie par KUKA\textsuperscript{TM}. Une interface ROS (\textit{Robot Operating System}) est par ailleurs disponible pour contrôler le robot. Le robots peut être commandés en courant, vitesse ou position articulaire en utilisant les boucles internes. Les boucles plus haut niveau, détaillée notamment en \cref{fig_comanipulation_ctrl} sont donc implémentées en utilisant ROS sur un ordinateur dédié. Une fréquence d'environ \SI{1.00}{\kilo\hertz} a pu être atteinte.
 %
 \newlineBlank
 %
@@ -558,23 +590,23 @@ Lors de l'analyse hors ligne des données pour l'estimation d'impédance, seules
 
 \subsubsection{Identification des paramètres en impédance} \label{sec_impedance_estimation_sub_tools_sub_optimization}
 
-L'identification d'impédance peut être opérée au niveau articulaire, ce qui impose une maîtrise ou mesure complète du mouvement, et plus seulement une mesure de la trajectoire de l'effecteur. Dans le cadre de cette étude, c'est le comportement global en impédance au niveau de l'effecteur qui est étudié, cette partie de la littérature n'est donc pas plus détaillée. 
+%L'identification d'impédance peut aussi être opérée au niveau articulaire, ce qui impose une maîtrise ou mesure complète du mouvement, et plus seulement une mesure de la trajectoire de l'effecteur. Dans le cadre de cette étude, c'est le comportement global en impédance au niveau de l'effecteur qui est étudié, cette partie de la littérature n'est donc pas plus détaillée. 
 %
-\newlineBlank
+%\newlineBlank
 %
 Les travaux décrit en \cref{sec_impedance_estimation_sub_litterature} utilisent pour une grande majorité des méthodes d'identification régressives basées sur les moindres carrés. Dans le cadre de perturbations en position, cette régression peut-être effectuée uniquement sur la raideur, la position perturbée pouvant être maintenue grâce à contrôle précis. \cite{burdet_method_2000} a donc pu proposer une identification de la raideur seule en utilisant \SI{60}{\milli\second} de données stables, suite à la perturbation. A l'inverse, les perturbations en force imposent l'identification simultanée de la raideur, de l'amortissement et de la masse, et donc nécessite plus d'échantillons, mais leur mise en place est plus simple pour des identifications en mouvement.
 %
 \newlineBlank
 %
-Il est intéressant de signaler que des méthodes d'identification différentes ont été proposées dans la littérature. \cite{piovesan_measuring_2012} ont en effet proposé d'utiliser une approche fréquentielle, permettant d'éviter les nombreuses répétitions nécessaires avec les méthodes précédentes. Par ailleurs, des méthodes plus complexes proposées par \cite{kearney_identification_1997} avec une analyse impulsionnelle et non linéaire en utilisant un modèle de Hammerstein, ou \cite{guarin_unbiased_2018} avec une identification non paramétrique, ont pour vocation de séparer la raideur intrinsèques de la raideur induite par les réflexes. En effet, la raideur due aux différents réflexes ne peut pas être modélisée intégralement avec un modèle linéaire. Toutefois, des travaux précédemment évoqués ont réussi à modéliser et reproduire des comportements en impédance avec des modèles linéarisés pour de faibles déviations. 
+Il est intéressant de signaler que des méthodes d'identification différentes ont été proposées dans la littérature. \cite{piovesan_measuring_2012} ont en effet proposé d'utiliser une approche fréquentielle, permettant d'éviter les nombreuses répétitions nécessaires avec les méthodes précédentes. Par ailleurs, des méthodes plus complexes proposées par \cite{kearney_identification_1997} avec une analyse impulsionnelle et non linéaire en utilisant un modèle de Hammerstein, ou \cite{guarin_unbiased_2018} avec une identification non paramétrique, ont pour vocation de séparer la raideur intrinsèque de la raideur induite par les réflexes. En effet, la raideur due aux différents réflexes ne peut pas être modélisée intégralement avec un modèle linéaire. Toutefois, des travaux précédemment évoqués ont réussi à modéliser et reproduire des comportements en impédance avec des modèles linéarisés pour de faibles déviations. 
 %
 \newlineBlank
 %
-L'objectif \textit{in fine} de la thèse est d'observer des variations du comportement en impédance pendant une tâche rythmique, avec un robot poly-articulé, pour ensuite en déduire des commandes bio-inspirées. Les travaux conduits par \cite{erden_end-point_2015,erden_hand_2015} proposent une méthodologie qui a fortement inspiré la mise en place de l'estimation d'impédance. En étudiant l'impédance cartésienne de manière découplée comme dans leurs travaux, on peut utiliser le modèle KBI \cref{eq_impedance_z} en s'intéressant uniquement aux effets de l'impédance sur le degré de liberté de la tâche de jonglerie. Une identification par les moindres carrés permet d'identifier des paramètres constants. Toutefois, en réalisant plusieurs estimations à différents instants du cyclique de jonglerie, il est possible d'observer des variations, en comparant chaque identification, à la manière de \cite{tsuji_bio-mimetic_2008}.
+L'objectif \textit{in fine} de la thèse est d'observer des variations du comportement en impédance pendant une tâche rythmique, avec un robot poly-articulé, pour ensuite en déduire des commandes bio-inspirées. Les travaux conduits par \cite{erden_end-point_2015,erden_hand_2015} proposent une méthodologie qui a fortement inspiré la mise en place de l'estimation d'impédance. En étudiant l'impédance cartésienne de manière découplée comme dans leurs travaux, on peut utiliser le modèle KBI \cref{eq_impedance_z} en s'intéressant uniquement aux effets de l'impédance sur le degré de liberté de la tâche de jonglerie. Une identification par les moindres carrés permet d'identifier des paramètres constants. Toutefois, en réalisant plusieurs estimations à différents instants du cycle de jonglerie, il est possible d'observer des variations, en comparant chaque identification, à la manière de \cite{tsuji_bio-mimetic_2008}.
 %
 \newlineBlank
 %
-L'équation \cref{eq_impedance_z}, devient donc \cref{eq_impedance_z_real}, avec $ f_{z}^c $ la force d'interaction mesurée par le capteur, $ \hat{f}_z^0 $ l'estimation de la force virtuelle et $ \hat{z}^0 $ l'estimation de la position virtuelle. \cite{erden_end-point_2015} ont montré que la régression linéaire par les moindres carrés, pouvait être réalisé en utilisant une fenêtre de 200 échantillons. 
+L'équation \cref{eq_impedance_z} devient donc \cref{eq_impedance_z_real}, avec $ f_{z}^c $ la force d'interaction mesurée par le capteur, $ \hat{f}_z^0 $ l'estimation de la force virtuelle et $ \hat{z}^0 $ l'estimation de la position virtuelle. \cite{erden_end-point_2015} ont montré que la régression linéaire par les moindres carrés, pouvait être réalisé en utilisant une fenêtre de 200 échantillons.
 
 \begin{equation} \label{eq_impedance_z_real}
 	-(f_{z}^c - \hat{f}_z^0) = K_z (\hat{z}^0 - z) + B_z (\dot{\hat{z}}^0 - \dot{z}) + I_z (\ddot{\hat{z}}^0 - \ddot{z})
@@ -612,9 +644,7 @@ Selon la nature des perturbations on préfèrera certaines des solutions propos�
 
 \subsubsection{Estimation des trajectoires virtuelles} \label{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}
 
-%\paragraph{name ?}
-
-La méthode d'estimation d'impédance décrite, repose sur les déviations en forces $ \delta \vect{f} $ et en trajectoires $ \delta \vect{x} $ produites par les perturbations, par rapport aux forces et trajectoires virtuelles (\cref{sec_bouncing_sub_interactions_sub_arm}). Par essence, ces trajectoires virtuelles en forces et positions sont inaccessibles et nécessitent donc d'être estimées. 
+La méthode d'estimation d'impédance décrite repose sur les déviations en forces $ \delta \vect{f} $ et en trajectoires $ \delta \vect{x} $ produites par les perturbations, par rapport aux forces et trajectoires virtuelles (\cref{sec_bouncing_sub_interactions_sub_arm}). Par essence, ces trajectoires virtuelles en forces et positions sont inaccessibles et nécessitent donc d'être estimées. 
 %
 \newlineBlank
 %
@@ -642,7 +672,7 @@ D'un côté quantitatif, \cite{erden_end-point_2015, erden_hand_2015} bien consc
 %
 \newlineBlank
 %
-Une fenêtre d'une durée de \SI{200}{\milli\second} a donc été choisie [ce qui correspond au temps de réponse du bras humain ??]. L'interpolation de la trajectoire virtuelle réalisée avec Matlab\textsuperscript{TM} en utilisant des splines cubiques, utilise les données \SI{100}{\milli\second} avant et après (tirets oranges sur la \cref{fig_perturbed_virtual_traj}) pour réaliser l'estimation de la trajectoire sur la fenêtre de \SI{200}{\milli\second} (lignes avec des points oranges sur la \cref{fig_perturbed_virtual_traj}).
+Une fenêtre d'une durée de \SI{200}{\milli\second} a donc été choisie, ce qui d'après les observations expérimentales réalisées lors de cette thèse, correspond approximativement au temps de réponse vis-vis des perturbations. L'interpolation de la trajectoire virtuelle réalisée avec Matlab\textsuperscript{TM} en utilisant des splines cubiques, utilise les données \SI{100}{\milli\second} avant et après (tirets oranges sur la \cref{fig_perturbed_virtual_traj}) pour réaliser l'estimation de la trajectoire sur la fenêtre de \SI{200}{\milli\second} (lignes avec des points oranges sur la \cref{fig_perturbed_virtual_traj}).
 
 \paragraph{Évaluation} Afin de valider la fiabilité de la trajectoire virtuelle estimée, la procédure d'estimation a été conduite sur des trajectoires non perturbées. De cette manière, si cette méthode permet de reproduire le mouvement humain, les écarts entre la trajectoire prédite et la trajectoire réelle devraient tendre vers zéro. Pour ne pas masquer des erreurs, le mouvement cyclique a été découpé en 4 phases, montrées en \cref{fig_traj_spline_evaluation}, qui seront évaluées séparément dans un premier temps : 
 \begin{enumerate*}[label=\roman*),itemjoin={,\quad}] 
@@ -654,20 +684,20 @@ Une fenêtre d'une durée de \SI{200}{\milli\second} a donc été choisie [ce qu
 %
 \newlineBlank
 %
-Sur l'essai donné en \cref{fig_ball_bouncing_experiment}, les pics de positions ont été repérés, afin de permettre la classification des cycles en phases. Le début de l'estimation est défini par un délai (pouvant être négatif) à partir de ces pics. Pour obtenir une trajectoire sur un pic iii) et iv), un délai négatif de \SI{100}{\milli\second} est injecté de manière à centrer la fenêtre d'estimation sur le pic. Pour les autres phases i) et ii), la durée moyenne, ainsi que l'écart type des 93 cycles ont été calculés. Avec une moyenne de cycle de \SI{434}{\milli\second}, et un écart type de \SI{62}{\milli\second}, un délai de \SI{155}{\milli\second} est choisi. La différenciation entre les phases pré-déterminées est ensuite facilement obtenue à l'aide de la vitesse ou des valeurs initiale et finale.
+Sur l'essai donné en \cref{fig_ball_bouncing_experiment}, les extrema de positions ont été repérés, afin de permettre la classification des cycles en phases. Le début de l'estimation est défini par un délai (pouvant être négatif) à partir de ces extrema. Pour obtenir une trajectoire sur un extremum iii) et iv), un délai négatif de \SI{100}{\milli\second} est injecté de manière à centrer la fenêtre d'estimation sur l'extremum. Pour les autres phases i) et ii), la durée moyenne, ainsi que l'écart type des 93 cycles ont été calculés. Avec une moyenne de cycle de \SI{434}{\milli\second}, et un écart type de \SI{62}{\milli\second}, un délai de \SI{155}{\milli\second} est choisi. La différenciation entre les phases pré-déterminées est ensuite facilement obtenue à l'aide de la vitesse ou des valeurs initiale et finale.
 %
 %%%%%%%%
 \input{latex_figures/fig_spline_trajectory.tex}
 
-L'ensemble des données classées donne 33 jeux de données pour chacune des phases ii) et iii) et 45 jeux de données pour chacune des phase i) et iv). Chacun des jeux de données contient \SI{200}{\milli\second} échantillonnées à \SI{1}{\kilo\hertz}. Les écarts entre la position mesurée avec le système de vision, et la position estimée à l'aide de l'interpolation, sont normalisés par rapport à l'amplitude du mouvement. Les résultats de cette analyse sont affichés sous forme d'histogrammes en \cref{fig_hist_err_spline_position}. 
+L'ensemble des données recueillies jusqu'à présent et classées donne 33 jeux de données pour chacune des phases ii) et iii) et 45 jeux de données pour chacune des phase i) et iv). Chacun des jeux de données contient \SI{200}{\milli\second} échantillonnées à \SI{1}{\kilo\hertz}, sans perturbations. Les écarts entre la position mesurée avec le système de vision, et la position estimée à l'aide de l'interpolation, sont normalisés par rapport à l'amplitude du mouvement. Les résultats de cette analyse sont affichés sous forme d'histogrammes en \cref{fig_hist_err_spline_position}. 
 %
 \input{latex_figures/fig_histogram_error_spline.tex}
 
-Pour les phases i), ii) et iv) une forme gaussienne centrée proche de 0 semble se dégager. On remarque par ailleurs, que l'erreur de position sur les phases i) et ii) semble moins dispersée, puisque les écarts type pour ces deux premières phases, donnés dans la \cref{tab_sline_position_errors}, sont inférieurs aux deux dernières. On reste toutefois, même dans le moins bon cas, pour les pics supérieurs iii), sur un écart type inférieur à 3\%.
+Pour les phases i), ii) et iv) une forme gaussienne centrée proche de 0 semble se dégager. On remarque par ailleurs, que l'erreur de position sur les phases i) et ii) semble moins dispersée, puisque les écarts type pour ces deux premières phases, donnés dans la \cref{tab_sline_position_errors}, sont inférieurs aux deux dernières. On reste toutefois, même dans le moins bon cas, pour les maxima de position iii), sur un écart type inférieur à 3\%.
 %
 \newlineBlank
 %
-Il est toutefois important de noter que les splines cubiques sont des fonctions $ C^2 $. Par conséquent, lorsqu'on cherche à obtenir l'accélération en dérivant deux fois la trajectoire approchée par des splines, on obtient une fonction affine qui ne correspond pas à l'allure de l'accélération réelle. L'utilisation d'une stratégie similaire pour estimer la vitesse à partir de splines cubiques, permettrait en théorie d'améliorer l'estimation de l'accélération. Toutefois, les essais réalisés ont montré que dès l'estimation de vitesse, les trajectoires approchées étaient de qualité inférieure en utilisant l'interpolation sur la vitesse. Cette observation peut-être provoquée par la dérivation numérique de la position pour obtenir la vitesse, qui entache les données de bruits. 
+Il est toutefois important de noter que les splines cubiques sont des fonctions $ C^2 $. Par conséquent, lorsqu'on cherche à obtenir l'accélération en dérivant deux fois la trajectoire approchée par des splines, on obtient une fonction affine qui ne correspond pas exactement à l'allure de l'accélération réelle. L'utilisation d'une stratégie similaire pour estimer la vitesse à partir de splines cubiques, permettrait en théorie d'améliorer l'estimation de l'accélération. Toutefois, les essais réalisés ont montré que dès l'estimation de vitesse, les trajectoires approchées étaient de qualité inférieure en utilisant l'interpolation sur la vitesse. Cette dégradation peut-être provoquée par la dérivation numérique de la position pour obtenir la vitesse, qui entache les données de bruits. 
 %
 \begin{table}[]
 	\centering
@@ -685,7 +715,7 @@ Il est toutefois important de noter que les splines cubiques sont des fonctions 
 %
 \newlineBlank
 %
-Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalente, dont on a un exemple en \cref{fig_perturbed_virtual_traj_b}, on obtient alors des résultats plus éloignés de la réalité. En effet, le comportement en force mesuré est bien plus volatil et variable que le comportement en position, puisqu'il est en effet non seulement influencé par la position, mais aussi la vitesse et l'accélération. La \cref{fig_hist_err_spline_force} et la \cref{tab_sline_force_errors} récapitulent les écarts trouvés ainsi que leur dispersion. Une meilleur maitrise des perturbations introduites pourrait permettre de se dédouaner de cette estimation entachée d'erreurs.
+Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalente, avec les mêmes phases que pour la position, dont on a un exemple en \cref{fig_perturbed_virtual_traj_b}, on obtient alors des résultats plus éloignés de la réalité. En effet, le comportement en force mesuré est bien plus volatil et variable que le comportement en position, puisqu'il est en effet non seulement influencé par la position, mais aussi la vitesse et l'accélération. La \cref{fig_hist_err_spline_force} et la \cref{tab_sline_force_errors} récapitulent les écarts trouvés ainsi que leur dispersion. Une meilleur maitrise des perturbations introduites pourrait permettre de se dédouaner de cette estimation entachée d'erreurs.
 %
 \input{latex_figures/fig_histogram_force_error_spline.tex}
 %
@@ -708,7 +738,7 @@ Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalen
 
 \subsection{Résultats préliminaires} \label{sec_impedance_estimation_sub_results}
 
-Avant de commencer cette partie, il est important de noter que les mesures réalisées doivent être consolidées pour obtenir des résultats statistiques significatifs, sur une population plus large. A ce stade, seules 2 expériences ont pu être menées de manière préliminaire, avec un seul participant. De plus, une calibration avec un système masse-ressort-amortissement connu, permettrait une validation qualitative de la méthodologie proposée.
+Avant de commencer cette partie, il est important de noter que les mesures réalisées doivent être consolidées pour obtenir des résultats statistiques significatifs, sur une population plus large. A ce stade, seules 2 expériences ont pu être menées de manière préliminaire, avec un seul participant. De plus, une calibration avec un système masse-ressort-amortissement connu permettrait une validation qualitative de la méthodologie proposée.
 
 \subsubsection{Faisabilité de la tâche}
 \label{sec_impedance_estimation_sub_results_sub_task_feasibility}
@@ -748,9 +778,9 @@ Les résultats exposés dans cette partie, sont issus du deuxième essai, dont l
 % 
 % Comme expliqué dans la \cref{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}, les actions volontaires peuvent intervenir dès \SI{100}{\milli\second} et ne sont pas modélisables correctement avec le modèle proposé \cref{eq_impedance_z}, puisqu'elles impliquent un processus cognitifs, plus complexe. 
 %
-\newlineBlank
+%\newlineBlank
 % 
-[déplacer le paragraphe concernant les réflexes ici ?? le choix des 200ms pour l'estimation de trajectoire ne devrait pas avoir la même justification que le choix de 200ms pour l'identification ?? Ou alors, je pense ajouter une sous partie 3.2.4 qui s'intéressera spécifiquement à cette problématique]
+%[déplacer le paragraphe concernant les réflexes ici ?? le choix des 200ms pour l'estimation de trajectoire ne devrait pas avoir la même justification que le choix de 200ms pour l'identification ?? Ou alors, je pense ajouter une sous partie 3.2.4 qui s'intéressera spécifiquement à cette problématique]
 
 \paragraph{Validation des résultats} \label{sec_impedance_estimation_sub_results_sub_impedance_results_par_validity}
 
@@ -760,7 +790,7 @@ Pour vérifier que l'estimation d'impédance observée a bien du sens, on s'int�
 %
 \newlineBlank
 % 
-Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $ des onze perturbations évaluées, atteignent un pic pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'ajouter ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant injectées au niveau articulaire, la chaîne de transmission jusqu'à l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
+Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'intervalle de temps utilisé pour l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $ des onze perturbations évaluées, atteignent un maximum pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'ajouter ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant injectées au niveau articulaire, la chaîne de transmission jusqu'à l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
 %
 \input{latex_figures/fig_r_square.tex}
 %
@@ -770,7 +800,8 @@ Il est aussi intéressant de noter que le coefficient de détermination moyen de
 %
 \newlineBlank
 % 
-La \cref{fig_force_reconstruction} montre les résultats de reconstruction de force $ \delta f_z $ avec les paramètres identifiés, pour les onze perturbations sélectionnées. L'amplitude des forces générées est comprise entre \SI{4}{\newton} et \SI{7}{\newton}. Les erreurs de reconstruction que l'on peut observer sur les courbes présentées sont aussi récapitulées sous la forme d'un histogramme en \cref{fig_hist_err_force_rec}. On constate que les erreurs décrivent une forme presque gaussienne, avec une moyenne nulle (\SI{-8e-17}{\newton}) et un écart type de \SI{0.35}{\newton}.
+La \cref{fig_force_reconstruction} montre les résultats de reconstruction de force $ \delta f_z $ avec les paramètres identifiés, pour les onze perturbations sélectionnées. L'amplitude des forces générées est comprise entre \SI{4}{\newton} et \SI{7}{\newton}. Les erreurs de reconstruction que l'on peut observer sur les courbes présentées sont aussi récapitulées sous la forme d'un histogramme en \cref{fig_hist_err_force_rec}. On constate que les erreurs décrivent une forme presque gaussienne, avec une moyenne nulle %(\SI{-8e-17}{\newton}) 
+et un écart type de \SI{0.35}{\newton}.
 %
 \input{latex_figures/fig_histogram_error_force_rec.tex} 
 %
@@ -782,7 +813,7 @@ La \cref{fig_force_reconstruction} montre les résultats de reconstruction de fo
 %
 \newlineBlank
 % 
-Les résultats préliminaires dont la validité a été étudiée au \cref{sec_impedance_estimation_sub_results_sub_impedance_results_par_validity} sont présentés dans la \cref{tab_param_identification}. On peut constater que la raideur moyenne obtenue est presque deux fois supérieures aux valeurs moyennes observées dans la littérature, dès que $ \delta t \geq 10 $ et qu'au contraire, les autres paramètres sont bien inférieurs. Ces différences trouvent peut-être leur source dans l'estimation de la trajectoire virtuelle, qui ne semble pas valide pour l'accélération, et dont la validité pour la vitesse reste discutable [non encore étudié]. En effet, si on s'intéresse de plus près à l'amortissement et à la masse, on constate que leur écart type respectif sont supérieurs à 100\%, contre seulement 26\% pour la raideur.
+Les résultats préliminaires dont la validité a été étudiée au \cref{sec_impedance_estimation_sub_results_sub_impedance_results_par_validity} sont présentés dans la \cref{tab_param_identification}. On peut constater que la raideur moyenne obtenue est presque deux fois supérieure aux valeurs moyennes observées dans la littérature, dès que $ \delta t \geq $ \SI{10}{\milli\second} et qu'au contraire, les autres paramètres sont bien inférieurs. Ces différences trouvent peut-être leur source dans l'estimation de la trajectoire virtuelle, qui ne semble pas valide pour l'accélération, et dont la validité pour la vitesse reste discutable [non encore étudié]. En effet, si on s'intéresse de plus près à l'amortissement et à la masse, on constate que leur écart type respectif sont supérieurs à 100\%, contre seulement 26\% pour la raideur.
 %
 \begin{table}[htbp] 
 	\begin{center}
