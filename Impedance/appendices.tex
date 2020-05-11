@@ -2,6 +2,107 @@
 \clearpage
 \begin{appendices}
 	\crefalias{section}{appendix}
+	
+	\section{Oscillateur de Matsuoka} \label{app_matsuoka}
+	
+	Les équations différentielles \cref{eq_cpg_matsuoka} de l'oscillateur non linéaire de Mastuoka sont rappelées. Il s'agit d'une structure composée de 2 neurones identiques chacun en inhibition réciproque. Ces neurones correspondent à l'activation des muscles agonistes et antagonistes.
+	
+	\begin{equation} \label{eq_cpg_matsuoka}
+	\begin{split}
+		\tau_r \dot{x}_1(t) &= -x_1(t)-\beta \nu_1(t) - \omega y_2(t) - h\max(0,m(t)) + c \\
+		\tau_a \dot{\nu}_1(t) &=-\nu_1(t)+y_1(t) \\
+		\tau_r \dot{x}_2(t) &= -x_2(t)-\beta \nu_2(t) - \omega y_1(t) - h\min(0,m(t)) + c \\
+		\tau_a \dot{\nu}_2(t) &=-\nu_2(t)+y_2(t) \\
+		y_{out} &= \max(x_1,0) - \max(x_2,0)
+	\end{split}
+	\end{equation}
+	
+	La sortie de l'oscillateur est donnée par $y_{out}$, les états $x_i$ et $\nu_i$ correspondent respectivement au potentiel et à l'auto-inhibition responsable des phénomènes de fatigue. $ m(t) $ correspond à l'entrée sensorielle, et $ c $ à l'excitabilité du CPG qui détermine l'amplitude de la sortie. Les paramètres $ \beta $ et $ \omega $ définissent respectivement l'intensité de l'auto-inhibition et de l'inhibition réciproque et $ \tau_r $ et $ \tau_a $ sont des constantes de temps qui donnent les temps de réponses de $x_i$ et $\nu_i$. Enfin, $ h $ est un gain sur l'entrée sensorielle. 
+	
+	\newpage	
+	\section{Définition de l'impédance mécanique} \label{app_mechanical_impedance}
+	
+	Le \textit{Random House Kernerman Webster's College Dictionary} définit l'impédance mécanique comme, le rapport entre une \textbf{force} exercée sur un système physique soumis à un \textbf{mouvement} harmonique, et la \textbf{vitesse} des particules du-dit système\footnote{"\textit{The ratio of the force on a system undergoing harmonic motion to the velocity of the particles in the system.}"}. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{fig_mech_impedance}) comme une \textbf{résistance à un mouvement}.
+	
+	\begin{figure}[h]
+		\centering
+		
+		\begin{tikzpicture}
+		\node[rectangle, draw, align=center, minimum width=3.5cm, minimum height=1.75cm, line width=1.2] (impedance) at (0,0) {\textbf{Impédance} \\ (système)};
+		\node[rectangle, draw, align=center, minimum width=3.5cm, minimum height=1.75cm, line width=1.2] (admittance) at ($(impedance) + (6.5, 0)$) {\textbf{Admittance} \\ (environnement)};
+		\draw[-{Latex[length=3mm]}, line width=1.2] (impedance.east) -- (admittance.west)
+		node[midway, above] {\phantom{p}force\phantom{p}};
+		\draw[{Latex[length=3mm]}-, line width=1.2] (impedance.west) -- +(-2.8,0)
+		node[midway, above] {\phantom{p}mouvement\phantom{p}};		
+		\draw[-{Latex[length=3mm]}, line width=1.2] (admittance.east) -- +(2.8,0)
+		node[midway, above] {\phantom{p}mouvement\phantom{p}};
+		\end{tikzpicture}
+		
+		\caption{Systèmes physiques : comme expliqué par \cite{hogan_impedance_1985}, l'environnement peut souvent être modélisé par une admittance, un système qui interagit avec, devra donc être considéré comme une impédance.} % Figure caption
+		\label{fig_mech_impedance} % Label for referencing
+	\end{figure}
+	
+	Ainsi, par analogie avec l'électricité, si l'on se restreint à des systèmes linéaires, il existe 3 éléments passifs, l'\textbf{inertie}, la \textbf{raideur} et l'\textbf{amortissement} et 2 actifs, la force et la vitesse que l'on peut rapprocher respectivement à l'inductance, à la capacité et à la résistance puis à la tension et au courant. Comme c'est fait pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \cite{hondori_perturbation-based_2010}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme. La \cref{fig_impedance_analogy} et le système \eqref{eq_impedance_analogy} résument l'ensemble de ces rapprochements, qui donneront lieux à différents modèles.
+	
+	\begin{figure}[h]
+		
+		\centering
+		
+		\begin{circuitikz}
+			\draw (0,0) node[ground] {} 
+			to[V=$U(t)$]  ++(0,2)
+			-- ++(0.5,0)
+			to[R=$R$] ++(1.5,0)
+			to[L=$L$] ++(1.5,0)
+			to[short, i^>=$i(t)$] ++ (0.5,0)
+			to[C=$C$] ++(0,-2)
+			node[ground] {};
+			
+			\node at (5.8,1) {\LARGE $\equiv$};
+			
+			\draw (8,0) coordinate (O)
+			to[V=$F(t)$] ++(0,2) coordinate (A);
+			\coordinate (B) at ($(A) + (1.5, 0)$);
+			\coordinate (C) at ($(B) + (1.5, 0)$);
+			\coordinate (D) at ($(C) + (1.5, 0)$);
+			
+			\draw (B) 
+			to[damper=$B$] ++ (0,-2);
+			\draw (C)
+			to[mass=$I$] ++ (0,-2);		
+			\draw (D)
+			to[spring=$K$] ++ (0,-2);
+			\node at ($(D) + (1.2, 0)$) {$\updownarrow x(t)$};
+			\draw [line width = 1pt] ($(A) + (-0.5,0)$) --($(D) + (0.5,0)$);
+			\draw [line width = 1pt] ($(A) + (-0.5,-2)$) --($(D) + (0.5,-2)$);
+			
+			\foreach \i in {7.5, 7.75, ..., 13} {
+				\draw (\i, 0) --+ (225:0.4);
+			}
+			
+			%\draw (C) -- (O) node[midway, cground] {};
+			
+		\end{circuitikz}
+		
+		\caption{Analogie électricité - mécanique} % Figure caption
+		\label{fig_impedance_analogy} % Label for referencing
+	\end{figure}
+	
+	\noindent
+	%\begin{tabularx}{\textwidth}{@{}XX@{}}
+	
+	\begin{equation}
+	\left\{
+	\begin{array}{rcl}
+	R 	& \equiv &		B \\
+	L 	& \equiv & 	I \\
+	C	& \equiv & 	\frac{1}{K} 
+	\end{array}
+	\right.
+	\label{eq_impedance_analogy} % Label for referencing
+	\end{equation}
+	
+	\newpage
 	\section{Calcul du Modèle Géométrique Direct} \label{app_direct_kinem}
 	
 	\subsection{Modèle à 3 articulations colinéaires} \label{app_direct_kinem_sub_3}
@@ -315,7 +416,7 @@
 	\input{latex_figures/fig_coupling_effect_joint_ctrl}
 	\newlineBlank
 	%
-	La mise en place expérimentale de la stratégie de contrôle articulaire décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} est venue valider la théorie décrite dans cette annexe. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités par l'utilisateur. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre" (P. Rodriguez).
+	La mise en place expérimentale de la stratégie de contrôle articulaire décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} est venue valider la théorie décrite dans cette annexe. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités par l'utilisateur. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre".
 	
 	\newpage
 	\section{Effets de l'erreur de trainage} \label{app_latency_error_effect}
@@ -380,5 +481,14 @@
 	\end{equation*} 
 	%
 	d'où $ \dot{z}_2^p = 0 $. On a donc bien une projection dans le noyau de la tâche principale décrite dans le \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_main}.
+
+	\newpage
+	\section{Coefficient de détermination} \label{app_r_square}
+	
+	Le coefficient de détermination $ R^2 $, est une mesure de la qualité de l'estimation d'une régression linéaire. Il est donné par l'équation \cref{eq_r_square}, avec $ y_i $ la mesure de l'échantillon $ i $, $ \hat{y}_i $ et $ \bar{y} $ respectivement la valeur estimée à $ i $ et la moyenne des mesures.  
+	
+	\begin{equation} \label{eq_r_square}
+		R^2 = \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 }{\sum_{i=1}^{n} (y_i - \bar{y})^2} 
+	\end{equation}
 	
 \end{appendices}

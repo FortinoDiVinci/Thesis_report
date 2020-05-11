@@ -35,7 +35,7 @@
 \author{
 	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2}, Maria MAKAROV\textsuperscript{2}, Pedro RODRIGUEZ-AYERBE\textsuperscript{2}, Isabelle SIEGLER\textsuperscript{1}} % Authors
 	\newline\newline % Space before institutions
-	\textsuperscript{1}\institution{Université Paris Sud - CIAMS}\\ % Institution 1
+	\textsuperscript{1}\institution{Université Paris-Saclay - CIAMS}\\ % Institution 1
 	\textsuperscript{2}\institution{CentraleSupélec - L2S}\\ % Institution 2
 }
 
@@ -155,20 +155,7 @@ Cette section présente quelques éléments du contrôle moteur humain lors de t
 
 \subsubsection{Mouvements rythmiques} \label{sec_bouncing_sub_previous_sub_rhythmic}
 
-A la rencontre de la robotique, de l'automatique et des sciences du mouvement humain, \cite{siegler_passive_2010, avrin_model_2017}, se sont intéressés au névraxe (CNS, \textit{Central Nervous System}) lors de mouvements rythmiques, pour la tâche de jonglerie, dans un environnement simulé purement cinématique. Ils ont été capables de reproduire des performances proches de celles de l'humain, en utilisant une structure de contrôle se basant sur des réseaux locomoteurs spinaux, plus connus sous l'anglicisme \textit{Central Pattern Generators} (CPG). Le choix s'est porté sur un oscillateur non-linéaire de \cite{matsuoka_sustained_1985}, pour jouer le rôle du CPG. En effet, il est admis qu'il s'agit d'un oscillateur bio-inspiré pouvant répliquer des comportements d'animaux dont celui de l'humain (\cite{zhang_analysis_2006,ijspeert_central_2008, pelc_resonant_2008, roy_chowdhury_finding_2015, avrin_model_2017}). Dans ces simulations, l'oscillateur non-linéaire%, dont les équations sont rappelées \cref{eq_cpg_matsuoka} 
-prenait en entrée les données cinématiques de la balle pour contrôler à la fois l'amplitude et la fréquence du mouvement uni-articulaire du coude d'un bras humain simulé. Le réglage des paramètres de l'oscillateur de Matsuoka a été obtenu grâce à un algorithme d'optimisation de type essaim particulaire (PSO, \textit{Particule Swarm Optimization}), \cite{avrin_particle_2016}.
-
-%\begin{equation} \label{eq_cpg_matsuoka}
-%\begin{split}
-%	\tau_r \dot{x}_1(t) &= -x_1(t)-\beta \nu_1(t) - \omega y_2(t) - h\max(0,m(t)) + c \\
-%	\tau_a \dot{\nu}_1(t) &=-\nu_1(t)+y_1(t) \\
-%	\tau_r \dot{x}_2(t) &= -x_2(t)-\beta \nu_2(t) - \omega y_1(t) - h\min(0,m(t)) + c \\
-%	\tau_a \dot{\nu}_2(t) &=-\nu_2(t)+y_2(t) \\
-%	y_{out} &= \max(x_1,0) - \max(x_2,0)
-%\end{split}
-%\end{equation}
-%
-%La sortie de l'oscillateur est donnée par $y_{out}$, les $x_i$ et $\nu_i$ correspondent à ... [+ peut-être serait-il intéressant d'y joindre un schéma de l'oscillateur de Matsuoka peut-être plus parlant que les équations \& explications ?]
+A la rencontre de la robotique, de l'automatique et des sciences du mouvement humain, \cite{siegler_passive_2010, avrin_model_2017}, se sont intéressés au névraxe (CNS, \textit{Central Nervous System}) lors de mouvements rythmiques, pour la tâche de jonglerie, dans un environnement simulé purement cinématique. Ils ont été capables de reproduire des performances proches de celles de l'humain, en utilisant une structure de contrôle se basant sur des réseaux locomoteurs spinaux, plus connus sous l'anglicisme \textit{Central Pattern Generators} (CPG). Le choix s'est porté sur un oscillateur non-linéaire de \cite{matsuoka_sustained_1985}, pour jouer le rôle du CPG. En effet, il est admis qu'il s'agit d'un oscillateur bio-inspiré pouvant répliquer des comportements d'animaux dont celui de l'humain (\cite{zhang_analysis_2006,ijspeert_central_2008, pelc_resonant_2008, roy_chowdhury_finding_2015, avrin_model_2017}). Dans ces simulations, l'oscillateur non-linéaire, dont la structure est donnée en \cref{app_matsuoka}, prenait en entrée les données cinématiques de la balle pour contrôler à la fois l'amplitude et la fréquence du mouvement uni-articulaire du coude d'un bras humain simulé. Le réglage des paramètres de l'oscillateur de Matsuoka a été obtenu grâce à un algorithme d'optimisation de type essaim particulaire (PSO, \textit{Particule Swarm Optimization}), \cite{avrin_particle_2016}.
 
 \subsubsection{Jonglerie} \label{sec_bouncing_sub_previous_sub_bouncing}
 
@@ -217,7 +204,7 @@ On voit que si la masse de la balle $ m_b $ est négligeable face à celle de la
 
 \subsubsection{Réaction du bras}  \label{sec_bouncing_sub_interactions_sub_arm}
 
-L'impédance mécanique décrite en [ref chapitre impédance mécanique] est un moyen de modéliser des interactions physiques, en donnant une fonction de transfert entre les mouvements et forces.
+L'impédance mécanique, dont la définition est rappelée en \cref{app_mechanical_impedance}, est un moyen de modéliser des interactions physiques, en donnant une fonction de transfert entre les mouvements et forces.
 %
 \newlineBlank
 %
@@ -655,7 +642,7 @@ Selon la nature des perturbations on préfèrera certaines des solutions propos�
 
 \paragraph{Choix du type de perturbation}
 
-[Cette partie requière de nouvelles expériences pour comparer le résultat des différentes perturbations de manière expérimentale, avec par exemple un environnement très rigide, puis plutôt souple]
+Pour les expériences préliminaires menées, le choix s'est porté sur le troisième type de perturbation, toutefois, des expériences comparatives supplémentaires sont envisagées. En effet, l'influence des perturbations sur l'estimation, peut avoir des effets non négligeables comme rappelé dans la revue faite par \cite{mizrahi_mechanical_2015}.
 
 \subsubsection{Estimation des trajectoires virtuelles} \label{sec_impedance_estimation_sub_tools_sub_virtual_trajectory}
 
@@ -807,7 +794,7 @@ Pour vérifier que l'estimation d'impédance observée a bien du sens, on s'int�
 %
 \newlineBlank
 % 
-Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'intervalle de temps utilisé pour l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $ des onze perturbations évaluées, atteignent un maximum pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'ajouter ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant injectées au niveau articulaire, la chaîne de transmission jusqu'à l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
+Comme on peut le voir sur la \cref{fig_imp_est_pert_nonpert_splines}, le début de l'intervalle de temps utilisé pour l'estimation n'est pas marqué par la perturbation, qui intervient à $ t_{p} $. En effet, un autre paramètre $ \delta t \in \R^+ $, a été introduit pour procéder à des comparaisons. Ce délai a une influence significative sur le résultat de l'estimation, notamment pour les valeurs inférieures à \SI{5}{\milli\second} où des paramètres du modèle KBI négatifs sont obtenus. Sur la \cref{fig_r_square}, on peut voir que les valeurs moyennes des coefficients de détermination $ R^2 $, dont la formule est rappelée en \cref{app_r_square}, des onze perturbations évaluées, atteignent un maximum pour des délais compris entre \SI{10}{\milli\second} et \SI{20}{\milli\second}. Au delà de \SI{20}{\milli\second} le $ R^2 $ converge vers les valeurs obtenues en dehors des perturbations, proche de 0.5. Il est aussi intéressant de noter que c'est pour les délais de \SI{10}{\milli\second} et \SI{15}{\milli\second} qu'on observe les écarts types les plus faibles. Le besoin d'ajouter ce délai pour l'identification, peut s'expliquer par la présence de latence dans le système d'introduction des perturbations. En effet, les perturbations étant injectées au niveau articulaire, la chaîne de transmission jusqu'à l'effecteur n'est pas instantanée, comme on peut l'entrevoir en \cref{fig_perturbed_virtual_traj}.
 %
 \input{latex_figures/fig_r_square.tex}
 %
