@@ -29,7 +29,8 @@
 
 %\title{Expérience de comanipulation} % The article title
 
-\title{Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment}
+\title{Commande bio-inspirée de robot pour des tâches rythmiques en interaction avec l'environnement}
+	%Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment}
 
 \author{
 	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2}, Maria MAKAROV\textsuperscript{2}, Pedro RODRIGUEZ-AYERBE\textsuperscript{2}, Isabelle SIEGLER\textsuperscript{1}} % Authors
@@ -39,7 +40,7 @@
 }
 
 
-\date{Mai 2020} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date % first edit feb 2020
+\date{26 Mai 2020} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date % first edit feb 2020
 
 %----------------------------------------------------------------------------------------
 
@@ -59,7 +60,19 @@
 %\estheticline
 %
 %\lettrine{A}{\textbf{fin}} d'estimer le comportement cartésien en impédance du bras humain, lors d'une tâche rythmique, une expérience utilisant une interface homme machine est proposée. La tâche de jonglerie est un cas d'étude à la fois simple et complet en science du mouvement humain, faisant à la fois appel à un contrôle rythmique du bras, et à des interactions avec un environnement physique au cours du cycle de jongle. Pour une meilleur maitrise de la tâche, un environnement simulé contenant à la fois une raquette, une balle et des indications complémentaires est utilisé. Pour pouvoir manipuler la raquette virtuelle, un robot articulé est utilisé. Pour rendre la manipulation du robot transparente intuitive, et minimiser ses dynamiques apparentes, une boucle de contrôle utilisant un capteur de force est proposée.
-
+%
+\newpage %
+\pagestyle{empty}
+\hspace{0pt} %
+\vfill %
+%
+\begin{center}
+	\textcolor{DarkRed}{\fontsize{16}{19}\usefont{OT1}{phv}{b}{n}\selectfont Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment}
+\end{center}
+%
+\vspace{60pt}
+\section*{Abstract}
+\vspace{15pt}
 \lettrine{S}{\textbf{ince}} robots have populated the industry in the late 20\textsuperscript{th} century, they have earned precious and precise skills to achieve repeated tasks in controlled environments. Most robots used in plants are able to outperform humans in very specific tasks under restrained conditions. In fact, there are still lot to learn about humans ability to adapt to various environments, and strikingly their capacities to reach stable behaviour during physical interaction are still unrivalled. However, the dawn of robot services is already in the past, late development such as exoskeletons, surgical robots, industrial cobots have already emerged. Understanding and reproducing the robustness of humans physical interactions is therefore a matter of energy efficiency, safety, adaptability and resilience. %
 %
 \newlineBlank
@@ -69,16 +82,17 @@ It is in such a perspective that human motor control has been studied for decade
 \newlineBlank
 %
 Using a human movement science benchmark, this study proposes an approach to evaluate the human impedance variations during a rhythmic task with intermittent physical interactions. This fits the ambition to match human like behaviour, using bio-inspired control laws, for robots during cyclic task with environmental interactions.
+
+\vfill
+\hspace{0pt}
 %
 \newpage %
 \hspace{0pt} %
 \vfill %
 %
-\textcolor{DarkRed}{\fontsize{28}{32}\usefont{OT1}{phv}{b}{n}\selectfont \noindent Commande bio-inspirée de robot pour des tâches rythmiques en interaction avec l'environnement.}
-%
-\vspace{60pt}
-
-\lettrine{D}{\textbf{epuis}} la fin du 20\textsuperscript{ème} siècle, les robots sont devenus indispensables dans l'industrie, grâce à leurs capacités à abattre des tâches répétitives avec précision dans des environnements maîtrisés. La plupart des robots industriels surpassent les humains sur des compétences spécifiques pour la réalisation de tâches dans des conditions restreintes. Dans les faits, les capacités humaines d'adaptation à des environnements variés ont encore beaucoup à enseigner à la robotique, avec notamment l'habilité humaine inégalée, à maintenir des comportements stables pendant des interactions physiques. Toutefois, l'aube de la robotique de service fait déjà partie intégrante du passé, avec le développement d'exosquelettes, de robots chirurgicaux, et de robots industriels collaboratifs qui a déjà émergé. Comprendre et reproduire la robustesse des interactions physiques humaines est donc un sujet important pour la sécurité, la résilience et l'efficacité énergétique des robots. %
+\section*{Résumé}
+\vspace{15pt}
+\lettrine{D}{\textbf{epuis}} la fin du 20\textsuperscript{ème} siècle, les robots sont devenus indispensables dans l'industrie, grâce à leurs capacités à abattre des tâches répétitives avec précision dans des environnements maîtrisés. La plupart des robots industriels surpassent les humains sur des compétences spécifiques pour la réalisation de tâches dans des conditions restreintes. Dans les faits, les capacités humaines d'adaptation à des environnements variés ont encore beaucoup à enseigner à la robotique, avec notamment l'habilité humaine inégalée, à maintenir des comportements stables pendant des interactions physiques. Toutefois, l'aube de la robotique de service fait déjà partie intégrante du passé, avec le développement d'exosquelettes, de robots chirurgicaux, et de robots industriels collaboratifs qui a déjà émergé. Comprendre et reproduire la robustesse des interactions physiques humaines est donc un sujet important pour la sécurité, la résilience et l'efficacité énergétique des robots. 
 %
 \newlineBlank
 %
@@ -91,7 +105,6 @@ En s'intéressant à une étude classique en sciences du mouvement humain, cette
 \vfill
 \hspace{0pt}
 \pagebreak
-
 %----------------------------------------------------------------------------------------
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
@@ -99,31 +112,33 @@ En s'intéressant à une étude classique en sciences du mouvement humain, cette
 \tableofcontents
 
 \newpage
+\setcounter{page}{1}
+\pagestyle{fancy}
 
 \section*{Introduction}  \label{sec_intro}
 
-Les sciences du mouvement humain regroupent des connaissances en psychologie, biomécanique, neurosciences et physiologie pour étudier le contrôle, la structuration ainsi que l'apprentissage du mouvement chez l'humain ainsi que d'autres espèces animales. L'unité de recherche CIAMS pour \textit{Complexité, Innovation, Activités Motrices et Sportives}, sous les tutelles des universités Paris-Saclay et Orléans, a positionné l'un de ses axes de recherches sur la modélisation et la compréhension de la performance et de la motricité. 
+Les sciences du mouvement humain regroupent des connaissances en psychologie, biomécanique, neurosciences et physiologie pour étudier le contrôle, la structuration ainsi que l'apprentissage du mouvement humain ainsi que d'autres espèces animales. L'unité de recherche CIAMS pour \textit{Complexité, Innovation, Activités Motrices et Sportives}, sous les tutelles des universités Paris-Saclay et Orléans, a positionné l'un de ses axes de recherches sur la modélisation et la compréhension de la performance et de la motricité. 
 %Un intérêt particulier est porté sur la modélisation des lois de commande du membre supérieur. Notamment
 %
 \newlineBlank
 %
-C'est bien souvent en observant son environnement, et en trouvant ses muses dans la nature que l'esprit humain trouve une inspiration créatrice. Ainsi Sénèque disait \textit{omnis ars naturae imitatio est}, repris plus d'un millénaire après par Pablo Picasso, \textit{La peinture ce n'est pas copier la nature mais c'est apprendre à travailler comme elle}. Ainsi, ces deux citations reflètent les deux approches différentes que sont le bio-mimétisme et la bio-inspiration. Le système neuro-musculo-squelettique humain, dont la complexité limite les méthodes mimétiques reste une grande source d'inspiration, notamment pour la robotique.
+C'est bien souvent en observant son environnement, et en trouvant ses muses dans la nature que l'esprit humain trouve l'inspiration. Ainsi Sénèque disait \textit{omnis ars naturae imitatio est}, repris plus d'un millénaire après par Pablo Picasso, \textit{La peinture ce n'est pas copier la nature mais c'est apprendre à travailler comme elle}. Ainsi, ces deux citations reflètent les deux approches différentes que sont le bio-mimétisme et la bio-inspiration. Le système neuro-musculo-squelettique humain, dont la complexité limite les méthodes mimétiques n'en reste pas moins une grande source d'inspiration, notamment pour la robotique.
 %
 \newlineBlank
 %
-paragraphe sur l'utilisation pour la robotique et des travaux de G. Avrin (collaboration CIAMS L2S)
+En effet, les robots de plus en plus présents dans les environnements anthropisés doivent interagir avec des outils pensés pour l'Homme, mais aussi avec des êtres humains. Dans ce contexte, une meilleure compréhension des mouvements humains est essentiel pour ces interactions. Par ailleurs, les capacités dextres des humains et ainsi que leur perception de l'environnement reste aujourd'hui un grand défi pour la robotique. Ces défis se placent aussi bien sur le plan mécanique avec les différences entre les complexes musculo-squelettiques et les actionneurs robotisés que sur le plan de l'automatique avec le contrôle neural face aux lois de commande en robotique. C'est sur ce second axe que se positionnent certains chercheurs du L2S, \textit{Laboratoire des Signaux et Systèmes}.
 %
 \newlineBlank
 %
-objectifs de l'expérience
+C'est ainsi qu'une collaboration entre enseignants-chercheurs des deux structures a pu naître. La modélisation du membre supérieur contribue d’une part à la compréhension du mouvement humain et à son analyse à l’aide d’outils de l’automatique, et d’autre part au développement de stratégies de commande bio-inspirées innovantes pour des systèmes robotiques anthropomorphes en interaction avec l’environnement, pour des applications en co-manipulation et assistance robotique. Une première thèse, défendue en 2017 par G. Avrin a proposé un modèle comportemental innovant fondé sur un oscillateur neuronal bio-inspiré, capable de reproduire des motifs de comportement humain.
 %
 \newlineBlank
 %
-plan : 1 - Mesure de l’impédance pour plusieurs participants ;
-2 - Étude de la variation d’impédance ;
-3 - Analyse de la robustesse obtenu grâce à cette variation et application en robotique ;
-4 - Établir le banc de test pour faire mesure d’impédance ;
-5 - Brève résume du rapport (comme dans les articles, chapitre 1 jonglerie et travaux de Guillaume, 2 mise en place du banc, 3 mesure d’impédance, 4 conclusions et perspectives).
+Dans la perspective d’un transfert des modèles de comportement ainsi mis en évidence vers des applications robotiques réalistes en interaction dynamique avec l’environnement, le modèle développé doit être complété par des stratégies du contrôle des efforts employés pour réaliser le mouvement. Par ailleurs, comprendre comment les propriétés dynamiques du bras sont régulées au cours du mouvement pour préparer les phases d’impact de la balle est également un enjeu dans le champ des sciences du mouvement humain. Des mesures d'impédance pourraient permettre d'éclair cet aspect. Enfin, la transposition des connaissances acquises a pour but de proposer une structure de commande innovantes pour la robotique, avec des analyses de robustesse essayant de vérifier l'intérêt des variations d'impédance pour l'Homme et le robot.
+%
+\newlineBlank
+%
+Ainsi, ce rapport de mi-thèse, présente en \cref{sec_bouncing} la tâche de jonglerie ainsi que son cadre expérimental. La \cref{sec_robot} propose une mise en place du banc expérimental qui permet de réaliser les estimations d'impédance. La \cref{sec_impedance_estimation} donne des méthodes de mesures d'impédance avec des résultats préliminaires de ces estimations. Enfin, la \cref{sec_conclusion} expose des perspectives pour la suite de cette thèse.
 
 \section{La tâche de jonglerie avec un robot}  \label{sec_bouncing}
 
@@ -709,7 +724,8 @@ Il est toutefois important de noter que les splines cubiques sont des fonctions 
 		mean (\%)            &-0.25 & 0.64 & 2.75 & 0.51 & 0.76  \\
 		%\hline
 	\end{tabular}
-	\caption{Normalized errors, for position estimation using cubic splines}
+	\caption{Erreurs normalisées pour l'estimation de position, avec l'utilisation de splines cubiques}
+		%Normalized errors, for position estimation using cubic splines}
 	\label{tab_sline_position_errors}
 \end{table}
 %
@@ -729,7 +745,8 @@ Si on s'intéresse à la force $ f_z $ en utilisant une méthodologie équivalen
 		mean (\%)            & 1.18 & 3.36 &-3.76 & 1.39 & 0.66  \\
 		%\hline
 	\end{tabular}
-	\caption{Normalized errors, for force estimation using cubic splines}
+	\caption{Erreurs normalisées pour l'estimation de la force en utilisant des splines cubiques}
+		%Normalized errors, for force estimation using cubic splines}
 	\label{tab_sline_force_errors}
 \end{table}
 %
