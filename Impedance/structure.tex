@@ -248,7 +248,7 @@
 \pretitle{
 	\vspace{-30pt} % Move the entire title section up
 	\begin{center}
-		\makebox[.8\textwidth]{\includegraphics[width=\paperwidth]{misc/logo_CentraleSupelec_ParisSaclay.jpg}}
+		\includegraphics[width=.7\paperwidth]{misc/logo_CentraleSupelec_ParisSaclay.jpg}
 	\end{center}
 	\HorRule\vspace{10pt} % Horizontal rule before the title
 	\fontsize{32}{36}\usefont{OT1}{phv}{b}{n}\selectfont % Helvetica
@@ -257,12 +257,13 @@
 
 \posttitle{\par\vskip 40pt} % Whitespace under the title
 
-\preauthor{} % Anything that will appear before \author is printed
+\preauthor{\begin{flushleft}} % Anything that will appear before \author is printed
 
 \postauthor{ % Anything that will appear after \author is printed
 	\vspace{10pt} % Space before the rule
 	\par\HorRule % Horizontal rule after the title
 	\vspace{20pt} % Space after the title section
+	\end{flushleft}
 }
 
 %----------------------------------------------------------------------------------------
