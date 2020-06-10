@@ -135,7 +135,11 @@ La modélisation du membre supérieur contribue d’une part à la compréhensio
 %
 \newlineBlank
 %
-Dans la perspective d’un transfert des modèles de comportement ainsi mis en évidence vers des applications robotiques réalistes en interaction dynamique avec l’environnement, le modèle développé doit être complété par des stratégies du contrôle des efforts employés pour réaliser le mouvement. Par ailleurs, comprendre comment les propriétés dynamiques du bras sont régulées au cours du mouvement pour préparer les phases d’impact de la balle (\cite{tsuji_bio-mimetic_2008}) est également un enjeu dans le champ des sciences du mouvement humain. Des mesures d'impédance pourraient permettre d'éclaircir cet aspect. Enfin, la transposition des connaissances acquises a pour but de proposer une structure de commande innovante pour la robotique, avec des analyses de robustesse essayant de vérifier l'intérêt des variations d'impédance pour l'Homme et le robot. L'état de l'art concernant l'impédance humaine mais aussi ses liens avec la robotique est riche avec notamment plusieurs revues comme celles de \cite{mizrahi_mechanical_2015,vanderborght_variable_2013,nikooyan_mass-spring-damper_2011} et chapitres de livres \cite{burdet_interaction_2014,tsuji_human_1997}.
+Dans la perspective d’un transfert des modèles de comportement ainsi mis en évidence vers des applications robotiques réalistes en interaction dynamique avec l’environnement, le modèle développé doit être complété par des stratégies du contrôle des efforts employés pour réaliser le mouvement. Par ailleurs, comprendre comment les propriétés dynamiques du bras sont régulées au cours du mouvement pour préparer les phases d’impact de la balle (\cite{tsuji_bio-mimetic_2008}) est également un enjeu dans le champ des sciences du mouvement humain. Des mesures d'impédance pourraient permettre d'éclaircir cet aspect. La transposition des connaissances acquises pourra permettre de proposer une structure de commande innovante pour la robotique, avec des analyses de robustesse essayant de vérifier l'intérêt des variations d'impédance pour l'Homme et le robot. 
+%
+\newlineBlank
+%
+L'ensemble de l'état de l'art sur ces thématiques, aussi bien du côté des sciences du mouvement humain que de la robotique/automatique, mené au début de la thèse, n'a pas pu être inclus dans son intégrité dans ce rapport par souci de brièveté. Les revues suivantes concernant l'impédance humaine et ses lien avec la robotique sont citées à titre indicatif : \cite{mizrahi_mechanical_2015,vanderborght_variable_2013,nikooyan_mass-spring-damper_2011}, et chapitres de livres : \cite{burdet_interaction_2014,tsuji_human_1997}.
 %
 \newlineBlank
 %
@@ -537,7 +541,7 @@ Toutefois, dans tous les cas cités, l'utilisateur maintient une posture connue,
 %
 \newlineBlank
 %
-Dans des travaux plus récent, \cite{guarin_unbiased_2018} introduisent de faibles perturbations en position, de l'ordre de \SI{0.03}{\radian}, niveau articulaire. Leur analyse est conduite au niveau articulaire, l'objectif de cette étude étant de proposer une méthode d'identification non biaisée des paramètres en impédance des articulations humaines, en séparant notamment les phénomènes induits par les réflexes. Il est toutefois important de préciser que cette étude est conduite en simulation, en s'appuyant des résultats d'une publication précédente. 
+Dans des travaux plus récent, \cite{guarin_unbiased_2018} introduisent de faibles perturbations en position, de l'ordre de \SI{0.03}{\radian}. Leur analyse est conduite au niveau articulaire, l'objectif de cette étude étant de proposer une méthode d'identification non biaisée des paramètres en impédance des articulations humaines, en séparant notamment les phénomènes induits par les réflexes. Il est toutefois important de préciser que cette étude est conduite en simulation, en s'appuyant des résultats d'une publication précédente. 
 %\subsubsection{Utilisation de perturbation en force} \label{sec_impedance_estimation_sub_litterature_sub_pert_force}
 %
 \newlineBlank
@@ -552,7 +556,7 @@ Dans leur deuxième expérience, \cite{gomi_human_1997} proposent une tâche de 
 
 \subsubsection{Équipements} \label{sec_impedance_estimation_sub_tools_sub_apparatus}
 
-Dans le cadre de cette thèse, un robot articulé à 5 degrés de liberté est utilisé, le youBot arm de KUKA\textsuperscript{TM}. Ses boucles de contrôle bas niveau en courants et vitesses articulaires sont embarqués sur des cartes de contrôle internes, qui permettent d'atteindre des temps de cycles faibles (jusqu'à \SI{50}{\micro\second} pour le courant). Le réglage des correcteurs reste accessible grâce à l'interface de programmation (API, \textit{Application Programming Interface}) fournie par KUKA\textsuperscript{TM}. Une interface ROS (\textit{Robot Operating System}) est par ailleurs disponible pour contrôler le robot. Le robots peut être commandés en courant, vitesse ou position articulaire en utilisant les boucles internes. Les boucles plus haut niveau, détaillée notamment en \cref{fig_comanipulation_ctrl} sont donc implémentées en utilisant ROS sur un ordinateur dédié. Une fréquence d'environ \SI{1.00}{\kilo\hertz} a pu être atteinte.
+Dans le cadre de cette thèse, un robot articulé à 5 degrés de liberté est utilisé, le youBot arm de KUKA\textsuperscript{TM}. Ses boucles de contrôle bas niveau en courants et vitesses articulaires sont embarqués sur des cartes de contrôle internes, qui permettent d'atteindre des temps de cycles faibles (jusqu'à \SI{50}{\micro\second} pour le courant). Le réglage des correcteurs reste accessible grâce à l'interface de programmation (API, \textit{Application Programming Interface}) fournie par KUKA\textsuperscript{TM}. Une interface ROS (\textit{Robot Operating System}) est par ailleurs disponible pour contrôler le robot. Le robots peut être commandés en courant, vitesse ou position articulaire en utilisant les boucles internes. Les boucles plus haut niveau, détaillées notamment en \cref{fig_comanipulation_ctrl} sont donc implémentées en utilisant ROS sur un ordinateur dédié. Une fréquence d'environ \SI{1.00}{\kilo\hertz} a pu être atteinte.
 %
 \newlineBlank
 %
@@ -856,7 +860,7 @@ Dans l'attente du retour d'un contexte favorable, des expériences avec un nombr
 %
 \newlineBlank
 %
-Une étude plus poussée de la stabilité et de la transparence du contrôle en admittance pourrait permettre un meilleur réglage du schéma de commande, ou l'adoption d'une nouvelle stratégie de contrôle (eg. commande robuste). Par ailleurs, une maîtrise de la dynamique apparente du robot ouvrirait un nouveau champ expérimental pour cette thèse, en se proposant d'étudier l'influence de la dynamique du robot sur l'impédance humaine.
+Une étude plus poussée de la stabilité et de la transparence du contrôle en admittance pourrait permettre un meilleur réglage du schéma de commande, ou l'adoption d'une nouvelle stratégie de contrôle (\text{e.g.,} commande robuste). Par ailleurs, une maîtrise de la dynamique apparente du robot ouvrirait un nouveau champ expérimental pour cette thèse, en se proposant d'étudier l'influence de la dynamique du robot sur l'impédance humaine.
 %
 \newlineBlank
 % 

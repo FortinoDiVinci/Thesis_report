@@ -33,26 +33,26 @@
 		] table [x = t_tot, y = z_tot] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		\addplot [
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
-		vermillon,
+		blueishGreen,
 		only marks,
 		mark options={scale=0.7},
 		] table [x = t_fit_est, y = z_fit_est] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		\addplot [
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		densely dotted,
-		vermillon,
+		blueishGreen,
 		line width=1.5pt,
 		] table [x = t_est, y = z_est] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		\addplot [
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
-		blueishGreen,
+		vermillon,
 		only marks,
 		mark options={scale=0.5},
 		] table [x = t_fit_val, y = z_fit_val] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		\addplot [
 		y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
 		densely dotted,
-		blueishGreen,
+		vermillon,
 		line width=1pt,
 		] table [x = t_val, y = z_val] {misc/impedance_estimation_pert_nonpert_spline_comp_2.csv};
 		
