@@ -2,6 +2,7 @@
 #include <ros/package.h>
 #include <string>
 #include <signal.h>
+#include <time.h>
 //#include <eigen3/Eigen/Dense>
 
 #include <brics_actuator/JointVelocities.h>
@@ -11,6 +12,8 @@
 #include <sensor_msgs/JointState.h>
 //#include "youbot_ros_control/StampedBool.h"
 #include <std_msgs/Bool.h>
+#include <std_msgs/Float32.h>
+#include <std_msgs/Float64.h>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -19,19 +22,22 @@
 #include "youbot_driver/generic/ConfigFile.hpp"
 #include "utils/utils.h"
 
-/**********	
+/**********    
  * MACROS *
  **********/
 
+#define BALL_IMPACT_FORCE       true
+#define RANDOM_PERTURBATIONS    true
+// CTRL MODE
 #define WITH_VIRTUAL_MECH       false
 // setting the following macro with nullspace ctrl will have no effect
 #define WITH_Y_ORIENTATION      false
 #define NULLSPACE_CTRL_LOOP     true
 #define X_L_CTRL_LOOP           false
-#define NB_JOINT_YOUBOT     	5
-#define NB_ACTUATED_JOINTS  	3
-#define DOF                 	3
-#define REF_FRAME_ID        	"base_link"
+#define NB_JOINT_YOUBOT         5
+#define NB_ACTUATED_JOINTS      3
+#define DOF                     3
+#define REF_FRAME_ID            "base_link"
 
 const float TH_MAX[NB_JOINT_YOUBOT] = {5.7401, 25179, -0.1157, 3.3292, 5.5415}; //rad
 const float TH_MIN[NB_JOINT_YOUBOT] = {1.101e-1, 1.101e-1, -4.9266, 1.221e-1, 2.106e-1}; //rad
@@ -45,6 +51,7 @@ const bool ACTUATED_JOINTS[NB_JOINT_YOUBOT] = {false, true, true, true, false};
 
 Robot* kuka_youBot;
 float joint_effort_set_point[NB_JOINT_YOUBOT] = {0., 0., 0., 0., 0.};
+float joint_velocity_set_point[NB_JOINT_YOUBOT] = {0., 0., 0., 0., 0.};
 Pose force_torque_sensor(Point(0,0,0,"N"), Point(0,0,0,"N m"));
 sig_atomic_t volatile g_request_shutdown = 0;
 bool unlocked = false;
@@ -58,40 +65,74 @@ class DisturbanceTimer
 {
 
 public:
-	
-	DisturbanceTimer(ros::NodeHandle*);
-	
-	void trigger(const ros::TimerEvent&);
-	void stop(const ros::TimerEvent&);
-	
-	float getDisturbance() {return dist;};
-	float isDisturbance() {return dist_msg.data;};
-	std::vector<float> getLastEffCmd() {return last_eff_cmd;};
-	
+    
+    DisturbanceTimer(ros::NodeHandle*, float);
+    
+    // timers for perturbation introduction
+    void trigger(const ros::TimerEvent&);
+    void stop_curr(const ros::TimerEvent&);
+    void stop_vel(const ros::TimerEvent&);
+    void off(const ros::TimerEvent&);
+    void unlockDist(const ros::TimerEvent&);
+    
+    // timer for ball/paddle impact
+    void stopImpact(const ros::TimerEvent&);
+    
+    float getDisturbance() {return dist;};
+    float getImpactMagnitude() {return force_impulse;};
+    bool isDisturbance() {return dist_msg.data;};
+    bool isTransitionning() {return torque_speed_transition;};
+    bool isImpact() {return is_impact;};
+    
+    std::vector<float> getLastEffCmd() {return last_eff_cmd;};
+    
+    void getImpulse(const std_msgs::Float64::ConstPtr& data);
+    void computePaddleFreq();    
+    
 private:
-	float dist;
-	std::vector<float> last_eff_cmd;
-	ros::NodeHandle* nh;
-	
-	ros::Timer stop_dist_timer;
-	ros::Timer next_dist_timer;
-	
-	//youbot_ros_control::StampedBool dist_msg;
-	std_msgs::Bool dist_msg;
-	ros::Publisher pub_time_dist;
+    float dist_magnitude;
+    float dist;
+    std::vector<float> last_eff_cmd;
+    ros::NodeHandle* nh;
+    
+    ros::Timer stop_dist_timer;
+    ros::Timer next_dist_timer;
+
+    ros::Timer stop_impact_timer;
+    ros::Timer next_impact_timer;
+    
+    //youbot_ros_control::StampedBool dist_msg;
+    bool torque_speed_transition;
+    bool is_impact = false;
+    bool disturbance_unlocked = true;
+
+    double force_impulse = 0;   // ball/paddle impact force
+    float paddle_period;
+    std::vector<float> lastImpactsTime;
+    float cycle_delay = 0;      // given as pourcentage of the time period
+                                // this delay starts with the ball impact
+    
+    std_msgs::Bool dist_msg;
+    std_msgs::Float32 dist_val_msg;
+    
+    ros::Publisher pub_time_dist;
+    ros::Publisher pub_val_dist;
+    
+    ros::Subscriber sub_impulse;
 };
 
 /*************
  * FUNCTIONS *
  *************/
 
-std::vector <float> nullSpaceCtrlInit(Robot* youBot, float, float, float);
+std::vector <float> nullSpaceCtrlInit(Robot* youBot, float, float, float, float);
 brics_actuator::JointPositions youBotInitializePosition(Robot*, std::vector<float>);
 brics_actuator::JointPositions youBotInitializePosition(Robot*);
 
 void youBotInitializationNSCtrl(Robot* &, boost::scoped_ptr<youbot::ConfigFile>&, ros::NodeHandle*);
 void youBotInitializationXLCtrl(Robot*, boost::scoped_ptr<youbot::ConfigFile>&, float*, float*, ros::NodeHandle*);
 void nullSpaceCtrlLoop(Robot*, Pose, float, std::vector<float>, float);
+void velocityRamp(Robot*, int);
 void xavierLamyCtrlLoop(Robot*, Pose, Pose);
 Pose virtualLineGuide(Robot*, VirtualMechanism, bool);
 
@@ -171,8 +212,11 @@ int main(int argc, char** argv)
     n1.getParam("Joint_equilibrium_gain", Kq);
     
     ROS_INFO_STREAM("freq: " << frequency << "\n" << "Stiffness x: " << Kx_vm << "\n"
-    	<< "Damping x: " << Bx_vm << "\n" << "Stiffness ry: " << Kry_vm << "\n"
-    	<< "Damping ry: " << Bry_vm << "\n" <<  "Joint eq gain: " << Kq << "\n");
+        << "Damping x: " << Bx_vm << "\n" << "Stiffness ry: " << Kry_vm << "\n"
+        << "Damping ry: " << Bry_vm << "\n" <<  "Joint eq gain: " << Kq << "\n");
+    
+    float dist_magnitude;
+    n1.getParam("disturbance_magnitude", dist_magnitude);
     
     //
     // ROBOT & VIRTUAL FIXTURE
@@ -185,7 +229,7 @@ int main(int argc, char** argv)
     #elif NULLSPACE_CTRL_LOOP
         youBotInitializationNSCtrl(kuka_youBot, config_file, &n);
         std::vector<float> qi_0;
-        qi_0 = nullSpaceCtrlInit(kuka_youBot, Kx_vm, Kq, Kp[1]);
+        qi_0 = nullSpaceCtrlInit(kuka_youBot, Kx_vm, Kq, Kp[1], Ki[1]);
     #endif
     
     // Start listening to youBot msgs
@@ -241,9 +285,10 @@ int main(int argc, char** argv)
     
     float Te = 1/frequency;
     float delay = Te;           //the ideal is: delay = Te
+    int it = 0;                 //used for ramp transition between trq & vel ctrl
     
-   	DisturbanceTimer dist_timer(&n);
-   	ros::Timer timer = n.createTimer(ros::Duration(5.), &DisturbanceTimer::trigger, &dist_timer, true);
+    DisturbanceTimer dist_timer(&n, dist_magnitude);
+    //ros::Timer timer = n.createTimer(ros::Duration(5.), &DisturbanceTimer::trigger, &dist_timer, true);
 
     ros::Rate rate(frequency);
     kuka_youBot->updateTimeSample();
@@ -257,7 +302,7 @@ int main(int argc, char** argv)
 
     while (!g_request_shutdown)
     {
-    	
+        
         #if WITH_VIRTUAL_MECH
             force_torque_vm = virtualLineGuide(kuka_youBot, vm, WITH_Y_ORIENTATION);
         #endif
@@ -265,26 +310,46 @@ int main(int argc, char** argv)
         #if X_L_CTRL_LOOP
             xavierLamyCtrlLoop(kuka_youBot, force_torque_sensor, force_torque_vm);
         #elif NULLSPACE_CTRL_LOOP
-            // disturbance is set to 0 (it will be set in the inner loop)
-            nullSpaceCtrlLoop(kuka_youBot, force_torque_sensor, x0, qi_0, dist_timer.getDisturbance());
-        #endif    
         
-        if( !dist_timer.isDisturbance() ) // no disturbance
+        if( dist_timer.isImpact() )  // ball impact
         {
+        #if BALL_IMPACT_FORCE
+            kuka_youBot->setTorqueDisturbanceCmd(dist_timer.getLastEffCmd(), dist_timer.getImpactMagnitude());
+            kuka_youBot->publishTorquesCmd();
+        #endif    
+        }
+        else if( !dist_timer.isDisturbance() ) // no disturbance
+        {
+            // disturbance is set to 0 (it will be set in the inner loop)
+            nullSpaceCtrlLoop(kuka_youBot, force_torque_sensor, x0, qi_0, 0); //dist_timer.getDisturbance()
+            #if RANDOM_PERTURBATIONS
+            if ( dist_timer.isTransitionning() )
+            {
+                // avoid spike after returning to velocity control
+                velocityRamp(kuka_youBot, it);
+                it = min(it+1, 15);
+                //ROS_INFO_STREAM("iteration: " << it);
+            }
+            #endif
             kuka_youBot->publishVelocitiesCmd();
         }
         else // disturbance 
         {
-            kuka_youBot->setTorqueDisturbanceCmd(dist_timer.getLastEffCmd());
+        #if RANDOM_PERTURBATIONS
+            it = 0;
+            kuka_youBot->setTorqueDisturbanceCmd(dist_timer.getLastEffCmd(), dist_timer.getDisturbance());
             kuka_youBot->publishTorquesCmd();
+        #endif
         }
-
+        
+    #endif
+    
         //ROS_INFO_STREAM_THROTTLE(0.2, "VM forces:\n" << force_torque_vm.getPoseVector());
         
-        if ( checkXLimits(*kuka_youBot, x0 + 0.02, x0 - 0.03, 0.410 + 0.05, 0.226 - 0.05) && unlocked)
+        if ( checkXLimits(*kuka_youBot, x0 + 0.03, x0 - 0.03, 0.410 + 0.05, 0.226 - 0.05) && unlocked )
         {
             stop_robot = true;
-            ROS_ERROR("The robot endpoint is out of bounds, the experiment was terminated.");
+            ROS_ERROR("The robot endpoint is out of bounds, the experiment has been terminated.");
             break;
         }
         
@@ -358,7 +423,7 @@ void youBotInitializationNSCtrl(Robot* &youBot, boost::scoped_ptr<youbot::Config
     youBot = new Robot(joints, ACTUATED_JOINTS, youBot_jacobian, initPositionsCmd(), nh);
 }
 
-std::vector <float> nullSpaceCtrlInit(Robot* youBot, float Kx_gain, float Kq_gain, float Kz_gain)
+std::vector <float> nullSpaceCtrlInit(Robot* youBot, float Kx_gain, float Kq_gain, float Kz_gain, float Kiz_gain)
 {
     std::vector <Endpoint> ep_limits;
     std::vector <float> qi_0;
@@ -383,7 +448,7 @@ std::vector <float> nullSpaceCtrlInit(Robot* youBot, float Kx_gain, float Kq_gai
     
     youBot->setNullspaceCtrlGains(Kx_gain, Kq_gain);
     youBot->setEndpointLimits(ep_limits);
-    youBot->setEndpointPID(PID(Kz_gain, 0, 0));
+    youBot->setEndpointPID(PID(Kz_gain, Kiz_gain, 0));
     
     return qi_0;
 }
@@ -453,7 +518,7 @@ void nullSpaceCtrlLoop(Robot* youBot, Pose ft_sens, float x_eq, std::vector<floa
     youBot->computeEnpointPosition();
     // to allow perturbation/disturbance replace 0. by dist
     if (unlocked) {
-    	youBot->computeNullspaceCollaborativeCmd(x_eq, ft_sens.getPosition().z, dist, qi_eq);
+        youBot->computeNullspaceCollaborativeCmd(x_eq, ft_sens.getPosition().z, dist, qi_eq);
     }
 }
 
@@ -462,6 +527,25 @@ void xavierLamyCtrlLoop(Robot* youBot, Pose ft_sens, Pose ft_virt_guide)
     youBot->updateJacobianTranspose();
     youBot->setInputError(youBot->computeJointTorquesFromWrench(ft_sens + ft_virt_guide));
     youBot->computeVelocityCollaborativeCmd(); 
+}
+
+void velocityRamp(Robot* youBot, int iteration)
+{
+    brics_actuator::JointVelocities dummy_vel_cmd;
+    dummy_vel_cmd = youBot->getVelocityCmd();
+    //ROS_INFO_STREAM("Before: "<< dummy_vel_cmd.velocities[2].value);
+    int idx = 0;
+    float alpha = iteration/15;
+    for (int i = 0; i < NB_JOINT_YOUBOT; i++)
+    {
+        if ( ACTUATED_JOINTS[i] )
+        {
+            dummy_vel_cmd.velocities[idx].value = (dummy_vel_cmd.velocities[idx].value*alpha + youBot->getJoints()[i].getAngularVelocity()*(1 - alpha))/2 ;
+            idx++;
+        }
+    }    
+    //ROS_INFO_STREAM("After: "<< dummy_vel_cmd.velocities[2].value);
+    youBot->setVelocityCmd(dummy_vel_cmd);
 }
 
 Pose virtualLineGuide(Robot* youBot, VirtualMechanism vm, bool orientation) 
@@ -558,7 +642,8 @@ void getJointSetpoints(const sensor_msgs::JointState::ConstPtr& data)
     for (int ii = 0; ii < NB_JOINT_YOUBOT; ii++)
     {
         joint_effort_set_point[ii] = data->effort[ii];
-    }    
+        joint_velocity_set_point[ii] = data->velocity[ii];
+    }
 }
 
 // security
@@ -620,46 +705,147 @@ void sigIntHandler(int sig)
 
 // timers
 
-DisturbanceTimer::DisturbanceTimer(ros::NodeHandle* n)
+DisturbanceTimer::DisturbanceTimer(ros::NodeHandle* n, float magnitude)
 {
-	this->nh = n;
-	
-	dist = 0.0;
-	last_eff_cmd.resize(NB_ACTUATED_JOINTS);
-	
-	std::string topic_name = "";
-    topic_name = "arm_1/disturbance_time";
+    this->nh = n;
+    
+    dist_magnitude = magnitude;
+    dist = 0.0;
+    dist_msg.data = false;
+    torque_speed_transition = false;
+    cycle_delay = 0.25; // should be in the middle of decreasing phase
+    
+    last_eff_cmd.resize(NB_ACTUATED_JOINTS);
+    lastImpactsTime.resize(5, ros::Time::now().toSec()); // 5 previous impact times are stored
+    
+    std::string topic_name = "";
+    //topic_name = "arm_1/disturbance_time";
     //pub_time_dist = nh->advertise<youbot_ros_control::StampedBool>(topic_name, 1);
-    pub_time_dist = nh->advertise<std_msgs::Bool>(topic_name, 1);
+    //pub_time_dist = nh->advertise<std_msgs::Bool>(topic_name, 1);
+    topic_name = "arm_1/disturbance_val";
+    pub_val_dist = nh->advertise<std_msgs::Float32>(topic_name, 1);
+    topic_name = "impulse";
+    sub_impulse = nh->subscribe(topic_name, 1, &DisturbanceTimer::getImpulse, this); // ball impact force
+    
+    srand (time(NULL));
 }
 
 void DisturbanceTimer::trigger(const ros::TimerEvent& e)
 {
-	ROS_INFO("TRIGGERED");
-	
-	int idx = 0;
-	for (int i = 0; i < NB_ACTUATED_JOINTS; i++)
-	{
-	    if ( ACTUATED_JOINTS[i] )
-	    {
-	        last_eff_cmd[idx] = joint_effort_set_point[i];
-	        idx++;
-	    }
-	}
-	
-	dist_msg.data = true;
-	//dist_msg.stamp = ros::Time::now();
-	pub_time_dist.publish(dist_msg);
-	
-	stop_dist_timer = nh->createTimer(ros::Duration(0.03), &DisturbanceTimer::stop, this, true);
+    //ROS_INFO("TRIGGERED");
+    
+    int idx = 0;
+    for (int i = 0; i < NB_JOINT_YOUBOT; i++)
+    {
+        if ( ACTUATED_JOINTS[i] )
+        {
+            last_eff_cmd[idx] = joint_effort_set_point[i];
+            idx++;
+        }
+    }
+
+    dist_msg.data = true;
+    dist = dist_magnitude*( 2*( rand()%2 ) - 1 ); // sign is chosen randomly
+    dist_val_msg.data = dist;
+    //dist_msg.stamp = ros::Time::now();
+    //pub_time_dist.publish(dist_msg);
+    pub_val_dist.publish(dist_val_msg);
+    
+    stop_dist_timer = nh->createTimer(ros::Duration(0.03), &DisturbanceTimer::stop_curr, this, true);
 }
 
-void DisturbanceTimer::stop(const ros::TimerEvent& e)
+void DisturbanceTimer::stop_curr(const ros::TimerEvent& e)
 {
-	//ROS_INFO("STOPED");
-	dist_msg.data = false;
-	//dist_msg.stamp = ros::Time::now();
-	pub_time_dist.publish(dist_msg);
-	
-	next_dist_timer = nh->createTimer(ros::Duration(1.), &DisturbanceTimer::trigger, this, true);
+    //ROS_INFO("STOPED");
+    dist_msg.data = true;
+    dist = 0.;
+    dist_val_msg.data = dist;
+    //dist_msg.stamp = ros::Time::now();
+    //pub_time_dist.publish(dist_msg);
+    pub_val_dist.publish(dist_val_msg);
+    
+    next_dist_timer = nh->createTimer(ros::Duration(0.0015), &DisturbanceTimer::stop_vel, this, true);
+}
+
+void DisturbanceTimer::stop_vel(const ros::TimerEvent& e)
+{
+    //ROS_INFO("STOPED");
+    dist_msg.data = false;
+    torque_speed_transition = true;
+  
+    next_dist_timer = nh->createTimer(ros::Duration(0.015), &DisturbanceTimer::off, this, true);
+}
+
+void DisturbanceTimer::off(const ros::TimerEvent& e)
+{
+    dist_msg.data = false;
+    torque_speed_transition = false;
+    //dist_msg.stamp = ros::Time::now();
+    //pub_time_dist.publish(dist_msg);
+    
+    disturbance_unlocked = false;
+    
+    next_dist_timer = nh->createTimer(ros::Duration((rand()%301)/100+1.5), &DisturbanceTimer::unlockDist, this, true);    
+}
+
+void DisturbanceTimer::unlockDist(const ros::TimerEvent& e)
+{
+    disturbance_unlocked = true; // free disturbance lock
+}
+
+void DisturbanceTimer::stopImpact(const ros::TimerEvent& e)
+{
+    is_impact = false; // free disturbance lock during impact
+}
+
+void DisturbanceTimer::getImpulse(const std_msgs::Float64::ConstPtr& data)
+{
+    ros::Time t_imp = ros::Time::now();
+    force_impulse = data->data;
+    
+    if ( force_impulse != 0. )
+    {
+        //std::rotate(lastImpactsTime.rbegin(), lastImpactsTime.rbegin() + 1, lastImpactsTime.rend());
+        
+        if( !is_impact )
+        {
+            // avoid considering multiple consecutive impacts in chaotic bouncings
+            lastImpactsTime.pop_back();
+            lastImpactsTime.insert(lastImpactsTime.begin(), t_imp.toSec());
+            
+            this->computePaddleFreq();
+
+            if (disturbance_unlocked)
+            {
+                next_dist_timer = nh->createTimer(ros::Duration(paddle_period*cycle_delay), &DisturbanceTimer::trigger, this, true);            
+            }
+            
+            is_impact = true; // avoid perturbation during impact
+            stop_impact_timer = nh->createTimer(ros::Duration(0.03), &DisturbanceTimer::stopImpact, this, true);
+        }
+
+    }
+}
+
+void DisturbanceTimer::computePaddleFreq()
+{
+    //ros::Duration sum;
+    double average;
+    
+    for (std::vector<float>::iterator it=lastImpactsTime.begin(); it!=lastImpactsTime.end()-1; ++it)
+    //for (int it=0; it<lastImpactsTime.size()-1; ++it)
+    {
+        average += *(it+1) - *it;
+        //average += lastImpactsTime.at(it+1) - lastImpactsTime.at(it);
+    }
+    average = average / (lastImpactsTime.size() - 1);
+    
+    if (average > 0)
+    {
+        paddle_period = average;
+    }
+    else
+    {
+        // manage error
+    }
 }
