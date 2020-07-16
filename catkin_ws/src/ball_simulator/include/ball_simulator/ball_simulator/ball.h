@@ -13,12 +13,13 @@ namespace ball_simulator
 {
 struct BallConfig
 {
-  BallConfig(ros::NodeHandle nh) : parent_frame_id("world"), frame_id("ball"), mass(1.0), radius(0.05)
+  BallConfig(ros::NodeHandle nh) : parent_frame_id("world"), frame_id("ball"), mass(1.0), radius(0.05), stiffness(15000)
   {
     nh.param("parent_frame_id", parent_frame_id, parent_frame_id);
     nh.param("ball_frame_id", frame_id, frame_id);
     nh.param("ball_mass", mass, mass);
     nh.param("radius", radius, radius);
+    nh.param("stiffness", stiffness, stiffness);
   }
 
   void reconfigure(ball_simulator::BallSimulatorConfig& config)
@@ -36,6 +37,7 @@ struct BallConfig
   std::string frame_id;
   double mass;
   double radius;
+  double stiffness;
 };
 
 struct BallState

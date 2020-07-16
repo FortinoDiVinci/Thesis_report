@@ -131,13 +131,27 @@ BouncingStepResult bouncing_step(const ros::Time& stamp, Simulation& simulation,
       state.collision_time += fall_duration;
       const double ball_velocity_at_collision = state.bounce_velocity - config.gravity * fall_duration;
       const double paddle_velocity_at_collision = paddle.velocity(state.collision_time);
-      const double collision_impulse = (ball_config.mass * paddle_config.mass) * (1.0 + config.restitution) *
-                                       (paddle_velocity_at_collision - ball_velocity_at_collision) /
-                                       (ball_config.mass + paddle_config.mass);
+
+      const double bounce_velocity = ( paddle_config.mass * (1.0 + config.restitution) * paddle_velocity_at_collision + ball_velocity_at_collision * (ball_config.mass - paddle_config.mass * config.restitution) ) / (ball_config.mass + paddle_config.mass);
+
+      //const double collision_impulse = (ball_config.mass * paddle_config.mass) * ( (1.0 + config.restitution) * paddle_velocity_at_collision - config.restitution * ball_velocity_at_collision) / (ball_config.mass + paddle_config.mass);
+
       state.bounce_velocity =
-          std::max(0.0, std::max(paddle_velocity_at_collision, collision_impulse / ball_config.mass));
+          std::max(0.0, std::max(paddle_velocity_at_collision, bounce_velocity));
       elapsed_time = current_time - state.collision_time;
+
+      const double collision_impulse = ball_config.mass * (state.bounce_velocity - ball_velocity_at_collision) / elapsed_time; // m*a   
+
       total_impulse += collision_impulse;
+      
+      //ROS_INFO_STREAM("ball post_velocity: " << bounce_velocity << "\n" <<
+      //                "ball pre_velocity: "  << ball_velocity_at_collision << "\n" <<
+      //                "ball mass: " << ball_config.mass << "\n" <<
+      //                "arm pre_velocity: "  << paddle_velocity_at_collision << "\n" <<
+      //                "arm mass: " << paddle_config.mass << "\n" <<
+      //                "collision_impulse: " << collision_impulse << "\n" <<
+      //                "time elasped: " << elapsed_time);
+
     }
     else
     {

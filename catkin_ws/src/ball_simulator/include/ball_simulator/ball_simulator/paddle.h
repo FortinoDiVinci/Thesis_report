@@ -17,19 +17,21 @@ namespace ball_simulator
 struct PaddleConfig
 {
   PaddleConfig(ros::NodeHandle nh)
-    : parent_frame_id("world"), frame_id("paddle"), mass(1.0), frequency(0.5), amplitude(0.2), scale(1.0)
+    : parent_frame_id("world"), frame_id("paddle"), mass(1.0), stiffness(700), frequency(0.5), amplitude(0.2), scale(1.0), initial_height(0.3)
   {
     nh.param("parent_frame_id", parent_frame_id, parent_frame_id);
     nh.param("paddle_frame_id", frame_id, frame_id);
     nh.param("paddle_mass", mass, mass);
+    nh.param("stiffness", stiffness, stiffness);
     nh.param("paddle_frequency", frequency, frequency);
     nh.param("paddle_amplitude", amplitude, amplitude);
     nh.param("scale", scale, scale);
+    nh.param("h0", initial_height, initial_height);
   }
 
   void reconfigure(ball_simulator::BallSimulatorConfig& config)
   {
-    mass = config.ball_mass;
+    mass = config.paddle_mass;
     frequency = config.paddle_frequency;
     amplitude = config.paddle_amplitude;
     scale = config.scale;
@@ -38,9 +40,11 @@ struct PaddleConfig
   std::string parent_frame_id;
   std::string frame_id;
   double mass;
+  double stiffness;
   double frequency;
   double amplitude;
   double scale;
+  double initial_height; 
 };
 
 class Paddle
@@ -116,17 +120,16 @@ public:
   {
     tf::StampedTransform transform;
 
-    tf_listener_.waitForTransform(frame_id_, config().parent_frame_id, ros::Time(stamp), ros::Duration(0.1),
-                                  ros::Duration(0.001));
+    tf_listener_.waitForTransform(frame_id_, config().parent_frame_id, ros::Time(stamp), ros::Duration(0.03), ros::Duration(0.001));
 
     try
     {
       tf_listener_.lookupTransform(config().parent_frame_id, frame_id_, ros::Time(stamp), transform);
-      return transform.getOrigin().getZ() * config().scale;
+      return (transform.getOrigin().getZ() - config().initial_height) * config().scale;
     }
     catch (const tf::TransformException& e)
     {
-      ROS_WARN("cannot compute %s coordinates: %s", frame_id_.c_str(), e.what());
+      ROS_WARN_THROTTLE(0.2, "cannot compute %s coordinates: %s", frame_id_.c_str(), e.what());
       return 0.0;
     }
   }
@@ -137,8 +140,7 @@ public:
     double velocity = 0.0;
     std::string error_msg;
 
-    tf_listener_.waitForTransform(config().parent_frame_id, frame_id_, ros::Time(stamp), ros::Duration(0.1),
-                                  ros::Duration(0.001));
+    tf_listener_.waitForTransform(config().parent_frame_id, frame_id_, ros::Time(stamp), ros::Duration(0.03), ros::Duration(0.001));
 
     try
     {
@@ -148,7 +150,7 @@ public:
     }
     catch (const tf::TransformException& e)
     {
-      ROS_WARN("cannot compute %s velocity: %s", frame_id_.c_str(), e.what());
+      ROS_WARN_THROTTLE(0.2, "cannot compute %s velocity: %s", frame_id_.c_str(), e.what());
     }
 
     return velocity;
