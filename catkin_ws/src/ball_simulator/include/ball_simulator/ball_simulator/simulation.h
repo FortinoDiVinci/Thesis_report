@@ -20,6 +20,7 @@ struct SimulationConfig
     nh.param("restitution", restitution, restitution);
     nh.param("gravity", gravity, gravity);
     nh.param("enable_sine_paddle", enable_sine_paddle, enable_sine_paddle);
+
   }
 
   void reconfigure(ball_simulator::BallSimulatorConfig& config)
@@ -110,13 +111,16 @@ class SimulationReconfiguration
 {
 public:
   SimulationReconfiguration(ros::NodeHandle nh)
-    : simulation_config(nh), ball_config(nh), paddle_config(nh), ramp_config(nh), target_config(nh)
+    : simulation_config(nh), ball_config(nh), paddle_config(nh), ramp_config(nh), target_config(nh), paddle_limits_config(nh)
   {
     marker_pub = nh.advertise<visualization_msgs::MarkerArray>("markers", 1, true);
 
     dynamic_reconfigure::Server<ball_simulator::BallSimulatorConfig>::CallbackType reconfigure_callback =
         boost::bind(&SimulationReconfiguration::reconfigure, this, _1, _2);
     reconfiguration_server.setCallback(reconfigure_callback);
+
+    //nh.param("scale", scale_factor, scale_factor);
+    scale_factor = paddle_config.getScale();
   }
 
   void reconfigure(ball_simulator::BallSimulatorConfig& config, uint32_t level)
@@ -125,7 +129,6 @@ public:
     ball_config.reconfigure(config);
     paddle_config.reconfigure(config);
     target_config.reconfigure(config);
-
     marker_pub.publish(markers());
   }
 
@@ -149,22 +152,42 @@ public:
     return ramp_config;
   }
 
+  const PaddleLimitsConfig& paddleLimitsConfig() const
+  {
+    return paddle_limits_config;
+  }
+
   visualization_msgs::MarkerArray markers() const
   {
     int id = 0;
     visualization_msgs::MarkerArray markers;
+
     auto ball_marker = BallPublisher::marker(ball_config);
     ball_marker.id = id++;
     markers.markers.push_back(ball_marker);
+
     auto paddle_marker = PaddlePublisher::marker(paddle_config);
     paddle_marker.id = id++;
     markers.markers.push_back(paddle_marker);
+
     visualization_msgs::Marker ramp_marker = RampPublisher::marker(ramp_config);
     ramp_marker.id = id++;
     markers.markers.push_back(ramp_marker);
+
     visualization_msgs::Marker target_marker = TargetPublisher::marker(target_config);
     target_marker.id = id++;
     markers.markers.push_back(target_marker);
+
+    visualization_msgs::Marker paddle_lower_limit_marker = PaddleLimitsPublisher::l_marker(paddle_limits_config);
+    paddle_lower_limit_marker.pose.position.z *= scale_factor;
+    paddle_lower_limit_marker.id = id++;
+    markers.markers.push_back(paddle_lower_limit_marker);
+
+    visualization_msgs::Marker paddle_upper_limit_marker = PaddleLimitsPublisher::u_marker(paddle_limits_config);
+    paddle_upper_limit_marker.pose.position.z *= scale_factor;
+    paddle_upper_limit_marker.id = id++;
+    markers.markers.push_back(paddle_upper_limit_marker);
+
     return markers;
   }
 
@@ -175,7 +198,10 @@ private:
   Paddle::Config paddle_config;
   RampConfig ramp_config;
   TargetConfig target_config;
+  PaddleLimitsConfig paddle_limits_config;
   ros::Publisher marker_pub;
+  double scale_factor = 6; // without this hardcoded initialization (corrected in constructor, the limits are not well set at the start (0)... TODO: proper correction
+    
 };
 
 class SimulationServices

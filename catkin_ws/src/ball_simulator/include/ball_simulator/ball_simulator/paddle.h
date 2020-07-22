@@ -17,7 +17,7 @@ namespace ball_simulator
 struct PaddleConfig
 {
   PaddleConfig(ros::NodeHandle nh)
-    : parent_frame_id("world"), frame_id("paddle"), mass(1.0), stiffness(700), frequency(0.5), amplitude(0.2), scale(1.0), initial_height(0.3)
+    : parent_frame_id("world"), frame_id("paddle"), mass(1.0), stiffness(700), frequency(0.5), amplitude(0.2), scale(1.0), initial_height(0.32)
   {
     nh.param("parent_frame_id", parent_frame_id, parent_frame_id);
     nh.param("paddle_frame_id", frame_id, frame_id);
@@ -36,6 +36,11 @@ struct PaddleConfig
     amplitude = config.paddle_amplitude;
     scale = config.scale;
   }
+
+  double getScale() 
+    {
+      return scale;
+    }
 
   std::string parent_frame_id;
   std::string frame_id;

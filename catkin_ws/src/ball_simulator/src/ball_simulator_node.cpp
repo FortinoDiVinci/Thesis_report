@@ -140,7 +140,8 @@ BouncingStepResult bouncing_step(const ros::Time& stamp, Simulation& simulation,
           std::max(0.0, std::max(paddle_velocity_at_collision, bounce_velocity));
       elapsed_time = current_time - state.collision_time;
 
-      const double collision_impulse = ball_config.mass * (state.bounce_velocity - ball_velocity_at_collision) / elapsed_time; // m*a   
+      //const double collision_impulse = ball_config.mass * (state.bounce_velocity - ball_velocity_at_collision) / elapsed_time; // m*a   
+      const double collision_impulse = -(ball_velocity_at_collision - paddle_velocity_at_collision) * (1 + config.restitution) * sqrt(ball_config.mass * 650) / 3.14 / sqrt(1 + ball_config.mass/paddle_config.mass); // TODO correct hardcoded values..  
 
       total_impulse += collision_impulse;
       
