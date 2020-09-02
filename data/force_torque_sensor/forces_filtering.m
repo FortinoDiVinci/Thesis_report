@@ -111,7 +111,7 @@ end
 FT_bias = zeros(6, counter);
 grav = zeros(3, counter);
 for i=1:counter
-    T = MGD_T0sensor(thetas(1,i), thetas(2,i), thetas(3,i), thetas(4,i), thetas(5,i));
+    T = MGD_T0handle(thetas(1,i), thetas(2,i), thetas(3,i), thetas(4,i), thetas(5,i));
     grav(:,i) = inv(T(1:3,1:3))*[0;0;-m*9.81];
     FT_bias(1:3, i) = F_s(:,i) - grav(:,i);
     FT_bias(4:6, i) = T_s(:,i); %%todo
@@ -123,7 +123,7 @@ if rotation
     % disp('rotation')
     % Transformation from sensor to global reference
     for i=1:length(F_s)
-        T = MGD_T0sensor(thetas(1,i), thetas(2,i), thetas(3,i), thetas(4,i), thetas(5,i));
+        T = MGD_T0handle(thetas(1,i), thetas(2,i), thetas(3,i), thetas(4,i), thetas(5,i));
         F_r(:,i) = T(1:3,1:3) * (F_s(:, i) - ft_bias(1:3));
         T_r(:,i) = T(1:3,1:3) * (T_s(:, i) - ft_bias(1:3));
     end

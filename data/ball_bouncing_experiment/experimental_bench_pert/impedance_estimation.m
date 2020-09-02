@@ -14,7 +14,24 @@
 clear all
 close all
 
-file_name = 'successful_exp_data.mat';
+%file_name = 'successful_exp_data.mat';
+%file_name = 'data_impact2.mat';
+
+
+%    data_impact2.mat    %
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EXP  | t_start | t_end |
+%-------------------------
+%  1   |   68 s  |  83 s |
+% 1bis |   90 s  | 108 s |
+%  2   |   56 s  |  73 s |
+% 2bis |   83 s  | 100 s |
+%  3   |   47 s  |  93 s |
+% 3bis |  100 s  | 120 s |
+%  4   |   53 s  | 118 s |
+% 4bis |  124 s  | 151 s |
+%-------------------------
+
 load(file_name);
 
 %%%%%%%%%%%%%%%%%%
@@ -23,16 +40,22 @@ load(file_name);
 % display macros
 DISP_NORMALIZED_TRAJECTORIES = 0
 DISP_TIME_FRAMES_OF_INTEREST = 0
-DISP_RECONSTRUCTED_FORCES    = 1
-DISP_NORMAL_ERRORS_HISTOGRAM = 1
+DISP_RECONSTRUCTED_FORCES    = 0
+DISP_NORMAL_ERRORS_HISTOGRAM = 0
 
 ONLY_DECREASING_CYCLES_PERT  = 1
 
-min_time_distance_to_peak = 0.100;    % 050ms 
+%selection of the experimental time
+T_START                      = 73.5
+T_END                        = 115
+%T_START                     = 53
+%T_END                       = 118
+
+min_time_distance_to_peak = 0.010;% 0.100;    % 050ms 
 % time evaluation variables
 idx_traj_fit        = ceil(0.100/dt); % 100ms before and after the window
 idx_window          = ceil(0.200/dt); % 200ms
-idx_delay           = ceil(0.015/dt); % 015ms
+idx_delay           = ceil(0.010/dt); % 015ms
 
 nb_param            = 4; % for the impedance model, should be between 2 & 4
                          % - 2: F = Kx + e
@@ -68,12 +91,11 @@ ddz = Iu_diffcent(dz,t);
 idx_peaks = crossing(dz);
 idx_peaks = idx_peaks(diff(idx_peaks)>100);
 
-t_1st_peak = 73.5; % approx time for selection of relevant data
-t_last_peak = 115;
+t_1st_peak = T_START;
+t_last_peak = T_END;
 idx_peaks = idx_peaks(t(idx_peaks)>t_1st_peak & t(idx_peaks)<t_last_peak);
 t_on_dist = t_on_dist(t_on_dist > t_1st_peak & t_on_dist < t_last_peak);
 
-t_on_dist = t_on_dist(t_on_dist>t_1st_peak & t_on_dist<t_last_peak);
 idx_perts = zeros(size(t_on_dist)); % global indexes of all perturbations
 % perturbation indexes
 for pert_idx = 1:length(t_on_dist)
@@ -387,10 +409,10 @@ for pert_idx = 1:length(idx_perts) % indexes whithin the perturbations
     
     if DISP_TIME_FRAMES_OF_INTEREST
         figure(1)
-        plot(t(idx_tot), z(idx_tot), 'r:','linewidth',2)
+        plot(t(idx_tot), z_virt(:, pert_idx), 'r:','linewidth',2)
         plot(t(idx_fit), z(idx_fit), 'ro')
         
-        plot(t(idx_tot_val), z(idx_tot_val), 'g:','linewidth',2)
+        plot(t(idx_tot_val), z_virt_val(:, pert_idx), 'g:','linewidth',2)
         plot(t(idx_fit_val), z(idx_fit_val), 'go')       
         % perturbation 
         plot(t(idx_pert), z(idx_pert), 'k^', 'MarkerSize', 10); 
@@ -433,7 +455,9 @@ r2_val = NaN(nb,1);
 delta_fz_rec = NaN(idx_window, nb);
 delta_fz_rec_val = NaN(idx_window, nb);
 % reconstruction errors
+err_rec = NaN(idx_window, nb);
 err_rec_n = NaN(idx_window, nb);
+err_rec_val = NaN(idx_window, nb);
 err_rec_n_val = NaN(idx_window, nb);
 
 % indexes to select only the intersection between idx_tot and idx_fit, 
@@ -488,8 +512,10 @@ for pert_idx = 1:length(idx_perts)
     % reconstruction error
     mag_fz = abs(max(delta_fz(:, pert_idx)) - min(delta_fz(:, pert_idx))); % force magnitude
     mag_fz_val = abs(max(delta_fz_val(:, pert_idx)) - min(delta_fz_val(:, pert_idx)));
-    err_rec_n(:, pert_idx) = (delta_fz_rec(:, pert_idx) - delta_fz(:, pert_idx)) / mag_fz;   
-    err_rec_n_val(:, pert_idx) = (delta_fz_rec_val(:, pert_idx) - delta_fz_val(:, pert_idx)) / mag_fz_val;
+    err_rec(:, pert_idx) = delta_fz_rec(:, pert_idx) - delta_fz(:, pert_idx);
+    err_rec_n(:, pert_idx) = err_rec(:, pert_idx) / mag_fz;   
+    err_rec_val(:, pert_idx) = delta_fz_rec_val(:, pert_idx) - delta_fz_val(:, pert_idx);
+    err_rec_n_val(:, pert_idx) = err_rec_val(:, pert_idx) / mag_fz_val;
 end
 
 
@@ -515,13 +541,14 @@ end
 
 if DISP_NORMAL_ERRORS_HISTOGRAM
     figure(4)
-    histHandle = histogram(err_rec_n(:),50);
+    histHandle = histogram(err_rec_val(:),50);
     hold on, grid on
-    avg_tot = nanmean(err_rec_n(:));
-    std_tot = nanstd(err_rec_n(:));
+    avg_tot = nanmean(err_rec_val(:));
+    std_tot = nanstd(err_rec_val(:));
     line([avg_tot+std_tot, avg_tot+std_tot], [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([avg_tot-std_tot, avg_tot-std_tot], [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([avg_tot, avg_tot], [0, max(histHandle.Values)], 'Color','red','LineStyle','--','linewidth',2);
+    xlabel('\delta f (N)')
 end
 
 if nb_param > 1
@@ -561,10 +588,33 @@ if nb_param > 3
     disp("relative std: " + num2str(round(100*I_std/I_mean),'%i') + "%")
 end
 
+rho_max = max(impedance(end,:));
+rho_min = nanmin(impedance(end,:));
+rho_mean = nanmean(impedance(end,:));
+rho_std = nanstd(impedance(end,:));
+disp('------ rho -------')
+disp('------------------')
+disp("min: " + num2str(rho_min, '%1.3f') + "N")
+disp("max: " + num2str(rho_max, '%1.3f') + "N")
+disp("mean: " + num2str(rho_mean, '%1.3f') + "N")
+disp("std: " + num2str(rho_std,'%1.3f') + "N")
+
 r2_mean = nanmean(r2);
 r2_val_mean = nanmean(r2_val);
+r2_std = nanstd(r2);
+r2_val_std = nanstd(r2_val);
 
 disp('------- R^2 -------')
 disp('------------------')
 disp("perturbed mean: " + num2str(r2_mean, '%1.3f'))
+disp("std: " + num2str(r2_std, '%1.3f'))
 disp("non perturbed mean: " + num2str(r2_val_mean, '%1.3f'))
+disp("std: " + num2str(r2_val_std, '%1.3f'))
+
+% tfr=(1:200)';
+% save_mat = [];
+% save_mat = [save_mat, tfr];
+% for pert_idx = 1:length(delta_fz(1,:))
+%     save_mat = [save_mat, delta_fz(:, pert_idx), delta_fz_rec(:, pert_idx), delta_fz_val(:, pert_idx), delta_fz_rec_val(:, pert_idx)];
+% end
+% dlmwrite('forces_reconstruction_2.csv', save_mat,'delimiter',',','precision',5);
