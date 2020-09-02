@@ -12,10 +12,10 @@ addpath('../../force_torque_sensor')
 
 DISPLAY_MOCAP_FIT                   = 1
 DISPLAY_BALL_BOUNCING_IMPACTS       = 0
-SINGLE_MOCAP_FITTING                = 0
+SINGLE_MOCAP_FITTING                = 1
 IS_BALL_BOUNCING                    = 0
-USE_DEFAULT_TF_MATRIX               = 1
-
+USE_DEFAULT_TF_MATRIX               = 0
+SAVE_DATA                           = 1 % specify name for the file
 
 %% kinematic data, ball and paddle trajectories
 
@@ -27,8 +27,12 @@ dt = 1e-3;
 %names = ["antonello_v/", "baptiste_b/", "cristina_m/1/", "cristina_m/2/", "cristina_v/", "joy_f/", "maria_m/1/", "maria_m/2/", "martin_s/", "remi_a/", "sorin_o/", "thomas_c/"];
 %names = "calibrated_spring/" + ["1/", "2/", "3/", "4/"];
 %names = "calibrated_environnement/calibrated_spring_" + ["1/", "2/", "3/", "4/", "5/", "6/"];
-names = ["vincent_f/"];
+%names = ["vincent_f/"];
+names = "data_02-Sep-2020_17h45/" +["no_pert/", "long_pert/", "short_pert/", "spring_no_pert/", "spring_long_pert/", "spring_long_pert2/", "spring_short_pert/"];
 folder_names = "preliminary_experimental_data/" + names;
+if SAVE_DATA
+    saved_data_name = "data_eval_pert";
+end
 
 NO_DISTURBANCE = cell(size(folder_names));
 NO_DISTURBANCE(:,:) = {0};
@@ -192,13 +196,13 @@ for fld_idx = 1:length(folder_names)
     end    
     
     if USE_DEFAULT_TF_MATRIX
-      tranformation_matrix{fld_idx} = [0.9939    0.0214    0.1082   -0.1188
+      transformation_matrix{fld_idx} = [0.9939    0.0214    0.1082   -0.1188
                                        0.1085   -0.0115   -0.9940    0.3065
                                       -0.0200    0.9997   -0.0138    0.0513
                                        0         0         0    1.0000];
     
     elseif SINGLE_MOCAP_FITTING & fld_idx ~= 1
-        tranformation_matrix{fld_idx} = tranformation_matrix{1};
+        transformation_matrix{fld_idx} = transformation_matrix{1};
     else
         
         if NO_MOCAP{fld_idx}
@@ -210,7 +214,7 @@ for fld_idx = 1:length(folder_names)
         % transformation recalibration is done using free movement
         [R2, Bfit, ErrorStats] = absor(mocap_marker_fm{fld_idx}', robot_marker_fm{fld_idx}');
 
-        tranformation_matrix{fld_idx} = R2.M;
+        transformation_matrix{fld_idx} = R2.M;
 
         mocap_marker_robot_base_fm{fld_idx} = zeros(size(mocap_marker_fm{fld_idx}));
         for i=1:length(t_free_mov{fld_idx})
@@ -232,7 +236,7 @@ for fld_idx = 1:length(folder_names)
 
     mocap_marker_robot_base{fld_idx} = zeros(size(mocap_marker{fld_idx}));
     for i=1:length(t{fld_idx})
-        temp_hom = tranformation_matrix{fld_idx} * [mocap_marker{fld_idx}(i,:), 1]';
+        temp_hom = transformation_matrix{fld_idx} * [mocap_marker{fld_idx}(i,:), 1]';
         mocap_marker_robot_base{fld_idx}(i,:) = temp_hom(1:3);
     end
 
@@ -328,6 +332,21 @@ if IS_BALL_BOUNCING
 
     end
 
+end
+
+if SAVE_DATA
+    if exist(strcat(saved_data_name,".mat"), "file")
+        warning('The file ' + saved_data_name + ".mat, already exists.")
+        str_in = input('Do you really want to erase it ?','s');
+        if str_in ~= "yes" && str_in ~= "YES" && str_in ~= "Yes" && str_in ~= "Y" && str_in ~= "y"
+            return
+        end
+    end
+    save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+        "joint_eff_fm", "mocap_marker", "mocap_marker_fm", "mocap_marker_robot_base", ...
+        "mocap_marker_robot_base_fm", "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", ...
+        "NO_MOCAP", "NO_TRQ_CMD_DIST", "robot_marker", "robot_marker_fm", "t", "t_dist", "thetas", ...
+        "thetas_fm", "torques_unf", "transformation_matrix", "z_b", "z_p");
 end
 
 return
