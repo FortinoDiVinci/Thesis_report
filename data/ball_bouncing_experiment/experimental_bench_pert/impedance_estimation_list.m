@@ -19,18 +19,19 @@ addpath('../../youBot_analysis/Utils')
 
 %file_name = 'successful_exp_data.mat';
 %file_name = 'data_impact2.mat';
-file_name = 'preliminary_data.mat';
-file_name = 'calibration_bench_data_26_08_20';
+%file_name = 'preliminary_data.mat';
+%file_name = 'calibration_bench_data_26_08_20';
+file_name = 'data_eval_pert.mat';
 
 load(file_name);
+STATIC_EXP = cell(size(folder_names));
+STATIC_EXP(:,:) = {0};
+STATIC_EXP(4:end) = {1};
 
 %%%%%%%%%%%%%%%%%%
 %% MACROS & variables
 %%%%%%%%%%%%%%%%%%
 % display macros
-DISP_TIME_FRAMES_OF_INTEREST = 0
-DISP_RECONSTRUCTED_FORCES    = 0
-DISP_NORMAL_ERRORS_HISTOGRAM = 0
 
 if ~exist('dt', 'var')
     dt = 1e-3;
@@ -98,7 +99,11 @@ for exp_nb = 1:length(folder_names)
         dist_timings = dist_timings_tmp(1:2:end-6);
         for pert_idx = 1:length(dist_timings)
             idx_perts(pert_idx) = find(t{exp_nb} >= dist_timings(pert_idx), 1, 'first');
-        end   
+        end
+    elseif NO_DISTURBANCE{exp_nb}
+        dist_duration = NaN;
+        dist_timings = [];
+        idx_perts = [];
     else
         dist_duration = t_dist{exp_nb}(2) - t_dist{exp_nb}(1);
         dist_timings = t_dist{exp_nb}(1:2:end);
@@ -109,32 +114,48 @@ for exp_nb = 1:length(folder_names)
     %size(idx_perts)
     %size(dist_timings)
     % if the experiment was interrupted during the last perturbation
-    if ( idx_perts(end) + idx_window_virt_traj + idx_delay)  > length(t{exp_nb})
-        idx_perts = idx_perts(1:end-1);
-        dist_timings = dist_timings(1:end-1);
+    if ~isempty(idx_perts)
+        if ( idx_perts(end) + idx_window_virt_traj + idx_delay)  > length(t{exp_nb})
+            idx_perts = idx_perts(1:end-1);
+            dist_timings = dist_timings(1:end-1);
+        end
     end
     %disp("pert size: " + string(size(idx_perts)))
     
-    if ~NO_TRQ_CMD_DIST{exp_nb}
+%     if ~NO_TRQ_CMD_DIST{exp_nb}
+%         delta_z{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, z{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
+%         delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, -1.*fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
+%     
+%         computeDiffTraject(delta_z{exp_nb}, 'VirtTrajMethod', 'static');
+%         computeDiffTraject(delta_fz{exp_nb}, 'VirtTrajMethod', 'static');
+%     else
+%         delta_z{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, z{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
+%         delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, 100, -1.*fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
+%  
+%         computeDiffTraject(delta_z{exp_nb}, 'VirtTrajMethod', 'static');
+%         computeDiffTraject(delta_fz{exp_nb}, 'VirtTrajMethod', 'static');
+%     end
+    
+    if STATIC_EXP{exp_nb}
         delta_z{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, z{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
         delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, -1.*fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
-    
-        computeDiffTraject(delta_z{exp_nb}, 'VirtTrajMethod', 'static');
-        computeDiffTraject(delta_fz{exp_nb}, 'VirtTrajMethod', 'static');
+     
+        delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
+        delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
     else
         delta_z{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, z{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
-        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, 100, -1.*fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
- 
-        computeDiffTraject(delta_z{exp_nb}, 'VirtTrajMethod', 'spline');
-        computeDiffTraject(delta_fz{exp_nb}, 'VirtTrajMethod', 'spline');
+        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, -1.*fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
+        
+        delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline');
+        delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline');
     end
-    
-    computeDerivatives(delta_z{exp_nb});   
+
+    delta_z{exp_nb}.computeDerivatives();   
     
     impedance{exp_nb} = IMPEDANCE_DATA(nb_param, length(dist_timings), idx_window_imp_eval);
-    init_phi(impedance{exp_nb}, delta_z{exp_nb}.diff_traject, delta_z{exp_nb}.d_diff_traject, delta_z{exp_nb}.dd_diff_traject);
-    init_y(impedance{exp_nb}, delta_fz{exp_nb}.diff_traject);
-    lsq(impedance{exp_nb});
+    impedance{exp_nb}.init_phi(delta_z{exp_nb}.diff_traject(1:idx_window_imp_eval,:), delta_z{exp_nb}.d_diff_traject(1:idx_window_imp_eval,:), delta_z{exp_nb}.dd_diff_traject(1:idx_window_imp_eval,:));
+    impedance{exp_nb}.init_y(delta_fz{exp_nb}.diff_traject(1:idx_window_imp_eval,:));
+    impedance{exp_nb}.lsq();
     
     if NO_MOCAP{exp_nb}
         continue

@@ -72,8 +72,8 @@ classdef IMPEDANCE_DATA < handle
                     error('' + string(self.nb_param) + ' parameters were expected.' ...
                             + '\n' + string(nargin-1) + ' were provided')
             end
-
-            dimensions = size(delta_z); 
+            
+            dimensions = size(delta_z);
             
             if dimensions(1) == self.id_size && dimensions(2) == self.nb_id
                 % data is correctly provided
@@ -83,22 +83,22 @@ classdef IMPEDANCE_DATA < handle
                 delta_dz = delta_dz';
                 delta_ddz = delta_ddz';
             else
-                warning('Input dimensions are not correct, or the number of identification and/or the identification size were not set correctly. \\' ... 
-                + 'Identification size: ' + string(self.id_size) + ', number of identifications: ' + string(self.nb_id))
+                warning('Input dimensions are not correct, or the number of identification and/or the identification size were not set correctly.')% \n' ... 
+                %+ 'Identification size: ' + string(self.id_size) + ', number of identifications: ' + string(self.nb_id))
             end
-
+            
             switch self.nb_param
                 case 1
                     for ii = 1:self.nb_id
-                        self.phi(:,:,ii) = [delta_z(:,ii), ones(size(delta_z(:,ii)))];
+                        self.phi(:,:,ii) = [delta_z(1:self.id_size,ii), ones(size(delta_z(1:self.id_size,ii)))];
                     end
                 case 2
                     for ii = 1:self.nb_id
-                        self.phi(:,:,ii) = [delta_z(:,ii), delta_dz(:,ii), ones(size(delta_z(:,ii)))];
+                        self.phi(:,:,ii) = [delta_z(1:self.id_size,ii), delta_dz(1:self.id_size,ii), ones(size(delta_z(1:self.id_size,ii)))];
                     end
                 case 3
                     for ii = 1:self.nb_id
-                        self.phi(:,:,ii) = [delta_z(:,ii), delta_dz(:,ii), delta_ddz(:,ii), ones(size(delta_z(:,ii)))];
+                        self.phi(:,:,ii) = [delta_z(1:self.id_size,ii), delta_dz(1:self.id_size,ii), delta_ddz(1:self.id_size,ii), ones(size(delta_z(1:self.id_size,ii)))];
                     end
                 otherwise
                     warning('This number of parameters is not implemented')
@@ -114,6 +114,8 @@ classdef IMPEDANCE_DATA < handle
                 % data is correctly provided
             elseif dimensions(2) == self.id_size && dimensions(1) == self.nb_id
                 delta_fz = delta_fz';
+            else
+                warning('Unsuitable size of the force vector.')
             end
     
             self.y = delta_fz;
@@ -123,9 +125,9 @@ classdef IMPEDANCE_DATA < handle
         % least square optimization method with error evaluations
         function self = lsq(self)
             
-            for ii = 1:self.nb_id     
-              
-                self.xi(:, ii) = self.phi(:,:,ii)\self.y(:,ii);
+            for ii = 1:self.nb_id   
+                
+                self.xi(:, ii) = self.phi(:,:,ii)\self.y(:, ii);
                 mdl = fitlm(self.phi(:,:,ii),self.y(:, ii));
                 self.r_2(ii) = mdl.Rsquared.Adjusted;
                 

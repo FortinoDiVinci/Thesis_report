@@ -57,6 +57,16 @@ classdef DIFF_TRAJECT < handle
                                 virtual_trajectory_method = 1;
                             elseif varargin{ii+1} == 'static'
                                 virtual_trajectory_method = 2;
+                                nb_samp_avg = 25;
+                            end
+                        case 'NbSampAvg' % specify nb of samples for the
+                            %virtual trajectery estimation before pert.
+                            tmp_val = varargin{ii+1};
+                            if isnumeric(tmp_val) 
+                                nb_samp_avg = floor(varargin{ii+1});
+                            else
+                                warning('The number of sample for the computation of the average should be a numeric value. Default value was attributed.')
+                                nb_samp_avg = 25;
                             end
                     end
                 end
@@ -90,10 +100,10 @@ classdef DIFF_TRAJECT < handle
                 for ii = 1:self.nb_traject
 
                     idx = self.pert_ind(ii);               
-                    self.traject(:,ii) = self.complete_traject(idx-2+self.delay:idx+self.interp_window+1+self.delay);
-                    self.t_traject(:,ii) = self.time(idx-2+self.delay:idx+self.interp_window+1+self.delay);
+                    self.traject(:,ii) = self.complete_traject(idx-2+self.delay:idx+self.estim_window+1+self.delay);
+                    self.t_traject(:,ii) = self.time(idx-2+self.delay:idx+self.estim_window+1+self.delay);
 
-                    self.virt_traject(:,ii) = mean(self.complete_traject(idx-2-self.delay:idx-2+self.delay))*ones(size(self.virt_traject(:,ii)));
+                    self.virt_traject(:,ii) = mean(self.complete_traject(idx-2-nb_samp_avg+self.delay:idx-2+self.delay))*ones(size(self.virt_traject(:,ii)));
 
                     self.tmp_diff_traject(:,ii) = self.virt_traject(:,ii) - self.traject(:,ii);
                     self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
