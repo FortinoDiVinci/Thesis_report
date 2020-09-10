@@ -162,6 +162,7 @@ add_executable(${PROJECT_NAME}_old_control_loop
 add_executable(${PROJECT_NAME}_velocity_ctrl src/velocity_ctrl.cpp)
 add_executable(${PROJECT_NAME}_trajectory_generator src/trajectory_generator.cpp)
 add_executable(${PROJECT_NAME}_dynamic_model src/dynamic_model.cpp)
+add_executable(${PROJECT_NAME}_position_control_loop src/position_ctrl_loop.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -175,6 +176,7 @@ set_target_properties(${PROJECT_NAME}_old_control_loop PROPERTIES OUTPUT_NAME ol
 set_target_properties(${PROJECT_NAME}_velocity_ctrl PROPERTIES OUTPUT_NAME velocity_ctrl PREFIX "")
 set_target_properties(${PROJECT_NAME}_trajectory_generator PROPERTIES OUTPUT_NAME trajectory_generator PREFIX "")
 set_target_properties(${PROJECT_NAME}_dynamic_model PROPERTIES OUTPUT_NAME dynamic_model PREFIX "")
+set_target_properties(${PROJECT_NAME}_position_control_loop PROPERTIES OUTPUT_NAME position_control_loop PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -186,6 +188,7 @@ add_dependencies(${PROJECT_NAME}_old_control_loop ${${PROJECT_NAME}_EXPORTED_TAR
 add_dependencies(${PROJECT_NAME}_velocity_ctrl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_trajectory_generator ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_dynamic_model ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_position_control_loop ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_endpoint
@@ -210,6 +213,9 @@ target_link_libraries(${PROJECT_NAME}_trajectory_generator
   ${catkin_LIBRARIES} ${Boost_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_dynamic_model
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_position_control_loop
   ${catkin_LIBRARIES}
 )
 
@@ -244,6 +250,7 @@ install(
     ${PROJECT_NAME}_velocity_ctrl
     ${PROJECT_NAME}_trajectory_generator
     ${PROJECT_NAME}_dynamic_model
+    ${PROJECT_NAME}_position_control_loop
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

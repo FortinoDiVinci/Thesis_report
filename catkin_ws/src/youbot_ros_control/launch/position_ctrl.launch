@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<launch>
+ 
+  <arg name="loop_freq" default="1000" /> <!-- Hz-->  
+  <!-- PID gains -->
+  <!-- 
+  <arg name="Kp" default="[10, 14, 12, 12, 10]" />   
+  <arg name="Ki" default="[0,0,0,0,0]" />
+  <arg name="Kd" default="[0,0,0,0,0]" /> --> <!-- [5,7,6,6,5] -->
+  
+  <arg name="sine_freq" default="0.2" /> <!-- Hz-->
+  <!-- Units are in meters -->
+  <arg name="ze" default="0.3205" /> <!-- 0.274 -->
+  <arg name="xe" default="-0.3525" />
+  <arg name="sine_magn" default="0.005" /> <!-- This should not be above 0.08-->
+
+  <node name="position_control_loop" pkg="youbot_ros_control" type="position_control_loop" output="screen"> 
+    <param name="rate" value="$(arg loop_freq)"/>
+    <rosparam param="Kp">[10, 50, 70, 70, 10] </rosparam>
+    <rosparam param="Ki">[0,0,0,0,0] </rosparam>
+    <rosparam param="Kd">[0,0,0,0,0] </rosparam>
+    <!-- <param name="Kp" value="$(arg Kp)"/>
+    <param name="Ki" value="$(arg Ki)"/>
+    <param name="Kd" value="$(arg Kd)"/> -->
+    <param name="f" value="$(arg sine_freq)"/>
+    <param name="z0" value="$(arg ze)"/>
+    <param name="x0" value="$(arg xe)"/>
+    <param name="magnitude" value="$(arg sine_magn)"/>
+  </node> 
+
+</launch>
