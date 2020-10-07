@@ -21,17 +21,21 @@ addpath('../../youBot_analysis/Utils')
 %file_name = 'data_impact2.mat';
 %file_name = 'preliminary_data.mat';
 %file_name = 'calibration_bench_data_26_08_20';
-file_name = 'data_eval_pert.mat';
+%file_name = 'data_eval_pert.mat';
+%file_name = 'data_vfo_3_phases.mat';
+file_name = 'data_mso_3_phases.mat';
 
 load(file_name);
 STATIC_EXP = cell(size(folder_names));
 STATIC_EXP(:,:) = {0};
-STATIC_EXP(4:end) = {1};
+%STATIC_EXP(4:end) = {1};
 
 %%%%%%%%%%%%%%%%%%
 %% MACROS & variables
 %%%%%%%%%%%%%%%%%%
-% display macros
+
+DISP_STIFFNESS_DISTRIBUTION = 0;
+SORT_PERT_BY_PHASE = 1; 
 
 if ~exist('dt', 'var')
     dt = 1e-3;
@@ -48,8 +52,8 @@ nb_param            = 3; % for the impedance model, should be between 1 & 3
                          
 % time of the end and start of each experiment need to be entered manually 
 % if necessary else zeros need to be filled 
-%T_END = [130,190,173.5,190,234,166.5,210.5,209,206,182,0,171.5];
-%T_START = [0,0,0,0,0,98,0,173,0,0,0,0];     
+T_END = [130,190,173.5,190,234,166.5,210.5,209,206,182,0,171.5];
+T_START = [0,0,0,0,0,98,0,173,0,0,0,0];     
 %T_START = [138,2,2,2]; 
 %T_END = [150,20,20,20]; 
 %T_START = [0,0,0,0]; 
@@ -88,7 +92,7 @@ for exp_nb = 1:length(folder_names)
     [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
 
     z{exp_nb} = filtfilt(b,a,z_temp);
-    fz{exp_nb} = filtfilt(b,a,fz_temp);
+    fz{exp_nb} = -1*filtfilt(b,a,fz_temp);
     
 end
     
@@ -107,6 +111,7 @@ for exp_nb = 1:length(folder_names)
     else
         dist_duration = t_dist{exp_nb}(2) - t_dist{exp_nb}(1);
         dist_timings = t_dist{exp_nb}(1:2:end);
+        dist_val = dist{exp_nb}(1:2:end);
         for pert_idx = 1:length(dist_timings)
             idx_perts(pert_idx) = find(t{exp_nb} >= dist_timings(pert_idx), 1, 'first');
         end
@@ -138,16 +143,17 @@ for exp_nb = 1:length(folder_names)
     
     if STATIC_EXP{exp_nb}
         delta_z{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, z{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
-        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, -1.*fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
+        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
      
         delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
         delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
+        disp('static exp: ' + string(exp_nb))
     else
         delta_z{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, z{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
-        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, -1.*fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
+        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, fz{exp_nb}, t{exp_nb}, idx_perts, idx_delay);
         
         delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline');
-        delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline');
+        delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline', 'DiffDirection', 'neg');
     end
 
     delta_z{exp_nb}.computeDerivatives();   
@@ -177,10 +183,10 @@ for exp_nb = 1:length(folder_names)
        
 end
 
-stiff_all_cln = stiff_all( (stiff_all>0) & (damp_all>0));
-damp_all_cln = damp_all( (stiff_all>0) & (damp_all>0));
+%stiff_all_cln = stiff_all( (stiff_all>0) & (damp_all>0));
+%damp_all_cln = damp_all( (stiff_all>0) & (damp_all>0));
 
-stiff_all_cln = stiff_all( (stiff_all>0));
+stiff_all_cln = stiff_all( (stiff_all>0) & (stiff_all<3e3));
 damp_all_cln = damp_all( (stiff_all>0));
 
 %damp_all_cln = damp_all_cln(stiff_all_cln<2e3);
@@ -196,34 +202,85 @@ med_damp = nanmedian(damp_all);
 std_damp_cln = nanstd(damp_all_cln);
 med_damp_cln = nanmedian(damp_all_cln);
 
-figure
-subplot(2,1,1)
-plot(stiff_all, 'o')
-hold on
-line([1 size(stiff_all,2)], [med_stif, med_stif], 'Color','red','LineStyle','--','linewidth',2);
-line([1 size(stiff_all,2)], [med_stif+std_stif, med_stif+std_stif], 'Color','black','LineStyle','--','linewidth',1);
-line([1 size(stiff_all,2)], [med_stif-std_stif, med_stif-std_stif], 'Color','black','LineStyle','--','linewidth',1);
-title('Unclean Stiffness, std = ' + string(std_stif) + ', mediane = ' + string(med_stif))
-subplot(2,1,2)
-plot(damp_all, 'x')
-hold on
-line([1 size(damp_all,2)], [med_damp, med_damp], 'Color','red','LineStyle','--','linewidth',2);
-line([1 size(damp_all,2)], [med_damp+std_damp, med_damp+std_damp], 'Color','black','LineStyle','--','linewidth',1);
-line([1 size(damp_all,2)], [med_damp-std_damp, med_damp-std_damp], 'Color','black','LineStyle','--','linewidth',1);
-title('Damping, std = ' + string(std_damp) + ', mediane = ' + string(med_damp))
+if DISP_STIFFNESS_DISTRIBUTION
 
-figure
-subplot(2,1,1)
-plot(stiff_all_cln, 'o')
-hold on
-line([1 size(stiff_all_cln,2)], [med_stif_cln, med_stif_cln], 'Color','red','LineStyle','--','linewidth',2);
-line([1 size(stiff_all_cln,2)], [med_stif_cln+std_stif_cln, med_stif_cln+std_stif_cln], 'Color','black','LineStyle','--','linewidth',1);
-line([1 size(stiff_all_cln,2)], [med_stif_cln-std_stif_cln, med_stif_cln-std_stif_cln], 'Color','black','LineStyle','--','linewidth',1);
-title('Stiffness, std = ' + string(std_stif_cln) + ', mediane = ' + string(med_stif_cln))
-subplot(2,1,2)
-plot(damp_all_cln, 'x')
-hold on
-line([1 size(stiff_all_cln,2)], [med_damp_cln, med_damp_cln], 'Color','red','LineStyle','--','linewidth',2);
-line([1 size(stiff_all_cln,2)], [med_damp_cln+std_damp_cln, med_damp_cln+std_damp_cln], 'Color','black','LineStyle','--','linewidth',1);
-line([1 size(stiff_all_cln,2)], [med_damp_cln-std_damp_cln, med_damp_cln-std_damp_cln], 'Color','black','LineStyle','--','linewidth',1);
-title('Damping, std = ' + string(std_damp_cln) + ', mediane = ' + string(med_damp_cln))
+    figure
+    subplot(2,1,1)
+    plot(stiff_all, 'o')
+    hold on
+    line([1 size(stiff_all,2)], [med_stif, med_stif], 'Color','red','LineStyle','--','linewidth',2);
+    line([1 size(stiff_all,2)], [med_stif+std_stif, med_stif+std_stif], 'Color','black','LineStyle','--','linewidth',1);
+    line([1 size(stiff_all,2)], [med_stif-std_stif, med_stif-std_stif], 'Color','black','LineStyle','--','linewidth',1);
+    title('Unclean Stiffness, std = ' + string(std_stif) + ', mediane = ' + string(med_stif))
+    subplot(2,1,2)
+    plot(damp_all, 'x')
+    hold on
+    line([1 size(damp_all,2)], [med_damp, med_damp], 'Color','red','LineStyle','--','linewidth',2);
+    line([1 size(damp_all,2)], [med_damp+std_damp, med_damp+std_damp], 'Color','black','LineStyle','--','linewidth',1);
+    line([1 size(damp_all,2)], [med_damp-std_damp, med_damp-std_damp], 'Color','black','LineStyle','--','linewidth',1);
+    title('Damping, std = ' + string(std_damp) + ', mediane = ' + string(med_damp))
+
+    figure
+    subplot(2,1,1)
+    plot(stiff_all_cln, 'o')
+    hold on
+    line([1 size(stiff_all_cln,2)], [med_stif_cln, med_stif_cln], 'Color','red','LineStyle','--','linewidth',2);
+    line([1 size(stiff_all_cln,2)], [med_stif_cln+std_stif_cln, med_stif_cln+std_stif_cln], 'Color','black','LineStyle','--','linewidth',1);
+    line([1 size(stiff_all_cln,2)], [med_stif_cln-std_stif_cln, med_stif_cln-std_stif_cln], 'Color','black','LineStyle','--','linewidth',1);
+    title('Stiffness, std = ' + string(std_stif_cln) + ', mediane = ' + string(med_stif_cln))
+    subplot(2,1,2)
+    plot(damp_all_cln, 'x')
+    hold on
+    line([1 size(stiff_all_cln,2)], [med_damp_cln, med_damp_cln], 'Color','red','LineStyle','--','linewidth',2);
+    line([1 size(stiff_all_cln,2)], [med_damp_cln+std_damp_cln, med_damp_cln+std_damp_cln], 'Color','black','LineStyle','--','linewidth',1);
+    line([1 size(stiff_all_cln,2)], [med_damp_cln-std_damp_cln, med_damp_cln-std_damp_cln], 'Color','black','LineStyle','--','linewidth',1);
+    title('Damping, std = ' + string(std_damp_cln) + ', mediane = ' + string(med_damp_cln))
+
+end
+
+if SORT_PERT_BY_PHASE
+    
+    epsilon = 0.001;
+    
+    idx_pert_cycle_1 = (compare2eps(dist_val, 10.1, epsilon) | compare2eps(dist_val, -9.9, epsilon));
+    idx_pert_cycle_2 = (compare2eps(dist_val, 10.2, epsilon) | compare2eps(dist_val, -9.8, epsilon));
+    idx_pert_cycle_3 = (compare2eps(dist_val, 10.3, epsilon) | compare2eps(dist_val, -9.7, epsilon));
+    
+    t_cycle_1 = dist_timings(idx_pert_cycle_1);
+    t_cycle_2 = dist_timings(idx_pert_cycle_2);
+    t_cycle_3 = dist_timings(idx_pert_cycle_3);
+    
+    stiff_cyc_1 = stiff_all(idx_pert_cycle_1);
+    stiff_cyc_2 = stiff_all(idx_pert_cycle_2);
+    stiff_cyc_3 = stiff_all(idx_pert_cycle_3);
+    
+    std_stiff_cyc1 = nanstd(stiff_cyc_1);
+    med_stiff_cyc1 = nanmedian(stiff_cyc_1);
+    std_stiff_cyc2 = nanstd(stiff_cyc_2);
+    med_stiff_cyc2 = nanmedian(stiff_cyc_2);
+    std_stiff_cyc3 = nanstd(stiff_cyc_3);
+    med_stiff_cyc3 = nanmedian(stiff_cyc_3);
+ 
+    disp('Stiff phase descendante :' + string(med_stiff_cyc1) + ' +/- ' + string(std_stiff_cyc1));
+    disp('Stiff pic inférieur :' + string(med_stiff_cyc2) + ' +/- ' + string(std_stiff_cyc2));
+    disp('Stiff phase montante :' + string(med_stiff_cyc3) + ' +/- ' + string(std_stiff_cyc3));
+    
+    figure
+    subplot(1,3,1)
+    histogram(stiff_cyc_1, 10);
+    title('nb data: ' + string(length(stiff_cyc_1)))
+    subplot(1,3,2)
+    histogram(stiff_cyc_2, 10);
+    title('nb data: ' + string(length(stiff_cyc_2)))
+    subplot(1,3,3)
+    histogram(stiff_cyc_3, 10);
+    title('nb data: ' + string(length(stiff_cyc_3)))
+    
+end
+
+
+function ret = compare2eps(a,b, eps)
+
+    ret = logical(abs(a - b) < eps);
+
+end

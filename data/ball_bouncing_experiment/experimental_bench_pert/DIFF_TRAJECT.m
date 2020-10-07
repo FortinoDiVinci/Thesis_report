@@ -49,9 +49,17 @@ classdef DIFF_TRAJECT < handle
         
         function self = computeDiffTraject(self, varargin)
             
+            differential_direction = 1; % x0 - x
+            
             if ~isempty(varargin)
                 for ii = 1:2:length(varargin)
                     switch(varargin{ii})
+                        case 'DiffDirection'
+                            if varargin{ii+1} == 'pos'
+                                differential_direction = 1; % x0 - x
+                            elseif varargin{ii+1} == 'neg'
+                                differential_direction = -1; % x - x0
+                            end
                         case 'VirtTrajMethod'
                             if varargin{ii+1} == 'spline'
                                 virtual_trajectory_method = 1;
@@ -90,7 +98,7 @@ classdef DIFF_TRAJECT < handle
                     %else
                         %self.tmp_diff_traject(:,ii) = self.virt_traject(:,ii) - self.traject(:,ii);
                     end
-                    self.tmp_diff_traject(:,ii) = self.virt_traject(:,ii) - self.traject(:,ii);
+                    self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - self.traject(:,ii))*differential_direction;
                     self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
 
                 end
@@ -105,7 +113,7 @@ classdef DIFF_TRAJECT < handle
 
                     self.virt_traject(:,ii) = mean(self.complete_traject(idx-2-nb_samp_avg+self.delay:idx-2+self.delay))*ones(size(self.virt_traject(:,ii)));
 
-                    self.tmp_diff_traject(:,ii) = self.virt_traject(:,ii) - self.traject(:,ii);
+                    self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - self.traject(:,ii))*differential_direction;
                     self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
 
                 end

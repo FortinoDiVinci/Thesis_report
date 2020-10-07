@@ -13,7 +13,7 @@ addpath('../../force_torque_sensor')
 DISPLAY_MOCAP_FIT                   = 1
 DISPLAY_BALL_BOUNCING_IMPACTS       = 0
 SINGLE_MOCAP_FITTING                = 1
-IS_BALL_BOUNCING                    = 0
+IS_BALL_BOUNCING                    = 1
 USE_DEFAULT_TF_MATRIX               = 0
 SAVE_DATA                           = 1 % specify name for the file
 
@@ -28,10 +28,14 @@ dt = 1e-3;
 %names = "calibrated_spring/" + ["1/", "2/", "3/", "4/"];
 %names = "calibrated_environnement/calibrated_spring_" + ["1/", "2/", "3/", "4/", "5/", "6/"];
 %names = ["vincent_f/"];
-names = "data_02-Sep-2020_17h45/" +["no_pert/", "long_pert/", "short_pert/", "spring_no_pert/", "spring_long_pert/", "spring_long_pert2/", "spring_short_pert/"];
+%names = "data_02-Sep-2020_17h45/" +["no_pert/", "long_pert/", "short_pert/", "spring_no_pert/", "spring_long_pert/", "spring_long_pert2/", "spring_short_pert/"];
+%names = "data_16-Sep-2020_10h40/ref_response_time_" + ["static/", "static_2/", "cyclic/", "cyclic_2/"];
+%names = "data_21-Sep-2020_11h05/experiment_" + ["step", "sine"] + "_movement_alone/";
+%names = "data_01-Oct-2020_16h54/ball_bouncing_vfo" + ["", "1", "2"] + "/";
+names = "data_07-Oct-2020_10h51/ball_bouncing_mso" + [""] + "/";
 folder_names = "preliminary_experimental_data/" + names;
 if SAVE_DATA
-    saved_data_name = "data_eval_pert";
+    saved_data_name = "data_mso_3_phases";
 end
 
 NO_DISTURBANCE = cell(size(folder_names));
@@ -46,7 +50,21 @@ NO_BALL_BOUNC = cell(size(folder_names));
 NO_BALL_BOUNC(:,:) = {0};
 
 %kinematic_coeff = [6, 6, 6, 6, 6, 6, 6, 6, 3, 6, 6, 3];
+kinematic_coeff = [6, 6, 6];
 
+% init cells
+
+t_free_mov = cell(size(folder_names));
+t = cell(size(folder_names)); 
+t_dist = cell(size(folder_names));
+dist = cell(size(folder_names));
+t_trq_cmd = cell(size(folder_names));
+val_trq_cmd = cell(size(folder_names));
+t_impulse = cell(size(folder_names));
+imp = cell(size(folder_names));
+z_b = cell(size(folder_names));
+mocap_marker = cell(size(folder_names));
+mocap_marker_fm = cell(size(folder_names));
 
 for fld_idx = 1:length(folder_names)
 
@@ -174,7 +192,7 @@ for fld_idx = 1:length(folder_names)
                        
     for i=1:length(t{fld_idx})
         T = MGD_T0handle(thetas{fld_idx}(i,1), thetas{fld_idx}(i,2), thetas{fld_idx}(i,3), thetas{fld_idx}(i,4), thetas{fld_idx}(i,5));
-        z_p{fld_idx}(i, 1) = (T(3,4) - 0.3)*3;
+        z_p{fld_idx}(i, 1) = (T(3,4) - 0.3)*6; % depends on kinematics coefficient !!
     end
 end
 
@@ -342,11 +360,19 @@ if SAVE_DATA
             return
         end
     end
-    save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+    if USE_DEFAULT_TF_MATRIX
+        save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+        "joint_eff_fm", "mocap_marker", "mocap_marker_fm", "mocap_marker_robot_base", ...
+        "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP",  ...
+        "NO_TRQ_CMD_DIST", "robot_marker", "robot_marker_fm", "t", "t_dist", "thetas", ...
+        "thetas_fm", "torques_unf", "transformation_matrix", "z_b", "z_p");
+    else
+        save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
         "joint_eff_fm", "mocap_marker", "mocap_marker_fm", "mocap_marker_robot_base", ...
         "mocap_marker_robot_base_fm", "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", ...
         "NO_MOCAP", "NO_TRQ_CMD_DIST", "robot_marker", "robot_marker_fm", "t", "t_dist", "thetas", ...
         "thetas_fm", "torques_unf", "transformation_matrix", "z_b", "z_p");
+    end
 end
 
 return
