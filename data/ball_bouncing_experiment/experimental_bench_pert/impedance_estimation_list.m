@@ -22,8 +22,8 @@ addpath('../../youBot_analysis/Utils')
 %file_name = 'preliminary_data.mat';
 %file_name = 'calibration_bench_data_26_08_20';
 %file_name = 'data_eval_pert.mat';
-%file_name = 'data_vfo_3_phases.mat';
-file_name = 'data_mso_3_phases.mat';
+file_name = 'data_vfo_3_phases.mat';
+%file_name = 'data_mso_3_phases.mat';
 
 load(file_name);
 STATIC_EXP = cell(size(folder_names));
@@ -52,8 +52,8 @@ nb_param            = 3; % for the impedance model, should be between 1 & 3
                          
 % time of the end and start of each experiment need to be entered manually 
 % if necessary else zeros need to be filled 
-T_END = [130,190,173.5,190,234,166.5,210.5,209,206,182,0,171.5];
-T_START = [0,0,0,0,0,98,0,173,0,0,0,0];     
+%T_END = [130,190,173.5,190,234,166.5,210.5,209,206,182,0,171.5];
+%T_START = [0,0,0,0,0,98,0,173,0,0,0,0];     
 %T_START = [138,2,2,2]; 
 %T_END = [150,20,20,20]; 
 %T_START = [0,0,0,0]; 
@@ -109,9 +109,10 @@ for exp_nb = 1:length(folder_names)
         dist_timings = [];
         idx_perts = [];
     else
-        dist_duration = t_dist{exp_nb}(2) - t_dist{exp_nb}(1);
+        % set the disturbances by couples, compute diff and then the average
+        dist_duration = mean(diff(reshape(t_dist{exp_nb}, 2, length(t_dist{exp_nb})/2)));
         dist_timings = t_dist{exp_nb}(1:2:end);
-        dist_val = dist{exp_nb}(1:2:end);
+        dist_val{exp_nb} = dist{exp_nb}(1:2:end);
         for pert_idx = 1:length(dist_timings)
             idx_perts(pert_idx) = find(t{exp_nb} >= dist_timings(pert_idx), 1, 'first');
         end
@@ -119,10 +120,12 @@ for exp_nb = 1:length(folder_names)
     %size(idx_perts)
     %size(dist_timings)
     % if the experiment was interrupted during the last perturbation
+    reduced_dist{exp_nb} = 0;
     if ~isempty(idx_perts)
         if ( idx_perts(end) + idx_window_virt_traj + idx_delay)  > length(t{exp_nb})
             idx_perts = idx_perts(1:end-1);
             dist_timings = dist_timings(1:end-1);
+            reduced_dist{exp_nb} = 1;
         end
     end
     %disp("pert size: " + string(size(idx_perts)))
@@ -242,17 +245,31 @@ if SORT_PERT_BY_PHASE
     
     epsilon = 0.001;
     
-    idx_pert_cycle_1 = (compare2eps(dist_val, 10.1, epsilon) | compare2eps(dist_val, -9.9, epsilon));
-    idx_pert_cycle_2 = (compare2eps(dist_val, 10.2, epsilon) | compare2eps(dist_val, -9.8, epsilon));
-    idx_pert_cycle_3 = (compare2eps(dist_val, 10.3, epsilon) | compare2eps(dist_val, -9.7, epsilon));
+    idx_pert_cycle_1 = [];
+    idx_pert_cycle_2 = [];
+    idx_pert_cycle_3 = [];
     
-    t_cycle_1 = dist_timings(idx_pert_cycle_1);
-    t_cycle_2 = dist_timings(idx_pert_cycle_2);
-    t_cycle_3 = dist_timings(idx_pert_cycle_3);
+    for exp_nb = 1:length(folder_names)
     
-    stiff_cyc_1 = stiff_all(idx_pert_cycle_1);
-    stiff_cyc_2 = stiff_all(idx_pert_cycle_2);
-    stiff_cyc_3 = stiff_all(idx_pert_cycle_3);
+        idx_pert_cycle_1 = [idx_pert_cycle_1; (compare2eps(dist_val{exp_nb}, 10.1, epsilon) | compare2eps(dist_val{exp_nb}, -9.9, epsilon))];
+        idx_pert_cycle_2 = [idx_pert_cycle_2; (compare2eps(dist_val{exp_nb}, 10.2, epsilon) | compare2eps(dist_val{exp_nb}, -9.8, epsilon))];
+        idx_pert_cycle_3 = [idx_pert_cycle_3; (compare2eps(dist_val{exp_nb}, 10.3, epsilon) | compare2eps(dist_val{exp_nb}, -9.7, epsilon))];
+
+        if reduced_dist{exp_nb}
+            idx_pert_cycle_1 = idx_pert_cycle_1(1:end-1);
+            idx_pert_cycle_2 = idx_pert_cycle_2(1:end-1);
+            idx_pert_cycle_3 = idx_pert_cycle_3(1:end-1);
+        end
+        
+    end
+    
+    %t_cycle_1 = dist_timings(idx_pert_cycle_1);
+    %t_cycle_2 = dist_timings(idx_pert_cycle_2);
+    %t_cycle_3 = dist_timings(idx_pert_cycle_3);
+    
+    stiff_cyc_1 = stiff_all(logical(idx_pert_cycle_1));
+    stiff_cyc_2 = stiff_all(logical(idx_pert_cycle_2));
+    stiff_cyc_3 = stiff_all(logical(idx_pert_cycle_3));
     
     std_stiff_cyc1 = nanstd(stiff_cyc_1);
     med_stiff_cyc1 = nanmedian(stiff_cyc_1);
