@@ -24,6 +24,7 @@ classdef IMPEDANCE_DATA < handle
         rec_err;  % error between reconstruction and real force
         rec_err_norm;  % normalized error according to force magnitude
         r_2; % coefficient of determination
+        %r_2_fit; % idem but computed with fitlm
         
     end
     
@@ -43,6 +44,7 @@ classdef IMPEDANCE_DATA < handle
             self.rec_err = NaN(self.id_size, self.nb_id);
             self.rec_err_norm = NaN(self.id_size, self.nb_id);
             self.r_2 = NaN(self.nb_id,1);
+            %self.r_2_fit = NaN(self.nb_id,1);
             
         end
         
@@ -128,11 +130,16 @@ classdef IMPEDANCE_DATA < handle
             for ii = 1:self.nb_id   
                 
                 self.xi(:, ii) = self.phi(:,:,ii)\self.y(:, ii);
-                mdl = fitlm(self.phi(:,:,ii),self.y(:, ii));
-                self.r_2(ii) = mdl.Rsquared.Adjusted;
+                % automated linear fit (brings the same results)
+                % mdl = fitlm(self.phi(:,:,ii),self.y(:, ii));
+                % self.r_2_fit(ii) = mdl.Rsquared.Adjusted;
                 
                 self.rec_y(:,ii) = self.phi(:,:,ii)*self.xi(:, ii);
                 self.rec_err(:,ii) = self.rec_y(:,ii) - self.y(:,ii);
+                
+                % determination coefficient 
+                self.r_2(ii) = 1 - sum( self.rec_err(:,ii).^2 ) / ...
+                    sum( (self.y(:, ii) - mean(self.y(:, ii))).^2 );
                 
             end  
             

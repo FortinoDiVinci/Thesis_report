@@ -8,8 +8,9 @@ classdef DIFF_TRAJECT < handle
         nb_traject;    % number of trajectories to be estimated
         
         pert_ind;      % indexes at which trajectories will be estimated
+        pert_val;      % value of the perturbation for sorting purpose
         delay;         % delay from the perturbation index (in samples)
-   
+        
         complete_traject;
         time;
         
@@ -26,15 +27,17 @@ classdef DIFF_TRAJECT < handle
     
     methods
         
-        function self = DIFF_TRAJECT(estimation_window_size, interpolation_window_size, complete_trajectory, time_frame, perturbation_indexes, delay_sample)
+        function self = DIFF_TRAJECT(estimation_window_size, interpolation_window_size, ...
+                complete_trajectory, complete_time_frame, perturbation_indexes, perturbation_values, delay_sample)
             
             self.interp_window = interpolation_window_size;
             self.estim_window = estimation_window_size;
             self.nb_traject = length(perturbation_indexes);
             
             self.complete_traject = complete_trajectory;
-            self.time = time_frame;
+            self.time = complete_time_frame;
             self.pert_ind = perturbation_indexes;
+            self.pert_val = perturbation_values;
             self.delay = delay_sample;
 
             self.t_traject = NaN(self.estim_window + 4, self.nb_traject);
@@ -73,7 +76,9 @@ classdef DIFF_TRAJECT < handle
                             if isnumeric(tmp_val) 
                                 nb_samp_avg = floor(varargin{ii+1});
                             else
-                                warning('The number of sample for the computation of the average should be a numeric value. Default value was attributed.')
+                                warning('The number of sample for the ' +...
+                                    'computation of the average should be a ' +...
+                                    'numeric value. Default value was attributed.')
                                 nb_samp_avg = 25;
                             end
                     end
@@ -87,18 +92,23 @@ classdef DIFF_TRAJECT < handle
                 for ii = 1:self.nb_traject
                     
                     idx = self.pert_ind(ii);               
-                    self.traject(:,ii) = self.complete_traject(idx-2+self.delay:idx+self.estim_window+1+self.delay);
-                    self.t_traject(:,ii) = self.time(idx-2+self.delay:idx+self.estim_window+1+self.delay);
+                    self.traject(:,ii) = self.complete_traject(idx-2+self.delay:...
+                        idx+self.estim_window+1+self.delay);
+                    self.t_traject(:,ii) = self.time(idx-2+self.delay:...
+                        idx+self.estim_window+1+self.delay);
 
-                    self.virt_traject(1:self.interp_window+4,ii) = interp1(self.t_traject([1,2,3,self.interp_window+2,self.interp_window+3,self.interp_window+4],ii), self.traject([1,2,3,self.interp_window+2,self.interp_window+3,self.interp_window+4],ii), self.t_traject(1:self.interp_window+4,ii), 'spline');
+                    self.virt_traject(1:self.interp_window+4,ii) = interp1(...
+                        self.t_traject([1,2,3,self.interp_window+2,self.interp_window+3,self.interp_window+4],ii), ...
+                        self.traject([1,2,3,self.interp_window+2,self.interp_window+3,self.interp_window+4],ii), ...
+                        self.t_traject(1:self.interp_window+4,ii), 'spline');
                     
                     if self.estim_window ~= self.interp_window
-                        self.virt_traject(self.interp_window+5:end,ii) = self.traject(self.interp_window+5:end,ii);
-                        %self.tmp_diff_traject(:,ii) = [self.virt_traject(1:self.interp_window+4,ii) - self.traject(1:self.interp_window+4,ii); zeros(size(self.traject(self.interp_window+5:end,ii)))];
-                    %else
-                        %self.tmp_diff_traject(:,ii) = self.virt_traject(:,ii) - self.traject(:,ii);
+                        self.virt_traject(self.interp_window+5:end,ii) =...
+                            self.traject(self.interp_window+5:end,ii);
                     end
-                    self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - self.traject(:,ii))*differential_direction;
+                    
+                    self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - ...
+                        self.traject(:,ii))*differential_direction;
                     self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
 
                 end
@@ -108,12 +118,17 @@ classdef DIFF_TRAJECT < handle
                 for ii = 1:self.nb_traject
 
                     idx = self.pert_ind(ii);               
-                    self.traject(:,ii) = self.complete_traject(idx-2+self.delay:idx+self.estim_window+1+self.delay);
-                    self.t_traject(:,ii) = self.time(idx-2+self.delay:idx+self.estim_window+1+self.delay);
+                    self.traject(:,ii) = self.complete_traject(...
+                        idx-2+self.delay:idx+self.estim_window+1+self.delay);
+                    self.t_traject(:,ii) = self.time(...
+                        idx-2+self.delay:idx+self.estim_window+1+self.delay);
 
-                    self.virt_traject(:,ii) = mean(self.complete_traject(idx-2-nb_samp_avg+self.delay:idx-2+self.delay))*ones(size(self.virt_traject(:,ii)));
+                    self.virt_traject(:,ii) = mean(self.complete_traject(...
+                        idx-2-nb_samp_avg+self.delay:idx-2+self.delay))*...
+                        ones(size(self.virt_traject(:,ii)));
 
-                    self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - self.traject(:,ii))*differential_direction;
+                    self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) ...
+                        - self.traject(:,ii))*differential_direction;
                     self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
 
                 end
