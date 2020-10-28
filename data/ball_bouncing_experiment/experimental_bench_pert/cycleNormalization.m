@@ -1,9 +1,9 @@
-function [norm_cycles, max_idx, max_amp_pos, max_amp_vel] = cycle_data_norm(cycles)
+function [norm_cycles, min_idx, max_amp_pos, max_amp_vel] = cycleNormalization(cycles)
 %cycle_data_norm
 %   Input : CYCLE_DATA array
 %   Outputs : 
 %       - CYCLE_DATA array
-%       - max index used for the time normalization
+%       - min index used for the time normalization
 %       - max position magnitude
 %       - max velocity magnitude
     

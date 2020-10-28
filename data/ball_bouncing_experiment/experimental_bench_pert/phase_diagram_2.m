@@ -96,7 +96,8 @@ for i = 1:length(idx_st)
     z_avg = filtfilt(b2,a2,zh);
  
     figure()
-    plot(zh-z_avg, dzh)
+    p1 = plot(zh-z_avg, dzh);
+    p1.Color(4) = 0.5;
     hold on
     plot(zh(idx_imp_inf)-z_avg(idx_imp_inf), dzh(idx_imp_inf), '.r', 'MarkerSize',30)
     plot(zh(pert_idx)-z_avg(pert_idx), dzh(pert_idx), '.m', 'MarkerSize',30)
@@ -120,14 +121,31 @@ for i = 1:length(idx_st)
     end
 
     % cycle normalization    
-    cycles_norm = cycle_data_norm(cycles);
-    % cycle statistics computation
+    [cycles_norm, ~, pos_magn, vel_magn] = cycleNormalization(cycles);
     
-    plot(cycles_norm_mean.time, cycles_norm_mean.velocity, 'k', 'linewidth', 2)
-    fill([cycles_norm_mean.time fliplr(cycles_norm_mean.time)], ...
-        [(cycles_norm_mean.velocity+cycles_norm_std.velocity)' ...
-        fliplr((cycles_norm_mean.velocity-cycles_norm_std.velocity)')], ...
+    % cycle statistics computation  
+    [cycles_norm_mean, cycles_norm_std] = getDistribution(cycles_norm);
+    ctl_pos = mean(cycles_norm_mean.position); % central position
+    ctl_vel = mean(cycles_norm_mean.velocity); % central velocity
+    
+    cycles_mean_position = (cycles_norm_mean.position - ctl_pos)*pos_magn;
+    cycles_mean_velocity = (cycles_norm_mean.velocity - ctl_vel)*vel_magn;
+    cycles_std_position = (cycles_norm_std.position)*pos_magn;
+    cycles_std_velocity = (cycles_norm_std.velocity)*vel_magn;
+    
+    plot(cycles_mean_position, cycles_mean_velocity, 'k', 'linewidth', 2)
+    hold on
+    fill([cycles_mean_position - cycles_std_position...
+        flip(cycles_mean_position + cycles_std_position)], ...
+        [(cycles_mean_velocity+cycles_std_velocity) ...
+        flip((cycles_mean_velocity-cycles_std_velocity))], ...
         [0.25, 0.25, 0.25], 'FaceAlpha', 0.3,'linestyle','-','edgecolor',[0.25, 0.25, 0.25])
+    
+%     plot(cycles_norm_mean.time, cycles_norm_mean.velocity, 'k', 'linewidth', 2)
+%     fill([cycles_norm_mean.time fliplr(cycles_norm_mean.time)], ...
+%         [(cycles_norm_mean.velocity+cycles_norm_std.velocity)' ...
+%         fliplr((cycles_norm_mean.velocity-cycles_norm_std.velocity)')], ...
+%         [0.25, 0.25, 0.25], 'FaceAlpha', 0.3,'linestyle','-','edgecolor',[0.25, 0.25, 0.25])
     
     global_cycles = [global_cycles, cycles];
 end

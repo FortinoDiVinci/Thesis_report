@@ -100,7 +100,7 @@ for exp_nb = 1:length(folder_names)
     hold on
     hang_plot_dist = plot(zb(idx_dist_t),dzb(idx_dist_t), 'ro');
     hang_plot_impulse = plot(zb(idx_impulse_t),dzb(idx_impulse_t), 'bx');
-    legend([hang_plot(1), hang_plot_dist(1), hang_plot_impulse(1)], 'phase cycle', 'distrurbance', 'impact')
+    legend([hang_plot(1), hang_plot_dist(1), hang_plot_impulse(1)], 'phase cycle', 'disturbance', 'impact')
     xlabel('zb')
     ylabel('v_{zb}')
     

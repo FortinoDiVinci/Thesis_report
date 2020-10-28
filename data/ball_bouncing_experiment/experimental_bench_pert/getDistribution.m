@@ -2,10 +2,10 @@ function [cycles_mean, cycles_std] = getDistribution(cycles, varargin)
 %TODO
 %   Detailed explanation goes here
 
-    cycle_mean_pos = NaN(length(cycles_norm(1).time), 1);
-    cycle_std_pos = NaN(length(cycles_norm(1).time), 1);
-    cycle_mean_vel = NaN(length(cycles_norm(1).time), 1);
-    cycle_std_vel = NaN(length(cycles_norm(1).time), 1);
+    cycle_mean_pos = NaN(length(cycles(1).time), 1);
+    cycle_std_pos = NaN(length(cycles(1).time), 1);
+    cycle_mean_vel = NaN(length(cycles(1).time), 1);
+    cycle_std_vel = NaN(length(cycles(1).time), 1);
     
     for idx = length(cycles(1).time):-1:1 % this way the object vector is preallocated     
         positions_at_idx = NaN(length(cycles),1);
@@ -48,12 +48,17 @@ function [cycles_mean, cycles_std] = getDistribution(cycles, varargin)
     % Statistics per perturbations directions
         pert_dir = [];
         data_pos = {};
+        data_vel = {};
         pert_dir = [pert_dir, cycles.pert_dir];       
         data_pos = {cycles.position};
+        data_vel = {cycles.velocity};
         
-        %data_pos_no_pert = data_pos(logical(pert_dir == 0));
-        %data_pos_pos_pert = data_pos(logical(pert_dir == 1));
-        %data_pos_neg_pert = data_pos(logical(pert_dir == -1));
+        data_pos_no_pert = data_pos(logical(pert_dir == 0));
+        data_pos_pos_pert = data_pos(logical(pert_dir == 1));
+        data_pos_neg_pert = data_pos(logical(pert_dir == -1));
+        data_vel_no_pert = data_vel(logical(pert_dir == 0));
+        data_vel_pos_pert = data_vel(logical(pert_dir == 1));
+        data_vel_neg_pert = data_vel(logical(pert_dir == -1));
     end
     
 end

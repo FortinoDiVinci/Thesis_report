@@ -9,6 +9,7 @@ classdef CYCLE_DATA < handle
         pert_val;
         pert_dir; 
         pert_t;
+        pert_idx;
     end
     
     methods
@@ -56,6 +57,7 @@ classdef CYCLE_DATA < handle
                 self.pert_val = perturbation_value;
                 self.pert_dir = sign(perturbation_value);
                 self.pert_t = perturbation_time;
+                self.pert_idx = find(self.pert_t >= self.time, 1, 'first');
             end
         end
         %

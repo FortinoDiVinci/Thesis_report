@@ -10,9 +10,9 @@ addpath('../../force_torque_sensor')
 %% MACROS & variables
 %%%%%%%%%%%%%%%%%%
 
-DISPLAY_MOCAP_FIT                   = 1
+DISPLAY_MOCAP_FIT                   = 0
 DISPLAY_BALL_BOUNCING_IMPACTS       = 0
-SINGLE_MOCAP_FITTING                = 1
+SINGLE_MOCAP_FITTING                = 0
 IS_BALL_BOUNCING                    = 1
 USE_DEFAULT_TF_MATRIX               = 0
 SAVE_DATA                           = 1 % specify name for the file
@@ -31,17 +31,21 @@ dt = 1e-3;
 %names = "data_02-Sep-2020_17h45/" +["no_pert/", "long_pert/", "short_pert/", "spring_no_pert/", "spring_long_pert/", "spring_long_pert2/", "spring_short_pert/"];
 %names = "data_16-Sep-2020_10h40/ref_response_time_" + ["static/", "static_2/", "cyclic/", "cyclic_2/"];
 %names = "data_21-Sep-2020_11h05/experiment_" + ["step", "sine"] + "_movement_alone/";
-%names = "data_01-Oct-2020_16h54/ball_bouncing_vfo" + ["", "1", "2"] + "/";
-names = "data_07-Oct-2020_10h51/ball_bouncing_mso" + [""] + "/";
+names = "data_01-Oct-2020_16h54/ball_bouncing_vfo" + ["", "1", "2", "3", "4", "5", "6"] + "/";
+%names = "data_07-Oct-2020_10h51/ball_bouncing_mso" + [""] + "/";
+names = "data_20-Oct-2020_11h24/";
 folder_names = "preliminary_experimental_data/" + names;
+folder_names = "data_validation_retour_haptique/" + names;
 if SAVE_DATA
-    saved_data_name = "data_mso_3_phases";
+    saved_data_name = "haptic_feedback_validation_3"; % without extension
 end
 
 NO_DISTURBANCE = cell(size(folder_names));
 NO_DISTURBANCE(:,:) = {0};
-NO_TRQ_CMD_DIST = cell(size(folder_names)); % long period torque cmd
+NO_TRQ_CMD_DIST = cell(size(folder_names)); % torque cmd (eg. for long period disturbance)
 NO_TRQ_CMD_DIST (:,:) = {0};
+NO_VEL_CMD = cell(size(folder_names)); % the robot is speed controlled
+NO_VEL_CMD (:,:) = {0};
 NO_IMPULSE = cell(size(folder_names));
 NO_IMPULSE(:,:) = {0};
 NO_MOCAP = cell(size(folder_names));
@@ -60,6 +64,8 @@ t_dist = cell(size(folder_names));
 dist = cell(size(folder_names));
 t_trq_cmd = cell(size(folder_names));
 val_trq_cmd = cell(size(folder_names));
+t_vel_cmd = cell(size(folder_names));
+val_vel_cmd = cell(size(folder_names));
 t_impulse = cell(size(folder_names));
 imp = cell(size(folder_names));
 z_b = cell(size(folder_names));
@@ -90,6 +96,11 @@ for fld_idx = 1:length(folder_names)
         torque_cmd = readtable(strcat(folder_names(fld_idx), 'bagfile-_arm_1_arm_controller_torque_command.csv'));
     catch
         NO_TRQ_CMD_DIST{fld_idx} = 1;
+    end
+    try
+        velocity_cmd = readtable(strcat(folder_names(fld_idx), 'bagfile-_arm_1_arm_controller_velocity_command.csv'));
+    catch
+        NO_VEL_CMD{fld_idx} = 1;
     end
     try
         impulse = readtable(strcat(folder_names(fld_idx), 'bagfile-_impulse.csv'));
@@ -136,6 +147,13 @@ for fld_idx = 1:length(folder_names)
     if ~NO_TRQ_CMD_DIST{fld_idx}
         t_trq_cmd{fld_idx} = (torque_cmd.x_time - joint_states.x_time(1))*1e-9;
         val_trq_cmd{fld_idx} = torque_cmd.field_torques0_value;
+        %t_dist{fld_idx} = t_dist{fld_idx}(1:end-2);
+    end
+    if ~NO_VEL_CMD{fld_idx}
+        t_vel_cmd{fld_idx} = (velocity_cmd.x_time - joint_states.x_time(1))*1e-9;
+        val_vel_cmd{fld_idx} = [velocity_cmd.field_velocities0_value, ...
+                                velocity_cmd.field_velocities1_value, ...
+                                velocity_cmd.field_velocities2_value];
         %t_dist{fld_idx} = t_dist{fld_idx}(1:end-2);
     end
     if ~NO_IMPULSE{fld_idx}
@@ -360,7 +378,19 @@ if SAVE_DATA
             return
         end
     end
-    if USE_DEFAULT_TF_MATRIX
+    if any(~[NO_MOCAP{:}])==0 % not a single motion capture
+        if any(~[NO_VEL_CMD{:}])==1 % velocity command recorded
+            save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+            "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP", "t_impulse", "imp", ...
+            "NO_TRQ_CMD_DIST", "t", "t_dist", "thetas", "torques_unf", "z_b", "z_p", "val_vel_cmd", ...
+            "t_vel_cmd", "NO_VEL_CMD");
+        else
+            save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+            "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP", "t_impulse", "imp", ...
+            "NO_TRQ_CMD_DIST", "t", "t_dist", "thetas", "torques_unf", "z_b", "z_p");
+        end
+        
+    elseif USE_DEFAULT_TF_MATRIX
         save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
         "joint_eff_fm", "mocap_marker", "mocap_marker_fm", "mocap_marker_robot_base", ...
         "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP",  ...
