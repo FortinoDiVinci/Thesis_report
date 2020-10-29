@@ -26,7 +26,9 @@ ssq_xyz = [set_square.field_pose_position_x, ...
            set_square.field_pose_position_y, ...
            set_square.field_pose_position_z];
 
-figure
+initial_ssq_xyz = ssq_xyz;
+       
+figure(1)
 hold on
 plot3(ssq_xyz(:,1),ssq_xyz(:,2),ssq_xyz(:,3), '*')
 xlabel('x(t)')
@@ -60,7 +62,7 @@ plot3(ssq_xyz(:,1),ssq_xyz(:,2),ssq_xyz(:,3), '*')
 
 %% Points normal vectors computation
 
-K_nghb = 50; % K closest neighbor
+K_nghb = 100; % K closest neighbor
 k = knnsearch(ssq_xyz,ssq_xyz, 'K', K_nghb); % finds 50 closest neighbors for each 
 % points in the data set, k contains the indexes
 
@@ -111,13 +113,48 @@ q = quiver3(ssq_xyz(:,1),ssq_xyz(:,2),ssq_xyz(:,3), ssq_xyz(:,1)+normals(:,1), .
 % we search the most orthogonal vector to all normals
 CV_norm = zeros(3,3); % covariance matrix of all normal vectors
 for i = 1:length(normals)
-    CV_norm = CV_norm + (normals(i)')*normals(i);
+    CV_norm = CV_norm + normals(i)'*normals(i);
 end
 lambda = eig(CV_norm);
 [eig_vectors,~] = eig(CV_norm);
-idx_norm_vect = find(min(lambda) == lambda); % min eigen value
-a_cyl = eig_vectors(:,idx_norm_vect)'; % corresp. eig. vect.
+% eigen vector correspding to the minimum eigen value (Z)
+a_cyl = eig_vectors(:,logical(min(lambda) == lambda))'; 
 q_c = quiver3(mean_pts(1), mean_pts(2), mean_pts(3), mean_pts(1)+a_cyl(1),...
     mean_pts(2)+a_cyl(2), mean_pts(3)+a_cyl(3), 'Color', 'black', 'LineWidth', 1, 'AutoScaleFactor', 0.05);
 
-legend([q(1) q_c(1)], 'min(Eig\_vect)', 'cylinder')
+% other eigen value corresponding to the vector of the plane (XY)
+plane_vectors = eig_vectors(:,logical(min(lambda) ~= lambda))'; 
+
+%% Points projection to the plane Cx,Cy with origin O
+
+o = [0,0,0];
+i = 1;
+proj_pts = NaN(size(ssq_xyz));
+for pt = ssq_xyz'
+    proj_pts(i,:) = pt' - dot(a_cyl, pt'-o) * a_cyl; % a_cyl = plan normal
+    i = i + 1;
+end
+
+figure(2)
+hold on
+plot3(proj_pts(:,1),proj_pts(:,2),proj_pts(:,3), '*')
+
+%% Circle fitting
+
+A = [2*proj_pts(:,1:2), ones(size(proj_pts(:,1)))];
+b = sum(proj_pts(:,1:2).^2,2); % (norm-2)^2 
+
+circle_identification = (A'*A)\A'*b; % least square optimization
+
+cx = circle_identification(1);
+cy = circle_identification(2);
+r = sqrt(circle_identification(3) + cx^2 + cy^2); % radius
+
+p_star = cx*plane_vectors(1,:) + cy*plane_vectors(2,:); % circle center in 3D
+
+plotCircle3D([cx, cy, mean(ssq_xyz(:,3))], a_cyl, r)
+figure(1)
+p = plot3(p_star(1),p_star(2),p_star(3), 'k*', 'MarkerSize',10);
+legend([q(1) q_c(1) p(1)], 'min(Eig\_vect)', 'cylinder', 'center')
+
+%% Inliers update
