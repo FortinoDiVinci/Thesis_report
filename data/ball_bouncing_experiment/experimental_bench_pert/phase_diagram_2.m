@@ -2,6 +2,7 @@ clear all
 close all
 
 load('data_vfo_3_phases.mat')
+%load('data_vfo_10.mat')
 
 addpath('../../force_torque_sensor')
 addpath('../../youBot_analysis/Utils')
@@ -22,8 +23,12 @@ addpath('../../youBot_analysis/Utils')
 % idx_st = 1.42e4;
 % idx_end = 3.2e5; 
 %
+% for data data_vfo_3_phases.mat
 idx_st = [1.2e4, 1.22e4, 1.31e4, 1.15e4, 1.08e4, 1.1e4, 1e4];
 idx_end = [1.2e5, 1.0e5, 1.09e5, 1.071e5, 9.8e4, 1.05e5, 1.026e5]; 
+% for data_vfo_10
+%idx_st = [1.6e4];
+%idx_end = [6.64e5]; 
 
 target_height = 1.7;
 paddle_offset = 0.3;
@@ -32,35 +37,34 @@ global_cycles = [];
 
 for i = 1:length(idx_st)
 
-    %% ball signal processing
-    
-    fc = 25; % cut off frequency
-    [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
-
-    zb = filtfilt(b,a,z_b{i});
-    dzb = Iu_diffcent(zb,t{i});
-    zb_old = zb;
-    zb = zb(idx_st(i):idx_end(i));
-    dzb = dzb(idx_st(i):idx_end(i));
-
-    impact = crossing(dzb);
-    idx_imp = impact(diff(impact)>100);
-    idx_imp_inf = idx_imp(zb(idx_imp) < 0.5);
-    idx_apex = idx_imp(zb(idx_imp) > 0.5);
-
     t_new = t{i}(idx_st(i):idx_end(i));
+    %% ball signal processing
+    if ~NO_BALL_BOUNC{i}
+        fc = 25; % cut off frequency
+        [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
 
-    % bouncing error 
-    rms_be = sqrt(mean((zb(idx_apex) - target_height).^2))/target_height; 
-    
-    figure()
-    plot(t{i}, zb_old)
-    hold on
-    plot(t_new, zb)
-    plot(t_new(idx_imp_inf), zb(idx_imp_inf), '*k',  'MarkerSize', 10)
-    line([t_new(1), t_new(end)], [target_height, target_height], 'Color','red','LineStyle','--','linewidth',2)
-    title('Bouncing RMSE: ' + string(rms_be*1e2) + '%')
+        zb = filtfilt(b,a,z_b{i});
+        dzb = Iu_diffcent(zb,t{i});
+        zb_old = zb;
+        zb = zb(idx_st(i):idx_end(i));
+        dzb = dzb(idx_st(i):idx_end(i));
 
+        impact = crossing(dzb);
+        idx_imp = impact(diff(impact)>100);
+        idx_imp_inf = idx_imp(zb(idx_imp) < 0.5);
+        idx_apex = idx_imp(zb(idx_imp) > 0.5);
+
+        % bouncing error 
+        rms_be = sqrt(mean((zb(idx_apex) - target_height).^2))/target_height; 
+
+        figure()
+        plot(t{i}, zb_old)
+        hold on
+        plot(t_new, zb)
+        plot(t_new(idx_imp_inf), zb(idx_imp_inf), '*k',  'MarkerSize', 10)
+        line([t_new(1), t_new(end)], [target_height, target_height], 'Color','red','LineStyle','--','linewidth',2)
+        title('Bouncing RMSE: ' + string(rms_be*1e2) + '%')
+    end
     %% disturbance data processing
 
     t_dist_on = t_dist{i}(1:2:end);
@@ -112,7 +116,7 @@ for i = 1:length(idx_st)
         t_cyc = t_new(i_cyc);
         z_cyc = zh(i_cyc);
         vz_cyc = dzh(i_cyc);        
-        cycles(cyc_nb-1) = CYCLE_DATA(t_cyc, z_cyc, vz_cyc, i_cyc);      
+        cycles(cyc_nb-1) = CYCLE_DATA(t_cyc, z_cyc, vz_cyc, [], i_cyc);      
         % did a perturbation occured in this cycle ?
         bool_pert_cyc = logical(t_cyc(1) < t_new(pert_idx)) & logical(t_cyc(end) > t_new(pert_idx));
         if(any(bool_pert_cyc))   

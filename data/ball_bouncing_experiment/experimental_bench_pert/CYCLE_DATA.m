@@ -5,6 +5,7 @@ classdef CYCLE_DATA < handle
         time;       % t(idx)
         position;   % p(idx)
         velocity;   % v(idx)
+        force;      % f(idx)
         isPerturbed;
         pert_val;
         pert_dir; 
@@ -14,13 +15,14 @@ classdef CYCLE_DATA < handle
     
     methods
         %
-        function self = CYCLE_DATA(time, position, velocity, indexes)
+        function self = CYCLE_DATA(time, position, velocity, force, indexes)
             switch (nargin)
                 case 0
                     % default constructor
                     self.time = [];
                     self.position = [];
                     self.velocity = [];
+                    self.force = [];
                     self.idx = [];
                 case 1
                     error('Not enough inputs provided')
@@ -28,22 +30,32 @@ classdef CYCLE_DATA < handle
                     self.time = time;
                     self.position = position;
                     self.velocity = [];
+                    self.force = [];
                     self.idx = [];
                 case 3
                     self.time = time;
                     self.position = position;
                     self.velocity = velocity;
+                    self.force = [];
                     self.idx = [];
                 case 4
                     self.time = time;
                     self.position = position;
                     self.velocity = velocity;
+                    self.force = force;
+                    self.idx = [];
+                case 5 
+                    self.time = time;
+                    self.position = position;
+                    self.velocity = velocity;
+                    self.force = force;
                     self.idx = indexes;
                 otherwise
                     warning('Too many inputs provided')
                     self.time = time;
                     self.position = position;
                     self.velocity = velocity;
+                    self.force = force;
                     self.idx = indexes;
             end
             self.isPerturbed = 0;
