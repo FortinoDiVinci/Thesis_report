@@ -82,7 +82,7 @@ class matlabDataPrePro(Dataset):
     # repeat the isBallImpact array to fit the dimensions of the rest of the data
     self.isBallImpact = np.tile(np.stack(raw_ballImp), (self.chunck_size, 1)).astype("float32")
     for han_str in raw_hand:
-      if han_str[0][0][0] == 'right':
+      if han_str[0] == 'right':
         self.hand.append([[1]]*self.chunck_size)
       else:
         self.hand.append([[0]]*self.chunck_size)
@@ -181,20 +181,21 @@ class LightningLSTM(pl.LightningModule):
     y_hat = self(x)
     loss = self.loss(y_hat, y)
     # The accuracy is evaluated solely on the trajectory that was masked
-    acc = self.loss(y_hat[-self.estimate_size:-1], y[-self.estimate_size:-1])
+    #acc = self.loss(y_hat[-self.estimate_size:-1], y[-self.estimate_size:-1])
     
-    prog_bar = {'acc': acc}  
+    # prog_bar = {'acc': acc}  
     # Logging to TensorBoard by default
     self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
-    self.log('train_acc', acc, on_step=True, on_epoch=True, prog_bar=True)
+    #self.log('train_acc', acc, on_step=True, on_epoch=True, prog_bar=True)
     #print('Training Step')
-    return {'loss': loss, 'progress_bar': prog_bar}
+    #return {'loss': loss, 'progress_bar': prog_bar}
+    return {'loss': loss}
 
   def validation_step(self, batch, batch_idx):
     res = self.training_step(batch, batch_idx)
     # Logging to TensorBoard by default
     self.log('val_loss', res['loss'], on_step=True, on_epoch=True)
-    self.log('val_acc', res['progress_bar']['acc'], on_step=True, on_epoch=True)
+    #self.log('val_acc', res['progress_bar']['acc'], on_step=True, on_epoch=True)
     return res
 
   # def validation_epoch_end(self, val_step_outputs):
@@ -275,6 +276,16 @@ if __name__ == "__main__":
   """ LSTM MODEL """
   
   lstm_model = LightningLSTM()
+
+  early_stop_callback = pl.callbacks.early_stopping.EarlyStopping(
+   monitor='val_loss',
+   min_delta=0.00,
+   patience=5,
+   verbose=False
+   #mode='max'
+   )
+  lr_monitor = pl.callbacks.LearningRateMonitor()
+  #reconf_lr_callback = DecayLearningRate()  
   
   if LOAD_TRAIN_MODEL:
     checkpoint_callback =  pl.callbacks.ModelCheckpoint(dirpath= path.join( 
@@ -285,25 +296,20 @@ if __name__ == "__main__":
       monitor='val_loss',
       #dirpath=LOGGING_PATH + '/version_',
       filename='force_estimation-{epoch:02d}-{val_loss:.2f}',
-      save_top_k=7,
+      save_top_k=3,
       mode='min')    
   else: #TODO : Do not record anything in the case of unitary test
-    checkpoint_callback = pl.callbacks.ModelCheckpoint()  
-  
-  early_stop_callback = pl.callbacks.early_stopping.EarlyStopping(
-   monitor='val_acc',
-   min_delta=0.00,
-   patience=5,
-   verbose=False
-   #mode='max'
- )
-  lr_monitor = pl.callbacks.LearningRateMonitor()
-  #reconf_lr_callback = DecayLearningRate()
-  
-  trainer = pl.Trainer(fast_dev_run=IS_UNIT_TEST, check_val_every_n_epoch=1, 
+    checkpoint_callback = None 
+    
+  if IS_UNIT_TEST:
+    trainer = pl.Trainer(fast_dev_run=IS_UNIT_TEST, check_val_every_n_epoch=1, 
                 max_epochs=MAX_NB_EPOCHS, limit_train_batches=BATCHES_PERCENT, 
-                         callbacks=[checkpoint_callback, early_stop_callback,
-                                    lr_monitor], auto_lr_find=False)   
+                callbacks=[early_stop_callback, lr_monitor], auto_lr_find=False)
+  else:
+    trainer = pl.Trainer(fast_dev_run=IS_UNIT_TEST, check_val_every_n_epoch=1, 
+                max_epochs=MAX_NB_EPOCHS, limit_train_batches=BATCHES_PERCENT, 
+                callbacks=[checkpoint_callback, early_stop_callback,
+                lr_monitor], auto_lr_find=False)
       
   trainer.fit(lstm_model, train_loader, val_loader)  
   

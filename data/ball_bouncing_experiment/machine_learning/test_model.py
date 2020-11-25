@@ -21,7 +21,7 @@ from lstm_trajectory_prediction_v1 import matlabDataPrePro
 
 #MODEL_REL_PATH = 'lightning_logs/version_8/checkpoints/force_estimation-epoch=25-val_loss=0.00.ckpt'
 #MODEL_REL_PATH = 'lightning_logs/version_14/checkpoints/force_estimation-epoch=26-val_loss=0.00.ckpt'
-MODEL_REL_PATH = 'lightning_logs/version_25/checkpoints/force_estimation-epoch=43-val_loss=0.02.ckpt'
+MODEL_REL_PATH = 'lightning_logs/version_1/checkpoints/force_estimation-epoch=28-val_loss=0.02.ckpt'
 INPUT_FILE_NAME = 'data_vfo_3_phases_subData'
 
 #%%

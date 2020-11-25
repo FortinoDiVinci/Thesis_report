@@ -30,9 +30,9 @@ for it = 1:length(folder_names)
     Ball = [Ball; z_b{it}./kinematic_coeff(fld_idx) - virtual_pos_offset];
     TrialNb = [TrialNb; j*ones(size(z_b{it}))];
     if (rem(j,2) == 1)
-        Hand = [Hand; ones(size(z_b{it}))];
+        Hand = [Hand; zeros(size(z_b{it}))]; % start with left hand
     else
-        Hand = [Hand; zeros(size(z_b{it}))];
+        Hand = [Hand; ones(size(z_b{it}))];
     end
     IsBallImpact = [IsBallImpact; zeros(size(z_b{it}))]; % False
     
@@ -57,8 +57,8 @@ for it = 1:length(folder_names)
     Position = [Position; mocap_marker_robot_base{it}(:,3)];
     Ball = [Ball; z_b{it}./kinematic_coeff(fld_idx) - virtual_pos_offset];
     TrialNb = [TrialNb; j*ones(size(z_b{it}))];
-    if (rem(j,2) == 0)
-        Hand = [Hand; ones(size(z_b{it}))];
+    if (rem(j,2) == 1)
+        Hand = [Hand; ones(size(z_b{it}))]; % start with right hand
     else
         Hand = [Hand; zeros(size(z_b{it}))];
     end

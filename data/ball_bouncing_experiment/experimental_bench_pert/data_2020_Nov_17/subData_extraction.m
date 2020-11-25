@@ -1,11 +1,12 @@
 clear all
 close all
 
-T = readtable('data_2020_Nov_17_concatenated.csv');
+%T = readtable('data_2020_Nov_17_concatenated.csv');
+T = readtable('data_vfo_3_phases_concatenated.csv');
 
 Time = T.Time;
-subData = [];
-subData_size = 1500;
+subDataTest = [];
+subData_size = 1500; % ms
 j = 1;
 
 for it = 1:floor(length(T.Position)/subData_size)
@@ -22,39 +23,42 @@ for it = 1:floor(length(T.Position)/subData_size)
         continue
     end
     
-    subData(j).position = T.Position(idx);
-    subData(j).force = T.Force(idx);
-    subData(j).ball = T.Ball(idx);
+    subDataTest(j).position = T.Position(idx);
+    subDataTest(j).force = T.Force(idx);
+    subDataTest(j).ball = T.Ball(idx);
     if T.Hand(idx(1))
-        subData(j).hand = "right";
+        subDataTest(j).hand = 'right';
     else
-        subData(j).hand = "left";
+        subDataTest(j).hand = 'left';
     end
-    subData(j).isBallImpact = T.IsBallImpact(idx(1));
+    subDataTest(j).isBallImpact = T.IsBallImpact(idx(1));
     
     j = j + 1;
     
 end
 
-save('youBotRhythmicTaskSubTrajectories.mat','subData')
+%save('youBotRhythmicTaskSubTrajectories.mat','subData')
+save('data_vfo_3_phases_subData.mat','subDataTest')
 
-rand_idx = randperm(length(subData));
+rand_idx = randperm(length(subDataTest));
+
+%% Disp
 
 figure
 for it = 1:9
     idx = rand_idx(it);
     subplot(3,3,it)
-    plot(subData(idx).position)
+    plot(subDataTest(idx).position)
     hold on
-    plot(subData(idx).ball)
+    plot(subDataTest(idx).ball)
     yyaxis right
-    plot(subData(idx).force)
-    if contains(subData(idx).hand, "right")
+    plot(subDataTest(idx).force)
+    if contains(subDataTest(idx).hand, "right")
         hand = "right hand.";
     else
         hand = "left hand.";
     end
-    if subData(idx).isBallImpact
+    if subDataTest(idx).isBallImpact
         b_i = ", with";
     else
         b_i = ", without";
