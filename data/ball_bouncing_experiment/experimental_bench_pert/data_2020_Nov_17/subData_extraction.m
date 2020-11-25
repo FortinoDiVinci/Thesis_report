@@ -37,3 +37,27 @@ for it = 1:floor(length(T.Position)/subData_size)
 end
 
 save('youBotRhythmicTaskSubTrajectories.mat','subData')
+
+rand_idx = randperm(length(subData));
+
+figure
+for it = 1:9
+    idx = rand_idx(it);
+    subplot(3,3,it)
+    plot(subData(idx).position)
+    hold on
+    plot(subData(idx).ball)
+    yyaxis right
+    plot(subData(idx).force)
+    if contains(subData(idx).hand, "right")
+        hand = "right hand.";
+    else
+        hand = "left hand.";
+    end
+    if subData(idx).isBallImpact
+        b_i = ", with";
+    else
+        b_i = ", without";
+    end
+    title("Trial n" + num2str(idx) + b_i + " ball haptic feedback, using the " + hand)
+end

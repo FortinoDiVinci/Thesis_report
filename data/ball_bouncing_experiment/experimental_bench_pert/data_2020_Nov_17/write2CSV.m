@@ -27,7 +27,7 @@ for it = 1:length(folder_names)
     Time = [Time; t{it}];
     Force = [Force; -f(3,:)'];
     Position = [Position; mocap_marker_robot_base{it}(:,3)];
-    Ball = [Ball; z_b{it}];
+    Ball = [Ball; z_b{it}./kinematic_coeff(fld_idx) - virtual_pos_offset];
     TrialNb = [TrialNb; j*ones(size(z_b{it}))];
     if (rem(j,2) == 1)
         Hand = [Hand; ones(size(z_b{it}))];
@@ -55,7 +55,7 @@ for it = 1:length(folder_names)
     Time = [Time; t{it}];
     Force = [Force; -f(3,:)'];
     Position = [Position; mocap_marker_robot_base{it}(:,3)];
-    Ball = [Ball; z_b{it}];
+    Ball = [Ball; z_b{it}./kinematic_coeff(fld_idx) - virtual_pos_offset];
     TrialNb = [TrialNb; j*ones(size(z_b{it}))];
     if (rem(j,2) == 0)
         Hand = [Hand; ones(size(z_b{it}))];
