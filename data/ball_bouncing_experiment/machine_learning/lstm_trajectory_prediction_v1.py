@@ -96,15 +96,25 @@ class matlabDataPrePro(Dataset):
     
     if normalization == "Magnitude":
       # data normalization between 1 and 0 .ptp() for magnitude
+      self.offsets = {'position': self.position.min(), 'force': self.force.min(), 
+                      'ball': self.ball.min()}
+      self.divisions = {'position': self.position.ptp(), 'force': self.force.ptp(), 
+                      'ball': self.ball.ptp()}
       self.position = (self.position - self.position.min())/self.position.ptp()
       self.force = (self.force - self.force.min())/self.force.ptp()
-      self.ball = (self.ball - self.ball.min())/self.ball.ptp()
+      self.ball = (self.ball - self.ball.min())/self.ball.ptp()      
     elif normalization == "Variance":
       # data standardization with a null mean and unitary standard deviation
+      self.offsets = {'position': self.position.mean(), 'force': self.force.mean(), 
+                      'ball': self.ball.mean()}
+      self.divisions = {'position': self.position.std(), 'force': self.force.std(), 
+                      'ball': self.ball.std()}
       self.position = (self.position - self.position.mean())/self.position.std()
       self.force = (self.force - self.force.mean())/self.force.std()
       self.ball = (self.ball - self.ball.mean())/self.ball.std()
     else:
+      self.offsets = {'position': 0, 'force': 0, 'ball': 0}
+      self.divisions = {'position': 1, 'force': 1, 'ball': 1}
       print("Data was neither normalized nor standardized")
     
   def __len__(self): 

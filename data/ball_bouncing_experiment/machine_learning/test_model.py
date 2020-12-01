@@ -15,6 +15,8 @@ from torch.utils.data import DataLoader
 import numpy as np
 from lstm_trajectory_prediction_v1 import LightningLSTM
 from lstm_trajectory_prediction_v1 import matlabDataPrePro
+#import pickle
+import scipy.io
 
 #%%
 """ MACROS """
@@ -23,6 +25,7 @@ from lstm_trajectory_prediction_v1 import matlabDataPrePro
 #MODEL_REL_PATH = 'lightning_logs/version_14/checkpoints/force_estimation-epoch=26-val_loss=0.00.ckpt'
 MODEL_REL_PATH = 'lightning_logs/version_1/checkpoints/force_estimation-epoch=28-val_loss=0.02.ckpt'
 INPUT_FILE_NAME = 'data_vfo_3_phases_subData'
+SAVE_PREDICTIONS = True
 
 #%%
 """ CLASSES """
@@ -41,31 +44,36 @@ test = matlabDataPrePro(filepath, 'subDataTest', normalization="Variance", mask_
 test_loader = DataLoader(test, batch_size=1)
 
 test_loss = list()
-test_pred = list()
 
+data_prediction = list()
 
 for item in test_loader:
   x, y = item
   y_hat = model(x)
+  y_hat = y_hat.detach()   
   # compute loss solely on prediction
   test_loss.append(model.loss(y_hat,y).detach().numpy())
-  test_pred.append(y_hat.detach().numpy().squeeze())
+  y_hat = y_hat.numpy().squeeze()
+  y = y.numpy().squeeze()
+  subDataRes = {'y': y, 'y_hat': y_hat} 
+  data_prediction.append(subDataRes)
   
 fig, ax = plt.subplots()
 ax.plot(test_loss)
 plt.show()  
 
 # example
-idx = np.random.randint(0,len(test_loader))
-x_t, y_t = test_loader.dataset[idx]
-t_ = np.arange(0,150)
-fig, ax = plt.subplots()
-ax.plot(t_, test_pred[idx], 'r', t_, y_t, 'b')
-plt.show()  
+for it in np.arange(1,5):
+  idx = np.random.randint(0,len(test_loader))
+  x_t, y_t = test_loader.dataset[idx]
+  t_ = np.arange(0,150)
+  fig, ax = plt.subplots()
+  ax.plot(t_, data_prediction[idx]['y_hat'], 'r', t_, data_prediction[idx]['y'], 'b')
+  plt.show()  
 
-idx = np.random.randint(0,len(test_loader))
-x_t, y_t = test_loader.dataset[idx]
-t_ = np.arange(0,150)
-fig, ax = plt.subplots()
-ax.plot(t_, test_pred[idx], 'r', t_, y_t, 'b')
-plt.show()  
+if SAVE_PREDICTIONS:
+  # pickle do not seem to be a good choice for matlab
+  #pickle.dump( data_prediction, open( "saved_pred.p", "wb" ) )
+  #formated_data = pickle.load( open( "saved_pred.p", "rb" ) )
+  scipy.io.savemat('saved_pred.mat',  {"Data": data_prediction, "Offsets":test.offsets, "Divisions":test.divisions})
+  
