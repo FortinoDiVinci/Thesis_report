@@ -69,6 +69,10 @@ classdef DIFF_TRAJECT < handle
                             elseif varargin{ii+1} == 'static'
                                 virtual_trajectory_method = 2;
                                 nb_samp_avg = 25;
+                            elseif varargin{ii+1} == 'filter'
+                                virtual_trajectory_method = 3;
+                                fc = 2; % 2 Hz
+                                dt = 1e-3; % 1ms
                             end
                         case 'NbSampAvg' % specify nb of samples for the
                             %virtual trajectery estimation before pert.
@@ -87,52 +91,50 @@ classdef DIFF_TRAJECT < handle
                 virtual_trajectory_method = 1;
             end
             
-            if virtual_trajectory_method == 1 % spline
+            if virtual_trajectory_method == 3 % filtered signal
+                [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
+                filtered_signal = filtfilt(b,a,self.complete_traject);
+            end
             
-                for ii = 1:self.nb_traject
-                    
-                    idx = self.pert_ind(ii);               
-                    self.traject(:,ii) = self.complete_traject(idx-2+self.delay:...
-                        idx+self.estim_window+1+self.delay);
-                    self.t_traject(:,ii) = self.time(idx-2+self.delay:...
-                        idx+self.estim_window+1+self.delay);
+            for ii = 1:self.nb_traject
 
+                idx = self.pert_ind(ii);  
+                % Real chuncked trajectory
+                self.traject(:,ii) = self.complete_traject(idx-2+self.delay:...
+                    idx+self.estim_window+1+self.delay);
+                self.t_traject(:,ii) = self.time(idx-2+self.delay:...
+                    idx+self.estim_window+1+self.delay);
+                
+                % Virtual chuncked trajectory 
+                if virtual_trajectory_method == 1 % spline
+                    
                     self.virt_traject(1:self.interp_window+4,ii) = interp1(...
                         self.t_traject([1,2,3,self.interp_window+2,self.interp_window+3,self.interp_window+4],ii), ...
                         self.traject([1,2,3,self.interp_window+2,self.interp_window+3,self.interp_window+4],ii), ...
                         self.t_traject(1:self.interp_window+4,ii), 'spline');
-                    
+
                     if self.estim_window ~= self.interp_window
                         self.virt_traject(self.interp_window+5:end,ii) =...
                             self.traject(self.interp_window+5:end,ii);
                     end
                     
-                    self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - ...
-                        self.traject(:,ii))*differential_direction;
-                    self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
-
-                end
-            
-            elseif virtual_trajectory_method == 2 % static
-                
-                for ii = 1:self.nb_traject
-
-                    idx = self.pert_ind(ii);               
-                    self.traject(:,ii) = self.complete_traject(...
-                        idx-2+self.delay:idx+self.estim_window+1+self.delay);
-                    self.t_traject(:,ii) = self.time(...
-                        idx-2+self.delay:idx+self.estim_window+1+self.delay);
-
+                elseif virtual_trajectory_method == 2 % static
+                    
                     self.virt_traject(:,ii) = mean(self.complete_traject(...
                         idx-2-nb_samp_avg+self.delay:idx-2+self.delay))*...
                         ones(size(self.virt_traject(:,ii)));
-
-                    self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) ...
-                        - self.traject(:,ii))*differential_direction;
-                    self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
-
-                end
                 
+                elseif virtual_trajectory_method == 3 % Using filtered signal as ref
+
+                    self.virt_traject(:,ii) = filtered_signal(idx-2+self.delay:...
+                    idx+self.estim_window+1+self.delay);
+                    
+                end
+                % difference between real and virtual
+                self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - ...
+                    self.traject(:,ii))*differential_direction;
+                self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
+
             end
             
         end

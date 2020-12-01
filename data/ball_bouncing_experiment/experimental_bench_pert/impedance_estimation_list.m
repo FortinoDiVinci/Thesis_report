@@ -22,13 +22,12 @@ addpath('../../youBot_analysis/Utils')
 %file_name = 'preliminary_data.mat';
 %file_name = 'calibration_bench_data_26_08_20';
 %file_name = 'data_eval_pert.mat';
-file_name = 'data_vfo_3_phases.mat';
+file_name = 'preliminary_experimental_data/data_vfo_3_phases.mat';
 %file_name = 'data_mso_3_phases.mat';
 
 load(file_name);
 STATIC_EXP = cell(size(folder_names));
 STATIC_EXP(:,:) = {0};
-%STATIC_EXP(4:end) = {1};
 
 %%%%%%%%%%%%%%%%%%
 %% MACROS & variables
@@ -36,12 +35,15 @@ STATIC_EXP(:,:) = {0};
 
 DISP_STIFFNESS_DISTRIBUTION = 0;
 SORT_PERT_BY_PHASE = 1; 
+VIRTUAL_FILTERED = 0; % Virtual force = low pass filt. of original force
+LOW_PASS_FREQ = 25; % Input signal are lp filtered before any computation
+FILTER_ORDER = 2;
 
 if ~exist('dt', 'var')
     dt = 1e-3;
 end
 % time evaluation variables
-idx_window_virt_traj= ceil(0.200/dt); % 200ms
+idx_window_virt_traj= ceil(0.400/dt); % 200ms
 idx_window_imp_eval = ceil(0.200/dt); % 200ms       
 idx_delay           = ceil(0.000/dt); % 015ms
 
@@ -81,7 +83,7 @@ if ~exist("NO_TRQ_CMD_DIST", "var")
     NO_TRQ_CMD_DIST (:,:) = {1};
 end
 
-% Z force and position extraction and low pass filtering (25 Hz)
+% Z force and position extraction and low pass filtering 
 for exp_nb = 1:length(folder_names)
 
     % data filtering
@@ -94,14 +96,14 @@ for exp_nb = 1:length(folder_names)
     [f,~,~]= forces_filtering(forces_unf{exp_nb}', torques_unf{exp_nb}', ...
         thetas{exp_nb}', t{exp_nb});
     fz_temp = f(3,:);
-    fc = 25; % cut off frequency
-    [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
+    [b,a] = butter(FILTER_ORDER,LOW_PASS_FREQ/(1/(2*dt)),'low'); 
 
     z{exp_nb} = filtfilt(b,a,z_temp);
     fz{exp_nb} = -1*filtfilt(b,a,fz_temp);
     
 end
-    
+ 
+% Virtual trajectories and impedance estimation
 for exp_nb = 1:length(folder_names)
     
     %% Perturbation indexes extraction 
@@ -129,8 +131,6 @@ for exp_nb = 1:length(folder_names)
             idx_perts(pert_idx) = find(t{exp_nb} >= dist_timings(pert_idx), 1, 'first');
         end
     end
-    %size(idx_perts)
-    %size(dist_timings)
     % if the experiment was interrupted during the last perturbation
     reduced_dist{exp_nb} = 0;
     if ~isempty(idx_perts)
@@ -142,10 +142,6 @@ for exp_nb = 1:length(folder_names)
         end
     end
     %disp("pert size: " + string(size(idx_perts)))
-    
-    %% Cycle extraction and processing
-    
-    
     
     %% Trajectories extraction & estimation
     
@@ -165,7 +161,14 @@ for exp_nb = 1:length(folder_names)
             fz{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
         
         delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline'); % z0 - z
-        delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline', 'DiffDirection', 'neg'); % fz - fz0
+        % low pass filtered at 2Hz
+        if VIRTUAL_FILTERED
+            delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', ...
+            'filter', 'DiffDirection', 'neg'); % fz - fz0
+        else
+            delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline', ...
+            'DiffDirection', 'neg'); % fz - fz0
+        end
     end
 
     delta_z{exp_nb}.computeDerivatives();   
@@ -329,7 +332,7 @@ if SORT_PERT_BY_PHASE
     
     analysis_type = ["All data", "Cycle 1", "Cycle 2", "Cycle 3", "Cycle 1+", ...
         "Cycle 2+", "Cycle 3+", "Cycle 1-", "Cycle 2-", "Cycle 3-"]; 
-    
+    % histograms
     for data_nb = 1:length(data_new)
         
         figure

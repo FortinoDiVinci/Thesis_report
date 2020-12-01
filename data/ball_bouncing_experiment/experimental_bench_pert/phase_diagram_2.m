@@ -1,7 +1,7 @@
 clear all
 close all
 
-load('data_vfo_3_phases.mat')
+load('preliminary_experimental_data/data_vfo_3_phases.mat')
 %load('data_vfo_10.mat')
 
 addpath('../../force_torque_sensor')

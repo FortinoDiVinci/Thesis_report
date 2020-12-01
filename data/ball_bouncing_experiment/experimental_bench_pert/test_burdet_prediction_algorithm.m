@@ -9,6 +9,8 @@ close all
 addpath('../../youBot_analysis/Utils');
 addpath('utils');
 addpath('utils/cycles');
+addpath('Input_signal_examples/');
+addpath('trajectory_prediction_evaluation/Burdet2000');
 base_save_path = "trajectory_prediction_evaluation\Burdet2000\";
 
 %%%%%%%%%%
@@ -16,21 +18,22 @@ base_save_path = "trajectory_prediction_evaluation\Burdet2000\";
 
 % GLOBAL LOOP (iterations of the algorithme
 NB_OF_GLOBAL_ITERATIONS = 1; % nb pseudo random signals generated
-NB_OF_CONFIGURATIONS = 3;
-NB_TIME_DISTORTIONS = [1, 5, 9]; % should be of size NB_OF_CONFIGURATIONS
-TIME_DISTORTION_GROWTH = [0, 0.03, 0.03]; % provided as percentage
+NB_OF_CONFIGURATIONS = 1; % For the time distorsion
+NB_TIME_DISTORTIONS = [1];%[1, 5, 9]; % should be of size NB_OF_CONFIGURATIONS
+TIME_DISTORTION_GROWTH = [0];%[0, 0.03, 0.03]; % provided as percentage
 CLEAR_TEMPORARY_DATA = 1; % Not setting this var to 1 can lead to memory crashes
 SAVE_FIGURES = 0;
+LOW_PASS_FREQ = 50; % Hz
 
 % INPUT SIGNAL
-EXTERNAL_INPUT_SIGNAL = 1;
+EXTERNAL_INPUT_SIGNAL = 0;
 if EXTERNAL_INPUT_SIGNAL
     addpath('../../force_torque_sensor');
     load("preliminary_experimental_data/data_vfo_10.mat"); 
     t_in = t;
     clear t
     idx_start = [1.5e4];
-    idx_end = [6.625e5];
+    idx_end = [6.625e5];   
 else
     TIME_VARIANT_MAGN = 1;
     TIME_VARIANT_PHASE = 1;
@@ -77,19 +80,23 @@ if EXTERNAL_INPUT_SIGNAL
     [f,~,~]= forces_filtering(forces_unf{SIGNAL_IDX}', torques_unf{SIGNAL_IDX}', ...
         thetas{SIGNAL_IDX}', t');
     nsig = -1.*f(3,:);
-    % 50Hz filtering
-    fc = 50; % cut off frequency
+    % filtering
+    fc = LOW_PASS_FREQ; % cut off frequency
     [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
     fsig = filtfilt(b,a,nsig);
     fc = 2; % cut off frequency
     [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
     sig = filtfilt(b,a,nsig);
     
+    [b,a] = butter(2,10/(1/(2*dt)),'low'); 
+    msig = filtfilt(b,a,nsig);
+    
     % to avoid the irrelevant data at both the beginning and end of the
     % signal
     nsig = nsig(idx_start:idx_end);
     fsig = fsig(idx_start:idx_end);
     sig = sig(idx_start:idx_end);
+    msig = msig(idx_start:idx_end);
     t = t(idx_start:idx_end);
     dt = (t(end) - t(1)) / length(t);
     %dt = 1e-3;
@@ -98,71 +105,43 @@ if EXTERNAL_INPUT_SIGNAL
     hold on
     plot(t, nsig)
     plot(t, fsig)
+    plot(t, msig)
     plot(t, sig)
-    legend('original', 'filtered at 50Hz', 'filtered at 2Hz')
+    legend('original', "filtered at " + num2str(LOW_PASS_FREQ,'%.0f') + "Hz", 'filtered at 10Hz', 'filtered at 2Hz')
     title("External input signal n" + num2str(SIGNAL_IDX))
     
 else
     % "ideal" signal
     dt = 1e-3;      % time sampling
     f = 0.8;        % sine frequency
-    alp = 10;       % frequency multiplier for second sine
-    phi = pi/2;     % phase delay of second sine
+    alp = 10;       % frequency multiplier for second sine % modify in generateRhythmicSignal
+    phi = pi/2;     % phase delay of second sine % modify in generateRhythmicSignal
     a1 = 1;         % first sine magnitude
     a2 = 0;%a1/5;   % 2nd sine magnitude
     t_max = 80 - dt;
     t = 0:dt:t_max; % time vector
     t_under_samp = 0:10*dt:t_max; % time
+    
+%     % low freq noise + gaussian noise
+%     lf = f/20;
+%     la = a1/4;
+%     %lsig = la*sin(2*pi*lf.*t);
+%     lsig = 0;
+%     nsig = awgn(sig + lsig, 35);
 
-    if TIME_VARIANT_MAGN
-        a1t = step(dsp.ColoredNoise('InverseFrequencyPower',2,'SamplesPerFrame',length(t)/10));
-        a1t = 1 + interp1(t_under_samp, a1t/(max(a1t)-min(a1t)), t);
-        % deal with last nan
-        nan_idx = find(isnan(a1t));
-        for nan_i = 1:length(nan_idx)
-            a1t(nan_idx(nan_i)) = a1t(nan_idx(nan_i)-1);
-        end
-        fc = 0.5; % cut off frequency
-        [b,a] = butter(4,fc/(1/(2*dt)),'low'); 
-        a1t = filtfilt(b,a,a1t);
-    else
-        a1t = a1;
-    end
-
-    if TIME_VARIANT_PHASE
-        phit = step(dsp.ColoredNoise('InverseFrequencyPower',2,'SamplesPerFrame',length(t)/10));
-        phit = phi.*interp1(t_under_samp, phit/(max(phit)-min(phit)), t);
-        nan_idx = find(isnan(phit));
-        for nan_i = 1:length(nan_idx)
-            phit(nan_idx(nan_i)) = phit(nan_idx(nan_i)-1);
-        end
-        fc = 0.25; % cut off frequency
-        [b,a] = butter(4,fc/(1/(2*dt)),'low'); 
-        phit = filtfilt(b,a,phit);
-    else
-        phit = phi;
-    end
-
-    sig = a1t.*sin(2*pi*f.*t + phit) + a2*sin(alp*pi*f.*t + phi);
-
-    figure 
-    plot(t,sig)
-
-    % low freq noise + gaussian noise
-    lf = f/20;
-    la = a1/4;
-    %lsig = la*sin(2*pi*lf.*t);
-    lsig = 0;
-    nsig = awgn(sig + lsig, 35);
-
-    hold on
-    plot(t, nsig)
+    [nsig, sig] = generateRhythmicSignal(dt, t_max, f, 'TimeVariantMagnitude', true, ...
+        'TimeVariantPhase', true, 'GaussianNoise', true, 'FirstSineMagnitude',a1, ...
+        'SecondSineMagnitude',a2);
 
     % 50Hz filtering
-    fc = 50; % cut off frequency
+    fc = LOW_PASS_FREQ; % cut off frequency
     [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
     fsig = filtfilt(b,a,nsig);
-
+    
+    figure
+    plot(t, sig)
+    hold on
+    plot(t, nsig)
     plot(t, fsig)
     legend('original', 'noisy', 'filtered')
     title("Input signal n" + num2str(SIGNAL_IDX))
@@ -178,7 +157,7 @@ idx_pks = idx_pks(1:2:end); % selection of only half the peaks
 
 plot(t(idx_pks), fsig(idx_pks), 'k^')
 if EXTERNAL_INPUT_SIGNAL
-    legend('original', 'filtered at 50Hz', 'filtered at 2Hz', 'cycle');
+    legend('original', 'filtered at 50Hz', 'filtered at 10Hz', 'filtered at 2Hz', 'cycle');
 else
     legend('original', 'noisy', 'filtered', 'cycle');
 end
@@ -270,7 +249,7 @@ time_dist = 1+linspace(-max_time_distortion,max_time_distortion,td_nb);
 cand = NaN(m_nb*ts_nb*td_nb, min_idx); 
 
 % cycles iterations
-for i = k+1:15%length(ncycles)-1
+for i = k+1:length(ncycles)-1
     
     % cycle formating, cycles length are reduced to the minimum cycle length
     cell_f = {prev_cycles.force};
@@ -287,41 +266,31 @@ for i = k+1:15%length(ncycles)-1
     std_force = max(std(forces_list));
     magn_list = 1 + linspace(-coef_std*std_force,coef_std*std_force,m_nb);
     
-    % candidates population
-    for ii = 1:td_nb
-        cand_dist = generateTimeDistortion(avg_force, (1:min_idx), time_dist(ii));
-        for jj = 1:m_nb
-            cand_magn = cand_dist.*magn_list(jj);
-            for kk = 1:ts_nb
-                if time_shift(kk) > 0
-                    cand_shift = cat(2,cand_magn(1+time_shift(kk):end), ...
-                        NaN(1,time_shift(kk))); % complete the missing data with NaN
-                elseif time_shift(kk) < 0
-                    cand_shift = cat(2,NaN(1,-time_shift(kk)), ...
-                        cand_magn(1:end+time_shift(kk)));
-                else
-                    cand_shift = cand_magn(1+time_shift(kk):end);
-                end
-                cand(ts_nb*(m_nb*(ii-1)+jj-1)+kk,:) = cand_shift;
-            end
-        end
-    end
-    
-    % disp candidates, mean signal, and 10 previous signals
-%     if i == k+1 %% only disp the first one
-%         figure
-%         p = plot(cand');
-%         hold on
-%         plot(forces_list', 'k', 'LineWidth', 1.1);
-%         plot(avg_force, '--k', 'LineWidth', 3)
-%         for i_p = length(p)
-%             p(i_p).Color(4) = 0.3;
+%     % candidates population
+%     for ii = 1:td_nb
+%         cand_dist = generateTimeDistortion(avg_force, (1:min_idx), time_dist(ii));
+%         for jj = 1:m_nb
+%             cand_magn = cand_dist.*magn_list(jj);
+%             for kk = 1:ts_nb
+%                 if time_shift(kk) > 0
+%                     cand_shift = cat(2,cand_magn(1+time_shift(kk):end), ...
+%                         NaN(1,time_shift(kk))); % complete the missing data with NaN
+%                 elseif time_shift(kk) < 0
+%                     cand_shift = cat(2,NaN(1,-time_shift(kk)), ...
+%                         cand_magn(1:end+time_shift(kk)));
+%                 else
+%                     cand_shift = cand_magn(1+time_shift(kk):end);
+%                 end
+%                 cand(ts_nb*(m_nb*(ii-1)+jj-1)+kk,:) = cand_shift;
+%             end
 %         end
 %     end
     
+    cand = generateCandidatesBurdet2000(forces_list, magn_list, time_dist, time_shift);
+
     % best match
     % For this prototype, 300 ms + a rand number between 0 and 300 are used
-    % for the unperturbed trajectory comparing
+    % for the unperturbed trajectory comparison
     rand_val = floor(RAND_GEN(i)*offset_idx_pred); % offset_idx_pred
     d_cost = zeros(size(cand,1),1);
     alt_cost = zeros(size(cand,1),1);
@@ -389,12 +358,6 @@ for i = k+1:15%length(ncycles)-1
              b_spline_cand);
         errors(SIGNAL_IDX, CONFIG_IDX, 5).appendData(ncycles(i).force(pred_indexes) -...
              w_spline_cand);
-%         errors(SIGNAL_IDX, CONFIG_IDX, 5) = STATISTIC_DATA(ncycles(i).force(pred_indexes) -...
-%             w_spline_cand, 'Worst Spline candidate');
-%         errors(SIGNAL_IDX, CONFIG_IDX, 3) = STATISTIC_DATA(ncycles(i).force(pred_indexes) -...
-%             mean_spline_cand, 'Mean Spline candidate');
-%         errors(SIGNAL_IDX, CONFIG_IDX, 4) = STATISTIC_DATA(ncycles(i).force(pred_indexes) -...
-%             b_spline_cand, 'Best Spline candidate');
         
         if DISP_SPLINE_ALL_CANDIDATES && i == 15%k+1
             figure
@@ -411,6 +374,8 @@ for i = k+1:15%length(ncycles)-1
             "Mean spline", "Best spline", "Worst spline"});
         end
     end
+    
+    
     
     % the prediction begins at time 300ms + rand_val and is evaluated on 
     % 300ms : pred_indexes

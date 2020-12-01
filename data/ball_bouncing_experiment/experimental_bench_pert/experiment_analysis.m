@@ -1,6 +1,7 @@
 clear all
 close all
 
+addpath('utils');
 addpath('../../youBot_analysis/Utils');
 addpath('../../youBot_analysis/Jacobian');
 addpath('../../youBot_analysis/Motion_capture_validation/utils');
@@ -10,12 +11,15 @@ addpath('../../force_torque_sensor')
 %% MACROS & variables
 %%%%%%%%%%%%%%%%%%
 
-DISPLAY_MOCAP_FIT                   = 0
-DISPLAY_BALL_BOUNCING_IMPACTS       = 0
-SINGLE_MOCAP_FITTING                = 0
+DISPLAY_MOCAP_FIT                   = 1
+DISPLAY_BALL_BOUNCING_IMPACTS       = 1
+DISPLAY_CARTESIAN_FORCE_Z           = 0
+SINGLE_MOCAP_FITTING                = 1 % only the first data will be used for fitting
 IS_BALL_BOUNCING                    = 1
 USE_DEFAULT_TF_MATRIX               = 0
 SAVE_DATA                           = 1 % specify name for the file
+SAVE_ALL                            = 1 % save all data, but temp/empty data only relevant if SAVE_DATA is set to 1
+COMPUTE_STATISTICS                  = 1 
 
 %% kinematic data, ball and paddle trajectories
 
@@ -31,13 +35,16 @@ dt = 1e-3;
 %names = "data_02-Sep-2020_17h45/" +["no_pert/", "long_pert/", "short_pert/", "spring_no_pert/", "spring_long_pert/", "spring_long_pert2/", "spring_short_pert/"];
 %names = "data_16-Sep-2020_10h40/ref_response_time_" + ["static/", "static_2/", "cyclic/", "cyclic_2/"];
 %names = "data_21-Sep-2020_11h05/experiment_" + ["step", "sine"] + "_movement_alone/";
-names = "data_01-Oct-2020_16h54/ball_bouncing_vfo" + ["", "1", "2", "3", "4", "5", "6"] + "/";
+%names = "data_01-Oct-2020_16h54/ball_bouncing_vfo" + ["", "1", "2", "3", "4", "5", "6"] + "/";
 %names = "data_07-Oct-2020_10h51/ball_bouncing_mso" + [""] + "/";
-names = "data_20-Oct-2020_11h24/";
-folder_names = "preliminary_experimental_data/" + names;
-folder_names = "data_validation_retour_haptique/" + names;
+%names = "vfo10/";
+%folder_names = "preliminary_experimental_data/" + names;
+%folder_names = "data_validation_retour_haptique/" + names;
+%names = ["calibration1";"trial" + num2str((1:9)');"trial" + num2str((10:14)')] + "/";
+names = ["calibration2";"trial" + num2str((15:28)')] + "/";
+folder_names = "data_2020_Nov_17/" + names;
 if SAVE_DATA
-    saved_data_name = "haptic_feedback_validation_3"; % without extension
+    saved_data_name = "data_with_impacts_2020_11_17"; % without extension
 end
 
 NO_DISTURBANCE = cell(size(folder_names));
@@ -52,9 +59,13 @@ NO_MOCAP = cell(size(folder_names));
 NO_MOCAP(:,:) = {0};
 NO_BALL_BOUNC = cell(size(folder_names));
 NO_BALL_BOUNC(:,:) = {0};
+NO_FORCE_SENSOR = cell(size(folder_names)); % for solely kinematic data
+NO_FORCE_SENSOR(:,:) = {0};
 
 %kinematic_coeff = [6, 6, 6, 6, 6, 6, 6, 6, 3, 6, 6, 3];
-kinematic_coeff = [6, 6, 6];
+kinematic_coeff = 6*ones(size(folder_names));
+virtual_pos_offset = -0.32; % used in the ball_bouncing package
+target_height = 1.7; % for the ball bouncing task
 
 % init cells
 
@@ -86,7 +97,11 @@ for fld_idx = 1:length(folder_names)
     catch
         NO_BALL_BOUNC{fld_idx} = 1;
     end
-    force_unf = readtable(strcat(folder_names(fld_idx), 'bagfile-_netft_data.csv'));
+    try
+        force_unf = readtable(strcat(folder_names(fld_idx), 'bagfile-_netft_data.csv'));
+    catch
+        NO_FORCE_SENSOR{fld_idx} = 1;
+    end
     try
         disturbance = readtable(strcat(folder_names(fld_idx), 'bagfile-_arm_1_disturbance_val.csv'));
     catch
@@ -109,12 +124,18 @@ for fld_idx = 1:length(folder_names)
     end
         
     % time interpolation
-    force_unf_t = (force_unf.x_time - joint_states.x_time(1))*1e-9;
+    if ~NO_FORCE_SENSOR{fld_idx}
+        force_unf_t = (force_unf.x_time - joint_states.x_time(1))*1e-9;
+    end
     if ~NO_BALL_BOUNC{fld_idx}
         ball_pose_t = (ball_pose.x_time - joint_states.x_time(1))*1e-9;
     end
     %tf_t = (tf.x_time - joint_states.x_time(1))*1e-9;
     joint_t = (joint_states.x_time - joint_states.x_time(1))*1e-9;
+    if NO_FORCE_SENSOR{fld_idx}
+        force_unf_t = joint_t; inf; % avoid creating another case scenario...
+        warning("No force data was found for input: " + names(fld_idx));
+    end
     if NO_MOCAP{fld_idx} == 0
         mocap_t = (mocap.x_time - joint_states.x_time(1))*1e-9;
         if NO_BALL_BOUNC{fld_idx}
@@ -135,9 +156,10 @@ for fld_idx = 1:length(folder_names)
         end    
         t_free_mov{fld_idx} = (joint_t(1):dt:t_start)';
     end
-    
-    t{fld_idx} = t_start:dt:t_end;
-    t{fld_idx} = t{fld_idx}';
+    if NO_FORCE_SENSOR{fld_idx} % In this case free_mov shoule be the same
+        t_free_mov{fld_idx} = (t_start:dt:t_end)';
+    end
+    t{fld_idx} = (t_start:dt:t_end)';
     
     if ~NO_DISTURBANCE{fld_idx}
         t_dist{fld_idx} = (disturbance.x_time - joint_states.x_time(1))*1e-9;
@@ -200,17 +222,18 @@ for fld_idx = 1:length(folder_names)
                                 interp1(mocap_t, mocap.field_pose_position_y, t_free_mov{fld_idx}), ...
                                 interp1(mocap_t, mocap.field_pose_position_z, t_free_mov{fld_idx})];
     end
-    forces_unf{fld_idx} = [interp1(force_unf_t, force_unf.field_wrench_force_x, t{fld_idx}), ...
-                           interp1(force_unf_t, force_unf.field_wrench_force_y, t{fld_idx}), ...
-                           interp1(force_unf_t, force_unf.field_wrench_force_z, t{fld_idx})]; 
-                       
-    torques_unf{fld_idx} = [interp1(force_unf_t, force_unf.field_wrench_torque_x, t{fld_idx}), ...
-                           interp1(force_unf_t, force_unf.field_wrench_torque_y, t{fld_idx}), ...
-                           interp1(force_unf_t, force_unf.field_wrench_torque_z, t{fld_idx})]; 
-                       
+    if ~NO_FORCE_SENSOR{fld_idx}
+        forces_unf{fld_idx} = [interp1(force_unf_t, force_unf.field_wrench_force_x, t{fld_idx}), ...
+                               interp1(force_unf_t, force_unf.field_wrench_force_y, t{fld_idx}), ...
+                               interp1(force_unf_t, force_unf.field_wrench_force_z, t{fld_idx})]; 
+
+        torques_unf{fld_idx} = [interp1(force_unf_t, force_unf.field_wrench_torque_x, t{fld_idx}), ...
+                               interp1(force_unf_t, force_unf.field_wrench_torque_y, t{fld_idx}), ...
+                               interp1(force_unf_t, force_unf.field_wrench_torque_z, t{fld_idx})]; 
+    end                   
     for i=1:length(t{fld_idx})
         T = MGD_T0handle(thetas{fld_idx}(i,1), thetas{fld_idx}(i,2), thetas{fld_idx}(i,3), thetas{fld_idx}(i,4), thetas{fld_idx}(i,5));
-        z_p{fld_idx}(i, 1) = (T(3,4) - 0.3)*6; % depends on kinematics coefficient !!
+        z_p{fld_idx}(i, 1) = (T(3,4) + virtual_pos_offset)*kinematic_coeff(fld_idx); % depends on kinematics coefficient !!
     end
 end
 
@@ -290,8 +313,6 @@ for fld_idx = 1:length(folder_names)
 end
 
 
-%fld_idx = 3; % successful camera kinematic data calibration
-
 %% ball and paddle 
 
 if IS_BALL_BOUNCING
@@ -340,26 +361,34 @@ if IS_BALL_BOUNCING
         % line([impact(:,2), impact(:,2)], [-5, 5], 'Color','black','LineStyle','--');
 
         % Disturbance 
-        t_10th_impact = impact(10,2);
-        t_positiv_dist{fld_idx} = t_dist{fld_idx}((find(dist{fld_idx} > 0))');
-        t_negativ_dist{fld_idx} = t_dist{fld_idx}((find(dist{fld_idx} < 0))');
-        t_off_dist{fld_idx} = t_dist{fld_idx}(find((dist{fld_idx} == 0))');
+        if ~NO_DISTURBANCE{fld_idx}
+            t_10th_impact = impact(10,2);
+            t_positiv_dist{fld_idx} = t_dist{fld_idx}((find(dist{fld_idx} > 0))');
+            t_negativ_dist{fld_idx} = t_dist{fld_idx}((find(dist{fld_idx} < 0))');
+            t_off_dist{fld_idx} = t_dist{fld_idx}(find((dist{fld_idx} == 0))');
+        end
 
         if DISPLAY_BALL_BOUNCING_IMPACTS
 
-            figure()
+            figure
             hold on, grid on
             plot(t{fld_idx}, z_b{fld_idx}, 'r')
             plot(t{fld_idx}, z_p{fld_idx}, 'b')
             if ~NO_MOCAP{fld_idx}            
-                plot(t{fld_idx}, (mocap_marker_robot_base{fld_idx}(:,3)-0.3)*kinematic_coeff(fld_idx), 'c')
+                plot(t{fld_idx}, (mocap_marker_robot_base{fld_idx}(:,3)+virtual_pos_offset)*kinematic_coeff(fld_idx), 'c')
             end
+            if ~NO_DISTURBANCE{fld_idx}
             line([t_positiv_dist{fld_idx}, t_positiv_dist{fld_idx}], [-0.2, 0.2], 'Color','green','LineStyle','--');
             line([t_negativ_dist{fld_idx}, t_negativ_dist{fld_idx}], [-0.2, 0.2], 'Color','red','LineStyle','--');
             line([t_off_dist{fld_idx}, t_off_dist{fld_idx}], [-0.2, 0.2], 'Color','black','LineStyle','--');
             line([t{fld_idx}(idx_ball_on_ramp), t_10th_impact], [0.8, 0.8], 'Color','black','LineStyle','--');
             line([t_10th_impact, t{fld_idx}(end)], [1.00, 1.00], 'Color','black','LineStyle','--');
-            legend('ball', 'paddle')
+            end
+            if NO_MOCAP{fld_idx} 
+                legend('ball', 'paddle')
+            else
+                legend('ball', 'paddle', 'mocap virtual')
+            end
             xlabel('time (s)')
             ylabel('height (m)')
             title('Ball bouncing impacts: ' + names(fld_idx))
@@ -378,56 +407,94 @@ if SAVE_DATA
             return
         end
     end
-    if any(~[NO_MOCAP{:}])==0 % not a single motion capture
-        if any(~[NO_VEL_CMD{:}])==1 % velocity command recorded
-            save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
-            "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP", "t_impulse", "imp", ...
-            "NO_TRQ_CMD_DIST", "t", "t_dist", "thetas", "torques_unf", "z_b", "z_p", "val_vel_cmd", ...
-            "t_vel_cmd", "NO_VEL_CMD");
-        else
-            save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
-            "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP", "t_impulse", "imp", ...
-            "NO_TRQ_CMD_DIST", "t", "t_dist", "thetas", "torques_unf", "z_b", "z_p");
+    if SAVE_ALL
+        clear temp_hom joint_t force_unf_t mocap_t i % temporary data
+        clear mocap_marker_fm robot_marker_fm t_free_mov thetas_fm T_fm joint_eff_fm % free mov data
+        
+        vars = whos;
+        for i = 1:length(vars)
+            var = vars(i);
+            if strcmp(var.class, 'cell')
+                if(all(cellfun(@isempty, eval([var.name])))) % if cell array is completely empty
+                    eval(['clear ' var.name ';'])
+                end
+            elseif strcmp(var.class, 'table') % clear all tables
+                eval(['clear ' var.name ';'])
+            end
         end
         
-    elseif USE_DEFAULT_TF_MATRIX
-        save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
-        "joint_eff_fm", "mocap_marker", "mocap_marker_fm", "mocap_marker_robot_base", ...
-        "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP",  ...
-        "NO_TRQ_CMD_DIST", "robot_marker", "robot_marker_fm", "t", "t_dist", "thetas", ...
-        "thetas_fm", "torques_unf", "transformation_matrix", "z_b", "z_p");
+        save(strcat(saved_data_name,".mat"));
+        
     else
-        save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
-        "joint_eff_fm", "mocap_marker", "mocap_marker_fm", "mocap_marker_robot_base", ...
-        "mocap_marker_robot_base_fm", "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", ...
-        "NO_MOCAP", "NO_TRQ_CMD_DIST", "robot_marker", "robot_marker_fm", "t", "t_dist", "thetas", ...
-        "thetas_fm", "torques_unf", "transformation_matrix", "z_b", "z_p");
+        if any(~[NO_MOCAP{:}])==0 % not a single motion capture
+            if any(~[NO_VEL_CMD{:}])==1 % velocity command recorded
+                save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+                "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP", "t_impulse", "imp", ...
+                "NO_TRQ_CMD_DIST", "t", "t_dist", "thetas", "torques_unf", "z_b", "z_p", "val_vel_cmd", ...
+                "t_vel_cmd", "NO_VEL_CMD");
+            else
+                save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+                "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP", "t_impulse", "imp", ...
+                "NO_TRQ_CMD_DIST", "t", "t_dist", "thetas", "torques_unf", "z_b", "z_p");
+            end
+
+        elseif USE_DEFAULT_TF_MATRIX
+            save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+            "joint_eff_fm", "mocap_marker", "mocap_marker_fm", "mocap_marker_robot_base", ...
+            "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", "NO_MOCAP",  ...
+            "NO_TRQ_CMD_DIST", "robot_marker", "robot_marker_fm", "t", "t_dist", "thetas", ...
+            "thetas_fm", "torques_unf", "transformation_matrix", "z_b", "z_p");
+        else
+            save(strcat(saved_data_name,".mat"),"dist", "dt", "folder_names", "forces_unf", "joint_eff", ...
+            "joint_eff_fm", "mocap_marker", "mocap_marker_fm", "mocap_marker_robot_base", ...
+            "mocap_marker_robot_base_fm", "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", ...
+            "NO_MOCAP", "NO_TRQ_CMD_DIST", "robot_marker", "robot_marker_fm", "t", "t_dist", "thetas", ...
+            "thetas_fm", "torques_unf", "transformation_matrix", "z_b", "z_p");
+        end
     end
 end
 
-return
+%% STATISTICS
+
+if COMPUTE_STATISTICS
+    ball_bouncing_stats(t,z_b,vz_b,target_height)
+end
+
+if ~DISPLAY_CARTESIAN_FORCE_Z 
+    return
+end
 
 %% Forces
 
-m = 0.1096;   %sensor mass (determined by least square method)
-l = 0.0103;   %arm lever
-[F_r{fld_idx}, T_r{fld_idx}, ft_bias{fld_idx}] = forces_filtering(forces_unf{fld_idx}', torques_unf{fld_idx}', thetas{fld_idx}', t{fld_idx}, 2e3, m, l, 'filtering', 'TRUE');
+for fld_idx = 1:length(folder_names)
+    if NO_FORCE_SENSOR{fld_idx}
+        continue
+    end
+    m = 0.1096;   %sensor mass (determined by least square method)
+    l = 0.0103;   %arm lever
+    [F_r{fld_idx}, T_r{fld_idx}, ft_bias{fld_idx}] = forces_filtering(forces_unf{fld_idx}', torques_unf{fld_idx}', thetas{fld_idx}', t{fld_idx}, 2e3, m, l, 'filtering', 'TRUE');
 
-figure()
-subplot(2,1,1)
-hold on, grid on
-plot(t{fld_idx}, z_p{fld_idx})
-line([t_positiv_dist{fld_idx}, t_positiv_dist{fld_idx}], [-0.2, 0.2], 'Color','green','LineStyle','--');
-line([t_negativ_dist{fld_idx}, t_negativ_dist{fld_idx}], [-0.2, 0.2], 'Color','red','LineStyle','--');
-line([t_off_dist{fld_idx}, t_off_dist{fld_idx}], [-0.2, 0.2], 'Color','black','LineStyle','--');
-ylabel('height (m)')
-legend('paddle')
-subplot(2,1,2)
-hold on, grid on
-plot(t{fld_idx}, F_r{fld_idx}(3,:))
-line([t_positiv_dist{fld_idx}, t_positiv_dist{fld_idx}], [-10, 10], 'Color','green','LineStyle','--');
-line([t_negativ_dist{fld_idx}, t_negativ_dist{fld_idx}], [-10, 10], 'Color','red','LineStyle','--');
-line([t_off_dist{fld_idx}, t_off_dist{fld_idx}], [-10, 10], 'Color','black','LineStyle','--');
-ylabel('force (N)')
-xlabel('time (s)')
-legend('interaction forces')
+    figure()
+    subplot(2,1,1)
+    hold on, grid on
+    plot(t{fld_idx}, z_p{fld_idx})
+    if ~NO_DISTURBANCE{fld_idx}
+    line([t_positiv_dist{fld_idx}, t_positiv_dist{fld_idx}], [-0.2, 0.2], 'Color','green','LineStyle','--');
+    line([t_negativ_dist{fld_idx}, t_negativ_dist{fld_idx}], [-0.2, 0.2], 'Color','red','LineStyle','--');
+    line([t_off_dist{fld_idx}, t_off_dist{fld_idx}], [-0.2, 0.2], 'Color','black','LineStyle','--');
+    end
+    ylabel('height (m)')
+    legend('paddle')
+    subplot(2,1,2)
+    hold on, grid on
+    plot(t{fld_idx}, F_r{fld_idx}(3,:))
+    if ~NO_DISTURBANCE{fld_idx}
+    line([t_positiv_dist{fld_idx}, t_positiv_dist{fld_idx}], [-10, 10], 'Color','green','LineStyle','--');
+    line([t_negativ_dist{fld_idx}, t_negativ_dist{fld_idx}], [-10, 10], 'Color','red','LineStyle','--');
+    line([t_off_dist{fld_idx}, t_off_dist{fld_idx}], [-10, 10], 'Color','black','LineStyle','--');
+    end
+    ylabel('force (N)')
+    xlabel('time (s)')
+    legend('interaction forces')
+
+end
