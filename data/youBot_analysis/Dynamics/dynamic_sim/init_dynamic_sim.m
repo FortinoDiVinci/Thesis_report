@@ -23,9 +23,9 @@ Kxi = [0;0;0];
 
 fz0 = 0;
 
-K_env = 0;100;
-B_env = 0;10;
-M_env = 0;1;
+K_env = [0,100,0];
+B_env = [0,10,0];
+M_env = [0,1,0];
 
 x0 = 0;
 le = 0.1;
@@ -42,6 +42,8 @@ plot3(jp(1,5),jp(2,5),jp(3,5),'b^','markersize',20)
 plot3(p0(1),p0(2),p0(3),'g^','markersize',20)
 xlabel('x'); ylabel('y'); zlabel('z')
 view(0,0)
+
+equil = [p0(1);p0(3);acos(r(1,1))];
 
 return 
 %% after simulink finished execution

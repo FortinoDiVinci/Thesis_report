@@ -77,7 +77,7 @@ function simulateYouBotKinematics(q,dt,f)
             [0 O1(3) O2(3) O3(3) O4(3) O5(3) OE(3)],'b'); 
         % z force
         if nargin > 2
-            quiver3(OE(1),OE(2),OE(3),f(k,1),f(k,2),f(k,3),'r')  
+            quiver3(OE(1),OE(2),OE(3),f(k,1)/10,f(k,2)/10,f(k,3)/10,'r')  
         end
         axis([-0.3 0.3 -0.3 0.3 0 0.5])
         pause(0.02) % 1kHz
