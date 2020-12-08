@@ -22,7 +22,7 @@ function simulateYouBot_3DOF(q,f)
     
     q = [q; zeros(1,size(q,2))];
     for k = 1:size(q,2)
-        g0E = ones(4,4);
+        g0E = eye(4,4);
         for j = 1:4
             g0E = g0E * mattransfo(alpha(j),d(j),q(j,k),r(j));
             joint_pos(:,j,k) = g0E(1:3,4);

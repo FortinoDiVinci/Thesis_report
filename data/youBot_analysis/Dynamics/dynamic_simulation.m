@@ -53,7 +53,7 @@ for ii = 1:length(t)
     % Admittance control
     adm_cmd = adm_ctrl.compute(f0(ii) - f_tot(3));
     % Cartesian space to joint space
-    vel_setp = J0E' * [0;0;adm_cmd;0;0;0]; % cmd is only along z axis
+    vel_setp = J0E([1,3,5],:)\[0;adm_cmd;0]; % cmd is only along z axis
     % Joint velocity control
     vel_cmd = vel_ctrl.compute(vel_setp - dq);
     % Joint current control is neglected
@@ -82,7 +82,7 @@ end
 
 %%
 
-simulateYouBot_3DOF(data.kinematic.joints.q,data.dynamic.f_env)
+%simulateYouBot_3DOF(data.kinematic.joints.q,data.dynamic.f_env)
 
 % 
 figure
