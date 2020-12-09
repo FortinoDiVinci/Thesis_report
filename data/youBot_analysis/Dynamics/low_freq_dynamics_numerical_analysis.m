@@ -1,12 +1,14 @@
 % Low dynamic evaluation for q0
 
+addpath('dynamic_sim/')
+
 q0_kuka = [1.676; -4.363; 1.497];
-q_dh = [-90 0 90]'*pi/180;        % Denavit H. 
+q_dh = [90 0 -90]'*pi/180;        % Denavit H. 
 q_rob = [65 -146 102.5]'.*pi/180; % robot offsets
-q0 = (q_rob - q_dh) - q0_kuka;    % simulation convention
-dq0 = [0; 0; 0];
-tau0 = G_3DOF(q0);
-tau0_exp = [2;2;1.3;]; % a quick evaluation was done, this needs to be confimed
+th0 = q_dh - (q0_kuka - q_rob);   % simulation convention
+dth0 = [0; 0; 0];
+tau0 = G_3DOF(th0(1),th0(2),th0(3));
+%tau0_exp = [2;2;1.3;]; % a quick evaluation was done, this needs to be confimed
 % admittance controller gains
 Kp_f = 0.015;
 Ki_f = 0.08;
@@ -16,14 +18,13 @@ Kp_v = Kp_v./256;
 Ki_v = zeros(3,3); Ki_v(1,1)=3000; Ki_v(2,2)=900; Ki_v(3,3)=1000; 
 Ki_v = Ki_v./65536;
 % dynamic evaluation at q0
-iM = inv(M_3DOF(q0(2:3)));
-J0E = J0E_3DOF(q0(1:3));
-J = J0E([1,3,5],:);
-iJ = inv(J);
-syms q1 q2 q3;
-Ksym = jacobian(inv(M_3DOF([q2;q3]))*tau0, [q1;q2;q3]) + ...
-    jacobian(inv(M_3DOF([q2;q3]))*G_3DOF([q1;q2;q3]), [q1;q2;q3]);
-K = double(vpa(subs(Ksym,[q1;q2;q3],q0)));
+iM = iM_3DOF(th0(2),th0(3));
+J = J0E_3DOF(th0(1),th0(2),th0(3));
+iJ = iJ0E_3DOF(th0(1),th0(2),th0(3));
+syms th1 th2 th3;
+Ksym = jacobian(iM_3DOF(th2,th3)*tau0, [th1;th2;th3]) + ...
+    jacobian(iM_3DOF(th2,th3)*G_3DOF(th1,th2,th3), [th1;th2;th3]);
+K = double(vpa(subs(Ksym,[th1;th2;th3],th0)));
 
 A = J*iM*Ki_v*iJ*Ki_f;
 B = J*(iM*Ki_v*iJ + K*iJ);
@@ -58,17 +59,17 @@ bode(LD2z)
 % frequence de coupure à 0.03 Hz
 
 %% 
-% Conséquence de la variation de Ki_f, le gain intégrale du controlleur 
-% en admittance
+% Integral gain variation of the admittance controler on the apparent
+% dynamics
 
-Ki_f = (0:0.001:0.1);
+Ki = (0:0.001:0.1);
 
 A = J*iM*Ki_v*iJ;
 B = J*(iM*Ki_v*iJ + K*iJ);
 LD_gain = (B\A);
-LD_zgain = LD_gain(2,2).*(Ki_f);
+LD_zgain = LD_gain(2,2).*(Ki);
 
 figure('DefaultAxesFontSize',14)
-plot(Ki_f, 1./LD_zgain)
+plot(Ki, 1./LD_zgain)
 xlabel('Ki gain')
 ylabel('Masse apparente (kg)')

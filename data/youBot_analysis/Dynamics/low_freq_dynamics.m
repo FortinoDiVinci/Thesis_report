@@ -1,5 +1,7 @@
 %% Symbolic
 
+addpath('dynamic_sim/')
+
 J = sym('J%d%d', [3 3]);
 M = sym('M%d%d', [3 3]);
 K = sym('K%d%d', [3 3]);

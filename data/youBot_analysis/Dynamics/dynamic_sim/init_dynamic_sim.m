@@ -1,10 +1,11 @@
 % Init sim
+clear all
 
 KUKA_offset = [169 65 -146 102.5 167.5]'*pi/180;
 theta_DH = [0 pi/2 0 -pi/2 0]';
-q0 = [1.676; -4.363; 1.497] - KUKA_offset(2:4);
+q0 = [1.676; -4.363; 1.497];
 dq0 = [0; 0; 0];
-th0 = theta_DH(2:4) - q0;
+th0 = theta_DH(2:4) - (q0 - KUKA_offset(2:4));
 dth0 = dq0;
 % limits
 qmax = [5.7401; 2.5179; -0.1157; 3.3292; 5.5415];
@@ -30,18 +31,8 @@ M_env = [0,1,0];
 x0 = 0;
 le = 0.1;
 [p0, r, ~, jp] = DGM_youBot(th0, x0, le);
-%simulateYouBotKinematics(theta0');
 
-figure
-hold on
-plot3(jp(1,1),jp(2,1),jp(3,1),'b^','markersize',20)
-plot3(jp(1,2),jp(2,2),jp(3,2),'b^','markersize',20)
-plot3(jp(1,3),jp(2,3),jp(3,3),'b^','markersize',20)
-plot3(jp(1,4),jp(2,4),jp(3,4),'b^','markersize',20)
-plot3(jp(1,5),jp(2,5),jp(3,5),'b^','markersize',20)
-plot3(p0(1),p0(2),p0(3),'g^','markersize',20)
-xlabel('x'); ylabel('y'); zlabel('z')
-view(0,0)
+simulateYouBotKinematics([0,th0',0]);
 
 equil = [p0(1);p0(3);acos(r(1,1))];
 

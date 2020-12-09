@@ -2,8 +2,6 @@
 clear all
 close all
 
-addpath('../utils/')
-
 %% Initialization
 % time
 dt = 1e-3;
@@ -11,10 +9,11 @@ t_end = 15;
 t = 0:dt:t_end;
 % joints
 q0_kuka = [1.676; -4.363; 1.497];
-q_dh = [-90 0 90]'*pi/180;       % Denavit H. 
+q_dh = [90 0 -90]'*pi/180;       % Denavit H. 
 q_rob = [65 -146 102.5]'*pi/180; % robot offsets
-q0 = (q_rob - q_dh) - q0_kuka;  % simulation convention
-dq0 = [0; 0; 0];
+th0 = q_dh - (q0_kuka - q_rob);  % simulation convention
+dth0 = [0; 0; 0];
+le = 0.1;
 % admittance controller gains
 Kp_f = 0.015;
 Ki_f = 0.08;
@@ -23,15 +22,14 @@ adm_ctrl = PI(dt, Kp_f, Ki_f);
 % velocity controller gains
 Kp_v = [2500;1500;2000]./256;
 Ki_v = [3000;900;1000]./65536;
-Ti_v = 1./Ki_v;
 vel_ctrl = PI(dt, Kp_v, Ki_v);
 % Environnement var
-Mz = 0.1;
-Bz = 5;
-Kz = 150;
+Mz = 1;
+Bz = 10;
+Kz = 100;
 ddz0 = 0;
 dz0 = 0;
-z0 = 0.4;
+z0 = 0.3;
 % inputs
 fz_in = 0*sin(2*pi*0.9.*t); % environnement force
 f0 = zeros(size(fz_in)); % admittance force set point
@@ -45,39 +43,40 @@ data.dynamic.fz_in = fz_in;
 % data.kinematic.cartesian.dz(1) = NaN; % TODO init
 % data.kinematic.cartesian.ddz(1) = NaN; % TODO init
 %%
-q = q0;
-dq = dq0;
+th = th0;
+dth = dth0;
 for ii = 1:length(t)
-    J0E = J0E_3DOF(q);
-    f_tot = [0;0;fz_in(ii)-fz_env;0;0;0];
+    J0E = J0E_3DOF(th(1), th(2), th(3));
+    f_tot = [0;fz_in(ii);0];
     % Admittance control
     adm_cmd = adm_ctrl.compute(f0(ii) - f_tot(3));
     % Cartesian space to joint space
-    vel_setp = J0E([1,3,5],:)\[0;adm_cmd;0]; % cmd is only along z axis
+    vel_setp = J0E\[0;adm_cmd;0]; % cmd is only along z axis
     % Joint velocity control
-    vel_cmd = vel_ctrl.compute(vel_setp - dq);
+    vel_cmd = vel_ctrl.compute(vel_setp - dth);
     % Joint current control is neglected
     tau = vel_cmd; % vel_cmd can also be seen as the torque set points
     % Robot Dynamic model
-    [ddq, dq, q] = DynModel_3DOF(f_tot,tau,q,dq,dt);
+    [ddth, dth, th] = DynModel_3DOF(f_tot,tau,th,dth,dt);
     % Joint space to cartesian space
-    hm = DGM_3DOF(q); % homogenous tranformation matrix
-    cartesian_velocity = J0E_3DOF(q)*dq;
-    dJ0E = ((J0E_3DOF(q)-J0E)./dt); % derivative of the jacobian
-    cartesian_acceleration = J0E_3DOF(q)*ddq + dJ0E*dq;    
+    p = DGM_youBot(th,0,le); % homogenous tranformation matrix
+    J0En = J0E_3DOF(th(1), th(2), th(3));
+    cartesian_velocity = J0En*dth;
+    dJ0E = ((J0En-J0E)./dt); % derivative of the jacobian
+    cartesian_acceleration = J0En*ddth + dJ0E*dth;    
     
     % Data recording
-    data.kinematic.cartesian.z(ii) = hm(3,4);
-    data.kinematic.cartesian.dz(ii) = cartesian_velocity(3);
-    data.kinematic.cartesian.ddz(ii) = cartesian_acceleration(3);
-    data.kinematic.joints.q(:,ii) = q;
-    data.kinematic.joints.dq(:,ii) = dq;
-    data.kinematic.joints.ddq(:,ii) = ddq;
+    data.kinematic.cartesian.z(ii) = p(3);
+    data.kinematic.cartesian.dz(ii) = cartesian_velocity(2);
+    data.kinematic.cartesian.ddz(ii) = cartesian_acceleration(2);
+    data.kinematic.joints.th(:,ii) = th;
+    data.kinematic.joints.dth(:,ii) = dth;
+    data.kinematic.joints.ddth(:,ii) = ddth;
     % Reaction force of the environment
     fz_env = 0;%Mz*(data.kinematic.cartesian.ddz(ii) - ddz0) + ...
      %Bz*(data.kinematic.cartesian.dz(ii) - dz0) + ...
      %Kz*(data.kinematic.cartesian.z(ii) - z0);  
-    data.dynamic.f_env(:,ii) = [0;0;fz_env];   
+    data.dynamic.f_env(:,ii) = [0;fz_env;0];   
 end
 
 %%
@@ -89,4 +88,4 @@ figure
 plot(t, data.kinematic.cartesian.z)
 
 figure
-plot(t, data.dynamic.f_env(3,:))
+plot(t, data.dynamic.f_env(2,:))
