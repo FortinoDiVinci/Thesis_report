@@ -19,8 +19,11 @@ Ki = 0.08;
 Kv = [2500,1500,2000]/256;
 Kvi = [3000,900,1000]/65536;
 %position controller
-Kx = [0;0;0];%20;0;0
+Kx = [20;0;0];%20;0;0
 Kxi = [0;0;0];
+%joint position controller
+Kj = [1,1,1]*5;
+Kjd = [1,1,1]*0.1;
 
 fz0 = 0;
 
@@ -34,11 +37,19 @@ le = 0.1;
 
 simulateYouBotKinematics([0,th0',0]);
 
-equil = [p0(1);p0(3);acos(r(1,1))];
+x0 = p0(1);
+z0 = p0(3);
+ry0 = acos(r(1,1));
 
 return 
 %% after simulink finished execution
 
-simulateYouBotKinematics([zeros(size(th_rec.signals.values,1),1), ...
-    th_rec.signals.values, zeros(size(th_rec.signals.values,1),1)],1e-3, ...
-    [fe_rec.signals.values(:,1),zeros(size(fe_rec.signals.values,1),1),fe_rec.signals.values(:,2)] );
+th_sim = [zeros(size(th_rec.signals.values,1),1), ...
+    th_rec.signals.values, zeros(size(th_rec.signals.values,1),1)];
+f_sim = -1*[fe_rec.signals.values(:,1),zeros(size(fe_rec.signals.values,1),1),...
+    fe_rec.signals.values(:,2)];
+dt = 1e-3;
+p0_sim = [p0_rec.signals.values(:,1),zeros(size(p0_rec.signals.values,1),1),...
+    p0_rec.signals.values(:,2)];
+
+simulateYouBotKinematics(th_sim, dt, f_sim, p0_sim);
