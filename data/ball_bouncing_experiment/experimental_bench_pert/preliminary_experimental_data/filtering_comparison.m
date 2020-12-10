@@ -1,10 +1,28 @@
-% fz needs to be computed
-% only test for data_vfo_10.mat
+% only tested for data_vfo_3_phases
 
-%% TODO: This script needs to be cleaned to work as a stand alone prog
+clear all
+
+addpath('../../../force_torque_sensor')
+load('data_vfo_3_phases.mat')
+
+exp_nb = 7;
+
+% fz computation
+[f,~,~]= forces_filtering(forces_unf{exp_nb}', torques_unf{exp_nb}', ...
+        thetas{exp_nb}', t{exp_nb});
+fz_temp = f(3,:);
 
 [b2,a2] = butter(10,9/(1/(2*dt)),'low'); 
 fz2{exp_nb} = -1*filtfilt(b2,a2,fz_temp);
+[b,a] = butter(10,25/(1/(2*dt)),'low'); 
+fz{exp_nb} = -1*filtfilt(b,a,fz_temp);
+
+% perturbation sync
+dist_timings = t_dist{exp_nb}(1:2:end); % extract only the start of the disturbance
+% extraction of the perturbation indexes
+for pert_idx = 1:length(dist_timings)
+    idx_perts(pert_idx) = find(t{exp_nb} >= dist_timings(pert_idx), 1, 'first');
+end
 
 figure
 hold on
@@ -16,7 +34,7 @@ legend('original', '25Hz LP', '10Hz LP', 'pert')
 xlim([52.5,54.5])
 
 %[n,Wn] = buttord([8 11]/(1/(2*dt)),[6.5 12.5]/(1/(2*dt)),0.1,20);
-[b3,a3] = ellip(5,1,20,7./(1/(2*dt)),'low');  
+[b3,a3] = ellip(5,1,20,8./(1/(2*dt)),'low');  
 freqz(b3,a3)
 fz3{exp_nb} = -1*filtfilt(b3,a3,fz_temp);
 figure
@@ -24,8 +42,6 @@ plot(t{exp_nb}, -fz_temp)
 hold on
 plot(t{exp_nb}, fz{exp_nb})
 plot(t{exp_nb},fz3{exp_nb})
-
-
 plot(t{exp_nb}(idx_perts), fz{exp_nb}(idx_perts), 'kp')
 legend('original', '25Hz LP', 'custom', 'pert')
 xlim([52.5,54.5])
