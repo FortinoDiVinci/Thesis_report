@@ -16,20 +16,20 @@ thmax = theta_DH - (qmin - KUKA_offset);
 K = 0.015;
 Ki = 0.08;
 %velocity controller
-Kv = [2500,1500,2000]/256;
-Kvi = [3000,900,1000]/65536;
+Kv = [2500;1500;2000]/256;
+Kvi = [3000;900;1000]/65536;
 %position controller
 Kx = [20;0;0];%20;0;0
 Kxi = [0;0;0];
 %joint position controller
-Kj = [1,1,1]*5;
-Kjd = [1,1,1]*0.1;
+Kj = [1;1;1]*5;
+Kjd = [1;1;1]*0.1;
 
 fz0 = 0;
 
-K_env = [0,100,0];
-B_env = [0,10,0];
-M_env = [0,1,0];
+K_env = [0;100;0];
+B_env = [0;10;0];
+M_env = [0;1;0];
 
 x0 = 0;
 le = 0.1;
@@ -53,3 +53,11 @@ p0_sim = [p0_rec.signals.values(:,1),zeros(size(p0_rec.signals.values,1),1),...
     p0_rec.signals.values(:,2)];
 
 simulateYouBotKinematics(th_sim, dt, f_sim, p0_sim);
+
+figure
+subplot(2,1,1)
+plot(pos_rec.signals.values)
+legend('x','z','\theta')
+subplot(2,1,2)
+plot(vel_rec.signals.values)
+legend('dx','dz','d\theta')
