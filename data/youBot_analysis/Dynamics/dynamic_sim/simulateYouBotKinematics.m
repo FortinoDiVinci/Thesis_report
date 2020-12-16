@@ -1,4 +1,4 @@
-function simulateYouBotKinematics(q,dt,f,p0)
+function simulateYouBotKinematics(q,dt,f,p0,pert)
 % This function display the youbot joint behaviour 
 
 %     q1 = q(:,1);
@@ -20,6 +20,9 @@ function simulateYouBotKinematics(q,dt,f,p0)
             dwnsamp = floor(2e-2/dt);
         end
         sq = q(1:dwnsamp:end,:);
+        if nargin > 4
+            spert = pert(1:dwnsamp:end,:);
+        end
         if nargin > 3
             sp0 = p0(1:dwnsamp:end,:);
         end
@@ -28,6 +31,9 @@ function simulateYouBotKinematics(q,dt,f,p0)
         end
     else
         sq = q;
+        if nargin > 4
+            spert = pert;
+        end
         if nargin > 3
             sp0 = p0;
         end
@@ -82,14 +88,20 @@ function simulateYouBotKinematics(q,dt,f,p0)
         plot3(O3(1),O3(2),O3(3),'b.','markersize',20)
         plot3(O4(1),O4(2),O4(3),'b.','markersize',20)
         plot3(O5(1),O5(2),O5(3),'b.','markersize',20)
-        plot3(OE(1),OE(2),OE(3),'r.','markersize',20) % endpoint
+        plot3(OE(1),OE(2),OE(3),'g.','markersize',20) % endpoint
         % segments
         plot3([0 O1(1) O2(1) O3(1) O4(1) O5(1) OE(1)],...
             [0 O1(2) O2(2) O3(2) O4(2) O5(2) OE(2)],...
             [0 O1(3) O2(3) O3(3) O4(3) O5(3) OE(3)],'b'); 
+        % Perturbation introduced
+        if nargin > 4
+            if any(spert(k,:)) ~= 0
+                plot3(OE(1),OE(2),OE(3),'r.','markersize',30)
+            end
+        end
         % Target or point of interest
         if nargin > 3
-            plot3(sp0(k,1),sp0(k,2),sp0(k,3),'mp','markersize',10)
+            plot3(sp0(k,1),sp0(k,2),sp0(k,3),'mp','markersize',13)
         end
         % z force
         if nargin > 2

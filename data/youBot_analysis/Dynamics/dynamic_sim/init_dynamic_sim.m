@@ -1,6 +1,10 @@
 % Init sim
 clear all
 
+time_start = 25;
+time_end = 70;
+dt = 1e-3;
+
 KUKA_offset = [169 65 -146 102.5 167.5]'*pi/180;
 theta_DH = [0 pi/2 0 -pi/2 0]';
 q0 = [1.676; -4.363; 1.497];
@@ -26,8 +30,10 @@ Kj = [1;1;1]*5;
 Kjd = [1;1;1]*0.1;
 
 fz0 = 0;
-
-K_env = [0;100;0];
+% Cartesian flexibilities
+[filt_num,filt_den] = butter(2,2*pi*14,'low','s'); % filter around 14Hz
+% Environment
+K_env = [0;300;0];
 B_env = [0;10;0];
 M_env = [0;1;0];
 
@@ -41,23 +47,105 @@ x0 = p0(1);
 z0 = p0(3);
 ry0 = acos(r(1,1));
 
+% dummy var (run next section and change manual switches in simulink for 
+% real input test)
+real_fz.signals.values = zeros(size(time_start:dt:time_end))';
+real_fz.time = (time_start:dt:time_end)';
+real_fx.signals.values = zeros(size(time_start:dt:time_end))';
+real_fx.time = (time_start:dt:time_end)';
+real_fry.signals.values = zeros(size(time_start:dt:time_end))';
+real_fry.time = (time_start:dt:time_end)';
+
 return 
+
+%% Loading real data, to test behaviour with real data,
+
+load('..\..\..\ball_bouncing_experiment\experimental_bench_pert\data_2020_Nov_17\data_without_impacts_2020_11_17.mat')
+addpath('..\..\..\force_torque_sensor')
+exp_nb = 2;
+
+real_x = mocap_marker_robot_base{exp_nb}(:,1);
+real_z = mocap_marker_robot_base{exp_nb}(:,3);
+
+[real_f,real_tau,~] = forces_filtering(forces_unf{exp_nb}', torques_unf{exp_nb}', ...
+            thetas{exp_nb}', t{exp_nb});
+
+% for simulink from workspace
+real_fz.signals.values = -real_f(3,:)';
+real_fz.time = (t{exp_nb} - t{exp_nb}(1));
+real_fx.signals.values = -real_f(1,:)';
+real_fx.time = (t{exp_nb} - t{exp_nb}(1));
+real_fry.signals.values = -real_tau(2,:)';
+real_fry.time = (t{exp_nb} - t{exp_nb}(1));
+
+real_ft = [real_f(1,:);real_f(3,:);real_tau(2,:)];
+
+% figure
+% lsim(Hz,real_fz.signals.values,t{exp_nb})
+% 
+% figure
+% lsim(linsys1,real_ft,t{exp_nb})
+
+return
+
 %% after simulink finished execution
 
 th_sim = [zeros(size(th_rec.signals.values,1),1), ...
     th_rec.signals.values, zeros(size(th_rec.signals.values,1),1)];
 f_sim = -1*[fe_rec.signals.values(:,1),zeros(size(fe_rec.signals.values,1),1),...
     fe_rec.signals.values(:,2)];
-dt = 1e-3;
 p0_sim = [p0_rec.signals.values(:,1),zeros(size(p0_rec.signals.values,1),1),...
     p0_rec.signals.values(:,2)];
 
-simulateYouBotKinematics(th_sim, dt, f_sim, p0_sim);
+tau_p = taup_rec.signals.values;
 
+is_pert = logical(tau_p ~= 0);
+
+simulateYouBotKinematics(th_sim, dt, f_sim, p0_sim,is_pert);
+
+time = 0:1e-3:20;
 figure
 subplot(2,1,1)
-plot(pos_rec.signals.values)
-legend('x','z','\theta')
+hold on
+plot(time, pos_rec.signals.values(:,2))
+p1 = plot(time(any(is_pert,2)), pos_rec.signals.values(any(is_pert,2),2), 'o');
+p1(1).Color(4) = 0.1;
+title('Endpoint Position')
+legend('z', 'z pert')
 subplot(2,1,2)
-plot(vel_rec.signals.values)
-legend('dx','dz','d\theta')
+hold on
+plot(time, f_sim(:,3))
+p2 = plot(time(any(is_pert,2)), f_sim(any(is_pert,2),3), 'o');
+p2(1).Color(4) = 0.1;
+title('Endpoint Force')
+legend('z', 'z pert')
+
+return
+
+%% After linear analysis
+
+% inputs: endpoint force (interaction) / outputs: cartesian position
+[H1_ctrl_b, H1_ctrl_a] = ss2tf(linsys1.A, linsys1.B, linsys1.C, linsys1.D,1); % outputs for Fx inpout
+[H2_ctrl_b, H2_ctrl_a] = ss2tf(linsys1.A, linsys1.B, linsys1.C, linsys1.D,2); % outputs for Fz inpout
+[H3_ctrl_b, H3_ctrl_a] = ss2tf(linsys1.A, linsys1.B, linsys1.C, linsys1.D,3); % outputs for Tau y inpout
+% only input Fz shoud have any influence ? Others are always null..
+Hz = tf(H2_ctrl_b(2),H2_ctrl_a); % decoupled tf
+
+%% After runnning simulink with real force input
+
+sim_z = pos_rec.signals.values(:,2);
+sim_flex_z = posf_rec.signals.values(:,2);
+n = length(sim_z);
+
+idx_exp = time_start/dt + (1:n);
+ 
+figure
+hold on
+plot(real_fz.time(idx_exp), sim_z)
+plot(real_fz.time(idx_exp), sim_flex_z)
+plot(real_fz.time(idx_exp),real_z(idx_exp))
+legend('Simulated stiff position', 'Simulated flex position', 'Real mocap position')
+
+th_real = theta_DH' - (thetas{exp_nb} - KUKA_offset');
+
+simulateDualYouBotKinematics(th_sim, th_real(idx_exp,:), dt, real_f(:,idx_exp)');
