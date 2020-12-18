@@ -11,7 +11,8 @@ init_dynamic_sim
 % H1 = tf(b1,a1);
 % H2 = tf(b2,a2);
 % H3 = tf(b3,a3);
-Htot = tf(ss(A,B,C,D,dt));
+SStot =  ss(A,B,C,D,dt);
+Htot = tf(SStot);
 
 figure
 hold on

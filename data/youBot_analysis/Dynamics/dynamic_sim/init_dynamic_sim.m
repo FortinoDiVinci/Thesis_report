@@ -2,7 +2,7 @@
 clear all
 
 time_start = 25;
-time_end = 70;
+time_end = 150;
 dt = 1e-3;
 
 KUKA_offset = [169 65 -146 102.5 167.5]'*pi/180;
@@ -29,9 +29,15 @@ Kxi = [0;0;0];
 Kj = [1;1;1]*5;
 Kjd = [1;1;1]*0.1;
 
+Fv = diag([0.5,0.37,0.7]); % frottements visqueux
+
 fz0 = 0;
 % Cartesian flexibilities
-[filt_num,filt_den] = butter(2,2*pi*14,'low','s'); % filter around 14Hz
+%[filt_num,filt_den] = butter(2,2*pi*14,'low','s'); % filter around 14Hz
+w0 = 2*pi*14;
+xi = sqrt(2)/2;
+filt_num = 1;
+filt_den = [1/w0^2 2*xi/w0 1];
 % Environment
 K_env = [0;300;0];
 B_env = [0;10;0];
@@ -124,12 +130,17 @@ return
 
 %% After linear analysis
 
-% inputs: endpoint force (interaction) / outputs: cartesian position
-[H1_ctrl_b, H1_ctrl_a] = ss2tf(linsys1.A, linsys1.B, linsys1.C, linsys1.D,1); % outputs for Fx inpout
-[H2_ctrl_b, H2_ctrl_a] = ss2tf(linsys1.A, linsys1.B, linsys1.C, linsys1.D,2); % outputs for Fz inpout
-[H3_ctrl_b, H3_ctrl_a] = ss2tf(linsys1.A, linsys1.B, linsys1.C, linsys1.D,3); % outputs for Tau y inpout
-% only input Fz shoud have any influence ? Others are always null..
-Hz = tf(H2_ctrl_b(2),H2_ctrl_a); % decoupled tf
+ssH = ss(linsys1.A, linsys1.B, linsys1.C, linsys1.D,dt);
+H_ctrl = tf(ssH);
+
+figure('DefaultAxesFontSize',14)
+hold on, grid on
+bode(linsys1(2,2))
+bode(linsys2(2,2))
+bode(Hz_rob{3}/s)
+legend('Simulink LA, complete','Simulink LA, z ctrl','Analytical TF')
+title('Robot close loop along the z axis: Pz = Hz*Fz')
+
 
 %% After runnning simulink with real force input
 
