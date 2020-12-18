@@ -113,8 +113,9 @@ grav = zeros(3, counter);
 for i=1:counter
     T = MGD_T0handle(thetas(1,i), thetas(2,i), thetas(3,i), thetas(4,i), thetas(5,i));
     grav(:,i) = inv(T(1:3,1:3))*[0;0;-m*9.81];
+    grav_tq(:,i) = cross(grav(:,i), [0;0;-m])*l;
     FT_bias(1:3, i) = F_s(:,i) - grav(:,i);
-    FT_bias(4:6, i) = T_s(:,i); %%todo
+    FT_bias(4:6, i) = T_s(:,i) - grav_tq(:,i);
 end
 ft_bias = nanmean(FT_bias, 2);   
 F_r = zeros(size(F_s));
@@ -125,14 +126,14 @@ if rotation
     for i=1:length(F_s)
         T = MGD_T0handle(thetas(1,i), thetas(2,i), thetas(3,i), thetas(4,i), thetas(5,i));
         F_r(:,i) = T(1:3,1:3) * (F_s(:, i) - ft_bias(1:3));
-        T_r(:,i) = T(1:3,1:3) * (T_s(:, i) - ft_bias(1:3));
+        T_r(:,i) = T(1:3,1:3) * (T_s(:, i) - ft_bias(4:6));
     end
 else
     F_r(:,i) = F_s(:,i) - ft_bias(1:3);
-    T_r(:,i) = T_s(:,i) - ft_bias(1:3);   
+    T_r(:,i) = T_s(:,i) - ft_bias(4:6);   
 end
 
-if (gravity == 'TRUE') | (gravity == 1)
+if (gravity == 'TRUE') | (gravity == 1) %TODO: compensate gravity torque
     if rotation
         % gravity compensation on Z axis
         F_r(3,:) = F_r(3,:) + m*9.81;
