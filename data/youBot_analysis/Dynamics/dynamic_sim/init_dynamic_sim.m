@@ -31,6 +31,8 @@ Kjd = [1;1;1]*0.1;
 
 Fv = diag([0.5,0.37,0.7]); % frottements visqueux
 
+nu = 0.65; % external force to robot torque transmission efficiency
+
 fz0 = 0;
 % Cartesian flexibilities
 %[filt_num,filt_den] = butter(2,2*pi*14,'low','s'); % filter around 14Hz
@@ -109,8 +111,8 @@ is_pert = logical(tau_p ~= 0);
 
 simulateYouBotKinematics(th_sim, dt, f_sim, p0_sim,is_pert);
 
-time = 0:1e-3:20;
-figure
+time = time_start:dt:time_end;
+figure('DefaultAxesFontSize',14)
 subplot(2,1,1)
 hold on
 plot(time, pos_rec.signals.values(:,2))
@@ -150,12 +152,14 @@ n = length(sim_z);
 
 idx_exp = time_start/dt + (1:n);
  
-figure
+figure('DefaultAxesFontSize',14)
 hold on
 plot(real_fz.time(idx_exp), sim_z)
 plot(real_fz.time(idx_exp), sim_flex_z)
 plot(real_fz.time(idx_exp),real_z(idx_exp))
 legend('Simulated stiff position', 'Simulated flex position', 'Real mocap position')
+xlabel('Time (s)')
+ylabel('Position (m)')
 
 th_real = theta_DH' - (thetas{exp_nb} - KUKA_offset');
 
