@@ -1,8 +1,9 @@
 clear all
 
 init_dynamic_sim
+load('linsys_no_secondary_ctrl.mat')
 
-[A,B,C,D] = dlinmod('dynamic_simulation_control_for_id');
+[A,B,C,D] = linmod('dynamic_simulation_control_for_id');
 
 % [b1,a1] = ss2tf(A,B,C,D,1);
 % [b2,a2] = ss2tf(A,B,C,D,2);
@@ -11,8 +12,13 @@ init_dynamic_sim
 % H1 = tf(b1,a1);
 % H2 = tf(b2,a2);
 % H3 = tf(b3,a3);
-SStot =  ss(A,B,C,D,dt);
+SStot =  ss(A,B,C,D);
 Htot = tf(SStot);
+
+figure
+hold on
+bode(-SStot(2))
+bode(linsys1(2), 'y--')
 
 figure
 hold on
