@@ -17,7 +17,7 @@ Htot = tf(SStot);
 
 figure
 hold on
-bode(-SStot(2))
+bode(SStot(2))
 bode(linsys1(2), 'y--')
 
 figure

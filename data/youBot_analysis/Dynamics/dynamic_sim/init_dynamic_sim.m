@@ -23,15 +23,18 @@ Ki = 0.08;
 Kv = [2500;1500;2000]/256;
 Kvi = [3000;900;1000]/65536;
 %position controller
-Kx = [20;0;0];%20;0;0
+Kx = [20;0;0]; 
 Kxi = [0;0;0];
 %joint position controller
 Kj = [1;1;1]*5;
 Kjd = [1;1;1]*0.1;
 
-Fv = diag([0.5,0.37,0.7]); % frottements visqueux
+Fv = diag([0.5,0.37,0.7]); % viscous frictions
+Fs = [0.97571; 0.65131; 0.25819];  % static frictions
+Fc = Fs; % Coulomb friction
+dv = 1e-2; % velocity bound to avoid unstable behaviour (static frictions)
 
-nu = 0.65; % external force to robot torque transmission efficiency
+nu = 0.1;%0.65; % external force to robot torque transmission efficiency
 
 fz0 = 0;
 % Cartesian flexibilities
@@ -64,9 +67,9 @@ real_fx.time = (time_start:dt:time_end)';
 real_fry.signals.values = zeros(size(time_start:dt:time_end))';
 real_fry.time = (time_start:dt:time_end)';
 
-return 
+return % This other section can be run after this one
 
-%% Loading real data, to test behaviour with real data,
+%% Loading real data, run this section to test simulation with real data
 
 load('..\..\..\ball_bouncing_experiment\experimental_bench_pert\data_2020_Nov_17\data_without_impacts_2020_11_17.mat')
 addpath('..\..\..\force_torque_sensor')
@@ -79,14 +82,19 @@ real_z = mocap_marker_robot_base{exp_nb}(:,3);
             thetas{exp_nb}', t{exp_nb});
 
 % for simulink from workspace
-real_fz.signals.values = -real_f(3,:)';
+real_fz.signals.values = real_f(3,:)';
 real_fz.time = (t{exp_nb} - t{exp_nb}(1));
-real_fx.signals.values = -real_f(1,:)';
+real_fx.signals.values = real_f(1,:)';
 real_fx.time = (t{exp_nb} - t{exp_nb}(1));
-real_fry.signals.values = -real_tau(2,:)';
+real_fry.signals.values = real_tau(2,:)';
 real_fry.time = (t{exp_nb} - t{exp_nb}(1));
 
 real_ft = [real_f(1,:);real_f(3,:);real_tau(2,:)];
+
+% To try to accout for the fact that during the phy. interaction, the user's
+% hand maintains the position along z with its impedance relation, a gain
+% is added in the position control (which does not exist in the real exp.)
+Kx = [20;0;0]; % z gain to maintain z position
 
 % figure
 % lsim(Hz,real_fz.signals.values,t{exp_nb})
@@ -96,7 +104,7 @@ real_ft = [real_f(1,:);real_f(3,:);real_tau(2,:)];
 
 return
 
-%% after simulink finished execution
+%% after simulink finished execution, run this section for behaviour display
 
 th_sim = [zeros(size(th_rec.signals.values,1),1), ...
     th_rec.signals.values, zeros(size(th_rec.signals.values,1),1)];
@@ -130,7 +138,7 @@ legend('z', 'z pert')
 
 return
 
-%% After linear analysis
+%% After linear analysis using control design tool & loading linsys model
 
 ssH = ss(linsys1.A, linsys1.B, linsys1.C, linsys1.D,dt);
 H_ctrl = tf(ssH);
@@ -144,14 +152,15 @@ legend('Simulink LA, complete','Simulink LA, z ctrl','Analytical TF')
 title('Robot close loop along the z axis: Pz = Hz*Fz')
 
 
-%% After runnning simulink with real force input
+%% After runnning simulink with real force input, run this section
 
 sim_z = pos_rec.signals.values(:,2);
 sim_flex_z = posf_rec.signals.values(:,2);
 n = length(sim_z);
 
 idx_exp = time_start/dt + (1:n);
- 
+
+% position
 figure('DefaultAxesFontSize',14)
 hold on
 plot(real_fz.time(idx_exp), sim_z)
@@ -160,6 +169,19 @@ plot(real_fz.time(idx_exp),real_z(idx_exp))
 legend('Simulated stiff position', 'Simulated flex position', 'Real mocap position')
 xlabel('Time (s)')
 ylabel('Position (m)')
+title("Robot real and simulated z endpoint position, nu=" + string(nu))
+
+sim_vz = vel_rec.signals.values(:,2);
+addpath('../../Utils/')
+% velocity
+figure('DefaultAxesFontSize',14)
+hold on
+plot(real_fz.time(idx_exp), sim_vz)
+plot(real_fz.time(idx_exp), Iu_diffcent(real_z(idx_exp), real_fz.time(idx_exp)))
+legend('Simulated velocity', 'Mocap position num. derivated')
+xlabel('Time (s)')
+ylabel('Velocity (m.s^{-1})')
+title("Robot real and simulated z endpoint velocity, nu=" + string(nu))
 
 th_real = theta_DH' - (thetas{exp_nb} - KUKA_offset');
 
