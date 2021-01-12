@@ -22,6 +22,8 @@ Ki = 0.08;
 %velocity controller
 Kv = [2500;1500;2000]/256;
 Kvi = [3000;900;1000]/65536;
+Tc = [0.0335;0.0335;0.051]; % Torque constants: conversion from current to torque
+R = [156;100;71]; % Gear ratios: conversion from motor torque to joint torque
 %position controller
 Kx = [20;0;0]; 
 Kxi = [0;0;0];
@@ -34,7 +36,7 @@ Fs = [0.97571; 0.65131; 0.25819];  % static frictions
 Fc = Fs; % Coulomb friction
 dv = 1e-2; % velocity bound to avoid unstable behaviour (static frictions)
 
-nu = 0.1;%0.65; % external force to robot torque transmission efficiency
+nu = [0.1;0.1;0.1];% external force to robot torque transmission efficiency
 
 fz0 = 0;
 % Cartesian flexibilities
@@ -44,7 +46,7 @@ xi = sqrt(2)/2;
 filt_num = 1;
 filt_den = [1/w0^2 2*xi/w0 1];
 % Environment
-K_env = [0;300;0];
+K_env = [0;100;0];
 B_env = [0;10;0];
 M_env = [0;1;0];
 
@@ -108,7 +110,7 @@ return
 
 th_sim = [zeros(size(th_rec.signals.values,1),1), ...
     th_rec.signals.values, zeros(size(th_rec.signals.values,1),1)];
-f_sim = -1*[fe_rec.signals.values(:,1),zeros(size(fe_rec.signals.values,1),1),...
+f_sim = [fe_rec.signals.values(:,1),zeros(size(fe_rec.signals.values,1),1),...
     fe_rec.signals.values(:,2)];
 p0_sim = [p0_rec.signals.values(:,1),zeros(size(p0_rec.signals.values,1),1),...
     p0_rec.signals.values(:,2)];
@@ -169,7 +171,8 @@ plot(real_fz.time(idx_exp),real_z(idx_exp))
 legend('Simulated stiff position', 'Simulated flex position', 'Real mocap position')
 xlabel('Time (s)')
 ylabel('Position (m)')
-title("Robot real and simulated z endpoint position, nu=" + string(nu))
+title("Robot real and simulated z endpoint position, nu=[" + ...
+    num2str(reshape(nu', 1, [])) + "]")
 
 sim_vz = vel_rec.signals.values(:,2);
 addpath('../../Utils/')
@@ -181,7 +184,8 @@ plot(real_fz.time(idx_exp), Iu_diffcent(real_z(idx_exp), real_fz.time(idx_exp)))
 legend('Simulated velocity', 'Mocap position num. derivated')
 xlabel('Time (s)')
 ylabel('Velocity (m.s^{-1})')
-title("Robot real and simulated z endpoint velocity, nu=" + string(nu))
+title("Robot real and simulated z endpoint velocity, nu=[" + ...
+    num2str(reshape(nu', 1, [])) + "]")
 
 th_real = theta_DH' - (thetas{exp_nb} - KUKA_offset');
 
