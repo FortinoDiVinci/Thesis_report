@@ -71,7 +71,6 @@ classdef DIFF_TRAJECT < handle
                                 nb_samp_avg = 25;
                             elseif varargin{ii+1} == 'filter'
                                 virtual_trajectory_method = 3;
-                                fc = 2; % 2 Hz
                                 dt = 1e-3; % 1ms
                             end
                         case 'NbSampAvg' % specify nb of samples for the
@@ -92,8 +91,13 @@ classdef DIFF_TRAJECT < handle
             end
             
             if virtual_trajectory_method == 3 % filtered signal
-                [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
-                filtered_signal = filtfilt(b,a,self.complete_traject);
+                df = designfilt('lowpassfir','PassbandFrequency',8,...
+                'StopbandFrequency',8.5,'StopbandAttenuation',20,...
+                'SampleRate',1/dt);
+                mean_delay = floor(mean(grpdelay(df)));                
+                filtered_signal = filter(df, self.complete_traject);
+                filtered_signal = circshift(filtered_signal,-mean_delay);
+                filtered_signal(end-mean_delay:end) = NaN;
             end
             
             for ii = 1:self.nb_traject
@@ -125,7 +129,9 @@ classdef DIFF_TRAJECT < handle
                         ones(size(self.virt_traject(:,ii)));
                 
                 elseif virtual_trajectory_method == 3 % Using filtered signal as ref
-
+                    % TODO: deal with the case where:
+                    % idx+self.estim_window+1+self.delay is within the circ
+                    % shift and therefore is populated with some NaN
                     self.virt_traject(:,ii) = filtered_signal(idx-2+self.delay:...
                     idx+self.estim_window+1+self.delay);
                     

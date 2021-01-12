@@ -130,6 +130,7 @@ classdef IMPEDANCE_DATA < handle
             for ii = 1:self.nb_id   
                 
                 self.xi(:, ii) = self.phi(:,:,ii)\self.y(:, ii);
+                % self.xi(:, ii) = (self.phi(:,:,ii)'*self.phi(:,:,ii))\self.phi(:,:,ii)'*self.y(:, ii);
                 % automated linear fit (brings the same results)
                 % mdl = fitlm(self.phi(:,:,ii),self.y(:, ii));
                 % self.r_2_fit(ii) = mdl.Rsquared.Adjusted;
