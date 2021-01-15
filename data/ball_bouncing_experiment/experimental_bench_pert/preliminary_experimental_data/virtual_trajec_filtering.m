@@ -35,6 +35,7 @@ y_filtfilt = filtfilt(df, fz);
 % perturbation
 len_pert = 65;
 idx_select_pert = NaN(len_pert, length(idx_perts));
+fz_virt = y_filtfilt;
 for ii_pert = 1:length(idx_perts)
     idx_select_pert = idx_perts(ii_pert) + (0:len_pert-1);    
     % 
@@ -49,18 +50,31 @@ for ii_pert = 1:length(idx_perts)
     % the continuous component of the perturbation is extracted at the
     % center of the filtered repetition of the perturbation, it is the
     % stable part (the boundaries can have undesired oscillations)
-    contin_comp = pert_conti_comp(250*len_pert:250*len_pert+len_pert) - ...
-        interp_line;
+    contin_comp = pert_conti_comp(250*len_pert:250*len_pert+len_pert-1) - ...
+        interp_line';
     fz_wo_pert = fz;
-    fz_wo_pert(idx_select_pert) = fz_wo_pert(idx_select_pert) - contin_comp';
+    fz_wo_pert(idx_select_pert) = fz_wo_pert(idx_select_pert) - contin_comp;
     % when the continuous component of the perturbation is suppressed from
     % the original signal at the perturbation timing, it still needs to be
-    % filtered to remove possible discontinuties
+    % filtered to remove discontinuties
     fz_wo_pert_filt = filtfilt(df, fz_wo_pert);
-    
-    
+    % virtual trajectories population for each perturbation chunk
+    if ii_pert == 1
+        idx_mid_pert = floor((idx_perts(ii_pert)+idx_perts(ii_pert+1))/2);
+        fz_virt(1:idx_mid_pert) = fz_wo_pert_filt(1:idx_mid_pert);
+    elseif ii_pert == length(idx_perts)
+        fz_virt(idx_mid_pert+1:end) = fz_wo_pert_filt(idx_mid_pert+1:end);
+    else
+        prev_idx = idx_mid_pert;
+        idx_mid_pert = floor((idx_perts(ii_pert)+idx_perts(ii_pert+1))/2);
+        fz_virt(prev_idx+1:idx_mid_pert) = fz_wo_pert_filt(prev_idx+1:idx_mid_pert);
+    end  
     
 end 
 
-
-
+figure('DefaultAxesFontSize',14)
+hold on
+plot(t{exp_nb}, fz)
+plot(t{exp_nb}, y_filtfilt)
+plot(t{exp_nb}, fz_virt)
+legend('original', 'filtered', 'algorithm')
