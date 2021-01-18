@@ -34,7 +34,7 @@ y_filtfilt = filtfilt(df, fz);
 
 % perturbation
 len_pert = 65;
-idx_select_pert = NaN(len_pert, length(idx_perts));
+idx_select_pert = NaN(len_pert);
 fz_virt = y_filtfilt;
 for ii_pert = 1:length(idx_perts)
     idx_select_pert = idx_perts(ii_pert) + (0:len_pert-1);    

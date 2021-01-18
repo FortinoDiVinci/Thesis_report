@@ -16,6 +16,7 @@ close all
 
 addpath('../../force_torque_sensor')
 addpath('../../youBot_analysis/Utils')
+addpath('utils')
 
 %file_name = 'successful_exp_data.mat';
 %file_name = 'data_impact2.mat';
@@ -34,18 +35,23 @@ STATIC_EXP(:,:) = {0};
 %%%%%%%%%%%%%%%%%%
 
 DISP_STIFFNESS_DISTRIBUTION = 0;
-SORT_PERT_BY_PHASE = 1; 
-VIRTUAL_FILTERED = 0; % Virtual force = low pass filt. of original force
-LOW_PASS_FREQ = 25; % Input signal are lp filtered before any computation
+SORT_PERT_BY_PHASE = 0; 
+VIRT_FORCE_FILT = 0; % Virtual force = low pass filt. of original force
+VIRT_FORCE_FILT_PLUS = 1; % Virual force = low pass filt. and the continuous
+% component of the perturbation is suppress, more details in
+% computeVirtualForce function in utils
+LOW_PASS_FREQ = 50; % Input signal are lp filtered before any computation
 FILTER_ORDER = 2;
 
 if ~exist('dt', 'var')
     dt = 1e-3;
 end
+
 % time evaluation variables
-idx_window_virt_traj= ceil(0.400/dt); % 200ms
-idx_window_imp_eval = ceil(0.200/dt); % 200ms       
-idx_delay           = ceil(0.000/dt); % 015ms
+idx_wndw_virt_traj   = ceil(0.200/dt); % 200ms (position)
+idx_wndw_virt_f_traj = ceil(0.065/dt); % 65ms  (force) 
+idx_wndw_imp_eval    = ceil(0.200/dt); % 200ms       
+idx_delay            = ceil(0.000/dt); % 0ms
 
 nb_param            = 3; % for the impedance model, should be between 1 & 3
                          % - 1: F = Kx + e
@@ -53,15 +59,6 @@ nb_param            = 3; % for the impedance model, should be between 1 & 3
                          % - 3: F = Kx + Bdx + Iddx + e
 
 min_r2              = 0.75;
-                         
-% time of the end and start of each experiment need to be entered manually 
-% if necessary else zeros need to be filled 
-%T_END = [130,190,173.5,190,234,166.5,210.5,209,206,182,0,171.5];
-%T_START = [0,0,0,0,0,98,0,173,0,0,0,0];     
-%T_START = [138,2,2,2]; 
-%T_END = [150,20,20,20]; 
-%T_START = [0,0,0,0]; 
-%T_END = [0,0,0,0]; 
 
 z = {};
 fz = {};
@@ -96,10 +93,10 @@ for exp_nb = 1:length(folder_names)
     [f,~,~]= forces_filtering(forces_unf{exp_nb}', torques_unf{exp_nb}', ...
         thetas{exp_nb}', t{exp_nb});
     fz_temp = f(3,:);
+    
     [b,a] = butter(FILTER_ORDER,LOW_PASS_FREQ/(1/(2*dt)),'low'); 
-
     z{exp_nb} = filtfilt(b,a,z_temp);
-    fz{exp_nb} = -1*filtfilt(b,a,fz_temp);
+    fz{exp_nb} = -1*filtfilt(b,a,fz_temp); % f(r->e)
     
 end
  
@@ -134,7 +131,7 @@ for exp_nb = 1:length(folder_names)
     % if the experiment was interrupted during the last perturbation
     reduced_dist{exp_nb} = 0;
     if ~isempty(idx_perts)
-        if ( idx_perts(end) + idx_window_virt_traj + idx_delay)  > length(t{exp_nb})
+        if ( idx_perts(end) + idx_wndw_virt_traj + idx_delay)  > length(t{exp_nb})
             idx_perts = idx_perts(1:end-1);
             dist_val{exp_nb} = dist_val{exp_nb}(1:end-1);
             dist_timings = dist_timings(1:end-1);
@@ -145,26 +142,32 @@ for exp_nb = 1:length(folder_names)
     
     %% Trajectories extraction & estimation
     
+    idx_window = max(idx_wndw_imp_eval, idx_wndw_virt_traj);
+    
     if STATIC_EXP{exp_nb}
-        delta_z{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, ...
+        delta_z{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_traj, ...
             z{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
-        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, ...
+        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_f_traj, ...
             fz{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
      
         delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
         delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
         disp('static exp: ' + string(exp_nb))
     else % nominal case
-        delta_z{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, ...
+        delta_z{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_traj, ...
             z{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
-        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window_virt_traj, idx_window_virt_traj, ...
+        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_f_traj, ...
             fz{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
         
         delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline'); % z0 - z
-        % low pass filtered at 2Hz
-        if VIRTUAL_FILTERED
+        % low pass filtered with cutoff freq at 8.5Hz
+        if VIRT_FORCE_FILT
             delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', ...
             'filter', 'DiffDirection', 'neg'); % fz - fz0
+        % see computeVirtualForce in utils
+        elseif VIRT_FORCE_FILT_PLUS
+            delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', ...
+            'filterPlus', 'DiffDirection', 'neg'); % fz - fz0   
         else
             delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline', ...
             'DiffDirection', 'neg'); % fz - fz0
@@ -175,11 +178,11 @@ for exp_nb = 1:length(folder_names)
     
     %% Impedance estimation 
     
-    impedance{exp_nb} = IMPEDANCE_DATA(nb_param, length(dist_timings), idx_window_imp_eval);
-    impedance{exp_nb}.init_phi(delta_z{exp_nb}.diff_traject(1:idx_window_imp_eval,:), ...
-        delta_z{exp_nb}.d_diff_traject(1:idx_window_imp_eval,:), ... % speed
-        delta_z{exp_nb}.dd_diff_traject(1:idx_window_imp_eval,:)); % acceleration
-    impedance{exp_nb}.init_y(delta_fz{exp_nb}.diff_traject(1:idx_window_imp_eval,:));
+    impedance{exp_nb} = IMPEDANCE_DATA(nb_param, length(dist_timings), idx_wndw_imp_eval);
+    impedance{exp_nb}.init_phi(delta_z{exp_nb}.diff_traject(1:idx_wndw_imp_eval,:), ...
+        delta_z{exp_nb}.d_diff_traject(1:idx_wndw_imp_eval,:), ... % speed
+        delta_z{exp_nb}.dd_diff_traject(1:idx_wndw_imp_eval,:)); % acceleration
+    impedance{exp_nb}.init_y(delta_fz{exp_nb}.diff_traject(1:idx_wndw_imp_eval,:));
     impedance{exp_nb}.lsq(); % least square optimization evaluation
     
     if NO_MOCAP{exp_nb}

@@ -64,14 +64,19 @@ classdef DIFF_TRAJECT < handle
                                 differential_direction = -1; % x - x0
                             end
                         case 'VirtTrajMethod'
-                            if varargin{ii+1} == 'spline'
+                            if strcmp(varargin{ii+1}, 'spline')
                                 virtual_trajectory_method = 1;
-                            elseif varargin{ii+1} == 'static'
+                            elseif strcmp(varargin{ii+1}, 'static')
                                 virtual_trajectory_method = 2;
                                 nb_samp_avg = 25;
-                            elseif varargin{ii+1} == 'filter'
+                            elseif strcmp(varargin{ii+1}, 'filter')
                                 virtual_trajectory_method = 3;
                                 dt = 1e-3; % 1ms
+                            elseif strcmp(varargin{ii+1}, 'filterPlus')
+                                virtual_trajectory_method = 4;
+                                dt = 1e-3; % 1ms
+                            else
+                                error('Unknown Virtual trajectory method.')
                             end
                         case 'NbSampAvg' % specify nb of samples for the
                             %virtual trajectery estimation before pert.
@@ -98,6 +103,10 @@ classdef DIFF_TRAJECT < handle
                 filtered_signal = filter(df, self.complete_traject);
                 filtered_signal = circshift(filtered_signal,-mean_delay);
                 filtered_signal(end-mean_delay:end) = NaN;
+                
+            elseif virtual_trajectory_method == 4 % filtered signal
+                filtered_signal = computeVirtualForce(self.time, ...
+                    self.complete_traject, self.pert_ind, self.interp_window);
             end
             
             for ii = 1:self.nb_traject
@@ -134,7 +143,9 @@ classdef DIFF_TRAJECT < handle
                     % shift and therefore is populated with some NaN
                     self.virt_traject(:,ii) = filtered_signal(idx-2+self.delay:...
                     idx+self.estim_window+1+self.delay);
-                    
+                elseif virtual_trajectory_method == 4
+                    self.virt_traject(:,ii) = filtered_signal(idx-2+self.delay:...
+                    idx+self.estim_window+1+self.delay);
                 end
                 % difference between real and virtual
                 self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - ...
