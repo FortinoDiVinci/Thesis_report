@@ -1,0 +1,1 @@
+Expérience réalisée avec un contact en bois (planche de bois large posée sur la protection de polystyrène).

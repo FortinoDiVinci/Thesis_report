@@ -1,0 +1,2 @@
+Expérience réalisée avec un contact en bois (planche de bois large posée sur la protection de polystyrène).
+Cette fois, les données du capteur sont fournies, il faudra compenser le poids du capteur et donner les forces dans le référentiel global.

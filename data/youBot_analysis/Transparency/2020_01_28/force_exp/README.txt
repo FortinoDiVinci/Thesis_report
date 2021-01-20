@@ -1,0 +1,1 @@
+Expérience réalisée avec un contact en polystyrène
