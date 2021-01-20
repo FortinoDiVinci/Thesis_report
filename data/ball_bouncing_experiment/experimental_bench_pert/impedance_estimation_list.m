@@ -148,7 +148,7 @@ for exp_nb = 1:length(folder_names)
     delta_z{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_traj, ...
         z{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
     delta_fz{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_f_traj, ...
-        fz{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
+        fz{exp_nb}', t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
     
     if STATIC_EXP{exp_nb} % deprecated   
         delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
@@ -205,6 +205,8 @@ for exp_nb = 1:length(folder_names)
     end
        
 end
+
+return
 
 %% Post evaluation processing 
 

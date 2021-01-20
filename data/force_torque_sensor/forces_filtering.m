@@ -4,7 +4,7 @@ function [F_r, T_r, ft_bias] = forces_filtering(F_s, T_s, thetas, t, counter, m,
 % end effector of the kuka youBot robot. It allows bias and gravity
 % compensation, transformation of sensor data to the robot base frame and
 % filtering of the data at 'fq' Hz
-% /!\ the torque gravity compensation is not implemented !!
+% /!\ the torque gravity compensation is not implemented (negligeable ?)
 %
 %DESCRIPTION:
 %
@@ -159,7 +159,7 @@ if (filtering == 'TRUE') | (filtering == 1)
     if isnan(F_r)
         warning('NaN detected in forces, the filtering will populate NaNs !')
     elseif isnan(T_r)
-        ('NaN detected in torques, the filtering will populate NaNs !')
+        warning('NaN detected in torques, the filtering will populate NaNs !')
     end
     
     F_r = F_r';
