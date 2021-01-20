@@ -4,12 +4,13 @@
 
 % This script make estimation of the virtual trajectory of the arm after
 % a perturbation occured. To be able to estimate the impedance, as stated
-% in [ref papier CASE], the virtual trajectory need to be computed.
+% in [FORTINEAU 2020], the virtual trajectory need to be computed.
 % Here, the virtual trajectories and forces are approached using cubic 
 % spline interpolation at 1 kHz. The estimation is based on a trajectory
 % of 200 ms, using 100 ms both before and after the estimated time window,
 % for the interpolation. A delay of 15 ms is injected to abide by the
-% latency of the system ? 
+% latency of the system ?  => after later analysis, this delay should not be
+% added, delay in the perturbation introduction is lesser than 3ms.
 
 clear all
 close all
@@ -144,21 +145,16 @@ for exp_nb = 1:length(folder_names)
     
     idx_window = max(idx_wndw_imp_eval, idx_wndw_virt_traj);
     
-    if STATIC_EXP{exp_nb}
-        delta_z{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_traj, ...
-            z{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
-        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_f_traj, ...
-            fz{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
-     
+    delta_z{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_traj, ...
+        z{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
+    delta_fz{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_f_traj, ...
+        fz{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
+    
+    if STATIC_EXP{exp_nb} % deprecated   
         delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
         delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'static');
         disp('static exp: ' + string(exp_nb))
-    else % nominal case
-        delta_z{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_traj, ...
-            z{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
-        delta_fz{exp_nb} = DIFF_TRAJECT(idx_window, idx_wndw_virt_f_traj, ...
-            fz{exp_nb}, t{exp_nb}, idx_perts, dist_val{exp_nb}, idx_delay);
-        
+    else % nominal case       
         delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline'); % z0 - z
         % low pass filtered with cutoff freq at 8.5Hz
         if VIRT_FORCE_FILT
@@ -217,6 +213,7 @@ end
 
 stiff_all_cln = stiff_all( (stiff_all>0) & (stiff_all<3e3));
 damp_all_cln = damp_all( (stiff_all>0));
+mass_all_cln = mass_all( (stiff_all>0));
 
 stiff_r2_sup = stiff_all(r_sq_all > min_r2);
 
@@ -233,7 +230,28 @@ med_damp = nanmedian(damp_all);
 std_damp_cln = nanstd(damp_all_cln);
 med_damp_cln = nanmedian(damp_all_cln);
 
+std_mass = nanstd(mass_all);
+med_mass = nanmedian(mass_all);
+std_mass_cln = nanstd(mass_all_cln);
+med_mass_cln = nanmedian(mass_all_cln);
+
 %% Display
+
+figure('DefaultAxesFontSize',14)
+subplot(2,1,1)
+hold on
+plot(delta_z{exp_nb}.time, delta_z{exp_nb}.complete_traject)
+plot(delta_z{exp_nb}.t_traject, delta_z{exp_nb}.virt_traject, 'Color', [0.8500, 0.3250, 0.0980])
+xlabel('Time (s)')
+ylabel('Position (m)')
+legend('Meas.', 'Virtual')
+subplot(2,1,2)
+hold on
+plot(delta_fz{exp_nb}.time, delta_fz{exp_nb}.complete_traject)
+plot(delta_fz{exp_nb}.t_traject, delta_fz{exp_nb}.virt_traject, 'Color', [0.8500, 0.3250, 0.0980])
+xlabel('Time (s)')
+ylabel('Force (N)')
+legend('Meas.', 'Virtual')
 
 if DISP_STIFFNESS_DISTRIBUTION
 

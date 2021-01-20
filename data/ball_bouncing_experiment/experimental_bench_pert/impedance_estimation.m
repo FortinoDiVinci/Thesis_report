@@ -4,7 +4,7 @@
 
 % This script make estimation of the virtual trajectory of the arm after
 % a perturbation occured. To be able to estimate the impedance, as stated
-% in [ref papier CASE], the virtual trajectory need to be computed.
+% in FORTINEAU 2020, the virtual trajectory need to be computed.
 % Here, the virtual trajectories and forces are approached using cubic 
 % spline interpolation at 1 kHz. The estimation is based on a trajectory
 % of 200 ms, using 100 ms both before and after the estimated time window,
