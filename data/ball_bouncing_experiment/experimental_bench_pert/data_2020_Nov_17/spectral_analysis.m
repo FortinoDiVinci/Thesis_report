@@ -73,18 +73,40 @@ subplot(2,1,1)
 hold on
 for i = 1:length(spec_analysis)
     plot(spec_analysis(i).f_interp, mean([spec_analysis(i).force.power_interp],2))
+    %semilogy(spec_analysis(i).f_interp, mean([spec_analysis(i).force.power_interp],2))
 end
-xlim([0.1,10])
+%xlim([0.1,10])
+xlim([0,25])
 ylabel('Power')
 xlabel('Frequency')
 title('Force')
-legend('Without impact','with impact')
+legend('without impact','with impact')
 subplot(2,1,2)
 hold on
 for i = 1:length(spec_analysis)
     plot(spec_analysis(i).f_interp, mean([spec_analysis(i).position.power_interp],2))
+    %semilogy(spec_analysis(i).f_interp, mean([spec_analysis(i).position.power_interp],2))
 end
-xlim([0.1,10])
+xlim([0,25])
+ylabel('Power')
+xlabel('Frequency')
+title('Position')
+legend('without impact','with impact')
+
+% Same figure with logatithmic scale
+figure('DefaultAxesFontSize',16)
+subplot(2,1,1)
+semilogy(spec_analysis(1).f_interp, mean([spec_analysis(1).force.power_interp],2),...
+	spec_analysis(2).f_interp, mean([spec_analysis(2).force.power_interp],2))
+xlim([0,25])
+ylabel('Power')
+xlabel('Frequency')
+title('Force')
+legend('without impact','with impact')
+subplot(2,1,2)
+semilogy(spec_analysis(1).f_interp, mean([spec_analysis(1).position.power_interp],2),...
+	spec_analysis(2).f_interp, mean([spec_analysis(2).position.power_interp],2))
+xlim([0,25])
 ylabel('Power')
 xlabel('Frequency')
 title('Position')
