@@ -11,11 +11,11 @@ addpath('../utils')
 % simulation parameters
 M = 0.1;
 B = 5;
-K = 100;
+K = 200;
 dt = 1e-3;
 pert_mag = 1;
 pert_space = ceil(3.3/dt); % samples
-pert_dur_perc = 0.060/dt; % samples
+pert_duration = 0.060/dt; % samples
 t_max = (101*pert_space -1)*dt;
 
 % to use real data set ext_signal to 1
@@ -41,8 +41,8 @@ mdl = 'KBM_sim';
 out = sim(mdl,t_max);
 
 % get relevant data
-fz = out.force.data';
-z = out.position.data';
+fz = out.force.data;
+z = out.position.data;
 t = out.force.Time;
 % get the rising edges indexes of the perturbations
 pert_idx = find(diff(out.perturbations.data) > 0)';
@@ -75,11 +75,11 @@ impedance.init_phi(delta_z.diff_traject(1:idx_wndw_imp_eval,:), ...
 impedance.init_y(delta_fz.diff_traject(1:idx_wndw_imp_eval,:));
 impedance.lsq(); % least square optimization evaluation
 
+%% Data display
+
 mean_stiff = nanmean(impedance.xi(1,:));
 mean_damp = mean(impedance.xi(2,:));
 mean_mass = mean(impedance.xi(3,:));
-
-%% Data display
 
 disp("Mean Stiffness: " + string(mean_stiff))
 disp("Mean Damping: " + string(mean_damp))
@@ -98,6 +98,32 @@ std_stiff = nanstd(impedance.xi(1,:));
 std_damp = nanstd(impedance.xi(2,:));
 std_mass = nanstd(impedance.xi(3,:));
 
-disp("Std Stiffness: " + string(std_stiff))
-disp("Std Damping: " + string(std_damp))
-disp("Std Mass: " + string(std_mass))
+% relative standard deviations
+disp("Stiffness rel. std error: " + string(100*std_stiff/abs(mean_stiff)) ...
++ "%")
+disp("Damping rel. std error: " + string(100*std_damp/abs(mean_damp)) ...
++ "%")
+disp("Mass rel. std error: " + string(100*std_mass/abs(mean_mass)) ...
++ "%")
+
+% Statistics
+
+figure('DefaultAxesFontSize',14)
+subplot(3,1,1)
+hold on
+plot(impedance.rel_std(1,:))
+plot(abs(impedance.xi(1,:)-K)/K)
+title('Stiffness')
+legend('\sigma_x%','\epsilon%')
+subplot(3,1,2)
+hold on
+plot(impedance.rel_std(2,:))
+plot(abs(impedance.xi(2,:)-B)/B)
+title('Damping')
+legend('\sigma_x%','\epsilon%')
+subplot(3,1,3)
+hold on
+plot(impedance.rel_std(3,:))
+plot(abs(impedance.xi(3,:)-M)/M)
+title('Mass')
+legend('\sigma_x%','\epsilon%')

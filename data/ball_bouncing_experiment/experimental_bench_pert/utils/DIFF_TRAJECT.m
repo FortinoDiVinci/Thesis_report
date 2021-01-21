@@ -157,7 +157,7 @@ classdef DIFF_TRAJECT < handle
         end
         
         function self = computeDerivatives(self)
-            
+            %addpath('../../../youBot_analysis/Utils');
             for ii = 1:self.nb_traject
                 
                 temp_velocity = Iu_diffcent(self.tmp_diff_traject(:,ii), self.t_traject(:,ii));
@@ -172,4 +172,16 @@ classdef DIFF_TRAJECT < handle
         
     end
     
+end
+
+%Iu_DIFFCENT	derivee numérique par difference centrale
+%	Copyright (c) 1994 by M. Gautier, LAN Robotique
+%	Exemple : yd=diffcent(y,pas);
+
+function [yd] = Iu_diffcent(y,t)
+
+ny=length(y);
+
+dtemps = [(t(2)-t(1));(t(3:ny)-t(1:ny-2))/2;(t(ny)-t(ny-1))];
+yd=[(y(2)-y(1));(y(3:ny)-y(1:ny- 2))/2;(y(ny)-y(ny-1))]./dtemps;
 end

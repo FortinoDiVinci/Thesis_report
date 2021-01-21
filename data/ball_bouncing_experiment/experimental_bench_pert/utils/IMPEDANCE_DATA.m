@@ -24,6 +24,7 @@ classdef IMPEDANCE_DATA < handle
         rec_err;  % error between reconstruction and real force
         rec_err_norm;  % normalized error according to force magnitude
         r_2; % coefficient of determination
+        rel_std;
         %r_2_fit; % idem but computed with fitlm
         
     end
@@ -43,7 +44,8 @@ classdef IMPEDANCE_DATA < handle
             self.rec_y = NaN(self.id_size, self.nb_id);
             self.rec_err = NaN(self.id_size, self.nb_id);
             self.rec_err_norm = NaN(self.id_size, self.nb_id);
-            self.r_2 = NaN(self.nb_id,1);
+            self.r_2 = NaN(1,self.nb_id);
+            self.rel_std = NaN(self.nb_param,self.nb_id);
             %self.r_2_fit = NaN(self.nb_id,1);
             
         end
@@ -129,8 +131,8 @@ classdef IMPEDANCE_DATA < handle
             
             for ii = 1:self.nb_id   
                 
-                self.xi(:, ii) = self.phi(:,:,ii)\self.y(:, ii);
-                % self.xi(:, ii) = (self.phi(:,:,ii)'*self.phi(:,:,ii))\self.phi(:,:,ii)'*self.y(:, ii);
+                % self.xi(:, ii) = self.phi(:,:,ii)\self.y(:, ii);
+                self.xi(:, ii) = (self.phi(:,:,ii)'*self.phi(:,:,ii))\self.phi(:,:,ii)'*self.y(:, ii);
                 % automated linear fit (brings the same results)
                 % mdl = fitlm(self.phi(:,:,ii),self.y(:, ii));
                 % self.r_2_fit(ii) = mdl.Rsquared.Adjusted;
@@ -141,6 +143,14 @@ classdef IMPEDANCE_DATA < handle
                 % determination coefficient 
                 self.r_2(ii) = 1 - sum( self.rec_err(:,ii).^2 ) / ...
                     sum( (self.y(:, ii) - mean(self.y(:, ii))).^2 );
+                % relative standard deviation Khalil (2004) eq 12.7 - 12.10
+                sig_p2 = ( norm(self.rec_err(:,ii))^2 )/ ...
+                    (self.id_size - self.nb_param);
+                for j = 1:self.nb_param
+                    C = sig_p2*inv(self.phi(:,:,ii)'*self.phi(:,:,ii));
+                    sig_j = sqrt(C(j,j));
+                    self.rel_std(j, ii) = sig_j/abs(self.xi(j,ii));
+                end
                 
             end  
             

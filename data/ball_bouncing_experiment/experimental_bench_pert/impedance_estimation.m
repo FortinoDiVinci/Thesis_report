@@ -15,7 +15,7 @@ filter_order = 2;
 wndw_virt_traj   = 200; % 200ms (position)
 wndw_virt_f_traj = 065; % 65ms  (force) 
 wndw_imp_eval    = 200; % 200ms       
-p_delay            = 0;   % 0ms
+p_delay            = 0; % 0ms
 window = max(wndw_imp_eval, wndw_virt_traj);
 %
 nb_param = 3; % K B M
