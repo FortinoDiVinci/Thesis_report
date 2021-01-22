@@ -9,9 +9,9 @@ addpath('../utils')
 
 %% Simulation for data generation
 % simulation parameters
-M = 0.1;
-B = 5;
-K = 200;
+Mv = 0.1;
+Bv = 5;
+Kv = 200;
 dt = 1e-3;
 pert_mag = 1;
 pert_space = ceil(3.3/dt); % samples
