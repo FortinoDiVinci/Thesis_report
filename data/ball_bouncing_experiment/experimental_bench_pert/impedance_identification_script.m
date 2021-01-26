@@ -1,0 +1,165 @@
+% equivalent of the live script impedance_identification
+% this script was created for quicker execution
+
+clear all
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Problem definition
+syms Ms Bs Ks;
+% impedance state space repr.
+A = [  0 ,   1 ; -Ks/Ms, -Bs/Ms];
+B = [0; 1/Ms];
+C = [1, 0];
+% discretization
+dt = 1e-3; % 1ms
+Ad = expm(A*dt);
+Bd = A\(Ad - eye(2))*B;
+Cd = C;
+% discrete transfert function
+syms z;
+Hd = simplify(Cd*(z*eye(2) - Ad)^(-1)*Bd);
+syms sig1
+Hd = subs(Hd,(Bs^2 - 4*Ks*Ms)^(1/2), sig1); % for readability
+[n,d] = numden(Hd);
+n = collect(n,z); % rearange expr.
+d = collect(d,z);
+b_coef = flip(coeffs(n,z)); % high order first
+a_coef = flip(coeffs(d,z)); % high order first
+disp("Numerator order: " + string(length(b_coef)-1))
+disp("Denominator order: " + string(length(a_coef)-1))
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Identification of the coefficients
+na = length(a_coef)-1; % order of Ak
+nb = length(b_coef)-1; % order of Bk 
+nk = 0; % delay in Bk
+%% data loading
+load 'data_2020_Nov_17/data_without_impacts_2020_11_17.mat' 't' ...
+    'thetas' 'forces_unf' % real data
+addpath('utils') 
+addpath('../../force_torque_sensor') % for force pre-processing
+addpath('../../utils') %
+% force signal processing
+exp_nb = randi([1 15],1,1); % chose a random experimental dataset
+t = t{exp_nb} - t{exp_nb}(1); % t0 = 0s
+f_tmp = forces_filtering(forces_unf{exp_nb}', forces_unf{exp_nb}', thetas{exp_nb}', t); % from sensor base to robot base
+[b,a] = butter(2,50/(1/(2*dt)),'low'); % BW 2nd order low pass filter (cutoff freq. 50 Hz)
+f_tmp = -f_tmp(3,:)'; % fz conversion from f(e->r) to f(r->e), robot force on the environment
+f = filtfilt(b,a,f_tmp); % zero phase digital filtering
+clear forces_unf thetas f_tmp % clear unecessary data
+%% Simulating data with real input
+input_force.signals.values = f;
+input_force.time = t;
+% impedance parameters that will be identified
+Mv = 0.2;
+Bv = 10;
+Kv = 200;
+% perturbation introduced in simulation
+ext_signal = 1;
+pert_mag = 10; % setpoint as defined in the real experiment
+pert_space = ceil(2.8/dt); % samples 2.8 sec between perturbations
+pert_duration = 0.030/dt;  % samples, 30 ms
+% perturbation filter
+xi = sqrt(2)/2;
+w0 = 40*pi*1;
+K_f = 3e3;
+t_max = t(end);
+out = sim('Impedance_env_simulation/KBM_sim',t_max);
+% Collecting simulated data
+fz = out.force.data;
+z = out.position.data;
+t = out.force.Time;
+fz0 = out.virt_force.data; % simulated virtual force
+z0 = out.virt_position.data; % simulated virtual position
+% get the rising edges indexes of the perturbations
+pert_idx = find(diff(out.perturbations.data) > 0)';
+pert_val = pert_mag.*ones(size(pert_idx));
+%% Impedance identification algorithm
+% PARAMETERS
+idx_wndw_virt_traj   = ceil(0.200/dt); % 200ms (position)
+idx_wndw_virt_f_traj = ceil(0.065/dt); % 65ms  (force) 
+idx_wndw_imp_eval    = ceil(0.200/dt); % 200ms       
+idx_delay            = ceil(0.000/dt); % 0ms
+idx_window = max(idx_wndw_imp_eval, idx_wndw_virt_traj);
+nb_param = 3; % K B M
+% DATA PRE-PROCESSING
+delta_z = DIFF_TRAJECT(idx_window, idx_wndw_virt_traj, z, t, pert_idx, pert_val, idx_delay);
+delta_fz = DIFF_TRAJECT(idx_window, idx_wndw_virt_f_traj, fz, t, pert_idx, pert_val, idx_delay);
+delta_z.computeDiffTraject('VirtTrajMethod', 'spline');
+delta_fz.computeDiffTraject('VirtTrajMethod', 'filterPlus'); % this step might take few seconds
+delta_z.computeDerivatives();
+% Actual simulated virtual trajectories 
+% The trajectories should be the same repeated, if the perturbation is 
+% perfectly extracted
+delta_z_sim = copyObj(delta_z);
+delta_fz_sim = copyObj(delta_fz);
+delay_wdw = delta_z.delay;
+estim_wdw = delta_z.estim_window;
+for i = 1:delta_z_sim.nb_traject
+    pert_interval = delta_z_sim.pert_ind(i)+(-2:estim_wdw+1)+delay_wdw;
+    delta_z_sim.virt_traject(:,i) = z0(pert_interval);
+    delta_fz_sim.virt_traject(:,i) = fz0(pert_interval);
+end
+delta_z_sim.computeDiffTraject('VirtTrajMethod', 'manual');
+delta_fz_sim.computeDiffTraject('VirtTrajMethod', 'manual');
+%% Data formating for identification
+for i = delta_z.nb_traject:-1:1 
+    data{i} = iddata(delta_z.diff_traject(:,i), ...
+        delta_fz.diff_traject(:,i),dt);
+    data{i}.TimeUnit = 's';
+    data{i}.InputUnit = 'N';
+    data{i}.OutputUnit = 'm'; 
+end
+data_sim = iddata(delta_z_sim.diff_traject(:,1),...
+    delta_fz_sim.diff_traject(:,1),dt); % ideal data
+data_sim.TimeUnit = 's';
+data_sim.InputUnit = 'N';
+data_sim.OutputUnit = 'm';
+% ARX identification
+for i = delta_z.nb_traject:-1:1 
+    arx_id{i} = arx(data{i},[na nb+1 nk],'IntegrateNoise',true); 
+    arx_id{i}.Name = 'Arx ID';
+end
+arx_id_sim = arx(data_sim,[na nb nk]);
+arx_id_sim.Name = 'Arx ID with ideal data';
+% display ARX fit
+for i = delta_z.nb_traject:-1:1 
+    [~,arx_id_fit(i),~] = compare(data{i},arx_id{i});
+end
+[~,arx_id_sim_fit,~] = compare(data_sim,arx_id_sim);
+figure('DefaultAxesFontSize',14)
+hold on
+plot(arx_id_fit)
+plot([1, delta_z.nb_traject], [arx_id_sim_fit, arx_id_sim_fit])
+title('Fit %')
+legend('arx', 'arx with ideal data')
+% K D M identification
+assume(Ks, 'real');
+assume(Bs, 'real');
+assume(Ms, 'real');
+assume(sig1, 'real');
+for i = 1:length(arx_id)
+    % declare the equations system
+    eq.A(1) = a_coef(1)/a_coef(3) - arx_id{i}.A(1)/arx_id{i}.A(3) == 0;
+    eq.A(2) = a_coef(2)/a_coef(3) - arx_id{i}.A(2)/arx_id{i}.A(3) == 0;
+    eq.B(1) = b_coef(1)/b_coef(2) - arx_id{i}.B(1)/arx_id{i}.B(2) == 0;
+    eq.A(1) = subs(eq.A(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+    eq.A(2) = subs(eq.A(2), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+    eq.B(1) = subs(eq.B(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+    imp_param_id(i) = solve({eq.A(1),eq.A(2),eq.B(1)},[Ks;Bs;Ms]);
+end
+%
+figure('DefaultAxesFontSize',14)
+subplot(3,1,1)
+title('Stiffness')
+plot([imp_param_id(:).Ks])
+xlabel('Identification nb')
+ylabel('N/m')
+subplot(3,1,2)
+title('Damping')
+plot([imp_param_id(:).Bs])
+xlabel('Identification nb')
+ylabel('N.s/m')
+subplot(3,1,3)
+title('Mass')
+plot([imp_param_id(:).Ms])
+xlabel('Identification nb')
+ylabel('kg')
