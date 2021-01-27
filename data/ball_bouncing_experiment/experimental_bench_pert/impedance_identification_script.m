@@ -26,6 +26,10 @@ b_coef = flip(coeffs(n,z)); % high order first
 a_coef = flip(coeffs(d,z)); % high order first
 disp("Numerator order: " + string(length(b_coef)-1))
 disp("Denominator order: " + string(length(a_coef)-1))
+a1 = a_coef(2)/a_coef(1); % z coef
+a0 = a_coef(3)/a_coef(1); % 1 coef
+b0 = b_coef(2)/b_coef(1); % num
+Kh = b_coef(1)/a_coef(1); % gain
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Identification of the coefficients
 na = length(a_coef)-1; % order of Ak
@@ -40,7 +44,8 @@ addpath('../../utils') %
 % force signal processing
 exp_nb = randi([1 15],1,1); % chose a random experimental dataset
 t = t{exp_nb} - t{exp_nb}(1); % t0 = 0s
-f_tmp = forces_filtering(forces_unf{exp_nb}', forces_unf{exp_nb}', thetas{exp_nb}', t); % from sensor base to robot base
+f_tmp = forces_filtering(forces_unf{exp_nb}', forces_unf{exp_nb}', ...
+    thetas{exp_nb}', t); % from sensor base to robot base
 [b,a] = butter(2,50/(1/(2*dt)),'low'); % BW 2nd order low pass filter (cutoff freq. 50 Hz)
 f_tmp = -f_tmp(3,:)'; % fz conversion from f(e->r) to f(r->e), robot force on the environment
 f = filtfilt(b,a,f_tmp); % zero phase digital filtering
@@ -74,15 +79,15 @@ pert_idx = find(diff(out.perturbations.data) > 0)';
 pert_val = pert_mag.*ones(size(pert_idx));
 %% Impedance identification algorithm
 % PARAMETERS
-idx_wndw_virt_traj   = ceil(0.200/dt); % 200ms (position)
-idx_wndw_virt_f_traj = ceil(0.065/dt); % 65ms  (force) 
-idx_wndw_imp_eval    = ceil(0.200/dt); % 200ms       
+wndw_virt_traj   = ceil(0.200/dt); % 200ms (position)
+wndw_virt_f_traj = ceil(0.065/dt); % 65ms  (force) 
+wndw_imp_eval    = ceil(0.200/dt); % 200ms       
 idx_delay            = ceil(0.000/dt); % 0ms
-idx_window = max(idx_wndw_imp_eval, idx_wndw_virt_traj);
+window = max(wndw_imp_eval, wndw_virt_traj);
 nb_param = 3; % K B M
 % DATA PRE-PROCESSING
-delta_z = DIFF_TRAJECT(idx_window, idx_wndw_virt_traj, z, t, pert_idx, pert_val, idx_delay);
-delta_fz = DIFF_TRAJECT(idx_window, idx_wndw_virt_f_traj, fz, t, pert_idx, pert_val, idx_delay);
+delta_z = DIFF_TRAJECT(window, wndw_virt_traj, z, t, pert_idx, pert_val, idx_delay);
+delta_fz = DIFF_TRAJECT(window, wndw_virt_f_traj, fz, t, pert_idx, pert_val, idx_delay);
 delta_z.computeDiffTraject('VirtTrajMethod', 'spline');
 delta_fz.computeDiffTraject('VirtTrajMethod', 'filterPlus'); % this step might take few seconds
 delta_z.computeDerivatives();
@@ -100,7 +105,7 @@ for i = 1:delta_z_sim.nb_traject
 end
 delta_z_sim.computeDiffTraject('VirtTrajMethod', 'manual');
 delta_fz_sim.computeDiffTraject('VirtTrajMethod', 'manual');
-%% Data formating for identification
+%% Data formating for ARX identification
 for i = delta_z.nb_traject:-1:1 
     data{i} = iddata(delta_z.diff_traject(:,i), ...
         delta_fz.diff_traject(:,i),dt);
@@ -118,7 +123,7 @@ for i = delta_z.nb_traject:-1:1
     arx_id{i} = arx(data{i},[na nb+1 nk],'IntegrateNoise',true); 
     arx_id{i}.Name = 'Arx ID';
 end
-arx_id_sim = arx(data_sim,[na nb nk]);
+arx_id_sim = arx(data_sim,[na nb+1 nk]);
 arx_id_sim.Name = 'Arx ID with ideal data';
 % display ARX fit
 for i = delta_z.nb_traject:-1:1 
@@ -138,28 +143,101 @@ assume(Ms, 'real');
 assume(sig1, 'real');
 for i = 1:length(arx_id)
     % declare the equations system
-    eq.A(1) = a_coef(1)/a_coef(3) - arx_id{i}.A(1)/arx_id{i}.A(3) == 0;
-    eq.A(2) = a_coef(2)/a_coef(3) - arx_id{i}.A(2)/arx_id{i}.A(3) == 0;
-    eq.B(1) = b_coef(1)/b_coef(2) - arx_id{i}.B(1)/arx_id{i}.B(2) == 0;
+    eq.A(1) = a1 - arx_id{i}.A(2)/arx_id{i}.A(1) == 0;
+    eq.A(2) = a0 - arx_id{i}.A(3)/arx_id{i}.A(1) == 0;
+    eq.B(1) = Kh*(b0 + 1) - (arx_id{i}.B(1) + arx_id{i}.B(2))/arx_id{i}.A(1) == 0;
     eq.A(1) = subs(eq.A(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
     eq.A(2) = subs(eq.A(2), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
     eq.B(1) = subs(eq.B(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
     imp_param_id(i) = solve({eq.A(1),eq.A(2),eq.B(1)},[Ks;Bs;Ms]);
 end
+% ideal scenaraio with known virtual trajectories
+eq.A(1) = a1 - arx_id_sim.A(2)/arx_id_sim.A(1) == 0;
+eq.A(2) = a0 - arx_id_sim.A(3)/arx_id_sim.A(1) == 0;
+eq.B(1) = Kh*(b0 + 1) - (arx_id_sim.B(1) + arx_id_sim.B(2))/arx_id_sim.A(1) == 0;
+eq.A(1) = subs(eq.A(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+eq.A(2) = subs(eq.A(2), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+eq.B(1) = subs(eq.B(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+imp_param_id_sim = solve({eq.A(1),eq.A(2),eq.B(1)},[Ks;Bs;Ms]);
+% figure('DefaultAxesFontSize',14)
+% subplot(3,1,1)
+% title('Stiffness')
+% hold on
+% plot([imp_param_id(:).Ks])
+% plot([1 length(arx_id)], [imp_param_id_sim.Ks, imp_param_id_sim.Ks])
+% xlabel('Identification nb')
+% ylabel('N/m')
+% legend('ARX','ideal ARX')
+% subplot(3,1,2)
+% title('Damping')
+% hold on
+% plot([imp_param_id(:).Bs])
+% plot([1 length(arx_id)], [imp_param_id_sim.Bs, imp_param_id_sim.Bs])
+% xlabel('Identification nb')
+% ylabel('N.s/m')
+% legend('ARX','ideal ARX')
+% subplot(3,1,3)
+% title('Mass')
+% hold on
+% plot([imp_param_id(:).Ms])
+% plot([1 length(arx_id)], [imp_param_id_sim.Ms, imp_param_id_sim.Ms])
+% xlabel('Identification nb')
+% ylabel('kg')
+% legend('ARX','ideal ARX')
+%% Least square methodology 
+nb_id = min(delta_z.nb_traject, delta_fz.nb_traject);
+impedance = IMPEDANCE_DATA(3, nb_id,wndw_imp_eval);
+impedance.init_phi(delta_z.diff_traject(1:wndw_imp_eval,:), ...
+    delta_z.d_diff_traject(1:wndw_imp_eval,:), ... % speed
+    delta_z.dd_diff_traject(1:wndw_imp_eval,:)); % acceleration
+impedance.init_y(delta_fz.diff_traject(1:wndw_imp_eval,:));
+impedance.lsq(); % least square optimization evaluation
+% ideal
+impedance_sim = IMPEDANCE_DATA(3, nb_id,wndw_imp_eval);
+impedance_sim.init_phi(delta_z_sim.diff_traject(1:wndw_imp_eval,:), ...
+    delta_z_sim.d_diff_traject(1:wndw_imp_eval,:), ... % speed
+    delta_z_sim.dd_diff_traject(1:wndw_imp_eval,:)); % acceleration
+impedance_sim.init_y(delta_fz_sim.diff_traject(1:wndw_imp_eval,:));
+impedance_sim.lsq(); % least square optimization evaluation
 %
 figure('DefaultAxesFontSize',14)
 subplot(3,1,1)
 title('Stiffness')
+hold on
 plot([imp_param_id(:).Ks])
+plot([1 length(arx_id)], [imp_param_id_sim.Ks, imp_param_id_sim.Ks])
+plot(impedance.xi(1,:))
+plot([1,nb_id], [impedance_sim.xi(1), impedance_sim.xi(1)])
 xlabel('Identification nb')
 ylabel('N/m')
+legend('ARX','ideal ARX','LSQ','ideal LSQ')
 subplot(3,1,2)
 title('Damping')
+hold on
 plot([imp_param_id(:).Bs])
+plot([1 length(arx_id)], [imp_param_id_sim.Bs, imp_param_id_sim.Bs])
+plot(impedance.xi(2,:))
+plot([1,nb_id], [impedance_sim.xi(2), impedance_sim.xi(2)])
 xlabel('Identification nb')
 ylabel('N.s/m')
+legend('ARX','ideal ARX','LSQ','ideal LSQ')
 subplot(3,1,3)
 title('Mass')
+hold on
 plot([imp_param_id(:).Ms])
+plot([1 length(arx_id)], [imp_param_id_sim.Ms, imp_param_id_sim.Ms])
+plot(impedance.xi(3,:))
+plot([1,nb_id], [impedance_sim.xi(3), impedance_sim.xi(3)])
 xlabel('Identification nb')
 ylabel('kg')
+legend('ARX','ideal ARX','LSQ','ideal LSQ')
+%% Comparison between the 2 methods
+disp("In the ideal scenario where the virtual trajectories are known, "...
+    +"the ARX method gives for each param a relative error of: ")
+disp("K: " + sprintf('%.3f',double(abs(imp_param_id_sim.Ks-Kv)/Kv)*100) + "%")
+disp("B: " + sprintf('%.3f',double(abs(imp_param_id_sim.Bs-Bv)/Bv)*100) + "%")
+disp("M: " + sprintf('%.3f',double(abs(imp_param_id_sim.Ms-Mv)/Mv)*100) + "%")
+disp("And for the LSQ method: ")
+disp("K: " + sprintf('%.3f',abs(impedance_sim.xi(1)-Kv)/Kv*100) + "%")
+disp("B: " + sprintf('%.3f',abs(impedance_sim.xi(2)-Bv)/Bv*100) + "%")
+disp("M: " + sprintf('%.3f',abs(impedance_sim.xi(3)-Mv)/Mv*100) + "%")

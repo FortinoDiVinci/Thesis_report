@@ -137,6 +137,32 @@ classdef IMPEDANCE_DATA < handle
                 % mdl = fitlm(self.phi(:,:,ii),self.y(:, ii));
                 % self.r_2_fit(ii) = mdl.Rsquared.Adjusted;
                 
+%                 self.rec_y(:,ii) = self.phi(:,:,ii)*self.xi(:, ii);
+%                 self.rec_err(:,ii) = self.rec_y(:,ii) - self.y(:,ii);
+%                 
+%                 % determination coefficient 
+%                 self.r_2(ii) = 1 - sum( self.rec_err(:,ii).^2 ) / ...
+%                     sum( (self.y(:, ii) - mean(self.y(:, ii))).^2 );
+%                 % relative standard deviation Khalil (2004) eq 12.7 - 12.10
+%                 sig_p2 = ( norm(self.rec_err(:,ii))^2 )/ ...
+%                     (self.id_size - self.nb_param);
+%                 for j = 1:self.nb_param
+%                     C = sig_p2*inv(self.phi(:,:,ii)'*self.phi(:,:,ii));
+%                     sig_j = sqrt(C(j,j));
+%                     self.rel_std(j, ii) = sig_j/abs(self.xi(j,ii));
+%                 end
+                
+            end  
+            
+            errorStat(self);
+            
+        end
+        
+        % the lsq method call this method
+        % this method 
+        function self = errorStat(self)
+            
+            for ii = 1:self.nb_id
                 self.rec_y(:,ii) = self.phi(:,:,ii)*self.xi(:, ii);
                 self.rec_err(:,ii) = self.rec_y(:,ii) - self.y(:,ii);
                 
@@ -151,8 +177,7 @@ classdef IMPEDANCE_DATA < handle
                     sig_j = sqrt(C(j,j));
                     self.rel_std(j, ii) = sig_j/abs(self.xi(j,ii));
                 end
-                
-            end  
+            end
             
         end
         

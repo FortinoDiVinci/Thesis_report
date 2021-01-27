@@ -137,6 +137,21 @@ methods
         for ii = 1:self.nb_traject
 
             idx = self.pert_ind(ii);  
+            if idx+self.estim_window+1+self.delay > length(self.complete_traject)
+                warning("The perturbation n°" + string(self.nb_traject) +...
+                    " was too close to the end of the experiment to be" +...
+                    " properly evaluated. It was therefore ignored, " + ...
+                    "and so were the following ones.");
+                self.nb_traject = ii - 1;
+                self.traject(:,ii:end) = [];
+                self.t_traject(:,ii:end) = [];
+                self.virt_traject(:,ii:end) = [];
+                self.tmp_diff_traject(:,ii:end) = [];
+                self.diff_traject(:,ii:end) = [];
+                self.d_diff_traject(:,ii:end) = [];
+                self.dd_diff_traject(:,ii:end) = [];
+                break;
+            end
             % Real chuncked trajectory
             self.traject(:,ii) = self.complete_traject(idx-2+self.delay:...
                 idx+self.estim_window+1+self.delay);

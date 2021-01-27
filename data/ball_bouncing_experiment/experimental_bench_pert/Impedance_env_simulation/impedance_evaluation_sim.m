@@ -13,13 +13,13 @@ Mv = 0.1;
 Bv = 5;
 Kv = 200;
 dt = 1e-3;
-pert_mag = 1;
+pert_mag = 10;
 pert_space = ceil(3.3/dt); % samples
-pert_duration = 0.060/dt; % samples
+pert_duration = 0.030/dt; % samples
 t_max = (101*pert_space -1)*dt;
 
 % to use real data set ext_signal to 1
-ext_signal = 1; % set to 0 to use default sine wave for force
+ext_signal = 0; % set to 0 to use default sine wave for force
 if ext_signal
     exp_nb = 2;
     load('..\data_2020_Nov_17\data_without_impacts_2020_11_17.mat')
@@ -35,6 +35,11 @@ else
     input_force.signals.values = zeros(size(0:dt:t_max))';
     input_force.time = (0:dt:t_max)';
 end
+
+% perturbation filter
+xi = sqrt(2)/2;
+w0 = 40*pi*1;
+K_f = 2e3;
 
 % launch sim
 mdl = 'KBM_sim';
