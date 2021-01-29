@@ -200,37 +200,43 @@ impedance_sim.init_phi(delta_z_sim.diff_traject(1:wndw_imp_eval,:), ...
 impedance_sim.init_y(delta_fz_sim.diff_traject(1:wndw_imp_eval,:));
 impedance_sim.lsq(); % least square optimization evaluation
 %
+impedance_arx = copyObj(impedance);
+impedance_arx.arx();
+%
 figure('DefaultAxesFontSize',14)
 subplot(3,1,1)
 title('Stiffness')
 hold on
 plot([imp_param_id(:).Ks])
 plot([1 length(arx_id)], [imp_param_id_sim.Ks, imp_param_id_sim.Ks])
+plot(impedance_arx.xi(1,:), '--')
 plot(impedance.xi(1,:))
 plot([1,nb_id], [impedance_sim.xi(1), impedance_sim.xi(1)])
 xlabel('Identification nb')
 ylabel('N/m')
-legend('ARX','ideal ARX','LSQ','ideal LSQ')
+legend('ARX','ideal ARX','new ARX','LSQ','ideal LSQ')
 subplot(3,1,2)
 title('Damping')
 hold on
 plot([imp_param_id(:).Bs])
 plot([1 length(arx_id)], [imp_param_id_sim.Bs, imp_param_id_sim.Bs])
+plot(impedance_arx.xi(2,:), '--')
 plot(impedance.xi(2,:))
 plot([1,nb_id], [impedance_sim.xi(2), impedance_sim.xi(2)])
 xlabel('Identification nb')
 ylabel('N.s/m')
-legend('ARX','ideal ARX','LSQ','ideal LSQ')
+legend('ARX','ideal ARX','new ARX','LSQ','ideal LSQ')
 subplot(3,1,3)
 title('Mass')
 hold on
 plot([imp_param_id(:).Ms])
 plot([1 length(arx_id)], [imp_param_id_sim.Ms, imp_param_id_sim.Ms])
+plot(impedance_arx.xi(3,:), '--')
 plot(impedance.xi(3,:))
 plot([1,nb_id], [impedance_sim.xi(3), impedance_sim.xi(3)])
 xlabel('Identification nb')
 ylabel('kg')
-legend('ARX','ideal ARX','LSQ','ideal LSQ')
+legend('ARX','ideal ARX','new ARX','LSQ','ideal LSQ')
 %% Comparison between the 2 methods
 disp("In the ideal scenario where the virtual trajectories are known, "...
     +"the ARX method gives for each param a relative error of: ")
