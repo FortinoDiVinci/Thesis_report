@@ -15,15 +15,15 @@ Ad = expm(A*dt);
 Bd = A\(Ad - eye(2))*B;
 Cd = C;
 % discrete transfert function
-syms z;
-Hd = simplify(Cd*(z*eye(2) - Ad)^(-1)*Bd);
-syms sig1
-Hd = subs(Hd,(Bs^2 - 4*Ks*Ms)^(1/2), sig1); % for readability
+syms zL;
+Hd = simplify(Cd*(zL*eye(2) - Ad)^(-1)*Bd);
+%syms sig1
+%Hd = subs(Hd,(Bs^2 - 4*Ks*Ms)^(1/2), sig1); % for readability
 [n,d] = numden(Hd);
-n = collect(n,z); % rearange expr.
-d = collect(d,z);
-b_coef = flip(coeffs(n,z)); % high order first
-a_coef = flip(coeffs(d,z)); % high order first
+n = collect(n,zL); % rearange expr.
+d = collect(d,zL);
+b_coef = flip(coeffs(n,zL)); % high order first
+a_coef = flip(coeffs(d,zL)); % high order first
 disp("Numerator order: " + string(length(b_coef)-1))
 disp("Denominator order: " + string(length(a_coef)-1))
 a1 = a_coef(2)/a_coef(1); % z coef
@@ -146,44 +146,26 @@ for i = 1:length(arx_id)
     eq.A(1) = a1 - arx_id{i}.A(2)/arx_id{i}.A(1) == 0;
     eq.A(2) = a0 - arx_id{i}.A(3)/arx_id{i}.A(1) == 0;
     eq.B(1) = Kh*(b0 + 1) - (arx_id{i}.B(1) + arx_id{i}.B(2))/arx_id{i}.A(1) == 0;
-    eq.A(1) = subs(eq.A(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
-    eq.A(2) = subs(eq.A(2), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
-    eq.B(1) = subs(eq.B(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+    %eq.A(1) = subs(eq.A(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+    %eq.A(2) = subs(eq.A(2), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+    %eq.B(1) = subs(eq.B(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
     imp_param_id(i) = solve({eq.A(1),eq.A(2),eq.B(1)},[Ks;Bs;Ms]);
 end
-% ideal scenaraio with known virtual trajectories
+% ideal scenario with known virtual trajectories
 eq.A(1) = a1 - arx_id_sim.A(2)/arx_id_sim.A(1) == 0;
 eq.A(2) = a0 - arx_id_sim.A(3)/arx_id_sim.A(1) == 0;
 eq.B(1) = Kh*(b0 + 1) - (arx_id_sim.B(1) + arx_id_sim.B(2))/arx_id_sim.A(1) == 0;
 eq.A(1) = subs(eq.A(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
 eq.A(2) = subs(eq.A(2), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
 eq.B(1) = subs(eq.B(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
-imp_param_id_sim = solve({eq.A(1),eq.A(2),eq.B(1)},[Ks;Bs;Ms]);
-% figure('DefaultAxesFontSize',14)
-% subplot(3,1,1)
-% title('Stiffness')
-% hold on
-% plot([imp_param_id(:).Ks])
-% plot([1 length(arx_id)], [imp_param_id_sim.Ks, imp_param_id_sim.Ks])
-% xlabel('Identification nb')
-% ylabel('N/m')
-% legend('ARX','ideal ARX')
-% subplot(3,1,2)
-% title('Damping')
-% hold on
-% plot([imp_param_id(:).Bs])
-% plot([1 length(arx_id)], [imp_param_id_sim.Bs, imp_param_id_sim.Bs])
-% xlabel('Identification nb')
-% ylabel('N.s/m')
-% legend('ARX','ideal ARX')
-% subplot(3,1,3)
-% title('Mass')
-% hold on
-% plot([imp_param_id(:).Ms])
-% plot([1 length(arx_id)], [imp_param_id_sim.Ms, imp_param_id_sim.Ms])
-% xlabel('Identification nb')
-% ylabel('kg')
-% legend('ARX','ideal ARX')
+imp_param_id_sim = vpasolve([eq.A(1),eq.A(2),eq.B(1)],[Ks;Bs;Ms]);
+% reverse solving: knowing the real parameters, what should the ARX
+% coefficient be ?
+a1_r = double(subs(a1, [Ks;Bs;Ms], [Kv;Bv;Mv]));
+a0_r = double(subs(a0, [Ks;Bs;Ms], [Kv;Bv;Mv]));
+kh_r = double(subs(Kh, [Ks;Bs;Ms], [Kv;Bv;Mv]));
+b0_r = double(subs(b0, [Ks;Bs;Ms], [Kv;Bv;Mv]));
+khb0_r = double(subs(Kh*(b0 + 1), [Ks;Bs;Ms], [Kv;Bv;Mv]));
 %% Least square methodology 
 nb_id = min(delta_z.nb_traject, delta_fz.nb_traject);
 impedance = IMPEDANCE_DATA(3, nb_id,wndw_imp_eval);
@@ -199,9 +181,69 @@ impedance_sim.init_phi(delta_z_sim.diff_traject(1:wndw_imp_eval,:), ...
     delta_z_sim.dd_diff_traject(1:wndw_imp_eval,:)); % acceleration
 impedance_sim.init_y(delta_fz_sim.diff_traject(1:wndw_imp_eval,:));
 impedance_sim.lsq(); % least square optimization evaluation
-%
+% The arx method was implemented in the IMPEDANCE_DATA class
 impedance_arx = copyObj(impedance);
 impedance_arx.arx();
+%
+for ii = impedance_arx.nb_id:-1:1
+    % coeff relative err
+    a1_arx = impedance_arx.arx_id{ii}.A(2)/impedance_arx.arx_id{ii}.A(1);
+    a0_arx = impedance_arx.arx_id{ii}.A(3)/impedance_arx.arx_id{ii}.A(1);
+    b_arx = (impedance_arx.arx_id{ii}.B(1) + impedance_arx.arx_id{ii}.B(2))/...
+        impedance_arx.arx_id{ii}.A(1);
+    kh_arx = impedance_arx.arx_id{ii}.B(1)/impedance_arx.arx_id{ii}.A(1);
+    b0_arx = impedance_arx.arx_id{ii}.B(2)/impedance_arx.arx_id{ii}.B(1);
+    a1_rel_e(ii) = abs(a1_r - a1_arx)/a1_r;
+    a0_rel_e(ii) = abs(a0_r - a0_arx)/a0_r;
+    b_rel_e(ii) = abs(khb0_r - b_arx)/khb0_r;
+    b0_rel_e(ii) = abs(b0_r - b0_arx)/b0_r;
+    kh_rel_e(ii) = abs(kh_r - kh_arx)/kh_r;
+    % virtual trajectory root mean square err
+    z0_rmse(ii) = sqrt(mean((delta_z_sim.virt_traject(:,ii) - ...
+        delta_z.virt_traject(:,ii)).^2));
+    fz0_rmse(ii) = sqrt(mean((delta_fz_sim.virt_traject(:,ii) - ...
+        delta_fz.virt_traject(:,ii)).^2));
+    % K,B,M relative err
+    K_rel_e(ii) = abs(Kv - impedance_arx.xi(1,ii))/Kv;
+    B_rel_e(ii) = abs(Bv - impedance_arx.xi(2,ii))/Bv;
+    M_rel_e(ii) = abs(Mv - impedance_arx.xi(3,ii))/Mv;
+end
+% Display
+figure('DefaultAxesFontSize',14)
+subplot(3,1,1)
+title('ARX Identification')
+hold on
+plot(a1_rel_e.*100, 'DisplayName', 'a_1 RE')
+plot(a0_rel_e.*100, 'DisplayName', 'a_0 RE')
+%plot(b0_rel_e.*100, 'DisplayName', 'b_0 RE')
+%plot(kh_rel_e.*100, 'DisplayName', 'Kh RE')
+plot(b_rel_e.*100, 'DisplayName', 'Kh(1+b_0) RE')
+ylabel('% E')
+yyaxis right
+plot((1-impedance_arx.r_2).*100, 'DisplayName', '1-R^2')
+ylabel('%')
+legend show
+subplot(3,1,2)
+title('Virtual trajectories errors')
+hold on
+plot(z0_rmse.*100, '.-', 'DisplayName', 'z_0 RMSE')
+ylabel('cm')
+yyaxis right
+plot(fz0_rmse, '.-', 'DisplayName', 'fz_0 RMSE')
+ylabel('N')
+legend show
+subplot(3,1,3)
+title('Impedance parameters errors')
+hold on
+plot(impedance_arx.rel_std(1, :), 'DisplayName', 'K std RE')
+plot(impedance_arx.rel_std(2, :), 'DisplayName', 'B std RE')
+plot(impedance_arx.rel_std(3, :), 'DisplayName', 'M std RE')
+yyaxis right
+plot(K_rel_e.*100, 'DisplayName', 'K RE')
+plot(B_rel_e.*100, 'DisplayName', 'B RE')
+plot(M_rel_e.*100, 'DisplayName', 'M RE')
+ylabel('%')
+legend show
 %
 figure('DefaultAxesFontSize',14)
 subplot(3,1,1)
