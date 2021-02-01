@@ -28,6 +28,7 @@ properties
     rmse;
     %r_2_fit; % idem but computed with fitlm
 
+    arx_id;   % if arx identification was used, this will be fed
 end
 
 methods
@@ -156,26 +157,11 @@ methods
         for ii = 1:self.nb_id   
 
             % self.xi(:, ii) = self.phi(:,:,ii)\self.y(:, ii);
-            self.xi(:, ii) = (self.phi(:,:,ii)'*self.phi(:,:,ii))\self.phi(:,:,ii)'*self.y(:, ii);
+            self.xi(:, ii) = (self.phi(:,:,ii)'*self.phi(:,:,ii))\...
+                self.phi(:,:,ii)'*self.y(:, ii);
             % automated linear fit (brings the same results)
             % mdl = fitlm(self.phi(:,:,ii),self.y(:, ii));
             % self.r_2_fit(ii) = mdl.Rsquared.Adjusted;
-
-%                 self.rec_y(:,ii) = self.phi(:,:,ii)*self.xi(:, ii);
-%                 self.rec_err(:,ii) = self.rec_y(:,ii) - self.y(:,ii);
-%                 
-%                 % determination coefficient 
-%                 self.r_2(ii) = 1 - sum( self.rec_err(:,ii).^2 ) / ...
-%                     sum( (self.y(:, ii) - mean(self.y(:, ii))).^2 );
-%                 % relative standard deviation Khalil (2004) eq 12.7 - 12.10
-%                 sig_p2 = ( norm(self.rec_err(:,ii))^2 )/ ...
-%                     (self.id_size - self.nb_param);
-%                 for j = 1:self.nb_param
-%                     C = sig_p2*inv(self.phi(:,:,ii)'*self.phi(:,:,ii));
-%                     sig_j = sqrt(C(j,j));
-%                     self.rel_std(j, ii) = sig_j/abs(self.xi(j,ii));
-%                 end
-
         end  
 
         errorStat(self);
@@ -189,7 +175,7 @@ methods
     function self = arx(self)
 
         data = cell(self.nb_id,1);
-        arx_id = cell(self.nb_id,1);
+        self.arx_id = cell(self.nb_id,1);
         dt = 1e-3; % TODO: make it a parameter
         if self.nb_param ~= 3
             error("This method was only implemented for 3 parameters.");
@@ -205,21 +191,21 @@ methods
         end
         
         for ii = 1:self.nb_id 
-            arx_id{ii} = arx(data{ii},[2 2 0],'IntegrateNoise',true);
-            arx_id{ii}.Name = 'Arx ID';
+            self.arx_id{ii} = arx(data{ii},[2 2 0],'IntegrateNoise',true);
+            self.arx_id{ii}.Name = 'Arx ID';
         end
         syms Ks Bs Ms
         assume(Ks, 'real')
         assume(Bs, 'real')
         assume(Ms, 'real')
-        a0 = self.arxCoeffA0(Bs,Ms);
-        a1 = self.arxCoeffA1(Ks,Bs,Ms);
-        b = self.arxCoeffsB(Ks,Bs,Ms);
+        a0 = self.arxCoeffA0(Bs,Ms); % a1 = A1/A2
+        a1 = self.arxCoeffA1(Ks,Bs,Ms); % a0 = A0/A2
+        b = self.arxCoeffsB(Ks,Bs,Ms); % Kh(1 + b0) = (B1 + B0)/A2
         for ii = 1:self.nb_id 
-            eq.A(1) = a1 - arx_id{ii}.A(2)/arx_id{ii}.A(1) == 0;
-            eq.A(2) = a0 - arx_id{ii}.A(3)/arx_id{ii}.A(1) == 0;
-            eq.B(1) = b - (arx_id{ii}.B(1) + arx_id{ii}.B(2))/...
-                arx_id{ii}.A(1) == 0;
+            eq.A(1) = a1 - self.arx_id{ii}.A(2)/self.arx_id{ii}.A(1) == 0;
+            eq.A(2) = a0 - self.arx_id{ii}.A(3)/self.arx_id{ii}.A(1) == 0;
+            eq.B(1) = b - (self.arx_id{ii}.B(1) + self.arx_id{ii}.B(2))/...
+                self.arx_id{ii}.A(1) == 0;
             sol = vpasolve([eq.A(1),eq.A(2),eq.B(1)],[Ks;Bs;Ms]);
             self.xi(1, ii) = double(sol.Ks);
             self.xi(2, ii) = double(sol.Bs);
@@ -301,7 +287,7 @@ methods
                 self.rec_err(:,ii) = self.rec_y(:,ii) - self.y(:,ii);
             end
             % root mean square error 
-            self.rmse(:,ii) = sqrt(mean(self.rec_err(:,ii)^2));
+            self.rmse(:,ii) = sqrt(mean(self.rec_err(:,ii).^2));
             % determination coefficient 
             self.r_2(ii) = 1 - sum( self.rec_err(:,ii).^2 ) / ...
                 sum( (self.y(:, ii) - mean(self.y(:, ii))).^2 );
