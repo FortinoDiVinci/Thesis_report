@@ -140,7 +140,7 @@ legend('arx', 'arx with ideal data')
 assume(Ks, 'real');
 assume(Bs, 'real');
 assume(Ms, 'real');
-assume(sig1, 'real');
+%assume(sig1, 'real');
 for i = 1:length(arx_id)
     % declare the equations system
     eq.A(1) = a1 - arx_id{i}.A(2)/arx_id{i}.A(1) == 0;
@@ -155,9 +155,9 @@ end
 eq.A(1) = a1 - arx_id_sim.A(2)/arx_id_sim.A(1) == 0;
 eq.A(2) = a0 - arx_id_sim.A(3)/arx_id_sim.A(1) == 0;
 eq.B(1) = Kh*(b0 + 1) - (arx_id_sim.B(1) + arx_id_sim.B(2))/arx_id_sim.A(1) == 0;
-eq.A(1) = subs(eq.A(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
-eq.A(2) = subs(eq.A(2), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
-eq.B(1) = subs(eq.B(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+%eq.A(1) = subs(eq.A(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+%eq.A(2) = subs(eq.A(2), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
+%eq.B(1) = subs(eq.B(1), sig1, (Bs^2 - 4*Ks*Ms)^(1/2));
 imp_param_id_sim = vpasolve([eq.A(1),eq.A(2),eq.B(1)],[Ks;Bs;Ms]);
 % reverse solving: knowing the real parameters, what should the ARX
 % coefficient be ?
