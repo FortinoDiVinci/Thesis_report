@@ -191,7 +191,7 @@ methods
         end
         
         for ii = 1:self.nb_id 
-            self.arx_id{ii} = arx(data{ii},[2 2 0],'IntegrateNoise',true);
+            self.arx_id{ii} = arx(data{ii},[2 2 0]);%,'IntegrateNoise',true);
             self.arx_id{ii}.Name = 'Arx ID';
         end
         syms Ks Bs Ms
@@ -287,7 +287,7 @@ methods
                 self.rec_err(:,ii) = self.rec_y(:,ii) - self.y(:,ii);
             end
             % root mean square error 
-            self.rmse(:,ii) = sqrt(mean(self.rec_err(:,ii).^2));
+            self.rmse(ii) = sqrt(mean(self.rec_err(:,ii).^2));
             % determination coefficient 
             self.r_2(ii) = 1 - sum( self.rec_err(:,ii).^2 ) / ...
                 sum( (self.y(:, ii) - mean(self.y(:, ii))).^2 );

@@ -2,6 +2,7 @@ clear all
 
 addpath('utils')
 addpath('../../force_torque_sensor')
+addpath('../../utils')
 
 %% PARAMETERS
 % MACRO
@@ -81,6 +82,7 @@ end
 delta_z = {};
 delta_fz = {};
 impedance = {};
+impedance_arx = {};
 
 % extraction of the delta of position and force
 for exp_nb = tot_nb_exp:-1:1
@@ -103,7 +105,9 @@ for exp_nb = tot_nb_exp:-1:1
         delta_z{exp_nb}.d_diff_traject(1:wndw_imp_eval,:), ... % speed
         delta_z{exp_nb}.dd_diff_traject(1:wndw_imp_eval,:)); % acceleration
     impedance{exp_nb}.init_y(delta_fz{exp_nb}.diff_traject(1:wndw_imp_eval,:));
+    impedance_arx{exp_nb} = copyObj(impedance{exp_nb});
     impedance{exp_nb}.lsq(); % least square optimization evaluation
+    impedance_arx{exp_nb}.arx();
 end
 
 %% DATA POST-PROCESSING (statistical analysis)
@@ -113,9 +117,84 @@ damp = [];
 mass = [];
 rho = [];
 
+stiff_a = [];
+damp_a = [];
+mass_a = [];
+rho_a = [];
+
 for exp_nb = 1:tot_nb_exp  
     stiff = [stiff, impedance{exp_nb}.xi(1,:)];
     damp = [damp, impedance{exp_nb}.xi(2,:)];
     mass = [mass, impedance{exp_nb}.xi(3,:)];
     rho = [rho, impedance{exp_nb}.xi(4,:)];   
+    stiff_a = [stiff_a, impedance_arx{exp_nb}.xi(1,:)];
+    damp_a = [damp_a, impedance_arx{exp_nb}.xi(2,:)];
+    mass_a = [mass_a, impedance_arx{exp_nb}.xi(3,:)];
+    rho_a = [rho_a, impedance_arx{exp_nb}.xi(4,:)];   
 end
+
+%% Display
+exp_nb = 1;
+% trajectory estimation
+figure
+ax(1) = subplot(2,1,1);
+hold on
+plot(delta_z{exp_nb}.time, delta_z{exp_nb}.complete_traject)
+plot(delta_z{exp_nb}.t_traject, delta_z{exp_nb}.virt_traject, 'r')
+title('Position')
+legend('meas.', 'virtual')
+xlabel('Time (s)')
+ylabel('Distance (m)')
+ax(2) = subplot(2,1,2);
+hold on
+plot(delta_fz{exp_nb}.time, delta_fz{exp_nb}.complete_traject)
+plot(delta_fz{exp_nb}.t_traject, delta_fz{exp_nb}.virt_traject, 'r')
+plot(delta_z{exp_nb}.t_traject(3:end-2,:), impedance{exp_nb}.rec_y + delta_fz{exp_nb}.virt_traject(3:end-2,:), 'c--')
+plot(delta_z{exp_nb}.t_traject(3:end-2,:), impedance_arx{exp_nb}.rec_y + delta_fz{exp_nb}.virt_traject(3:end-2,:), 'm--')
+title('Force')
+legend('meas.', 'virtual')
+xlabel('Time (s)')
+ylabel('Force (N)')
+linkaxes(ax,'x')
+
+% parameters identification
+figure('DefaultAxesFontSize',14)
+subplot(3,1,1)
+hold on
+plot(stiff)
+plot(stiff_a)
+legend('LSQ', 'ARX')
+subplot(3,1,2)
+hold on
+plot(damp)
+plot(damp_a)
+legend('LSQ', 'ARX')
+subplot(3,1,3)
+hold on
+plot(mass)
+plot(mass_a)
+legend('LSQ', 'ARX')
+
+[mean(rmoutliers(stiff)), mean(rmoutliers(stiff_a))]
+[mean(rmoutliers(damp)), mean(rmoutliers(damp_a))]
+[mean(rmoutliers(mass)), mean(rmoutliers(mass_a))]
+
+all_imp_arx = [impedance_arx{:}];
+all_imp_lsq = [impedance{:}];
+
+% 
+figure
+subplot(2,1,1)
+hold on
+p1 = plot([all_imp_lsq.rmse]);
+p2 = plot([all_imp_arx.rmse]);
+ylim([0,50]);
+title('RMSE reconstruction errors')
+legend([p1,p2],{'LSQ', 'ARX'})
+subplot(2,1,2)
+hold on
+p1 = plot([all_imp_lsq.r_2]);
+yyaxis right
+p2 = plot([all_imp_arx.r_2]);
+title('R^2 scores')
+legend([p1,p2],{'LSQ', 'ARX'})

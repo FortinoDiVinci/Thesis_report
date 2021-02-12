@@ -18,6 +18,7 @@ properties
     traject;
     virt_traject;
     tmp_diff_traject;
+    exit_flag;
 
     diff_traject;        
     d_diff_traject;
@@ -43,7 +44,8 @@ methods
                 self.t_traject = [];
                 self.traject = [];            
                 self.virt_traject = [];  
-                self.tmp_diff_traject = [];  
+                self.tmp_diff_traject = []; 
+                self.exit_flag = [];
                 self.diff_traject = [];  
                 self.d_diff_traject = [];  
                 self.dd_diff_traject = [];  
@@ -63,6 +65,7 @@ methods
                 self.traject = NaN(self.estim_window + 4, self.nb_traject);            
                 self.virt_traject = NaN(self.estim_window + 4, self.nb_traject);
                 self.tmp_diff_traject = NaN(self.estim_window + 4, self.nb_traject);
+                self.exit_flag = NaN(1, self.nb_traject);
 
                 self.diff_traject = NaN(self.estim_window, self.nb_traject); 
                 self.d_diff_traject = NaN(self.estim_window, self.nb_traject); 
@@ -74,7 +77,7 @@ methods
 
     function self = computeDiffTraject(self, varargin)
 
-        differential_direction = 1; % x0 - x
+        differential_direction = -1; % x - x0
 
         if ~isempty(varargin)
             for ii = 1:2:length(varargin)
@@ -99,7 +102,8 @@ methods
                             dt = 1e-3; % 1ms
                         elseif strcmp(varargin{ii+1}, 'manual')
                             virtual_trajectory_method = 5;
-                            dt = 1e-3; % 1ms
+                        elseif strcmp(varargin{ii+1}, 'sineOpt')
+                            virtual_trajectory_method = 6;
                         else
                             error('Unknown Virtual trajectory method.')
                         end
@@ -193,6 +197,12 @@ methods
                         " still contains NaN. The data might have been"...
                         +" fed improperly.")
                 end
+            elseif virtual_trajectory_method == 6
+                [opt,~,self.exit_flag(ii)] = sineOptimization(self.time,...
+                    self.complete_traject, idx, self.interp_window, ...
+                    ceil(self.estim_window/2), (idx-2+self.delay:idx+...
+                    self.estim_window+1+self.delay));
+                self.virt_traject(:,ii) = opt;
             end
             % difference between real and virtual
             self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - ...
