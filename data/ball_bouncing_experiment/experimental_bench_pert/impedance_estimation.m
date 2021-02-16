@@ -16,7 +16,8 @@ filter_order = 2;
 wndw_virt_traj   = 200; % 200ms (position)
 wndw_virt_f_traj = 065; % 65ms  (force) 
 wndw_imp_eval    = 200; % 200ms       
-p_delay            = 0; % 0ms
+p_delay          = 10; % 0ms
+f_delay          = 0;
 window = max(wndw_imp_eval, wndw_virt_traj);
 %
 nb_param = 3; % K B M
@@ -70,7 +71,7 @@ for exp_nb = tot_nb_exp:-1:1
             dist_timings(pert_idx), 1, 'first');
     end
     % if the experiment was interrupted during the last perturbation
-    if ( idx_perts{exp_nb}(end) + window + p_delay)  > length(t{exp_nb} )
+    if (idx_perts{exp_nb}(end) + window + max(p_delay,f_delay))  > length(t{exp_nb})
         % the last perturbation will no be use for impedance estimation
         idx_perts{exp_nb} = idx_perts{exp_nb}(1:end-1);
         dist_val{exp_nb} = dist_val{exp_nb}(1:end-1);
