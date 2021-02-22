@@ -9,7 +9,7 @@ properties
 
     pert_ind;      % indexes at which trajectories will be estimated
     pert_val;      % value of the perturbation for sorting purpose
-    delay;         % delay from the perturbation index (in samples)
+    delay;        % delay from the perturbation index (in samples)
 
     complete_traject;
     time;
