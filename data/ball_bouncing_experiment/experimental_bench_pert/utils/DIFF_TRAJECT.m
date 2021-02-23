@@ -24,6 +24,8 @@ properties
     d_diff_traject;
     dd_diff_traject;
 
+    opt_param; % for sine trajectory optimisation
+    
 end
 
 methods
@@ -104,6 +106,10 @@ methods
                             virtual_trajectory_method = 5;
                         elseif strcmp(varargin{ii+1}, 'sineOpt')
                             virtual_trajectory_method = 6;
+                        elseif strcmp(varargin{ii+1}, 'sineOpt+')
+                            virtual_trajectory_method = 7;
+                        elseif strcmp(varargin{ii+1}, 'sineOptM')
+                            virtual_trajectory_method = 8;
                         else
                             error('Unknown Virtual trajectory method.')
                         end
@@ -200,8 +206,32 @@ methods
             elseif virtual_trajectory_method == 6
                 [opt,~,self.exit_flag(ii)] = sineOptimization(self.time,...
                     self.complete_traject, idx, self.interp_window, ...
-                    ceil(self.estim_window/2), (idx-2+self.delay:idx+...
+                    100, (idx-2+self.delay:idx+...
                     self.estim_window+1+self.delay));
+                self.virt_traject(:,ii) = opt;
+            elseif virtual_trajectory_method == 7
+                % multiple starts
+                if ii == 1
+                    [opt,param_opt,~] = sineOptimization_upgrade(self.time,...
+                    self.complete_traject, idx, 'pertLength', self.interp_window, ...
+                    'uFitLength', 100, 'lFitLength', 60, 'outputIndex', (idx-2+self.delay:idx+...
+                    self.estim_window+1+self.delay), 'nbSine', 4, 'linearComp', 1, ...
+                    'multiStart', 250);
+                    self.opt_param(:,ii) = param_opt;
+                else
+                    [opt,self.opt_param(:,ii),~] = sineOptimization_upgrade(self.time,...
+                        self.complete_traject, idx, 'pertLength', self.interp_window,...
+                        'uFitLength', 100, 'lFitLength', 60, 'outputIndex',...
+                        (idx-2+self.delay:idx+self.estim_window+1+self.delay), ...
+                        'nbSine', 4, 'linearComp', 1, 'feedStartingPts', param_opt);
+                end
+                self.virt_traject(:,ii) = opt;
+            elseif virtual_trajectory_method == 8
+                [opt,~,~] = sineOptimization_upgrade(self.time, self.complete_traject, ...
+                    idx, 'pertLength', self.interp_window, 'uFitLength', 100, ...
+                    'lFitLength', 60, 'outputIndex', (idx-2+self.delay:idx+...
+                    self.estim_window+1+self.delay), 'nbSine', 4, 'linearComp', 1,...
+                    'multiStart', 50);
                 self.virt_traject(:,ii) = opt;
             end
             % difference between real and virtual
