@@ -29,6 +29,7 @@ nb_sine = 3;
 linear_c = 0;
 nb_start_pts = 1;
 st_pts = [];
+solver_name = 'lsqcurvefit';
 
 if ~isempty(varargin)
     for ii = 1:2:length(varargin)
@@ -53,8 +54,8 @@ if ~isempty(varargin)
                 end
             case 'outputIndex' 
                 out_idx = varargin{ii+1};
-                if (idx_p - out_idx(1) < 1) || ...
-                        idx_p + out_idx(end) > length(t)
+                if (out_idx(1) < 1) || ...
+                        out_idx(end) > length(t)
                     warning("The output vector goes beyond the original signal boundaries.")
                 end
             case 'nbSine'
@@ -69,6 +70,8 @@ if ~isempty(varargin)
                 nb_start_pts = floor(varargin{ii+1});
             case 'feedStartingPts'
                 st_pts = varargin{ii+1};
+            case 'solverName'
+                solver_name = varargin{ii+1};
             otherwise
                 error('Unknown argument')
         end
@@ -122,24 +125,24 @@ for i = 1:nb_sine
     %lb(3*(i-1) + 1) = 0; % no negative gains
     ub(3*(i-1) + 1) = 10;% force amplitude    
     % f i lower bound
-    if i ~= 1 
-        % lower bound is the previous initial frequency
-        lb(3*(i-1) + 2) = param_init(3*(i-2) + 2);
-    %else
-        %lb(3*(i-1) + 2) = 0;
-    end
+%     if i ~= 1 
+%         % lower bound is the previous initial frequency
+%         lb(3*(i-1) + 2) = param_init(3*(i-2) + 2);
+%     end
+    lb(3*(i-1) + 2) = 0;
+    ub(3*(i-1) + 2) = 10;
     lb(3*(i-1) + 3) = -pi/2;
     ub(3*(i-1) + 3) = pi/2;
 end
-for i = 1:nb_sine
-    % f i upper bound
-    if i == nb_sine 
-        ub(3*(i-1) + 2) = 12; % max is set to 12 Hz
-    else
-        % upper bound is the next initial frequency
-        ub(3*(i-1) + 2) = param_init(3*(i) + 2);
-    end
-end
+% for i = 1:nb_sine
+%     % f i upper bound
+%     if i == nb_sine 
+%         ub(3*(i-1) + 2) = 12; % max is set to 12 Hz
+%     else
+%         % upper bound is the next initial frequency
+%         ub(3*(i-1) + 2) = param_init(3*(i) + 2);
+%     end
+% end
 if linear_c
     lb(3*nb_sine + 2) = -100;
     ub(3*nb_sine + 2) = 100;
@@ -153,9 +156,15 @@ xd = t(optim_indexes);
 yd = sig(optim_indexes);
 
 % problem definition
-problem = createOptimProblem('lsqcurvefit', 'x0', param_init, 'objective',...
+if strcmp(solver_name, 'lsqcurvefit')
+    problem = createOptimProblem('lsqcurvefit', 'x0', param_init, 'objective',...
     @(par,xd)sineFunc(par, xd), 'lb', lb, 'ub', ub, 'xdata', xd, 'ydata', yd);
-
+elseif strcmp(solver_name, 'lsqnonlin')
+    problem = createOptimProblem('lsqnonlin', 'x0', param_init, 'objective',...
+        @(par)sineFunc(par, xd)-yd, 'lb', lb, 'ub', ub);
+else
+    error('Unknown solver name')
+end
 % multiple starting points opt
 ms = MultiStart('Display','off','UseParallel',true);
 [xmulti,errormulti] = run(ms, problem, nb_start_pts);

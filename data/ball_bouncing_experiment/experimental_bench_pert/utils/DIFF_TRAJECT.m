@@ -80,7 +80,10 @@ methods
     function self = computeDiffTraject(self, varargin)
 
         differential_direction = -1; % x - x0
-
+        solver_name = 'lsqcurvefit'; % for sine method with optimisation
+        lin_comp = 1;
+        nb_sine = 4;
+        
         if ~isempty(varargin)
             for ii = 1:2:length(varargin)
                 switch(varargin{ii})
@@ -124,6 +127,12 @@ methods
                                 'numeric value. Default value was attributed.')
                             nb_samp_avg = 25;
                         end
+                    case 'OptSolverName'
+                        solver_name = varargin{ii+1};
+                    case 'OptNbSine'
+                        nb_sine = varargin{ii+1};
+                    case 'OptlinearComp'
+                        lin_comp = varargin{ii+1};
                 end
             end
         else
@@ -215,23 +224,24 @@ methods
                     [opt,param_opt,~] = sineOptimization_upgrade(self.time,...
                     self.complete_traject, idx, 'pertLength', self.interp_window, ...
                     'uFitLength', 100, 'lFitLength', 60, 'outputIndex', (idx-2+self.delay:idx+...
-                    self.estim_window+1+self.delay), 'nbSine', 4, 'linearComp', 1, ...
-                    'multiStart', 250);
+                    self.estim_window+1+self.delay), 'nbSine', nb_sine, 'linearComp', lin_comp, ...
+                    'multiStart', 250, 'solverName', solver_name);
                     self.opt_param(:,ii) = param_opt;
                 else
                     [opt,self.opt_param(:,ii),~] = sineOptimization_upgrade(self.time,...
                         self.complete_traject, idx, 'pertLength', self.interp_window,...
                         'uFitLength', 100, 'lFitLength', 60, 'outputIndex',...
                         (idx-2+self.delay:idx+self.estim_window+1+self.delay), ...
-                        'nbSine', 4, 'linearComp', 1, 'feedStartingPts', param_opt);
+                        'nbSine', nb_sine, 'linearComp', lin_comp, 'feedStartingPts', param_opt,...
+                        'solverName', solver_name);
                 end
                 self.virt_traject(:,ii) = opt;
             elseif virtual_trajectory_method == 8
-                [opt,~,~] = sineOptimization_upgrade(self.time, self.complete_traject, ...
+                [opt,self.opt_param(:,ii),~] = sineOptimization_upgrade(self.time, self.complete_traject, ...
                     idx, 'pertLength', self.interp_window, 'uFitLength', 100, ...
                     'lFitLength', 60, 'outputIndex', (idx-2+self.delay:idx+...
-                    self.estim_window+1+self.delay), 'nbSine', 4, 'linearComp', 1,...
-                    'multiStart', 50);
+                    self.estim_window+1+self.delay), 'nbSine', nb_sine, 'linearComp', lin_comp,...
+                    'multiStart', 50, 'solverName', solver_name);
                 self.virt_traject(:,ii) = opt;
             end
             % difference between real and virtual
