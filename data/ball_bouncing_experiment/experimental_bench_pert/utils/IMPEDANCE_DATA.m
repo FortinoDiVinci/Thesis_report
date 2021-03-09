@@ -22,7 +22,7 @@ properties
     rec_y;    % reconstructed force using identified parameters
     rec_err;  % error between reconstruction and real force
     rec_err_norm;  % normalized error according to force magnitude
-    r_2; % coefficient of determination
+    r_2;      % coefficient of determination
     rel_std;
     rmse;
     nrmse;
