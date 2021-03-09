@@ -80,8 +80,6 @@ end
 
 %% DATA PROCESSING 
 
-for p_delay = 12:-1:12
-
 delta_z = {};
 delta_fz = {};
 impedance = {};
@@ -91,22 +89,13 @@ impedance_arx = {};
 for exp_nb = tot_nb_exp:-1:1
     % delta z and its derivatives
     delta_z{exp_nb} = DIFF_TRAJECT(window, wndw_virt_traj, z{exp_nb}, ...
-        t{exp_nb}, idx_perts{exp_nb}, dist_val{exp_nb}, p_delay);
+        t{exp_nb}, idx_perts{exp_nb}, dist_val{exp_nb}, 0);
     delta_z{exp_nb}.computeDiffTraject('VirtTrajMethod', 'spline');
     delta_z{exp_nb}.computeDerivatives();
     % delta fz
     delta_fz{exp_nb} = DIFF_TRAJECT(window, wndw_virt_f_traj, fz{exp_nb},...
         t{exp_nb}, idx_perts{exp_nb}, dist_val{exp_nb}, f_delay);
-    delta_fzS{exp_nb} = DIFF_TRAJECT(window, 100, fz{exp_nb},...
-        t{exp_nb}, idx_perts{exp_nb}, dist_val{exp_nb}, f_delay);
-    delta_fzSP{exp_nb} = DIFF_TRAJECT(window, 100, fz{exp_nb},...
-        t{exp_nb}, idx_perts{exp_nb}, dist_val{exp_nb}, f_delay); 
-    delta_fzSM{exp_nb} = DIFF_TRAJECT(window, 100, fz{exp_nb},...
-        t{exp_nb}, idx_perts{exp_nb}, dist_val{exp_nb}, f_delay);
     delta_fz{exp_nb}.computeDiffTraject('VirtTrajMethod', 'filterPlus'); 
-    delta_fzS{exp_nb}.computeDiffTraject('VirtTrajMethod', 'sineOpt'); 
-    delta_fzSP{exp_nb}.computeDiffTraject('VirtTrajMethod', 'sineOpt+');
-    delta_fzSM{exp_nb}.computeDiffTraject('VirtTrajMethod', 'sineOptM');
 end
 
 % impedance computation
@@ -117,28 +106,16 @@ for exp_nb = tot_nb_exp:-1:1
         delta_z{exp_nb}.d_diff_traject(1:wndw_imp_eval,:), ... % speed
         delta_z{exp_nb}.dd_diff_traject(1:wndw_imp_eval,:)); % acceleration
     impedance{exp_nb}.init_y(delta_fz{exp_nb}.diff_traject(1:wndw_imp_eval,:));
-    impedance_arx{exp_nb} = copyObj(impedance{exp_nb});
-    impedance_arxS{exp_nb} = copyObj(impedance{exp_nb});
-    impedance_arxSP{exp_nb} = copyObj(impedance{exp_nb});
-    impedance_arxSM{exp_nb} = copyObj(impedance{exp_nb});   
+    impedance_arx{exp_nb} = copyObj(impedance{exp_nb}); 
     impedance{exp_nb}.lsq('NulInitialCond'); % least square optimization evaluation
     impedance_arx{exp_nb}.arx('NulInitialCond');
     % position reconstruction from force input (causal sim)
     impedance{exp_nb}.causalSim(dt,'NulInitialCond'); 
     impedance_arx{exp_nb}.causalSim(dt,'NulInitialCond');
-    % Other force trajectory methods only tested with ARX
-    impedance_arxS{exp_nb}.init_y(delta_fzS{exp_nb}.diff_traject(1:wndw_imp_eval,:));
-    impedance_arxSP{exp_nb}.init_y(delta_fzSP{exp_nb}.diff_traject(1:wndw_imp_eval,:));
-    impedance_arxSM{exp_nb}.init_y(delta_fzSM{exp_nb}.diff_traject(1:wndw_imp_eval,:));
-    impedance_arxS{exp_nb}.arx('NulInitialCond');    
-    impedance_arxSP{exp_nb}.arx('NulInitialCond');  
-    impedance_arxSM{exp_nb}.arx('NulInitialCond');
-    impedance_arxS{exp_nb}.causalSim(dt,'NulInitialCond');
-    impedance_arxSP{exp_nb}.causalSim(dt,'NulInitialCond');
-    impedance_arxSM{exp_nb}.causalSim(dt,'NulInitialCond');
 end
 
 %% DATA POST-PROCESSING (statistical analysis)
+c = clock;
 
 stiff = [];
 damp = [];
@@ -154,23 +131,6 @@ nrmse_f = [];
 nrmse_f_a = [];
 nrmse_p = [];
 nrmse_p_a = [];
-
-stiff_aS = [];
-damp_aS = [];
-mass_aS = [];
-rho_aS = [];      
-stiff_aSP = [];
-damp_aSP = [];
-mass_aSP = [];
-rho_aSP = [];     
-stiff_aSM = [];
-damp_aSM = [];
-mass_aSM = [];
-rho_aSM = [];
-
-nrmse_p_aS = [];
-nrmse_p_aSP = [];
-nrmse_p_aSM = [];
     
 for exp_nb = 1:tot_nb_exp  
     stiff = [stiff, impedance{exp_nb}.xi(1,:)];
@@ -185,72 +145,10 @@ for exp_nb = 1:tot_nb_exp
     nrmse_f = [nrmse_f, impedance{exp_nb}.nrmse];
     nrmse_f_a = [nrmse_f_a, impedance_arx{exp_nb}.nrmse];
     nrmse_p = [nrmse_p, impedance{exp_nb}.nrmse_pos];
-    nrmse_p_a = [nrmse_p_a, impedance_arx{exp_nb}.nrmse_pos];
-    % other trajectory estimation methods
-    stiff_aS = [stiff_aS, impedance_arxS{exp_nb}.xi(1,:)];
-    damp_aS = [damp_aS, impedance_arxS{exp_nb}.xi(2,:)];
-    mass_aS = [mass_aS, impedance_arxS{exp_nb}.xi(3,:)];
-    rho_aS = [rho_aS, impedance_arxS{exp_nb}.xi(4,:)];      
-    stiff_aSP = [stiff_aSP, impedance_arxSP{exp_nb}.xi(1,:)];
-    damp_aSP = [damp_aSP, impedance_arxSP{exp_nb}.xi(2,:)];
-    mass_aSP = [mass_aSP, impedance_arxSP{exp_nb}.xi(3,:)];
-    rho_aSP = [rho_aSP, impedance_arxSP{exp_nb}.xi(4,:)];  
-    stiff_aSM = [stiff_aSM, impedance_arxSM{exp_nb}.xi(1,:)];
-    damp_aSM = [damp_aSM, impedance_arxSM{exp_nb}.xi(2,:)];
-    mass_aSM = [mass_aSM, impedance_arxSM{exp_nb}.xi(3,:)];
-    rho_aSM = [rho_aSM, impedance_arxSM{exp_nb}.xi(4,:)]; 
-    % rec errors
-    nrmse_p_aS = [nrmse_p_aS, impedance_arxS{exp_nb}.nrmse_pos];
-    nrmse_p_aSP = [nrmse_p_aSP, impedance_arxSP{exp_nb}.nrmse_pos];
-    nrmse_p_aSM = [nrmse_p_aSM, impedance_arxSM{exp_nb}.nrmse_pos];
+    nrmse_p_a = [nrmse_p_a, impedance_arx{exp_nb}.nrmse_pos]; 
 end
 
-% data{p_delay+1}.delay = p_delay;
-% data{p_delay+1}.stiff = stiff;
-% data{p_delay+1}.damp = damp;
-% data{p_delay+1}.mass = mass;
-% data{p_delay+1}.rho = rho;
-% data{p_delay+1}.stiff_a = stiff_a;
-% data{p_delay+1}.damp_a = damp_a;
-% data{p_delay+1}.mass_a = mass_a;
-% data{p_delay+1}.rho_a = rho_a;
-% data{p_delay+1}.nrmse_f = nrmse_f;
-% data{p_delay+1}.nrmse_p = nrmse_p;
-% data{p_delay+1}.nrmse_f_a = nrmse_f_a;
-% data{p_delay+1}.nrmse_p_a = nrmse_p_a;
-
-data.delay = p_delay;
-data.lsq.stiff = stiff;
-data.lsq.damp = damp;
-data.lsq.mass = mass;
-data.lsq.rho = rho;
-data.lsq.nrmse_f = nrmse_f;
-data.lsq.nrmse_p = nrmse_p;
-
-data.arx.stiff = stiff_a;
-data.arx.damp = damp_a;
-data.arx.mass = mass_a;
-data.arx.rho = rho_a;
-data.arx.nrmse_f = nrmse_f_a;
-data.arx.nrmse_p = nrmse_p_a;
-
-data.arxS.stiff = stiff_aS;
-data.arxS.damp = damp_aS;
-data.arxS.mass = mass_aS;
-data.arxS.rho = rho_aS;
-data.arxS.nrmse_p = nrmse_p_aS;
-
-data.arxSP.stiff = stiff_aSP;
-data.arxSP.damp = damp_aSP;
-data.arxSP.mass = mass_aSP;
-data.arxSP.rho = rho_aSP;
-data.arxSP.nrmse_p = nrmse_p_aSP;
-
-end
-
-save("force_traject_comparison.mat",'data')
-
-return
+%% Display
 
 for i = 1:41
     mean_nrmse_p_a(i) = nanmean(rmoutliers(data{i}.nrmse_p_a));
@@ -267,9 +165,7 @@ title('mean NRMSE against delay')
 xlabel('Delay (ms)')
 ylabel('%')
 
-return
-
-%% Display
+%% Display to compare LSQ and ARX methods
 exp_nb = 1;
 % trajectory estimation
 figure
