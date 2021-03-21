@@ -6,7 +6,7 @@ addpath('../../../youBot_analysis/Utils')
 
 %% force traject
 
-load('../trajectory_prediction_evaluation/force_trajectory_optimization/test_sine_opt_3.mat')
+load('../trajectory_prediction_evaluation/force_trajectory_optimization/test_sine_opt_5.mat')
 
 BIC = NaN(size(delta_fz,2),1);
 AIC = NaN(size(delta_fz,2),1);

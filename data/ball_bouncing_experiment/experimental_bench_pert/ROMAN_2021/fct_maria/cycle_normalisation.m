@@ -4,7 +4,9 @@ nb_exp = length(cycles);
 %nlines = floor(sqrt(nb_exp))
 
 % Lmin = cellfun(@(x)min(cellfun(@(S)(S.npts), x)), cycles);
-Lmin = cellfun(@(x)min([x.npts]), cycles);
+Lmin = min(cellfun(@(x)min([x.npts]), cycles));
+tmp = cellfun(@(x) vertcat(x.npts), cycles, 'UniformOutput', false);
+Lmean = mean(rmoutliers(vertcat(tmp{:})));
 
 for trial_id = 1:nb_exp
     
@@ -12,7 +14,8 @@ for trial_id = 1:nb_exp
     
     cycle_id = cycles{trial_id};
     
-    t_com = [0:Lmin-1]*dt;
+    %t_com = [0:Lmin-1]*dt;
+    t_com = [0:Lmean-1]*dt;
     t_com = t_com/max(t_com);
     
     for i = 1:length(cycle_id)

@@ -23,6 +23,7 @@ plot(pts, ratio_dist, 'k*'); hold on
 plot(pts(idx_ratio==1), ratio_dist(idx_ratio==1), 'ro')
 plot(pts(idx_ratio==2), ratio_dist(idx_ratio==2), 'bo')
 plot(pts(idx_ratio==3), ratio_dist(idx_ratio==3), 'go')
+ylim([0,1])
 
 cycles_class = cycles_norm;
 count = 1;
