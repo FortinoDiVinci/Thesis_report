@@ -1,8 +1,10 @@
 clear all
 
 load('cyclic_data.mat')
+addpath('../utils/')
+addpath('../../../utils')
 
-time_wdw = 150;
+time_wdw = 200;
 
 if time_wdw == 200
     load('../imp_test_data/imp_test_09.mat')
@@ -132,6 +134,13 @@ Bp = [];
 Bn = [];
 Mp = [];
 Mn = [];
+%
+Kp2 = [];
+Kn2 = [];
+Bp2 = [];
+Bn2 = [];
+Mp2 = [];
+Mn2 = [];
 
 if time_wdw == 200
     dly = 8; % delay
@@ -147,7 +156,10 @@ for i = 1:3
     idx_neg_r2{idx2} = data_sorted(i).neg.r2(:,dly) < 0.5;
     idx_k_out{idx1} = out2(@() rmoutliers(data_sorted(i).pos.K(:,dly), 'ThresholdFactor', 5));
     idx_k_out{idx2} = out2(@() rmoutliers(data_sorted(i).neg.K(:,dly), 'ThresholdFactor', 5));
+    idx_m_out{idx1} = out2(@() rmoutliers(data_sorted(i).pos.M(:,dly), 'ThresholdFactor', 5));
+    idx_m_out{idx2} = out2(@() rmoutliers(data_sorted(i).neg.M(:,dly), 'ThresholdFactor', 5));
 
+    % K and R^2 method
     % total outliers
     idx_tot{idx1} = idx_neg_r2{idx1} | idx_k_out{idx1};
     idx_tot{idx2} = idx_neg_r2{idx2} | idx_k_out{idx2};
@@ -192,35 +204,50 @@ for i = 1:3
     Mp = [Mp; data_sorted(i).pos.M(~idx_tot{idx1},dly)];
     Mn = [Mn; data_sorted(i).neg.M(~idx_tot{idx2},dly)];
     
-%     [~,id{idx1}] = rmoutliers(data_sorted(i).pos.K(~idx_neg_r2{idx1},8), 'ThresholdFactor', 5);
-%     [~,id{idx2}] = rmoutliers(data_sorted(i).neg.K(~idx_neg_r2{idx2},8), 'ThresholdFactor', 5); 
-%     counts(idx1) = data_sorted(i).pos.count - sum(idx_neg_r2{idx1}) - sum(id{idx1});
-%     counts(idx2) = data_sorted(i).neg.count - sum(idx_neg_r2{idx2}) - sum(id{idx2});
-%     % R2
-%     tmp = data_sorted(i).pos.r2(~idx_neg_r2{idx1},8);
-%     mean_r2(idx1) = mean(tmp(~id{idx1}));
-%     std_r2(idx1) = std(tmp(~id{idx1}));
-%     tmp = data_sorted(i).neg.r2(~idx_neg_r2{idx2},8);
-%     mean_r2(idx2) = mean(tmp(~id{idx2}));
-%     std_r2(idx2) = std(tmp(~id{idx2}));
-%     tmp = data_sorted(i).pos.K(~idx_neg_r2{idx1},8);
-%     mean_K(idx1) = mean(tmp(~id{idx1}));
-%     std_K(idx1) = std(tmp(~id{idx1}));
-%     tmp = data_sorted(i).neg.K(~idx_neg_r2{idx2},8);
-%     mean_K(idx2) = mean(tmp(~id{idx2}));
-%     std_K(idx2) = std(tmp(~id{idx2}));
-%     tmp = data_sorted(i).pos.B(~idx_neg_r2{idx1},8);
-%     mean_B(idx1) = mean(tmp(~id{idx1}));
-%     std_B(idx1) = std(tmp(~id{idx1}));
-%     tmp = data_sorted(i).neg.B(~idx_neg_r2{idx2},8);
-%     mean_B(idx2) = mean(tmp(~id{idx2}));
-%     std_B(idx2) = std(tmp(~id{idx2}));
-%     tmp = data_sorted(i).pos.M(~idx_neg_r2{idx1},8);
-%     mean_M(idx1) = mean(tmp(~id{idx1}));
-%     std_M(idx1) = std(tmp(~id{idx1}));
-%     tmp = data_sorted(i).neg.M(~idx_neg_r2{idx2},8);
-%     mean_M(idx2) = mean(tmp(~id{idx2}));
-%     std_M(idx2) = std(tmp(~id{idx2}));
+    % M and R^2 method
+    % total outliers
+    idx_tot2{idx1} = idx_neg_r2{idx1} | idx_m_out{idx1};
+    idx_tot2{idx2} = idx_neg_r2{idx2} | idx_m_out{idx2};
+    % common outliers
+    idx_inter2{idx1} = idx_neg_r2{idx1} & idx_m_out{idx1};
+    idx_inter2{idx2} = idx_neg_r2{idx2} & idx_m_out{idx2};
+    % outliers solely in K
+    idx_m_out_o2{idx1} = xor(idx_m_out{idx1}, idx_inter2{idx1});
+    idx_m_out_o2{idx2} = xor(idx_m_out{idx2}, idx_inter2{idx2});
+    % outliers solely in R^2
+    idx_neg_r2_o2{idx1} = xor(idx_neg_r2{idx1}, idx_inter2{idx1});
+    idx_neg_r2_o2{idx2} = xor(idx_neg_r2{idx2}, idx_inter2{idx2});
+    % non outliers count
+    counts2(idx1) = data_sorted(i).pos.count - sum(idx_tot2{idx1});
+    counts2(idx2) = data_sorted(i).neg.count - sum(idx_tot2{idx2});
+    % data
+    %R^2
+    mean_r22(idx1) = mean(data_sorted(i).pos.r2(~idx_tot2{idx1},dly));
+    mean_r22(idx2) = mean(data_sorted(i).neg.r2(~idx_tot2{idx2},dly));
+    std_r22(idx1) = std(data_sorted(i).pos.r2(~idx_tot2{idx1},dly));
+    std_r22(idx2) = std(data_sorted(i).neg.r2(~idx_tot2{idx2},dly));
+    % K
+    mean_K2(idx1) = mean(data_sorted(i).pos.K(~idx_tot2{idx1},dly));
+    mean_K2(idx2) = mean(data_sorted(i).neg.K(~idx_tot2{idx2},dly));
+    std_K2(idx1) = std(data_sorted(i).pos.K(~idx_tot2{idx1},dly));
+    std_K2(idx2) = std(data_sorted(i).neg.K(~idx_tot2{idx2},dly));
+    % B
+    mean_B2(idx1) = mean(data_sorted(i).pos.B(~idx_tot2{idx1},dly));
+    mean_B2(idx2) = mean(data_sorted(i).neg.B(~idx_tot2{idx2},dly));
+    std_B2(idx1) = std(data_sorted(i).pos.B(~idx_tot2{idx1},dly));
+    std_B2(idx2) = std(data_sorted(i).neg.B(~idx_tot2{idx2},dly));
+    % M
+    mean_M2(idx1) = mean(data_sorted(i).pos.M(~idx_tot2{idx1},dly));
+    mean_M2(idx2) = mean(data_sorted(i).neg.M(~idx_tot2{idx2},dly));
+    std_M2(idx1) = std(data_sorted(i).pos.M(~idx_tot2{idx1},dly));
+    std_M2(idx2) = std(data_sorted(i).neg.M(~idx_tot2{idx2},dly));
+    % +
+    Kp2 = [Kp2; data_sorted(i).pos.K(~idx_tot2{idx1},dly)];
+    Kn2 = [Kn2; data_sorted(i).neg.K(~idx_tot2{idx2},dly)];
+    Bp2 = [Bp2; data_sorted(i).pos.B(~idx_tot2{idx1},dly)];
+    Bn2 = [Bn2; data_sorted(i).neg.B(~idx_tot2{idx2},dly)];
+    Mp2 = [Mp2; data_sorted(i).pos.M(~idx_tot2{idx1},dly)];
+    Mn2 = [Mn2; data_sorted(i).neg.M(~idx_tot2{idx2},dly)];
 end
 
 for i = 1:3
@@ -236,31 +263,149 @@ for i = 1:3
         bar_count(3,2*i+j) = sum(idx_inter{2*i+j});
         bar_count(4,2*i+j) = sum(idx_k_out_o{2*i+j});
     end
+    % method 2
+    for j = [-1,0]
+        bar_count2(1,2*i+j) = counts2(2*i+j); 
+        bar_count2(2,2*i+j) = sum(idx_neg_r2_o2{2*i+j});
+        bar_count2(3,2*i+j) = sum(idx_inter2{2*i+j});
+        bar_count2(4,2*i+j) = sum(idx_m_out_o2{2*i+j});
+    end    
 end
 
 figure
 subplot(2,2,1)
 title('Counts')
 bar(bar_count','stacked')
-set(gca, 'XTickLabel', {'a)+', 'a)-', 'b)+', 'b)-', 'c)+', 'c)-'})
+set(gca, 'XTickLabel', {'c_1+', 'c_1-', 'c_2+', 'c_2-', 'c_3+', 'c_3-'})
 ylabel('Nb identifications')
 xlabel('Class')
 subplot(2,2,2)
 errorbar(mean_K, std_K)
 set(gca, 'XTick', [1 3 5])
-set(gca, 'XTickLabel', {'a)+', 'b)+', 'c)+'})
+set(gca, 'XTickLabel', {'c_1+', 'c_2+', 'c_3+'})
 ylabel('Stiffness (N m^{-1})')
 xlabel('Class')
 subplot(2,2,3)
 errorbar(mean_B, std_B)
 set(gca, 'XTick', [1 3 5])
-set(gca, 'XTickLabel', {'a)+', 'b)+', 'c)+'})
+set(gca, 'XTickLabel', {'c_1+', 'c_2+', 'c_3+'})
 ylabel('Damping (Ns m^{-1})')
 xlabel('Class')
 subplot(2,2,4)
 errorbar(mean_M, std_M)
 set(gca, 'XTick', [1 3 5])
-set(gca, 'XTickLabel', {'a)+', 'b)+', 'c)+'})
+set(gca, 'XTickLabel', {'c_1+', 'c_2+', 'c_3+'})
 ylabel('Mass (kg)')
 xlabel('Class')
 
+
+figure
+subplot(2,2,1)
+title('Counts')
+bar(bar_count2','stacked')
+set(gca, 'XTickLabel', {'c_1+', 'c_1-', 'c_2+', 'c_2-', 'c_3+', 'c_3-'})
+ylabel('Nb identifications')
+xlabel('Class')
+subplot(2,2,2)
+errorbar(mean_K2, std_K2)
+set(gca, 'XTick', [1 3 5])
+set(gca, 'XTickLabel', {'c_1+', 'c_2+', 'c_3+'})
+ylabel('Stiffness (N m^{-1})')
+xlabel('Class')
+subplot(2,2,3)
+errorbar(mean_B2, std_B2)
+set(gca, 'XTick', [1 3 5])
+set(gca, 'XTickLabel', {'c_1+', 'c_2+', 'c_3+'})
+ylabel('Damping (Ns m^{-1})')
+xlabel('Class')
+subplot(2,2,4)
+errorbar(mean_M2, std_M2)
+set(gca, 'XTick', [1 3 5])
+set(gca, 'XTickLabel', {'c_1+', 'c_2+', 'c_3+'})
+ylabel('Mass (kg)')
+xlabel('Class')
+
+return
+
+%% group anova
+% R2
+r2_a =[data_sorted(1).pos.r2(~idx_tot{1},dly); data_sorted(1).neg.r2(~idx_tot{2},dly); ...
+    data_sorted(2).pos.r2(~idx_tot{3},dly); data_sorted(2).neg.r2(~idx_tot{4},dly); ...
+    data_sorted(3).pos.r2(~idx_tot{5},dly); data_sorted(3).neg.r2(~idx_tot{6},dly)];
+
+r2_g =[ones(size(data_sorted(1).pos.r2(~idx_tot{1},dly))); 
+    2.*ones(size(data_sorted(1).neg.r2(~idx_tot{2},dly))); ...
+    3.*ones(size(data_sorted(2).pos.r2(~idx_tot{3},dly))); ...
+    4.*ones(size(data_sorted(2).neg.r2(~idx_tot{4},dly))); ...
+    5.*ones(size(data_sorted(3).pos.r2(~idx_tot{5},dly))); ...
+    6.*ones(size(data_sorted(3).neg.r2(~idx_tot{6},dly)))];
+
+[p,t,stats] = anova1(r2_a, r2_g);
+[c,m,h,nms] = multcompare(stats);
+
+% K
+K_a =[data_sorted(1).pos.K(~idx_tot{1},dly); data_sorted(1).neg.K(~idx_tot{2},dly); ...
+    data_sorted(2).pos.K(~idx_tot{3},dly); data_sorted(2).neg.K(~idx_tot{4},dly); ...
+    data_sorted(3).pos.K(~idx_tot{5},dly); data_sorted(3).neg.K(~idx_tot{6},dly)];
+
+K_g =[ones(size(data_sorted(1).pos.K(~idx_tot{1},dly))); 
+    2.*ones(size(data_sorted(1).neg.K(~idx_tot{2},dly))); ...
+    3.*ones(size(data_sorted(2).pos.K(~idx_tot{3},dly))); ...
+    4.*ones(size(data_sorted(2).neg.K(~idx_tot{4},dly))); ...
+    5.*ones(size(data_sorted(3).pos.K(~idx_tot{5},dly))); ...
+    6.*ones(size(data_sorted(3).neg.K(~idx_tot{6},dly)))];
+
+[p,t,stats] = anova1(K_a, K_g);
+[c,m,h,nms] = multcompare(stats);
+
+% B
+B_a =[data_sorted(1).pos.B(~idx_tot{1},dly); data_sorted(1).neg.B(~idx_tot{2},dly); ...
+    data_sorted(2).pos.B(~idx_tot{3},dly); data_sorted(2).neg.B(~idx_tot{4},dly); ...
+    data_sorted(3).pos.B(~idx_tot{5},dly); data_sorted(3).neg.B(~idx_tot{6},dly)];
+
+B_g =[ones(size(data_sorted(1).pos.B(~idx_tot{1},dly))); 
+    2.*ones(size(data_sorted(1).neg.B(~idx_tot{2},dly))); ...
+    3.*ones(size(data_sorted(2).pos.B(~idx_tot{3},dly))); ...
+    4.*ones(size(data_sorted(2).neg.B(~idx_tot{4},dly))); ...
+    5.*ones(size(data_sorted(3).pos.B(~idx_tot{5},dly))); ...
+    6.*ones(size(data_sorted(3).neg.B(~idx_tot{6},dly)))];
+
+[p,t,stats] = anova1(B_a, B_g);
+[c,m,h,nms] = multcompare(stats);
+
+% M
+M_a =[data_sorted(1).pos.M(~idx_tot{1},dly); data_sorted(1).neg.M(~idx_tot{2},dly); ...
+    data_sorted(2).pos.M(~idx_tot{3},dly); data_sorted(2).neg.M(~idx_tot{4},dly); ...
+    data_sorted(3).pos.M(~idx_tot{5},dly); data_sorted(3).neg.M(~idx_tot{6},dly)];
+
+M_g =[ones(size(data_sorted(1).pos.M(~idx_tot{1},dly))); 
+    2.*ones(size(data_sorted(1).neg.M(~idx_tot{2},dly))); ...
+    3.*ones(size(data_sorted(2).pos.M(~idx_tot{3},dly))); ...
+    4.*ones(size(data_sorted(2).neg.M(~idx_tot{4},dly))); ...
+    5.*ones(size(data_sorted(3).pos.M(~idx_tot{5},dly))); ...
+    6.*ones(size(data_sorted(3).neg.M(~idx_tot{6},dly)))];
+
+[p,t,stats] = anova1(M_a, M_g);
+[c,m,h,nms] = multcompare(stats);
+
+% data200ms.r2_a = r2_a;
+% data200ms.r2_g = r2_g;
+% data200ms.K_a = K_a;
+% data200ms.K_g = K_g;
+% data200ms.B_a = B_a;
+% data200ms.B_g = B_g;
+% data200ms.M_a = M_a;
+% data200ms.M_g = M_g;
+% 
+% save('data_anova_200ms.mat', 'data200ms')
+
+% data100ms.r2_a = r2_a;
+% data100ms.r2_g = r2_g;
+% data100ms.K_a = K_a;
+% data100ms.K_g = K_g;
+% data100ms.B_a = B_a;
+% data100ms.B_g = B_g;
+% data100ms.M_a = M_a;
+% data100ms.M_g = M_g;
+% 
+% save('data_anova_100ms.mat', 'data100ms')

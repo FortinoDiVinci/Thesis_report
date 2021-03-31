@@ -18,8 +18,11 @@ for i = 1:length(cycles)
         cyc_pert = find([cycles{i}.type_dist] == k);
         %idx_pert = [cycles{i}(cyc_pert).ind];
         idx_pert = floor([cycles{i}(cyc_pert).ratio_dist].*length(cycles{i}(1).t_com));
+        if any(idx_pert == 0)
+            idx_pert(idx_pert == 0) = 1; % avoid this rare scenario of 0 idx
+        end
         for j = 1:length(idx_pert) 
-        scatter(cycles{i}(cyc_pert(j)).t_com(idx_pert(j)),...
+        scatter(cycles{i}(cyc_pert(j)).t_com(idx_pert(j)), ...
             cycles{i}(cyc_pert(j)).ui_interp(idx_pert(j)), ...
             'filled', 'MarkerFaceAlpha', 0.75, 'MarkerFaceColor', colors(k,:)); 
         end
@@ -38,6 +41,9 @@ for i = 1:length(cycles)
         cyc_pert = find([cycles{i}.type_dist] == k);
         %idx_pert = [cycles{i}(cyc_pert).ind];
         idx_pert = floor([cycles{i}(cyc_pert).ratio_dist].*length(cycles{i}(1).t_com));
+        if any(idx_pert == 0)
+            idx_pert(idx_pert == 0) = 1; % avoid this rare scenario of 0 idx
+        end
         for j = 1:length(idx_pert) 
         scatter(cycles{i}(cyc_pert(j)).t_com(idx_pert(j)),...
             cycles{i}(cyc_pert(j)).yi_interp(idx_pert(j)), ...
@@ -73,6 +79,9 @@ for i = 1:length(cycles)
         cyc_pert = find([cycles{i}.type_dist] == k);
         %idx_pert = [cycles{i}(cyc_pert).ind];
         idx_pert = floor([cycles{i}(cyc_pert).ratio_dist].*length(cycles{i}(1).t_com));
+        if any(idx_pert == 0)
+            idx_pert(idx_pert == 0) = 1; % avoid this rare scenario of 0 idx
+        end
         for j = 1:length(idx_pert) 
         scatter(cycles{i}(cyc_pert(j)).t_com(idx_pert(j)),...
             cycles{i}(cyc_pert(j)).ui_interp(idx_pert(j)), ...
@@ -94,6 +103,9 @@ for i = 1:length(cycles)
         cyc_pert = find([cycles{i}.type_dist] == k);
         %idx_pert = [cycles{i}(cyc_pert).ind];
         idx_pert = floor([cycles{i}(cyc_pert).ratio_dist].*length(cycles{i}(1).t_com));
+        if any(idx_pert == 0)
+            idx_pert(idx_pert == 0) = 1; % avoid this rare scenario of 0 idx
+        end
         for j = 1:length(idx_pert) 
         scatter(cycles{i}(cyc_pert(j)).t_com(idx_pert(j)),...
             cycles{i}(cyc_pert(j)).yi_interp(idx_pert(j)), ...

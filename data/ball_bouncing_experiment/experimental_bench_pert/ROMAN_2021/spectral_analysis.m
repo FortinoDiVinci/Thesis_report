@@ -82,20 +82,20 @@ spec_analysis(i).force.power_filt = filtfilt(b,a, spec_analysis(i).force.power);
 spec_analysis(i).position.power_filt = filtfilt(b,a, spec_analysis(i).position.power);
 end
 
-figure('DefaultAxesFontSize',16)
-subplot(1,2,1)
+figure('DefaultAxesFontSize',12)
+subplot(2,1,1)
 semilogy(spec_analysis(1).force.f, spec_analysis(1).force.power_filt,...
 	spec_analysis(2).force.f, spec_analysis(2).force.power_filt)
 xlim([0,25])
 ylabel('Power')
-xlabel('Frequency')
+xlabel('Frequency (Hz)')
 title('Force')
 legend('without impact','with impact')
-subplot(1,2,2)
+subplot(2,1,2)
 semilogy(spec_analysis(1).position.f, spec_analysis(1).position.power_filt,...
 	spec_analysis(2).position.f, spec_analysis(2).position.power_filt)
 xlim([0,25])
 ylabel('Power')
-xlabel('Frequency')
+xlabel('Frequency (Hz)')
 title('Position')
 legend('without impact','with impact')

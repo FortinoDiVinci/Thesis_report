@@ -7,6 +7,10 @@ function cycle_iout = cycle_extraction(ind_i_red, dt, dfz, dz, z_b, z_p, display
 
 cycle_i = {};
 cycle_i(1).is_post_dist = 0;
+
+d_dz = Iu_diffcent(dz.complete_traject, dz.time);
+d_dfz = Iu_diffcent(dfz.complete_traject, dfz.time);
+
 for i = 1:length(ind_i_red) - 1
     %--- opérations sur temps et durée
     ind_pts_i = [ind_i_red(i):ind_i_red(i+1) - 1]'; % indices absolus du cycle
@@ -44,14 +48,18 @@ for i = 1:length(ind_i_red) - 1
     
     %--- opérations sur signaux dans le cycle i
     cycle_i(i).t = dfz.time(ind_pts_i); % temps absolu [t1:t2]
-    cycle_i(i).ui = dz.complete_traject(ind_pts_i); % pos mocap    
+    cycle_i(i).ui = dz.complete_traject(ind_pts_i); % pos mocap  
+    cycle_i(i).dui = d_dz(ind_pts_i); % vel    
     cycle_i(i).yi = dfz.complete_traject(ind_pts_i); % force capteur
+    cycle_i(i).dyi = d_dfz(ind_pts_i); % yank
     
     cycle_i(i).z_b = z_b(ind_pts_i); % pos balle 
     cycle_i(i).z_p = z_p(ind_pts_i); % pos raquette 
     
     cycle_i(i).ui_max = max(cycle_i(i).ui) - min(cycle_i(i).ui); % amp max entrée
     cycle_i(i).yi_max = max(cycle_i(i).yi) - min(cycle_i(i).yi); % amp max sortie
+    cycle_i(i).dui_max = max(cycle_i(i).dui) - min(cycle_i(i).dui); % amp max derv entrée
+    cycle_i(i).dyi_max = max(cycle_i(i).dyi) - min(cycle_i(i).dyi); % amp max derv sortie
     
     %--- affichage
     if display

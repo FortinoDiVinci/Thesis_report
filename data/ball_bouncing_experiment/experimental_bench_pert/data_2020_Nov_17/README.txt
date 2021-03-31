@@ -39,16 +39,28 @@ Trial 26 (l): 17:07:56
 Trial 27 (r): 17:19:21
 Trial 28 (l): 17:30:25
 
-Ball_bouncing package parameters:
+Ball_bouncing package parameters (simulated environment):
 Target height: 1.7 (m)
 Z position offset: 0.32 (m)
 Kinematic coefficient: 6
 Restiution coefficient: 0.6
 Gravity force: 9.81 (m.s^-2)
-Ball impact force are computed with the following equation: ...
+
+Ball impact force are computed with the following equation: 
+fi(k) = -(vb(k) - vp(k))*(1+alpha)*sqrt(mb*mp*K/(mp+mb))/pi
+- vb and vp respectively the ball and paddle velocities
+- mb and mp respectively the ball and paddle masses
+- alpha = 0.6, the restitution coefficient
+- K = 650, the total equivalent stiffness
+Ball impact are introduced as torque perturbations of 30ms
 
 Robot control parameters:
 Admittance control as described in Fortineau et al. (2020)
-Kp = 
-Ki = 
-Ball impact are introduced as torque perturbations of 30ms
+Cartesian admittance control
+Kp = 1.5e-2 (proportionnal gain)
+Ki = 8e-2 (integral gain)
+Position control (x axis)
+Kx = 20 (proportionnal gain)
+Joint control (q0)
+K_q = 5 (proportionnal gain)
+Kd_q = 0.1 (derivative gain)

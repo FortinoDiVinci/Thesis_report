@@ -18,7 +18,7 @@ for i = 1:length(data)
     r2(:,i) = 1 - sum(([tmp_imp.rec_pos_err]).^2)./...
     sum((squeeze(phi(:,1,:)) - mean(squeeze(phi(:,1,:)))).^2);
     r2_adj(:,i) = 1 - (1 - r2(:,i))*(n-1)/(n-p-1);    
-    %xi_all(:,:,i) = [tmp_imp.xi];
+    xi_all(:,:,i) = [tmp_imp.xi];
 end
 
 figure

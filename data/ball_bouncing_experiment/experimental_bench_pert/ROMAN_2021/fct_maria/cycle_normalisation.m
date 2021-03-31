@@ -23,15 +23,21 @@ for trial_id = 1:nb_exp
 %         cycle = i
         cycle_id(i).ui_norm = cycle_id(i).ui/cycle_id(i).ui_max;
         cycle_id(i).ui_norm = cycle_id(i).ui_norm - cycle_id(i).ui_norm(1);
+        cycle_id(i).dui_norm = cycle_id(i).dui/cycle_id(i).dui_max;
+        cycle_id(i).dui_norm = cycle_id(i).dui_norm - cycle_id(i).dui_norm(1);
         
         cycle_id(i).yi_norm = cycle_id(i).yi/cycle_id(i).yi_max;
         cycle_id(i).yi_norm = cycle_id(i).yi_norm - cycle_id(i).yi_norm(1);
+        cycle_id(i).dyi_norm = cycle_id(i).dyi/cycle_id(i).dyi_max;
+        cycle_id(i).dyi_norm = cycle_id(i).dyi_norm - cycle_id(i).dyi_norm(1);
         
         cycle_id(i).t_norm = cycle_id(i).t_red/max(cycle_id(i).t_red);
 %         cycle_id(i). = cycle_id(i).t_red/max(cycle_id(i).t_red);
         
         cycle_id(i).ui_interp = interp1(cycle_id(i).t_norm, cycle_id(i).ui_norm, t_com);
+        cycle_id(i).dui_interp = interp1(cycle_id(i).t_norm, cycle_id(i).dui_norm, t_com);
         cycle_id(i).yi_interp = interp1(cycle_id(i).t_norm, cycle_id(i).yi_norm, t_com);
+        cycle_id(i).dyi_interp = interp1(cycle_id(i).t_norm, cycle_id(i).dyi_norm, t_com);
         
         cycle_id(i).t_com = t_com;
         

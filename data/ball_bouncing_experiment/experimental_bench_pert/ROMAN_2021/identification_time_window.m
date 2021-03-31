@@ -35,8 +35,12 @@ for i = 1:length(cycles_class)
 end
 
 % 2 methods for removing outliers are compared here
-% 1) remove data with R^2<50% and then sort according to stiffness (5 sMAD)
-% 2) R^2 removing data outside 5 sMAD 
+% 1) remove data with R^2<50%
+% 2) removing R^2 idx outside 5 sMAD 
+% 3) removing K idx outside 5 sMAD 
+% 4) Combination of 2) and 3)
+% 5) Combination of 1) and 3)
+% 6) Combination of 1) and removing M idx outside 5 sMAD
 
 p = 3;
 for i = 1:1:size(data.impedance,2)
@@ -79,6 +83,10 @@ for i = 1:1:size(data.impedance,2)
     
     K_mean2(i) = mean(K(i,~idx_clc2(i,:)));
     K_std2(i) = std(K(i,~idx_clc2(i,:)));
+    B_mean2(i) = mean(B(i,~idx_clc2(i,:)));
+    B_std2(i) = std(B(i,~idx_clc2(i,:)));
+    M_mean2(i) = mean(M(i,~idx_clc2(i,:)));
+    M_std2(i) = std(M(i,~idx_clc2(i,:)));
     
     % method 3 (outlier only with stiffness)
     [K_clc, K_outl_idx] = rmoutliers(K(i,:), 'ThresholdFactor', 5);
@@ -110,6 +118,24 @@ for i = 1:1:size(data.impedance,2)
     
     K_mean5(i) = mean(K(i, ~idx_5));
     K_std5(i) = std(K(i, ~idx_5));
+    B_mean5(i) = mean(B(i, ~idx_5));
+    B_std5(i) = std(B(i, ~idx_5));
+    M_mean5(i) = mean(M(i, ~idx_5));
+    M_std5(i) = std(M(i, ~idx_5));
+    
+    % method 6 R2 > 50% or mass outlier
+    [M_clc, M_outl_idx] = rmoutliers(M(i,:), 'ThresholdFactor', 5);
+    idx_6 = M_outl_idx | glob_idx_suppr | (r2_adj(i, :) < 0.5);
+    r2_adj_mean6(i) = mean(r2_adj(i, ~idx_6));
+    r2_adj_std6(i) = std(r2_adj(i, ~idx_6));
+    r2_suppr6(i) = sum(idx_6);
+    
+    K_mean6(i) = mean(K(i, ~idx_6));
+    K_std6(i) = std(K(i, ~idx_6));
+    B_mean6(i) = mean(B(i, ~idx_6));
+    B_std6(i) = std(B(i, ~idx_6));
+    M_mean6(i) = mean(M(i, ~idx_6));
+    M_std6(i) = std(M(i, ~idx_6));
 end
 
 %r2 = r2(~cellfun('isempty',r2));
@@ -126,23 +152,44 @@ errorbar((50:1:200), r2_adj_mean2, r2_adj_std2);
 %errorbar((50:1:200), r2_adj_mean3, r2_adj_std3);
 errorbar((50:1:200), r2_adj_mean4, r2_adj_std4);
 errorbar((50:1:200), r2_adj_mean5, r2_adj_std5);
+errorbar((50:1:200), r2_adj_mean6, r2_adj_std6);
+legend('M2', 'M4', 'M5', 'M6')
 ylabel('R^2 score')
 xlabel('Identification time window (ms)')
-subplot(3,1,2)
+subplot(3,2,3)
 hold on
 errorbar((50:1:200), K_mean2, K_std2)
 %errorbar((50:1:200), K_mean3, K_std3)
 errorbar((50:1:200), K_mean4, K_std4)
 errorbar((50:1:200), K_mean5, K_std5)
+errorbar((50:1:200), K_mean6, K_std6)
 xlabel('Identification time window (ms)')
 ylabel('Stiffness (Nm^{-1})')
-subplot(3,1,3)
+subplot(3,2,4)
+hold on
+errorbar((50:1:200), B_mean2, B_std2)
+%errorbar((50:1:200), K_mean3, K_std3)
+errorbar((50:1:200), B_mean4, B_std4)
+errorbar((50:1:200), B_mean5, B_std5)
+errorbar((50:1:200), B_mean6, B_std6)
+xlabel('Identification time window (ms)')
+ylabel('Damping (Nsm^{-1})')
+subplot(3,2,5)
+hold on
+errorbar((50:1:200), M_mean2, M_std2)
+%errorbar((50:1:200), K_mean3, K_std3)
+errorbar((50:1:200), M_mean4, M_std4)
+errorbar((50:1:200), M_mean5, M_std5)
+errorbar((50:1:200), M_mean6, M_std6)
+xlabel('Identification time window (ms)')
+ylabel('Damping (Nsm^{-1})')
+subplot(3,2,6)
 hold on
 plot((50:1:200), r2_suppr2)
 %plot((50:1:200), K_suppr3)
 plot((50:1:200), r2_suppr4)
 plot((50:1:200), r2_suppr5)
-legend('M2', 'M4', 'M5')
+plot((50:1:200), r2_suppr6)
 xlabel('Identification time window (ms)')
 ylabel('Nb of outliers')
 
