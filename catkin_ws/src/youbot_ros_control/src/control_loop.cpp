@@ -32,7 +32,7 @@
 #define TORQUE_PERTURBATIONS false
 // after a perturbation is introduced a transition is done at the velocity level
 #define VELOCITY_TRANSITION false
-// the disturbance are introduced at precise ball/paddle timing if yes
+// the disturbance are introduced at precise ball/paddle timing if true
 #define DIST_SYNC_WITH_IMPACT false
 // the disturbance are introduced using the outter force loop reference
 #define REF_PERTURBATIONS false
@@ -120,6 +120,7 @@ private:
   bool disturbance_unlocked;
 
   double force_impulse; // ball/paddle impact force
+  unsigned int impacts_counts;
   float paddle_period;
   // std::vector<ros::Time> lastImpactsTime;
   std::vector<double> lastImpactsTime;
@@ -129,9 +130,11 @@ private:
 
   std_msgs::Bool dist_msg;
   std_msgs::Float32 dist_val_msg;
+  std_msgs::Float32 fake_impulse_msg;
 
   ros::Publisher pub_time_dist;
   ros::Publisher pub_val_dist;
+  ros::Publisher pub_fake_impulse;
 
   ros::Subscriber sub_impulse;
 };
@@ -377,10 +380,11 @@ int main(int argc, char **argv) {
     }
 #if REF_PERTURBATIONS
     else if (!ref_timer.isDisturbance())
+    {
 #elif TORQUE_PERTURBATIONS || BALL_IMPACT_FORCE
     else if (!dist_timer.isDisturbance()) // no disturbance
-#endif
     {
+#endif
       nullSpaceCtrlLoop(kuka_youBot, force_torque_sensor, x0, qi_0, 0);
 #if TORQUE_PERTURBATIONS && VELOCITY_TRANSITION
       if (dist_timer.isTransitionning()) {
@@ -391,16 +395,20 @@ int main(int argc, char **argv) {
       }
 #endif
       kuka_youBot->publishVelocitiesCmd();
-    } else // disturbance
+#if REF_PERTURBATIONS || TORQUE_PERTURBATIONS || BALL_IMPACT_FORCE
+    }
+#endif
+#if TORQUE_PERTURBATIONS 
+    else // disturbance
     {
-#if TORQUE_PERTURBATIONS
+
       it = 0;
       kuka_youBot->setTorqueDisturbanceCmd(dist_timer.getLastEffCmd(),
                                            dist_timer.getDisturbance());
       kuka_youBot->publishTorquesCmd();
-#endif
-    }
 
+    }
+#endif
 #endif
 
     // ROS_INFO_STREAM_THROTTLE(0.2, "VM forces:\n" <<
@@ -791,6 +799,7 @@ DisturbanceTimer::DisturbanceTimer(ros::NodeHandle *n) {
   disturbance_unlocked = true;
 
   force_impulse = 0;
+  impacts_counts = 0;
 
   last_eff_cmd.resize(NB_ACTUATED_JOINTS);
   lastImpactsTime.resize(
@@ -800,7 +809,8 @@ DisturbanceTimer::DisturbanceTimer(ros::NodeHandle *n) {
   topic_name = "impulse";
   sub_impulse = nh->subscribe(topic_name, 1, &DisturbanceTimer::getImpulse,
                               this); // ball impact force
-
+  topic_name = "arm_1/fake_impulse";
+  pub_fake_impulse = nh->advertise<std_msgs::Float32>(topic_name, 1);
   srand(time(NULL));
 }
 
@@ -819,6 +829,7 @@ DisturbanceTimer::DisturbanceTimer(ros::NodeHandle *n, float magnitude,
   cycle_delay = 0.25; // should be in the middle of decreasing phase
   cycle_phase = 0;    // select multiples of cycle delay, for now x1, x2 or x3
   force_impulse = 0;
+  impacts_counts = 0;
 
   last_eff_cmd.resize(NB_ACTUATED_JOINTS);
   lastImpactsTime.resize(
@@ -833,6 +844,8 @@ DisturbanceTimer::DisturbanceTimer(ros::NodeHandle *n, float magnitude,
   topic_name = "impulse";
   sub_impulse = nh->subscribe(topic_name, 1, &DisturbanceTimer::getImpulse,
                               this); // ball impact force
+  topic_name = "arm_1/fake_impulse";
+  pub_fake_impulse = nh->advertise<std_msgs::Float32>(topic_name, 1);
 
   srand(time(NULL));
 }
@@ -846,7 +859,6 @@ void DisturbanceTimer::trigger(const ros::TimerEvent &e) {
       idx++;
     }
   }
-
   dist_msg.data = true;
   dist = dist_magnitude * (2 * (rand() % 2) - 1); // sign is chosen randomly
   // this helps to know the phase of the cycle either +0.01, +0.02 or 0.03.
@@ -854,13 +866,13 @@ void DisturbanceTimer::trigger(const ros::TimerEvent &e) {
   // dist_msg.stamp = ros::Time::now();
   // pub_time_dist.publish(dist_msg);
   pub_val_dist.publish(dist_val_msg);
-#if VELOCITY_TRANSITION
-  stop_dist_timer = nh->createTimer(ros::Duration(dist_duration),
-                                    &DisturbanceTimer::stop_curr, this, true);
-#else
-  stop_dist_timer = nh->createTimer(ros::Duration(dist_duration),
-                                    &DisturbanceTimer::off, this, true);
-#endif
+  #if VELOCITY_TRANSITION
+    stop_dist_timer = nh->createTimer(ros::Duration(dist_duration),
+                                      &DisturbanceTimer::stop_curr, this, true);
+  #else
+    stop_dist_timer = nh->createTimer(ros::Duration(dist_duration),
+                                      &DisturbanceTimer::off, this, true);
+  #endif
 }
 
 void DisturbanceTimer::stop_curr(const ros::TimerEvent &e) {
@@ -909,7 +921,7 @@ void DisturbanceTimer::off(const ros::TimerEvent &e) {
   // dist_msg.stamp = ros::Time::now();
   // pub_time_dist.publish(dist_msg);
 
-#if DIST_SYNC_WITH_IMPACT
+#if DIST_SYNC_WITH_IMPACT && (TORQUE_PERTURBATIONS || REF_PERTURBATIONS)
   next_dist_timer = nh->createTimer(
       ros::Duration((rand() % 301) / 100 + 2), &DisturbanceTimer::unlockDist,
       this, true); // at least 2s between perturbations, at most 5s
@@ -936,16 +948,18 @@ void DisturbanceTimer::getImpulse(const std_msgs::Float64::ConstPtr &data) {
   if (tmp_impulse != 0.) // temp modification to launch disturbance without link
                          // with ball impact
   {
+    // inversion to fit robot/sensor base reference (TODO: Check...)
     force_impulse =
-        (tmp_impulse < 0) ? 0 : tmp_impulse / 3; // max(0,tmp_impulse)
+        (tmp_impulse < 0) ? 0 : -tmp_impulse / 3; // max(0,tmp_impulse)
     // TODO: get scale factor from ball boucing node
 
     // std::rotate(lastImpactsTime.rbegin(), lastImpactsTime.rbegin() + 1,
     // lastImpactsTime.rend()); ROS_INFO_STREAM("IMPACT: " << tmp_impulse <<
     // "N");
-
     if (!is_impact) {
-#if DIST_SYNC_WITH_IMPACT
+      impacts_counts++;
+      ROS_INFO_STREAM("Impact nb: "<< impacts_counts);
+#if DIST_SYNC_WITH_IMPACT && (TORQUE_PERTURBATIONS || REF_PERTURBATIONS)
       // avoid considering multiple consecutive impacts in chaotic bouncings
       lastImpactsTime.pop_back();
       lastImpactsTime.insert(lastImpactsTime.begin(), t_imp.toSec());
@@ -957,30 +971,46 @@ void DisturbanceTimer::getImpulse(const std_msgs::Float64::ConstPtr &data) {
 
       this->computePaddleFreq();
       // ROS_INFO_STREAM("before lock: " << disturbance_unlocked);
-      if (disturbance_unlocked && (paddle_period > 0.5)) {
-        disturbance_unlocked = false;
-        // ROS_INFO_STREAM("locked: " << disturbance_unlocked);
-        // disturbance is generated after the impact with a delay that
-        // corresponds to either of 3 random phase of the cycle (eg. 25%, 50%
-        // and 75% of the cycle)
-        cycle_phase = rand() % 3 + 1;
-        next_dist_timer = nh->createTimer(
-            ros::Duration(paddle_period * cycle_delay * cycle_phase),
-            &DisturbanceTimer::trigger, this, true);
-      }
-#endif
-      // set current effort for ball/paddle impulse
-      int idx = 0;
-      for (int i = 0; i < NB_JOINT_YOUBOT; i++) {
-        if (ACTUATED_JOINTS[i]) {
-          last_eff_cmd[idx] = joint_effort_set_point[i];
-          idx++;
+      ROS_INFO_STREAM("Impact nb = "<< impacts_counts);
+      if (impacts_counts >= 5) 
+      // perturbations starts after fews impacts to ensure steady state
+      {
+        if (disturbance_unlocked && (paddle_period > 0.5)) 
+        {
+          disturbance_unlocked = false;
+          // ROS_INFO_STREAM("locked: " << disturbance_unlocked);
+          // disturbance is generated after the impact with a delay that
+          // corresponds to either of 3 random phase of the cycle (eg. 25%, 50%
+          // and 75% of the cycle)
+          cycle_phase = rand() % 3 + 1;
+          next_dist_timer = nh->createTimer(
+              ros::Duration(paddle_period * cycle_delay * cycle_phase),
+              &DisturbanceTimer::trigger, this, true);
         }
       }
-      is_impact = true; // avoid perturbation during impact
-      stop_impact_timer = nh->createTimer(
-          ros::Duration(0.03), &DisturbanceTimer::stopImpact, this, true);
-      // ROS_INFO_STREAM("Ball impact = "<< force_impulse);
+#endif
+     //if (rand()%10 > 0) // 1/10th of chance to ignore the impact feedback
+     if (rand()%10 > 8) // 9/10th of chance to ignore the impact feedback
+      {
+      // set current effort for ball/paddle impulse
+        int idx = 0;
+        for (int i = 0; i < NB_JOINT_YOUBOT; i++) {
+          if (ACTUATED_JOINTS[i]) {
+            last_eff_cmd[idx] = joint_effort_set_point[i];
+            idx++;
+          }
+        }
+        is_impact = true; // avoid perturbation during impact
+        stop_impact_timer = nh->createTimer(
+            ros::Duration(0.03), &DisturbanceTimer::stopImpact, this, true);
+        // ROS_INFO_STREAM("Ball impact = "<< force_impulse);
+      }
+      else
+      {
+        fake_impulse_msg.data = force_impulse;
+        ROS_INFO_STREAM("Faked impact: "<< force_impulse);
+        pub_fake_impulse.publish(fake_impulse_msg);
+      }
     }
   }
 }
@@ -1005,3 +1035,4 @@ void DisturbanceTimer::computePaddleFreq() {
     // manage error
   }
 }
+
