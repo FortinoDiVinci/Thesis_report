@@ -19,7 +19,7 @@ IS_BALL_BOUNCING                    = 1
 USE_DEFAULT_TF_MATRIX               = 0
 SAVE_DATA                           = 1 % specify name for the file
 SAVE_ALL                            = 1 % save all data, but temp/empty data only relevant if SAVE_DATA is set to 1
-COMPUTE_STATISTICS                  = 1 
+COMPUTE_STATISTICS                  = 0 
 
 %% kinematic data, ball and paddle trajectories
 
@@ -37,14 +37,15 @@ dt = 1e-3;
 %names = "data_21-Sep-2020_11h05/experiment_" + ["step", "sine"] + "_movement_alone/";
 %names = "data_01-Oct-2020_16h54/ball_bouncing_vfo" + ["", "1", "2", "3", "4", "5", "6"] + "/";
 %names = "data_07-Oct-2020_10h51/ball_bouncing_mso" + [""] + "/";
-%names = "vfo10/";
 %folder_names = "preliminary_experimental_data/" + names;
 %folder_names = "data_validation_retour_haptique/" + names;
 %names = ["calibration1";"trial" + num2str((1:9)');"trial" + num2str((10:14)')] + "/";
-names = ["calibration2";"trial" + num2str((15:28)')] + "/";
-folder_names = "data_2020_Nov_17/" + names;
+names = ["calibration01";"trial" + num2str((1:3)')] + "/";
+%names = ["calibration1";"trial" + num2str((15:28)')] + "/";
+%folder_names = "data_2020_Nov_17/" + names;
+folder_names = "data_2021_April/" + names;
 if SAVE_DATA
-    saved_data_name = "data_with_impacts_2020_11_17"; % without extension
+    saved_data_name = "data_2021_04_07"; % without extension
 end
 
 NO_DISTURBANCE = cell(size(folder_names));
@@ -61,6 +62,8 @@ NO_BALL_BOUNC = cell(size(folder_names));
 NO_BALL_BOUNC(:,:) = {0};
 NO_FORCE_SENSOR = cell(size(folder_names)); % for solely kinematic data
 NO_FORCE_SENSOR(:,:) = {0};
+NO_GHOST_IMPULSE = cell(size(folder_names));
+NO_GHOST_IMPULSE(:,:) = {0};
 
 %kinematic_coeff = [6, 6, 6, 6, 6, 6, 6, 6, 3, 6, 6, 3];
 kinematic_coeff = 6*ones(size(folder_names));
@@ -78,6 +81,8 @@ val_trq_cmd = cell(size(folder_names));
 t_vel_cmd = cell(size(folder_names));
 val_vel_cmd = cell(size(folder_names));
 t_impulse = cell(size(folder_names));
+t_ghost_impulse = cell(size(folder_names));
+val_ghost_impulse = cell(size(folder_names));
 imp = cell(size(folder_names));
 z_b = cell(size(folder_names));
 mocap_marker = cell(size(folder_names));
@@ -121,6 +126,11 @@ for fld_idx = 1:length(folder_names)
         impulse = readtable(strcat(folder_names(fld_idx), 'bagfile-_impulse.csv'));
     catch
         NO_IMPULSE{fld_idx} = 1;
+    end
+    try
+        ghost_impulse = readtable(strcat(folder_names(fld_idx), 'bagfile-_arm_1_fake_impulse.csv'));
+    catch
+        NO_GHOST_IMPULSE{fld_idx} = 1;
     end
         
     % time interpolation
@@ -186,6 +196,12 @@ for fld_idx = 1:length(folder_names)
     if ~NO_BALL_BOUNC{fld_idx}
         z_b{fld_idx} = interp1(ball_pose_t, ball_pose.field_pose_position_z, t{fld_idx});
     end
+    
+    if ~NO_GHOST_IMPULSE{fld_idx}
+        t_ghost_impulse{fld_idx} = ghost_impulse.x_time;
+        val_ghost_impulse{fld_idx} = ghost_impulse.field_data;
+    end
+
     %[~, un_idx] = unique(tf_t);
     %z_p{fld_idx} = (interp1(tf_t(un_idx), tf.field_transforms0_transform_translation_z(un_idx), t{fld_idx}) - 0.3) * 3;
     
@@ -338,7 +354,15 @@ if IS_BALL_BOUNCING
         % impact detection
         idx_ball_on_ramp = find(z_b{fld_idx} ~= 1, 1, 'first');
         idx_ball_off_ramp{fld_idx} = find(z_b{fld_idx}(idx_ball_on_ramp:end) < 1, 1, 'first') + idx_ball_on_ramp;
-
+        dzbzp = z_b{fld_idx}(idx_ball_off_ramp{fld_idx}:end) - z_p{fld_idx}(idx_ball_off_ramp{fld_idx}:end);
+        % if the ball was on the paddle at the start and reset during the
+        % experiment, the position differential is huge compare to a
+        % nominal max values (0.01)
+        real_off_ramp = find(diff(dzbzp) > 0.1, 1, 'first');
+        if ~isempty(real_off_ramp) % correct the real beginning
+            idx_ball_off_ramp{fld_idx} = real_off_ramp + 1 + idx_ball_off_ramp{fld_idx};
+        end
+        
         j = 1;
         impact = [];
         idx_window = 100;
@@ -353,7 +377,21 @@ if IS_BALL_BOUNCING
             j = j + 1;
             i = a + 3*idx_window;
         end
-
+        
+        if ~isempty(idx_ball_off_ramp{fld_idx})
+            idx_apex{fld_idx} = detect_apexes(z_b{fld_idx}, t{fld_idx}, idx_ball_off_ramp{fld_idx});
+            bounc_err{fld_idx}.data = z_b{fld_idx}(idx_apex{fld_idx}) - target_height;
+            bounc_err{fld_idx}.mean = nanmean(bounc_err{fld_idx}.data);
+            bounc_err{fld_idx}.std = nanstd(bounc_err{fld_idx}.data);
+            be_movmean = movmean(bounc_err{fld_idx}.data,11);
+        else
+            idx_apex{fld_idx} = NaN(size(vz_b_fil{fld_idx}));
+            bounc_err{fld_idx}.data = NaN(size(vz_b_fil{fld_idx}));
+            bounc_err{fld_idx}.mean = NaN(size(vz_b_fil{fld_idx}));
+            bounc_err{fld_idx}.std = NaN(size(vz_b_fil{fld_idx}));
+            be_movmean = NaN(size(vz_b_fil{fld_idx}));
+        end
+        
         % %Velocity and impact detection
         % figure()
         % hold on, grid on
@@ -378,11 +416,16 @@ if IS_BALL_BOUNCING
                 plot(t{fld_idx}, (mocap_marker_robot_base{fld_idx}(:,3)+virtual_pos_offset)*kinematic_coeff(fld_idx), 'c')
             end
             if ~NO_DISTURBANCE{fld_idx}
-            line([t_positiv_dist{fld_idx}, t_positiv_dist{fld_idx}], [-0.2, 0.2], 'Color','green','LineStyle','--');
-            line([t_negativ_dist{fld_idx}, t_negativ_dist{fld_idx}], [-0.2, 0.2], 'Color','red','LineStyle','--');
-            line([t_off_dist{fld_idx}, t_off_dist{fld_idx}], [-0.2, 0.2], 'Color','black','LineStyle','--');
-            line([t{fld_idx}(idx_ball_on_ramp), t_10th_impact], [0.8, 0.8], 'Color','black','LineStyle','--');
-            line([t_10th_impact, t{fld_idx}(end)], [1.00, 1.00], 'Color','black','LineStyle','--');
+            %line([t_positiv_dist{fld_idx}, t_positiv_dist{fld_idx}], [-0.2, 0.2], 'Color','green','LineStyle','--');
+            %line([t_negativ_dist{fld_idx}, t_negativ_dist{fld_idx}], [-0.2, 0.2], 'Color','red','LineStyle','--');
+            %line([t_off_dist{fld_idx}, t_off_dist{fld_idx}], [-0.2, 0.2], 'Color','black','LineStyle','--');
+            %line([t{fld_idx}(idx_ball_on_ramp), t_10th_impact], [0.8, 0.8], 'Color','black','LineStyle','--');
+            %line([t_10th_impact, t{fld_idx}(end)], [1.00, 1.00], 'Color','black','LineStyle','--');
+            if ~isempty(idx_ball_off_ramp{fld_idx})
+                plot(t{fld_idx}(idx_apex{fld_idx}), be_movmean + target_height)
+                plot(t{fld_idx}(idx_apex{fld_idx}), z_b{fld_idx}(idx_apex{fld_idx}), '*')
+            end
+            line([t{fld_idx}(idx_ball_on_ramp), t{fld_idx}(end)], [target_height, target_height], 'Color','black','LineStyle','--');
             end
             if NO_MOCAP{fld_idx} 
                 legend('ball', 'paddle')
@@ -391,7 +434,12 @@ if IS_BALL_BOUNCING
             end
             xlabel('time (s)')
             ylabel('height (m)')
-            title('Ball bouncing impacts: ' + names(fld_idx))
+            if isnan(bounc_err{fld_idx}.mean) | isnan(bounc_err{fld_idx}.std) 
+                title('Ball bouncing impacts: ' + names(fld_idx))
+            else
+                title('Ball bouncing impacts: ' + names(fld_idx) + ", mean err: " +...
+                num2str(bounc_err{fld_idx}.mean, 3) + "+/-" + num2str(bounc_err{fld_idx}.std, 3))
+            end
 
         end
 
