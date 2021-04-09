@@ -29,13 +29,15 @@
 // allows the haptic ball feedback
 #define BALL_IMPACT_FORCE true
 // allows the introduction of perturbation
-#define TORQUE_PERTURBATIONS false
+#define TORQUE_PERTURBATIONS true
 // after a perturbation is introduced a transition is done at the velocity level
 #define VELOCITY_TRANSITION false
 // the disturbance are introduced at precise ball/paddle timing if true
-#define DIST_SYNC_WITH_IMPACT false
+#define DIST_SYNC_WITH_IMPACT true
 // the disturbance are introduced using the outter force loop reference
 #define REF_PERTURBATIONS false
+// 0-10 (indicating the percentage between 0% to 100%) must be an integer
+#define GHOSTED_FEEDBACK 0
 
 // CTRL MODE
 #define WITH_VIRTUAL_MECH false
@@ -971,7 +973,7 @@ void DisturbanceTimer::getImpulse(const std_msgs::Float64::ConstPtr &data) {
 
       this->computePaddleFreq();
       // ROS_INFO_STREAM("before lock: " << disturbance_unlocked);
-      ROS_INFO_STREAM("Impact nb = "<< impacts_counts);
+      // ROS_INFO_STREAM("Impact nb = "<< impacts_counts);
       if (impacts_counts >= 5) 
       // perturbations starts after fews impacts to ensure steady state
       {
@@ -989,8 +991,7 @@ void DisturbanceTimer::getImpulse(const std_msgs::Float64::ConstPtr &data) {
         }
       }
 #endif
-     //if (rand()%10 > 0) // 1/10th of chance to ignore the impact feedback
-     if (rand()%10 > 8) // 9/10th of chance to ignore the impact feedback
+     if (rand()%10 > GHOSTED_FEEDBACK - 1) 
       {
       // set current effort for ball/paddle impulse
         int idx = 0;
@@ -1014,7 +1015,7 @@ void DisturbanceTimer::getImpulse(const std_msgs::Float64::ConstPtr &data) {
     }
   }
 }
-
+//
 void DisturbanceTimer::computePaddleFreq() {
   // ros::Duration sum(0);
   double average = 0;
