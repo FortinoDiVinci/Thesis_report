@@ -32,6 +32,7 @@ properties
     rec_pos;
     rec_pos_err;
     nrmse_pos;
+    r2_pos;
 end
 
 methods
@@ -245,11 +246,11 @@ methods
         for ii = 1:self.nb_id   
             if rm_offset
                 % the signals averages are substracted for the identification
-                data{ii} = iddata(self.phi(:,1,ii)-mean(self.phi(:,1,ii)), ...
-                    self.y(:,ii)-mean(self.y(:,ii)),dt);
+                data{ii} = iddata(self.phi(1:self.id_size,1,ii)-mean(self.phi(1:self.id_size,1,ii)), ...
+                    self.y(1:self.id_size,ii)-mean(self.y(1:self.id_size,ii)),dt);
             elseif ic_zero
-                data{ii} = iddata(self.phi(:,1,ii) - self.phi(1,1,ii), ...
-                    self.y(:,ii) - self.y(1,ii),dt);
+                data{ii} = iddata(self.phi(1:self.id_size,1,ii) - self.phi(1,1,ii), ...
+                    self.y(1:self.id_size,ii) - self.y(1,ii),dt);
             end
             data{ii}.TimeUnit = 's';
             data{ii}.InputUnit = 'N';
@@ -354,33 +355,33 @@ methods
         
         for ii = 1:self.nb_id
             if rm_offset
-                phi_avg0 = self.phi(:,:,ii);
-                phi_avg0(:,1) = phi_avg0(:,1) - mean(phi_avg0(:,1));
+                phi_avg0 = self.phi(1:self.id_size,:,ii);
+                phi_avg0(:,1) = phi_avg0(1:self.id_size,1) - mean(phi_avg0(1:self.id_size,1));
                 self.rec_y(:,ii) = phi_avg0*self.xi(:, ii);
-                output = self.y(:,ii) - mean(self.y(:,ii));
+                output = self.y(1:self.id_size,ii) - mean(self.y(1:self.id_size,ii));
             elseif ic_zero
                 % initial position is shifted to be null
-                phi_ic0 = self.phi(:,:,ii);
-                phi_ic0(:,1) = phi_ic0(:,1) - phi_ic0(1,1);
+                phi_ic0 = self.phi(1:self.id_size,:,ii);
+                phi_ic0(:,1) = phi_ic0(1:self.id_size,1) - phi_ic0(1,1);
                 self.rec_y(:,ii) = phi_ic0*self.xi(:, ii);
-                output = self.y(:,ii) - self.y(1,ii);
+                output = self.y(1:self.id_size,ii) - self.y(1,ii);
             else
-                self.rec_y(:,ii) = self.phi(:,:,ii)*self.xi(:, ii);
-                output = self.y(:,ii);
+                self.rec_y(:,ii) = self.phi(1:self.id_size,:,ii)*self.xi(:, ii);
+                output = self.y(1:self.id_size,ii);
             end
-            self.rec_err(:,ii) = self.rec_y(:,ii) - output;
+            self.rec_err(:,ii) = self.rec_y(1:self.id_size,ii) - output;
             % root mean square error 
-            self.rmse(ii) = sqrt(mean(self.rec_err(:,ii).^2));
-            self.nrmse(ii) = 1 - norm(self.rec_err(:,ii)) / ...
+            self.rmse(ii) = sqrt(mean(self.rec_err(1:self.id_size,ii).^2));
+            self.nrmse(ii) = 1 - norm(self.rec_err(1:self.id_size,ii)) / ...
                 norm(mean(output) - output);
             % determination coefficient 
-            self.r_2(ii) = 1 - sum( self.rec_err(:,ii).^2 ) / ...
+            self.r_2(ii) = 1 - sum( self.rec_err(1:self.id_size,ii).^2 ) / ...
                 sum( (output - mean(output)).^2 );
             % relative standard deviation Khalil (2004) eq 12.7 - 12.10
-            sig_p2 = ( norm(self.rec_err(:,ii))^2 )/ ...
+            sig_p2 = ( norm(self.rec_err(1:self.id_size,ii))^2 )/ ...
                 (self.id_size - self.nb_param);
             for j = 1:self.nb_param
-                C = sig_p2*inv(self.phi(:,:,ii)'*self.phi(:,:,ii));
+                C = sig_p2*inv(self.phi(1:self.id_size,:,ii)'*self.phi(1:self.id_size,:,ii));
                 sig_j = sqrt(C(j,j));
                 self.rel_std(j, ii) = sig_j/abs(self.xi(j,ii));
             end
@@ -417,22 +418,24 @@ methods
             C = [1, 0];
             causal_ss = ss(A,B,C,0);
             if rm_offset
-                input = self.y(:,ii)-mean(self.y(:,ii));
-                output = self.phi(:,1,ii) - mean(self.phi(:,1,ii));
+                input = self.y(1:self.id_size,ii)-mean(self.y(:,ii));
+                output = self.phi(1:self.id_size,1,ii) - mean(self.phi(:,1,ii));
                 ic = [output(1), self.phi(1,2,ii)];
             elseif ic_zero
-                input = self.y(:,ii)-self.y(1,ii);
-                output = self.phi(:,1,ii) - self.phi(1,1,ii);
+                input = self.y(1:self.id_size,ii)-self.y(1,ii);
+                output = self.phi(1:self.id_size,1,ii) - self.phi(1,1,ii);
                 ic = [output(1), self.phi(1,2,ii)];
             else
-                input = self.y(:,ii);
-                output = self.phi(:,1,ii);
+                input = self.y(1:self.id_size,ii);
+                output = self.phi(1:self.id_size,1,ii);
                 ic = [output(1), self.phi(1,2,ii)];
             end
-            self.rec_pos(:,ii) = lsim(causal_ss, input, dt*(0:199), ic);
+            self.rec_pos(:,ii) = lsim(causal_ss, input, dt*(0:self.id_size-1), ic);
             self.rec_pos_err(:,ii) = self.rec_pos(:,ii) - output;
             self.nrmse_pos(ii) = 1 - norm(self.rec_pos_err(:,ii))/...
                 norm(mean(output) - output);
+            self.r2_pos = 1 - sum(self.rec_pos_err(:,ii).^2)/...
+                sum((mean(output) - output).^2);
         end
     end
     
