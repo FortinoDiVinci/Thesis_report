@@ -1,4 +1,4 @@
-Data collected on April 7th, 8th, 2021
+Data collected on April 7th, 8th, 9th 2021
 Several different experimental conditions were tested. Two new users were
 recorder. Voluntary stiff physical interactions were also recorded. 
 A new condition was also tested, whith some of the force feedback "ghosted".
@@ -15,7 +15,7 @@ users.
 
 Same experiment with voluntary strong cocontraction of the arm (stiff)
 
-* Trial 04 (l*): 21:04:07 16:08 user01 (expert) => motion cap was not recorded..
+* Trial 04 (l*): 21:04:07 16:08 user01 => motion cap was not recorded..
 
 Unerturbed ball bouncing task achieved with haptic feedbacks. A tenth of the
 haptic feedfack are "ghosted" to try to observe the virtual behaviour in 
@@ -38,6 +38,11 @@ Perturbed ball bouncing task achieved with 10% "ghosted" haptic feedbacks
 * Trial 12 (r ): 21:04:08 12:47 user01 
 * Trial 13 (l*): 21:04:08 13:33 user01 (strong cocontraction)
 * Trial 14 (l*): 21:04:08 13:53 user01
+
+Perturbed ball bouncing task achieved with haptic feedbacks (stiff)
+
+* Calibration03: 21:04:09 10:30
+* Trial 15 (l*): 21:04:09 11:38 user01 (strong cocontraction)
 
 ------------
 Parameters
