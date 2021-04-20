@@ -1,0 +1,145 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wenneker Article
+% LaTeX Template
+% Version 2.0 (28/2/17)
+%
+% This template was downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@LaTeXTemplates.com)
+% Frits Wenneker
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt, a4paper]{article} % 12pt font size (11 and 12 also possible), A4 paper (letterpaper for US letter) and two column layout (remove for one column)
+
+\input{structure.tex} % Specifies the document structure and loads requires packages
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+%\title{Expérience de comanipulation} % The article title
+
+\title{Analyse des signaux du système en interaction humain - robot}
+%Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment}
+
+\author{
+	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2} \\ Maria MAKAROV\textsuperscript{2}, encadrante \\ Pedro RODRIGUEZ-AYERBE\textsuperscript{2}, co-directeur \\ Isabelle SIEGLER\textsuperscript{1}, co-directrice}  % Authors
+	\newline\newline % Space before institutions
+	\textsuperscript{1}\institution{Université Paris-Saclay - CIAMS}\\ % Institution 1
+	\textsuperscript{2}\institution{CentraleSupélec - L2S}\\ % Institution 2
+}
+
+
+\date{26 Mai 2020} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date % first edit feb 2020
+
+%----------------------------------------------------------------------------------------
+
+\numberwithin{equation}{section}
+\begin{document}
+	
+	\section{Signaux}
+	
+	\subsection{Acquisition des signaux}
+	
+	Soit $ \vect{f}_0 $ la force d'interaction entre l'utilisateur humain et le robot youBot, qui est mesurée par le capteur de force au niveau de la poignée permettant sa manipulation. Soit $ \vect{p}_0 $ la pose de l'effecteur final, mesurée par un système de caméras repérant des balises qui ont été positionnées sur le robot. Ces deux signaux sont exprimées dans le repère formé par la base du robot.
+	
+	La force $ \vect{f}_0 $ est acquise à \SI{1}{\kilo\hertz}, alors que la pose $ \vect{p}_0 $ est acquise à une fréquence plus faible d'environ \SI{120}{\hertz}. 
+	
+	\subsection{Traitement des signaux}
+	
+	Avant toute opération, les signaux sont synchronisés à l'aide d'interpolations, de manière à obtenir des signaux à un échantillonnement constant de \SI{1}{\kilo\hertz}, on les nommes $ \vect{f}_{0s} $ et $ \vect{p}_{0s} $ respectivement la force et la position. Ces signaux sont ensuite traités avec un filtre passe bas de Butterworth du 2\textsuperscript{nd} ordre à une fréquence de coupure de \SI{25}{} - \SI{50}{\hertz} pour retirer les bruits indésirables des signaux. On nomme les alors $ \vect{f}_1 $ et $ \vect{p}_1 $.
+	
+	\subsection{Particularités des signaux} \label{signal_specificities}
+	
+	Une analyse fréquentielle des signaux $ \vect{f}_{0s} $ et $ \vect{p}_{0s} $ nous montre que la fréquence principale observée est celle imposée par la tâche de jonglerie autour de \SI{0.9}{\hertz}, avec quelques harmoniques d'intensité significatives plus faibles. On observe uniquement sur le signal en force un faible pic autour de \SI{5.5}{\hertz}. On retrouve ce phénomère lorsqu'on fait une observation temporelle de la force. Il s'agit d'oscillations que l'on peut observer sur la [ref figure] [analyse théorique du phénomène, probablement une instabilité].
+	
+	\subsection{Perturbations}
+	
+	Afin de réaliser une estimation d'impédance, des perturbations sont injectés pendant l'interaction en modifiant la consigne des courants moteurs pendant une durée de \SI{30}{\milli\second}, afin d'obtenir un créneaux très court sur la force d'interaction en z. Cette perturbation est donc transmise entre les chaînes motorisées et l'effecteur finales, ce qui a pour effet de la filtrer. On observe alors un signal dont le temps de réponse varient en fonction des caractéristiques du systèmes en interaction avec le robot. Lorsque l'interaction avec l'humain chargé de réaliser les manipulations d'essais avec le robot a été enregistrée, la durée de la perturbation a été évaluée entre une centaine de millisecondes et \SI{120}{\milli\second} [à valider avec des données statistiques à l'appui...] pour l'ensemble composé par le premier front montant puis le front descendant [cette durée est susceptible de varier en fontion de la synchronisation entre direction de la perturbation et du mouvement]. On a donc des perturbations qui sont injectés avec une impulsion fréquentielle (si cette expression a du sens...) d'environs \SI{8.5}{\hertz}.
+	
+	\subsection{Extractions de l'effet de la perturbation}
+	
+	Le temps de réponse en position du bras humain est de l'ordre de quelques centaines de millisecondes [source requise]. Dans le cadre de la tâche de jonglerie, le mouvement observé est presque sinusoïdal, comme détaillé dans [papier CASE2020], l'obtention d'une trajectoire en position non perturbée suite à l'injection de la perturbation, s'effectue avec des résultats assez concluant avec l'interpolation d'une spline cubique entre le point de début de la perturbation et un point d'arrivée \SI{200}{\milli\second} suite à la perturbation. 
+	
+	Toutefois, pour le signal en force, les dynamiques sont assez différentes, et la complexité détaillé précédemment (\cref{signal_specificities}) du signal fausse l'estimation de la trajectoire virtuelle si l'on essait de suivre la même méthodologie que pour la position. Pour essayer de pallier cette problématique, il est possible de filtrer le signal $ \vect{f}_1 $ afin d'en extraire les dynamiques provoquées par les perturbations. Pour cela, si on utilise un filtre eliptique [il a une pente plus raide que les filtres de Butterworth ou Tchebychev I et II, mais il serait intéressant de comparer avec les autres] pour minimiser la modification de l'intensité des fréquences autour de \SI{5.5}{\hertz}. [Caractéristique précise du filtre à déterminer pour l'instant ordre de 5 avec fréquence de coupure à 7Hz : à 7Hz aucune atténuation, à 8.5Hz -50dB, à 5.5Hz une atténuation inférieure à 0.02dB] On obtient alors le signal $ \vect{f}_2 $ où les perturbations sont filtrées et les autres dynamiques subissent une influence minimale.
+
+	
+	\section{Impédance}	
+	
+	\subsection{Trajectoires virtuelles}
+	
+	L'impédance s'estime entre les trajectoires mesurées $ \vect{f}_1 $ et $ \vect{p}_1 $, et les trajectoires virtuelles  $ \vect{f}_v $ et $ \vect{p}_v $. En supposant que l'estimation de la trajectoire virtuelle en position est parfaite, on s'intéresse aux conséquences du filtrage, pour l'obtention de la trajectoire virtuelle en force, sur l'estimation d'impédance.
+	
+	\begin{equation} \label{differential_pose_force}
+		\begin{split}
+			\vect{\delta_p} &= \hat{\vect{\delta_p}} = \vect{p}_v - \vect{p}_1 \\
+			\vect{\delta_f} &= -(\vect{f}_v - \vect{f}_1) \\
+			\hat{\vect{\delta_f}} &= -(\vect{f}_2 - \vect{f}_1) \\
+		\end{split}
+	\end{equation}
+	
+	On peut écrire le signal $ \vect{f}_1 $ comme la somme du signal non perturbé $ \vect{f}_v $, du comportement dynamique en impédance $ \vect{g}(\vect{\delta_x}) $ et d'autres phénomènes possiblement non linéaires que l'on simplifira comme une entrée supplémentaire $ \epsilon $.
+	
+	\begin{equation} %\label{}
+		\vect{f}_1 = \vect{f}_v + \vect{g}(\vect{\delta_p}, \dot{\vect{\delta_p}}, \ddot{\vect{\delta_p}}) + \epsilon
+	\end{equation}
+	
+	En se focalisant uniquement sur l'axe $ \vect{z} $ et en passant dans le domaine de Laplace :
+	
+	\begin{equation} %\label{}
+		\mathcal{L}\{f_{z1}\} = F_{zv}(p) + K\Delta_Z(p) + p B\Delta_Z(p) + p^2 M\Delta_Z(p) + E(p)
+	\end{equation}
+	
+	Lorsqu'on applique le filtre éliptique $ \mathcal{F}_e $
+	
+	\begin{equation} %\label{}
+		F_{z2} = \mathcal{F}_e(p)F_{z1}(p) = \mathcal{F}_e(p) (F_{zv}(p) + K\Delta_Z(p) + p B\Delta_Z(p) + p^2 M\Delta_Z(p) + E(p))
+	\end{equation}
+	
+	De part les caractétristiques choisies pour le filtre, on peut considérer que $ \mathcal{F}_e(p) F_{zv}(p) = F_{zv}(p) $, on peut alors écrire de nouveau la dernière équation du système \cref{differential_pose_force} dans le plan de Laplace :
+	
+	\begin{equation}
+		\hat{\Delta f}_z(p) = (1 - \mathcal{F}_e(p)) \left( (K + p B + p^2 M)\Delta_Z(p) + E(p) \right) 
+	\end{equation}
+	
+	Le filtre eliptique $ \mathcal{F}_e(p) $ peut s'écrire comme la fonction de transfert composé d'un numérateur $ N_e(p) $ et d'un dénominateur $ D_e(p) $ chacun d'ordre équivalent à celui du filtre.
+	
+	\subsection{Regression linéaire}
+	
+	Ainsi, pour estimer les paramètres $ K, B \textnormal{ et } M $ du comportement en impédance, une simple régreession linéaire est appliquée en utilisant une optimisation des moindres carrés qui minimise l'erreur quadratique. En théorie, nous avons donc :
+	
+	\begin{equation}
+		\matr{\Theta}\vect{\xi} = \vect{y} + \vect{\rho}
+	\end{equation}
+	
+	\begin{equation}
+		\vect{\xi} = (\matr{\Theta}^t\matr{\Theta})^{-1} \matr{\Theta}^t \vect{y} + \vect{\rho} \textnormal{,}
+	\end{equation}
+
+	avec, $ \vect{\xi} $ les paramètres du modèle en impédance, $ \matr{\Theta} $ le différentiel des variables cinématiques $ ^i\delta_z $, $ ^i\dot{\delta}_z $ et $ ^i\ddot{\delta}_z $ pour chaque échantillon $i$, représenté sous forme matriciel, et $ \vect{y} $ le différentiel de force $ ^i\delta_{fz} $ pour chaque échantillon, sous forme vectorielle concaténée.
+	
+	Dans le cas où la trajectoire virtuelle en force est estimée avec un filtre, il faut remplacer  $ \vect{y} $ par $ \hat{\vect{y}} $, avec $ y_i = ^i\hat{\delta}_{fz} $ :
+	
+		
+	\begin{equation}
+		\hat{\vect{\xi}}_i = (\vect{\theta}_i^t\vect{\theta}_i)^{-1} \vect{\theta}_i^t \left( ^if_{z1} - \mathcal{F}_e(^if_{z1}) \right) + \rho_i 
+	\end{equation}
+
+	\section{In progress...}	
+
+	\bibliographystyle{apalike} %abbrvnat
+	
+	\newpage
+	\bibliography{Biblio/impedance_ctrl,Biblio/CPG,Biblio/ball_bouncing,Biblio/human_motor_ctrl,Biblio/human_impedance,Biblio/robotics}	
+	
+\end{document}

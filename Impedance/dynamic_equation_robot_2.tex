@@ -1,0 +1,243 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wenneker Article
+% LaTeX Template
+% Version 2.0 (28/2/17)
+%
+% This template was downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@LaTeXTemplates.com)
+% Frits Wenneker
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt, a4paper]{article} % 12pt font size (11 and 12 also possible), A4 paper (letterpaper for US letter) and two column layout (remove for one column)
+
+\input{structure.tex} % Specifies the document structure and loads requires packages
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+%\title{Expérience de comanipulation} % The article title
+
+\title{Commande bio-inspirée de robot pour des tâches rythmiques en interaction avec l'environnement}
+%Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment}
+
+\author{
+	\authorstyle{Vincent FORTINEAU\textsuperscript{1,2} \\ Maria MAKAROV\textsuperscript{2}, encadrante \\ Pedro RODRIGUEZ-AYERBE\textsuperscript{2}, co-directeur \\ Isabelle SIEGLER\textsuperscript{1}, co-directrice}  % Authors
+	\newline\newline % Space before institutions
+	\textsuperscript{1}\institution{Université Paris-Saclay - CIAMS}\\ % Institution 1
+	\textsuperscript{2}\institution{CentraleSupélec - L2S}\\ % Institution 2
+}
+
+
+\date{26 Mai 2020} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date % first edit feb 2020
+
+%----------------------------------------------------------------------------------------
+
+\numberwithin{equation}{section}
+\begin{document}
+	
+	\section{Analyse théorique des dynamiques apparentes}
+	\label{app_apparent_dyn_robot}
+	
+	%\paragraph{Analyse théorique} 
+	
+	On donne le modèle dynamique général d'un robot en contact avec un environnement \cref{eq_dyn_model_robot}, avec $ \matr{M} $ la matrice d'inertie du robot, $ \vect{h} $ le vecteur regroupant les phénomènes liées à la position et à la vitesse - \textit{e.g., couples centrifuges, de Coriolis, gravitationnel}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur. Ce modèle dynamique peut-être obtenu à partir des équations de Lagrange, comme explicité par \citet[Chapitre 9, \textit{Dynamic modeling of serial robots}]{w_khalil_modeling_2002}.
+	%
+	\begin{equation} \label{eq_dyn_model_robot}
+	\matr{M}(\vect{q})\ddot{\vect{q}} + \vect{h}(\dot{\vect{q}}, \vect{q}) = \vect{\tau}_r + \vect{\tau}_{e}
+	\end{equation}
+	%
+	En explicitant les termes regroupés par $ \vect{h} $, on peut écrire l'expression suivante qui sépare les effets inertiels de ceux liés à la gravité $ \vect{g}(\vect{q}) $. En considérant les phénomènes de frottements visqueux notés $ \matr{F}_v $ ainsi que les couples centrifuges et de Coriolis regroupés dans le terme $ \matr{c}(\dot{\vect{q}}, \vect{q}) $ aussi détaillé par \cite{w_khalil_modeling_2002}, on peut exprimer l'accélération comme une fonction $ \vect{f} $ dépendant des positions et vitesses articulaires, respectivement  $ \vect{q}, \dot{\vect{q}} $, des couples internes $ \vect{\tau}_r $ et des forces générés par l'environnement $ \vect{f}_e $.
+	%
+	\begin{equation} \label{eq_dyn_model_robot_complete}
+		\ddot{\vect{q}} = \matr{M}(\vect{q})^{-1} \left( \vect{\tau}_r + \jacobian{\vect{q}
+		}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) \right)
+	\end{equation}
+	%
+	\subsection{Intégration de la commande en couple du robot}
+	
+	Les couples $ \vect{\tau}_r $ sont donnés par le contrôle en vitesses articulaires. On note $ \matr{C}_v \in \mathrm{diag} \left( \R^{3\times3} \right) $ le correcteur de la boucle interne en vitesses. %$ \matr{C}_v $ est diagonal. 
+	Les boucles secondaires, qui ne devraient pas avoir d'effet sur la transparence, sont négligées.	
+	%
+	\begin{equation} \label{torque_cmd_ctrl_loop}
+	\vect{\tau}_r \approx \vect{\tau}_d = \matr{C}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) = \matr{K}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) + \matr{K}_{vi} \int \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) \mathrm{d}t
+	\end{equation}
+	%
+	Les vitesses articulaires de consigne $ \dot{\vect{q}}_d $ sont obtenues à partir du passage dans le plan articulaire des consignes cartésiennes du contrôleur en admittance $ \matr{C}_z $ détaillé en \cref{velocity_cmd_ctrl_loop}.
+	%
+	\begin{equation} \label{velocity_cmd_ctrl_loop}
+	\dot{\vect{q}}_d = \jacobianHat{\vect{q}}{}{-1} \begin{pmatrix} 0 & c_z (f_z) & 0 \end{pmatrix}^{t} = \jacobianHat{\vect{q}}{}{-1} \matr{C}_z (\vect{f}_e) = \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right)
+	\end{equation}
+	%
+	On peut écrire de nouveau \cref{eq_dyn_model_robot_complete} pour y intégrer les contrôleurs.
+	%
+	\begin{equation} \label{eq_dyn_model_robot_complete_ctrl}
+	\ddot{\vect{q}} = \matr{M}(\vect{q})^{-1} \left( \matr{K}_v (\dot{\vect{q}}_d - \dot{\vect{q}}) + \matr{K}_{vi} (\vect{q}_d - \vect{q}) + \jacobian{\vect{q}
+	}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) \right) \text{,}
+	\end{equation}
+	%
+	avec :
+	%
+	\begin{equation} \label{integral_velocity_cmd_ctrl_loop}
+	\vect{q}_d = \int \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right) \; \mathrm{d}t
+	\end{equation}
+	%
+	\subsection{Passage dans les domaines cartésien}
+	%
+	La relation [peut-être préciser la source ? Khalil ?] \cref{eq_link_joint_endpoint_velocity} permet d'obtenir l'expression liant les accélérations cartésienne et articulaire \cref{eq_link_joint_endpoint_acceleration}, on peut alors écrire le modèle \cref{eq_dyn_model_robot_complete_2} de l'accélération cartésienne $ \ddot{\vect{x}} $.
+	%
+	\begin{equation} \label{eq_link_joint_endpoint_velocity}
+	\dot{\vect{X}} = \jacobian{\vect{q}}{}{} \dot{\vect{q}}
+	\end{equation}
+	%
+	\begin{equation} \label{eq_link_joint_endpoint_acceleration}
+	\ddot{\vect{X}} = \jacobian{\vect{q}}{}{} \ddot{\vect{q}} + \jacobianDot{\vect{q}}{}{} \dot{\vect{q}}
+	\end{equation}
+	%
+	\begin{equation} \label{eq_dyn_model_robot_complete_2}
+	\ddot{\vect{x}} =  \jacobian{\vect{q}
+	}{}{}\matr{M}(\vect{q})^{-1} \left(  \matr{C}_v (\dot{\vect{q}}_d - \dot{\vect{q}}) + \jacobian{\vect{q}
+	}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) \right) + \jacobianDot{\vect{q}}{}{} \dot{\vect{q}}
+	\end{equation}
+	%
+	\subsection{Linéarisation du modèle dynamique} \label{sec_dyn_app_sub_linear}
+	%
+	On peut donc exprimer le modèle dynamique du robot en fonction de trois variables tel que $ \ddot{\vect{x}} = \vect{f}(\vect{q}, \dot{\vect{q}}, \vect{f}_e) $. En s'intéressant à de mouvements faibles autours de la configuration  $ \vect{q}_0 $, on peut exprimer $ \tilde{\ddot{\vect{x}}} $ la linéarisation du modèle décrit en \cref{eq_dyn_model_robot_complete_2}, au voisinage des points d'équilibre $ \matr{X}_0 = \left( \vect{q}_0, \dot{\vect{q}_0}, \vect{f}_{e0} \right) $, avec $ \dot{\vect{q}}_0 = \vect{f}_{e0} = 0 $.
+	%
+	\begin{equation} \label{eq_linearization_dyn}
+	\tilde{\ddot{\vect{x}}} = d \vect{f}(\vect{q}, \dot{\vect{q}}, \vect{f}_e) = \left. \frac{\partial \vect{f}}{\partial \vect{q} } \right|_{\matr{X}_0} \tilde{\vect{q}} + \left. \frac{\partial \vect{f}}{\partial \dot{\vect{q}} } \right|_{\matr{X}_0} \tilde{\dot{\vect{q}}} + \left. \frac{\partial \vect{f}}{\partial \vect{f_e}} \right|_{\matr{X}_0} \tilde{\vect{f_e}}
+	\end{equation}
+	%
+%	En augmentant l'état de la fonction $ \vect{f} $, pour y intégrer $ \intgrl{\vect{f}}_e $ et $ \dintgrl{\vect{f}}_e $, respectivement l'intégrale et la double intégrale de la force d'interaction $ \vect{f}_e $, on peut exprimer $ \ddot{\vect{x}} = \vect{f}_2(\vect{q}, \dot{\vect{q}}, \vect{f}_e, \intgrl{\vect{f}}_e, \dintgrl{\vect{f}}_e) $.
+%	%
+%	\begin{equation} \label{eq_linearization_dyn_2}
+%	\tilde{\ddot{\vect{x}}} = d \vect{f}_2(\vect{q}, \dot{\vect{q}}, \vect{f}_e,\intgrl{\vect{f}}_e, \dintgrl{\vect{f}}_e) = \left. \frac{\partial \vect{f}_2}{\partial \vect{q} } \right|_{\matr{X}_0} \tilde{\vect{q}} + \left. \frac{\partial \vect{f}_2}{\partial \dot{\vect{q}} } \right|_{\matr{X}_0} \tilde{\dot{\vect{q}}} + \left. \frac{\partial \vect{f}_2}{\partial \vect{f_e}} \right|_{\matr{X}_0} \tilde{\vect{f_e}} + \left. \frac{\partial \vect{f}_2}{\partial \intgrl{\vect{f}}_e} \right|_{\matr{X}_0} \tilde{\intgrl{\vect{f}}}_e + \left. \frac{\partial \vect{f}_2}{\partial \dintgrl{\vect{f}}_e} \right|_{\matr{X}_0} \tilde{\dintgrl{\vect{f}}}_e
+%	\end{equation}
+	%
+	Il est possible d'augmenter l'état de la fonction $ \vect{f} $ pour simplifier les problématiques posées par les actions intégrales. Ainsi, on peut poser $ \vect{e}_f $ et $ \vect{e}_v $, respectivement les actions intégrales sur la force $ \vect{f}_e $ et sur les erreurs de vitesses articulaires $ \dot{\vect{q}_d} - \dot{\vect{q}} $. On obtient alors :
+	%
+	\begin{equation} \label{eq_linearization_dyn_2}
+		\tilde{\ddot{\vect{x}}} = d \vect{f}(\vect{q}, \dot{\vect{q}}, \vect{f}_e,\vect{e}_f, \vect{e}_v) = \left. \frac{\partial \vect{f}}{\partial \vect{q} } \right|_{\matr{X}_0} \tilde{\vect{q}} + \left. \frac{\partial \vect{f}}{\partial \dot{\vect{q}} } \right|_{\matr{X}_0} \tilde{\dot{\vect{q}}} + \left. \frac{\partial \vect{f}}{\partial \vect{f_e}} \right|_{\matr{X}_0} \tilde{\vect{f_e}} + \left. \frac{\partial \vect{f}}{\partial \vect{e}_f} \right|_{\matr{X}_0} \tilde{\vect{e}}_f + \left. \frac{\partial \vect{f}}{\partial \vect{e}_v} \right|_{\matr{X}_0} \tilde{\vect{e}}_v
+	\end{equation}
+	%
+%	En posant l'hypothèse \cref{eq_hyp_int_dyn}, et en notant que les nouveaux états ajoutés ont des valeurs nulles à l'équilibre $ \matr{X}_0 $ %($ \intgrl{\vect{f}}_{e0} = \dintgrl{\vect{f}}_{e0} = 0 $)
+%	, on peut s'intéresser aux dérivées partielles de la fonction $ \vect{f}_2 $ pour la linéarisation des dynamiques apparentes.
+%	%
+%	\begin{equation} \label{eq_hyp_int_dyn}
+%	\int_{t_0}^t \jacobianHat{\vect{q}}{}{-1} \matr{K}_p \vect{f}_e \; \mathrm{d}t =  \jacobianHat{\vect{q}}{}{-1} \matr{K}_p \int_{t_0}^t \vect{f}_e \; \mathrm{d}t
+%	\end{equation}
+	%
+	En écrivant \cref{eq_dyn_model_robot_complete_2} en fonction des états augmentés, on obtient :
+	%
+	\begin{equation}
+	\begin{aligned} \label{eq_dyn_augm_states}
+		\tilde{\ddot{\vect{x}}} = \jacobian{\vect{q}
+		}{}{}\matr{M}(\vect{q})^{-1} \big(\matr{K}_{vi}\vect{e}_v + (\matr{K}_v\jacobianHat{\vect{q}}{}{-1}\matr{K}_p + \jacobian{\vect{q}
+		}{}{t}) \vect{f}_{e} + \matr{K}_v\jacobianHat{\vect{q}}{}{-1}\matr{K}_i\vect{e}_f ...\\
+	 - (\matr{F}_v + \matr{C}(\vect{q}, \dot{\vect{q}}) + \matr{K}_v)\dot{\vect{q}} - \vect{g}(\vect{q}) \big) + \jacobianDot{\vect{q}}{}{} \dot{\vect{q}}
+	\end{aligned}
+	\end{equation}
+	%
+	En notant que les nouveaux états ajoutés ont des valeurs nulles à l'équilibre $ \matr{X}_0 $, on peut s'intéresser aux dérivées partielles de la fonction $ \vect{f} $ pour la linéarisation des dynamiques apparentes.
+	%
+	\begin{equation}
+	\begin{split}
+%	\left. \frac{\partial \vect{f}}{\partial \vect{q} } \right|_{\matr{X}_0} &= - \left. \frac{\partial \jacobian{q}{}{} \matr{M}(\vect{q})^{-1} }{\partial \vect{q} } \right|_{\matr{X}_0} \left( \matr{K}_{vi} \vect{q}_0 + \left. \frac{\partial \vect{g}(\vect{q})}{\partial \vect{q} } \right|_{\matr{X}_0} \right) \\
+	\left. \frac{\partial \vect{f}}{\partial \vect{q} } \right|_{\matr{X}_0} &= - \left. \frac{\partial \jacobian{q}{}{} \matr{M}(\vect{q})^{-1} \vect{g}(\vect{q}) }{\partial \vect{q} } \right|_{\matr{X}_0} \\
+	%
+	\left. \frac{\partial \vect{f}}{\partial \dot{\vect{q}} } \right|_{\matr{X}_0} &= \left. \frac{\partial \jacobianDot{\vect{q}}{}{} \dot{\vect{q}} }{\partial \dot{\vect{q}} } \right|_{\matr{X}_0} - \jacobian{\vect{q}_0}{}{}\matr{M}(\vect{q}_0)^{-1} \left(\matr{K}_v + \matr{F}_v + \left. \frac{\partial \matr{C}(\vect{q},\dot{\vect{q}}) \dot{\vect{q}} }{\partial \dot{\vect{q}} } \right|_{\matr{X}_0} \right) \\
+	%
+	\left. \frac{\partial \vect{f}}{\partial \vect{f}_e } \right|_{\matr{X}_0} &= \jacobian{\vect{q}_0
+	}{}{}\matr{M}(\vect{q}_0)^{-1} \left( \matr{K}_v \jacobianHat{\vect{q}_0}{}{-1} \matr{K}_p + \jacobian{\vect{q}_0}{}{t} \right) \\
+	%
+	\left. \frac{\partial \vect{f}}{\partial \vect{e}_f } \right|_{\matr{X}_0} &= \jacobian{\vect{q}_0
+	}{}{}\matr{M}(\vect{q}_0)^{-1} \matr{K}_v\jacobianHat{\vect{q}_0}{}{-1}\matr{K}_i \\
+	%
+	\left. \frac{\partial \vect{f}}{\partial \vect{e}_v } \right|_{\matr{X}_0} &= \jacobian{\vect{q}_0
+	}{}{}\matr{M}(\vect{q}_0)^{-1} \matr{K}_{vi} \\
+	%
+%	\left. \frac{\partial \vect{f}_2}{\partial \intgrl{\vect{f}}_e } \right|_{\matr{X}_0} &= \jacobian{\vect{q}_0
+%	}{}{}\matr{M}(\vect{q}_0)^{-1} \left( \matr{K}_v \jacobianHat{\vect{q}_0}{-1}{} \matr{K}_i + \matr{K}_{vi} \jacobianHat{\vect{q}_0}{-1}{} \matr{K}_p \right) \\
+%	%
+%	\left. \frac{\partial \vect{f}_2}{\partial \dintgrl{\vect{f}}_e } \right|_{\matr{X}_0} &= \jacobian{\vect{q}_0}{}{}\matr{M}(\vect{q}_0)^{-1} \matr{K}_{vi} \jacobianHat{\vect{q}_0}{-1}{} \matr{K}_i
+	\end{split}
+	\end{equation}
+	%
+	\subsection{Représentation d'état}
+	%
+%	L'expression \cref{eq_link_joint_endpoint_velocity} peut être utilisée pour de faibles mouvements articulaires au voisinage de points d'équilibre, tel que $ d\vect{X} = \jacobian{\vect{q}}{}{} d\vect{q} $, on peut alors exprimer :
+%	\begin{equation}
+%	\tilde{\ddot{\vect{x}}} = 
+%	\end{equation}
+	%
+	L'équation dynamique décrite en \cref{eq_dyn_model_robot_complete_ctrl} peut facilement être écrite sous forme de représentation d'état, en utilisant les états augmentés $ \vect{\phi} = \left(\vect{q}, \dot{\vect{q}}, \vect{e}_v, \vect{e}_f \right)^t $, avec comme entrées du système les forces d'interaction $ u =\vect{f}_e $.
+	%
+	L'équations manquante pour cette représentation peut être déduite de \cref{integral_velocity_cmd_ctrl_loop}, avec la relation suivante :
+	%
+	\begin{equation} 
+		\dot{\vect{e}_v} = \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \vect{e}_f \; \mathrm{d}t \right) - \dot{\vect{q}}_d
+	\end{equation}
+	%
+	\begin{equation}
+		\dot{\vect{\phi}} = \matr{A} \vect{\phi} + \matr{B} \vect{u}
+	\end{equation}
+	%
+	Les matrices $ \matr{A} $ et $ \matr{B} $ peuvent être calculées en utilisant la méthodologie décrite en \cref{sec_dyn_app_sub_linear}. Il faut considérer la concaténation des égalités des dérivées des états, en un vecteur $ \vect{\psi} $ que l'on dérive ensuite en fonction de chaque état. Il faut donc calculer le jacobien de $ \vect{\psi} $, en fonction des états $ \vect{\phi} $ pour la matrice $ \matr{A} $ et des entrées $ \vect{f}_e $ pour la matrice $ \matr{B} $.
+	%
+	\begin{equation} \label{eq_dynamic_ss_A}
+		\matr{A} = \frac{\partial \left( \dot{\vect{q}}, \ddot{\vect{q}}, \dot{\vect{e}_v}, \dot{\vect{e}_f} \right)}{\partial \left(\vect{q}, \dot{\vect{q}}, \vect{e}_v, \vect{e}_f \right)}
+	\end{equation}
+	%
+	\begin{equation} \label{eq_dynamic_ss_B}
+		\matr{B} = \frac{\partial \left( \dot{\vect{q}}, \ddot{\vect{q}}, \dot{\vect{e}_v}, \dot{\vect{e}_f} \right)}{\partial \vect{f}_e }
+	\end{equation}
+	%
+	En utilisant la relation \cref{eq_link_joint_endpoint_velocity}, on peut ensuite définir la matrice d'observation pour que la sortie du système soit dans l'espace cartésien.
+	%
+	\begin{equation} \label{eq_dynamic_ss_C}
+		\matr{C} = \frac{\partial \dot{x}_z }{ \partial \left(\vect{q}, \dot{\vect{q}}, \vect{e}_v, \vect{e}_f \right) }
+	\end{equation}
+	%
+	\subsection{Validation de la linéarisation}
+	%
+	\subsubsection{Identification des paramètres dynamiques}
+	%
+	Les paramètres dynamiques du robot ont été définis ... [voir avec Maria pour être précis sur la méthode utilisé pour l'identification (trajectoires optimisées et réduction des inconnues...)]
+	%
+	\subsubsection{Identification des paramètres géométriques}
+	%
+	Jacobien principalement, ...
+	%
+	\subsubsection{Simulation numérique}
+	%
+	Une fois ces paramètres identifiés, il est possible de définir les fonctions dynamiques des matrices de Corriolis et d'inertie, ainsi que le Jacobien et le vecteur de gravité, en fonction des données articulaires.
+	[Mettre les résultats de la simulation simulink et de la linéarisation avec représentation d'état...]
+	%
+	\subsection{Interprétations et analyses}
+	%
+	Bode de la position cartésienne en x, pour une entrée en force. Pente de -40dB/decade entre \SIrange{0.5}{2}{\hertz} -> comportement analogique à l'inverse d'une masse, en regardant le comportement en accélération, on observe bien ce plateau avec un gain de xx dB, ce qui correspond à une masse de 10 kg ??
+	Si on étudie la dynamique du robot sans le controle ... blalaba
+\clearpage
+\begin{appendices}
+	\crefalias{section}{appendix}
+	\section{test}
+	
+\end{appendices}
+	
+\bibliographystyle{apalike} %abbrvnat
+
+\newpage
+\bibliography{Biblio/impedance_ctrl,Biblio/CPG,Biblio/ball_bouncing,Biblio/human_motor_ctrl,Biblio/human_impedance,Biblio/robotics}	
+
+\end{document}

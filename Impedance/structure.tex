@@ -39,6 +39,8 @@
 %	CUSTOMIZED SECTION (vfo)
 %----------------------------------------------------------------------------------------
 %\usepackage{breqn}
+%\usepackage{autobreak} % to auto break long equations
+%\allowdisplaybreaks
 
 \usepackage{siunitx} % for SI units
 
@@ -174,6 +176,14 @@
 	\multiply\@tempcnta by -1
 	\advance\@tempcnta by #1\relax
 	\the\@tempcnta%
+}
+
+\newcommand{\intgrl}[1]{%
+	\overset{\prime}{#1}
+}
+
+\newcommand{\dintgrl}[1]{%
+	\overset{\prime\prime}{#1}
 }
 
 %----------------------------------------------------------------------------------------
