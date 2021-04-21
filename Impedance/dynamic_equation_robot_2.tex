@@ -50,6 +50,8 @@
 	\section{Analyse théorique des dynamiques apparentes}
 	\label{app_apparent_dyn_robot}
 	
+	\subsection{Modélisation}
+	
 	%\paragraph{Analyse théorique} 
 	
 	On donne le modèle dynamique général d'un robot en contact avec un environnement \cref{eq_dyn_model_robot}, avec $ \matr{M} $ la matrice d'inertie du robot, $ \vect{h} $ le vecteur regroupant les phénomènes liées à la position et à la vitesse - \textit{e.g., couples centrifuges, de Coriolis, gravitationnel}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur. Ce modèle dynamique peut-être obtenu à partir des équations de Lagrange, comme explicité par \citet[Chapitre 9, \textit{Dynamic modeling of serial robots}]{w_khalil_modeling_2002}.
@@ -65,13 +67,14 @@
 		}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) \right)
 	\end{equation}
 	%
-	\subsection{Intégration de la commande en couple du robot}
+	\subsubsection{Intégration de la commande en couple du robot}
 	
-	Les couples $ \vect{\tau}_r $ sont donnés par le contrôle en vitesses articulaires. On note $ \matr{C}_v \in \mathrm{diag} \left( \R^{3\times3} \right) $ le correcteur de la boucle interne en vitesses. %$ \matr{C}_v $ est diagonal. 
+	Les courants moteurs $ \vect{i}_r $ sont donnés par le contrôle en vitesses articulaires. On note $ \matr{C}_v \in \mathrm{diag} \left( \R^{3\times3} \right) $ le correcteur de la boucle interne en vitesses. %$ \matr{C}_v $ est diagonal. 
+	Pour obtenirs les couples articulaires à partir des courants moteurs, il faut d'une part considérer les constantes de couples $ \matr{T}_m $ pour obtenir les couples moteurs, puis  les trains épicycloïdaux (réducteurs planétaires) $ \matr{R} $, pour enfin obtenir les couples articulaires $ \vect{\tau}_r $. Ces constantes sont considérées comme étant intégrées aux gains des correcteurs, pour ne pas alourdir les équations.
 	Les boucles secondaires, qui ne devraient pas avoir d'effet sur la transparence, sont négligées.	
 	%
 	\begin{equation} \label{torque_cmd_ctrl_loop}
-	\vect{\tau}_r \approx \vect{\tau}_d = \matr{C}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) = \matr{K}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) + \matr{K}_{vi} \int \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) \mathrm{d}t
+	\vect{\tau}_r = \matr{R} \matr{T}_m \vect{i}_r \approx \matr{R} \matr{T}_m \vect{i}_d =  \matr{C}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) = \matr{K}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) + \matr{K}_{vi} \int \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) \mathrm{d}t
 	\end{equation}
 	%
 	Les vitesses articulaires de consigne $ \dot{\vect{q}}_d $ sont obtenues à partir du passage dans le plan articulaire des consignes cartésiennes du contrôleur en admittance $ \matr{C}_z $ détaillé en \cref{velocity_cmd_ctrl_loop}.
@@ -93,7 +96,7 @@
 	\vect{q}_d = \int \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right) \; \mathrm{d}t
 	\end{equation}
 	%
-	\subsection{Passage dans les domaines cartésien}
+	\subsubsection{Passage dans les domaines cartésien}
 	%
 	La relation [peut-être préciser la source ? Khalil ?] \cref{eq_link_joint_endpoint_velocity} permet d'obtenir l'expression liant les accélérations cartésienne et articulaire \cref{eq_link_joint_endpoint_acceleration}, on peut alors écrire le modèle \cref{eq_dyn_model_robot_complete_2} de l'accélération cartésienne $ \ddot{\vect{x}} $.
 	%
@@ -111,7 +114,7 @@
 	}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) \right) + \jacobianDot{\vect{q}}{}{} \dot{\vect{q}}
 	\end{equation}
 	%
-	\subsection{Linéarisation du modèle dynamique} \label{sec_dyn_app_sub_linear}
+	\subsubsection{Linéarisation du modèle dynamique} \label{sec_dyn_app_sub_linear}
 	%
 	On peut donc exprimer le modèle dynamique du robot en fonction de trois variables tel que $ \ddot{\vect{x}} = \vect{f}(\vect{q}, \dot{\vect{q}}, \vect{f}_e) $. En s'intéressant à de mouvements faibles autours de la configuration  $ \vect{q}_0 $, on peut exprimer $ \tilde{\ddot{\vect{x}}} $ la linéarisation du modèle décrit en \cref{eq_dyn_model_robot_complete_2}, au voisinage des points d'équilibre $ \matr{X}_0 = \left( \vect{q}_0, \dot{\vect{q}_0}, \vect{f}_{e0} \right) $, avec $ \dot{\vect{q}}_0 = \vect{f}_{e0} = 0 $.
 	%
@@ -174,7 +177,7 @@
 	\end{split}
 	\end{equation}
 	%
-	\subsection{Représentation d'état}
+	\subsubsection{Représentation d'état} \label{sec_dyn_app_sub_state_sys}
 	%
 %	L'expression \cref{eq_link_joint_endpoint_velocity} peut être utilisée pour de faibles mouvements articulaires au voisinage de points d'équilibre, tel que $ d\vect{X} = \jacobian{\vect{q}}{}{} d\vect{q} $, on peut alors exprimer :
 %	\begin{equation}
@@ -209,7 +212,7 @@
 		\matr{C} = \frac{\partial \dot{x}_z }{ \partial \left(\vect{q}, \dot{\vect{q}}, \vect{e}_v, \vect{e}_f \right) }
 	\end{equation}
 	%
-	\subsection{Validation de la linéarisation}
+	\subsection{Validation de la modélisation}
 	%
 	\subsubsection{Identification des paramètres dynamiques}
 	%
@@ -221,8 +224,40 @@
 	%
 	\subsubsection{Simulation numérique}
 	%
-	Une fois ces paramètres identifiés, il est possible de définir les fonctions dynamiques des matrices de Corriolis et d'inertie, ainsi que le Jacobien et le vecteur de gravité, en fonction des données articulaires.
-	[Mettre les résultats de la simulation simulink et de la linéarisation avec représentation d'état...]
+	Une fois ces paramètres identifiés, il est possible de définir les fonctions dynamiques des matrices de Corriolis et d'inertie, ainsi que le Jacobien, le vecteur de gravité et les vecteurs liés aux frottements visqueux et statiques, en fonction des données articulaires.
+	%
+	\paragraph{Contrôle}
+	%
+	Dans un premier temps, les réponses simulées et mesurées des correcteurs en vitesse articulaire ont été comparées pour vérifier leur validité. La \cref{fig_joint_velocities_real_vs_sim} montre les consignes de couple articulaire. La réponse réelle du robot est récupérée grâce à ROS, et la réponse simulée est calculée à partir des erreurs de vitesse articulaire $ \vect{\epsilon}_v = \dot{\vect{q}}_d - \dot{\vect{q}} $, elles aussi récupérées à partir de leurs composantes sous ROS.
+	%
+	\begin{figure}[h] 
+		\includegraphics[width=\textwidth]{misc/dynamic_model/simul_vs_measured_torque_cmd.png}
+		\caption{à tracer proprement...}
+		\label{fig_joint_velocities_real_vs_sim}
+	\end{figure}
+	
+	Ainsi, comme spécifiée dans la documentation technique \cite{noauthor_tmcm_2011} des pilotes moteurs, les gains des correcteurs proportionnels-intégraux-dérivés (PID) doivent être multipliés par des coefficients pour les convertir dans une unité non précisée, très probablement le bit, utilisées par les pilotes. La \cref{fig_joint_velocities_real_vs_sim} bien que dévoilant quelques différences, notamment pour la troisième articulation du robot, montre que les correcteurs simulés et réels présentent des amplitudes et dynamiques équivalentes. Les différences observées peuvent venir de non linéarités (saturations, gains adaptatifs) présentes dans les correcteurs réels.
+	
+	Etant donné les dynamiques rapides des boucles internes de courant, de l'ordre de la milliseconde, ces dernières sont négligées, les courant réels $ \vect{i}_r $ sont alors considérés égaux aux courants de consigne $ \vect{i}_d $, comme précedemment fait en \cref{torque_cmd_ctrl_loop}. Toutefois, contrairement à la simplification faite précedemment, les constantes de couples ainsi que des réducteurs ne sont pas intégrés aux gains des correcteurs réels $ \matr{C}_v $, il faut donc penser à faire la conversion de la sortie du correcteur qui est en courant moteur, comme indiqué sur la \cref{fig_trinamic_cascadde_control_diagram} du manuel \cite{noauthor_tmcm_2011}.
+	%
+	\begin{figure}[h] 
+		\includegraphics[width=\textwidth]{misc/dynamic_model/trinamic_motor_driver_schema.png}
+		\caption{à récupérer correctement ou refaire ?}
+		\label{fig_trinamic_cascadde_control_diagram}
+	\end{figure}
+	%
+	\paragraph{Model du robot}
+	%
+	Pour valider le comportement dynamique du robot, des forces d'interaction mesurées en expériences réelles ont été injectées dans la simulation, aussi bien au niveau du contrôleur en admittance que pour les dynamiques internes du robot. Les couples internes mesurées empiriqueemnt ont ensuite été comparés aux couples simulés, les résultats sont montrés en [ajouter référence de la figure].
+	Afin de tenir compte d'une transmission des forces externes aux couples moteurs avec des pertes énergétiques, des coefficients de rendement $ \matr{\nu} $ ont été ajoutés au modèle décrit en \cref{eq_dyn_model_robot_complete}, comme indiqué en \cref{eq_dyn_model_robot_complete_with_nu}. Les amplitudes ainsi que les motifs rythmiques indiquent que le comportement interne du modèle dynamique identifié est cohérent avec le comportement réellement observé.
+	%
+	\begin{equation} \label{eq_dyn_model_robot_complete_with_nu}
+		\ddot{\vect{q}} = \matr{M}(\vect{q})^{-1} \left( \vect{\tau}_r + \matr{\nu} \jacobian{\vect{q}}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) \right)
+	\end{equation}
+	%
+	\paragraph{Linéarisation}
+	
+	Pour valider la linéarisation, le schéma de contrôle ainsi que les dynamiques du robot ont été modélisés avec simulink, et leur linéarisation a été effectué à l'aide de la fonction \textit{dlinmod}. Les résultats obtenus ont pu être comparés à la linéarisation utilisant la méthode décrite en \cref{sec_dyn_app_sub_state_sys}.
 	%
 	\subsection{Interprétations et analyses}
 	%
@@ -238,6 +273,6 @@
 \bibliographystyle{apalike} %abbrvnat
 
 \newpage
-\bibliography{Biblio/impedance_ctrl,Biblio/CPG,Biblio/ball_bouncing,Biblio/human_motor_ctrl,Biblio/human_impedance,Biblio/robotics}	
+\bibliography{Biblio/impedance_ctrl,Biblio/CPG,Biblio/ball_bouncing,Biblio/human_motor_ctrl,Biblio/human_impedance,Biblio/robotics,Biblio/other}	
 
 \end{document}
