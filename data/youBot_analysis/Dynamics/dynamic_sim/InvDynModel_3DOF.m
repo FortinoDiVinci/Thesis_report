@@ -1,9 +1,9 @@
-function [ddth, dth, th] = DynModel_3DOF(f_env,tau,th,dth,dt, varargin)
+function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
 % Dynamic equation of the KUKA robot
 % call it as: [thetapp] = DynModel_3DOF(f_env,tau,q,dq)
 % where:
 %        - M,C,G are the inertia, Coriolis and gravity matrices
-%        - Fv is the viscous matrix
+%        - Fv, Fs are the viscous, and static friction matrices
 %        - tau is a vector of joint torques
 %        - q, dq, ddq joint angles, velocities and accelerations
 %        - fenv must be the force exerted on the robot by the environment,
@@ -73,17 +73,12 @@ function [ddth, dth, th] = DynModel_3DOF(f_env,tau,th,dth,dt, varargin)
     else
         Fs = zeros(3,1);
     end
+     
+    tau = M_3DOF(th3,th4)*ddth + C*dth + G + ...
+        nu.*J0E_3DOF(th2,th3,th4)'*f_env + Fv*dth + Fs;
     
-    % inverse dynamic model
-    ddth = iM_3DOF(th3,th4)*(tau - C*dth - G - ...
-        nu.*J0E_3DOF(th2,th3,th4)'*f_env - Fv*dth - Fs);
-    
-    if(isnan(ddth))
-        error('ddth is NaN...')
+    if(isnan(tau))
+        error('tau is NaN...')
     end
     
-    % integration
-    dth = ddth .*dt + dth;
-    th = dth .*dt + th;
-
 end

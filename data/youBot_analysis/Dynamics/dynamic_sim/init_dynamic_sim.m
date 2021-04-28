@@ -46,9 +46,9 @@ xi = sqrt(2)/2;
 filt_num = 1;
 filt_den = [1/w0^2 2*xi/w0 1];
 % Environment
-K_env = [0;100;0];
-B_env = [0;10;0];
-M_env = [0;1;0];
+K_env = [0;300;0];
+B_env = [0;15;0];
+M_env = [0;0.5;0];
 
 x0 = 0;
 le = 0.1;
@@ -59,6 +59,8 @@ simulateYouBotKinematics([0,th0',0]);
 x0 = p0(1);
 z0 = p0(3);
 ry0 = acos(r(1,1));
+
+is_real_data = 0; % no real input
 
 % dummy var (run next section and change manual switches in simulink for 
 % real input test)
@@ -76,6 +78,7 @@ return % This other section can be run after this one
 load('..\..\..\ball_bouncing_experiment\experimental_bench_pert\data_2020_Nov_17\data_without_impacts_2020_11_17.mat')
 addpath('..\..\..\force_torque_sensor')
 exp_nb = 2;
+is_real_data = 1;
 
 real_x = mocap_marker_robot_base{exp_nb}(:,1);
 real_z = mocap_marker_robot_base{exp_nb}(:,3);
@@ -84,7 +87,7 @@ real_z = mocap_marker_robot_base{exp_nb}(:,3);
             thetas{exp_nb}', t{exp_nb});
 
 % for simulink from workspace
-real_fz.signals.values = real_f(3,:)';
+real_fz.signals.values = real_f(3,:)'; % fsens = f(e->r)
 real_fz.time = (t{exp_nb} - t{exp_nb}(1));
 real_fx.signals.values = real_f(1,:)';
 real_fx.time = (t{exp_nb} - t{exp_nb}(1));
