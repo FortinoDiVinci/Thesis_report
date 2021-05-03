@@ -1,6 +1,5 @@
 
 *.~
-*.csv
 
 # Matlab
 *.m~
@@ -12,3 +11,19 @@ sccprj/*
 *.autosave
 *.mlappinstall
 *.mltbx
+*.tlc
+*.rtw
+*.dmr
+
+# figure
+.fig
+.png
+.jpg
+.pdf
+
+# data
+.mat
+.csv
+
+# machine learning
+*.ckpt
