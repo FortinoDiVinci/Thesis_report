@@ -5,9 +5,9 @@
 *.m~
 *.slxc
 *.asv
-*.mex*
-slprj/
-sccprj/*
+*.mex
+**/slprj/*
+**/sccprj/*
 *.autosave
 *.mlappinstall
 *.mltbx
@@ -16,14 +16,14 @@ sccprj/*
 *.dmr
 
 # figure
-.fig
-.png
-.jpg
-.pdf
+*.fig
+*.png
+*.jpg
+*.pdf
 
 # data
-.mat
-.csv
+*.mat
+*.csv
 
 # machine learning
 *.ckpt
