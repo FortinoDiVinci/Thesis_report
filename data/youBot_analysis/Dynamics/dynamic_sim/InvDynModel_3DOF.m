@@ -1,6 +1,5 @@
 function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
 % Dynamic equation of the KUKA robot
-% call it as: [thetapp] = DynModel_3DOF(f_env,tau,q,dq)
 % where:
 %        - M,C,G are the inertia, Coriolis and gravity matrices
 %        - Fv, Fs are the viscous, and static friction matrices
@@ -12,7 +11,7 @@ function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
     options.C = 1;
     options.G = 1;
     options.Fv = 1;
-    options.Fs = 0;
+    options.Fs = 1;
     
     for ii=1:2:length(varargin)
         param = varargin{ii};
@@ -74,8 +73,8 @@ function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
         Fs = zeros(3,1);
     end
      
-    tau = M_3DOF(th3,th4)*ddth + C*dth + G + ...
-        nu.*J0E_3DOF(th2,th3,th4)'*f_env + Fv*dth + Fs;
+    tau = M_3DOF(th3,th4)*ddth + C*dth + G - ...
+        nu.*J0E_3DOF(th2,th3,th4)'*f_env - Fv*dth - Fs;
     
     if(isnan(tau))
         error('tau is NaN...')

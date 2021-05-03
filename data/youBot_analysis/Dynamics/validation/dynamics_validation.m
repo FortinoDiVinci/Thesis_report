@@ -1,10 +1,10 @@
 % dynamic youBot model validation
 clear all
-addpath('../../utils')
-addpath('../../force_torque_sensor')
-addpath('dynamic_sim/')
+addpath('../../../utils')
+addpath('../../../force_torque_sensor')
+addpath('../dynamic_sim/')
 
-load('..\..\ball_bouncing_experiment\experimental_bench_pert\data_2020_Nov_17\data_without_impacts_2020_11_17.mat', ...
+load('..\..\..\ball_bouncing_experiment\experimental_bench_pert\data_2020_Nov_17\data_without_impacts_2020_11_17.mat', ...
     't', 'joint_eff', 'thetas', 'dt', 'forces_unf', 'torques_unf')
 exp_nb = 2;
 
@@ -76,10 +76,10 @@ for ii = length(time):-1:1
     
     tau_s_noFs(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'IsFs', 0);
     tau_s(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'IsFs', 1);
-    for j = 1:length(nu_list)
-        tau_s_nu(:,ii,j) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'IsFs', 1,...
-            'nu', nu_list(j));
-    end
+%     for j = 1:length(nu_list)
+%         tau_s_nu(:,ii,j) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'IsFs', 1,...
+%             'nu', nu_list(j));
+%     end
     
 end
 delete(f)
