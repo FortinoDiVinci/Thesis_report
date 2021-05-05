@@ -8,22 +8,25 @@
 *.mex
 **/slprj/*
 **/sccprj/*
+**/tlc/*
 *.autosave
 *.mlappinstall
 *.mltbx
-*.tlc
-*.rtw
 *.dmr
+*.rtw
 
 # figure
 *.fig
 *.png
 *.jpg
 *.pdf
+*.avi
 
 # data
 *.mat
 *.csv
+*.bag
 
 # machine learning
 *.ckpt
+*.p

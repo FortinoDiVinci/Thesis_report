@@ -12,7 +12,8 @@ function [ddth, dth, th] = DynModel_3DOF(f_env,tau,th,dth,dt, varargin)
     options.C = 1;
     options.G = 1;
     options.Fv = 1;
-    options.Fs = 0;
+    options.Fs = 1;
+    options.offset = 1;
     
     for ii=1:2:length(varargin)
         param = varargin{ii};
@@ -29,6 +30,9 @@ function [ddth, dth, th] = DynModel_3DOF(f_env,tau,th,dth,dt, varargin)
         elseif strcmpi(param, 'IsFs')
             % is static friction
             options.Fs = val;
+        elseif strcmpi(param, 'IsOffset')
+            % is static friction
+            options.offset = val;
         elseif strcmpi(param, 'nu')
             % is static friction
             nu = val;
@@ -46,7 +50,19 @@ function [ddth, dth, th] = DynModel_3DOF(f_env,tau,th,dth,dt, varargin)
     dth4 = dth(3);
     
     if ~exist('nu', 'var')
-       nu = 0.65; 
+       nu = diag([0.9488, 0.9216, 0.8345]); 
+    else
+        if all(size(ones(3)) == size(nu)) % nu provided as matrix
+            if ~isdiag(nu)
+                error('The nu matrix provided should be diagonal.')
+            end
+        elseif any(size(ones(3)) == size(nu)) % nu provided as vector
+            nu = diag(nu);
+        elseif all(size(1) == size(nu)) % nu provided as scalar
+            nu = nu.*eye(3);
+        else
+            error('nu val has unexpetected dimensions.')
+        end
     end
     
     % Corriolis
@@ -73,10 +89,16 @@ function [ddth, dth, th] = DynModel_3DOF(f_env,tau,th,dth,dt, varargin)
     else
         Fs = zeros(3,1);
     end
+    % torque offset
+    if options.offset
+        tau0 = [1.0234;1.0516;1.0901];
+    else
+        tau0 = zeros(3,1);
+    end
     
     % inverse dynamic model
     ddth = iM_3DOF(th3,th4)*(tau - C*dth - G - ...
-        nu.*J0E_3DOF(th2,th3,th4)'*f_env - Fv*dth - Fs);
+        nu*J0E_3DOF(th2,th3,th4)'*f_env + Fv*dth + Fs - tau0);
     
     if(isnan(ddth))
         error('ddth is NaN...')

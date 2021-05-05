@@ -32,11 +32,12 @@ Kj = [1;1;1]*5;
 Kjd = [1;1;1]*0.1;
 
 Fv = diag([0.5,0.37,0.7]); % viscous frictions
-Fs = [0.97571; 0.65131; 0.25819];  % static frictions
+Fs = [0.9, 1.3, 0.5];%[0.97571; 0.65131; 0.25819];  % static frictions
 Fc = Fs; % Coulomb friction
-dv = 1e-2; % velocity bound to avoid unstable behaviour (static frictions)
-
-nu = [0.65;0.65;0.65];% external force to robot torque transmission efficiency
+dv = 1e-3; % velocity bound to avoid unstable behaviour (static frictions)
+% external force to robot torque transmission efficiency
+nu = [0.9488; 0.9216; 0.8345];
+tau_0 = [1.0234;1.0516;1.0901]; %
 
 fz0 = 0;
 % Cartesian flexibilities

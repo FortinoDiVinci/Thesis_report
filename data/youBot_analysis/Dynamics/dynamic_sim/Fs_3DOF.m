@@ -3,10 +3,11 @@ function tau_fs = Fs_3DOF(dq, fe, Fs, dv)
 %   Detailed explanation goes here
 
     if nargin < 4
-        dv = 1e-2;
+        dv = 1e-3;
     end
     if nargin < 3
-        Fs = [0.97571; 0.65131; 0.25819];
+        %Fs = [0.97571; 0.65131; 0.25819];
+        Fs = [0.9;  1.3; 0.5];
     end
    
     Fc = Fs;
