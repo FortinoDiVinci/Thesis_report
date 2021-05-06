@@ -36,6 +36,9 @@ function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
         elseif strcmpi(param, 'nu')
             % is static friction
             nu = val;
+        elseif strcmpi(param, 'offset')
+            % is static friction
+            tau0 = val;
         else
            error(['Option ''' param ''' not recognized']);
         end
@@ -50,7 +53,8 @@ function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
     dth4 = dth(3);
     
     if ~exist('nu', 'var')
-       nu = diag([0.9488, 0.9216, 0.8345]); 
+       %nu = diag([0.9488, 0.9216, 0.8345]); 
+       nu = diag([0.8554, 0.5780, 0.9997]); 
     else
         if all(size(ones(3)) == size(nu)) % nu provided as matrix
             if ~isdiag(nu)
@@ -90,10 +94,17 @@ function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
         Fs = zeros(3,1);
     end
     % torque offset
-    if options.offset
-        tau0 = [1.0234;1.0516;1.0901];
+    if ~exist('tau0', 'var') % if tau0 was manually fed, skip this part
+        if options.offset
+            %tau0 = [1.0234;1.0516;1.0901];
+            tau0 = [1.0050; 0.6119; 0.8268];
+        else
+            tau0 = zeros(3,1);
+        end
     else
-        tau0 = zeros(3,1);
+        if any(size(tau0) ~= size(zeros(3,1)))
+            error('Offset size should be (3,1)')
+        end
     end
      
     tau = M_3DOF(th3,th4)*ddth + C*dth + G + ...

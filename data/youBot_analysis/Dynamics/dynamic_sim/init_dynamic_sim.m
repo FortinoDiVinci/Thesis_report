@@ -36,8 +36,8 @@ Fs = [0.9, 1.3, 0.5];%[0.97571; 0.65131; 0.25819];  % static frictions
 Fc = Fs; % Coulomb friction
 dv = 1e-3; % velocity bound to avoid unstable behaviour (static frictions)
 % external force to robot torque transmission efficiency
-nu = [0.9488; 0.9216; 0.8345];
-tau_0 = [1.0234;1.0516;1.0901]; %
+nu = [0.8554; 0.5780; 0.9997]; %[0.9488; 0.9216; 0.8345];
+tau_0 = [1.0050; 0.6119; 0.8268];%[1.0234;1.0516;1.0901]; %
 
 fz0 = 0;
 % Cartesian flexibilities
@@ -48,7 +48,7 @@ filt_num = 1;
 filt_den = [1/w0^2 2*xi/w0 1];
 % Environment
 K_env = [0;350;0]; %350%400%500%300
-B_env = [0;25;0]; %20%15
+B_env = [0;15;0]; %20%15
 M_env = [0;0.5;0]; %0.7%0.8%0.5
 
 x0 = 0;
@@ -61,7 +61,8 @@ x0 = p0(1);
 z0 = p0(3);
 ry0 = acos(r(1,1));
 
-is_real_data = 0; % no real input
+is_real_data = 0; % no real force input
+is_pos_input = 0; % no real position input
 
 % dummy var (run next section and change manual switches in simulink for 
 % real input test)
@@ -74,7 +75,7 @@ real_fry.time = (time_start:dt:time_end)';
 
 return % This other section can be run after this one
 
-%% Loading real data, run this section to test simulation with real data
+%% Loading real data, run this section to test simulation with real force data
 
 load('..\..\..\ball_bouncing_experiment\experimental_bench_pert\data_2020_Nov_17\data_without_impacts_2020_11_17.mat')
 addpath('..\..\..\force_torque_sensor')
@@ -108,7 +109,7 @@ Kx = [20;0;0]; % z gain to maintain z position
 % figure
 % lsim(linsys1,real_ft,t{exp_nb})
 
-out = sim('dynamic_simulation_control',time_end);
+out = sim('dynamic_discrete_simulation_control',time_end);
 
 %% After runnning simulink with real force input, run this section
 
@@ -150,7 +151,22 @@ simulateDualYouBotKinematics(th_sim, th_real,dt, real_f(:,idx_exp)');
 
 return
 
-%% after simulink finished execution, run this section for behaviour display
+%% Loading real data, run this section to test simulation with real position
+
+load('..\..\..\ball_bouncing_experiment\experimental_bench_pert\data_2020_Nov_17\data_without_impacts_2020_11_17.mat')
+addpath('..\..\..\force_torque_sensor')
+exp_nb = 2;
+is_pos_input = 1;
+
+real_z = mocap_marker_robot_base{exp_nb}(:,3);
+
+% for simulink from workspace
+input_pos.signals.values = real_z;
+input_pos.time = (t{exp_nb} - t{exp_nb}(1));
+
+out = sim('dynamic_discrete_simulation_control', time_end);
+
+%% After simulink finished execution, run this section for behaviour display
 
 th_sim = [zeros(size(th_rec.signals.values,1),1), ...
     th_rec.signals.values, zeros(size(th_rec.signals.values,1),1)];
@@ -163,7 +179,23 @@ tau_p = taup_rec.signals.values;
 
 is_pert = logical(tau_p ~= 0);
 
-simulateYouBotKinematics(th_sim, dt, f_sim, p0_sim,is_pert);
+limited_idx = (1:8/dt); % to avoid simulating more than 30 sec
+% comment next line not to record the video of simulation
+record_name = "youBot_video_K" + string(K_env(2)) + "_B" + string(B_env(2));
+if exist('record_name', 'var')
+    answer = questdlg('Do you want to record simulation ?', ...
+	'', 'Yes','No','Cancel','Cancel');
+    if strcmp(answer, 'Yes')
+    simulateYouBotKinematics(th_sim(limited_idx,:), dt, f_sim(limited_idx,:), ...
+        p0_sim(limited_idx,:), is_pert(limited_idx,:), record_name);
+    elseif strcmp(answer, 'No')
+        simulateYouBotKinematics(th_sim(limited_idx,:), dt, f_sim(limited_idx,:), ...
+            p0_sim(limited_idx,:), is_pert(limited_idx,:));
+    end
+else
+    simulateYouBotKinematics(th_sim(limited_idx,:), dt, f_sim(limited_idx,:), ...
+        p0_sim(limited_idx,:), is_pert(limited_idx,:));
+end
 
 time = time_start:dt:time_end;
 figure('DefaultAxesFontSize',14)
@@ -171,17 +203,24 @@ subplot(2,1,1)
 hold on
 plot(time, pos_rec.signals.values(:,2))
 p1 = plot(time(any(is_pert,2)), pos_rec.signals.values(any(is_pert,2),2), 'o');
-p1(1).Color(4) = 0.1;
+%p1(1).Color(4) = 0.1;<
 title('Endpoint Position')
 legend('z', 'z pert')
+ylabel('(m)')
+xlabel('(s)')
 subplot(2,1,2)
 hold on
 plot(time, f_sim(:,3))
 p2 = plot(time(any(is_pert,2)), f_sim(any(is_pert,2),3), 'o');
-p2(1).Color(4) = 0.1;
+%p2(1).Color(4) = 0.1;
 title('Endpoint Force')
 legend('z', 'z pert')
+ylabel('(N)')
+xlabel('(s)')
 
+figure('DefaultAxesFontSize',14)
+plot(tau_ctrl)
+legend('\tau_2', '\tau_3', '\tau_4')
 return
 
 %% After linear analysis using control design tool & loading linsys model

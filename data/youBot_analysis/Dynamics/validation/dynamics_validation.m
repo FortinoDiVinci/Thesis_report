@@ -25,6 +25,7 @@ th0 = q_dh - (q0_kuka - q_rob);  % simulation convention
 [b,a] = butter(2,50/(1/(2*dt)),'low'); % 2nd order 50Hz low pass filter
 f_filt = filtfilt(b,a, f_tmp')';
 tau_filt = filtfilt(b,a, tau_tmp')';
+% fe = f(env->rob) = -f(rob->env)
 fe = [f_filt(1,:); f_filt(3,:); tau_filt(2,:)]; % [fx;fz;fth]
 
 %f_tot = [0,0,0]';
@@ -74,12 +75,12 @@ for ii = length(time):-1:1
     
     %tau_s_noFs(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'IsFs', 0);
     tau_s(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth);
-    tau_s2(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'nu', ...
-        [0.9488, 0.8345, 0.8345]);
-    tau_s3(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'nu', ...
-        [0.9488, 0.7345, 0.8345]);    
-    tau_s4(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'nu', ...
-        [0.9488, 0.6345, 0.8345]);
+%     tau_s2(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'nu', ...
+%         [0.9488, 0.75, 0.8345]);
+%     tau_s3(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'nu', ...
+%         [0.9488, 0.50, 0.8345]);    
+%     tau_s4(:,ii) = InvDynModel_3DOF(fe(:,ii),th,dth,ddth, 'nu', ...
+%         [0.9488, 0.25, 0.8345]);
 end
 delete(f)
 def_col = lines(8);
@@ -140,28 +141,28 @@ for i = 1:3
 end
 
 %
-figure
-tiledlayout(3,1,'TileSpacing','compact','Padding','compact')
-for i = 1:3
-    nexttile
-    hold on
-    plot(time, tau_m(:,i), 'color', [def_col(1,:), 0.2])
-    plot(time, tau_s(i,:), 'color', [def_col(2,:), 0.2])
-    plot(time, tau_s2(i,:), 'color', [def_col(3,:), 0.2])
-    plot(time, tau_s3(i,:), 'color', [def_col(4,:), 0.2])
-    plot(time, tau_s4(i,:), 'color', [def_col(5,:), 0.2])
-    p0 = plot(time, filtfilt(b,a,tau_m(:,i))', 'color', def_col(1,:));  
-    p1 = plot(time, filtfilt(b,a,tau_s(i,:)')', 'color', def_col(2,:));
-    p2 = plot(time, filtfilt(b,a,tau_s2(i,:)')', 'color', def_col(3,:));
-    p3 = plot(time, filtfilt(b,a,tau_s3(i,:)')', 'color', def_col(4,:));
-    p4 = plot(time, filtfilt(b,a,tau_s4(i,:)')', 'color', def_col(5,:));
-    if i == 1   
-        title('Inverse dynamic model')
-        %legend([p0,p1,p3], {'measured', 'simulated', 'sim wo Fs'})
-        legend([p0,p1], {'measured', 'reconstructed'})
-    end
-    ylabel('torque (N.m)')
-end
+% figure
+% tiledlayout(3,1,'TileSpacing','compact','Padding','compact')
+% for i = 1:3
+%     nexttile
+%     hold on
+%     plot(time, tau_m(:,i), 'color', [def_col(1,:), 0.2])
+%     plot(time, tau_s(i,:), 'color', [def_col(2,:), 0.2])
+%     plot(time, tau_s2(i,:), 'color', [def_col(3,:), 0.2])
+%     plot(time, tau_s3(i,:), 'color', [def_col(4,:), 0.2])
+%     plot(time, tau_s4(i,:), 'color', [def_col(5,:), 0.2])
+%     p0 = plot(time, filtfilt(b,a,tau_m(:,i))', 'color', def_col(1,:));  
+%     p1 = plot(time, filtfilt(b,a,tau_s(i,:)')', 'color', def_col(2,:));
+%     p2 = plot(time, filtfilt(b,a,tau_s2(i,:)')', 'color', def_col(3,:));
+%     p3 = plot(time, filtfilt(b,a,tau_s3(i,:)')', 'color', def_col(4,:));
+%     p4 = plot(time, filtfilt(b,a,tau_s4(i,:)')', 'color', def_col(5,:));
+%     if i == 1   
+%         title('Inverse dynamic model')
+%         %legend([p0,p1,p3], {'measured', 'simulated', 'sim wo Fs'})
+%         legend([p0,p1], {'measured', 'reconstructed'})
+%     end
+%     ylabel('torque (N.m)')
+% end
 
 % % nu influence
 % figure
@@ -181,3 +182,83 @@ end
 %     end
 %     ylabel('torque (N.m)')
 % end
+
+%% dynamic nu and offset identification 
+% simultaneous identification of torque offset and nu coefficients on
+% dynamic interaction
+% least square matrix population
+for i = 1:length(time)
+    y(i,:) = -InvDynModel_3DOF([0;0;0],th_m(:,i),dth_m(:,i),ddth_m(:,i),...
+        'isOffset', 0, 'nu', [0;0;0])' + tau_m(i,:); % nu & offset
+    x(i,:) = (J0E_3DOF(th_m(1,i),th_m(2,i),th_m(3,i))'*fe(:,i))';
+end
+y = filtfilt(b,a,y); % to avoid acceleration noise
+x1 = ones(size(x,1),1); % for the offset value (y = nu*x + offset)
+% signal centered on zero
+yc0 = y - mean(y);
+xc0 = x - mean(x);
+% least square
+for i = 1:3
+    xi_hat(:,i) = ([x(:,i), x1]'*[x(:,i), x1])\[x(:,i), x1]'*y(:,i);
+    nu_c0(i) = (x(:,i)'*x(:,i))\x(:,i)'*y(:,i);
+end
+nu_new = max([xi_hat(1,:); [0,0,0]]); % min should be zero
+nu_new = min([nu_new; [1,1,1]]); % max should be one
+offset_new = xi_hat(2,:)';
+
+% new reconstruction
+% inverse dynamic main loop
+for ii = length(time):-1:1
+%     tau_s_n(:,ii) = InvDynModel_3DOF(fe(:,ii),th_m(:,ii),dth_m(:,ii),...
+%         ddth_m(:,ii), 'nu', nu_new, 'offset', offset_new);
+    tau_s_c0(:,ii) = InvDynModel_3DOF(fe(:,ii),th_m(:,ii),dth_m(:,ii),...
+        ddth_m(:,ii), 'nu', nu_c0, 'isOffset', 0);
+end
+offset_c0 = mean(tau_m' - tau_s_c0, 2);
+% display
+figure
+tiledlayout(3,1,'TileSpacing','compact','Padding','compact')
+for i = 1:3
+    nexttile
+    hold on
+    plot(time, tau_m(:,i), 'color', [def_col(1,:), 0.2])
+    plot(time, tau_s(i,:), 'color', [def_col(2,:), 0.2])
+    plot(time, tau_s_n(i,:), 'color', [def_col(3,:), 0.2])
+    plot(time, tau_s_c0(i,:) + offset_c0(i), 'color', [def_col(4,:), 0.2])
+    p0 = plot(time, filtfilt(b,a,tau_m(:,i))', 'color', def_col(1,:));  
+    p1 = plot(time, filtfilt(b,a,tau_s(i,:)')', 'color', def_col(2,:)); 
+    p2 = plot(time, filtfilt(b,a,tau_s_n(i,:)')', 'color', def_col(3,:)); 
+    p3 = plot(time, filtfilt(b,a,(tau_s_c0(i,:) + offset_c0(i))')', ...
+        'color', def_col(4,:)); 
+    if i == 1   
+        title('Inverse dynamic model')
+        legend([p0,p1,p2,p3], {'measured', 'reconstr.', 'new reconstr.', ...
+            'new reconstr. c0'})
+    end
+    ylabel('torque (N.m)')
+end
+
+% reconstruction error
+% inverse dynamic comparison with meas.
+figure
+tiledlayout(3,1,'TileSpacing','compact','Padding','compact')
+for i = 1:3
+    nexttile
+    hold on
+    plot(time, tau_m(:,i)' - tau_s(i,:), 'color', [def_col(1,:), 0.2])
+    p0 = plot(time, filtfilt(b,a,tau_m(:,i)) - filtfilt(b,a,tau_s(i,:)'),...
+        'color', def_col(1,:));  
+    plot(time, tau_m(:,i)' - tau_s_n(i,:), 'color', [def_col(2,:), 0.2])
+    p1 = plot(time, filtfilt(b,a,tau_m(:,i)) - filtfilt(b,a,tau_s_n(i,:)'),...
+        'color', def_col(2,:));  
+    plot(time, tau_m(:,i)' - tau_s_c0(i,:) - offset_c0(i), 'color', [def_col(3,:), 0.2])
+    p2 = plot(time, filtfilt(b,a,tau_m(:,i)) - filtfilt(b,a,tau_s_c0(i,:)' + offset_c0(i)),...
+        'color', def_col(3,:));  
+    if i == 1   
+        title('Inverse dynamic model')
+        %legend([p0,p1,p3], {'measured', 'simulated', 'sim wo Fs'})
+        legend([p0,p1,p2], {'reconstr. err', 'reconstr. err. new', ...
+            'reconstr. err. new c0'})
+    end
+    ylabel('torque (N.m)')
+end

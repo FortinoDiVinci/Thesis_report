@@ -1,4 +1,4 @@
-function simulateYouBotKinematics(q,dt,f,p0,pert)
+function simulateYouBotKinematics(q,dt,f,p0,pert, recording_name)
 % This function display the youbot joint behaviour 
 
 %     q1 = q(:,1);
@@ -42,6 +42,11 @@ function simulateYouBotKinematics(q,dt,f,p0,pert)
         end
     end
     
+    if exist('recording_name', 'var')
+        is_record = 1;
+    else
+        is_record = 0;
+    end
     
     
     % Numeric Values of the robot's geometrical parameters
@@ -69,6 +74,12 @@ function simulateYouBotKinematics(q,dt,f,p0,pert)
             T = T * tf;
             joint_pos(:,j,k) = T(1:3,4);
         end
+    end
+    
+    if is_record
+        myVideo = VideoWriter(recording_name); %open video file
+        myVideo.FrameRate = 25;  %can adjust this, 5 - 10 works well for me
+        open(myVideo)
     end
     
     figure
@@ -108,9 +119,15 @@ function simulateYouBotKinematics(q,dt,f,p0,pert)
             quiver3(OE(1),OE(2),OE(3),sf(k,1)/10,sf(k,2)/10,sf(k,3)/10,'r')  
         end
         axis([-0.3 0.3 -0.3 0.3 0 0.5])
+        if is_record
+            frame = getframe;
+            writeVideo(myVideo, frame);
+        end
         pause(0.02) % 1kHz
     end
-    
+    if is_record
+        close(myVideo)
+    end
 end
 
 function res = mattransfo(alpha, d, theta, r)

@@ -1,5 +1,7 @@
 clear all
 
+%% complete control & robot linearisation
+
 init_dynamic_sim
 load('linsys_no_secondary_ctrl_2020.mat')
 
@@ -33,6 +35,22 @@ bode(Htot(2))
 bode(Htot(3))
 %legend('H1','H2','H3','Htot1','Htot2','Htot3')
 legend('Htot1','Htot2','Htot3')
+
+%% youbot dynamics linearisation alone
+
+[A,B,C,D] = linmod('youBot_dynamics_id_alone');
+[Ad,Bd,Cd,Dd] = dlinmod('youBot_dynamics_id_alone', 1e-3);
+
+SS_youBot = ss(A,B,C,D);
+SS_youBotd = ss(Ad,Bd,Cd,Dd,1e-3);
+
+figure
+hold on
+bode(SS_youBot(2))
+bode(SS_youBot0(2), 'r--')
+%bode(SS_youBotd(2))
+
+%% tests
 
 % test with real input
 
