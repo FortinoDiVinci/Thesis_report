@@ -1,8 +1,10 @@
 clear all
 
-load('data_2021_04_07.mat')
-data = load('data_2021_04_09.mat');
+% regroup data in nominal conditions
 
+load('data_2021_04_07.mat')
+%data = load('data_2021_04_09.mat');
+data = load('data_2021_04_13.mat');
 
 folder_names{end + 1} = data.folder_names{2};
 folder_names{1} = [];
@@ -67,9 +69,12 @@ z_p = z_p(~cellfun('isempty',z_p));
 bounc_err{end + 1} = data.bounc_err{2};
 bounc_err{1} = [];
 bounc_err = bounc_err(~cellfun('isempty',bounc_err));
+idx_ball_off_ramp{end + 1} = data.idx_ball_off_ramp{2};
+idx_ball_off_ramp{1} = [];
+idx_ball_off_ramp = idx_ball_off_ramp(~cellfun('isempty',idx_ball_off_ramp));
 
-save("exp_1.mat", "dist", "dt", "folder_names", "forces_unf", ...
+save("exp_1_nom_cond.mat", "dist", "dt", "folder_names", "forces_unf", ...
             "mocap_marker_robot_base", "NO_GHOST_IMPULSE",...
             "names", "NO_BALL_BOUNC", "NO_DISTURBANCE", "NO_IMPULSE", ...
             "NO_MOCAP", "NO_TRQ_CMD_DIST", "t", "t_dist", "thetas", ...
-            "torques_unf", "z_b", "z_p", "bounc_err");
+            "torques_unf", "z_b", "z_p", "bounc_err", "idx_ball_off_ramp");

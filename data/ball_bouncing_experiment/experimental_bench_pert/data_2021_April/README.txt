@@ -1,4 +1,4 @@
-Data collected on April 7th, 8th, 9th 2021
+Data collected on April 7th, 8th, 9th, 13th 2021
 Several different experimental conditions were tested. Two new users were
 recorder. Voluntary stiff physical interactions were also recorded. 
 A new condition was also tested, whith some of the force feedback "ghosted".
@@ -43,6 +43,13 @@ Perturbed ball bouncing task achieved with haptic feedbacks (stiff)
 
 * Calibration03: 21:04:09 10:30
 * Trial 15 (l*): 21:04:09 11:38 user01 (strong cocontraction)
+
+Perturbed ball bouncing task achieved with haptic feedbacks
+
+* Calibration04: 21:04:13 09:xx
+* Trial 16 (l*): 21:04:13 09:xx user01 (normal cocontraction)
+* Trial 17 (l*): 21:04:13 10:xx user01 (low cocontraction -> failed?)
+* Trial 18 (l*): 21:04:13 10:xx user01 (strong cocontraction)
 
 ------------
 Parameters
