@@ -3,10 +3,13 @@ clear all
 %% complete control & robot linearisation
 
 init_dynamic_sim
+x0 = [th0;dth0;0;0;0;0;0;0;0];
+u0 = [0;0;0];
+
 load('linsys_no_secondary_ctrl_2020.mat')
 
-[A,B,C,D] = linmod('dynamic_simulation_control_for_id');
-[Ad,Bd,Cd,Dd] = dlinmod('dynamic_simulation_control_for_id', 1e-3);
+[A,B,C,D] = linmod('dynamic_simulation_control_for_id', x0, u0);
+[Ad,Bd,Cd,Dd] = dlinmod('dynamic_simulation_control_for_id', 1e-3, x0, u0);
 
 % [b1,a1] = ss2tf(A,B,C,D,1);
 % [b2,a2] = ss2tf(A,B,C,D,2);
@@ -36,10 +39,22 @@ bode(Htot(3))
 %legend('H1','H2','H3','Htot1','Htot2','Htot3')
 legend('Htot1','Htot2','Htot3')
 
-%% youbot dynamics linearisation alone
+% with discrete model (same control as in the real robot)
+x0 = [th0;dth0];
+u0 = [0;0;0];
 
-[A,B,C,D] = linmod('youBot_dynamics_id_alone');
-[Ad,Bd,Cd,Dd] = dlinmod('youBot_dynamics_id_alone', 1e-3);
+[A,B,C,D] = linmod('dynamic_discrete_simulation_control_for_id', x0, u0);
+[Ad,Bd,Cd,Dd] = dlinmod('dynamic_discrete_simulation_control_for_id', 1e-3, x0, u0);
+
+SS_dyouBot = ss(A,B,C,D);
+SS_dyouBotd =  ss(Ad,Bd,Cd,Dd,1e-3);
+
+%% youbot dynamics linearisation alone
+x0 = [th0;dth0];
+u0 = [0;0;0];
+
+[A,B,C,D] = linmod('youBot_dynamics_id_alone', x0, u0);
+[Ad,Bd,Cd,Dd] = dlinmod('youBot_dynamics_id_alone', 1e-3, x0, u0);
 
 SS_youBot = ss(A,B,C,D);
 SS_youBotd = ss(Ad,Bd,Cd,Dd,1e-3);
@@ -47,8 +62,14 @@ SS_youBotd = ss(Ad,Bd,Cd,Dd,1e-3);
 figure
 hold on
 bode(SS_youBot(2))
-bode(SS_youBot0(2), 'r--')
+bode(SS_youBotd(2), 'r--')
 %bode(SS_youBotd(2))
+
+%
+figure
+hold on
+bode(SS_youBot(2))
+bode(SStot(2))
 
 %% tests
 
