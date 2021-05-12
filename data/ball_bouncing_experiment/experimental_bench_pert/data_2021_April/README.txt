@@ -46,10 +46,10 @@ Perturbed ball bouncing task achieved with haptic feedbacks (stiff)
 
 Perturbed ball bouncing task achieved with haptic feedbacks
 
-* Calibration04: 21:04:13 09:xx
-* Trial 16 (l*): 21:04:13 09:xx user01 (normal cocontraction)
-* Trial 17 (l*): 21:04:13 10:xx user01 (low cocontraction -> failed?)
-* Trial 18 (l*): 21:04:13 10:xx user01 (strong cocontraction)
+* Calibration04: 21:04:13 09:43
+* Trial 16 (l*): 21:04:13 09:47 user01 (normal cocontraction)
+* Trial 17 (l*): 21:04:13 10:53 user01 (low cocontraction -> failed?)
+* Trial 18 (l*): 21:04:13 10:06 user01 (strong cocontraction)
 
 ------------
 Parameters
