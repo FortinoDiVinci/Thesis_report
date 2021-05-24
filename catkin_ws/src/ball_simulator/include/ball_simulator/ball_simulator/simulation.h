@@ -156,6 +156,11 @@ public:
   {
     return paddle_limits_config;
   }
+  
+  const TargetConfig& targetConfig() const
+  {
+    return target_config;
+  }
 
   visualization_msgs::MarkerArray markers() const
   {

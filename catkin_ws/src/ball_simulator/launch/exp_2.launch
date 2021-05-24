@@ -14,7 +14,7 @@
 
 
   <param name="use_sim_time" value="false"/>
-  <rosparam file="$(find ball_simulator)/config/example.yaml"/>
+  <rosparam file="$(find ball_simulator)/config/exp_2.yaml"/>
 <!--
   <node name="clock" pkg="ball_simulator" type="clock" output="screen">
     <param name="rate" value="$(arg clock_rate)"/>

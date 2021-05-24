@@ -71,8 +71,7 @@ struct BouncingStepResult
 /**
  * This function computes the new state of the ball bouncing on the paddle for a new timestamp
  */
-BouncingStepResult bouncing_step(const ros::Time& stamp, Simulation& simulation, const Ball::Config& ball_config,
-                                 const Paddle& paddle)
+BouncingStepResult bouncing_step(const ros::Time& stamp, Simulation& simulation, const Ball::Config& ball_config, const Paddle& paddle, const TargetConfig& target_config)
 {
   auto& state = simulation.state;
   auto config = simulation.config;
@@ -165,6 +164,10 @@ BouncingStepResult bouncing_step(const ros::Time& stamp, Simulation& simulation,
 
   const double future_ball_velocity = state.bounce_velocity - config.gravity * elapsed_time;
 
+// bouncing error estimation
+  const double ball_apex = 0.5*state.bounce_velocity*state.bounce_velocity/config.gravity + state.collision_height;    
+  ball_state.bouncing_error = ball_apex - target_config.height;
+
   // if there is no more bounce and ball is below paddle, ball must rest on top of paddle instead
   if (future_ball_height <= potential_collision_height)
   {
@@ -221,8 +224,9 @@ int main(int argc, char** argv)
 
     ros::Time stamp = ros::Time::now();
 
-    Paddle* paddle = (simulation.config.enable_sine_paddle) ? static_cast<Paddle*>(&sine_paddle) :
-                                                              static_cast<Paddle*>(&robot_paddle);
+    Paddle* paddle = (simulation.config.enable_sine_paddle) ? static_cast<Paddle*>(&sine_paddle) : static_cast<Paddle*>(&robot_paddle);
+
+    //ROS_INFO_STREAM_THROTTLE(1, "target height: " << configuration.targetConfig().height);
 
     if (!simulation.state.stopped)
     {
@@ -236,12 +240,11 @@ int main(int argc, char** argv)
       }
       else
       {
-        auto result = bouncing_step(stamp, simulation, ball.config, *paddle);
+        auto result = bouncing_step(stamp, simulation, ball.config, *paddle, configuration.targetConfig());
         ball.state = result.ball_state;
         paddle->setImpulse(result.impulse);
       }
     }
-
     simulation_publisher.publish(ball, *paddle, stamp);
   }
 }

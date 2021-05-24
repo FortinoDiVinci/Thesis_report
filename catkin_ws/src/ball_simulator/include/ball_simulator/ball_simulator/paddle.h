@@ -255,8 +255,12 @@ public:
     tf_broadcaster_.sendTransform(tf::StampedTransform(transform, stamp, config.parent_frame_id, config.frame_id));
 
     std_msgs::Float64 impulse_msg;
-    impulse_msg.data = paddle.impulse();
-    impulse_pub_.publish(impulse_msg);
+    double imp = paddle.impulse();
+    if (imp != 0)
+    {
+        impulse_msg.data = imp;
+        impulse_pub_.publish(impulse_msg);
+    }
 
     visualization_msgs::Marker marker;
     marker.header.frame_id = config.frame_id;

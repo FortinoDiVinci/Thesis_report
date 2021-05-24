@@ -2,32 +2,22 @@ session_manager:
   sessions:
     - session_1:
         initial_config:
-          target_height: 1.75 #0.8 
+          target_height: 1.5 
           restitution: 0.6
           gravity: 9.807
     - session_2:
         initial_config:
-          target_height: 1.75 #0.8
+          target_height: 1.5
           restitution: 0.6
           gravity: 9.807
     - session_3:
         initial_config:
-          target_height: 1.75 #0.9
+          target_height: 2.0
           restitution: 0.6
           gravity: 9.807
     - session_4:
         initial_config:
-          target_height: 1.75 #0.9
-          restitution: 0.6
-          gravity: 9.807
-    - session_5:
-        initial_config:
-          target_height: 1.75 #0.7
-          restitution: 0.6
-          gravity: 9.807
-    - session_5:
-        initial_config:
-          target_height: 1.75 #0.7
+          target_height: 2.0
           restitution: 0.6
           gravity: 9.807
 

@@ -7,8 +7,9 @@ Panels:
         - /Global Options1
         - /TF1
         - /TF1/Frames1
+        - /MarkerArray1/Namespaces1
       Splitter Ratio: 0.5
-    Tree Height: 662
+    Tree Height: 695
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -17,7 +18,7 @@ Panels:
       - /2D Nav Goal1
       - /Publish Point1
     Name: Tool Properties
-    Splitter Ratio: 0.5886790156364441
+    Splitter Ratio: 0.588679
   - Class: rviz/Views
     Expanded:
       - /Current View1
@@ -29,20 +30,16 @@ Panels:
     Name: Time
     SyncMode: 0
     SyncSource: ""
-Preferences:
-  PromptSaveOnExit: true
-Toolbars:
-  toolButtonStyle: 2
 Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.5
-      Cell Size: 0.10000000149011612
+      Cell Size: 0.1
       Class: rviz/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
-        Line Width: 0.029999999329447746
+        Line Width: 0.03
         Value: Lines
       Name: Grid
       Normal Cell Count: 0
@@ -53,18 +50,18 @@ Visualization Manager:
       Plane: XZ
       Plane Cell Count: 100
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Alpha: 1
       Axes Length: 1
-      Axes Radius: 0.10000000149011612
+      Axes Radius: 0.1
       Class: rviz/Pose
       Color: 255; 25; 0
       Enabled: false
-      Head Length: 0.30000001192092896
-      Head Radius: 0.10000000149011612
+      Head Length: 0.3
+      Head Radius: 0.1
       Name: Pose
       Shaft Length: 1
-      Shaft Radius: 0.05000000074505806
+      Shaft Radius: 0.05
       Shape: Arrow
       Topic: /ball_pose
       Unreliable: false
@@ -75,33 +72,31 @@ Visualization Manager:
       Frames:
         All Enabled: false
         arm_link_0:
-          Value: true
+          Value: false
         arm_link_1:
-          Value: true
+          Value: false
         arm_link_2:
-          Value: true
+          Value: false
         arm_link_3:
-          Value: true
+          Value: false
         arm_link_4:
-          Value: true
+          Value: false
         arm_link_5:
-          Value: true
+          Value: false
         ball:
-          Value: true
+          Value: false
         base_footprint:
-          Value: true
+          Value: false
         base_laser_front_link:
-          Value: true
+          Value: false
         base_link:
-          Value: true
+          Value: false
         gripper_palm_link:
-          Value: true
+          Value: false
         paddle:
-          Value: true
+          Value: false
         plate_link:
-          Value: true
-        sensor:
-          Value: true
+          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: false
@@ -126,8 +121,6 @@ Visualization Manager:
               {}
             plate_link:
               {}
-            sensor:
-              {}
       Update Interval: 0
       Value: true
     - Class: rviz/MarkerArray
@@ -135,20 +128,28 @@ Visualization Manager:
       Marker Topic: /ball_simulator/markers
       Name: MarkerArray
       Namespaces:
-        {}
-      Queue Size: 100
-      Value: true
-    - Class: rviz/Marker
-      Enabled: true
-      Marker Topic: /ball_velocity_marker
-      Name: Marker
-      Namespaces:
         "": true
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
+      Marker Topic: /ball_velocity_marker
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: false
+    - Class: rviz/Marker
+      Enabled: false
       Marker Topic: /paddle_velocity_marker
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: false
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /bouncing_error_marker
       Name: Marker
       Namespaces:
         "": true
@@ -157,7 +158,6 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 74; 74; 74
-    Default Light: true
     Fixed Frame: base_link
     Frame Rate: 60
   Name: root
@@ -169,10 +169,7 @@ Visualization Manager:
     - Class: rviz/FocusCamera
     - Class: rviz/Measure
     - Class: rviz/SetInitialPose
-      Theta std deviation: 0.2617993950843811
       Topic: /initialpose
-      X std deviation: 0.5
-      Y std deviation: 0.5
     - Class: rviz/SetGoal
       Topic: /move_base_simple/goal
     - Class: rviz/PublishPoint
@@ -182,38 +179,37 @@ Visualization Manager:
   Views:
     Current:
       Centre:
-        X: 0.023862026631832123
-        Y: 2.421438694000244e-07
-        Z: 1.2329100370407104
+        X: 0.0250747
+        Y: 2.05822e-07
+        Z: 0.948082
       Class: rviz_ortho_view_controller/Ortho
       Enable Stereo Rendering:
-        Stereo Eye Separation: 0.05999999865889549
+        Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.009999999776482582
+      Near Clip Distance: 0.01
       Plane: XZ
-      Scale: 273.60052490234375
+      Scale: 230.516
       Target Frame: <Fixed Frame>
       Value: Ortho (rviz_ortho_view_controller)
     Saved: ~
 Window Geometry:
-  "&Displays":
+  Displays:
     collapsed: true
-  "&Time":
-    collapsed: false
-  Height: 1015
+  Height: 998
   Hide Left Dock: true
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000001a900000339fc0200000008fb0000001200530065006c0065006300740069006f006e00000000460000019c0000007601000003fb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073000000004600000339000000f901000003fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000011000000339fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000004600000339000000d401000003fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000003bc0000004efc0100000002fb0000000800540069006d00650100000000000003bc000002d701000003fb0000000800540069006d00650100000000000004500000000000000000000003bc0000033900000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000001a90000034cfc0200000008fb0000001200530065006c0065006300740069006f006e00000000460000019c0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007300000000280000034c000000dd00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000011000000339fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000004600000339000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000003bc0000004efc0100000002fb0000000800540069006d00650100000000000003bc000002f600fffffffb0000000800540069006d00650100000000000004500000000000000000000003bc0000034c00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
+    collapsed: false
+  Time:
     collapsed: false
   Tool Properties:
     collapsed: false
   Views:
     collapsed: false
   Width: 956
-  X: 924
-  Y: 0
+  X: 694
+  Y: 14

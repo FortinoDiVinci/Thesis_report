@@ -30,4 +30,3 @@ session_manager:
           target_height: 1.75 #0.7
           restitution: 0.6
           gravity: 9.807
-

@@ -8,6 +8,8 @@
 #include <tf/transform_broadcaster.h>
 #include <visualization_msgs/Marker.h>
 #include <string>
+#include <sstream>
+#include <iomanip>
 
 namespace ball_simulator
 {
@@ -52,12 +54,14 @@ struct BallState
     y = 0.0;
     height = 1.0;
     velocity = 0.0;
+    bouncing_error = 0.0;
     return true;
   }
 
   double y;
   double height;
   double velocity;
+  double bouncing_error;
 };
 
 struct Ball
@@ -83,6 +87,7 @@ public:
   {
     pose_pub_ = nh.advertise<geometry_msgs::PoseStamped>("ball_pose", 1);
     velocity_pub_ = nh.advertise<visualization_msgs::Marker>("ball_velocity_marker", 1, true);
+    bouncing_err_pub_ = nh.advertise<visualization_msgs::Marker>("bouncing_error_marker", 1, true);
   }
 
   static geometry_msgs::PoseStamped ballPose(const Ball::Config& config, ros::Time stamp, tf::Vector3 position,
@@ -154,13 +159,34 @@ public:
     end.z = 0.0;
     marker.points.push_back(end);
     marker.points.push_back(start);
-    velocity_pub_.publish(marker);
+
+    //ROS_INFO_STREAM_THROTTLE(1, "Bouncing error: " << state.bouncing_error);
+
+    visualization_msgs::Marker text_marker;
+    text_marker.header.frame_id = config.parent_frame_id;
+    text_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+    text_marker.action = visualization_msgs::Marker::ADD;
+    text_marker.pose.orientation.w = 1.0;
+    text_marker.pose.position.z = 2.0;
+    text_marker.pose.position.x = 0.1;
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(3) << state.bouncing_error;
+    text_marker.text = stream.str();
+    text_marker.scale.z = config.radius * 2.0;
+    text_marker.color.a = 1.0;
+    text_marker.color.r = 1.0;
+    text_marker.color.g = 1.0;
+    text_marker.color.b = 1.0;
+
+    //velocity_pub_.publish(marker);
+    bouncing_err_pub_.publish(text_marker);
   }
 
 private:
   tf::TransformBroadcaster tf_broadcaster_;
   ros::Publisher pose_pub_;
   ros::Publisher velocity_pub_;
+  ros::Publisher bouncing_err_pub_;
 };
 }  // namespace ball_simulator
 
