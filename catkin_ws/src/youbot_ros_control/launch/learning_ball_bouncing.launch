@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-
+	
   <arg name="user_ref" default="000" />
 	
   <arg name="kinem_rate" default="1500.0" /> <!-- 1500 -->
@@ -15,7 +15,7 @@
   <arg name="bias" default="True" />
   <arg name="dist_mag" default="10." /> <!-- 5. --> 
   <arg name="nb_dist_phase" default="3" />
-  <arg name="do_disturbance" default="false" />
+  <arg name="do_disturbance" default="true" />
   
   <arg name="P_gain_cmd4" default="0.8" /> <!-- 2.3 -->
   <arg name="I_gain_cmd4" default="10" /> <!-- 10 -->
@@ -37,6 +37,7 @@
   <!-- This delay is necessary to wait for the gravity estimate. 
   The computation of the bias is achieved in a little more than 1s -->
   <arg name="node_control_delay" default="2.0" /> 
+  <arg name="node_record_delay" default="3.0" /> 
   
   <node name="netft_sensor" pkg="netft_utils" type="netft_node_u" output="screen" args=" --rate $(arg sensor_rate) --address $(arg sensor_ip)"/>
 
@@ -77,21 +78,13 @@
     <remap from="force_sensor/grav_comp" to="force_feedback"/>
   </node>
 
-   <!-- Launching display and bouncing task on the second computer 
-        Was not able to make it successful despite of being able
-        to achieve ssh connections between both machines           -->	
-   
-   <!--
-  <group ns="linux_display">
-  <machine name="robocop" address="192.168.1.102" env-loader="~/catkin_ws/src/ball_simulator/launch/env_load.sh"/>  
-	<include file="$(find ball_simulator)/launch/default.launch">
-	<arg name="machine" value="robocop" />
-	</include>
-	
-  </group> 
-  -->
-  
   <!--  
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find youbot_ros_control)/rviz/robot_transforms.rviz"/> -->
+  
+  <!-- Motion capture data acquisition -->
+  <include file="$(find vrpn_client_ros)/launch/sample.launch" />
+ 
+  <node name="rosbag_record_diag" pkg="rosbag" type="record" 
+       args="record -o /home/youbot/catkin_ws/rosbag_exp_may/$(arg user_ref)_l_ball_bouncing /netft_data /vrpn_client_node/robot_marker/pose /joint_states /ball_pose /impulse" launch-prefix="bash -c 'sleep $(arg node_record_delay); $0 $@' "/>
   
 </launch>
