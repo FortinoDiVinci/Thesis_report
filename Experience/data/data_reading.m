@@ -1,13 +1,42 @@
 clear all
 
+addpath('/utils')
+addpath('../../data/utils')
+addpath('../../data/force_torque_sensor')
+
 %%%%%%%%%%%%%%%%%%
 %% MACROS & variables
 %%%%%%%%%%%%%%%%%%
 NB_JOINTS = 5;
 DISPLAY_MOCAP_FIT = 1;
 
-bagselect = rosbag('vfo10.bag');
-is_calibration = 1;
+%% File selection
+files = dir('users/*/*.bag');
+is_calibration = zeros(size(files));
+is_exp = zeros(size(files));
+%bagselect = rosbag('vfo10.bag');
+for ii = 1:length(files)
+    if contains(files(ii).name, "calibration")
+        is_calibration(ii) = 1;
+        date_time(ii) = datenum(files(ii).name(13:end-4),'yyyy-mm-dd-HH-MM-SS');
+    elseif contains(files(ii).name, "exp_1")
+        is_exp(ii) = 1;
+        date_time(ii) = datenum(files(ii).name(7:end-4),'yyyy-mm-dd-HH-MM-SS');
+    elseif contains(files(ii).name, "exp_2")
+        is_exp(ii) = 2;
+        date_time(ii) = datenum(files(ii).name(7:end-4),'yyyy-mm-dd-HH-MM-SS');
+    elseif contains(files(ii).name, "l_ball")
+        date_time(ii) = datenum(files(ii).name(17:end-4),'yyyy-mm-dd-HH-MM-SS');
+    elseif contains(files(ii).name, "l_phri")
+        date_time(ii) = datenum(files(ii).name(8:end-4),'yyyy-mm-dd-HH-MM-SS');
+    end
+end
+
+[~, chron_order] = sort(date_time);
+files = files(chron_order);
+is_calibration = is_calibration(chron_order);
+is_exp = is_exp(chron_order);
+
 
 %% Topic extraction
 joint_data = readMessages(select(bagselect,'Topic','/joint_states'),...
@@ -18,10 +47,10 @@ motion_capture_data = readMessages(select(bagselect,'Topic',...
     '/vrpn_client_node/robot_marker/pose'),'DataFormat','struct');
 disturbance_data = readMessages(select(bagselect,'Topic', ...
     '/arm_1/disturbance_val'),'DataFormat','struct');
-% ball_data = readMessages(select(bagselect,'Topic','/ball_pose'),...
-%     'DataFormat','struct');
-% parameters_data = readMessages(select(bagselect,'Topic',...
-%     '/ball_simulator_parameter_updates'),'DataFormat','struct');
+ball_data = readMessages(select(bagselect,'Topic','/ball_pose'),...
+    'DataFormat','struct');
+parameters_data = readMessages(select(bagselect,'Topic',...
+    '/ball_simulator_parameter_updates'),'DataFormat','struct');
 
 %% Time extraction
 t_date = datetime(bagselect.StartTime,'ConvertFrom','epochtime','Format',...
