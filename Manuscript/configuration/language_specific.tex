@@ -1,0 +1,141 @@
+\ExplSyntaxOn
+	\NewExpandableDocumentCommand \firstcap { m } { \text_titlecase:n {#1} }
+\ExplSyntaxOff
+
+\addto\captionsenglish{%
+	\renewcommand{\contentsname}{Table of Contents}
+
+	\renewcommand{\lodname}{List of Definitions}
+
+	\renewcommand{\prfname}{proof}
+	\renewcommand{\dfnname}{definition}
+	\renewcommand{\thmname}{theorem}
+	\renewcommand{\lmmname}{lemma}
+	\renewcommand{\crlname}{corollary}
+	\renewcommand{\prpname}{property}
+	\renewcommand{\rmkname}{remark}
+	\renewcommand{\asmname}{assumption}
+	\renewcommand{\exmpname}{example}
+
+	\renewcommand{\Prfname}{\firstcap{\prfname}}
+	\renewcommand{\Dfnname}{\firstcap{\dfnname}}
+	\renewcommand{\Thmname}{\firstcap{\thmname}}
+	\renewcommand{\Lmmname}{\firstcap{\lmmname}}
+	\renewcommand{\Crlname}{\firstcap{\crlname}}
+	\renewcommand{\Prpname}{\firstcap{\prpname}}
+	\renewcommand{\Rmkname}{\firstcap{\rmkname}}
+	\renewcommand{\Asmname}{\firstcap{\asmname}}
+	\renewcommand{\Exmpname}{\firstcap{\exmpname}}
+
+	\renewcommand{\prfnames}{proofs}
+	\renewcommand{\dfnnames}{definitions}
+	\renewcommand{\thmnames}{theorems}
+	\renewcommand{\lmmnames}{lemmas}
+	\renewcommand{\crlnames}{corollaries}
+	\renewcommand{\prpnames}{properties}
+	\renewcommand{\rmknames}{remarks}
+	\renewcommand{\asmnames}{assumptions}
+	\renewcommand{\exmpnames}{examples}
+
+	\renewcommand{\Prfnames}{\firstcap{\prfnames}}
+	\renewcommand{\Dfnnames}{\firstcap{\dfnnames}}
+	\renewcommand{\Thmnames}{\firstcap{\thmnames}}
+	\renewcommand{\Lmmnames}{\firstcap{\lmmnames}}
+	\renewcommand{\Crlnames}{\firstcap{\crlnames}}
+	\renewcommand{\Prpnames}{\firstcap{\prpnames}}
+	\renewcommand{\Rmknames}{\firstcap{\rmknames}}
+	\renewcommand{\Asmnames}{\firstcap{\asmnames}}
+	\renewcommand{\Exmpnames}{\firstcap{\exmpnames}}
+}
+
+\addto\captionsfrench{%
+	\renewcommand{\contentsname}{Sommaire}
+
+	\renewcommand{\lodname}{Liste des définitions}
+
+	\renewcommand{\prfname}{démonstration}
+	\renewcommand{\dfnname}{définition}
+	\renewcommand{\thmname}{théorème}
+	\renewcommand{\lmmname}{lemme}
+	\renewcommand{\crlname}{corollaire}
+	\renewcommand{\prpname}{propriété}
+	\renewcommand{\rmkname}{remarque}
+	\renewcommand{\asmname}{hypothèse}
+	\renewcommand{\exmpname}{exemple}
+
+	\renewcommand{\Prfname}{\firstcap{\prfname}}
+	\renewcommand{\Dfnname}{\firstcap{\dfnname}}
+	\renewcommand{\Thmname}{\firstcap{\thmname}}
+	\renewcommand{\Lmmname}{\firstcap{\lmmname}}
+	\renewcommand{\Crlname}{\firstcap{\crlname}}
+	\renewcommand{\Prpname}{\firstcap{\prpname}}
+	\renewcommand{\Rmkname}{\firstcap{\rmkname}}
+	\renewcommand{\Asmname}{\firstcap{\asmname}}
+	\renewcommand{\Exmpname}{\firstcap{\exmpname}}
+
+	\renewcommand{\prfnames}{démonstrations}
+	\renewcommand{\dfnnames}{définitions}
+	\renewcommand{\thmnames}{théorèmes}
+	\renewcommand{\lmmnames}{lemmes}
+	\renewcommand{\crlnames}{corollaires}
+	\renewcommand{\prpnames}{propriétés}
+	\renewcommand{\rmknames}{remarques}
+	\renewcommand{\asmnames}{hypothèses}
+	\renewcommand{\exmpnames}{exemples}
+
+	\renewcommand{\Prfnames}{\firstcap{\prfnames}}
+	\renewcommand{\Dfnnames}{\firstcap{\dfnnames}}
+	\renewcommand{\Thmnames}{\firstcap{\thmnames}}
+	\renewcommand{\Lmmnames}{\firstcap{\lmmnames}}
+	\renewcommand{\Crlnames}{\firstcap{\crlnames}}
+	\renewcommand{\Prpnames}{\firstcap{\prpnames}}
+	\renewcommand{\Rmknames}{\firstcap{\rmknames}}
+	\renewcommand{\Asmnames}{\firstcap{\asmnames}}
+	\renewcommand{\Exmpnames}{\firstcap{\exmpnames}}
+}
+
+\addto\captionsgerman{%
+	\renewcommand{\contentsname}{Inhaltsverzeichnis}
+
+	\renewcommand{\lodname}{Definitionsliste}
+
+	\renewcommand{\prfname}{Beweis}
+	\renewcommand{\dfnname}{Definition}
+	\renewcommand{\thmname}{Theorem}
+	\renewcommand{\lmmname}{Lemma}
+	\renewcommand{\crlname}{Korollar}
+	\renewcommand{\prpname}{Satz}
+	\renewcommand{\rmkname}{Bemerkung}
+	\renewcommand{\asmname}{Annahme}
+	\renewcommand{\exmpname}{Beispiel}
+
+	\renewcommand{\Prfname}{\firstcap{\prfname}}
+	\renewcommand{\Dfnname}{\firstcap{\dfnname}}
+	\renewcommand{\Thmname}{\firstcap{\thmname}}
+	\renewcommand{\Lmmname}{\firstcap{\lmmname}}
+	\renewcommand{\Crlname}{\firstcap{\crlname}}
+	\renewcommand{\Prpname}{\firstcap{\prpname}}
+	\renewcommand{\Rmkname}{\firstcap{\rmkname}}
+	\renewcommand{\Asmname}{\firstcap{\asmname}}
+	\renewcommand{\Exmpname}{\firscap{\exmpname}}
+
+	\renewcommand{\prfnames}{Beweise}
+	\renewcommand{\dfnnames}{Definitionen}
+	\renewcommand{\thmnames}{Theoreme}
+	\renewcommand{\lmmnames}{Lemmata}
+	\renewcommand{\crlnames}{Korollare}
+	\renewcommand{\prpnames}{Sätze}
+	\renewcommand{\rmknames}{Bemerkungen}
+	\renewcommand{\asmnames}{Annahmen}
+	\renewcommand{\exmpnames}{Beispiele}
+
+	\renewcommand{\Prfnames}{\firstcap{\prfnames}}
+	\renewcommand{\Dfnnames}{\firstcap{\dfnnames}}
+	\renewcommand{\Thmnames}{\firstcap{\thmnames}}
+	\renewcommand{\Lmmnames}{\firstcap{\lmmnames}}
+	\renewcommand{\Crlnames}{\firstcap{\crlnames}}
+	\renewcommand{\Prpnames}{\firstcap{\prpnames}}
+	\renewcommand{\Rmknames}{\firstcap{\rmknames}}
+	\renewcommand{\Asmnames}{\firstcap{\asmnames}}
+	\renewcommand{\Exmpnames}{\firstcap{\exmpnames}}
+}

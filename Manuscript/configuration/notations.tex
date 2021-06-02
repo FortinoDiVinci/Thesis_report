@@ -1,0 +1,231 @@
+%!TEX root = ../TChevet_phd_thesis_draft.tex
+
+\DeclarePairedDelimiter\parentheses{\lparen}{\rparen}
+\DeclarePairedDelimiter\normdelim{\lVert}{\rVert}
+\DeclarePairedDelimiter\absdelim{\lvert}{\rvert}
+\DeclarePairedDelimiter\ccinterval{[}{]}
+\DeclarePairedDelimiter\ocinterval{(}{]}
+\DeclarePairedDelimiter\cointerval{[}{)}
+\DeclarePairedDelimiter\oointerval{(}{)}
+
+\providecommand\given{}
+\newcommand\SetSymbol[1][]{%
+	\nonscript\:#1\vert
+	\allowbreak
+	\nonscript\:
+	\mathopen{}
+}
+\DeclarePairedDelimiterX\Set[1]\{\}{
+	\renewcommand\given{
+		\SetSymbol[\delimsize]
+	}
+	#1
+}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\Epsilon}{\mathrm{E}}
+\newcommand{\Nu}{\mathrm{N}}
+\newcommand{\omicron}{o}
+\newcommand{\Omicron}{\mathrm{O}}
+
+\newcommand{\ensreal}{\mathbb{R}}
+\newcommand{\ensint}{\mathbb{N}}
+\newcommand{\mat}[1]{\mathbold{#1}}
+\newcommand{\vect}[1]{\mbf{#1}}
+\newcommand{\intset}[2]{\overline{#1,#2}}
+\newcommand{\invmat}[1]{#1^{-1}}
+\newcommand{\zeros}[2]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		\mat{0}_{#1}
+	}{
+		\mat{0}_{#1\times#2}
+	}
+}
+\newcommand{\eye}[1]{\mat{I}_{#1}}
+\newcommand{\ones}[2]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		\mat{1}_{#1}
+	}{
+		\mat{1}_{#1\times#2}
+	}
+}
+\newcommand{\norm}[2]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		\normdelim*{#1}
+	}{
+		\normdelim*{#1}_{#2}
+	}
+}
+\newcommand{\vtrans}[1]{
+	#1^\top
+}
+\newcommand{\abs}[1]{
+	\absdelim*{#1}
+}
+\newcommand{\expect}[1]{
+	\mathbb{E}\parentheses*{#1}
+}
+\newcommand{\proba}[1]{
+	\mathbb{P}\parentheses*{#1}
+}
+\newcommand{\variance}[1]{
+	\mat{\Sigma}_{#1}
+}
+\newcommand{\mean}[1]{
+	\mat{\mu}_{#1}
+}
+
+\newcommand{\fullset}[3]{
+	\Set*{#1\in#2\given{}#3}
+}
+\newcommand{\sets}[1]{
+	\mathcal{#1}
+}
+
+
+\newcommand{\ellipsoid}[4]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		\ifthenelse{
+			\isempty{#3}{}
+		}{
+			\mathscr{E}\parentheses*{#1} = \fullset{\vect{x}}{\ensreal^{#4}}{\vtrans{\vect{x}}#1\vect{x} \leq 1}
+		}{
+			\mathscr{E}\parentheses*{#1,#3} = \fullset{\vect{x}}{\ensreal^{#4}}{\vtrans{\vect{x}}#1\vect{x}\leq#3}
+		}
+	}{
+		\ifthenelse{
+			\isempty{#3}{}
+		}{
+			\mathscr{E}\parentheses*{#1,#2} = \fullset{\vect{x}}{\ensreal^{#4}}{\vtrans{\parentheses*{\vect{x} - #2\right)}}#1\parentheses*{\vect{x} - #2}\leq 1}
+		}{
+			\mathscr{E}\parentheses*{#1,#2,#3} = \fullset{\vect{x}}{\ensreal^{#4}}{\vtrans{\parentheses*{\vect{x} - #2}}#1\parentheses*{\vect{x} - #2} \leq #3}
+		}
+	}
+}
+\newcommand{\ellname}[3]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		\ifthenelse{
+			\isempty{#3}{}
+		}{
+			\mathscr{E}\parentheses{#1}
+		}{
+			\mathscr{E}\parentheses*{#1,#3}
+		}
+	}{
+		\ifthenelse{
+			\isempty{#3}{}
+		}{
+			\mathscr{E}\parentheses*{#1,#2}
+		}{
+			\mathscr{E}\parentheses*{#1,#2,#3}
+		}
+	}
+}
+\newcommand{\convhull}[1]{
+	\mathrm{conv}\parentheses*{#1}
+}
+\newcommand{\deter}[1]{
+	\mathrm{det}\parentheses*{#1}
+}
+\newcommand{\vrep}{V\hyp{}representation\xspace}
+\newcommand{\hrep}{H\hyp{}representation\xspace}
+
+\newcommand{\unitarybox}[1]{\mathbb{B}^{#1}}
+\newcommand{\rectbox}[2]{\mathbb{B}^{#1}\parentheses*{#2}}
+
+\newcommand{\expfun}[1]{\mathrm{exp}\parentheses*{#1}}
+\newcommand{\diag}[1]{\mathrm{diag}\parentheses*{#1}}
+
+\newcommand{\bordervor}[2]{\partial_{#2}\sets{V}_{#1}}
+\newcommand{\gbordervor}[2]{\partial_{#2}\sets{V}^g_{#1}}
+\newcommand{\pbordervor}[2]{\partial_{#2}\sets{V}^p_{#1}}
+
+\newcommand{\predhor}{N_p}
+
+\newcommand{\chebyequi}[2]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		#1_{\vect{c}}
+	}{
+		#1_{\vect{c}_{#2}}
+	}
+}
+\newcommand{\inequi}[2]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		#1^{\Epsilon}
+	}{
+		#1^{\Epsilon}_{#2}
+	}
+}
+\newcommand{\outequi}[2]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		#1^{\Omicron}
+	}{
+		#1^{\Omicron}_{#2}
+	}
+}
+\newcommand{\bary}[2]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		#1^{\mathrm{b}}
+	}{
+		#1^{\mathrm{b}}_{#2}
+	}
+}
+\newcommand{\safe}[2]{
+	\ifthenelse{
+		\isempty{#2}{}
+	}{
+		#1^{\mathrm{s}}
+	}{
+		#1^{\mathrm{s}}_{#2}
+	}
+}
+
+\newcommand{\nomvect}[1]{
+	\wcheck{\vect{#1}}
+}
+\newcommand{\estvect}[1]{
+	\what{\vect{#1}}
+}
+\newcommand{\errvect}[1]{
+	\wtilde{\vect{#1}}
+}
+\newcommand{\devvect}[1]{
+	\breve{\vect{#1}}
+}
+
+\newcommand{\covar}[2]{
+	\mathrm{cov}\parentheses*{#1,#2}
+}
+
+\ExplSyntaxOn
+\NewDocumentCommand\nomsets{m}{
+	\tc_nomsets:n { #1 }
+}
+
+\cs_new_protected:Npn \tc_nomsets:n #1
+{
+	\tl_map_inline:nn { #1 }
+	{
+		\token_if_cs:NTF ##1 { \wcheck { ##1 } } { \wcheck { \sets { ##1 } } }
+	}
+}
+\ExplSyntaxOff

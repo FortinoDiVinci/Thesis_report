@@ -1,0 +1,677 @@
+\renewcommand{\nomgroup}[1]{%
+	\ifthenelse{%
+		\equal{#1}{A}
+	}{%
+		\item[\textbf{Sets}]
+	}{%
+		\ifthenelse{%
+			\equal{#1}{B}
+		}{%
+			\item[\textbf{Algebra}]
+		}{%
+			\ifthenelse{
+				\equal{#1}{C}
+			}{%
+				\item[\textbf{Probabilities}]
+			}{
+				\ifthenelse{
+					\equal{#1}{D}
+				}{%
+					\item[\textbf{Multi-agent system}]
+				}{%
+					\ifthenelse{
+						\equal{#1}{E}
+					}{%
+						\item[\textbf{Robust control}]
+					}{}
+				}
+			}
+		}
+	}
+}
+
+\definecolor{LocalColor1}{HTML}{a6cee3}
+\definecolor{LocalColor2}{HTML}{1f78b4}
+\definecolor{LocalColor3}{HTML}{b2df8a}
+\definecolor{LocalColor4}{HTML}{33a02c}
+\definecolor{LocalColor5}{HTML}{fb9a99}
+\definecolor{LocalColor6}{HTML}{e31a1c}
+\definecolor{LocalColor7}{HTML}{fdbf6f}
+\definecolor{LocalColor8}{HTML}{ff7f00}
+\definecolor{LocalColor9}{HTML}{cab2d6}
+\definecolor{LocalColor10}{HTML}{6a3d9a}
+\definecolor{LocalColor11}{HTML}{ffff99}
+\definecolor{LocalColor12}{HTML}{b15928}
+
+\colorlet{GridColor}{black!25}
+
+%% amsthm environments
+\declaretheoremstyle[%
+	spaceabove    = 6pt,%
+	spacebelow    = 6pt,%
+	headfont      = \normalfont\bfseries,%
+	notefont      = \mdseries,%
+	notebraces    = {(}{)},%
+	bodyfont      = \normalfont\itshape,%
+	postheadspace = 1em,%
+	postheadspace = \newline,%
+	headpunct     = {},%
+	notebraces    = {}{},%
+	headformat    = \NAME~\NUMBER:\NOTE%
+]{example}
+\declaretheoremstyle[%
+    spaceabove    = -2pt,%
+    spacebelow    = 6pt,%
+    headfont      = \normalfont\itshape,%
+    bodyfont      = \normalfont,%
+    qed           = $\blacksquare$,%
+    postheadspace = 1em,%
+    headformat    = \NAME
+]{proof}
+
+\declaretheorem[%
+	name    = \dtname{Prfname},
+	style   = proof,
+	unnumbered
+]{prf}
+\declaretheorem[
+	name         = \dtname{Exmpname},
+	numberwithin = chapter,
+	style        = example,
+	refname      = {\exmpname,\exmpnames},
+	Refname      = {\Exmpname,\Exmpnames},
+]{exmp}
+
+%% tcolorbox environments
+\colorlet{localtcbackground}{black!1}
+
+\newtcbtheorem[%
+	number within = chapter,
+	crefname      = {\thmname}{\thmnames},
+	Crefname      = {\Thmname}{\Thmnames}
+]{thm}{\Thmname}{%
+	empty,
+	oversize,
+	coltitle                       = black,
+	attach boxed title to top left = {%
+		xshift  = 1cm,
+		yshift* = -\tcboxedtitleheight/2
+	},
+	boxed title style              = {%
+		empty,
+		overlay = {%
+			\fill[%
+				localtcbackground,
+				rounded corners
+			] (frame.south west) rectangle (frame.north east);
+		}
+	},
+	colframe                       = black,
+	fonttitle                      = \bfseries,
+	description font               = \normalfont,
+	label separator                = {},
+	breakable,
+	overlay unbroken              = {%
+		\fill[%
+			localtcbackground
+		] {%
+			[rounded corners] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-| ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+			-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+			|- (title.east);
+	},
+	overlay first                  = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+		{%
+			[rounded corners] -- ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+		{%
+			[rounded corners] -- ([xshift = 0.4cm] frame.north west)
+		} -- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = -0.4cm] frame.south east)
+			|- (title.east);
+	},
+	overlay middle                 = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west) rectangle ([xshift = -0.4cm] frame.north east);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = -0.4cm] frame.north east)
+			-- ([xshift = -0.4cm] frame.south east);
+		},
+	overlay last                   = {%
+		\fill[
+			localtcbackground
+		] {%
+			[rounded corners] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+			-- ([xshift = -0.4cm] frame.north east)
+		}	-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west)
+			-| ([xshift = -0.4cm] frame.north east);
+	}	
+}{}
+
+\newtcbtheorem[%
+	number within    = chapter,
+	use counter from = thm,
+	crefname         = {\lmmname}{\lmmnames},
+	Crefname         = {\Lmmname}{\Lmmnames}
+]{lmm}{\Lmmname}{%
+	empty,
+	oversize,
+	coltitle                       = black,
+	attach boxed title to top left = {%
+		xshift  = 1cm,
+		yshift* = -\tcboxedtitleheight/2
+	},
+	boxed title style              = {%
+		empty,
+		overlay = {%
+			\fill[%
+				localtcbackground,
+				rounded corners
+			] (frame.south west) rectangle (frame.north east);
+		}
+	},
+	colframe                       = black,
+	fonttitle                      = \bfseries,
+	description font               = \normalfont,
+	label separator                = {},
+	breakable,
+	overlay unbroken              = {%
+		\fill[%
+			localtcbackground
+		] {%
+			[rounded corners] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-| ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+			-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+			|- (title.east);
+	},
+	overlay first                  = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+		{%
+			[rounded corners] -- ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+		{%
+			[rounded corners] -- ([xshift = 0.4cm] frame.north west)
+		} -- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = -0.4cm] frame.south east)
+			|- (title.east);
+	},
+	overlay middle                 = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west) rectangle ([xshift = -0.4cm] frame.north east);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = -0.4cm] frame.north east)
+			-- ([xshift = -0.4cm] frame.south east);
+		},
+	overlay last                   = {%
+		\fill[
+			localtcbackground
+		] {%
+			[rounded corners] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+			-- ([xshift = -0.4cm] frame.north east)
+		}	-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west)
+			-| ([xshift = -0.4cm] frame.north east);
+	}	
+}{}
+
+\newtcbtheorem[%
+	number within    = chapter,
+	use counter from = thm,
+	crefname         = {\crlname}{\crlnames},
+	Crefname         = {\Crlname}{\Crlnames}
+]{crl}{\Crlname}{%
+	empty,
+	oversize,
+	coltitle                       = black,
+	attach boxed title to top left = {%
+		xshift  = 1cm,
+		yshift* = -\tcboxedtitleheight/2
+	},
+	boxed title style              = {%
+		empty,
+		overlay = {%
+			\fill[%
+				localtcbackground,
+				rounded corners
+			] (frame.south west) rectangle (frame.north east);
+		}
+	},
+	colback                        = localtcbackground,
+	colframe                       = black,
+	fonttitle                      = \bfseries,
+	description font               = \normalfont,
+	label separator                = {},
+	breakable,
+	overlay unbroken              = {%
+		\fill[%
+			localtcbackground
+		] {%
+			[rounded corners] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-| ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+			-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+			|- (title.east);
+	},
+	overlay first                  = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+		{%
+			[rounded corners] -- ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+		{%
+			[rounded corners] -- ([xshift = 0.4cm] frame.north west)
+		} -- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = -0.4cm] frame.south east)
+			|- (title.east);
+	},
+	overlay middle                 = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west) rectangle ([xshift = -0.4cm] frame.north east);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = -0.4cm] frame.north east)
+			-- ([xshift = -0.4cm] frame.south east);
+		},
+	overlay last                   = {%
+		\fill[
+			localtcbackground
+		] {%
+			[rounded corners] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+			-- ([xshift = -0.4cm] frame.north east)
+		}	-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west)
+			-| ([xshift = -0.4cm] frame.north east);
+	}	
+}{}
+
+\newlistof{listofdefinitions}{ldfn}{\lodname}
+\newlistentry[chapter]{definition}{ldfn}{0}
+\renewcommand*{\cftdefinitionname}{\Dfnname~}
+\renewcommand*{\cftdefinitionaftersnum}{:}
+\setlength{\cftdefinitionindent}{\cftsectionindent}
+
+\renewcommand{\thedefinition}{\thechapter.\arabic{definition}}
+
+\newtcbtheorem[%
+	use counter   = definition,
+	number within = chapter,
+	crefname      = {\dfnname}{\dfnnames},
+	Crefname      = {\Dfnname}{\Dfnnames},
+	list inside   = {ldfn},
+	list type     = definition
+]{dfn}{\Dfnname}{%
+	empty,
+	oversize,
+	coltitle                       = black,
+	attach boxed title to top left = {%
+		xshift  = 1cm,
+		yshift* = -\tcboxedtitleheight/2
+	},
+	boxed title style              = {%
+		empty,
+		overlay = {%
+			\fill[%
+				localtcbackground,
+				rounded corners
+			] (frame.south west) rectangle (frame.north east);
+		}
+	},
+	fonttitle                      = \bfseries,
+	description font               = \normalfont,
+	label separator                = {},
+	breakable,
+	overlay unbroken              = {%
+		\fill[%
+			localtcbackground
+		] {%
+			[rounded corners] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-| ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+			-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-- ($(frame.south west)!0.2!(frame.south east)$);
+	},
+	overlay first                 = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+		{%
+			[rounded corners] -- ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+		{%
+			[rounded corners] -- ([xshift = 0.4cm] frame.north west)
+		} -- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west);
+	},
+	overlay middle                = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west) rectangle ([xshift = -0.4cm] frame.north east);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west);
+		},
+	overlay last                  = {%
+		\fill[
+			localtcbackground
+		] {%
+			[rounded corners] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+			-- ([xshift = -0.4cm] frame.north east)
+		}	-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			|- ($(frame.south west)!0.2!(frame.south east)$);
+	}	
+}{}
+
+\newtcbtheorem[%
+	number within = chapter,
+	crefname      = {\prpname}{\prpnames},
+	Crefname      = {\Prpname}{\Prpnames}
+]{prp}{\Prpname}{%
+	empty,
+	oversize,
+	coltitle                       = black,
+	attach boxed title to top left = {%
+		xshift  = 1cm,
+		yshift* = -\tcboxedtitleheight/2
+	},
+	boxed title style              = {%
+		empty,
+		overlay = {%
+			\fill[%
+				localtcbackground,
+				rounded corners
+			] (frame.south west) rectangle (frame.north east);
+		}
+	},
+	fonttitle                      = \bfseries,
+	description font               = \normalfont,
+	label separator                = {},
+	breakable,
+	overlay unbroken              = {%
+		\fill[%
+			localtcbackground
+		] {%
+			[rounded corners] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-| ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+			-- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+			-- +(0, {3mm + \baselineskip});
+	},
+	overlay first                 = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west)
+			-- ([xshift = -0.4cm] frame.south east)
+		{%
+			[rounded corners] -- ([xshift = -0.4cm] frame.north east)
+		}	-- (title.east)
+		{%
+			[rounded corners] -- (title.south east)
+			-- (title.south west)
+		}	-- (title.west)
+		{%
+			[rounded corners] -- ([xshift = 0.4cm] frame.north west)
+		} -- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] (title.west)
+			-| (frame.south west);
+	},
+	overlay middle                = {%
+		\fill[
+			localtcbackground
+		] ([xshift = 0.4cm] frame.south west) rectangle ([xshift = -0.4cm] frame.north east);
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			-- ([xshift = 0.4cm] frame.south west);
+		},
+	overlay last                  = {%
+		\fill[
+			localtcbackground
+		] {[rounded corners] (frame.north west) -- ([xshift = 0.4cm] frame.south west) -- ([xshift = -0.4cm] frame.south east) -- ([xshift = -0.4cm] frame.north east)} -- cycle;
+		\draw[%
+			rounded corners,
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			|- ([xshift = -0.4cm] frame.south east)
+			-- +(0, {3mm + \baselineskip});
+	}	
+}{}
+
+\newtcbtheorem[%
+	number within = chapter,
+	crefname      = {\rmkname}{\rmknames},
+	Crefname      = {\Rmkname}{\Rmknames}
+]{rmk}{\Rmkname}{%
+	empty,
+	oversize,
+	coltitle                       = black,
+	fonttitle                      = \itshape,
+	description font               = \normalfont,
+	label separator                = {},
+	top                            = 0pt,
+	bottom                         = 0pt,
+	bottomtitle                    = 0pt,
+	boxsep                         = 0.5pt,
+	breakable,
+	overlay unbroken              = {%
+		\node[above left] at ($(frame.south east) + (-0.4cm,0.05pt)$) {$\Diamond$};
+	},
+	overlay first                 = {},
+	overlay middle                = {},
+	overlay last                  = {%
+		\node[above left] at ($(frame.south east) + (-0.4cm,0.05pt)$) {$\Diamond$};
+	}	
+}{}
+
+\newcommand{\listassumptionsname}{List of Assumptions}
+\newlistof{listofassumptions}{lasm}{\listassumptionsname}
+\newlistentry[chapter]{assumption}{lasm}{0}
+\renewcommand*{\cftassumptionname}{Assumption~}
+\renewcommand*{\cftassumptionaftersnum}{:}
+\setlength{\cftassumptionindent}{\cftsectionindent}
+
+\renewcommand{\theassumption}{\thechapter.\arabic{assumption}}
+
+\newtcbtheorem[%
+	use counter   = assumption,
+	number within = chapter,
+	crefname      = {\asmname}{\asmnames},
+	Crefname      = {\Asmname}{\Asmnames},
+	list inside   = {lasm},
+	list type     = assumption
+]{asm}{\Asmname}{%
+	empty,
+	oversize,
+	coltitle         = black,
+	fonttitle        = \bfseries,
+	description font = \normalfont,
+	fontupper        = \itshape,
+	label separator  = {},
+	bottomtitle      = 0pt,
+	top              = 0pt,
+	bottom           = 0pt,
+	breakable,
+	overlay unbroken = {%
+		\draw[%
+			line width = 0.5pt
+		] ($(frame.north west)!0.05!(frame.north east)$)
+	-| ([xshift = 0.4cm] frame.south west)
+			-- ($(frame.south west)!0.05!(frame.south east)$);
+	},
+	overlay first    = {%
+		\draw[%
+			line width = 0.5pt
+		] ($(frame.north west)!0.05!(frame.north east)$)
+			-| ([xshift = 0.4cm] frame.south west);
+	},
+	overlay middle   = {},
+	overlay last     = {%
+		\draw[%
+			line width = 0.5pt
+		] ([xshift = 0.4cm] frame.north west)
+			|- ($(frame.south west)!0.05!(frame.south east)$);
+	}	
+}{}
