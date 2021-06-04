@@ -9,6 +9,7 @@ addpath('../../data/force_torque_sensor')
 %%%%%%%%%%%%%%%%%%
 NB_JOINTS = 5;
 DISPLAY_MOCAP_FIT = 1;
+first_exp2_user029 = 0; % to deal with missing topic
 
 %% File selection
 files = dir('users/*/*.bag');
@@ -107,16 +108,18 @@ for idx = 1:length(files)
     field_name{1} = 'user';
     field_value{1} = files(idx).folder(end-2:end);
     field_name{2} = 'experience';
-    if is_exp == 1
+    if is_exp(idx) == 1
         field_value{2} = "exp_1";
-    elseif is_exp == 2
+    elseif is_exp(idx) == 2
         field_value{2} = "exp_2";
-    elseif is_calibration
+    elseif is_calibration(idx)
         field_value{2} = "calib";
-    elseif is_learning_phri
+    elseif is_learning_phri(idx)
         field_value{2} = "l_phri";
-    elseif is_learning_ball_bouncing
+    elseif is_learning_ball_bouncing(idx)
         field_value{2} = "l_bb";
+    else
+        field_value{2} = "unknown";
     end
     try
         for i = 1:length(parameters_data{end}.Doubles)
@@ -125,9 +128,42 @@ for idx = 1:length(files)
         end
     catch
         warning('Missing /ball_simulator/parameter_updates topic');
+        % This user data parameter topic is missing (manually fed)
+        if strcmp(field_value{1}, '029')
+            field_name{3} = 'restitution';
+            field_name{4} = 'ball_mass';
+            field_name{5} = 'paddle_mass';
+            field_name{6} = 'scale';
+            field_name{7} = 'gravity';
+            field_name{8} = 'radius';
+            field_name{9} = 'target_height';
+            field_name{10} = 'paddle_frequency'; % unused
+            field_name{11} = 'paddle_amplitude'; % unused
+            
+            field_value{3} = 0.6;
+            field_value{4} = 0.058;
+            field_value{5} = 1;
+            field_value{6} = 6;
+            field_value{7} = 9.807;
+            field_value{8} = 0.325;
+            field_value{10} = 0.5; % unused
+            field_value{11} = 0.3; % unused
+            if is_calibration(idx)
+                field_value{9} = NaN;
+            elseif is_exp(idx) == 1 || is_learning_phri(idx) || is_learning_ball_bouncing(idx)
+                field_value{9} = 1.75;
+            elseif is_exp(idx) == 2
+                if first_exp2_user029 
+                    field_value{9} = 1.5;
+                else
+                    field_value{9} = 2.0;
+                end
+                first_exp2_user029 = 1;
+            end
+        end    
     end
-    exp_parameters{idx} = cell2struct(field_value,field_name,2);
-    clear parameters_data
+    exp_parameters(idx) = cell2struct(field_value, field_name, 2);
+    clear parameters_data field_value field_name
 
 end
 
@@ -157,30 +193,61 @@ clear t_q t_mc t_ft t_b
 
 %% spatial synchronisation
 % between motion capture coordinates and robot coordinates
+for idx = 1:length(files)
+    for i=1:length(t{idx})
+        T = MGD_T0marker(q{idx}(i,1), q{idx}(i,2), q{idx}(i,3), q{idx}(i,4), q{idx}(i,5)); % htf matrix
+        robot_endpoint{idx}(i, :) = T(1:3,4);
+    end 
 
-for i=1:length(t)
-    T = MGD_T0marker(q{idx}(i,1), q{idx}(i,2), q{idx}(i,3), q{idx}(i,4), q{idx}(i,5)); % htf matrix
-    robot_endpoint{idx}(i, :) = T(1:3,4);
-end 
+    % redo calibration every time a new calibration is available
+    if is_calibration(ii)
+        [R2, Bfit, ErrorStats] = absor(mocap{idx}', robot_endpoint{idx}');
+        tf_matrix = R2.M;
+    end
 
-% redo calibration every time a new calibration is available
-if is_calibration(ii)
-    [R2, Bfit, ErrorStats] = absor(mocap', robot_endpoint');
-    tf_matrix = R2.M;
+    for i=1:length(t)
+        temp_t = tf_matrix*[mocap{idx}(i,:), 1]'; % homogenous coordinates
+        mocap_robot_endpoint{idx}(i, :) = temp_t(1:3);
+    end 
+
+    if DISPLAY_MOCAP_FIT 
+        figure
+        hold on, grid on
+        plot(t{idx}, mocap_robot_endpoint{idx}(:,3))
+        plot(t{idx}, robot_endpoint{idx}(:,3))
+        legend('mocap z', 'MGD z')
+        title('Motion capture VS Direct Kinematics')
+    end
 end
-
-for i=1:length(t)
-    temp_t = tf_matrix*[mocap{idx}(i,:), 1]'; % homogenous coordinates
-    mocap_robot_endpoint{idx}(i, :) = temp_t(1:3);
-end 
-
-if DISPLAY_MOCAP_FIT 
-    figure
-    hold on, grid on
-    plot(t, mocap_robot_endpoint(:,3))
-    plot(t, robot_endpoint(:,3))
-    legend('mocap z', 'MGD z')
-    title('Motion capture VS Direct Kinematics')
-end
-
 %% ball bouncing error
+for idx = 1:length(files)
+    if isempty(z_b{idx})
+        idx_ball_off_ramp(idx) = NaN;
+        idx_apex{idx} = [NaN];
+        bounce_err{idx}.data = [NaN];
+        bounce_err{idx}.mean = NaN;
+        bounce_err{idx}.std = NaN;
+        z_p{idx} = [NaN];
+        continue
+    end
+    [idx_ball_off_ramp(idx), ~, ~] = offRampIdx(z_b{idx}, dt);
+    idx_apex{idx} = detect_apexes(z_b{idx}, t{idx}, idx_ball_off_ramp(idx));
+    bounce_err{idx}.data = z_b{idx}(idx_apex{idx}) - exp_parameters(idx).target_height;
+    bounce_err{idx}.mean = nanmean(bounce_err{idx}.data);
+    bounce_err{idx}.std = nanstd(bounce_err{idx}.data);
+    be_movmean = movmean(bounce_err{idx}.data, 7);
+    
+    z_p{idx} = (robot_endpoint{idx}(:,3) + virtual_pos_offset)*exp_parameters(idx).scale;
+    
+    if DISPLAY_BALL_BOUNCING
+        figure
+        hold on, grid on
+        plot(t{idx}, z_b{idx}, 'r')
+        plot(t{idx}, z_p{idx}, 'b')
+        plot(t{idx}(idx_apex{idx}), be_movmean + exp_parameters(idx).target_height, 'Linewidth', 1.5)
+        line([t{idx}(idx_ball_on_ramp), t{idx}(end)], [exp_parameters(idx).target_height, exp_parameters(idx).target_height], 'Color','black','LineStyle','--');
+        legend('mocap z', 'MGD z')
+        title('Motion capture VS Direct Kinematics')
+    end
+    
+end
