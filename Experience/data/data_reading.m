@@ -3,13 +3,21 @@ clear all
 addpath('utils')
 addpath('../../data/utils')
 addpath('../../data/force_torque_sensor')
+addpath('../../data/youBot_analysis/Utils')
 
 %%%%%%%%%%%%%%%%%%
 %% MACROS & variables
 %%%%%%%%%%%%%%%%%%
 NB_JOINTS = 5;
 DISPLAY_MOCAP_FIT = 1;
+DISPLAY_BALL_BOUNCING = 1;
+SAVE_DATA = 1;
+
 first_exp2_user029 = 0; % to deal with missing topic
+virtual_pos_offset = -0.32;
+if SAVE_DATA
+    saved_data_name = "exp_june_2021";
+end
 
 %% File selection
 files = dir('users/*/*.bag');
@@ -41,6 +49,8 @@ end
 files = files(chron_order);
 is_calibration = is_calibration(chron_order);
 is_exp = is_exp(chron_order);
+is_learning_ball_bouncing = is_learning_ball_bouncing(chron_order);
+is_learning_phri = is_learning_phri(chron_order);
 
 %% Data reading
 for idx = 1:length(files)
@@ -129,7 +139,9 @@ for idx = 1:length(files)
     catch
         warning('Missing /ball_simulator/parameter_updates topic');
         % This user data parameter topic is missing (manually fed)
-        if strcmp(field_value{1}, '029')
+        % The ball simulator node was not always launched for calibration
+        if strcmp(field_value{1}, '029') || is_calibration(idx) || ...
+                is_learning_phri(idx)
             field_name{3} = 'restitution';
             field_name{4} = 'ball_mass';
             field_name{5} = 'paddle_mass';
@@ -163,18 +175,22 @@ for idx = 1:length(files)
         end    
     end
     exp_parameters(idx) = cell2struct(field_value, field_name, 2);
-    clear parameters_data field_value field_name
+    clear parameters_data field_value field_name 
 
 end
-
-return
+clear first_exp2_user029
 
 %% Synchronisation
 % Time synchronisation
 for idx = 1:length(files)
     dt = 1e-3;
-    t_start(idx) = max([t_q{idx}(1); t_mc{idx}(1); t_ft{idx}(1); t_b{idx}(1)]);
-    t_end(idx) = min([t_q{idx}(end); t_mc{idx}(end); t_ft{idx}(end); t_b{idx}(end)]);
+    if is_calibration(idx)
+        t_start(idx) = max([t_q{idx}(1); t_mc{idx}(1)]);
+        t_end(idx) = min([t_q{idx}(end); t_mc{idx}(end)]);        
+    else
+        t_start(idx) = max([t_q{idx}(1); t_mc{idx}(1); t_ft{idx}(1); t_b{idx}(1)]);
+        t_end(idx) = min([t_q{idx}(end); t_mc{idx}(end); t_ft{idx}(end); t_b{idx}(end)]);
+    end
     t{idx} = (t_start(idx):dt:t_end(idx))';
 
     for ii = 1:NB_JOINTS
@@ -183,13 +199,20 @@ for idx = 1:length(files)
     for ii = 1:3
         mocap{idx}(:,ii) = interp1(t_mc{idx}, raw_mocap{idx}(:,ii), t{idx});
     end
-    for ii = 1:3
-        ft_sensor{idx}(:,ii) = interp1(t_ft{idx}, raw_force{idx}(:,ii), t{idx});
-        ft_sensor{idx}(:,ii+3) = interp1(t_ft{idx}, raw_torque{idx}(:,ii), t{idx});
+    if is_calibration(idx)
+        ft_sensor{idx}(:,1:3) = NaN(size(mocap{idx}(:,1:3)));
+        ft_sensor{idx}(:,4:6) = NaN(size(mocap{idx}(:,1:3)));
+        z_b{idx} =  NaN(size(mocap{idx}(:,1)));
+    else
+        for ii = 1:3
+            ft_sensor{idx}(:,ii) = interp1(t_ft{idx}, raw_force{idx}(:,ii), t{idx});
+            ft_sensor{idx}(:,ii+3) = interp1(t_ft{idx}, raw_torque{idx}(:,ii), t{idx});
+        end
+        z_b{idx} = interp1(t_b{idx}, raw_ball_z{idx}, t{idx});
     end
-    z_b{idx} = interp1(t_b{idx}, raw_ball_z{idx}, t{idx});
 end
 clear t_q t_mc t_ft t_b
+clear raw_q raw_mocap raw_force raw_torque raw_ball_z
 
 %% spatial synchronisation
 % between motion capture coordinates and robot coordinates
@@ -200,12 +223,13 @@ for idx = 1:length(files)
     end 
 
     % redo calibration every time a new calibration is available
-    if is_calibration(ii)
-        [R2, Bfit, ErrorStats] = absor(mocap{idx}', robot_endpoint{idx}');
+    if is_calibration(idx)
+        [R2, ~, ~] = absor(mocap{idx}', robot_endpoint{idx}');
         tf_matrix = R2.M;
+        clear R2
     end
 
-    for i=1:length(t)
+    for i=1:length(t{idx})
         temp_t = tf_matrix*[mocap{idx}(i,:), 1]'; % homogenous coordinates
         mocap_robot_endpoint{idx}(i, :) = temp_t(1:3);
     end 
@@ -219,9 +243,11 @@ for idx = 1:length(files)
         title('Motion capture VS Direct Kinematics')
     end
 end
+clear tf_matrix temp_t T
 %% ball bouncing error
 for idx = 1:length(files)
-    if isempty(z_b{idx})
+    if isempty(z_b{idx}) || is_calibration(idx) || is_learning_phri(idx) || ...
+            is_learning_ball_bouncing(idx) 
         idx_ball_off_ramp(idx) = NaN;
         idx_apex{idx} = [NaN];
         bounce_err{idx}.data = [NaN];
@@ -244,10 +270,23 @@ for idx = 1:length(files)
         hold on, grid on
         plot(t{idx}, z_b{idx}, 'r')
         plot(t{idx}, z_p{idx}, 'b')
-        plot(t{idx}(idx_apex{idx}), be_movmean + exp_parameters(idx).target_height, 'Linewidth', 1.5)
-        line([t{idx}(idx_ball_on_ramp), t{idx}(end)], [exp_parameters(idx).target_height, exp_parameters(idx).target_height], 'Color','black','LineStyle','--');
-        legend('mocap z', 'MGD z')
-        title('Motion capture VS Direct Kinematics')
+        plot(t{idx}(idx_apex{idx}), be_movmean + exp_parameters(idx).target_height, 'c', 'Linewidth', 1.5)
+        line([t{idx}(idx_ball_off_ramp(idx)), t{idx}(end)], [exp_parameters(idx).target_height, exp_parameters(idx).target_height], 'Color','black','LineStyle','--');
+        legend('ball', 'paddle')
+        title("Ball bouncing task, user#" + string(exp_parameters(idx).user))
     end
     
 end
+
+clear idx ii i
+
+% to avoid unvoluntary data erasing
+if exist(strcat(saved_data_name,".mat"), "file")
+    warning('The file ' + saved_data_name + ".mat, already exists.")
+    str_in = input('Do you really want to erase it ?','s');
+    if str_in ~= "yes" && str_in ~= "YES" && str_in ~= "Yes" && str_in ~= "Y" && str_in ~= "y"
+        return
+    end
+end
+
+save(strcat(saved_data_name,".mat"));
