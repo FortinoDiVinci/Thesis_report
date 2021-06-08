@@ -10,7 +10,7 @@ addpath('../../data/youBot_analysis/Utils')
 %%%%%%%%%%%%%%%%%%
 NB_JOINTS = 5;
 DISPLAY_MOCAP_FIT = 1;
-DISPLAY_BALL_BOUNCING = 1;
+DISPLAY_BALL_BOUNCING = 0;
 SAVE_DATA = 1;
 
 first_exp2_user029 = 0; % to deal with missing topic
@@ -42,6 +42,9 @@ for ii = 1:length(files)
     elseif contains(files(ii).name, "l_phri")
         is_learning_phri(ii) = 1;
         date_time(ii) = datenum(files(ii).name(8:end-4),'yyyy-mm-dd-HH-MM-SS');
+    else
+        % otherwise wrong naming ? / peculiar case
+        date_time(ii) = datenum(files(ii).name(end-22:end-4),'yyyy-mm-dd-HH-MM-SS');
     end
 end
 
@@ -51,6 +54,7 @@ is_calibration = is_calibration(chron_order);
 is_exp = is_exp(chron_order);
 is_learning_ball_bouncing = is_learning_ball_bouncing(chron_order);
 is_learning_phri = is_learning_phri(chron_order);
+clear chron_order
 
 %% Data reading
 for idx = 1:length(files)
@@ -178,7 +182,7 @@ for idx = 1:length(files)
     clear parameters_data field_value field_name 
 
 end
-clear first_exp2_user029
+clear first_exp2_user029 file_path
 
 %% Synchronisation
 % Time synchronisation
@@ -217,6 +221,9 @@ clear raw_q raw_mocap raw_force raw_torque raw_ball_z
 %% spatial synchronisation
 % between motion capture coordinates and robot coordinates
 for idx = 1:length(files)
+    if idx == 1
+        continue
+    end
     for i=1:length(t{idx})
         T = MGD_T0marker(q{idx}(i,1), q{idx}(i,2), q{idx}(i,3), q{idx}(i,4), q{idx}(i,5)); % htf matrix
         robot_endpoint{idx}(i, :) = T(1:3,4);
@@ -246,6 +253,9 @@ end
 clear tf_matrix temp_t T
 %% ball bouncing error
 for idx = 1:length(files)
+    if idx == 1
+        continue
+    end
     if isempty(z_b{idx}) || is_calibration(idx) || is_learning_phri(idx) || ...
             is_learning_ball_bouncing(idx) 
         idx_ball_off_ramp(idx) = NaN;
@@ -270,7 +280,8 @@ for idx = 1:length(files)
         hold on, grid on
         plot(t{idx}, z_b{idx}, 'r')
         plot(t{idx}, z_p{idx}, 'b')
-        plot(t{idx}(idx_apex{idx}), be_movmean + exp_parameters(idx).target_height, 'c', 'Linewidth', 1.5)
+        plot(t{idx}(idx_apex{idx}), be_movmean + exp_parameters(idx).target_height, 'g', 'Linewidth', 1.5)
+        plot(t{idx}(idx_apex{idx}), z_b{idx}(idx_apex{idx}), 'yo')
         line([t{idx}(idx_ball_off_ramp(idx)), t{idx}(end)], [exp_parameters(idx).target_height, exp_parameters(idx).target_height], 'Color','black','LineStyle','--');
         legend('ball', 'paddle')
         title("Ball bouncing task, user#" + string(exp_parameters(idx).user))
@@ -289,4 +300,4 @@ if exist(strcat(saved_data_name,".mat"), "file")
     end
 end
 
-save(strcat(saved_data_name,".mat"));
+save(strcat(saved_data_name,".mat"), '-v7.3');

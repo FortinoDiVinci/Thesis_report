@@ -15,17 +15,31 @@ vz_b_filt = filtfilt(fir_filter, 1, vz_b);
 % since the ball is "teleported" when the experiment starts, the velocity
 % just before being on the ramp should be huge compare to nominal
 % velocities
-[~, idx_outl] = rmoutliers(vz_b, 'ThresholdFactor', 5);
+% found = 0;
+% for ii = 100:-1:3
+%     [~, idx_outl] = rmoutliers(vz_b, 'ThresholdFactor', ii);
+%     if any(idx_outl == 1)
+%         found = 1;
+%         break;
+%     end
+% end
+% if found == 0
+%     error('Algorithm failed to detect the ball on the ramp. (1)')
+% end
 %[~, idx_outl] = rmoutliers(vz_b_filt);
+% idx_on_ramp = find(idx_outl, 1, 'last');
 
-idx_on_ramp = find(idx_outl, 1, 'last');
+% when the experiment starts, the ball starts moving
+idx_on_ramp = find(vz_b ~= 0, 1, 'first');
+
 % when the ball finally ends up on the ramp, the velocity should be
 % negative
 i = 0;
 while vz_b(idx_on_ramp + i) > 0
     i = i + 1;
     if i >= 50
-        error('Algorithm failed to detect the ball on the ramp.')
+        % another abnormal velocity was detected after ball impacts.
+        error('Algorithm failed to detect the ball on the ramp. (2)')
     end
 end
 idx_on_ramp = idx_on_ramp + i;
@@ -43,6 +57,8 @@ for i = 2:length(z_b) - 1
 end
 az_b(1) = az_b(2);
 az_b(end) = az_b(end-1);
+% the changes of acceleration from ramp to free fall, can be observed
+% because of a local peak (interpolation issue ?)
 [~,idx_off_ramp] = max(az_b(idx_on_ramp+1:idx_on_ramp + idx_first_bounce - 20));
 idx_off_ramp = idx_off_ramp + idx_on_ramp + 1;
 %idx_off_ramp = find(TF, 1, 'last') + idx_on_ramp;
