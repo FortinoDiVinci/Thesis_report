@@ -1,13 +1,6 @@
 function disp_temporal_norm_multp_cond(cycles, names)
 
-% colors = [0.0000, 0.4470, 0.7410;
-%           0.8500, 0.3250, 0.0980;	          
-%           0.9290, 0.6940, 0.1250;
-%           0.4940, 0.1840, 0.5560;
-%           0.4660, 0.6740, 0.1880;
-%           0.3010, 0.7450, 0.9330;
-%           0.6350, 0.0780, 0.1840];
-colors = lines(7);
+colors = lines(length(unique(names)));
       
 %% mean and std
 tocm = 100;
@@ -16,7 +9,7 @@ names_regr = names;
 regrouped = [];
 for ii = 1:length(cycles)
     if any(ii == regrouped)
-        names_regr(ii) = [];
+        names_regr(ii) = "";
         continue
     end
     tmp = names;
@@ -24,11 +17,11 @@ for ii = 1:length(cycles)
     string_compare = strcmp(names(ii), tmp);
     idx = find(string_compare);
     if any(string_compare)
-        for i_idx = idx
+        for i_idx = idx'
             regrouped = [regrouped, i_idx];
             cycles_n{ii} = horzcat(cycles{ii}, cycles{i_idx});
         end
-        cycles_n{[idx]} = [];
+        cycles_n([idx]) = cell(1,length(idx));
     end
     idx_is_dist = ~logical(vertcat(cycles_n{ii}(:).is_dist));
     avg_cycle_pos(ii,:) = mean(vertcat(cycles_n{ii}(idx_is_dist).ui_interp));

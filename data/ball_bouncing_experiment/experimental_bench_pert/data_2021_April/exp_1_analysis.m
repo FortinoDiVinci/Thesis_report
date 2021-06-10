@@ -7,16 +7,24 @@ addpath('../../../youBot_analysis/Utils')
 addpath('../../../force_torque_sensor')
 % 
 
+VERSION = 2;
+
 % load('imp_data_exp1.mat')
 % clear impedance
 % %load('exp_1_impedance_id/imp_data_exp1_2.mat', 'impedance')
 % %load('exp_1_impedance_id/f_wdw_85ms/imp_data_exp1_b9.mat', 'impedance')
 % load('exp_1.mat', 'z_p')
-load('exp_1_impedance_id/imp_data_exp1_nom_cond.mat', 'impedance', 'delta_fz',...
-    'delta_z')
-load('exp_1_nom_cond.mat', 'z_p', 'z_b', 'idx_ball_off_ramp', 'bounc_err')
-
-USER_REF_NAMES = ["user1";"user2";"user3";"user1"];
+%% first SB2021 submission
+if VERSION == 1
+    load('exp_1_impedance_id/imp_data_exp1_nom_cond.mat', 'impedance', 'delta_fz',...
+        'delta_z')
+    load('exp_1_nom_cond.mat', 'z_p', 'z_b', 'idx_ball_off_ramp', 'bounc_err')
+    USER_REF_NAMES = ["user1";"user2";"user3";"user1"];
+%% corrected SB2021 submission
+elseif VERSION == 2
+    load('../../../../Experience/data/SB2021_new_data_impedance.mat')
+    USER_REF_NAMES = [string(vertcat(exp_parameters.user))];
+end
 
 nb_exp = length(z_b); 
 dt = 1e-3;
@@ -25,27 +33,29 @@ dt = 1e-3;
 [b,a] = butter(2,50/(1/(2*dt)),'low'); 
 % cycle_shift = -350; % cycles are shifted by xxx samples so that the impact 
 % is no longer the starting point. 
-virtual_offset = -0.32;
-kinematic_coeff = 6;
 
 for exp_nb = 1:nb_exp
-    
-%     f_tmp = forces_filtering(forces_unf{exp_nb}', torques_unf{exp_nb}', ...
-%         thetas{exp_nb}', t{exp_nb});
-%     z{exp_nb} = filtfilt(b,a,mocap_marker_robot_base{exp_nb}(:,3));
-%     fz{exp_nb} = -filtfilt(b,a,f_tmp(3,:))';
     
     dz = delta_z{exp_nb};
     dfz = delta_fz{exp_nb};
     idx_p = [delta_z{exp_nb}.pert_ind];
-    
-    i_imp = impacts_extraction2(dz.time, z_b{exp_nb}, 0.6);    
+    if VERSION == 1
+        i_imp = impacts_extraction2(dz.time, z_b{exp_nb}, 0.6);   
+    elseif VERSION == 2
+        i_imp = impacts_extraction2(dz.time, z_b{exp_nb}); 
+    end
     plot(dz.time, z_p{exp_nb}, 'Color', [0.4940,0.1840,0.5560], 'Linewidth', 2)
     plot([dz.time(1), dz.time(end)], [1.75, 1.75], 'k--', 'Linewidth', 1.5)
     % if the experiment start with a ball on the paddle, the previous 
     % function will detect the initial static instants as impacts
-    if ~isempty(idx_ball_off_ramp{exp_nb})
-        i_imp = i_imp(i_imp >= idx_ball_off_ramp{exp_nb});
+    if VERSION == 1
+        if ~isempty(idx_ball_off_ramp{exp_nb})
+            i_imp = i_imp(i_imp >= idx_ball_off_ramp{exp_nb});
+        end
+    elseif VERSION == 2
+        if ~isempty(idx_ball_off_ramp(exp_nb))
+            i_imp = i_imp(i_imp >= idx_ball_off_ramp(exp_nb));
+        end
     end
         
     first_impact = 4; % no perturbation before the 5th impact
@@ -54,12 +64,10 @@ for exp_nb = 1:nb_exp
     plot(dz.time(idx_p), z_p{exp_nb}(idx_p), 'rp', 'MarkerFaceColor', 'r',... 
         'Markersize',15);
     plot(dz.time(idx_i_red), z_b{exp_nb}(idx_i_red), 'o', 'color', ...
-        [0.9290,0.6940,0.1250], 'Markersize',15, 'Linewidth', 1.5)
+        [0.9290,0.6940,0.1250], 'Markersize', 15, 'Linewidth', 1.5)
     %legend('ball','impacts','paddle', 'target', 'perturb.')
     
-    display = 1;
-    %z_p{exp_nb} = (dz.complete_traject + virtual_offset)*kinematic_coeff;
-    
+    display = 1;    
     cycles{exp_nb} = cycle_extraction(idx_i_red, dt, dfz, dz, z_b{exp_nb}, z_p{exp_nb}, display);
     
     traject(exp_nb).time = dz.time;
