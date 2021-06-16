@@ -195,8 +195,9 @@ for idx = 1:length(files)
         t_start(idx) = max([t_q{idx}(1); t_mc{idx}(1); t_ft{idx}(1); t_b{idx}(1)]);
         t_end(idx) = min([t_q{idx}(end); t_mc{idx}(end); t_ft{idx}(end); t_b{idx}(end)]);
     end
-    t{idx} = (t_start(idx):dt:t_end(idx))';
-
+    t{idx} = (0:dt:t_end(idx)-t_start(idx))';
+    t_d{idx} = t_d{idx} - t_start(idx);
+    
     for ii = 1:NB_JOINTS
         q{idx}(:,ii) = interp1(t_q{idx}, raw_q{idx}(:,ii), t{idx});
     end

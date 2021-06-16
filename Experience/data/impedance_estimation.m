@@ -8,7 +8,7 @@ addpath('../../data/force_torque_sensor')
 % MACRO
 % FILE_NAME = 'preliminary_experimental_data/data_vfo_3_phases.mat';
 FILE_NAME = 'SB2021_new_data_v2.mat';
-SAVED_FILE_NAME = 'SB2021_new_data_impedance.mat';
+SAVED_FILE_NAME = 'SB2021_new_data_impedance_v2.mat';
 % PARAMS
 % data processing
 low_pass_cutoff_freq = 50; % Input signal are lp filt. before computation
@@ -80,8 +80,11 @@ for exp_nb = tot_nb_exp:-1:1
     end
 end
 
-%% DATA PROCESSING 
+for i = 1:length(t)
+    t{i} = t{i} - t{i}(1);
+end
 
+%% DATA PROCESSING 
 delta_z = {};
 delta_fz = {};
 impedance = {};

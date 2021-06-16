@@ -1,7 +1,13 @@
-function disp_temporal_norm_multp_cond(cycles, names)
+function cycles_n = disp_temporal_norm_multp_cond(cycles, names)
 
-colors = lines(length(unique(names)));
-      
+if length(unique(names)) < 7
+    colors = lines(length(unique(names)));
+else
+   colors = hsv(length(unique(names)));
+end
+%colors = parula(length(unique(names))); % hsv
+dot_colors = parula(length(unique([cycles{1}.type_dist]))-1);  
+
 %% mean and std
 tocm = 100;
 cycles_n = cycles;
@@ -16,12 +22,14 @@ for ii = 1:length(cycles)
     tmp(ii) = [""]; % mask the iith name to avoid seing itself as duplicate
     string_compare = strcmp(names(ii), tmp);
     idx = find(string_compare);
+    %cycles_n{ii} = cycles{ii};
     if any(string_compare)
         for i_idx = idx'
             regrouped = [regrouped, i_idx];
-            cycles_n{ii} = horzcat(cycles{ii}, cycles{i_idx});
+            cycles_n{ii} = horzcat(cycles_n{ii}, cycles{i_idx});
+            cycles_n{[i_idx]} = [];
         end
-        cycles_n([idx]) = cell(1,length(idx));
+        %cycles_n([idx]) = cell(1,length(idx));
     end
     idx_is_dist = ~logical(vertcat(cycles_n{ii}(:).is_dist));
     avg_cycle_pos(ii,:) = mean(vertcat(cycles_n{ii}(idx_is_dist).ui_interp));
@@ -34,7 +42,18 @@ for ii = 1:length(cycles)
     avg_cycle_for_mag(ii) = mean(vertcat(cycles_n{ii}(idx_is_dist).yi_max));
     std_cycle_for_mag(ii) = std(vertcat(cycles_n{ii}(idx_is_dist).yi_max));
 end
-
+% deleting empty lines
+avg_cycle_pos = avg_cycle_pos(~(names_regr==""),:);
+std_cycle_pos = std_cycle_pos(~(names_regr==""),:);
+avg_cycle_for = avg_cycle_for(~(names_regr==""),:);
+std_cycle_for = std_cycle_for(~(names_regr==""),:);
+%
+avg_cycle_pos_mag = avg_cycle_pos_mag(~(names_regr==""));
+std_cycle_pos_mag = std_cycle_pos_mag(~(names_regr==""));
+avg_cycle_for_mag = avg_cycle_for_mag(~(names_regr==""));
+std_cycle_for_mag = std_cycle_for_mag(~(names_regr==""));
+%
+names_regr = names_regr(~(names_regr==""));
 cycles_n =  cycles_n(~cellfun('isempty',cycles_n));
 
 figure('DefaultAxesFontSize',16)
@@ -73,7 +92,7 @@ for ii = 1:length(r)
             scatter(cycles_n{exp_nb}(cyc_pert(j)).t_com(idx_pert(j)),...
                 cycles_n{exp_nb}(cyc_pert(j)).ui_interp(idx_pert(j)).*avg_cycle_pos_mag(exp_nb), ...
                 'filled', 'MarkerFaceAlpha', 0.75, 'MarkerFaceColor', ...
-                colors(end-ii+1,:)); 
+                dot_colors(end-ii+1,:)); 
         end
 end
 end
@@ -126,7 +145,7 @@ for ii = 1:length(r)
             scatter(cycles_n{exp_nb}(cyc_pert(j)).t_com(idx_pert(j)),...
                 cycles_n{exp_nb}(cyc_pert(j)).yi_interp(idx_pert(j)).*avg_cycle_for_mag(exp_nb), ...
                 'filled', 'MarkerFaceAlpha', 0.75, 'MarkerFaceColor', ...
-                colors(end-ii+1,:)); 
+                dot_colors(end-ii+1,:)); 
         end
 end
 end

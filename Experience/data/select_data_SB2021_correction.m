@@ -47,6 +47,11 @@ idx_ball_off_ramp = [idx_ball_off_ramp, data_000.idx_ball_off_ramp(selected_exp)
 bounce_err = [bounce_err, data_000.bounce_err(selected_exp)];
 exp_parameters = [exp_parameters, data_000.exp_parameters(selected_exp)];
 
+for it = 1:length(t)
+    t{it} = t{it} - t{it}(1);
+    t_dist{it} = t_dist{it} - t_dist{it}(1);
+end
+
 save('SB2021_new_data_v2.mat', 't_date', 't', 't_dist', 'dist_val', 'q', ...
     'mocap_robot_endpoint', 'ft_sensor', 'z_b', 'z_p', 'idx_ball_off_ramp', ...
     'bounce_err', 'exp_parameters', 'users_list');

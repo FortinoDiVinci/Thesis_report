@@ -1,5 +1,9 @@
-
-
+clear all
+load('imp_data_exp1_b10.mat')
+% inc. 2 4 10 11 12 13
+% same 3 6 8  9  14 15
+% dec. 1 5 7
+%% b9
 for i = 1:3
     user(i).cond(1).stiff.data = impedance{i}.xi(1,:);
     user(i).cond(1).damp.data = impedance{i}.xi(2,:);
