@@ -1,0 +1,46 @@
+Reviewer 3 of CASE 2020 submission 271
+
+Comments to the author
+======================
+
+This paper presents a human-robot collaboration (HRC) setup
+to estimate the impedance of human arm endpoint while
+performing a representative cyclic task. Some preliminary
+simulation results are reported using a couple of different
+individuals to show the feasibility of the estimation task.
+
+While the paper addresses an interesting problem that may
+lead to biomimetic control of collaborative robots, it has
+quite a few shortcomings. The major issues are listed
+below:
+
+- As discussed by the authors, several successful studies
+have been conducted on human impedance estimation. In this
+context, the specific contribution(s) of this work is/are
+unclear. While the authors point out that they focus on the
+interaction forces here instead of kinematic modeling as in
+their previous works, it is hard to assess whether this
+dynamics modeling offers any benefits over the estimation
+methods developed by other research groups. 
+
+- The experimental results are limited and unconvincing. As
+acknowledged in the paper, no statistical significance
+tests can be performed due to the extremely small number of
+participants. Furthermore, the estimated stiffness value is
+greater than what is reported in the literature. The
+relative standard deviation of the average damping and mass
+coefficients is also very high. All these raise questions
+on the significance of the results. 
+
+- It is hard to understand how the stability mapping
+results are actually used to tune admittance control gains.
+
+
+Minor points:
+
+- There are quite a few grammatical errors in the text;
+sentence construction is also awkward at several places.
+
+- "practicable" should be practical in page 5
+
+- "consistence" should be consistency in page 6 

@@ -1,0 +1,29 @@
+Reviewer 4 of CASE 2020 submission 271
+
+Comments to the author
+======================
+
+This paper presents an experimental robotic setup dedicated
+to human arm endpoint impedance measurement in a cyclic
+task with physical interactions. The ball bouncing
+benchmark task, classical in human movement science, is
+selected here for its simplicity, yet representativeness of
+hand-eye synchronization and intermittent physical
+interactions. The paper is well organized and clearly
+written. The study design is sound and preliminary
+experimental results were reported and analyzed. It
+demonstrated the feasibility of using interactive robotics
+for human impedance estimation. In addition, future reseach
+avenues to enhance the work are identified.
+
+1.	What are the major difference and the major
+findings of this work comparing to the previous work
+conducted by the authors? 
+2.	In the experimental design, could the readers
+provide more information on the study design and the choice
+of ranges of parameters. 
+3.	Discuss the potential application of this work. The
+bio-mimetic rhythmic control design was mentioned as one
+area of application. What is the challenge of expanding
+this work out of the experimental environment? 
+4.	The explanation of Figure 5 can be strengthened. 
