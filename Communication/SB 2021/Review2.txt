@@ -1,0 +1,21 @@
+The work described in this abstract is too preliminary for presentation. 
+The topic is of course of interest and the pursued objective could provide 
+some interesting insights on the understanding of the principles of human 
+motion, especially in interaction with its environment. Nevertheless the 
+attempt to provide quite a lot of information in two pages is unfortunate 
+as the overall result is not very homogeneous in terms of the level of 
+details. It mostly leads to confusion, especially as the proposed work 
+mostly builds up on some unpublished work for which a preprint is not even 
+available. Moreover, the number of subjects used for the experiments is 
+too low to allow to draw any conclusion regarding the significance of the 
+obtained results. Remarks such as  "We can see that for the experimented 
+user, each cycle’s medians are closer than for the other users, which might 
+indicate expertise." or "It is interesting to underline that during the 
+experiment, the second user spontaneously declared that he felt “too 
+stiff”, while the third user said that he “almost forgot about the robot”, 
+which indicates a more relaxed behaviour." are note quite supported by 
+quantitative evidence and this kind of hazardous extrapolation should be 
+avoided (unless a clear definition of expertise is proposed or a clear 
+explanation on what "feeling stiff" means is given). I suggest the authors 
+to perform more experiements (and I know how difficult this is in the 
+context of a pandemia) in order to obtain conclusive results.

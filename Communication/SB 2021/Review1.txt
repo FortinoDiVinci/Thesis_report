@@ -1,0 +1,13 @@
+The manuscript is clear and well written. Relevant subject and interesting methodology. 
+The results are consistent with the training of the subjects. The table concerning significant 
+differences helps to understand the role of users and phases in the results obtained. 
+However, the reviewer understand that the authors cannot detail the methodology due to the page 
+limit but it is not usual to cite its own paper under review. At least, the authors must depose 
+it on an open database (HAL).
+
+10min50s, 5min30s and 8min10s: please, use the seconds (s) as standard units.
+
+Please homogenize the values on the horizontal axes of the figure 1 (left) and 1 (right).
+
+In the caption of the figure 2, it is unclear what is the class. The terminology is not used 
+elsewhere in the core of the manuscript.
