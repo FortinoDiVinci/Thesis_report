@@ -1,10 +1,10 @@
 clear all
 
-load('../imp_test_data/imp_test_12.mat')
-load('cyclic_data.mat')
-
 addpath('../utils')
 addpath('../../../utils')
+
+load('../imp_test_data/imp_test_12.mat')
+load('cyclic_data.mat')
 
 % perturbation classification
 for i = 1:length(cycles_class)

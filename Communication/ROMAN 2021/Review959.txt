@@ -1,0 +1,60 @@
+Reviewer 4 of ROMAN 2021 submission 121
+
+Comments to the author
+======================
+
+The paper presents a method for estimating the impedance of
+the human arm through method that involves perturbation
+induced by a robot. The paper is generally written and
+structured well. The method, while heavily based on
+previous work, seems to be relatively novel enough.
+However, there are several major issues with the claims and
+implementation, as highlighted in the comments below.
+
+1. It is very difficult to imagine the experiment task
+without any figure that would visualize it. Furthermore,
+there is no figure to illustrate the experiment setup
+(i.e., robot, etc.). I highly recommend adding figures that
+show the task and experiment setup. I guess there might be
+more details in the authors previous work (i.e., [3] and
+[11]), whose methods were reused in this paper, but the
+paper should be at least self-contained to a bare minimum
+degree.
+
+2. In the abstract and introduction the authors motivate
+the reader with a human-robot collaboration. However, the
+actual experiment task is not a collaborative task.
+Basically the human does the whole thing and the robot is
+essentially only there to estimate the impedance. I think
+the scope should be defined more realistically.
+
+3. In addition, the motivation promises that the method
+would work "outside a laboratory", which implies realistic
+tasks and realistic environments, as opposed to the methods
+in the literature, which according to the authors only work
+in "controlled environments closer to a laboratory than to
+an industrial setting". Yet, the authors did the
+experiments in a controlled lab setting and chose a very
+toy task, which is simulated on top of that. While on the
+other hand, contrary to the authors claims, there is
+literature that used actual human-robot collaboration
+and/or very realistic industrial tasks, while estimating
+human impedance in dynamic conditions. I think the claims
+about realistic tasks and realistic environments should be
+removed or they should be properly backed up by new
+experiments.
+
+4. To my knowledge, it is impossible to extract the
+reference trajectory (i.e., "virtual trajectory") of a
+human limb as commanded by the human central neurons
+system. Since Section III is claiming to estimate it, how
+can you then know or validate whether the estimation is
+anywhere near what the actual is? It should be noted that
+the reference trajectory of a human arm is not at all the
+same as the actual arm trajectory under unperturbed
+condition. For one, due to the gravity the reference has to
+be above the intended actual arm movement. So if the
+"ground truth" in the experimental comparison was the
+actual unperturbed movement (as stated), that is definitely
+not the reference (virtual) trajectory. So I am sceptical
+in the proposed experimental analysis.

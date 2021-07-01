@@ -1,8 +1,8 @@
 clear all
 
-load('cyclic_data.mat')
 addpath('../utils/')
 addpath('../../../utils')
+load('cyclic_data.mat')
 
 time_wdw = 200;
 

@@ -1,0 +1,75 @@
+Reviewer 2 of ROMAN 2021 submission 121
+
+Comments to the author
+======================
+
+This paper focuses on the human arm impedance estimation
+problem. The authors proposed an experimental methodology
+that allows for less constrained conditions for a
+real-world application outside a laboratory. In general,
+the paper is well-written, and the problem is significant
+for both robotics and RO-MAN communities. Some major and
+minor remarks are listed below:
+
+Major:
+- My primary concern is that it is hard to understand the
+specific contribution of the work. Even though the final
+goal is clear (i.e., human arm impedance estimation) and
+interesting for the robotics (and RO-MAN, particularly)
+community, the paper's contribution is still unclear. From
+the title, one can think that the paper is proposing an
+experimental protocol as a set of steps or procedures to
+estimate human arm impedance. However, the abstract states
+the following: "a force perturbation method is proposed..."
+Then, the introduction states: "This paper proposes a new
+methodology to identify the human endpoint impedance [...]
+the optimisation-based estimation of the unperturbed force
+trajectory proposed in this paper" Moreover, in the
+conclusions section: "The identification method proposed
+here..." Hence, it is not clear what is the
+novelty/contribution of this work. Is it the method that
+generates perturbations on the human arm? Is it the
+identification model? Is it the whole experimental
+procedure? This must be specified. 
+- Although the apparatus is explained in [11], a brief
+description needs to be included here. Otherwise, the
+reader needs two papers to understand this one. Besides, a
+labeled picture of the experimental setup would help
+understand how the experiment is carried out. This figure
+is not included here nor in [11]. Moreover, in section II
+authors wrote: "The experiment is briefly recalled in this
+section." Recall from where? From their previous works? 
+- Overall, I can see the effort of the authors and the
+potential of the work. I also understand it is hard to
+include all the work they did due to page limits.
+Therefore, I suggest the authors submit an expanded journal
+paper considering what they presented here and previous
+work in a more complete and in-detail way, including
+detailed descriptions of the methods, discussion and
+comparison w.r.t. the most relevant works on the
+state-of-the-art, and pictures and videos of the
+experiments.
+
+Some other minor comments can be found below:
+- The word "seamless" in the title can be ambiguous. Does
+it mean continuous? Constant? Robust? This adjective is not
+used in the body of the manuscript; hence I suggest the
+authors use a more concrete synonym or eventually remove it
+from the title. 
+- The structure can be improved. Why is the experiment
+section before the methodology section?
+- Check the order and format of the references. I suggest
+\bibliographystyle{IEEEtran}.
+- How is the position normalized? what are the maximum
+values?
+- In Fig.1 (right): Why does the normalized force exceed
+the maximum value? How is that possible if the maximum
+payload of the Kuka Yourobot arm is 0.5kg?
+- Please add labels to the figures.
+- The last paragraph of section II-A is hard to read.
+Please, consider rewriting this paragraph to improve the
+readability.
+- Where is the Force sensor placed? Is it placed on the
+robot wrist? If the weight of the sensor is around 0.1kg,
+then the available payload is 0.4kg. Is it correct? These
+aspects should be described in the manuscript.
