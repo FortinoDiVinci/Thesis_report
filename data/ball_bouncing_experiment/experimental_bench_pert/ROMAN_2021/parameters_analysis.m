@@ -341,6 +341,8 @@ r2_g =[ones(size(data_sorted(1).pos.r2(~idx_tot{1},dly)));
     6.*ones(size(data_sorted(3).neg.r2(~idx_tot{6},dly)))];
 
 [p,t,stats] = anova1(r2_a, r2_g);
+set(gca, 'XTickLabel', {'$c_1+$','$c_1-$','$c_2+$','$c_2-$','$c_3+$','$c_3-$'}, 'TickLabelInterpreter', 'latex');
+set(gca,'fontsize', 14)
 [c,m,h,nms] = multcompare(stats);
 
 % K
@@ -356,6 +358,9 @@ K_g =[ones(size(data_sorted(1).pos.K(~idx_tot{1},dly)));
     6.*ones(size(data_sorted(3).neg.K(~idx_tot{6},dly)))];
 
 [p,t,stats] = anova1(K_a, K_g);
+set(gca, 'XTickLabel', {'$c_1+$','$c_1-$','$c_2+$','$c_2-$','$c_3+$','$c_3-$'}, 'TickLabelInterpreter', 'latex');
+set(gca,'fontsize', 14)
+ylabel({'Stiffness $(Nm^{-1})$'}, 'interpreter', 'latex')
 [c,m,h,nms] = multcompare(stats);
 
 % B
@@ -371,6 +376,9 @@ B_g =[ones(size(data_sorted(1).pos.B(~idx_tot{1},dly)));
     6.*ones(size(data_sorted(3).neg.B(~idx_tot{6},dly)))];
 
 [p,t,stats] = anova1(B_a, B_g);
+set(gca, 'XTickLabel', {'$c_1+$','$c_1-$','$c_2+$','$c_2-$','$c_3+$','$c_3-$'}, 'TickLabelInterpreter', 'latex');
+set(gca,'fontsize', 14)
+ylabel({'Damping $(Nsm^{-1})$'}, 'interpreter', 'latex')
 [c,m,h,nms] = multcompare(stats);
 
 % M
@@ -385,7 +393,12 @@ M_g =[ones(size(data_sorted(1).pos.M(~idx_tot{1},dly)));
     5.*ones(size(data_sorted(3).pos.M(~idx_tot{5},dly))); ...
     6.*ones(size(data_sorted(3).neg.M(~idx_tot{6},dly)))];
 
+figure('DefaultAxesFontSize',14)
+boxplot(M_a, M_g);
 [p,t,stats] = anova1(M_a, M_g);
+set(gca, 'XTickLabel', {'$c_1+$','$c_1-$','$c_2+$','$c_2-$','$c_3+$','$c_3-$'}, 'TickLabelInterpreter', 'latex');
+set(gca,'fontsize', 14)
+ylabel({'Mass $(kg)$'}, 'interpreter', 'latex')
 [c,m,h,nms] = multcompare(stats);
 
 % data200ms.r2_a = r2_a;
