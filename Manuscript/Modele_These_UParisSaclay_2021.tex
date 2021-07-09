@@ -1,12 +1,24 @@
 %%%% Modèle proposé par frederic.mazaleyrat@ens-paris-saclay.fr %%%%
 %%%% 3 avril 2021 %%%%
 
-\documentclass[fr]{tcthesis}
+%\documentclass[fr]{tcthesis}
+\documentclass{book}
+
+\usepackage{tikz} % figure de façon générale - T. Chevet (la référence tikz)
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{calc}
+\usetikzlibrary{babel}
+\usetikzlibrary{patterns}
+\usetikzlibrary{matrix}
+\usepackage{circuitikz}
+\usepackage{cleveref}
+\usepackage{siunitx} % for SI units
 
 % The following modifies the margins with the memoir commands
-\setlrmarginsandblock{2.5cm}{3.5cm}{*}
-\setulmarginsandblock{2.5cm}{2.5cm}{*}
-\checkandfixthelayout
+%\setlrmarginsandblock{2.5cm}{3.5cm}{*}
+%\setulmarginsandblock{2.5cm}{2.5cm}{*}
+%\checkandfixthelayout
 
 \begin{document}
 
@@ -23,3 +35,5 @@
 \include{conclusion}
 
 \end{document}
+
+\bibliography{bibliography/chapter1}
