@@ -1,5 +1,5 @@
 load('exp_june_2021_ter')
-
+% for paper for the congrès de la société de biomécanique 2021
 users_list = ["418"; "456"; "495"; "546"; "548"; "573"; "640"; "661"; "666"; "000"];
 
 selected_exp = zeros(length(exp_parameters),1);

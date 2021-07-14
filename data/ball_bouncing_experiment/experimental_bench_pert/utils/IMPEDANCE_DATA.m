@@ -15,9 +15,11 @@ properties
     phi;      % kinematic data
     y;        % force data, output of the impedance model        
     xi;       % identified impedance parameters
-
+    t;        % time frame of the input trajectories
+    
     nb_id;    % number of identification to be achieved
     id_size;  % size of the window use for identification
+    t_pert;   % timing of the perturbation
 
     rec_y;    % reconstructed force using identified parameters
     rec_err;  % error between reconstruction and real force
@@ -45,6 +47,8 @@ methods
                 self.xi = [];
                 self.phi = [];   
                 self.y = [];
+                self.t = [];
+                self.t_pert = [];
 
                 self.rec_y = [];
                 self.rec_err = [];
@@ -64,6 +68,8 @@ methods
                 self.xi = NaN(self.nb_param+1, self.nb_id);
                 self.phi = zeros(self.id_size, self.nb_param+1, self.nb_id);   
                 self.y = NaN(self.id_size, self.nb_id);
+                self.t = NaN(self.id_size, self.nb_id);
+                self.t_pert = NaN(1, self.nb_id);
 
                 self.rec_y = NaN(self.id_size, self.nb_id);
                 self.rec_err = NaN(self.id_size, self.nb_id);
@@ -81,7 +87,6 @@ methods
     end
 
     function self = init_phi(self, delta_z, delta_dz, delta_ddz)
-
         % argument error management
         switch nargin
             case 2
@@ -160,6 +165,25 @@ methods
 
     end
 
+    function self = init_t(self, t, t_pert)
+        
+        dimensions = size(t);
+        if dimensions(1) == self.id_size && dimensions(2) == self.nb_id
+            % data is correctly provided
+        elseif dimensions(2) == self.id_size && dimensions(1) == self.nb_id
+            t = t';
+        else
+            warning('Unsuitable size of the time vector.')
+        end
+        
+        self.t = t;    
+        
+        if nargin > 1
+            self.t_pert = t_pert;
+        end
+        
+    end
+    
     % least square optimization method with error evaluations
     function self = lsq(self, varargin)
         

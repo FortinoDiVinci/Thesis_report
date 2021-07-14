@@ -268,7 +268,7 @@ for idx = 1:length(files)
         continue
     end
     [idx_ball_off_ramp(idx), ~, ~] = offRampIdx(z_b{idx}, dt);
-    idx_apex{idx} = detect_apexes(z_b{idx}, t{idx}, idx_ball_off_ramp(idx));
+    idx_apex{idx} = detectApexes(z_b{idx}, t{idx}, idx_ball_off_ramp(idx));
     bounce_err{idx}.data = z_b{idx}(idx_apex{idx}) - exp_parameters(idx).target_height;
     bounce_err{idx}.mean = nanmean(bounce_err{idx}.data);
     bounce_err{idx}.std = nanstd(bounce_err{idx}.data);

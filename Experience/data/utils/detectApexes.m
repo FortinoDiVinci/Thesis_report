@@ -1,4 +1,4 @@
-function apexes_idx = detect_apexes(zb, t, idx_start)
+function apexes_idx = detectApexes(zb, t, idx_start)
 
     apexes_idx = [];
     vzb = Iu_diffcent(zb, t);
