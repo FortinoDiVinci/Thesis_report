@@ -8,15 +8,17 @@ close all
 %addpath('../../../force_torque_sensor')
 %addpath('../../../../Experience/data/utils')
 addpath('utils/')
+% general functions
 addpath('../../data/utils/')
-
+% dedicated classes, functions...
+addpath('../../data/ball_bouncing_experiment/experimental_bench_pert/utils/')
 
 %% second ROMAN submission
 load('SB2021_new_data_impedance_v2.mat')
 
 nb_exp = length(z_b); 
 
-DISP = 1;
+DISP = 0;
 USER_REF_NAMES = [];
 NB_PHASES = [];
 dt = 1e-3;
@@ -89,4 +91,7 @@ end
 cycles_imp = addImpedance(cycles_class, impedance);
 cycles_regr = regroupCycles(cycles_imp);
 % sort outliers according to phase and perturbation direction
+cycles_id = clearOutliers(cycles_regr);
 
+% bouncing error variations
+plotBouncingError(cycles_id);

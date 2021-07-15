@@ -1,4 +1,4 @@
-function cycles_regr = regroupCycles(cycles)
+function [cycles_regr, names_regr] = regroupCycles(cycles)
 %
 
 cycles_regr = cycles;
@@ -12,7 +12,7 @@ for ii = 1:length(cycles)
         names_regr(ii) = "";
         continue
     end
-    tmp = names;
+    tmp = names_regr;
     tmp(ii) = [""]; % mask the iith name to avoid seing itself as duplicate
     string_compare = strcmp(names(ii), tmp);
     idx = find(string_compare);
@@ -34,6 +34,8 @@ for ii = 1:length(cycles)
 end
 names_regr = names_regr(~(names_regr==""));
 cycles_regr =  cycles_regr(~cellfun('isempty',cycles_regr));
+
+
 
 end
 

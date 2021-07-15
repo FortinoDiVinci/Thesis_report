@@ -11,7 +11,8 @@ dz_b = Iu_diffcent(z_b, dz.time);
 
 for i = 1:length(ind_i_red) - 1
     
-    cycle_i(i).user = exp_parameters.user;
+    cycle_i(i).n = i;
+    cycle_i(i).user = string(exp_parameters.user);
     cycle_i(i).target_height = exp_parameters.target_height;
     
     %--- time and duration processing
@@ -34,6 +35,7 @@ for i = 1:length(ind_i_red) - 1
     cycle_i(i).impact_vel = d_dz(ind_pts_i(1)); % velocity at impact
     cycle_i(i).impact_pos = dz.complete_traject(ind_pts_i(1));
     cycle_i(i).actual_target_height = cycle_i(i).target_height - cycle_i(i).impact_pos;
+    cycle_i(i).target_error = z_b(ind_pts_i(out2(@() max(z_b(ind_pts_i))))) - cycle_i(i).target_height;
     
     if cycle_i(i).is_dist
         cycle_i(i).dist_val = dfz.pert_val(IB(1));

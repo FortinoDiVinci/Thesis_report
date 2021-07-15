@@ -18,11 +18,11 @@ for ii = 1:length(cycles)
     idx = [cyc.is_dist];
     
     % first perturbation time frame
-    t1 = cyc(find(idx ==1, 1, 'first')).t(1);
-    t2 = cyc(find(idx ==1, 1, 'first')).t(end);
+    t1 = cyc(find(idx == 1, 1, 'first')).t(1);
+    t2 = cyc(find(idx == 1, 1, 'first')).t(end);
     % last perturbation time frame
-    te1 = cyc(find(idx ==1, 1, 'last')).t(1);
-    te2 = cyc(find(idx ==1, 1, 'last')).t(end);
+    te1 = cyc(find(idx == 1, 1, 'last')).t(1);
+    te2 = cyc(find(idx == 1, 1, 'last')).t(end);
     
     j = 0; 
     % skip first perturbations that might have occured before cyclic data
@@ -38,6 +38,16 @@ for ii = 1:length(cycles)
     if (impedance{ii}.nb_id - j) > sum(idx)
         k = impedance{ii}.nb_id - j - sum(idx);
     end
+    
+    c = cell(length(cyc), 1);
+    c(:) = {NaN};
+    [cycles_imp{ii}(:).K] = c{:};
+    [cycles_imp{ii}(:).B] = c{:};
+    [cycles_imp{ii}(:).M] = c{:};
+    [cycles_imp{ii}(:).R2] = c{:};
+    [cycles_imp{ii}(:).ui_r] = c{:};
+    [cycles_imp{ii}(:).t_r] = c{:};
+    
     idx_perts = find(idx);
     for jj = 1:length(idx_perts)
         % feed corresponding impedance data
@@ -48,7 +58,7 @@ for ii = 1:length(cycles)
         cycles_imp{ii}(idx_perts(jj)).ui_r = impedance{ii}.rec_pos(:, jj + j);
         cycles_imp{ii}(idx_perts(jj)).t_r = impedance{ii}.t(:, jj + j);
     end
-    
+
 end
 
 
