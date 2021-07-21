@@ -1,13 +1,13 @@
-function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
+function [tau, tau_detailed ] = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
 % Dynamic equation of the KUKA robot
 % where:
 %        - M,C,G are the inertia, Coriolis and gravity matrices
 %        - Fv, Fs are the viscous, and static friction matrices
 %        - tau is a vector of joint torques
 %        - q, dq, ddq joint angles, velocities and accelerations
-%        - fenv must be the force exerted on the robot by the environment,
-%             that is equal to force provided by the sensor in the robot
-%             frame
+%        - fenv must be the force exerted on the environment  by the robot,
+%             that is equal to minus the force provided by the sensor in 
+%             the robot frame
 
     options.C = 1;
     options.G = 1;
@@ -107,11 +107,20 @@ function tau = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
         end
     end
      
-    tau = M_3DOF(th3,th4)*ddth + C*dth + G + ...
-        nu*J0E_3DOF(th2,th3,th4)'*f_env - Fv*dth - Fs + tau0;
+    tau = M_3DOF(th3,th4)*ddth + C*dth + G + Fv*dth - Fs + tau0 - ...
+        nu*J0E_3DOF(th2,th3,th4)'*f_env;
     
     if(isnan(tau))
         error('tau is NaN...')
     end
+    
+    tau_detailed.env = -nu*J0E_3DOF(th2,th3,th4)'*f_env;
+    tau_detailed.grav = G;
+    tau_detailed.corr = C*dth;
+    tau_detailed.visc = Fv*dth;
+    tau_detailed.stat = Fs;
+    tau_detailed.mass = M_3DOF(th3,th4)*ddth;
+    tau_detailed.offs = tau0;
+    
     
 end

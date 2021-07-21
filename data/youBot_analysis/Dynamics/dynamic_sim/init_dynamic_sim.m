@@ -36,8 +36,8 @@ Fs = [0.9, 1.3, 0.5];%[0.97571; 0.65131; 0.25819];  % static frictions
 Fc = Fs; % Coulomb friction
 dv = 1e-3; % velocity bound to avoid unstable behaviour (static frictions)
 % external force to robot torque transmission efficiency
-nu = [0.8554; 0.5780; 0.9997]; %[0.9488; 0.9216; 0.8345];
-tau_0 = [1.0050; 0.6119; 0.8268];%[1.0234;1.0516;1.0901]; %
+nu = [0.8554, 0.5780, 0.9997]; %[0.9488; 0.9216; 0.8345];
+tau_0 = [1.0000; 0.6119; 0.8268];%[1.0234;1.0516;1.0901]; %
 
 fz0 = 0;
 % Cartesian flexibilities

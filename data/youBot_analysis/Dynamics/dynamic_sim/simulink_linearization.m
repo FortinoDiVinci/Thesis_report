@@ -21,12 +21,13 @@ load('linsys_no_secondary_ctrl_2020.mat')
 SStot =  ss(A,B,C,D);
 SStotd =  ss(Ad,Bd,Cd,Dd,1e-3);
 Htot = tf(SStot);
-
 figure
 hold on
 bode(SStot(2))
 bode(SStotd(2))
-bode(linsys1(2), 'y--')
+%bode(linsys1(2), 'y--')
+bode(simulink_linear_continuous_state_sys(2), 'r--')
+bode(simulink_linear_discrete_state_sys(2), 'y--')
 
 figure
 hold on
@@ -44,10 +45,20 @@ x0 = [th0;dth0];
 u0 = [0;0;0];
 
 [A,B,C,D] = linmod('dynamic_discrete_simulation_control_for_id', x0, u0);
+[A1,B1,C1,D1] = linmod('dynamic_discrete_simulation_control_for_id');
 [Ad,Bd,Cd,Dd] = dlinmod('dynamic_discrete_simulation_control_for_id', 1e-3, x0, u0);
 
 SS_dyouBot = ss(A,B,C,D);
+SS_dyouBot1 = ss(A1,B1,C1,D1);
 SS_dyouBotd =  ss(Ad,Bd,Cd,Dd,1e-3);
+
+figure
+hold on
+bode(SStot(2))
+bode(SStotd(2), '--')
+bode(SS_dyouBot(2))
+bode(SS_dyouBotd(2), 'r--')
+legend('cont.', 'discr.', 'cont. sim r', 'discr. sim r')
 
 %% youbot dynamics linearisation alone
 x0 = [th0;dth0];

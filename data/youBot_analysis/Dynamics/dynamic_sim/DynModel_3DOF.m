@@ -6,8 +6,9 @@ function [ddth, dth, th] = DynModel_3DOF(f_env,tau,th,dth,dt, varargin)
 %        - Fv is the viscous matrix
 %        - tau is a vector of joint torques
 %        - q, dq, ddq joint angles, velocities and accelerations
-%        - fenv must be the force exerted on the robot by the environment,
-%             that is equal to the force provided by the sensor
+%        - fenv must be the force exerted on the environment by the robot,
+%             that is equal to minus the force provided by the sensor in
+%             the robot frame 
 
     options.C = 1;
     options.G = 1;
@@ -97,12 +98,12 @@ function [ddth, dth, th] = DynModel_3DOF(f_env,tau,th,dth,dt, varargin)
     end
     
     % inverse dynamic model
-    ddth = iM_3DOF(th3,th4)*(tau - C*dth - G - ...
-        nu*J0E_3DOF(th2,th3,th4)'*f_env + Fv*dth + Fs - tau0);
+    ddth = iM_3DOF(th3,th4)*(tau - C*dth - G - Fv*dth - Fs - tau0 + ...
+        nu*J0E_3DOF(th2,th3,th4)'*f_env);
     
-%     if(isnan(ddth))
-%         warning('ddth is NaN...')
-%     end
+    if(isnan(ddth))
+        warning('ddth is NaN...')
+    end
     
     % integration
     dth = ddth .*dt + dth;
