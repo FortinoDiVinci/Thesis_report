@@ -55,10 +55,9 @@ SS_dyouBotd =  ss(Ad,Bd,Cd,Dd,1e-3);
 figure
 hold on
 bode(SStot(2))
-bode(SStotd(2), '--')
-bode(SS_dyouBot(2))
-bode(SS_dyouBotd(2), 'r--')
-legend('cont.', 'discr.', 'cont. sim r', 'discr. sim r')
+bode(SStotd(2), 'y--')
+bode(SS_dyouBotd(2), 'rx')
+legend('cont.', 'discr.', 'discr. sim r')
 
 %% youbot dynamics linearisation alone
 x0 = [th0;dth0];
@@ -75,7 +74,7 @@ hold on
 bode(SS_youBot(2))
 bode(SS_youBotd(2), 'r--')
 %bode(SS_youBotd(2))
-
+'simulink_linear_continuous_state_sys', 'simulink_linear_discrete_state_sys')
 %
 figure
 hold on
