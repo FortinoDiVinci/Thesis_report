@@ -1,0 +1,68 @@
+\begin{figure}[h]	
+	\centering
+	\begin{circuitikz}
+
+		\coordinate (O) at (0,0);
+		\coordinate (A) at ($(O) + (0, 1.5)$);
+		\coordinate (B) at ($(A) + (-1.4, 0)$);
+		\coordinate (C) at ($(A) + (1.4, 0)$);
+		\coordinate (D) at ($(B) + (0, 0.5)$);
+		\coordinate (D1) at ($(D) + (0.75, 0)$);
+		\coordinate (D2) at ($(D) + (-0.75, 0)$);
+		\coordinate (E) at ($(C) + (0,2.5)$);
+		\coordinate(F1) at ($(D1) + (0, 1.5)$);
+		\coordinate(F2) at ($(D2) + (0, 1.5)$);
+		\coordinate(F) at ($(F1) + (-0.75, 0)$);
+		\coordinate (G) at ($(F) + (0,0.5)$);
+		\coordinate (EG) at ($(G) + ({1.4},0)$);
+		
+		\draw (O) 
+		to[spring=$K_{SEE}$] ++ (A);
+		\draw (D1) 
+		to[damper=$B$]  (F1);
+		%\draw (D2)
+		%to[V=$CE$] (F2);
+		\draw (D2) -- (F2);
+		\draw[fill=white] ($0.5*(D2) + 0.5*(F2)$) circle (0.4)
+		node {CE};
+		
+		\draw (C)
+		to[spring=$K_{PEE}$] (E);
+
+% dashed rectangle: tendon
+		\draw[dashed, rounded corners=5pt]
+			let
+				\p0 = (A),
+				\p1 = (C),
+				\p2 = (D),
+				\p3 = (D2),
+				\n1 = {-0.5 *(\x0 + \x1 + \x2 + \x3) + 4}
+			in
+				($0.5*(\x2, 0.1) + 0.5*(\x3, 0.1)$) rectangle ($0.5*(A) + 0.5*(C) + (0, -0.1)$)
+				node [pos=.5, xshift = \n1, above, rotate=-90] {\footnotesize tendon}; % tendon text centered on the rectangle right side	
+% dashed rectangle: muscle
+		\draw[dashed, rounded corners=5pt]
+			let
+				\p0 = (A),
+				\p1 = (D1),
+				\p2 = (F2),
+				\n1 = {-0.5 *(\x0 + \x1 + \x2) - 7}
+			in
+				($ 0.5*(\x0, \y1) + 0.5*(\x1, \y1) + (0.1, 0)$) rectangle ($(-1*\x2, \y2) - (0.1, 0)$)
+				node [pos=.5, xshift = \n1, above, rotate=-90] {\footnotesize muscle fibers};
+				
+		\draw ($(O) + (-0.25,0)$) -- ($(O) + (0.25,0)$);
+		\draw (B) -- (C);
+		\draw (B) -- (D);
+		\draw (D1) -- (D2);
+		\draw (F1) -- (F2);
+		\draw(F) -- (G);
+		\draw(G) -- (E);
+		\draw (EG) -- ($(EG) + (0, 0.5)$);
+		
+		\foreach \i in {-0.25, -0.15, ..., 0.3} {
+		\draw (\i, 0) --+ (225:0.25);
+		}
+
+	\end{circuitikz}
+\end{figure}
