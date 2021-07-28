@@ -16,142 +16,60 @@
 
 \subsubsection{Les modalités de collaboration}
 
-\subsubsection{Les interactions haptique}
+\subsubsection{Les interactions haptiques}
 
 \subsection{Les contrôles robotiques lors d'interactions physiques}
 
-%%%
+\newpage%%%
 \section{Modéliser le comportement humain}
 %%%
 
 \subsection{Les sciences du mouvement humain}
 
-\subsubsection{Rappels sur la biologie du corps humain}
+\subsubsection{Rappels sur la biologie du corps humain} \label{chap_1_sec_modelling_human_subsec_1_1}
 
 \paragraph{Le Complexe Musculo-Squelettique}
 
-(CMS) est un système complexe regroupant les différents organes permettant le maintient de postures ainsi que l'exécution de mouvements. Il se compose donc de l'ensemble des os qui forment le squelette, des articulations et cartilages, des muscles, tendons et ligaments et d'autres tissus permettant notamment le maintient des organes.
+(CMS) est un système complexe regroupant les différents organes permettant le maintien de postures ainsi que l'exécution de mouvements. Il se compose donc de l'ensemble des os qui forment le squelette, des articulations et cartilages, des muscles, tendons et ligaments et d'autres tissus permettant notamment le maintient des organes.
 
 La dénomination de \emph{muscle} désigne ici spécifiquement une sous-catégorie de muscles, appelés muscles squelettiques ou "volontaires" qui permettent la réalisation de mouvements conscients, par opposition aux muscles lisses que l'on trouve typiquement sur des organes comme l'estomac ou les intestins, qui ne sont pas contrôlés consciemment. Ces muscles représentent généralement \SI{75}{\percent} de la masse de l'ensemble des muscles, soit \SI{40}{\percent} de la masse molle non grasse du corps humain, c'est à dire moins de \SI{30}{\percent} de la masse totale \cite{buckinx_pitfalls_2018}.
 
-Les muscles se composent notamment de longues cellules regroupées en faiseaux, les fibres musculaires ou myocytes, qui sont capables de \emph{contractions} lorsqu'elles sont stimulées. Ces fibres enveloppées dans l'epimysium sont fixées aux os grâce à des tissus d'insertion comme les tendons, permettant des points d'encrage sur les os. Comme le montre la \cref{fig_schema_muscle_activation}, lorsque les fibres musculaires d'un muscle se contractent, elles exercent une force sur les points d'ancrage, qui permet aux articulations de se mouvoir grâce au couple généré. Pour une description plus exhaustive des muscles squelettiques, on pourra se référer à \cite[Chapter~1]{mcmahon_muscles_1984}, \cite[Chapter~2]{tresilian_sensorimotor_2013} ou \cite{nishikawa_neuromechanics_2007} pour ne citer que trois exemples.
+Les muscles se composent notamment de longues cellules regroupées en faiseaux, les fibres musculaires ou myocytes, qui sont capables de \emph{contractions} lorsqu'elles sont stimulées. Ces fibres enveloppées dans l'epimysium sont fixées aux os grâce à des tissus d'insertion comme les tendons, permettant des points d'ancrage sur les os. Comme le montre la \cref{fig_schema_muscle_activation}, lorsque les fibres musculaires d'un muscle se contractent, elles exercent une force sur les points d'ancrage, qui permet aux articulations de se mouvoir grâce au couple généré. Pour une description plus exhaustive des muscles squelettiques, on pourra se référer à \cite[Chapter~1]{mcmahon_muscles_1984}, \cite[Chapter~2]{tresilian_sensorimotor_2013} ou \cite{nishikawa_neuromechanics_2007} pour ne citer que trois exemples.
 
 \input{schema_muscle}
 
-Les \emph{tendons} suivent donc le même principe de fonctionnement que les ficelles d'un pantin. Ces tissus de connexion solides sont composés de faisceaux de fibres de collagène qui leur offrent des propriétés viscoélastiques différentes des muscles. Le tendon calcanéen, plus connu par son appélation liée au héro grec Achille, permet ainsi lors de la marche ou de la course d'accumuler de l'énergie lorsqu'il est étendu, puis de la restituer comme le ferait un ressort. Des économies d'énergie pouvant dépasser \SI{30}{\percent} peuvent ainsi être réalisées lors de différents types de locomotion chez l'humain \cite{ker_spring_1987, alexander_energy-saving_1991, bramble_endurance_2004}.
+Les \emph{tendons} suivent donc le même principe de fonctionnement que les ficelles d'un pantin. Ces tissus de connexion solides sont composés de faisceaux de fibres de collagène qui leur offrent des propriétés viscoélastiques différentes des muscles. Le tendon calcanéen, plus connu par son appellation liée au héro grec Achille, permet ainsi lors de la marche ou de la course d'accumuler de l'énergie lorsqu'il est étendu, puis de la restituer comme le ferait un ressort. Des économies d'énergie pouvant dépasser \SI{30}{\percent} peuvent ainsi être réalisées lors de différents types de locomotion chez l'humain \cite{ker_spring_1987, alexander_energy-saving_1991, bramble_endurance_2004}.
 
-Ainsi, l'ensemble musculo-tendineux est connu pour ses propriétés visco-élastiques \cite{bernstein_construction_1947, hill_series_1950}. Les expériences réalisées par A. V. Hill dans la première moitiée du XX\textsuperscript{ème} siècle \cite{hill_first_1970}, notamment les premières expériences sur des muscles de grenouilles \cite{hill_myothermic_1931, hill_heat_1938} ont permis de proposer une modélisation des propriétés passives des fibres musculaires. Ainsi, en stimulant le gastrocnemius d'une grenouille pour le tetaniser, et en le maintenant dans une forme isométrique avant de le relacher (\cref{fig_experience_hill_1938}), les observations sur la force exercée ainsi que la vitesse de réduction du muscle on permis d'arriver aux conclusions suivantes :
-
+Ainsi, l'ensemble musculo-tendineux est connu pour ses propriétés visco-élastiques \cite{bernstein_construction_1947, hill_series_1950}. Les expériences réalisées par A. V. Hill dans la première moitiée du XX\textsuperscript{ème} siècle \cite{hill_first_1970}, notamment les premières expériences sur des muscles de grenouilles \cite{hill_myothermic_1931, hill_heat_1938} ont permis de proposer une modélisation des propriétés passives des fibres musculaires. Ainsi, en stimulant le gastrocnemius d'une grenouille pour le tétaniser, en le maintenant dans une forme isométrique avant de le relacher (\cref{fig_experience_hill_1938}), les observations sur la force exercée ainsi que la vitesse de contraction du muscle on permis d'arriver aux conclusions suivantes :
+%
 \begin{itemize}
-	\item les muscles ont un élément actif qui permet d'exercer la force de contraction,
-	\item les muscles ont un élément élastique dont on observe le comportement en \cref{fig_experience_hill_1938_ii} ($\Delta x_1$) qui correspond à une action tendineuse en série avec l'action contractile des muscles,
-	\item les muscles ont un second élément élastique parallèle à l'action des muscles,
-	\item la force de contraction a une dépendance à sa vitesse, ce qui indique un comportement amortissant aussi en parallèle.
+	\item les muscles ont un élément actif, $CE$, qui permet d'exercer la force de contraction,
+	\item les muscles ont un élément élastique, $K_{SEE}$, dont on observe le comportement en \cref{fig_experience_hill_1938_ii} ($\Delta x_1$) qui correspond à une action tendineuse en série avec l'action contractile des muscles,
+	\item les muscles ont un second élément élastique, $K_{PEE}$, parallèle à l'action des muscles,
+	\item la force de contraction dépend de sa vitesse, ce qui indique un comportement amortissant, $B$, aussi en parallèle.
 \end{itemize}
 
-\begin{figure}[h]
-	\resizebox{\textwidth}{!}{%
-	\begin{minipage}[b]{.6\linewidth}
-		\centering
-		\subcaptionbox{Hill's experimental set-up \label{fig_experience_hill_1938_i}}
-		{
-			\includegraphics[width=0.9\textwidth]{misc/fig_experience_hill}
-		}		
-	\end{minipage}
-	\begin{minipage}[b]{.4\linewidth}
-		\centering
-		\subcaptionbox{Hill's experimental observations\label{fig_experience_hill_1938_ii}}
-		{
-			\begin{tikzpicture}
-			\def\varXi{0.9}%
-			\def\varW{2*\pi}%
-			\begin{scope}[yshift = 1.7cm]
-			\begin{axis}[scale only axis,
-						 axis lines=middle,
-						 axis line style={->},
-						 width=0.7*\textwidth,
-						 height=0.3*\textwidth,
-						 xmin=0,
-						 xmax=10,
-						 variable=t,
-						 yticklabels={,,},
-						 xticklabels={,,},
-						 ytick={0.5},
-						 xtick={5},
-						 ylabel={tension},
-						 y label style={at={(axis description cs:-.025,.5)},rotate=90,anchor=south},
-						 ]
-				\addplot[color=black,
-						 domain=0:10,
-						 samples=1000]
-					%{1 - exp(-1*\varXi*\varW*x)/(sqrt(1 - \varXi^2)) };
-					{t < 5 ? 1 - exp(-2*t) : 0.5};
-			\end{axis}
-			\end{scope}
-			
-			\begin{scope}
-			\begin{axis}[scale only axis,
-						 axis lines=middle,
-						 axis line style={->},
-					     width=0.7*\textwidth,
-					     height=0.3*\textwidth,
-						 xmin=0,
-						 xmax=10,
-						 ymin=0,
-						 ymax=1.2,
-						 variable=t,
-						 yticklabels={,,},
-						 xticklabels={,,},
-						 ytick={0.4, 0.6, 1},
-						 xtick={5},
-						 xlabel={time},
-						 x label style={at={(axis description cs:0.9,-0.1)},anchor=north},
-						 ylabel={length},
-						 y label style={at={(axis description cs:0,.5)},rotate=90,anchor=south},
-						 ]
-				\addplot[color=orange,
-						 domain=0:10,
-					     samples=1000,
-					     style={thick}]
-					{t < 5 ? 1 : 0.2 + 1/(0.5*t)}; %
-				\draw[dashed, gray] (axis cs:5, 1) -- (axis cs:10, 1);
-				\draw[dashed, gray] (axis cs:3, 0.35) -- (axis cs:10, 0.35);
-				\draw[dashed, gray] (axis cs:3, 0.6) -- (axis cs:10, 0.6);
-				% arrows
-				% delta x1
-				\node (s1) at (axis cs: 7, 0.6){};
-				\coordinate (d1) at (axis cs: 7, 1){};
-				\draw[-{Latex[length=1.8mm]}] (s1.center) -- node[right]{\small $\Delta x_1$} (d1.center);
-				\draw[-{Latex[length=1.8mm]}] (d1.center) -- (s1.center);
-				% delta x2
-				\node (s2a) at (axis cs: 3.5, 0.85){};
-				\coordinate (d2a) at (axis cs: 3.5, 0.6){};
-				\draw[-{Latex[length=1.8mm]}] (s2a.center) -- (d2a.center);
-				\node (s2b) at (axis cs: 3.5, 0.15){};
-				\coordinate (d2b) at (axis cs: 3.5, 0.35){};
-				\draw[-{Latex[length=1.8mm]}] (s2b.center) -- node[near end, yshift=2.25mm, xshift=-1.5mm]{\small $\Delta x_2$} (d2b.center);
-			\end{axis}
-			\end{scope}
-			\end{tikzpicture}
-		}
-	\end{minipage}
-	}% resizebox
-	\caption{ (\subref{fig_experience_hill_1938_i}) Expérience réalisée par Hill sur le gastrocnemius d'une grenouille (a), avec le stimulateur (b) permettant de tétaniser la muscle, le mécanisme (c) maintenant le muscle dans une configuration isométrique et la charge (d). Ce schéma est une reproduction issue de \cite[Chapter~1]{mcmahon_muscles_1984}. \\ (\subref{fig_experience_hill_1938_ii}) }
-	\label{fig_experience_hill_1938}
-\end{figure}
+\input{fig_hills_experiment}
 
-On peut alors modéliser le comportement passif du muscle avec la représentation dites de Hill. Il faut toutefois remarquer, que la viscosité observée ne provient pas de liquide visqueux dans les muscles, mais plutôt de caractéristiques physiologiques des protéines à l'origine des contractions, qui peuvent être assimilé à des viscosités.
+On peut alors modéliser le comportement passif du muscle avec la représentation dite de Hill. Il faut toutefois remarquer, que la viscosité observée ne provient pas de liquides visqueux dans les muscles, mais plutôt de caractéristiques physiologiques des protéines à l'origine des contractions, qui peuvent être assimilées à de la viscosité.
 
 \input{fig_hill_muscle_model}
 
- liens avec la raideur, attention à la notion de raideur \cite{latash_joint_1993} (raideur avec les reflexes ? : \cite{agarwal_compliance_1977})
+\paragraph{Le Système Nerveux Central}
 
-\paragraph{Système nerveux central}
+(SNC), aussi appelé névraxe, regroupe l'\emph{encéphale} et la \emph{moelle épinière}. Il permet le traitement des informations apportées par l'ensemble des fonctions sensorielles du corps (système nerveux périphérique). Ainsi, l'encéphale contrôle la plupart des fonctions du corps, alors que la moelle épinière permet principalement d'innerver le corps en transmettant les signaux nerveux depuis et vers le cortex cérébral, notamment grâce aux motoneurones qui constituent l'interface entre les centres nerveux et les actionneurs, - \textit{on peut citer les motoneurones $\alpha$ qui sont responsables de la transmission des influx nerveux dans les muscles}. Certaines fonctions non conscientes sont directement contrôlées par la moelle épinière.
 
-[explicitation de la terminologie SNC]
+Ainsi, les \emph{réflexes} qui sont des réponses musculaires très rapides à un stimulus, sont générés sans faire intervenir le cerveau lors de leur exécution. De cette manière, l'arc réflexe qui court-circuite le cerveau permet d'accélérer une action qui peut avoir été conditionnée \cite{brogden_cerebellar_1937, pavlov_conditioned_2010}. Les réflexes se découpent en deux catégories, les réflexes de flexion, qui protègent le corps contre des aggressions nuisibles, - \textit{on pourra par exemple citer le réflexe permettant de retirer sa main d'une source brûlante} -, et les réflexes d'extension ou \emph{ostéotendineux}, qui se déclenchent en fonction de l'allongement des muscles.
 
-[les reflexes: réflexes d'extension (ostéotendineux), ...]
+En effet, des fibres musculaires sensorielles, les \emph{fuseaux neuromusculaires}, qui sont réceptives à l'extension des muscles, se trouvent parallèles aux autres fibres musculaires et permettent de transmettre une information nerveuse en fonction de l'allongement d'un muscle. En complément, les \emph{organes tendineux de Golgi}, qui se situent à l'interface entre muscles et tendons, sont sensibles aux changements de tension, et exercent une rétroaction inhibitrice en fonction de la force perçue.
 
+C'est ainsi que le réflexe ostéotendineux permet d'assurer une continuité dans le comportement élastique des muscles au-delà de la rupture de ce comportement passif \cite{nichols_improvement_1976, houk_regulation_1979}. Par ailleurs, ce réflexe permet une meilleure robustesse aux perturbations extérieures. En effet, lorsqu'un mouvement est commandé par les motoneurones $\alpha$, un déplacement est attendu et contrôlé par les motoneurones $\gamma$, qui peuvent en cas d'écart entre le mouvement réalisé et attendu, inhiber ou augmenter l'activité des motoneurones $\alpha$, tout en jouant sur les contractions des fuseaux neuromusculaires, qui peuvent être modélisés de manière similaire aux fibres musculaires.
+
+La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle. 
+
+\input{fig_stretch_reflex_ctrl_loop}
+
+\newpage
 \subsection{Modéliser le comportement humain en interaction physique grâce à l'impédance}
 
 \subsubsection{Définition}
@@ -207,26 +125,33 @@ L'impédance mécanique, \textit{qui sera simplement nommé impédance dans le r
 
 Les couples musculaires sont alors considérés comme proportionnel à une commande neurale, générée à l'aide d'un oscillateur non linéaire bio-inspiré, proposé par \cite{matsuoka_sustained_1985}. C'est l'appoche de computationnelle de contrôle en force telle qu'expliquée par \cite{danion_we_2011}.
 
-\begin{equation}
+\begin{equation} \label{eq_impedance_artic_mvt_derugy}
 	I\ddot{\theta} + \gamma\dot{\theta} + k\theta = T_i + T_j
-\label{eq_impedance_artic_mvt_derugy}
 \end{equation}
 
-L'impédance permet aussi de décrire les interactions physiques entre plusieurs systèmes dynamiques en contact. On peut alors décorréler la génération du mouvement, du comportement de rejet des perturbations. Dans ce cas, on étudie un comportement biologique non volontaire, qui regroupe les propriétés visco-élastiques du CMS ainsi que des comportements réflexes générés inconsciemment par le SNC. 
+L'impédance permet aussi de décrire les interactions physiques entre plusieurs systèmes dynamiques en contact. On peut alors décorréler la génération du mouvement, du comportement de rejet des perturbations. Dans ce cas, on étudie un comportement biologique en grande partie non volontaire, qui regroupe les propriétés visco-élastiques du CMS ainsi que des comportements réflexes générés inconsciemment par le SNC. 
 
 \subsubsection{Les types de modélisation [Titre à modifier (redécoupage à envisager ?)]}
 
-Si l'on considère l'articulation d'un membre, une même trajectoire peut être décrite avec des cocontractions variées - \textit{c'est à dire aussi bien la contraction des muscles générant le mouvement (agoniste), que deux ceux s'y opposant (antagoniste)} -, que ce soit dans le cas de trajectoire statique et donc isométrique \cite{dolan_dynamic_1993, d_j_newham_knee_2001}, ou en mouvement \cite{yamazaki_reciprocal_1994, milner_damping_1998, gribble_role_2003}. 
+Si l'on considère l'articulation d'un membre, une même trajectoire peut être décrite avec des cocontractions variées - \textit{c'est à dire aussi bien la contraction des muscles générant le mouvement (agoniste), que deux ceux s'y opposant (antagoniste)} -, que ce soit dans le cas de trajectoires statiques et donc isométriques \cite{dolan_dynamic_1993, d_j_newham_knee_2001}, ou en mouvement \cite{yamazaki_reciprocal_1994, milner_damping_1998, gribble_role_2003}. 
 
 Ainsi, \cite{gribble_role_2003} ont montré que les cocontractions du membre supérieur augmentaient lorsque la précision requise pour une tâche de pointage augmentait. Des mesures de l'activité musculaire étaient effectuées à l'aide de capteur EMG pendant la tâche, ainsi que sur une durée de \SI{200}{\milli\second} après l'arrêt du mouvement. Lorsque la taille de la cible diminuait, les cocontractions augmentaient et les erreurs de mouvement diminuaient. Ces résultats suggèrent selon les auteurs, que de SNC peut adapter les cocontractions pour améliorer la précision d'un mouvement, et aussi son rejet des perturbations externes.
 
-En effet comme le témoignent plusieurs travaux, les cocontractions musculaires ont notamment pour effet d'augmenter la robustesse en assurant des marges de stabilité plus importante \cite{granata_costbenefit_2000, milner_adaptation_2002, gribble_role_2003, darainy_muscle_2008}. [Ajouter du texte sur la possibilité d'assimiler les cocontractions a un comportement en raideur...]
+Comme le témoignent plusieurs travaux, les cocontractions musculaires ont notamment pour effet d'augmenter la robustesse en assurant des marges de stabilité plus importante \cite{granata_costbenefit_2000, milner_adaptation_2002, gribble_role_2003, darainy_muscle_2008}. En effet, comme montré par \cite{ford_tension_1977, zahalak_quantitative_1979}, la contraction d'un muscle entraîne une augmentation de sa raideur et aussi du gain des signaux electriques des réflexes spinaux liés à cette contraction. Ainsi, \cite{hogan_adaptive_1984} propose un modèle simplifié du bras où le biceps et le triceps sont chacun modélisé par un ressort (\cref{fig_hogan_elbow_joint}), les cocontractions permettent alors de modifier leur raideur et de moduler le comportement dynamic global donné en \cref{eq_hogan_cocontraction}. Il montre que malgré le coût énergétique des cocontractions, ces dernières permettent une régulation de la raideur sans délais (contrairement aux réflexes), et au delà des propriétés intrinsèques des muscles (comme détaillées en \cref{chap_1_sec_modelling_human_subsec_1_1}). En observant les signaux EMGs du biceps et triceps chez 2 sujets, lors d'une tâche isométrique en variation de charge, il confirme ses prédictions sur une régulation des propriétés visco-élastiques grâce aux contractions.
 
-\cite{milner_adaptation_2002} ont conduit une expérience sur l'articulation du poignet d'une dizaine de participants à l'aide d'un manipulandum. Pendant des mouvements rapides (\SI{3.14}{\radian\per\second}) et lents (\SI{0.57}{\radian\per\second}) de \ang{20}, avec des charges variables, dépendantes de la position - \textit{raideur négative} -, de la vitesse - \textit{amortissement négatif} - et des vibrations à \SI{5.5}{\hertz} et \SI{10}{\hertz}, les participants devaient réaliser une tâche de pointage uni-articulaire. Des mesures EMGs étaient enregistrées à partir de \SI{250}{\milli\second} avant et jusqu'à \SI{1500}{\milli\second} après le déclenchement du mouvement, sur six muscles responsable des flexions et extensions du poignet. Le critère de stabilité était évalué par rapport au décrément des oscillations en position une fois la cible atteinte. Ainsi, après avoir demandé aux participants de réduire au plus vite ces oscillations, si des mouvements en dehors d'une cible de \ang{3} étaient observés après \SI{800}{\milli\second}, alors le mouvement était considéré non conforme au critère de stabilité. Les résultats de l'étude indiquent que les cocontrations étaient impliquées à différent degré pour stabiliser le poignet en présence d'environnement déstabilisant.
+\begin{equation} \label{eq_hogan_cocontraction}
+	I \ddot{\theta} = T(u_b - u_t) - K(u_b + u_t)\theta + mgl \sin(\theta) - B \dot{\theta}
+\end{equation}
+
+On retrouve l'inertie $I$, l'amortissement $B$ (modélisation linéaire de la dépendance à la vitesse) et la raideur $K$ du bras, les commandes neurales $u$ du biceps et triceps sont notées respectivement avec les indices $b$ et $t$ et sont comprises entre 0 et 1, $T$ correspond au couple isométrique maximum que l'on peut voir émerger lorsque le bras est dans une position intermédiaire, $\theta \approx$ \ang{0} \cite{hogan_adaptive_1984, linnamo_maximal_2006}. Enfin, on retrouve le couple généré par l'effet de la gravité sur le bras, avec $m$ la masse du bras, $g$ l'accélération statique, et $l$ la longeur du bras. 
+
+\input{fig_hogan_arm_cocontraction_model}
+
+\cite{milner_adaptation_2002} ont conduit une expérience sur l'articulation du poignet d'une dizaine de participants à l'aide d'un manipulandum. Pendant des mouvements rapides (\SI{3.14}{\radian\per\second}) et lents (\SI{0.57}{\radian\per\second}) de \ang{20}, avec des charges variables déstabilisantes, dépendantes de la position - \textit{raideur négative} -, puis de la vitesse - \textit{amortissement négatif} - et des vibrations à \SI{5.5}{\hertz} et \SI{10}{\hertz}, les participants devaient réaliser une tâche de pointage uni-articulaire. Des mesures EMGs étaient enregistrées à partir de \SI{250}{\milli\second} avant et jusqu'à \SI{1500}{\milli\second} après le déclenchement du mouvement, sur six muscles responsable des flexions et extensions du poignet. Le critère de stabilité était évalué par rapport au décrément des oscillations en position une fois la cible atteinte. Ainsi, après avoir demandé aux participants de réduire au plus vite ces oscillations, si des mouvements en dehors d'une cible de \ang{3} étaient observés après \SI{800}{\milli\second}, alors le mouvement était considéré non conforme au critère de stabilité. Les résultats de l'étude indiquent que les cocontrations étaient impliquées à différents degrés pour stabiliser le poignet en présence d'environnements déstabilisants.
 
 Des résultats similaires sont observés pour d'autres parties du corps par \cite{cholewicki_stabilizing_1997, granata_costbenefit_2000} concernant les muscles du tronc, par \cite{hogan_adaptive_1984, de_serres_wrist_1991, burdet_central_2001} pour les muscles des membres supérieurs et par \cite{hirokawa_muscular_1991, finley_contributions_2012, di_nardo_assessment_2015, kim_center_2018} pour les muscles des membres inférieurs. Ainsi les cocontractions contribuent à améliorer la robustesse d'une articulation lorsqu'elle peut être soumise à des perturbations. Il est toutefois important de souligner qu'il ne s'agit qu'un seul des mécanismes existants permettant d'assurer la stabilité d'un mouvement ou du maintient d'une posture. 
 
-Comme l'expliquent \cite{finley_contributions_2012}, dans le cadre d'une expérience où des participants essaient de stabiliser un modèle simplifié de l'humain à l'aide de mouvements de leur cheville, la raideur générée par les cocontractions seules ne permet pas d'assurer la stabilité. Ainsi pour les auteurs, les propriétés mécaniques intrinsèques de la cheville ne sont pas suffisantes et des modulations actives et donc volontaires des muscles sont nécessaires [contribution des réflexes]. La \cref{fig_experience_finley_2012} reprend le schéma expérimental présenté par les auteurs dans leur publication. %L'objectif de cette expérience étant de se placer dans un cas simplifié du corps humain, où se dernier n'est représenté que par un simple pendule inversé d'une masse de \SI{25}{\percent} de celle de chaque participant et d'une hauteur de \SI{1}{\meter}.
+Comme l'expliquent \cite{finley_contributions_2012}, dans le cadre d'une expérience où des participants essaient de stabiliser un pendule inversé (modèle ultra simpliste du corps humain) à l'aide de mouvements de leur cheville, la raideur générée par les cocontractions seules ne permet pas d'assurer la stabilité. Ainsi pour les auteurs, les propriétés mécaniques intrinsèques de la cheville ne sont pas suffisantes et des modulations actives et donc volontaires des muscles sont nécessaires [contribution des réflexes]. La \cref{fig_experience_finley_2012} reprend le schéma expérimental présenté par les auteurs dans leur publication. %L'objectif de cette expérience étant de se placer dans un cas simplifié du corps humain, où se dernier n'est représenté que par un simple pendule inversé d'une masse de \SI{25}{\percent} de celle de chaque participant et d'une hauteur de \SI{1}{\meter}.
 
 \begin{figure}[h]
 	\centering

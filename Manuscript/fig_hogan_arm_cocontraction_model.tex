@@ -1,0 +1,88 @@
+\begin{figure} [h]
+	\centering
+	\begin{minipage}[b]{.45\linewidth}
+	\centering
+	\subcaptionbox{Articulation du coude, avec biceps et triceps \cite{hogan_adaptive_1984} \label{sugfig_hogan_1984}}
+	{
+		\begin{tikzpicture}
+			
+			\coordinate (elbow) at (0,0);
+			\coordinate (shoulder) at ($(elbow) + (0, 3.25)$);
+			
+			\draw[rounded corners=1ex, rotate around={-60:(elbow)}] (0.175, 0) rectangle (-0.175, 3.25); % can't seem to ba able to use reference as in the next
+			\draw[rounded corners=0.5ex] ($(elbow) + (0.175, 0)$) rectangle ($(shoulder) + (-0.175, 0)$);
+			
+			\node[circle, draw, minimum size=1.25cm, fill=white] (joint) at (elbow) {};
+			\node[circle, draw, minimum size=0.15cm, inner sep=0, fill=white] (jointBis) at (elbow) {};
+	
+			\draw[white, line width=1.5pt] (0,0) + (15:0.625cm) arc (15:45:0.625cm);
+	
+			\draw (-0.175, 3) node[xshift=-8mm, yshift=-12.5mm] {$t$} to[spring] (joint.west);
+			\draw (0.175, 3) node[xshift=7.5mm, yshift=-12.5mm] {$b$} to[spring] (joint.east);
+	
+			\draw[line width=0.5pt,->] (0,0) +(30:3cm) arc (30:40:3cm);
+			\draw[line width=0.5pt,->] (0,0) +(30:3cm) arc (30:20:3cm);
+			
+			\draw[gray, dashed] (0.625,0) -- (3,0);
+			\draw[-{Latex[length=2mm]}] (0,0) + (0:2cm) arc (0:25:2cm) node[midway, right]{$\theta$};
+			
+		\end{tikzpicture}
+	}
+	\end{minipage} %
+	%
+	\begin{minipage}[b]{.45\linewidth}
+		\centering
+		\subcaptionbox{Modèle articulaire dynamique (\cref{eq_hogan_cocontraction}) \label{sugfig_dynamic_model_hogan_1984}}
+		{
+			\begin{tikzpicture}			
+			\coordinate (elbow) at (0,0);
+			\coordinate (shoulder) at ($(elbow) + (0, 3.25)$);
+			%
+			\draw[rounded corners=1ex, rotate around={-60:(elbow)}] (0.175, 0) rectangle (-0.175, 3.25) node (wrist){}; % can't seem to ba able to use reference as in the next
+			\draw[rounded corners=0.5ex] ($(elbow) + (0.175, 0)$) rectangle ($(shoulder) + (-0.175, 0)$) node (shoudler){};
+			
+			\node[circle, draw, minimum size=1.25cm, fill=white] (joint) at (elbow) {};
+			\node[circle, draw, minimum size=0.15cm, inner sep=0, fill=white] (jointBis) at (elbow) {};
+			%
+			\draw[white, line width=1.5pt] (0,0) + (15:0.625cm) arc (15:45:0.625cm);
+			%
+			\path (elbow) +(33:3cm) coordinate(B)
+				arc (33:87:3cm) coordinate(E)
+				node[draw, springshape, pos=0.5, sloped](S){};
+			\node[above, xshift=3mm, yshift=2mm] at (S){$K$};
+			% from B the circle starts at 120 degree, let's se e the landing angle and use a spline
+			\draw let \p1=(S.right), \n1={-90+acos(\x1/3cm)}
+				in (B) to[out=120,in=\n1] (S.right);
+			% from E it starts at -10, let's caluclate the landing angle
+			\draw let \p1=(S.left), \n1={90+acos(\x1/3cm)}
+				in (E) to[out=-10,in=\n1] (S.left);
+			%
+			\path (elbow) +(35:2cm) coordinate(B2)
+				arc (35:85:2cm) coordinate(E2)
+				node[draw, dampershape, pos=0.5, sloped](S2){};
+			\node[above, xshift=3mm, yshift=2mm] at (S2){$B$};
+			% from B the circle starts at 120 degree, let's se e the landing angle and use a spline
+			\draw let \p1=(S2.right), \n1={-90+acos(\x1/2cm)}
+				in (B2) to[out=120,in=\n1] (S2.right);
+			% from E it starts at -10, let's caluclate the landing angle
+			\draw let \p1=(S2.left), \n1={90+acos(\x1/2cm)}
+				in (E2) to[out=-10,in=\n1] (S2.left);
+			%\draw[damper] (0,0) + (35:2cm) arc (35:85:2cm);
+			%
+			\draw[gray, dashed] (0.625,0) -- (3,0);
+			\draw[->, dashed] (0,0) + (0:2cm) arc (0:25:2cm) node[midway, right]{$\theta$};
+			%
+			\draw[rotate around={-60:(elbow)}] (0.5, 3.50) rectangle node[rotate=-60, yshift=2mm] (mass){$m$} (-0.5, 4.5);
+			\draw[rotate around={-60:(elbow)}] (0,3.25) -- (0,3.5); % link between mass and "arm"
+			\draw[-{Latex[length=2mm]}] (mass.south) --+ (0,-1) node[near end, right, xshift=1mm, yshift=-1mm] (gravity){$g$}; % gravity vector
+			\draw[dashed, <->] (mass.south) -- ($(elbow) + (.055,.04)$) node[midway, fill=white, inner sep=0.5pt] (length){$l$}; 
+			%
+			\draw[-{Latex[length=2mm]}] (0,0) + (30:1.25cm) arc (30:70:1.25cm) node[midway, above, yshift=.5mm,xshift=.5mm]{$T$};
+			
+			\end{tikzpicture}
+		}
+	\end{minipage}
+
+	\caption{Modélisation simpliste de l'articulation du coude, avec l'action agoniste du biceps $b$ et antagoniste du triceps $t$. Les muscles sont considérés comme de simple raideur variable, l'inertie du bras, la viscosité des muscles ainsi que le couple gravitationnel sont pris en compte lors des calculs présentés par \cite{hogan_adaptive_1984}. Ce modèle est valide pour de faibles vitesses (linéarisation de la viscosité).}
+	\label{fig_hogan_elbow_joint}
+\end{figure}

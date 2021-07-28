@@ -1,0 +1,50 @@
+\begin{figure}[h]
+	\centering
+	
+	\tikzstyle{circ} = [circle, draw, minimum size = 1cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	%
+	
+	\begin{tikzpicture} [node distance = 2cm]
+		
+		\node[circ] (alpha) at (0,0) {\Large$\alpha$};
+		%
+		\node[block, right of = alpha, align=center] (muscle) {muscle};
+		\node[block, right of = muscle, align=center] (tendon) {tendon};
+		\node[block, right of = tendon, align=center, node distance = 2.75cm] (load) {charge};
+		%
+		\node[block, above of = alpha, align=center] (golgi_fb) {inter-\\neurones};
+		\node[block, below of = tendon, align=center] (spindles) {fuseaux \\ neuromusc.};
+		%
+		\node[circ, below of = alpha, node distance = 3.5cm] (gamma) {\Large$\gamma$};
+		\node[circle, draw, fill=black, inner sep=0pt,minimum size=3pt, right of = load, node distance = 1cm](nodeLoad) {};
+		% connecting arrows
+		\draw[-{Latex[length=3mm]}] (alpha.east) -- (muscle.west);
+		\draw[-{Latex[length=3mm]}] (muscle.east) -- (tendon.west);	
+		\draw[-{Latex[length=3mm]}] (tendon.east) -- (load.west)
+			node[midway, above] {\phantom{p}force\phantom{p}};
+			
+		\draw[-{Latex[length=3mm]}] (tendon.north) |- (golgi_fb.east)
+			node[near end, above] {\phantom{p}force feedback\phantom{p}};
+		\draw[-{Latex[length=3mm]}] (golgi_fb.south) -- (alpha.north);
+		\draw[-{Latex[length=3mm]}] (spindles.west) -| (alpha.south)
+			node[near start, align=center] {\phantom{p}length \& velocity \\ feedbacks\phantom{p}};
+		\draw[-{Latex[length=3mm]}] (gamma.east) -| (spindles.south);
+		\draw[-{Latex[length=3mm]}] (nodeLoad.center) |- (spindles.east);
+		% arrows
+		\draw[{Latex[length=3mm]}-] (alpha.west) --+ ($ (-1, 0) $)
+			node[near end, above] {cmd};
+		\draw[{Latex[length=3mm]}-] (gamma.west) --+ ($ (-1, -0) $)
+			node[near end, left, align=center] {length \\ cmd};
+		\draw[{Latex[length=3mm]}-] (golgi_fb.west) --+ ($ (-1, -0) $)
+			node[near end, left, align=center] {force \\ cmd};
+		\draw[{Latex[length=3mm]}-] (load.north) --+ ($ (0, 1) $)
+			node[near end, right] {$f_e$};	
+		%
+		\draw[-{Latex[length=3mm]}] (load.east) --+ ($ (1.75, 0) $)
+			node[midway, above] {length};
+		
+	\end{tikzpicture}
+	\caption{Spinal stretch reflex control action}
+	\label{fig_stretch_reflex_control_loop}
+\end{figure}
