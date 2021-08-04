@@ -21,35 +21,31 @@ load('linsys_no_secondary_ctrl_2020.mat')
 SStot =  ss(A,B,C,D);
 SStotd =  ss(Ad,Bd,Cd,Dd,1e-3);
 Htot = tf(SStot);
-figure
-hold on
-bode(SStot(2))
-bode(SStotd(2))
+%figure
+%hold on
+%bode(SStot(2))
+%bode(SStotd(2))
 %bode(linsys1(2), 'y--')
-bode(simulink_linear_continuous_state_sys(2), 'r--')
-bode(simulink_linear_discrete_state_sys(2), 'y--')
+%bode(simulink_linear_continuous_state_sys(2), 'r--')
+%bode(simulink_linear_discrete_state_sys(2), 'y--')
 
-figure
-hold on
-% bode(H1)
-% bode(H2)
-% bode(H3)
-bode(Htot(1))
-bode(Htot(2))
-bode(Htot(3))
-%legend('H1','H2','H3','Htot1','Htot2','Htot3')
-legend('Htot1','Htot2','Htot3')
+% figure
+% hold on
+% bode(Htot(1))
+% bode(Htot(2))
+% bode(Htot(3))
+% legend('Htot1','Htot2','Htot3')
 
 % with discrete model (same control as in the real robot)
 x0 = [th0;dth0];
 u0 = [0;0;0];
 
-[A,B,C,D] = linmod('dynamic_discrete_simulation_control_for_id', x0, u0);
-[A1,B1,C1,D1] = linmod('dynamic_discrete_simulation_control_for_id');
+%[A,B,C,D] = linmod('dynamic_discrete_simulation_control_for_id', x0, u0);
+%[A1,B1,C1,D1] = linmod('dynamic_discrete_simulation_control_for_id');
 [Ad,Bd,Cd,Dd] = dlinmod('dynamic_discrete_simulation_control_for_id', 1e-3, x0, u0);
 
-SS_dyouBot = ss(A,B,C,D);
-SS_dyouBot1 = ss(A1,B1,C1,D1);
+%SS_dyouBot = ss(A,B,C,D);
+%SS_dyouBot1 = ss(A1,B1,C1,D1);
 SS_dyouBotd =  ss(Ad,Bd,Cd,Dd,1e-3);
 
 figure
@@ -74,7 +70,7 @@ hold on
 bode(SS_youBot(2))
 bode(SS_youBotd(2), 'r--')
 %bode(SS_youBotd(2))
-'simulink_linear_continuous_state_sys', 'simulink_linear_discrete_state_sys')
+%'simulink_linear_continuous_state_sys', 'simulink_linear_discrete_state_sys')
 %
 figure
 hold on
