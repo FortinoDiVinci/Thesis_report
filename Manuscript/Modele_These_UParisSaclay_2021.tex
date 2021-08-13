@@ -15,9 +15,15 @@
 \usepackage{pgfplots}
 \usepackage{subcaption}
 %\DeclareCaptionSubType[roman]{figure}
-\usepackage{cleveref}
 \usepackage{siunitx} % for SI units
-
+\usepackage{amsmath} % for splited equation notably
+%\usepackage[square]{natbib}
+\usepackage{cleveref} % should be loaded last
+\usepackage{xifthen} %for conditional test
+%
+\newcommand{\vect}[1]{
+	\boldsymbol{\MakeLowercase{#1}}
+}
 % The following modifies the margins with the memoir commands
 %\setlrmarginsandblock{2.5cm}{3.5cm}{*}
 %\setulmarginsandblock{2.5cm}{2.5cm}{*}

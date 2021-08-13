@@ -1,0 +1,53 @@
+\begin{figure}[h]
+	\centering
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	%
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	%
+	\begin{tikzpicture} [node distance = 2cm]
+		\node (nA) at (0,0) {};
+		\node[block, right of = nA, align=center, node distance = 3.25cm] (KBI) {$Is^2 + Bs + K$};
+		\node[block, below of = nA, align=center, minimum width = 0.8cm, minimum height = 0.8cm, , node distance = 1cm] (derv) {$s$};
+		\node[block, below of = derv, align=center] (delay) {$e^{-s\tau_d}$};
+		\node[block, right of = delay, align=center] (statNL) {$n_{RS}(*)$};
+		\node[block, right of = statNL, align=center, node distance = 3cm] (reflex) {\large$\frac{1}{(\frac{s}{\omega_0})^2+2\frac{\xi}{\omega_0}s+1}$};
+		%
+		\comp[]{c1}{($(KBI) + (3.75,0)$)};
+		%
+		\draw[-{Latex[length=2mm]}] ($(nA.center) + (-0.75,0)$) -- (KBI.west)
+			node[near start, above] {$\theta$};
+		\draw[-{Latex[length=2mm]}] (KBI.east) -- (c1.west)
+		node[near end, above] {$T_i$};
+		\draw[-{Latex[length=2mm]}] (nA.center) -- (derv.north);
+		\draw[-{Latex[length=2mm]}] (derv.south) -- (delay.north);
+		\draw[-{Latex[length=2mm]}] (delay.east) -- (statNL.west);
+		\draw[-{Latex[length=2mm]}] (statNL.east) -- (reflex.west);
+		\draw[-{Latex[length=2mm]}] (reflex.east) -| (c1.south)
+		node[near end, right] {$T_r$};
+		\draw[-{Latex[length=2mm]}] (c1.east) --+ (1,0)
+			node[near end, above] {$T$};
+		%
+	\end{tikzpicture}
+	\caption{Modèle des propriétés intrinsèques de la cheville, avec la contribution des réflexes représentée par un modèle de Hammerstein, avec la non linéarité statique $n_{RS}$.}
+	\label{fig_hammerstein_model_kearney}
+\end{figure}

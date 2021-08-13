@@ -1,0 +1,49 @@
+\begin{figure} [h]
+	\centering
+		\begin{tikzpicture}
+		\begin{axis}[
+			scale only axis,
+			axis lines=middle,
+			axis line style={->},
+			width=0.5*\textwidth,
+			%height=0.3*\textwidth,
+			xmin=0,
+			xmax=2.5,
+			ymin=0,
+			ymax=25,
+			variable=f,
+			%ytick={0.5},
+			%xtick={5},
+			ylabel={Raideur (\SI{}{\newton\meter\per\radian})},
+			y label style={at={(axis description cs:-.075,.5)},rotate=90,anchor=south},
+			xlabel={Fréquence (\SI{}{\hertz})},
+			]
+			\addplot[
+				color=black,
+				domain=0:2.5,
+				samples=1000,
+				dashed
+				]
+				{9.58*(f - 1.12)^2 + 6.63}; %
+			\addplot [only marks, mark=o]
+				plot [error bars/.cd, y dir = both, y explicit]
+				table[row sep=crcr, y error index=2]{%
+				0.71 8.8 3.8 \\
+				0.82 7.6 2.95 \\
+				0.93 7.4 2.85 \\
+				1 6.7 2.85 \\
+				1.13 6.7 2.35 \\
+				1.21 7.1 2.05 \\
+				1.32 7.4 0.8 \\
+				1.41 8.1 1.75 \\
+				1.5 8.7 2.15 \\
+				1.79 10 2.5 \\
+				2 14.8 2.95 \\
+				2.24 19.0 3.7 \\
+				};
+			\node [anchor=west] at (axis cs: 0.1, 22){$y = 9.58(f - 1.12)^2 + 6.63$};
+		\end{axis}
+		\end{tikzpicture}
+	\caption{Reproduction des résultats obtenus par \cite{abe_modulation_2003}, $R^2 = 0.994$}
+	\label{fig_stiffnessVSfrequency_abe_2003}
+\end{figure}

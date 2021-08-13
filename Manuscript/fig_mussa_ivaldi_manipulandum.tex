@@ -1,0 +1,67 @@
+\begin{figure} [h]
+	\centering
+	\begin{tikzpicture}
+		
+		%\coordinate (head) at (0,0);
+		%\coordinate (shoulder) at ($(head) + (1.5, 0)$);
+		\coordinate (shoulder) at (0,0);
+		\coordinate (elbow) at ($(shoulder) + (1.5, 1.5)$);
+		\coordinate (wrist) at ($(elbow) + (-1.5, 1.5)$);
+		\coordinate (manipTip) at ($(wrist) + (-0.283, 0.283)$);
+		\coordinate (manipElbow) at ($(manipTip) + (-1.5, 1.5)$);
+		\coordinate (manipShoulder) at ($(manipElbow) + (1.25, 0.75)$);
+		%
+		%\draw (head) ellipse (0.5cm and 0.65cm);
+		\draw (shoulder) circle (0.425cm);
+		\draw[white, line width=1.5pt] (shoulder) + (135:0.425cm) arc (135:-90:0.425cm);
+		%\draw (elbow) circle (0.35cm);
+		\draw (wrist) circle (0.2cm);
+		\draw[mark options={fill=black}, dashed] plot[mark=*] coordinates {(shoulder) (elbow)};
+		\draw (wrist) circle (0.075cm);
+		% handle
+		\node at (wrist) [rectangle,draw, inner sep=0.4cm, rotate around={-45:(wrist)}] (rectM) {};	
+		\node at (rectM) [right, xshift=3mm, yshift=3.5mm, anchor=west] {$(x',y')$};
+		\draw ($(manipShoulder.center) + (0.0750, 0.0450) + (0.3, -0.3) - (0.06, 0.06)$) circle (0.3cm)
+			node[right, xshift=2.5mm, anchor=west]{$(x_{oa},y_{oa})$};
+		% TODO: try to hide the cross section with square and arm 
+		% drawing manipulandum
+		\draw[line width=2mm, white!30!gray] (manipElbow) -- ($(manipShoulder.center) + (0.0750, 0.0450)$);
+		\draw[line width=2mm, white!30!gray] ($(manipElbow) + (0.3, -0.3)$) -- ($(manipShoulder) + (0.29, -0.31)$);
+		\draw[line width=2mm, white!30!gray] ($(manipShoulder.center) + (0.0750, 0.0450) + (-0.2,0.2) - (0.06, 0.06)$) -- ($(manipShoulder.center) + (0.0750, 0.0450) + (0.45, -0.45) - (0.06, 0.06)$);
+		\draw[line width=2mm, white!30!gray] (manipTip) -- ($(manipElbow) + (-0.15,0.15)$);
+		%
+		\draw (manipElbow) circle (0.1cm);
+		\draw (manipShoulder) circle (0.1cm);		
+		\draw ($(manipShoulder.center) + (0.0750, 0.0450) + (0.3, -0.3) - (0.06, 0.06)$) circle (0.1cm);
+		%
+		\draw[dashed, gray]  ($(manipShoulder.center) + (0.0750, 0.0450) + (0.3, -0.3) - (0.06, 0.06)$) --+ (-1.25,0);
+		\draw[dashed, gray]  (manipShoulder) --+ (-1,0);
+		\draw[dashed, gray]  (manipShoulder) --+ (-0.71,0.71);
+		% drawing the arm using splines
+		\draw ($(shoulder.center) + (-0.3,0.3)$) to[out=60, in=195] ($(elbow.center) + (-0.35,0)$); %0.425*cos(45)
+		\draw ($(shoulder.center) + (0,-0.425)$) to[out=15, in=-107] ($(elbow.center) + (0.35,0)$);
+		\draw ($(elbow.center) + (0.35,0)$) to[out=100, in=-45] ($(wrist.center) + (0.141,0.141)$); %0.2*cos(45) and sin(45)
+		\draw ($(elbow.center) + (-0.35,0)$) to[out=135, in=-45] ($(wrist.center) + (0,-0.2)$);
+		%\draw[dashed] (shoulder.center) -- (elbow.center);
+		\draw[dashed] (elbow.center) -- (manipElbow.center) -- (manipShoulder.center);
+		\draw[dashed] (elbow.center) -- (wrist.center) -- (manipElbow.center);
+		\draw[dashed, gray] (elbow.center) --+ (1,1);
+		% angles arcs
+		\draw[-{Latex[length=1.5mm]}] ($(shoulder.center) + (0.75, 0)$) arc (0:45:0.75)
+			node[midway, right, yshift=1mm] {$\theta_1$};
+		\draw[-{Latex[length=1.5mm]}] ($(elbow.center) + (0.53, 0.53)$) arc (45:135:0.75)
+			node[midway, above] {$\theta_2$};
+		%
+		\draw[-{Latex[length=1.5mm]}]  ($(manipShoulder) + (-0.53, 0.53) $) arc (135:180:0.75)
+			node[midway, left] {$\theta_1'$};
+		\draw[{Latex[length=1.5mm]}-] ($(manipElbow.center) + (0.53, -0.53)$) arc (-45:30:0.75)
+			node[midway, right, yshift=-3mm] {$\theta_2'$};
+		% axis
+		\draw[-{Latex[length=1.5mm]}] (shoulder.center) --+ (1.75,0)
+			node[near end, below] {$x$};
+		\draw[-{Latex[length=1.5mm]}] (shoulder.center) --+ (0,1.75)
+			node[near end, left] {$y$};
+	\end{tikzpicture}
+	\caption{Expérience décrite par \cite{mussa-ivaldi_neural_1985}, avec le manipulandum maintenue par sa poignée $(x',y')$ dans différentes postures.}
+	\label{fig_mussa_ivaldi_manipulandum}
+\end{figure}
