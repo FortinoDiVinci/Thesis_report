@@ -224,13 +224,15 @@ Dans l'objectif de différencier la contribution des réflexes $T_r$, qui agisse
 
 On peut alors légitimement se demander comment ces modèles uni-articulaires se transposent sur des modèles humains plus complets intégrant plusieurs articulations. En effet, les mouvements purement uni-articulaire sont plutôt rares dans des contextes ecologiques \cite{hogan_mechanics_1985}, pour bien étudier la complexité de la modulation des propriétés viscoélastiques lors d'une tâche physiologiquement réaliste, il convient donc de prendre en compte des données pluri-articulaires. C'est de cette manière que l'on peut étudier la coordination et génération de mouvements stables dans des conditions réalistes.
 
+[texte de latash sur les limites de la notion de raideur ? \cite{latash_joint_1993} -> je n'ai pas très bien compris la problématique de l'estimation de la raideur en dehors de son point d'équilibre (quasi stiffness)..]
+
 \paragraph{Modélisation pluri-articulaires} 
 
-Dès lors qu'on cherche à étudier plusieurs articulations simultanément, viennent les questions des effets de couplages et de l'impédance cartésienne. On peut aussi remarquer, que plus on s'intéresse à d'articulations conjointement, plus de variables devront être observées. Ainsi, \cite{hogan_mechanics_1985, mussa-ivaldi_neural_1985} se sont intéressés à  l'évaluation de l'impédance mécanique du bras, dans un cas où à la fois les articulations du coude et de l'épaule sont impliquées. En utilisant un manipulandum dans le plan horizontal et en soutenant le bras à l'aide d'une corde pour limiter les effets de la gravité, des estimations d'impédance étaient conduites à différentes postures, notamment grâce aux mesures angulaires $\theta_1'$ et $\theta_2'$ données par les 2 moteurs du manipulandum. 
+Dès lors qu'on cherche à étudier plusieurs articulations simultanément, viennent les questions des effets de couplages et de l'impédance cartésienne. On peut aussi remarquer, que plus on s'intéresse à d'articulations conjointement, plus de variables devront être observées. Ainsi, \cite{hogan_mechanics_1985, mussa-ivaldi_neural_1985} se sont intéressés à  l'évaluation de l'impédance mécanique du bras et plus précisement de sa raideur, dans un cas où à la fois les articulations du coude et de l'épaule sont impliquées. En utilisant un manipulandum dans le plan horizontal et en soutenant le bras à l'aide d'une corde pour limiter les effets de la gravité, des estimations d'impédance étaient conduites à différentes postures dans des conditions isométriques, notamment grâce aux mesures angulaires $\theta_1'$ et $\theta_2'$ données par les 2 moteurs du manipulandum. 
 
 \input{fig_mussa_ivaldi_manipulandum}
 
-En effet, les mesures directement sur les articulations humaines étant plus complexes, une estimation cartésienne de l'impédance est faite, le long des axes $\vect{x}$ et $\vect{y}$. En anglais, on parle de "goal directed impedance" ou "endpoint impedance", on se pose donc la question de la modulation de l'impédance pour atteindre un comportement viscoélastique au niveau d'un effecteur, ici la poignée. \cite{mussa-ivaldi_neural_1985} cherchent donc à obtenir les positions de la poignée (\cref{eq_mussa_ivaldi_position}), rigidement maintenue à la main de l'utilisateur, ainsi que les forces d'interaction (\cref{eq_mussa_ivaldi_force}) entre le manipulandum et l'utilisateur humain.
+En effet, les mesures directement sur les articulations humaines étant plus complexes, une estimation cartésienne de l'impédance est faite, le long des axes $\vect{x}$ et $\vect{y}$. En anglais, on parle de "goal directed impedance" ou "endpoint impedance", on se pose donc la question de la modulation de l'impédance pour atteindre un comportement viscoélastique spécifique au niveau d'un effecteur, ici la poignée. \cite{mussa-ivaldi_neural_1985} cherchent donc à obtenir les positions de la poignée (\cref{eq_mussa_ivaldi_position}), rigidement maintenue à la main de l'utilisateur, ainsi que les forces d'interaction (\cref{eq_mussa_ivaldi_force}) entre le manipulandum et l'utilisateur humain.
 
 \begin{equation} \label{eq_mussa_ivaldi_position}
 	\begin{cases}
@@ -246,7 +248,7 @@ F_y' &= \left( \frac{T_1'}{l_1'}\sin(\theta_1' + \theta_2') - \frac{T_2'}{l_2'}\
 \end{cases}
 \end{equation}
 
-L'impédance est donc évaluée sur deux degrés de libertés cartésiens, plutôt que d'être étudiée sur deux degrés de libertés au niveau articulaire. En se concentrant sur les effets liant la force au déplacement, et donc sur le comportement en raideur du CNS, les auteurs peuvent exprimer le modèle en impédance linéarisé pour de faibles déplacements $dx$ et $dy$. Comme défini par \cite{hogan_mechanics_1985}, pour pouvoir affirmer qu'un comportement élastique - "spring-like" - soit observé, il faut qu'il y ait un stockage d'énergie élastique. Ce qui est bien observé pour des mouvements planaires du membre supérieur \cite{mussa-ivaldi_neural_1985}. Comme prédit par \cite{hogan_mechanics_1985}, si les muscles ont des comportements élastiques, alors leurs effets combinés devraient aussi exprimer un comportement élastique aux extrémités (en supposant les segments squelettiques rigides, avec des points d'insertion ponctuels des muscles). Les effets non élastiques de la relation force-déplacement \cref{mussa_ivaldi_force_displacement} peuvent alors être induit dans les arcs de réflexe \cite{hogan_mechanics_1985}.
+L'impédance est donc évaluée sur deux degrés de liberté cartésiens, plutôt que d'être étudiée sur deux degrés de liberté articulaires. En se concentrant sur les effets liant la force au déplacement, et donc sur le comportement en raideur du CNS, les auteurs peuvent exprimer le modèle en impédance linéarisé pour de faibles déplacements $dx$ et $dy$. Comme défini par \cite{hogan_mechanics_1985}, pour pouvoir affirmer qu'un comportement élastique - "spring-like" - soit observé, il faut qu'il y ait un stockage d'énergie élastique. Ce qui est bien observé pour des mouvements planaires du membre supérieur \cite{mussa-ivaldi_neural_1985}. Comme prédit par \cite{hogan_mechanics_1985}, si les muscles ont des comportements élastiques, alors leurs effets combinés devraient aussi exprimer un comportement élastique aux extrémités (en supposant les segments squelettiques rigides, avec des points d'insertion ponctuels des muscles). Les effets non élastiques de la relation force-déplacement \cref{mussa_ivaldi_force_displacement} peuvent alors être induit par les arcs de réflexe. \cite{hogan_mechanics_1985}.
 
 \begin{equation} \label{mussa_ivaldi_force_displacement}
 	\begin{bmatrix}
@@ -263,10 +265,63 @@ L'impédance est donc évaluée sur deux degrés de libertés cartésiens, plut�
 	\end{bmatrix}
 \end{equation}
 
-Il est intéressant de noter que la matrice de raideur peut être séparée en 2 composantes, l'une symétrique qui représente les effets élastiques et l'autre antisymétrique qui ne peuvent pas être dérivée d'une fonction potentielle et ne sont donc pas élastiques \cite{hogan_mechanics_1985}. Il faut par contre remarquer que l'origine des comportements élastiques ne peut pas être différenciée avec cette représentation, \cite{hogan_mechanics_1985} montre que si les effets non élastique ne peuvent être dus qu'aux propriétés des arcs réflexes, ces derniers peuvent aussi avoir des comportements élastiques.
+Il est intéressant de noter que la matrice de raideur peut être séparée en deux composantes, l'une symétrique qui représente les effets élastiques et l'autre antisymétrique pour les phénomènes qui ne peuvent pas être dérivés d'une fonction potentielle et ne sont donc pas élastiques \cite{hogan_mechanics_1985}. Il faut par contre remarquer que l'origine des comportements élastiques ne peut pas être différenciée avec cette représentation, \cite{hogan_mechanics_1985} montre que si les effets non élastique ne peuvent être dus qu'aux propriétés des arcs réflexes, ces derniers peuvent aussi avoir des comportements élastiques.
+
+En réalisant des estimations d'impédance sur quatre participants, à différentes postures, avec différents types de perturbations - \textit{courtes et non prévisibles (\SI{120}{\milli\second}), statique et prévisible (charge)} -, \cite{mussa-ivaldi_neural_1985} indiquent que la modulation de la raideur cartésienne se fait principalement grâce à la configuration géométrique du bras. En effet, en simulant un bras à 2 DDL avec des raideurs articulaires constantes, ils trouvent une modulation de la raideur cartésienne proche de leur estimation. La géométrie semble dicter l'orientation et la forme de la raideur cartésienne qui restent relativement invariants lors des différents essais, toutefois, l'amplitude de la raideur peut varier jusqu'à doubler, la modulation du comportement en raideur par le CNS ne peut donc pas être négligé. Ce qui a aussi pu être observé par \cite{shadmehr_postural_1993} (même équipe de recherche) sous la forme de champ de force postural.
+
+Ces résultats ne sont toutefois pas trouvés à nouveau par \cite{lacquaniti_time-varying_1993} dans le plan vertical, pour une tâche de réception de balle en chute libre. Ces derniers auteurs ont mesuré les angles du poignet $ \theta_w $ et du coude $ \theta_e $ à l'aide d'un goniomètre fermement attaché du bras à la main, pour déterminer la raideur et l'amortissement de ces deux articulations, sur sept participants. En utilisant le jacobien $ \jacobian{}{}{} $, \cref{jacobian_lacquaniti}, ils ont facilement pu passer dans le plan cartésien \cite[Chapter~5]{khalil_modeling_2002} après quelques mesures géométriques concernant l'avant bras $l_{fa}$ et le troisième métacarpien $l_{m}$ (os reliant le poignet au majeur). Les relations entre les paramètres articulaires et cartésiens sont explicités dans \cite{hogan_mechanics_1985, tsuji_human_1997}. [Ajouter en annexe la relation entre la raideur articulaire et cartésienne ?]
+
+\begin{equation} \label{jacobian_lacquaniti}
+	\begin{bmatrix}
+		d_x \\
+		d_y 
+	\end{bmatrix} = 
+	\jacobian{}{}{}
+	\begin{bmatrix}
+		d_{\theta_w} \\
+		d_{\theta_e} 
+	\end{bmatrix} = %
+	\begin{bmatrix}
+		-l_{fa} \sin(\theta_e) - l_{m}\sin(\theta_w + \theta_e) & - l_{m}\sin(\theta_w + \theta_e)\\
+		l_{fa} \cos(\theta_e) + l_{m}\cos(\theta_w + \theta_e) & l_{m}\cos(\theta_w + \theta_e)
+	\end{bmatrix}
+	\begin{bmatrix}
+		d_{\theta_w} \\
+		d_{\theta_e} 
+	\end{bmatrix}
+\end{equation}
+
+Ils remarquent bien des variations de la géométrie du bras et de l'impédance articulaire, toutefois, la modulation avant l'impact de la balle leur semble réalisée de manière indépendante de la configuration géométrique. Ils observent que l'amplitude de la résistance à l'impact augmente, (à la fois la raideur et l'amortissement), et que l'orientation de l'amortissement se rapproche de la verticale, juste avant l'impact de le balle. Pour vérifier que ces changements n'étaient pas uniquement du à des facteurs géométriques ils ont comparé leur corrélation à l'inertie équivalente au niveau de la main, et ont constaté des variations des degrés de corrélation au court de la tâche.
+
+\cite{gomi_human_1997, gomi_task-dependent_1998} ont conduit plusieurs expériences statiques et en mouvements, avec des variations de charge impliquant des cocontractions variées, en utilisant un manipulandum dans le plan horizontal, dans des conditions proches de celles décrites par \cite{mussa-ivaldi_neural_1985} (voir \cref{fig_mussa_ivaldi_manipulandum}). Un modèle dynamique rigide en série du bras pour 2 articulations (comme détaillé par \cite[Chapter~9]{khalil_modeling_2002}) sans les effets de la gravité (compensés par le manipulandum) est utilisé :
+
+\begin{equation} \label{eq_arm_dynamic_model}
+	\matr{\Gamma}(\ddot{\vect{q}}, \dot{\vect{q}}, \vect{q}) = \matr{A}(\vect{q})\ddot{\vect{q}} + \matr{C}(\dot{\vect{q}},\vect{q}) \dot{\vect{q}} \text{ ,}
+\end{equation}
+%
+tel que :
+%
+\begin{equation} 
+	\matr{\Gamma}(\ddot{\vect{q}}, \dot{\vect{q}}, \vect{q}) = \vect{\tau}_{in}(\dot{\vect{q}}, \vect{q}, \vect{u}) + \vect{\tau}_{ext} \text{ ,}
+\end{equation}
+%
+avec, $ \vect{\tau}_{ext} $ les couples extérieurs appliqués sur le bras, et $ \vect{\tau}_{in} $ les couples générés par le CNS, avec $ \vect{u} $, les commandes neurales. Ces derniers couples sont générés par les muscles et réflexes, et peuvent être exprimés en fonction des relations liant la tension des muscles et leur longeur et vitesse pour de petits déplacements articulaires $\delta\vect{q}$ avec l'équation variationnelle suivante :
+
+\begin{equation}
+	\matr{A}(\vect{q}) \delta\ddot{\vect{q}} + \frac{\partial \matr{C}(\dot{\vect{q}},\vect{q})}{\partial \dot{\vect{q}}} \delta\dot{\vect{q}} + \left( \frac{\partial \matr{A}(\vect{q})\ddot{\vect{q}}}{\partial \vect{q}} + \frac{\partial \matr{C}(\dot{\vect{q}},\vect{q})}{\partial \vect{q}} \right) \delta\vect{q} = %
+	-\matr{D} \delta\dot{\vect{q}} - \matr{R} \delta\vect{q} + \delta\vect{\tau}_{ext}
+\end{equation}
+%
+avec les matrices de viscosité et raideur articulaires respectivement représentées par $\matr{D}$ et $\matr{R}$. Les paramètres géométriques des matrices inertielles et de Coriolis sont calculés et les paramètres restant concernant notamment les matrices de raideur et viscosité sont estimés en posant :
+%
+\begin{equation}
+	\delta \vect{q}^i(t) = \vect{q}^i_s(t) - \frac{1}{n} \sum_{i}^{n} \vect{q}^i_s(t) \text{,}
+\end{equation}
+%
+avec $ \vect{q}^i_s(t) $ la i\textsuperscript{ème} trajectoire avec l'offset retiré au début du temps de la perturbation.
 
 
-
+%
 %\paragraph{Autre modélisation}
 %
 %Utilisation d'un modèle non-linéaire de Harmerstein pour différencier le comportement visco-élastique linéaire, du comportement non linéaire des réflexes : \cite{kearney_identification_1997}.

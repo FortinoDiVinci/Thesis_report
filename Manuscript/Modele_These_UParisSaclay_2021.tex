@@ -17,12 +17,28 @@
 %\DeclareCaptionSubType[roman]{figure}
 \usepackage{siunitx} % for SI units
 \usepackage{amsmath} % for splited equation notably
+\usepackage{amssymb} % for delta equality notably
 %\usepackage[square]{natbib}
 \usepackage{cleveref} % should be loaded last
 \usepackage{xifthen} %for conditional test
+\usepackage[title]{appendix} % for appendices
 %
 \newcommand{\vect}[1]{
 	\boldsymbol{\MakeLowercase{#1}}
+}
+%
+\newcommand{\matr}[1]{
+	\boldsymbol{\MakeUppercase{#1}}
+}
+%
+\newcommand{\jacobian}[3]{ %
+	\ifthenelse{\isempty{#1}}
+	{%
+		\boldsymbol{\mathcal{J}_{#2}^{#3}} %
+	}
+	{%
+		\boldsymbol{\mathcal{J}_{#2}}(#1)^{#3} %
+	}	
 }
 % The following modifies the margins with the memoir commands
 %\setlrmarginsandblock{2.5cm}{3.5cm}{*}
@@ -42,6 +58,7 @@
 \include{chapter4}
 \include{chapter5}
 \include{conclusion}
+\include{appendices}
 
 \bibliographystyle{apalike} %abbrvnat
 \bibliography{bibliography/chapter1}

@@ -1,0 +1,49 @@
+\clearpage
+\begin{appendices}
+	\crefalias{section}{appendix}
+	
+	\section{Liens entre les paramètres articulaires et cartésiens}
+	
+	\subsection{Raideur}
+	
+	La raideur articulaire $ \matr{R} $ est par définition la capacité d'une ou plusieurs articulations $\vect{q}$ à emmaganiser de l'énergie élastique, qui se caractérise par une relation, possiblement non linéaire, entre la force exercée et le déplacement, tel que l'intégrale de la force en fonction de la position soit définie (énergie élastique) \cite{hogan_mechanics_1985}.
+	
+	\begin{equation}
+		\matr{R} \triangleq \frac{\partial \vect{\tau}}{\partial \vect{q}} = \frac{\partial \jacobian{}{}{t} \vect{f}}{\partial \vect{q}} = \jacobian{}{}{t} \frac{\partial \vect{f}}{\partial \vect{q}} + \frac{\partial \jacobian{}{}{t} }{\partial \vect{q}} \vect{f}
+	\end{equation}
+	
+	La raideur cartésienne $ \matr{K} $ se définit respectivement aux coordonnées d'un repère défini par les vecteurs $\vect{x}$, qui peuvent former un plan, ou un espace de plus de deux dimensions.
+	
+	\begin{equation}
+		\matr{K} \triangleq \frac{\partial \vect{f}}{\partial \vect{x}} = \frac{\partial \vect{f}}{\partial \vect{q}} \frac{\partial \vect{q}}{\partial \vect{x}} =  \frac{\partial \vect{f}}{\partial \vect{q}} \jacobian{}{}{-1}
+	\end{equation}
+	
+	D'où :
+	
+	\begin{equation}
+		\matr{K} = (\jacobian{}{}{t})^{-1} \left(\matr{R} - \frac{\partial \jacobian{}{}{t} }{\partial \vect{q}} \vect{f} \right) \jacobian{}{}{-1}
+	\end{equation}
+	
+	Pour que $ \matr{K} $ puisse être considéré comme une raideur, l'opérateur rotationnel $ \nabla $, du champ de vecteur de la force doit être nul \cite{hogan_mechanics_1985, latash_joint_1993}.
+	
+	\begin{equation}
+		\nabla \times \vect{f} = %
+		\begin{pmatrix}
+			\partial f_z/\partial y - \partial f_y/\partial z \\
+			\partial f_x/\partial z - \partial f_z/\partial x \\
+			\partial f_y/\partial x - \partial f_x/\partial y
+		\end{pmatrix} %
+		 = \matr{0}_{3\times 1}
+	\end{equation}
+	
+	\subsection{Amortissement / Viscosité}
+	
+	Idem raideur ??
+	
+	\subsection{Masse et inertie}
+	
+	\begin{equation}
+		\matr{M} = \left(\jacobian{}{}{t}\right)^{-1} I \jacobian{}{}{-1}
+	\end{equation}
+	
+\end{appendices}
