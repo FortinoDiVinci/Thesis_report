@@ -1,18 +1,19 @@
 \clearpage
 \begin{appendices}
+	%\chapter{Annexes}
 	\crefalias{section}{appendix}
 	
-	\section{Liens entre les paramètres articulaires et cartésiens}
+	\section{Liens entre les paramètres articulaires et cartésiens} \label{app_link_joint_endpoint}
 	
 	\subsection{Raideur}
 	
-	La raideur articulaire $ \matr{R} $ est par définition la capacité d'une ou plusieurs articulations $\vect{q}$ à emmaganiser de l'énergie élastique, qui se caractérise par une relation, possiblement non linéaire, entre la force exercée et le déplacement, tel que l'intégrale de la force en fonction de la position soit définie (énergie élastique) \cite{hogan_mechanics_1985}.
+	La raideur articulaire $ \matr{R} $ est par définition la capacité d'une ou plusieurs articulations $\vect{q}$ à emmaganiser de l'énergie élastique, qui se caractérise par une relation, possiblement non linéaire, entre la force exercée et le déplacement, tel que l'intégrale de la force en fonction de la position soit définie (énergie élastique) \cite{hogan_mechanics_1985, shadmehr_control_1993}.
 	
 	\begin{equation}
 		\matr{R} \triangleq \frac{\partial \vect{\tau}}{\partial \vect{q}} = \frac{\partial \jacobian{}{}{t} \vect{f}}{\partial \vect{q}} = \jacobian{}{}{t} \frac{\partial \vect{f}}{\partial \vect{q}} + \frac{\partial \jacobian{}{}{t} }{\partial \vect{q}} \vect{f}
 	\end{equation}
 	
-	La raideur cartésienne $ \matr{K} $ se définit respectivement aux coordonnées d'un repère défini par les vecteurs $\vect{x}$, qui peuvent former un plan, ou un espace de plus de deux dimensions.
+	La raideur cartésienne $ \matr{K} $ se définit respectivement aux coordonnées d'un repère défini par les vecteurs $\vect{x}$, qui peuvent former un plan, ou un espace de pluri-dimensionel.
 	
 	\begin{equation}
 		\matr{K} \triangleq \frac{\partial \vect{f}}{\partial \vect{x}} = \frac{\partial \vect{f}}{\partial \vect{q}} \frac{\partial \vect{q}}{\partial \vect{x}} =  \frac{\partial \vect{f}}{\partial \vect{q}} \jacobian{}{}{-1}
@@ -24,7 +25,7 @@
 		\matr{K} = (\jacobian{}{}{t})^{-1} \left(\matr{R} - \frac{\partial \jacobian{}{}{t} }{\partial \vect{q}} \vect{f} \right) \jacobian{}{}{-1}
 	\end{equation}
 	
-	Pour que $ \matr{K} $ puisse être considéré comme une raideur, l'opérateur rotationnel $ \nabla $, du champ de vecteur de la force doit être nul \cite{hogan_mechanics_1985, latash_joint_1993}.
+	Pour que $ \matr{K} $ puisse être considéré comme une raideur pure, l'opérateur rotationnel $ \nabla $, du champ de vecteur de la force doit être nul \cite{hogan_mechanics_1985, latash_joint_1993}, c'est à dire de nature conservative \cite[Chapter~7]{hooge_bcit_2016}.
 	
 	\begin{equation}
 		\nabla \times \vect{f} = %

@@ -1,0 +1,64 @@
+\begin{figure}
+	\centering	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 2.5cm, minimum height = 1.1cm, line width=0.7]  % bloc style
+
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	\resizebox{\textwidth}{!}{
+	\begin{tikzpicture} [node distance = 2cm]	
+		\comp{c1}{(0, 0)};
+		
+		\node[block, left of = c1, node distance = 2.5cm] (feed) {feedforward};
+		\node[left of = feed, node distance = 4cm](feed_cmd) {};
+		\fill (feed_cmd) circle[radius=1.75pt];
+		
+		\node[block, below of = feed] (imp) {impédance};
+		
+		\node[block, right of = c1, align = center, node distance = 3.5cm] (arm) {dynamiques\\bras};
+		\node[right of = arm, node distance = 2.5cm](arm_out) {};
+		\fill (arm_out) circle[radius=1.75pt];
+		
+		\comp[b]{c2}{($(imp) + (-4,0)$)};
+
+		\draw[{Latex[length=3mm]}-] (feed.west) --+ (-4,0)
+			node[align = center, above] {mouvement} node [align = center, below] {plannifié};
+		\draw[-{Latex[length=3mm]}] (feed_cmd.center) -- (c2.north);
+		\draw[{Latex[length=3mm]}-] (c2.south) --+ (0,-1) -| (arm_out.center);
+		
+		\draw[-{Latex[length=3mm]}] (c2.east) -- (imp.west)
+			node[midway, align = center, above] {erreur de} node[midway, align = center, below] {position};		
+		\draw[{Latex[length=3mm]}-] (c1.south) |- (imp.east)
+			node[left = -4mm, above = 2mm] {$\tau_{FB}$};;
+		
+		\draw[-{Latex[length=3mm]}] (feed.east) -- (c1.west)
+			node[above = 2mm, midway] {$\tau_{FF}$};	
+		\draw[-{Latex[length=3mm]}] (c1.east) -- (arm.west)
+			node[above = 1mm, midway] {$T_{act}$};	
+		\draw[-{Latex[length=3mm]}] (arm.east) --+ (2.5, 0);	
+		
+		\draw[{Latex[length=3mm]}-] (arm.north) --+ (0, 0.75)
+			node[above] {couple externe $\tau_E$};		
+	\end{tikzpicture}
+	}
+	\caption{Schéma bloc de contrôle en impédance avec utilisation de commande prédictive, utilisé par \cite{tee_model_2004}} % Figure caption
+	\label{fig_tee_model} % Label 
+\end{figure}

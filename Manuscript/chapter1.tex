@@ -1,4 +1,4 @@
-\chapter{Contexte}
+\chapter{Contexte} \label{chap_1}
 
 %%%
 \section{Vers une robotique collaborative}
@@ -65,7 +65,9 @@ En effet, des fibres musculaires sensorielles, les \emph{fuseaux neuromusculaire
 
 C'est ainsi que le réflexe ostéotendineux permet d'assurer une continuité dans le comportement élastique des muscles au-delà de la rupture de ce comportement passif \cite{nichols_improvement_1976, houk_regulation_1979}. Par ailleurs, ce réflexe permet une meilleure robustesse aux perturbations extérieures. En effet, lorsqu'un mouvement est commandé par les motoneurones $\alpha$, un déplacement est attendu et contrôlé par les motoneurones $\gamma$, qui peuvent en cas d'écart entre le mouvement réalisé et attendu, inhiber ou augmenter l'activité des motoneurones $\alpha$, tout en jouant sur les contractions des fuseaux neuromusculaires, qui peuvent être modélisés de manière similaire aux fibres musculaires.
 
-La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle. [ajouter des informations concernant les délais ? \cite{lacquaniti_transient_1991, }, et concernant l'activation en fonction des contractions \cite{toft_mechanical_1989}].
+La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle.
+
+[ajouter des informations concernant les délais ? \cite{lacquaniti_transient_1991, allum_mechanical_1982, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, et concernant l'activation en fonction des contractions \cite{toft_mechanical_1989}].
 
 \input{fig_stretch_reflex_ctrl_loop}
 
@@ -73,8 +75,6 @@ La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du r
 \subsection{Modéliser le comportement humain en interaction physique grâce à l'impédance}
 
 \subsubsection{Définition}
-
-%Le \textit{Random House Kernerman Webster's College Dictionary} définit l'impédance mécanique comme, le rapport entre une \emph{force} exercée sur un système physique soumis à un \emph{mouvement} harmonique, et la \emph{vitesse} des particules du-dit système\footnote{"\textit{The ratio of the force on a system undergoing harmonic motion to the velocity of the particles in the system.}"}. De manière plus générale, \cite{hogan_impedance_1985} explique que les systèmes physiques peuvent soit être définis en impédance, c'est à dire qu'ils acceptent en entrée un flux et fournissent en sortie un effort, soit en admittance, l'inverse de l'impédance. Ce concept d'abord établi pour l'électricité, est donc élargi à tous les systèmes physiques, ainsi, l'impédance mécanique se précise (\cref{mec_impedance}) comme une \emph{résistance à un mouvement}.
 
 L'\emph{impédance} $H$, peut se définir pour un système, comme le rapport d'un \emph{potentiel} extensif $E$ sur un \emph{flux} intensif $\phi$. Dit autrement, il s'agit de la capacité d'un système dynamique, d'opposer une force dont l'intensité est proportionnelle à une quantité caractéristique variable dans le temps, lorsqu'il est soumis à un flux de particules en mouvements.
 
@@ -267,9 +267,11 @@ L'impédance est donc évaluée sur deux degrés de liberté cartésiens, plutô
 
 Il est intéressant de noter que la matrice de raideur peut être séparée en deux composantes, l'une symétrique qui représente les effets élastiques et l'autre antisymétrique pour les phénomènes qui ne peuvent pas être dérivés d'une fonction potentielle et ne sont donc pas élastiques \cite{hogan_mechanics_1985}. Il faut par contre remarquer que l'origine des comportements élastiques ne peut pas être différenciée avec cette représentation, \cite{hogan_mechanics_1985} montre que si les effets non élastique ne peuvent être dus qu'aux propriétés des arcs réflexes, ces derniers peuvent aussi avoir des comportements élastiques.
 
+[ajouter un encadré sur la représentation éliptique de l'impédance \cite{mussa-ivaldi_neural_1985, dolan_dynamic_1993}]
+
 En réalisant des estimations d'impédance sur quatre participants, à différentes postures, avec différents types de perturbations - \textit{courtes et non prévisibles (\SI{120}{\milli\second}), statique et prévisible (charge)} -, \cite{mussa-ivaldi_neural_1985} indiquent que la modulation de la raideur cartésienne se fait principalement grâce à la configuration géométrique du bras. En effet, en simulant un bras à 2 DDL avec des raideurs articulaires constantes, ils trouvent une modulation de la raideur cartésienne proche de leur estimation. La géométrie semble dicter l'orientation et la forme de la raideur cartésienne qui restent relativement invariants lors des différents essais, toutefois, l'amplitude de la raideur peut varier jusqu'à doubler, la modulation du comportement en raideur par le CNS ne peut donc pas être négligé. Ce qui a aussi pu être observé par \cite{shadmehr_postural_1993} (même équipe de recherche) sous la forme de champ de force postural.
 
-Ces résultats ne sont toutefois pas trouvés à nouveau par \cite{lacquaniti_time-varying_1993} dans le plan vertical, pour une tâche de réception de balle en chute libre. Ces derniers auteurs ont mesuré les angles du poignet $ \theta_w $ et du coude $ \theta_e $ à l'aide d'un goniomètre fermement attaché du bras à la main, pour déterminer la raideur et l'amortissement de ces deux articulations, sur sept participants. En utilisant le jacobien $ \jacobian{}{}{} $, \cref{jacobian_lacquaniti}, ils ont facilement pu passer dans le plan cartésien \cite[Chapter~5]{khalil_modeling_2002} après quelques mesures géométriques concernant l'avant bras $l_{fa}$ et le troisième métacarpien $l_{m}$ (os reliant le poignet au majeur). Les relations entre les paramètres articulaires et cartésiens sont explicités dans \cite{hogan_mechanics_1985, tsuji_human_1997}. [Ajouter en annexe la relation entre la raideur articulaire et cartésienne ?]
+Ces résultats ne sont toutefois pas trouvés à nouveau par \cite{lacquaniti_time-varying_1993} dans le plan vertical, pour une tâche de réception de balle en chute libre. Ces derniers auteurs ont mesuré les angles du poignet $ \theta_w $ et du coude $ \theta_e $ à l'aide d'un goniomètre fermement attaché du bras à la main, pour déterminer la raideur et l'amortissement de ces deux articulations, sur sept participants. En utilisant le jacobien $ \jacobian{}{}{} $, \cref{jacobian_lacquaniti}, ils ont facilement pu passer dans le plan cartésien \cite[Chapter~5]{khalil_modeling_2002} après quelques mesures géométriques concernant l'avant bras $l_{fa}$ et le troisième métacarpien $l_{m}$ (os reliant le poignet au majeur). Les relations entre les paramètres articulaires et cartésiens sont explicités dans \cite{hogan_mechanics_1985, tsuji_human_1997}. Voir \cref{app_link_joint_endpoint} pour les relations entre les paramètres articulaires et cartésiens.
 
 \begin{equation} \label{jacobian_lacquaniti}
 	\begin{bmatrix}
@@ -293,13 +295,13 @@ Ces résultats ne sont toutefois pas trouvés à nouveau par \cite{lacquaniti_ti
 
 Ils remarquent bien des variations de la géométrie du bras et de l'impédance articulaire, toutefois, la modulation avant l'impact de la balle leur semble réalisée de manière indépendante de la configuration géométrique. Ils observent que l'amplitude de la résistance à l'impact augmente, (à la fois la raideur et l'amortissement), et que l'orientation de l'amortissement se rapproche de la verticale, juste avant l'impact de le balle. Pour vérifier que ces changements n'étaient pas uniquement du à des facteurs géométriques ils ont comparé leur corrélation à l'inertie équivalente au niveau de la main, et ont constaté des variations des degrés de corrélation au court de la tâche.
 
-\cite{gomi_human_1997, gomi_task-dependent_1998} ont conduit plusieurs expériences statiques et en mouvements, avec des variations de charge impliquant des cocontractions variées, en utilisant un manipulandum dans le plan horizontal, dans des conditions proches de celles décrites par \cite{mussa-ivaldi_neural_1985} (voir \cref{fig_mussa_ivaldi_manipulandum}). Un modèle dynamique rigide en série du bras pour 2 articulations (comme détaillé par \cite[Chapter~9]{khalil_modeling_2002}) sans les effets de la gravité (compensés par le manipulandum) est utilisé :
-
+\cite{gomi_human_1997, gomi_task-dependent_1998} ont conduit plusieurs expériences statiques et en mouvements, avec des variations de cocontractions, en utilisant un manipulandum dans le plan horizontal, dans des conditions proches de celles décrites par \cite{mussa-ivaldi_neural_1985} (voir \cref{fig_mussa_ivaldi_manipulandum}). Un modèle dynamique rigide en série du bras pour 2 articulations (comme détaillé par \cite[Chapter~9]{khalil_modeling_2002}) sans les effets de la gravité (compensés par le manipulandum) est utilisé :
+%
 \begin{equation} \label{eq_arm_dynamic_model}
 	\matr{\Gamma}(\ddot{\vect{q}}, \dot{\vect{q}}, \vect{q}) = \matr{A}(\vect{q})\ddot{\vect{q}} + \matr{C}(\dot{\vect{q}},\vect{q}) \dot{\vect{q}} \text{ ,}
 \end{equation}
 %
-tel que :
+où l'on retrouve les matrices d'inertie $\matr{A}$ et des effets centrifuges et de Coriolis $\matr{C}$, avec les données articulaires notées $\vect{q}$ tel que :
 %
 \begin{equation} 
 	\matr{\Gamma}(\ddot{\vect{q}}, \dot{\vect{q}}, \vect{q}) = \vect{\tau}_{in}(\dot{\vect{q}}, \vect{q}, \vect{u}) + \vect{\tau}_{ext} \text{ ,}
@@ -307,21 +309,89 @@ tel que :
 %
 avec, $ \vect{\tau}_{ext} $ les couples extérieurs appliqués sur le bras, et $ \vect{\tau}_{in} $ les couples générés par le CNS, avec $ \vect{u} $, les commandes neurales. Ces derniers couples sont générés par les muscles et réflexes, et peuvent être exprimés en fonction des relations liant la tension des muscles et leur longeur et vitesse pour de petits déplacements articulaires $\delta\vect{q}$ avec l'équation variationnelle suivante :
 
-\begin{equation}
+\begin{equation} \label{eq_gomi_impedance_model}
 	\matr{A}(\vect{q}) \delta\ddot{\vect{q}} + \frac{\partial \matr{C}(\dot{\vect{q}},\vect{q})}{\partial \dot{\vect{q}}} \delta\dot{\vect{q}} + \left( \frac{\partial \matr{A}(\vect{q})\ddot{\vect{q}}}{\partial \vect{q}} + \frac{\partial \matr{C}(\dot{\vect{q}},\vect{q})}{\partial \vect{q}} \right) \delta\vect{q} = %
 	-\matr{D} \delta\dot{\vect{q}} - \matr{R} \delta\vect{q} + \delta\vect{\tau}_{ext}
 \end{equation}
 %
-avec les matrices de viscosité et raideur articulaires respectivement représentées par $\matr{D}$ et $\matr{R}$. Les paramètres géométriques des matrices inertielles et de Coriolis sont calculés et les paramètres restant concernant notamment les matrices de raideur et viscosité sont estimés en posant :
+avec les matrices de viscosité et raideur articulaires respectivement représentées par $\matr{D}$ et $\matr{R}$. Les paramètres géométriques des matrices inertielles et de Coriolis sont calculés et les paramètres restant concernant notamment des matrices de raideur et viscosité sont estimés en utilisant les trajectoires moyennes :
 %
 \begin{equation}
 	\delta \vect{q}^i(t) = \vect{q}^i_s(t) - \frac{1}{n} \sum_{i}^{n} \vect{q}^i_s(t) \text{,}
 \end{equation}
 %
-avec $ \vect{q}^i_s(t) $ la i\textsuperscript{ème} trajectoire avec l'offset retiré au début du temps de la perturbation.
+avec $ \vect{q}^i_s(t) $ la i\textsuperscript{ème} trajectoire avec l'offset du début du temps de la perturbation retiré.
 
+\cite{gomi_human_1997} trouvent ainsi, en contradiction avec les résultats uniarticulaires de \cite{bennett_time-varying_1992}, que les raideurs articulaires et cartésiennes sont systématiquement supérieures dans des configurations équivalentes en mouvement par rapport aux cas statiques. Les auteurs supposent que ces différences viennent de la tension musculaire nécessaire pour générer le mouvement. Bien que le nombre de participants à cette étude soit faible (seulement trois), pour deux des participants, l'orientation et la forme de la raideur cartésienne représentée sous forme d'élipses étaient peu variables pour des configurations similaires, en cohérence avec les observations de \cite{mussa-ivaldi_neural_1985}. \cite{gomi_task-dependent_1998} ont toutefois observés des variations d'orientation et de formes induites par des changements de cocontractions réalisées grâce à l'aide du retour de capteurs EMG donnant l'activité musculaire. Par ailleurs, en cohérence avec des résultats uni-articulaires \cite{agarwal_compliance_1977}, ils trouvent à la fois une corrélation entre la raideur et le couple musculaire, et entre la viscosité apparente et ce même couple, bien que la dernière corrélation soit plus faible. Les auteurs émettent l'hypothèse que l'impédance du bras permettrait de réduire la complexité de mouvements coordonnés.
 
+Dans des expériences similaires à celle de \cite{mussa-ivaldi_neural_1985}, \cite{tsuji_human_1995, tsuji_human_1997} se sont proposés d'étudier l'impédance en évaluant directement les paramètres apparents cartésiens, c'est à dire aussi bien la raideur $\matr{K}$ et la viscosité $\matr{B}$ que l'inertie $\matr{M}$, pour de faibles mouvements $d\vect{x}$ autour d'une pose d'équilibre avec un modèle en impédance du second ordre souvent nommé KBM (ou KBI) :
 %
+\begin{equation}
+	\matr{M}d\ddot{\vect{x}}(t) + \matr{B}d\dot{\vect{x}}(t) + \matr{K}d\vect{x}(t) = - d\vect{f}(t)
+\end{equation} 
+
+En perturbant des masses et ressorts aux valeurs connues attachés au manipulandum, ils ont pu valider leur méthode d'estimation avant d'evaluer des paramètres humains apparents. Les raideurs estimées sont inférieures à celles décrites par \cite{mussa-ivaldi_neural_1985}, mais proche de celles observées plus tard par \cite{gomi_human_1997, gomi_task-dependent_1998}. Toutefois, les auteurs s'accordent globalement sur les observations de \cite{mussa-ivaldi_neural_1985} concernant les variations spatiales des elipses de raideurs. Ainsi, \cite{tsuji_human_1995} obtiennent, pour 4 participants, des raideurs cartésiennes (le long des axes $\vec{x}$ et $\vec{y}$) d'amplitudes comprises entre \SI{22.31\pm5.86}{} et \SI{448.18\pm40.28}{\newton\per\metre}, des amortissements cartésiens compris entre \SI{2.02\pm0.19}{} et \SI{22.98\pm1.54}{\newton\second\per\metre} et des masses inertielles comprises entre \SI{460\pm72}{} et \SI{2410\pm99}{\gram}.
+
+Comparativement au modèle décrit en \cref{eq_gomi_impedance_model}, le modèle en impédance proposé par \cite{tsuji_human_1995} néglige les effets des forces centrifuges et de Coriolis. Cette hypothèse a été étudiée par \cite{dolan_dynamic_1993}, dans une configuration proche de la \cref{fig_mussa_ivaldi_manipulandum}, en utilisant un robot SCARA pour des tâches de maintien de position. Les auteurs ont comparé le modèle KBM, à d'autres modèles, l'un négligeant les effets de l'amortissement \cref{eq_dolan_mod1}, l'autre prenant en compte les effets de Coriolis et centrifuges $\matr{B}_C$ \cref{eq_dolan_mod2} et le dernier en élevant au carré les termes de la vitesse cartésienne \cref{eq_dolan_mod3} avec $ \vect{x} = \left[ x^2_1 x^2_2 \right]^t $ le vecteur de déplacement :
+
+\begin{subequations} 
+	\begin{align}
+		\vect{f} &= \matr{M}\ddot{\vect{x}} + \matr{K}(\vect{x} -\vect{x}_0) \label{eq_dolan_mod1} \\
+		\vect{f} &= \matr{M}\ddot{\vect{x}} + \matr{B}_C\dot{\vect{x}}\dot{\vect{x}}^t + \matr{K}(\vect{x} -\vect{x}_0) \label{eq_dolan_mod2} \\
+		\vect{f} &= \matr{M}\ddot{\vect{x}} + \matr{B}\left[\dot{x}^2_1 \dot{x}^2_2 \right]^t + \matr{K}(\vect{x} -\vect{x}_0) \label{eq_dolan_mod3}
+	\end{align}	
+\end{subequations}
+
+En comparant les erreurs de reconstruction de ces différents modèles, après identification de leurs paramètres, \cite{dolan_dynamic_1993} concluent que pour de faibles perturbations autour d'un point d'équilibre, la relation liant la force cartésienne aux variables cinématiques cartésiennes est mieux décrite à l'aide du modèle KBM. En effet, sur les onze sujets de l'expérience (seul les données pour deux sont présentées dans l'article), et les cinq postures proposées, le modèle KBM avait presque systématiquement des erreurs significativement plus faibles que celle du modèle sans relation à la vitesse \cref{eq_dolan_mod1}, ce qui indique l'importance des termes relatifs à la vitesse. De plus, le modèle prenant en compte les forces de Corilis \cref{eq_dolan_mod2} avait toujours des erreurs plus importantes, ce qui indique que les effets liés à la vitesse viennent principalement des propriétés dynamiques passives du bras, et non des effets centrifuges et de Coriolis.
+
+\input{fig_KPTee_model}
+
+[Capactité de reproduire en simulation des mouvements humain à l'aide d'une correction en rejet de perturbation sur un modèle en impédance \cite{tee_model_2004}, je n'arrive pas à comprendre la causalité de leur modèle...]
+
+Pour étendre les modèles bidimensionnels présentés jusqu'ici, \cite{erden_end-point_2015} dans une expérience préliminaire puis \cite{erden_hand_2015} avec des professionnels de la soudure, ont souhaité évaluer l'impédance cartésienne tridimensionnelle entre des sujets experts et novices. Afin de réduire la complexité de l'identification, les éléments de couplage des matrices ont été négligés, en s'appuyant sur des publications précédentes \cite{tsuji_analysis_2004, fu_human-arm-and-hand-dynamic_2012} dans lesquelles ces phénomènes avaient aussi été ignorés. Comme détaillés dans le \cref{chap_3}, pour estimer les paramètres correctement, une dynamique suffisemment longue doit pouvoir être observée pour tous les paramètres, toutefois, des actions volontaires peuvent survenir dès [durée et source], pour devenir dominantes au delà de \SI{250}{\milli\second} \cite{erden_hand_2015}, rendant la modélisation en impédance inadéquate. 
+
+Ainsi, en utilisant un robot à 7 degrés de liberté controllé en admittance, permettant aux participants de manipuler une pinceau ou une tête de soudure, les auteurs ont dans un premier temps comparé l'impédance des mains dominantes et nondominantes pour une tâche caligraphique où la trajectoire à suivre est connue \cite{erden_end-point_2015}, pour ensuite comparer l'impédance cartésienne de la main en fonction de l'expertise pour une tâche de soudure \cite{erden_hand_2015}. En étudiant les différences entre experts et novices, mais aussi entre les 3 directions ($\vect{x}\text{,} \vect{y}\text{,} \vect{z}$), les auteurs obtiennent des résultats significatifs pour toutes les catégories avec des ANOVAs présentées en \cref{tab_erden_anova1, tab_erden_anova2}.
+
+\begin{center}
+	\begin{table}
+		%\caption*{ANOVAs} \label{tab_erden_anova}
+		\parbox{.40\linewidth}{
+			\caption{Expertise} \label{tab_erden_anova1}
+			\centering
+			\begin{tabular}{| l | c  c  c | }
+				\hline
+				 & $M_e$ & $B_e$ & $K_e$ \\ \hline
+				$M_n$ & ns & & \\ \hline
+				$B_n$ & & s ($x$) & \\ \hline
+				$K_n$ & & & s \\ 
+				\hline
+			\end{tabular} % expertise factor
+		}
+		\hfill	
+		\parbox{.50\linewidth}{
+			\caption{Direction} \label{tab_erden_anova2}
+			\centering
+			\begin{tabular}{| l | c  c  c | }
+				\hline
+				& $M$ & $B$ & $K$ \\ \hline
+				$x$ & s ($y$, $z$) & s ($y$, $z$) & s ($y$)\\ \hline
+				$y$ & s ($x$) & s ($x$) & s ($x$) \\ \hline
+				$z$ & s ($x$) & s ($x$) & ns \\ 
+				\hline
+			\end{tabular} % direction factor
+		}
+	\caption*{Les différences significatives sont indiquées par un "s", avec un seuil de \SI{1}{\percent}, les axes pour lesquels les différences sont observées sont indiqués entre parenthèses. Pour la comparaison des direction, les résultats obtenus entre experts et novices sont les mêmes \cite{erden_hand_2015}.}
+	\end{table}
+\end{center}
+
+La tâche de soudure à lieu le long de l'axe y, ...
+
+[Expérience de Erden et Billard pour les soudeurs professionnels \cite{erden_end-point_2015, erden_hand_2015}, étude de l'impédance par rapport à l'expertise aussi regardé par \cite{tsuji_bio-mimetic_2008}]
+
+[Limites de la modélisation en impédance d'ordre 2 popescu et piovesan \cite{popescu_elbow_2003, kistemaker_vivo_2011, piovesan_measuring_2012}]
+
+[petit encadré sur l'apprentissage optimal de paramètres en impédance et sur la collaboration en impédance ? \cite{burdet_central_2001, ganesh_two_2014}]
+
 %\paragraph{Autre modélisation}
 %
 %Utilisation d'un modèle non-linéaire de Harmerstein pour différencier le comportement visco-élastique linéaire, du comportement non linéaire des réflexes : \cite{kearney_identification_1997}.

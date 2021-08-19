@@ -15,13 +15,13 @@
 \usepackage{pgfplots}
 \usepackage{subcaption}
 %\DeclareCaptionSubType[roman]{figure}
-\usepackage{siunitx} % for SI units
+\usepackage[separate-uncertainty = true,multi-part-units=single]{siunitx} % for SI units
 \usepackage{amsmath} % for splited equation notably
 \usepackage{amssymb} % for delta equality notably
 %\usepackage[square]{natbib}
 \usepackage{cleveref} % should be loaded last
 \usepackage{xifthen} %for conditional test
-\usepackage[title]{appendix} % for appendices
+\usepackage[toc,page]{appendix} % for appendices [title]
 %
 \newcommand{\vect}[1]{
 	\boldsymbol{\MakeLowercase{#1}}
