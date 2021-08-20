@@ -67,7 +67,7 @@ C'est ainsi que le réflexe ostéotendineux permet d'assurer une continuité dan
 
 La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle.
 
-[ajouter des informations concernant les délais ? \cite{lacquaniti_transient_1991, allum_mechanical_1982, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, et concernant l'activation en fonction des contractions \cite{toft_mechanical_1989}].
+\textcolor{red}{[ajouter des informations concernant les délais ? \cite{lacquaniti_transient_1991, allum_mechanical_1982, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, et concernant l'activation en fonction des contractions \cite{toft_mechanical_1989}].}
 
 \input{fig_stretch_reflex_ctrl_loop}
 
@@ -160,13 +160,11 @@ Comme l'expliquent \cite{finley_contributions_2012}, dans le cadre d'une expéri
 	\label{fig_experience_finley_2012}
 \end{figure}
 
-Les résultats et interprétations présentés pour un membre ou une articulation ne peuvent toutefois pas être systématiquement étendus à l'ensemble du corps humain. Ainsi, l'évolution de la contribution du réflexe d'extension présenté ci-dessus par \cite{finley_contributions_2012}, n'est pas en adéquation avec les résultats observés par \cite{perreault_interactions_2008, krutky_interactions_2010} pour le bras. En effet, \cite{krutky_interactions_2010} ont observé une contribution du réflexe plus importante lors des interactions avec des environnements instables. [creuser sur les explications des différences ? methodologie ?..]
+Les résultats et interprétations présentés pour un membre ou une articulation ne peuvent toutefois pas être systématiquement étendus à l'ensemble du corps humain. Ainsi, l'évolution de la contribution du réflexe d'extension présenté ci-dessus par \cite{finley_contributions_2012}, n'est pas en adéquation avec les résultats observés par \cite{perreault_interactions_2008, krutky_interactions_2010} pour le bras. En effet, \cite{krutky_interactions_2010} ont observé une contribution du réflexe plus importante lors des interactions avec des environnements instables. \textcolor{red}{[creuser sur les explications des différences ? methodologie ?..]}
 
 Quelqu'en soient les conclusions, il est établi que les propriétés visco-élastiques des membres peuvent être modulées volontairement et insconsciemment par différents phénomènes physiologiques dont ont été cités les contractions/cocontractions et les réflexes. On pourra y ajouter la modification des positions articulaires, notamment lors de tâche impliquant plusieurs articulations pour modifier l'inertie et la projection des propriétés des membres \cite{mussa-ivaldi_neural_1985, hogan_mechanics_1985, trumbower_use_2009}, et aussi la vitesse des membres \cite{kuxhaus_dependence_2014}. Il est alors intéressant d'essayer d'évaluer l'origine des différentes contributions dans la modulation des propriétés \cite{bennett_catching_1994, kearney_identification_1997, ludvig_identification_2011, kuxhaus_dependence_2014, guarin_unbiased_2018} pour obtenir un modèle en impédance le plus fidèle possible, mieux comprendre les contrôles générés par le SNC et donc mieux diagnostiquer des pathologies neuro-musculaires. 
 
 \subsubsection{Modélisation de l'impédance mécanique}
-
-[parler de la modélisation non linéaire ??]
 
 \paragraph{Modélisation uni-articulaire linéaire}
 
@@ -204,7 +202,7 @@ Pour compléter les liens qui semblent exister entre la raideur articulaire et l
 
 \input{fig_stiffnessVSfrequency}
 
-Dans le cadre d'une tâche de pointage en extension dans le plan horizontal, et donc pour des mouvements discrets, par opposition aux mouvements rythmiques précédemment présentés [encart sur les implications entre mouvements rythmiques et discrets ? \cite{hogan_rhythmic_2007}], \cite{popescu_elbow_2003} proposent une augmentation du modèle en impédance pour tenir compte d'un retard du centre de masse sur la rotation angulaire \cref{eq_impedance_popescu_2003}, en choisissant le retard $t_d$ de \SI{5}{\milli\second}. 
+Dans le cadre d'une tâche de pointage en extension dans le plan horizontal, et donc pour des mouvements discrets, par opposition aux mouvements rythmiques précédemment présentés \textcolor{red}{[encart sur les implications entre mouvements rythmiques et discrets ? \cite{hogan_rhythmic_2007}]}, \cite{popescu_elbow_2003} proposent une augmentation du modèle en impédance pour tenir compte d'un retard du centre de masse sur la rotation angulaire \cref{eq_impedance_popescu_2003}, en choisissant le retard $t_d$ de \SI{5}{\milli\second}. 
 
 \begin{equation} \label{eq_impedance_popescu_2003}
 	\begin{split}
@@ -216,15 +214,13 @@ Dans le cadre d'une tâche de pointage en extension dans le plan horizontal, et 
 
 Les résultats des estimations d'impédance témoignent de faibles raideurs lors des mouvements comme observés par les auteurs précédent, toutefois, en comparant la raideur intrinsèques à celles de postures isométriques relâchées équivalentes, ils ne constatent pas de différences significatives, et concluent qu'en l'absence de changement de conditions, les raideurs intrinsèques entre tâches statiques et en mouvements devraient être identiques. Ils supposent qu'à cause de leur coût biologique, les cocontractions ne sont pas privilégiées lors de mouvements. Leurs conclusions pointent vers une régulation de la raideur principalement causée par des réflexes rapides puis long (au delà de \SI{100}{\milli\second}), et une rejection des perturbations principalement par des actions volontaires. Les différences observées par rapport à \cite{bennett_time-varying_1992} semblent donc être causées par une estimation de la raideur sur de très court délais ($\approx$\SI{50}{\milli\second}), ce qui permet de négliger la raideur entraînée par le réflexe d'extension.
 
-Dans l'objectif de différencier la contribution des réflexes $T_r$, qui agissent avec un délais $\tau_d$, des couples provoqués par les propriétés intrinsèques des muscles $T_i$ pour des mouvements de la cheville $\theta$, \cite{kearney_differential_1994, kearney_identification_1997} proposent un modèle en cascade avec une non linéairité statique $n_{RS}$ due à l'action des réflexes, qui est modélisée par un système de Hammerstein. Les propriétés viscoélastiques intrinsèques sont représentées classiquement par un modèle linéaire du second ordre. [Cette méthode semble toutefois en contradiction avec l'idée selon laquelle le réflexe d'extension permettrait notamment de maintenir le comportement quasi-linéaire des muscles.]
+Dans l'objectif de différencier la contribution des réflexes $T_r$, qui agissent avec un délais $\tau_d$, des couples provoqués par les propriétés intrinsèques des muscles $T_i$ pour des mouvements de la cheville $\theta$, \cite{kearney_differential_1994, kearney_identification_1997} proposent un modèle en cascade avec une non linéairité statique $n_{RS}$ due à l'action des réflexes, qui est modélisée par un système de Hammerstein. Les propriétés viscoélastiques intrinsèques sont représentées classiquement par un modèle linéaire du second ordre. \textcolor{red}{[Cette méthode semble toutefois en contradiction avec l'idée selon laquelle le réflexe d'extension permettrait notamment de maintenir le comportement quasi-linéaire des muscles.]}
 
-[faire le modèle de kerney ? je ne comprends pas où passe la non linéarité (statique) dans leurs équations, est-ce G ???]
+\textcolor{red}{[je ne comprends pas où passe la non linéarité (statique) dans leurs équations, est-ce G ???]}
 
 \input{fig_kearney_hammerstein_model}
 
 On peut alors légitimement se demander comment ces modèles uni-articulaires se transposent sur des modèles humains plus complets intégrant plusieurs articulations. En effet, les mouvements purement uni-articulaire sont plutôt rares dans des contextes ecologiques \cite{hogan_mechanics_1985}, pour bien étudier la complexité de la modulation des propriétés viscoélastiques lors d'une tâche physiologiquement réaliste, il convient donc de prendre en compte des données pluri-articulaires. C'est de cette manière que l'on peut étudier la coordination et génération de mouvements stables dans des conditions réalistes.
-
-[texte de latash sur les limites de la notion de raideur ? \cite{latash_joint_1993} -> je n'ai pas très bien compris la problématique de l'estimation de la raideur en dehors de son point d'équilibre (quasi stiffness)..]
 
 \paragraph{Modélisation pluri-articulaires} 
 
@@ -248,7 +244,7 @@ F_y' &= \left( \frac{T_1'}{l_1'}\sin(\theta_1' + \theta_2') - \frac{T_2'}{l_2'}\
 \end{cases}
 \end{equation}
 
-L'impédance est donc évaluée sur deux degrés de liberté cartésiens, plutôt que d'être étudiée sur deux degrés de liberté articulaires. En se concentrant sur les effets liant la force au déplacement, et donc sur le comportement en raideur du CNS, les auteurs peuvent exprimer le modèle en impédance linéarisé pour de faibles déplacements $dx$ et $dy$. Comme défini par \cite{hogan_mechanics_1985}, pour pouvoir affirmer qu'un comportement élastique - "spring-like" - soit observé, il faut qu'il y ait un stockage d'énergie élastique. Ce qui est bien observé pour des mouvements planaires du membre supérieur \cite{mussa-ivaldi_neural_1985}. Comme prédit par \cite{hogan_mechanics_1985}, si les muscles ont des comportements élastiques, alors leurs effets combinés devraient aussi exprimer un comportement élastique aux extrémités (en supposant les segments squelettiques rigides, avec des points d'insertion ponctuels des muscles). Les effets non élastiques de la relation force-déplacement \cref{mussa_ivaldi_force_displacement} peuvent alors être induit par les arcs de réflexe. \cite{hogan_mechanics_1985}.
+L'impédance est donc évaluée sur deux degrés de liberté cartésiens, plutôt que d'être étudiée sur deux degrés de liberté articulaires. En se concentrant sur les effets liant la force au déplacement, et donc sur le comportement en raideur du SNC, les auteurs peuvent exprimer le modèle en impédance linéarisé pour de faibles déplacements $dx$ et $dy$. Comme défini par \cite{hogan_mechanics_1985}, pour pouvoir affirmer qu'un comportement élastique - "spring-like" - soit observé, il faut qu'il y ait un stockage d'énergie élastique. Ce qui est bien observé pour des mouvements planaires du membre supérieur \cite{mussa-ivaldi_neural_1985}. Comme prédit par \cite{hogan_mechanics_1985}, si les muscles ont des comportements élastiques, alors leurs effets combinés devraient aussi exprimer un comportement élastique aux extrémités (en supposant les segments squelettiques rigides, avec des points d'insertion ponctuels des muscles). Les effets non élastiques de la relation force-déplacement \cref{mussa_ivaldi_force_displacement} peuvent alors être induit par les arcs de réflexe. \cite{hogan_mechanics_1985}.
 
 \begin{equation} \label{mussa_ivaldi_force_displacement}
 	\begin{bmatrix}
@@ -267,9 +263,9 @@ L'impédance est donc évaluée sur deux degrés de liberté cartésiens, plutô
 
 Il est intéressant de noter que la matrice de raideur peut être séparée en deux composantes, l'une symétrique qui représente les effets élastiques et l'autre antisymétrique pour les phénomènes qui ne peuvent pas être dérivés d'une fonction potentielle et ne sont donc pas élastiques \cite{hogan_mechanics_1985}. Il faut par contre remarquer que l'origine des comportements élastiques ne peut pas être différenciée avec cette représentation, \cite{hogan_mechanics_1985} montre que si les effets non élastique ne peuvent être dus qu'aux propriétés des arcs réflexes, ces derniers peuvent aussi avoir des comportements élastiques.
 
-[ajouter un encadré sur la représentation éliptique de l'impédance \cite{mussa-ivaldi_neural_1985, dolan_dynamic_1993}]
+\textcolor{red}{[ajouter un encadré sur la représentation éliptique de l'impédance \cite{mussa-ivaldi_neural_1985, dolan_dynamic_1993}]}
 
-En réalisant des estimations d'impédance sur quatre participants, à différentes postures, avec différents types de perturbations - \textit{courtes et non prévisibles (\SI{120}{\milli\second}), statique et prévisible (charge)} -, \cite{mussa-ivaldi_neural_1985} indiquent que la modulation de la raideur cartésienne se fait principalement grâce à la configuration géométrique du bras. En effet, en simulant un bras à 2 DDL avec des raideurs articulaires constantes, ils trouvent une modulation de la raideur cartésienne proche de leur estimation. La géométrie semble dicter l'orientation et la forme de la raideur cartésienne qui restent relativement invariants lors des différents essais, toutefois, l'amplitude de la raideur peut varier jusqu'à doubler, la modulation du comportement en raideur par le CNS ne peut donc pas être négligé. Ce qui a aussi pu être observé par \cite{shadmehr_postural_1993} (même équipe de recherche) sous la forme de champ de force postural.
+En réalisant des estimations d'impédance sur quatre participants, à différentes postures, avec différents types de perturbations - \textit{courtes et non prévisibles (\SI{120}{\milli\second}), statique et prévisible (charge)} -, \cite{mussa-ivaldi_neural_1985} indiquent que la modulation de la raideur cartésienne se fait principalement grâce à la configuration géométrique du bras. En effet, en simulant un bras à 2 DDL avec des raideurs articulaires constantes, ils trouvent une modulation de la raideur cartésienne proche de leur estimation. La géométrie semble dicter l'orientation et la forme de la raideur cartésienne qui restent relativement invariants lors des différents essais, toutefois, l'amplitude de la raideur peut varier jusqu'à doubler, la modulation du comportement en raideur par le SNC ne peut donc pas être négligé. Ce qui a aussi pu être observé par \cite{shadmehr_postural_1993} (même équipe de recherche) sous la forme de champ de force postural.
 
 Ces résultats ne sont toutefois pas trouvés à nouveau par \cite{lacquaniti_time-varying_1993} dans le plan vertical, pour une tâche de réception de balle en chute libre. Ces derniers auteurs ont mesuré les angles du poignet $ \theta_w $ et du coude $ \theta_e $ à l'aide d'un goniomètre fermement attaché du bras à la main, pour déterminer la raideur et l'amortissement de ces deux articulations, sur sept participants. En utilisant le jacobien $ \jacobian{}{}{} $, \cref{jacobian_lacquaniti}, ils ont facilement pu passer dans le plan cartésien \cite[Chapter~5]{khalil_modeling_2002} après quelques mesures géométriques concernant l'avant bras $l_{fa}$ et le troisième métacarpien $l_{m}$ (os reliant le poignet au majeur). Les relations entre les paramètres articulaires et cartésiens sont explicités dans \cite{hogan_mechanics_1985, tsuji_human_1997}. Voir \cref{app_link_joint_endpoint} pour les relations entre les paramètres articulaires et cartésiens.
 
@@ -307,7 +303,7 @@ où l'on retrouve les matrices d'inertie $\matr{A}$ et des effets centrifuges et
 	\matr{\Gamma}(\ddot{\vect{q}}, \dot{\vect{q}}, \vect{q}) = \vect{\tau}_{in}(\dot{\vect{q}}, \vect{q}, \vect{u}) + \vect{\tau}_{ext} \text{ ,}
 \end{equation}
 %
-avec, $ \vect{\tau}_{ext} $ les couples extérieurs appliqués sur le bras, et $ \vect{\tau}_{in} $ les couples générés par le CNS, avec $ \vect{u} $, les commandes neurales. Ces derniers couples sont générés par les muscles et réflexes, et peuvent être exprimés en fonction des relations liant la tension des muscles et leur longeur et vitesse pour de petits déplacements articulaires $\delta\vect{q}$ avec l'équation variationnelle suivante :
+avec, $ \vect{\tau}_{ext} $ les couples extérieurs appliqués sur le bras, et $ \vect{\tau}_{in} $ les couples générés par le SNC, avec $ \vect{u} $, les commandes neurales. Ces derniers couples sont générés par les muscles et réflexes, et peuvent être exprimés en fonction des relations liant la tension des muscles et leur longeur et vitesse pour de petits déplacements articulaires $\delta\vect{q}$ avec l'équation variationnelle suivante :
 
 \begin{equation} \label{eq_gomi_impedance_model}
 	\matr{A}(\vect{q}) \delta\ddot{\vect{q}} + \frac{\partial \matr{C}(\dot{\vect{q}},\vect{q})}{\partial \dot{\vect{q}}} \delta\dot{\vect{q}} + \left( \frac{\partial \matr{A}(\vect{q})\ddot{\vect{q}}}{\partial \vect{q}} + \frac{\partial \matr{C}(\dot{\vect{q}},\vect{q})}{\partial \vect{q}} \right) \delta\vect{q} = %
@@ -333,7 +329,7 @@ Dans des expériences similaires à celle de \cite{mussa-ivaldi_neural_1985}, \c
 En perturbant des masses et ressorts aux valeurs connues attachés au manipulandum, ils ont pu valider leur méthode d'estimation avant d'evaluer des paramètres humains apparents. Les raideurs estimées sont inférieures à celles décrites par \cite{mussa-ivaldi_neural_1985}, mais proche de celles observées plus tard par \cite{gomi_human_1997, gomi_task-dependent_1998}. Toutefois, les auteurs s'accordent globalement sur les observations de \cite{mussa-ivaldi_neural_1985} concernant les variations spatiales des elipses de raideurs. Ainsi, \cite{tsuji_human_1995} obtiennent, pour 4 participants, des raideurs cartésiennes (le long des axes $\vec{x}$ et $\vec{y}$) d'amplitudes comprises entre \SI{22.31\pm5.86}{} et \SI{448.18\pm40.28}{\newton\per\metre}, des amortissements cartésiens compris entre \SI{2.02\pm0.19}{} et \SI{22.98\pm1.54}{\newton\second\per\metre} et des masses inertielles comprises entre \SI{460\pm72}{} et \SI{2410\pm99}{\gram}.
 
 Comparativement au modèle décrit en \cref{eq_gomi_impedance_model}, le modèle en impédance proposé par \cite{tsuji_human_1995} néglige les effets des forces centrifuges et de Coriolis. Cette hypothèse a été étudiée par \cite{dolan_dynamic_1993}, dans une configuration proche de la \cref{fig_mussa_ivaldi_manipulandum}, en utilisant un robot SCARA pour des tâches de maintien de position. Les auteurs ont comparé le modèle KBM, à d'autres modèles, l'un négligeant les effets de l'amortissement \cref{eq_dolan_mod1}, l'autre prenant en compte les effets de Coriolis et centrifuges $\matr{B}_C$ \cref{eq_dolan_mod2} et le dernier en élevant au carré les termes de la vitesse cartésienne \cref{eq_dolan_mod3} avec $ \vect{x} = \left[ x^2_1 x^2_2 \right]^t $ le vecteur de déplacement :
-
+%
 \begin{subequations} 
 	\begin{align}
 		\vect{f} &= \matr{M}\ddot{\vect{x}} + \matr{K}(\vect{x} -\vect{x}_0) \label{eq_dolan_mod1} \\
@@ -341,56 +337,80 @@ Comparativement au modèle décrit en \cref{eq_gomi_impedance_model}, le modèle
 		\vect{f} &= \matr{M}\ddot{\vect{x}} + \matr{B}\left[\dot{x}^2_1 \dot{x}^2_2 \right]^t + \matr{K}(\vect{x} -\vect{x}_0) \label{eq_dolan_mod3}
 	\end{align}	
 \end{subequations}
-
+%
 En comparant les erreurs de reconstruction de ces différents modèles, après identification de leurs paramètres, \cite{dolan_dynamic_1993} concluent que pour de faibles perturbations autour d'un point d'équilibre, la relation liant la force cartésienne aux variables cinématiques cartésiennes est mieux décrite à l'aide du modèle KBM. En effet, sur les onze sujets de l'expérience (seul les données pour deux sont présentées dans l'article), et les cinq postures proposées, le modèle KBM avait presque systématiquement des erreurs significativement plus faibles que celle du modèle sans relation à la vitesse \cref{eq_dolan_mod1}, ce qui indique l'importance des termes relatifs à la vitesse. De plus, le modèle prenant en compte les forces de Corilis \cref{eq_dolan_mod2} avait toujours des erreurs plus importantes, ce qui indique que les effets liés à la vitesse viennent principalement des propriétés dynamiques passives du bras, et non des effets centrifuges et de Coriolis.
 
 \input{fig_KPTee_model}
 
-[Capactité de reproduire en simulation des mouvements humain à l'aide d'une correction en rejet de perturbation sur un modèle en impédance \cite{tee_model_2004}, je n'arrive pas à comprendre la causalité de leur modèle...]
+\textcolor{red}{[Capactité de reproduire en simulation des mouvements humain à l'aide d'une correction en rejet de perturbation sur un modèle en impédance \cite{tee_model_2004}, je n'arrive pas à comprendre la causalité de leur modèle...]}
 
-Pour étendre les modèles bidimensionnels présentés jusqu'ici, \cite{erden_end-point_2015} dans une expérience préliminaire puis \cite{erden_hand_2015} avec des professionnels de la soudure, ont souhaité évaluer l'impédance cartésienne tridimensionnelle entre des sujets experts et novices. Afin de réduire la complexité de l'identification, les éléments de couplage des matrices ont été négligés, en s'appuyant sur des publications précédentes \cite{tsuji_analysis_2004, fu_human-arm-and-hand-dynamic_2012} dans lesquelles ces phénomènes avaient aussi été ignorés. Comme détaillés dans le \cref{chap_3}, pour estimer les paramètres correctement, une dynamique suffisemment longue doit pouvoir être observée pour tous les paramètres, toutefois, des actions volontaires peuvent survenir dès [durée et source], pour devenir dominantes au delà de \SI{250}{\milli\second} \cite{erden_hand_2015}, rendant la modélisation en impédance inadéquate. 
+Pour étendre les modèles bi-dimensionnels présentés jusqu'ici, \cite{erden_end-point_2015} dans une expérience préliminaire puis \cite{erden_hand_2015} avec des professionnels de la soudure, ont souhaité évaluer l'impédance cartésienne tridimensionnelle entre des sujets experts et novices. Afin de réduire la complexité de l'identification, les éléments de couplage des matrices du modèle KBM ont été négligés, en s'appuyant sur des publications précédentes \cite{tsuji_analysis_2004, fu_human-arm-and-hand-dynamic_2012} dans lesquelles ces phénomènes avaient aussi été ignorés. Comme détaillés dans le \cref{chap_3}, pour estimer les paramètres correctement, une dynamique suffisemment longue doit pouvoir être observée pour tous les paramètres, toutefois, des actions volontaires peuvent survenir dès [durée et source], pour devenir dominantes au delà de \SI{250}{\milli\second} \cite{erden_hand_2015}, rendant la modélisation en impédance inadéquate. 
 
-Ainsi, en utilisant un robot à 7 degrés de liberté controllé en admittance, permettant aux participants de manipuler une pinceau ou une tête de soudure, les auteurs ont dans un premier temps comparé l'impédance des mains dominantes et nondominantes pour une tâche caligraphique où la trajectoire à suivre est connue \cite{erden_end-point_2015}, pour ensuite comparer l'impédance cartésienne de la main en fonction de l'expertise pour une tâche de soudure \cite{erden_hand_2015}. En étudiant les différences entre experts et novices, mais aussi entre les 3 directions ($\vect{x}\text{,} \vect{y}\text{,} \vect{z}$), les auteurs obtiennent des résultats significatifs pour toutes les catégories avec des ANOVAs présentées en \cref{tab_erden_anova1, tab_erden_anova2}.
+Ainsi, en utilisant un robot à 7 degrés de liberté controllé en admittance, permettant aux participants de manipuler un pinceau ou une tête de soudure, les auteurs ont dans un premier temps comparé l'impédance des mains dominantes et nondominantes pour une tâche calligraphique où la trajectoire à suivre est connue \cite{erden_end-point_2015}, pour ensuite comparer l'impédance cartésienne de la main en fonction de l'expertise pour une tâche de soudure \cite{erden_hand_2015}. En étudiant les différences entre experts et novices, mais aussi entre les 3 directions ($\vect{x}\text{,} \vect{y}\text{,} \vect{z}$) pour chacun des paramètres, les auteurs obtiennent les résultats significatifs présentées en \cref{tab_erden_anova1, tab_erden_anova2} pour des analyses de variance (ANOVA) à deux facteurs (expertise, direction), sans qu'ils ne trouvent d'interactions significatives entre ces facteurs.
 
-\begin{center}
-	\begin{table}
-		%\caption*{ANOVAs} \label{tab_erden_anova}
-		\parbox{.40\linewidth}{
-			\caption{Expertise} \label{tab_erden_anova1}
-			\centering
-			\begin{tabular}{| l | c  c  c | }
-				\hline
-				 & $M_e$ & $B_e$ & $K_e$ \\ \hline
-				$M_n$ & ns & & \\ \hline
-				$B_n$ & & s ($x$) & \\ \hline
-				$K_n$ & & & s \\ 
-				\hline
-			\end{tabular} % expertise factor
-		}
-		\hfill	
-		\parbox{.50\linewidth}{
-			\caption{Direction} \label{tab_erden_anova2}
-			\centering
-			\begin{tabular}{| l | c  c  c | }
-				\hline
-				& $M$ & $B$ & $K$ \\ \hline
-				$x$ & s ($y$, $z$) & s ($y$, $z$) & s ($y$)\\ \hline
-				$y$ & s ($x$) & s ($x$) & s ($x$) \\ \hline
-				$z$ & s ($x$) & s ($x$) & ns \\ 
-				\hline
-			\end{tabular} % direction factor
-		}
-	\caption*{Les différences significatives sont indiquées par un "s", avec un seuil de \SI{1}{\percent}, les axes pour lesquels les différences sont observées sont indiqués entre parenthèses. Pour la comparaison des direction, les résultats obtenus entre experts et novices sont les mêmes \cite{erden_hand_2015}.}
-	\end{table}
-\end{center}
+\begin{table}
+	%\caption*{ANOVAs} \label{tab_erden_anova}
+	\parbox{.40\linewidth}{
+		\caption{Expertise} \label{tab_erden_anova1}
+		\centering
+		\begin{tabular}{| l | c  c  c | } 
+			\hline
+		 & $M_e$ & $B_e$ & $K_e$ \\ \hline
+			$M_n$ & ns & & \\ \hline
+			$B_n$ & & s ($\vec{x}$) & \\ \hline
+			$K_n$ & & & s \\ 
+			\hline
+		\end{tabular} % expertise factor
+	}
+	\hfill	
+	\parbox{.50\linewidth}{
+		\caption{Direction} \label{tab_erden_anova2}
+		\centering
+		\begin{tabular}{| l | c  c  c | } 
+			\hline
+			& $M$ & $B$ & $K$ \\ \hline
+			$\vec{x}$ & s ($\vec{y}$, $\vec{z}$) & s ($y$, $z$) & s ($z$)\\ \hline
+			$\vec{y}$ & s ($\vec{x}$) & s ($\vec{x}$) & ns  \\ \hline
+			$\vec{z}$ & s ($\vec{x}$) & s ($\vec{x}$) & s ($\vec{x}$)\\ 
+			\hline
+		\end{tabular} % direction factor
+	}
+\caption*{\footnotesize Les différences significatives sont indiquées par un "s", avec un seuil de \SI{1}{\percent}, les axes pour lesquels les différences sont observées sont indiqués entre parenthèses. Pour la comparaison des direction, les résultats obtenus entre experts et novices sont les mêmes \cite{erden_hand_2015}.}
+\end{table}
 
-La tâche de soudure à lieu le long de l'axe y, ...
+La tâche de soudure étudiée par les auteurs est linéaire, et l'axe $\vec{y}$ était placé le long de la tâche. Il a donc pu être observé qu'aussi bien les novices (14 sujets) que les professionnels (10 sujets) orientaient leur bras pour projetter la masse apparente principalement sur l'axe $x$ perpendiculaire à la tâche dans le plan de travail. L'amortissement des professionnels estimé est significativement supérieur sur l'axe $\vec{x}$, alors qu'aucune autre différence significative n'est observée sur les autres axes. Finalement, lorsque l'ensemble des directions est considéré pour la raideur, l'ANOVA révèle l'existance de différences significatives entre novices et professionnels, toutefois, lorsque les axes ont été étudiés séparemment, ces différences ne s'observaient plus.
 
-[Expérience de Erden et Billard pour les soudeurs professionnels \cite{erden_end-point_2015, erden_hand_2015}, étude de l'impédance par rapport à l'expertise aussi regardé par \cite{tsuji_bio-mimetic_2008}]
+Dans une tâche uni-dimensionnelle de réception de balle, \cite{tsuji_bio-mimetic_2008} avait déjà observé des différences d'impédance cartésienne en fonction des performances de sujets, toujours avec le modèle KBM. Bien que cette dernière étude repose sur un faible nombre de participants (4), les sujets performants avaient notamment en préparation de la tâche, des gains des paramètres en impédance cartésienne plus importants que les sujets moins qualifiés. L'impédance a été évaluée le long de l'axe de la réception de la balle, la tâche étant contrainte par les équipements sur les autres axes. Il est important de noter que les valeurs de raideur obtenues par \cite{tsuji_bio-mimetic_2008} diffèrent de celles décrites par \cite{erden_hand_2015}. La \cref{labellist} résume l'amplitude des estimations réalisées en fonction des auteurs et tâches.
+
+[petit encadré sur l'apprentissage optimal de paramètres en impédance et sur la collaboration en impédance ? \cite{burdet_central_2001, ganesh_two_2014} transition logique avec les paragraphes précédents]
+
+\begin{sidewaystable}
+%\begin{table}
+	\centering
+	\caption{Estimations dans la littérature}
+	\begin{tabular}{| p{50mm} || c  c | c  c | c  c |} 
+		\hline
+		Etudes & $K_{max}$ & $K_{min}$ & $B_{max}$ & $B_{min}$ & $M_{max}$ & $M_{min}$ \\ \hline
+		\cite{tsuji_bio-mimetic_2008}: prépation d'impact & \SI{189\pm71}{}  & \SI{57\pm35}{} & \SI{28.1\pm2.4}{} & \SI{17.6\pm3.0}{} & \SI{1.90\pm0.16}{} & \SI{0.83\pm0.17}{} \\
+		\cite{tsuji_bio-mimetic_2008}: maintien posture & \SI{189\pm71}{}  & \SI{57\pm35}{} & \SI{28.1\pm2.4}{} & \SI{17.6\pm3.0}{} & \SI{1.90\pm0.16}{} & \SI{0.83\pm0.17}{} \\ \hline
+	\end{tabular}
+%\end{table}
+\end{sidewaystable}
+
+\paragraph{Limites du modèle viscoélastique}
+
+Ainsi, la littérature scientifique offre pléthore d'exemples d'estimations d'impédance mécanique dans des contextes variés plus ou moins réalistes, pour modéliser des comportements humains. Les objectifs sont tout aussi divers, on pourra citer 
+\begin{enumerate*}
+	\item la compréhension du SNC, avec le développement de théories sur la génération de mouvements coordonnés, 
+	\item la compréhension du CMS, pour une meilleur modélisation du corps humain,
+	\item la reproduction de comportements humains, dont on peut facilement imaginer l'intérêt pour les roboticiens,
+	\item l'anticipation de comportements humains, très utile lors d'intéractions entre humains et machines, ...
+\end{enumerate*}	
+La focalisation a été faite principalement sur le membre supérieur, ici. Le modèle KBM, malgré sa simplicité offre la possibilité de décrire des interactions entre un opérateur humain et son environnement pour des faibles déplacements proches d'une trajectoire d'équilibre, parfois appelée trajectoire virtuelle \cite{tsuji_human_1997}. Ce modèle, qui est une linéarison, n'est donc valide que pour décrire de faibles déviations, autrement dit pour décrire un comportement de rejet de perturbations de faibles amplitudes. En effet, comme suggéré par \cite{popescu_elbow_2003} en discussion de leur article, si les propriétés visco-élastiques du coude améliorent la robustesse vis à vis de perturbations, c'est principalement le réflexe ostéotendieux, et des comportements automatiques ou non à plus longue latence qui permettent de maintenir une trajectoire, ces derniers étant très difficilement modélisable grâce à l'impédance.
+
+\textcolor{red}{[texte de latash sur les limites de la notion de raideur ? \cite{latash_joint_1993} -> je n'ai pas très bien compris la problématique de l'estimation de la raideur en dehors de son point d'équilibre (quasi stiffness).]}
 
 [Limites de la modélisation en impédance d'ordre 2 popescu et piovesan \cite{popescu_elbow_2003, kistemaker_vivo_2011, piovesan_measuring_2012}]
-
-[petit encadré sur l'apprentissage optimal de paramètres en impédance et sur la collaboration en impédance ? \cite{burdet_central_2001, ganesh_two_2014}]
 
 %\paragraph{Autre modélisation}
 %
