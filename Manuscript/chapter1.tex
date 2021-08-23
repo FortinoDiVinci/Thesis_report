@@ -67,7 +67,7 @@ C'est ainsi que le réflexe ostéotendineux permet d'assurer une continuité dan
 
 La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle.
 
-\textcolor{red}{[ajouter des informations concernant les délais ? \cite{lacquaniti_transient_1991, allum_mechanical_1982, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, et concernant l'activation en fonction des contractions \cite{toft_mechanical_1989}].}
+\textcolor{red}{[ajouter des informations concernant les délais ? \cite{allum_mechanical_1982, sinkjaer_muscle_1988, lacquaniti_transient_1991, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, et concernant l'activation en fonction des contractions \cite{toft_mechanical_1989}].}
 
 \input{fig_stretch_reflex_ctrl_loop}
 
@@ -174,7 +174,7 @@ Dès les années 80, \cite{hogan_adaptive_1984} propose un modèle linéaire sim
 	I \ddot{\theta} = T(u_b - u_t) - K(u_b + u_t)\theta - mgl \sin(\theta + \pi/2) - B \dot{\theta}
 \end{equation}
 
-On retrouve l'inertie $I$, l'amortissement $B$ (modélisation linéaire de la dépendance à la vitesse) et la raideur $K$ du bras, les commandes neurales $u$ du biceps et triceps sont notées respectivement avec les indices $b$ et $t$ et sont comprises entre 0 et 1, $T$ correspond au couple isométrique maximum que l'on peut voir émerger lorsque le bras est dans une position intermédiaire, $\theta \approx$ \ang{0} \cite{hogan_adaptive_1984, linnamo_maximal_2006}. Enfin, on retrouve le couple généré par l'effet de la gravité sur le bras, avec $m$ la masse du bras, $g$ l'accélération statique, et $l$ la longueur entre le centre de rotation et le centre de masse du bras. [réprésentation du bras reproduite avec une rotation de pi/2, vérifier que la formule de Hogan modifiée est bien toujours correcte.] 
+On retrouve l'inertie $I$, l'amortissement $B$ (modélisation linéaire de la dépendance à la vitesse) et la raideur $K$ du bras, les commandes neurales $u$ du biceps et triceps sont notées respectivement avec les indices $b$ et $t$ et sont comprises entre 0 et 1, $T$ correspond au couple isométrique maximum que l'on peut voir émerger lorsque le bras est dans une position intermédiaire, $\theta \approx$ \ang{0} \cite{hogan_adaptive_1984, linnamo_maximal_2006}. Enfin, on retrouve le couple généré par l'effet de la gravité sur le bras, avec $m$ la masse du bras, $g$ l'accélération statique, et $l$ la longueur entre le centre de rotation et le centre de masse du bras. \textcolor{red}{[réprésentation du bras reproduite avec une rotation de pi/2, vérifier que la formule de Hogan modifiée est bien toujours correcte.]}
 
 \input{fig_hogan_arm_cocontraction_model}
 
@@ -192,7 +192,7 @@ Ainsi, quand de faibles perturbations viennent modifier la trajectoire de réfé
 
 \cite{bennett_time-varying_1992} observent des variations cycliques de raideur et d'amortissement chez quatre participants, aussi bien pour les oscillations dans le plan horizontal que vertical. A l'inverse, comme on pourrait s'y attendre l'inertie estimée ne varie presque pas au cours d'un cycle. Ainsi, ils estiment des raideurs angulaires positives inférieures à \SI{20}{\newton\meter\per\radian}, avec des moyennes cyliques autours de \SIrange{5}{8}{\newton\meter\per\radian}, des amortissements angulaires inférieurs à \SI{1}{\newton\meter\per\radian\per\second} et des inerties comprises entre \SIrange{0.06}{0.1}{\newton\meter\per\radian\per\second\squared}. Les estimations des auteurs révèlent aussi des raideurs toujours plus faibles lors de mouvements que lors de maintien de poses.
 
-\cite{latash_virtual_1992} observe aussi des variations de raideur cycliques lors d'expériences conduites en utilisant un manipulandum, qui permet d'étudier des mouvements dans le plan horizontal en compensant le poids du bras. Dans le courant de pensée lancé par \cite{feldman_functional_1966, bizzi_effect_1978}, concernant l'hypothèse du point d'équilibre [faire un encart concernant cette théorie ?] aussi appelée la théorie $\lambda$, les auteurs estiment la trajectoire virtuelle en plus de la raideur. En réalisant des oscillations à plusieurs fréquences comprises entre \SI{1}{\hertz} et \SI{2.1}{\hertz}, les auteurs remarquent que leurs résultats pointent vers une augmentation de la raideur avec la fréquence. Ce changement modifie notamment la fréquence naturelle du bras $\omega_0$, ce qui peut réduire l'écart entre la fréquence naturelle du bras et celle de la tâche (qui est imposée), ce qui permettrait de réduire le couple nécessaire pour générer le mouvement (et donc l'énergie nécessaire à la génération du mouvement). Cette interprétation est aussi soutenue par des travaux plus récents \cite{zawadzki_maximal_2010}.
+\cite{latash_virtual_1992} observe aussi des variations de raideur cycliques lors d'expériences conduites en utilisant un manipulandum, qui permet d'étudier des mouvements dans le plan horizontal en compensant le poids du bras. Dans le courant de pensée lancé par \cite{feldman_functional_1966, bizzi_effect_1978}, concernant l'hypothèse du point d'équilibre \textcolor{red}{[faire un encart concernant cette théorie ? \cite{popescu_elbow_2003}]} aussi appelée la théorie $\lambda$, les auteurs estiment la trajectoire virtuelle en plus de la raideur. En réalisant des oscillations à plusieurs fréquences comprises entre \SI{1}{\hertz} et \SI{2.1}{\hertz}, les auteurs remarquent que leurs résultats pointent vers une augmentation de la raideur avec la fréquence. Ce changement modifie notamment la fréquence naturelle du bras $\omega_0$, ce qui peut réduire l'écart entre la fréquence naturelle du bras et celle de la tâche (qui est imposée), ce qui permettrait de réduire le couple nécessaire pour générer le mouvement (et donc l'énergie nécessaire à la génération du mouvement). Cette interprétation est aussi soutenue par des travaux plus récents \cite{zawadzki_maximal_2010}.
 
 \begin{equation} \label{eq_natural_frequency}
 	\omega_0 = \sqrt{\frac{K}{I}}
@@ -380,19 +380,36 @@ Ainsi, en utilisant un robot à 7 degrés de liberté controllé en admittance, 
 
 La tâche de soudure étudiée par les auteurs est linéaire, et l'axe $\vec{y}$ était placé le long de la tâche. Il a donc pu être observé qu'aussi bien les novices (14 sujets) que les professionnels (10 sujets) orientaient leur bras pour projetter la masse apparente principalement sur l'axe $x$ perpendiculaire à la tâche dans le plan de travail. L'amortissement des professionnels estimé est significativement supérieur sur l'axe $\vec{x}$, alors qu'aucune autre différence significative n'est observée sur les autres axes. Finalement, lorsque l'ensemble des directions est considéré pour la raideur, l'ANOVA révèle l'existance de différences significatives entre novices et professionnels, toutefois, lorsque les axes ont été étudiés séparemment, ces différences ne s'observaient plus.
 
-Dans une tâche uni-dimensionnelle de réception de balle, \cite{tsuji_bio-mimetic_2008} avait déjà observé des différences d'impédance cartésienne en fonction des performances de sujets, toujours avec le modèle KBM. Bien que cette dernière étude repose sur un faible nombre de participants (4), les sujets performants avaient notamment en préparation de la tâche, des gains des paramètres en impédance cartésienne plus importants que les sujets moins qualifiés. L'impédance a été évaluée le long de l'axe de la réception de la balle, la tâche étant contrainte par les équipements sur les autres axes. Il est important de noter que les valeurs de raideur obtenues par \cite{tsuji_bio-mimetic_2008} diffèrent de celles décrites par \cite{erden_hand_2015}. La \cref{labellist} résume l'amplitude des estimations réalisées en fonction des auteurs et tâches.
+Dans une tâche uni-dimensionnelle de réception de balle, \cite{tsuji_bio-mimetic_2008} avait déjà observé des différences d'impédance cartésienne en fonction des performances de sujets, toujours avec le modèle KBM. Bien que cette dernière étude repose sur un faible nombre de participants (4), les sujets performants avaient notamment en préparation de la tâche, des gains des paramètres en impédance cartésienne plus importants que les sujets moins qualifiés. L'impédance a été évaluée le long de l'axe de la réception de la balle, la tâche étant contrainte par les équipements sur les autres axes. Il est important de noter que les valeurs de raideur obtenues par \cite{tsuji_bio-mimetic_2008} diffèrent de celles décrites par \cite{erden_hand_2015}. La \cref{tab_impedance_litterature} résume l'amplitude des estimations réalisées en fonction des auteurs et tâches.
 
-[petit encadré sur l'apprentissage optimal de paramètres en impédance et sur la collaboration en impédance ? \cite{burdet_central_2001, ganesh_two_2014} transition logique avec les paragraphes précédents]
+\textcolor{red}{[petit encadré sur l'apprentissage optimal de paramètres en impédance et sur la collaboration en impédance ? \cite{burdet_central_2001, ganesh_two_2014} transition logique avec les paragraphes précédents]}
+
+\textcolor{red}{[modèle à 2 raideurs et armortissements, \cite{speich_modeling_2005, fu_human-arm-and-hand-dynamic_2012}]}
 
 \begin{sidewaystable}
 %\begin{table}
 	\centering
-	\caption{Estimations dans la littérature}
-	\begin{tabular}{| p{50mm} || c  c | c  c | c  c |} 
+	\caption{Estimations d'impédance du bras dans la littérature, seuls les paramètres sur les axes principaux ont été pris en compte (pas les paramètres de couplage)} \label{tab_impedance_litterature}
+	\begin{tabular}{| p{50mm} | c || c  c | c  c | c  c |} 
 		\hline
-		Etudes & $K_{max}$ & $K_{min}$ & $B_{max}$ & $B_{min}$ & $M_{max}$ & $M_{min}$ \\ \hline
-		\cite{tsuji_bio-mimetic_2008}: prépation d'impact & \SI{189\pm71}{}  & \SI{57\pm35}{} & \SI{28.1\pm2.4}{} & \SI{17.6\pm3.0}{} & \SI{1.90\pm0.16}{} & \SI{0.83\pm0.17}{} \\
-		\cite{tsuji_bio-mimetic_2008}: maintien posture & \SI{189\pm71}{}  & \SI{57\pm35}{} & \SI{28.1\pm2.4}{} & \SI{17.6\pm3.0}{} & \SI{1.90\pm0.16}{} & \SI{0.83\pm0.17}{} \\ \hline
+		Etudes & Eff. & $K_{max}$ & $K_{min}$ & $B_{max}$ & $B_{min}$ & $M_{max}$ & $M_{min}$ \\ \hline
+		%
+		\cite{burdet_central_2001}**: pointage en présence de champs de force & 9 & \SI{800\pm194}{}  & \SI{182\pm91}{} & / & / & / & / \\ \hline
+		%
+		\cite{tsuji_bio-mimetic_2008}*: prépation d'impact & 4 & \SI{189\pm71}{}  & \SI{57\pm35}{} & \SI{28.1\pm2.4}{} & \SI{17.6\pm3.0}{} & \SI{1.90\pm0.16}{} & \SI{0.83\pm0.17}{} \\
+		\cite{tsuji_bio-mimetic_2008}*: maintien de posture & 4 & \SI{98\pm45}{}  & \SI{44\pm24}{} & \SI{25.4\pm2.5}{} & \SI{12.4\pm1.7}{} & \SI{1.74\pm0.10}{} & \SI{0.94\pm0.06}{} \\ \hline
+		%
+		\cite{ajoudani_tele-impedance_2012}: maintien de posture & 1 & \SI{241}{}  & \SI{81}{} & \SI{26.1}{} & \SI{17.7}{} & \SI{1.02}{} & \SI{0.78}{} \\ \hline
+		%
+		\cite{dyck_measuring_2013}: maintien de posture & 1 & \SI{72\pm7}{}  & \SI{13\pm4}{} & \SI{10.9\pm1.1}{} & \SI{4.0\pm0.5}{} & \SI{1.45\pm0.21}{} & \SI{1.06\pm0.07}{} \\ \hline
+		%
+		\cite{fu_human-arm-and-hand-dynamic_2012}*$^\dagger$: maintien de posture & 15 & \SI{459\pm145}{}  & \SI{105\pm28}{} & \SI{5.9\pm2.2}{} & \SI{2.6\pm1.3}{} & \SI{0.32\pm0.15}{} & / \\ \hline
+		%
+		\cite{erden_hand_2015}*: soudure & 24 & \SI{539\pm200}{}  & \SI{280\pm108}{} & \SI{44\pm14}{} & \SI{12\pm8}{} & \SI{2.8\pm0.8}{} & \SI{0.6\pm0.2}{} \\ \hline
+		%
+		\cite{lee_simple_2017}*: reception de balle & 3 & \SI{333\pm142}{}  & / & \SI{8.8\pm6.8}{} & / & \SI{1.5\pm0.56}{} & / \\ \hline
+		%
+		\multicolumn{8}{l}{(*) écart type, (**)\SI{90}{\percent} des données, ($\dagger$) modèles à plus de 3 paramètres}
 	\end{tabular}
 %\end{table}
 \end{sidewaystable}
@@ -408,9 +425,15 @@ Ainsi, la littérature scientifique offre pléthore d'exemples d'estimations d'i
 \end{enumerate*}	
 La focalisation a été faite principalement sur le membre supérieur, ici. Le modèle KBM, malgré sa simplicité offre la possibilité de décrire des interactions entre un opérateur humain et son environnement pour des faibles déplacements proches d'une trajectoire d'équilibre, parfois appelée trajectoire virtuelle \cite{tsuji_human_1997}. Ce modèle, qui est une linéarison, n'est donc valide que pour décrire de faibles déviations, autrement dit pour décrire un comportement de rejet de perturbations de faibles amplitudes. En effet, comme suggéré par \cite{popescu_elbow_2003} en discussion de leur article, si les propriétés visco-élastiques du coude améliorent la robustesse vis à vis de perturbations, c'est principalement le réflexe ostéotendieux, et des comportements automatiques ou non à plus longue latence qui permettent de maintenir une trajectoire, ces derniers étant très difficilement modélisable grâce à l'impédance.
 
-\textcolor{red}{[texte de latash sur les limites de la notion de raideur ? \cite{latash_joint_1993} -> je n'ai pas très bien compris la problématique de l'estimation de la raideur en dehors de son point d'équilibre (quasi stiffness).]}
+Dans des simulations, \cite{kistemaker_vivo_2011} ont évalué la capacité du modèle KBM, de décrire le comportement d'un modèle musculaire de Hill, présenté en \cref{fig_hill_muscle_model}, prenant en compte la raideur ajoutée en série par les tendons, contrairement au modèle KBM. Malgré la capacité du modèle KBM à bien décrire le comportement simulé par le modèle de Hill, ils montrent que les paramètres identifiés du modèle KBM n'ont plus de ressemblances avec les paramètres originellement simulés. Ils observent par ailleurs, que les paramètres estimés sont sensibles à la méthode d'identification, et aussi au type de perturbations introduites, du fait de relations non linéaires entre les paramètres des deux modèles. Il est donc important de garder à l'esprit que les paramètres d'un modèle KBI n'ont propbablement pas d'équivalences biologiques, car l'ensemble formé par le SNC et CMS est bien plus complet que le modèle de Hill. 
 
-[Limites de la modélisation en impédance d'ordre 2 popescu et piovesan \cite{popescu_elbow_2003, kistemaker_vivo_2011, piovesan_measuring_2012}]
+En extension de ces remarques, on peut noter, comme l'ont fait \cite{latash_joint_1993}, que la présence de muscles biarticulaires (eg. biceps brachial) rend l'étude d'une articulation isolée complexe, voir illusoire selon les auteurs, même s'ils concèdent que cette étape est nécessaire. Un autre point souligné par les auteurs, concerne les arcs réflexes et leur influence sur la raideur globale. Ils notent que la problématique principale provient des latences avec lesquels les reflexes courts puis longs interviennent, rendant l'identification des paramètres en raideur sensible à la durée sur laquelle ils sont observés. Finalement, les auteurs avancent que les liens entre raideur, amortissement et élongation et vitesse des muscles complexifient encore plus la réalité du comportement d'une articulation lorsqu'elle est soumise à des perturbations.
+
+La complexité d'une seule articulation est ainsi approchée avec un modèle de 13 paramètes \textcolor{red}{[le fournir en annexe ?]}, prenant en compte plusieurs des différentes problématiques exposées. Toutefois, dès lors qu'on souhaite étudier plusieurs articulations, la complexité de tels modèles rend les identifications encore moins applicables, ce qui peut expliquer l'absence d'études expérimentales l'utilisant (à notre connaissance). L'idée principale des auteurs est presque sémantique, il cherche à montrer que nombreuses études antérieures utilisait le terme de raideur de manière abusive. Ils introduisent les termes de raideur apparente et quasi-raideur, pour parler des de la force en fonction de la position. En effet, comme expliqué en \cref{app_link_joint_endpoint}, pour qu'on puisse parler de raideur, de l'énergie potentielle doit être emmaganisée. Ainsi, si la nature de la force résistive est ignorée, les auteurs conseillent d'utiliser le terme de raideur apparente, et si les estimations de raideur ne sont pas conduites à l'équilibre de quasi-raideur.
+
+\textcolor{red}{[je n'ai pas très bien compris la problématique de l'estimation de la raideur en dehors de son point d'équilibre (quasi stiffness).]}
+
+Le modèle KBM malgré ses limites a l'avantage d'être extrêmement simple, bien qu'il puisse reproduire des comportements de rejet en perturbations pour de faibles mouvements, ses paramètres ne doivent pas être regardés comme des réalités physiques.
 
 %\paragraph{Autre modélisation}
 %
