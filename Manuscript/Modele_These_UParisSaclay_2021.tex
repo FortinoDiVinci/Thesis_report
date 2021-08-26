@@ -24,6 +24,7 @@
 \usepackage[toc,page]{appendix} % for appendices [title]
 \usepackage{rotating} % for sideway table notably
 \usepackage[inline]{enumitem}
+\usepackage[framemethod=default]{mdframed} % for text boxes
 %
 \newcommand{\vect}[1]{
 	\boldsymbol{\MakeLowercase{#1}}
@@ -42,13 +43,30 @@
 		\boldsymbol{\mathcal{J}_{#2}}(#1)^{#3} %
 	}	
 }
+
 % The following modifies the margins with the memoir commands
 %\setlrmarginsandblock{2.5cm}{3.5cm}{*}
 %\setulmarginsandblock{2.5cm}{2.5cm}{*}
 %\checkandfixthelayout
 
 \begin{document}
-
+	
+%%%%%
+\newenvironment{aside}[1][]{%
+\mdfsetup{%
+	frametitle={%
+		\tikz[baseline=(current bounding box.east),outer sep=1pt]
+		%\node[anchor=east,rectangle,fill=blue!20]
+		\node[anchor=east,rectangle,fill={rgb:red,99;green,0;blue,60},text=white]
+		%\definecolor{Prune}{RGB}{99,0,60}
+		{Aparté:~#1};}}
+	%
+\mdfsetup{innertopmargin=10pt,linecolor={rgb:red,99;green,0;blue,60},%
+	linewidth=2pt,topline=true,
+	frametitleaboveskip=-9pt,}
+\begin{mdframed}[]\relax%
+}{\end{mdframed}}
+	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tableofcontents
 \setcounter{page}{1}

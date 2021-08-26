@@ -8,8 +8,39 @@
 
 \subsubsection{Génèse de la robotique}
 
+Les robots peuvent se définir techniquement, comme des ensembles mécatroniques physiques, capables de sentir leur environnement à travers des \emph{capteurs}, de prendre des décisions avec différents niveaux d'autonomie grâce à des \emph{algorithmes} et outils de l'automatique pour enfin agir à travers des \emph{actionneurs}. On remarquera que si cette manière large de qualifier les robots permet à la fois d'inclure des véhicules, des bras articulés, des automates, des exosquelettes, des androïdes et même les répliquants de P. K. Dick, elle ne prend pas en compte les simulations et robots virtuels tant qu'ils n'opèrent pas sur le monde physique - \textit{contrairement à Skynet}.
+
+Suivant cette définition, on peut trouver des trâces de proto-robots dès l'antiquité à travers les mythes du golem, créature d'argile du folklore hébraïque, et dans la mythologie grècque avec l'histoire de Galatée, statue d'ivoire devenant femme, transcrite au I\textsuperscript{er} siècle dans les Métamorphoses d'Ovide. Si dans ces deux exemples, c'est une divinité qui insuffle la vie, au XIV\textsuperscript{ème} siècle, dans le roman épistolaire de M. Shelley, c'est bien un homme, Victor Frankenstein qui donne l'étincelle à sa création.
+
+Si on s'éloigne de la littérature, les premiers enjeux techniques liés à la robotique ont été principalement dirigés vers la mécanique, comme on peut le voir avec les \emph{automates} créés par des inventeurs du XII\textsuperscript{ème} siècle comme Al-Jazari \cite{ceccarelli_distinguished_2009} puis en France au XVIII\textsuperscript{ème} siècle par Jacques de Vaucanson. Il faudra toutefois attendre la seconde moitiée du XX\textsuperscript{ème} siècle, pour voir apparaître les premiers robots dans des contextes industriels, avec Unimaton, la première companie à concevoir et proposer des robots articulés motorisés \cite{devol_programmed_1961}.
+
+Ces machines autonomes s'avèrent effectivement très performantes pour les tâches répétitives qui parsèment les lignes de productions dépeintes avec un humour satirique dans les Temps Modernes de C. Chaplin. C'est ainsi que les années 1970 voit l'installation de bras articulés émerger dans le monde, notamment pour l'industrie automobile \cite{lazaric_origines_1992}. Ces robots se démocratisent ensuite à d'autres secteurs où leur rapidité et précision permettent, dans des environnements contrôllés, d'automatiser entièrement ou partiellement la production de produits manufacturés. Les installations de robot industriel passent ainsi de \SI{97000}{} à \SI{373000}{} unités de 2004 à 2019, comme le montre la \cref{fig_indus_rob_growth}.
+
+\input{fig_industrial_robotic_growth}
+
+Ces robots industriels qui évoluent dans des cages pour protéger les opérateurs humains, peuvent s'avérer dangereux \cite[Chapter~4]{dhillon_robot_1991}. Une recherche sur la base de données de l'\textit{Occupational Safety and Health Administration} (OSHA), - \textit{une agence gouvernementale fédérale étasunienne pour la prévention des blessures, maladies et décès dans le cadre du travail }- avec le mot clé 'robot', informe de 13 cas de fatalités humaines entre 2003 et 2019, dont huit cas où le robot semble explicitement responsable du décès \cite{OSHA_robot_accident}. Ces accidents bien que précoccupants sont à relativiser par rapport à l'ensemble des accidents du travail. Ainsi, \cite{gihleb_industrial_2020} indiquent que les robots industriels entraînent une chute significative des accidents professionnels. Une réduction de \SI{28}{\percent} des blessures dans les entreprises manufacturières entre 2005 et 2011, aux Etats-Unis d'Amérique et en Allemagne serait ainsi liée à l'augmentation des équipements robotisés.
+
+Pourtant, si les robots peuvent surpasser l'humain dans des cadres particuliers, la versatilité des animaux biologiques semble encore un pas de géant pour les machines artificielles. Ainsi, pour que les robots puissent évoluer dans des environnements non maîtrisés, qui regroupent dans les faits la plupart des environnements existants, il leur faut tendre vers la capacité d'adaptation du vivant. En effet, à ce jour, si la cuisine reste une tâche à la portée de n'importe quel être humain - \textit{ou du moins de la plupart} -, l'environnement offert par les fourneaux reste plutôt hostile aux robots. Malgré l'existance de projets concernant des robots chefs, un robot cuisinier se résume plutôt à l'habile mariage d'un autocuiseur et d'un mixeur alors que cette thèse est écrite.
+
+\input{fig_robot_cuisine}
+
+Un autre exemple criant, qui témoigne de la difficulté des robots à interagir avec des environnements humains, est celui livré par les véhicules autonomes. Ainsi, il n'existe aucun projet viable de robot conduisant une voiture comme le ferait un humain, c'est à dire en manipulant volant, pédales, levier de vitesses... Par contre, la course aux véhicules sans conducteur roule à pleine vitesse avec des démonstrateurs fonctionnels sur des portions spécifiques de route.
+
+La qualification humaine est donc loin d'être totalement remplacée par des machines, ce qui pose la question des interactions entre humain et robot, que ce soit dans des contextes industriels, ou en dehors des usines.
+
 \subsubsection{Vers une collaboration humain-robot}
 
+C'est notamment pour répondre à cette problématique que le concept de robot collaboratif, raccourci en cobot, s'est dégagé. Défini par \cite{peshkin_cobots_1999}, les cobots sont des robots conçus pour réaliser des interactions directes avec des opérateurs humains, dans des espaces de travail partagés\footnote{\label{footnote_cobot}"Collaborative robots 'cobots' are intended for direct interaction with a human worker, handling a shared payload", \cite{peshkin_cobots_1999}.}. C'est donc l'application qui permet d'affirmer qu'il s'agit d'un cobot, or pour atteindre cette collaboration le robot devra répondre à plusieurs enjeux.
+
+En effet, comme évoqué précédemment, pour éviter des dommages collateraux et transformer le robot en Roy Batty de P.K. Dick ou Ava de A. Garland, la conception du robot doit être pensée pour la sécurité des opérateurs. Cette compatibilité à évoluer proche d'humains peut être prévue dès la conception du robot, à travers %
+\begin{enumerate*}
+	\item des actionneurs spécifiques, comme ceux à impédance variables qui sont explorés plus loin, 
+	\item des capteurs dédiés, permettant par exemple de détecter des contacts sur des zones specifiques ;
+\end{enumerate*}
+ou alors grâce à des stratégies de commande particulières, prenant en compte la présence d'un humain dans la boucle de contrôle, transformant ainsi un robot classique en un robot collaboratif. C'est la combinaison de ces méthodes, qui permet de maximiser la fiabilité des interactions.
+
+
+ 
 \subsection{Vers quels types de collaboration ?}
 
 \subsubsection{Les environnements collaboratifs}
@@ -17,6 +48,10 @@
 \subsubsection{Les modalités de collaboration}
 
 \subsubsection{Les interactions haptiques}
+
+\begin{aside}[Collaboration et performances]
+	\textcolor{red}{[petit encadré sur la collaboration en impédance ? \cite{ganesh_two_2014}.}
+\end{aside}
 
 \subsection{Les contrôles robotiques lors d'interactions physiques}
 
@@ -70,6 +105,8 @@ La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du r
 \textcolor{red}{[ajouter des informations concernant les délais ? \cite{allum_mechanical_1982, sinkjaer_muscle_1988, lacquaniti_transient_1991, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, et concernant l'activation en fonction des contractions \cite{toft_mechanical_1989}].}
 
 \input{fig_stretch_reflex_ctrl_loop}
+
+\textcolor{red}{[ajouter des informations concernant les délais des actions volontaires ? \cite{libet_unconscious_1985}}
 
 \newpage
 \subsection{Modéliser le comportement humain en interaction physique grâce à l'impédance}
@@ -162,11 +199,11 @@ Comme l'expliquent \cite{finley_contributions_2012}, dans le cadre d'une expéri
 
 Les résultats et interprétations présentés pour un membre ou une articulation ne peuvent toutefois pas être systématiquement étendus à l'ensemble du corps humain. Ainsi, l'évolution de la contribution du réflexe d'extension présenté ci-dessus par \cite{finley_contributions_2012}, n'est pas en adéquation avec les résultats observés par \cite{perreault_interactions_2008, krutky_interactions_2010} pour le bras. En effet, \cite{krutky_interactions_2010} ont observé une contribution du réflexe plus importante lors des interactions avec des environnements instables. \textcolor{red}{[creuser sur les explications des différences ? methodologie ?..]}
 
-Quelqu'en soient les conclusions, il est établi que les propriétés visco-élastiques des membres peuvent être modulées volontairement et insconsciemment par différents phénomènes physiologiques dont ont été cités les contractions/cocontractions et les réflexes. On pourra y ajouter la modification des positions articulaires, notamment lors de tâche impliquant plusieurs articulations pour modifier l'inertie et la projection des propriétés des membres \cite{mussa-ivaldi_neural_1985, hogan_mechanics_1985, trumbower_use_2009}, et aussi la vitesse des membres \cite{kuxhaus_dependence_2014}. Il est alors intéressant d'essayer d'évaluer l'origine des différentes contributions dans la modulation des propriétés \cite{bennett_catching_1994, kearney_identification_1997, ludvig_identification_2011, kuxhaus_dependence_2014, guarin_unbiased_2018} pour obtenir un modèle en impédance le plus fidèle possible, mieux comprendre les contrôles générés par le SNC et donc mieux diagnostiquer des pathologies neuro-musculaires. 
+Quelqu'en soient les conclusions, il est admis que les propriétés visco-élastiques des membres peuvent être modulées volontairement et insconsciemment par différents phénomènes physiologiques dont ont été cités les contractions/cocontractions et les réflexes. On pourra y ajouter la modification des positions articulaires, notamment lors de tâche impliquant plusieurs articulations pour modifier l'inertie et la projection des propriétés des membres \cite{mussa-ivaldi_neural_1985, hogan_mechanics_1985, trumbower_use_2009}, et aussi la vitesse des membres \cite{kuxhaus_dependence_2014}. Il est alors intéressant d'essayer d'évaluer l'origine des différentes contributions dans la modulation des propriétés \cite{bennett_catching_1994, kearney_identification_1997, ludvig_identification_2011, kuxhaus_dependence_2014, guarin_unbiased_2018} pour obtenir un modèle en impédance le plus fidèle possible, mieux comprendre les contrôles générés par le SNC et par exemple mieux diagnostiquer des pathologies neuro-musculaires. Il est toutefois important de souligner que si la modulation des propriétés visco-élastiques est plutôt consensuelle, la notion de contrôle en impédance - \textit{à savoir la génération de trajectoires spécifiques grâce à ces modulations }-, ne l'est pas.
 
-\subsubsection{Modélisation de l'impédance mécanique}
+\subsubsection{Modélisation de l'impédance mécanique du membre supérieur chez l'humain}
 
-\paragraph{Modélisation uni-articulaire linéaire}
+\paragraph{Modélisation uni-articulaire}
 
 Dès les années 80, \cite{hogan_adaptive_1984} propose un modèle linéaire simplifié du bras permettant de décrire l'essentiel du comportement articulaire lors d'un maintient de posture (malgré la mise en évidence de comportements non-linéaires des muscles chez le chat \cite{rack_effects_1969}), où le biceps et le triceps sont chacun modélisés par un ressort (\cref{fig_hogan_elbow_joint}). Les cocontractions permettent alors de modifier leur raideur et de moduler le comportement dynamique global donné en \cref{eq_hogan_cocontraction}. \cite{hogan_adaptive_1984} montre que malgré le coût énergétique des cocontractions, ces dernières permettent une régulation de la raideur sans délais (contrairement aux réflexes), et au delà des propriétés intrinsèques des muscles (comme détaillées en \cref{chap_1_sec_modelling_human_subsec_1_1}). En utilisant des outils du contrôle optimal, il estime l'activation $u$ des muscles en minimisant le coût énergétique du maintien de posture en présence de perturbations. En observant les signaux EMGs du biceps et triceps chez 2 sujets, lors d'une tâche isométrique en variation de charge, il confirme ses prédictions sur une régulation des propriétés visco-élastiques grâce aux contractions.
 
@@ -263,7 +300,20 @@ L'impédance est donc évaluée sur deux degrés de liberté cartésiens, plutô
 
 Il est intéressant de noter que la matrice de raideur peut être séparée en deux composantes, l'une symétrique qui représente les effets élastiques et l'autre antisymétrique pour les phénomènes qui ne peuvent pas être dérivés d'une fonction potentielle et ne sont donc pas élastiques \cite{hogan_mechanics_1985}. Il faut par contre remarquer que l'origine des comportements élastiques ne peut pas être différenciée avec cette représentation, \cite{hogan_mechanics_1985} montre que si les effets non élastique ne peuvent être dus qu'aux propriétés des arcs réflexes, ces derniers peuvent aussi avoir des comportements élastiques.
 
-\textcolor{red}{[ajouter un encadré sur la représentation éliptique de l'impédance \cite{mussa-ivaldi_neural_1985, dolan_dynamic_1993}]}
+\begin{aside}[Représentation elliptique]
+	D'abord introduite par \cite{mussa-ivaldi_neural_1985} pour la raideur puis étendue à l'ensemble des paramètres dynamiques en impédance par \cite{dolan_dynamic_1993}, les ellipses permettent une représentation graphique facilement lisible des forces de restitution dans le cadre de tâches planaires, pour des déplacements induits sur un cercle unitaire.
+	Pour ce tracé, la matrice d'impédance doit être séparée en une matrice symmétrique $Z_s$ et antisymmétrique, seuls les composants de la matrice symmétrique sont représentés. Les axes de l'ellipse sont déterminés par les valeurs propres de cette dernière matrice, et l'orientation est obtenue grâce à la formule suivante: $\phi=\tan^{-1}((\lambda_2-Z_{s11})/Z_{s21})$. \textcolor{red}{en annexe plutôt ?}	
+	La \cref{fig_ellipse_dolan} montre un exemple de cette représentation.
+\end{aside}
+
+\input{fig_ellipse_impedance}
+
+%\begin{definition}[TEST]
+%	test test test
+%\end{definition}
+%\begin{mdframed}
+%	testestest
+%\end{mdframed}
 
 En réalisant des estimations d'impédance sur quatre participants, à différentes postures, avec différents types de perturbations - \textit{courtes et non prévisibles (\SI{120}{\milli\second}), statique et prévisible (charge)} -, \cite{mussa-ivaldi_neural_1985} indiquent que la modulation de la raideur cartésienne se fait principalement grâce à la configuration géométrique du bras. En effet, en simulant un bras à 2 DDL avec des raideurs articulaires constantes, ils trouvent une modulation de la raideur cartésienne proche de leur estimation. La géométrie semble dicter l'orientation et la forme de la raideur cartésienne qui restent relativement invariants lors des différents essais, toutefois, l'amplitude de la raideur peut varier jusqu'à doubler, la modulation du comportement en raideur par le SNC ne peut donc pas être négligé. Ce qui a aussi pu être observé par \cite{shadmehr_postural_1993} (même équipe de recherche) sous la forme de champ de force postural.
 
@@ -318,15 +368,15 @@ avec les matrices de viscosité et raideur articulaires respectivement représen
 %
 avec $ \vect{q}^i_s(t) $ la i\textsuperscript{ème} trajectoire avec l'offset du début du temps de la perturbation retiré.
 
-\cite{gomi_human_1997} trouvent ainsi, en contradiction avec les résultats uniarticulaires de \cite{bennett_time-varying_1992}, que les raideurs articulaires et cartésiennes sont systématiquement supérieures dans des configurations équivalentes en mouvement par rapport aux cas statiques. Les auteurs supposent que ces différences viennent de la tension musculaire nécessaire pour générer le mouvement. Bien que le nombre de participants à cette étude soit faible (seulement trois), pour deux des participants, l'orientation et la forme de la raideur cartésienne représentée sous forme d'élipses étaient peu variables pour des configurations similaires, en cohérence avec les observations de \cite{mussa-ivaldi_neural_1985}. \cite{gomi_task-dependent_1998} ont toutefois observés des variations d'orientation et de formes induites par des changements de cocontractions réalisées grâce à l'aide du retour de capteurs EMG donnant l'activité musculaire. Par ailleurs, en cohérence avec des résultats uni-articulaires \cite{agarwal_compliance_1977}, ils trouvent à la fois une corrélation entre la raideur et le couple musculaire, et entre la viscosité apparente et ce même couple, bien que la dernière corrélation soit plus faible. Les auteurs émettent l'hypothèse que l'impédance du bras permettrait de réduire la complexité de mouvements coordonnés.
+\cite{gomi_human_1997} trouvent ainsi, en contradiction avec les résultats uniarticulaires de \cite{bennett_time-varying_1992}, que les raideurs articulaires et cartésiennes sont systématiquement supérieures dans des configurations équivalentes en mouvement par rapport aux cas statiques. Les auteurs supposent que ces différences viennent de la tension musculaire nécessaire pour générer le mouvement. Bien que le nombre de participants à cette étude soit faible (seulement trois), pour deux des participants, l'orientation et la forme de la raideur cartésienne représentée sous forme d'ellipses étaient peu variables pour des configurations similaires, en cohérence avec les observations de \cite{mussa-ivaldi_neural_1985}. \cite{gomi_task-dependent_1998} ont toutefois observé des variations d'orientation et de formes induites par des changements de cocontractions, réalisés grâce à l'aide du retour de capteurs EMG donnant l'activité musculaire. Par ailleurs, en cohérence avec des résultats uni-articulaires \cite{agarwal_compliance_1977}, ils trouvent à la fois une corrélation entre la raideur et le couple musculaire, et entre la viscosité apparente et ce même couple, bien que la dernière corrélation soit plus faible. Les auteurs émettent l'hypothèse que l'impédance du bras permettrait de réduire la complexité de mouvements coordonnés.
 
-Dans des expériences similaires à celle de \cite{mussa-ivaldi_neural_1985}, \cite{tsuji_human_1995, tsuji_human_1997} se sont proposés d'étudier l'impédance en évaluant directement les paramètres apparents cartésiens, c'est à dire aussi bien la raideur $\matr{K}$ et la viscosité $\matr{B}$ que l'inertie $\matr{M}$, pour de faibles mouvements $d\vect{x}$ autour d'une pose d'équilibre avec un modèle en impédance du second ordre souvent nommé KBM (ou KBI) :
+Dans des expériences similaires à celle de \cite{mussa-ivaldi_neural_1985}, \cite{tsuji_human_1995, tsuji_human_1997} se sont proposés d'étudier l'impédance en évaluant directement les paramètres apparents cartésiens, c'est à dire aussi bien la raideur $\matr{K}$ et la viscosité $\matr{B}$ que la masse inertielle $\matr{M}$, pour de faibles mouvements $d\vect{x}$ autour d'une pose d'équilibre, en utilisant un modèle en impédance du second ordre souvent nommé KBM (ou KBI) :
 %
 \begin{equation}
 	\matr{M}d\ddot{\vect{x}}(t) + \matr{B}d\dot{\vect{x}}(t) + \matr{K}d\vect{x}(t) = - d\vect{f}(t)
 \end{equation} 
 
-En perturbant des masses et ressorts aux valeurs connues attachés au manipulandum, ils ont pu valider leur méthode d'estimation avant d'evaluer des paramètres humains apparents. Les raideurs estimées sont inférieures à celles décrites par \cite{mussa-ivaldi_neural_1985}, mais proche de celles observées plus tard par \cite{gomi_human_1997, gomi_task-dependent_1998}. Toutefois, les auteurs s'accordent globalement sur les observations de \cite{mussa-ivaldi_neural_1985} concernant les variations spatiales des elipses de raideurs. Ainsi, \cite{tsuji_human_1995} obtiennent, pour 4 participants, des raideurs cartésiennes (le long des axes $\vec{x}$ et $\vec{y}$) d'amplitudes comprises entre \SI{22.31\pm5.86}{} et \SI{448.18\pm40.28}{\newton\per\metre}, des amortissements cartésiens compris entre \SI{2.02\pm0.19}{} et \SI{22.98\pm1.54}{\newton\second\per\metre} et des masses inertielles comprises entre \SI{460\pm72}{} et \SI{2410\pm99}{\gram}.
+En perturbant des masses et ressorts aux valeurs connues attachés au manipulandum, ils ont pu valider leur méthode d'estimation avant d'evaluer des paramètres humains apparents. Les raideurs estimées sont inférieures à celles décrites par \cite{mussa-ivaldi_neural_1985}, mais proche de celles observées plus tard par \cite{gomi_human_1997, gomi_task-dependent_1998}. Toutefois, les auteurs s'accordent globalement sur les observations de \cite{mussa-ivaldi_neural_1985} concernant les variations spatiales des ellipses de raideurs. Les paramètres identifiés par \cite{tsuji_human_1995} pour 4 participants sont résumés dans la \cref{tab_impedance_litterature}.
 
 Comparativement au modèle décrit en \cref{eq_gomi_impedance_model}, le modèle en impédance proposé par \cite{tsuji_human_1995} néglige les effets des forces centrifuges et de Coriolis. Cette hypothèse a été étudiée par \cite{dolan_dynamic_1993}, dans une configuration proche de la \cref{fig_mussa_ivaldi_manipulandum}, en utilisant un robot SCARA pour des tâches de maintien de position. Les auteurs ont comparé le modèle KBM, à d'autres modèles, l'un négligeant les effets de l'amortissement \cref{eq_dolan_mod1}, l'autre prenant en compte les effets de Coriolis et centrifuges $\matr{B}_C$ \cref{eq_dolan_mod2} et le dernier en élevant au carré les termes de la vitesse cartésienne \cref{eq_dolan_mod3} avec $ \vect{x} = \left[ x^2_1 x^2_2 \right]^t $ le vecteur de déplacement :
 %
@@ -338,7 +388,7 @@ Comparativement au modèle décrit en \cref{eq_gomi_impedance_model}, le modèle
 	\end{align}	
 \end{subequations}
 %
-En comparant les erreurs de reconstruction de ces différents modèles, après identification de leurs paramètres, \cite{dolan_dynamic_1993} concluent que pour de faibles perturbations autour d'un point d'équilibre, la relation liant la force cartésienne aux variables cinématiques cartésiennes est mieux décrite à l'aide du modèle KBM. En effet, sur les onze sujets de l'expérience (seul les données pour deux sont présentées dans l'article), et les cinq postures proposées, le modèle KBM avait presque systématiquement des erreurs significativement plus faibles que celle du modèle sans relation à la vitesse \cref{eq_dolan_mod1}, ce qui indique l'importance des termes relatifs à la vitesse. De plus, le modèle prenant en compte les forces de Corilis \cref{eq_dolan_mod2} avait toujours des erreurs plus importantes, ce qui indique que les effets liés à la vitesse viennent principalement des propriétés dynamiques passives du bras, et non des effets centrifuges et de Coriolis.
+En comparant les erreurs de reconstruction de ces différents modèles, après identification de leurs paramètres, \cite{dolan_dynamic_1993} concluent que pour de faibles perturbations autour d'un point d'équilibre, la relation liant la force cartésienne aux variables cinématiques cartésiennes est mieux décrite à l'aide du modèle KBM. En effet, sur les onze sujets de l'expérience (seul les données pour deux sont présentées dans l'article), et les cinq postures proposées, le modèle KBM avait presque systématiquement des erreurs significativement plus faibles que celle du modèle sans relation à la vitesse \cref{eq_dolan_mod1}, ce qui indique l'importance des termes relatifs à la vitesse. De plus, le modèle prenant en compte les forces de Coriolis \cref{eq_dolan_mod2} avait toujours des erreurs plus importantes, ce qui indique que les effets liés à la vitesse viennent principalement des propriétés dynamiques passives du bras, et non des effets centrifuges et de Coriolis.
 
 \input{fig_KPTee_model}
 
@@ -382,9 +432,25 @@ La tâche de soudure étudiée par les auteurs est linéaire, et l'axe $\vec{y}$
 
 Dans une tâche uni-dimensionnelle de réception de balle, \cite{tsuji_bio-mimetic_2008} avait déjà observé des différences d'impédance cartésienne en fonction des performances de sujets, toujours avec le modèle KBM. Bien que cette dernière étude repose sur un faible nombre de participants (4), les sujets performants avaient notamment en préparation de la tâche, des gains des paramètres en impédance cartésienne plus importants que les sujets moins qualifiés. L'impédance a été évaluée le long de l'axe de la réception de la balle, la tâche étant contrainte par les équipements sur les autres axes. Il est important de noter que les valeurs de raideur obtenues par \cite{tsuji_bio-mimetic_2008} diffèrent de celles décrites par \cite{erden_hand_2015}. La \cref{tab_impedance_litterature} résume l'amplitude des estimations réalisées en fonction des auteurs et tâches.
 
-\textcolor{red}{[petit encadré sur l'apprentissage optimal de paramètres en impédance et sur la collaboration en impédance ? \cite{burdet_central_2001, ganesh_two_2014} transition logique avec les paragraphes précédents]}
+\begin{aside}[Apprentissage et impédance]
+	\cite{tsuji_bio-mimetic_2008, erden_hand_2015} ont montré l'existence de différences significatives des paramètres en impédance, notamment en terme d'amplitude, en fonction des performances, de l'expertise et de l'expérience des sujets testés. \cite{burdet_central_2001} ont pu montrer dans le cadre d'une tâche de pointage planaire, qu'en présence d'un champ de force déstabilisant, les participants de l'expérience adaptaient leur impédance afin que la raideur résultante entre l'environnement et l'utilisateur soit proche de celle estimée en l'absence de champ de force. Ainsi, comme exposé en conclusion de leur article, le CNS semble modifier ses paramètres d'impédance de manière optimale, pour limiter à la fois le coût métabolique des cocontractions et les erreurs de déplacements (plus pénalisantes en présence de champ de force).	
+\end{aside}
 
-\textcolor{red}{[modèle à 2 raideurs et armortissements, \cite{speich_modeling_2005, fu_human-arm-and-hand-dynamic_2012}]}
+Pour des tâches haptiques ou de téléopération, où le poignet et les doigts peuvent jouer un rôle important, plusieurs auteurs \cite{speich_modeling_2005, diaz_influence_2010, fu_human-arm-and-hand-dynamic_2012} ont proposé d'utiliser un modèle d'impédance cartésienne à cinq paramètres \cref{eq_impedance_model_5_param}, montré en \cref{fig_speich_5param_imp_model}. En effet, en ajoutant une raideur et un amortissement, les auteurs entendent modéliser une prise plus molle de l'effecteur, notamment dans le cas où l'utilisateur manipule un stylo ou pinceau. Les analyses fréquentielles conduites par les auteurs entre \SIrange{0.5}{10}{\hertz} pour \cite{speich_modeling_2005} et \SIrange{0.6}{30}{\hertz} pour \cite{fu_human-arm-and-hand-dynamic_2012} leurs ont révélé une meilleure adéquation de ce modèle lors d'interaction avec des interfaces haptiques comme le phantom Omni%\textsuperscript{TM} 
+\cref{fig_haptic_interface}.
+
+\begin{equation} \label{eq_impedance_model_5_param}
+	\frac{x(s)}{f(s)} = \frac{m s^2 + (b_1 + b_2)s + (k_1 + k_2)}{m b_1 s^3 + (m k_1 + b_1 b_2)s^2 + (k_1 b_2 + b_1 k_2)s +k_1 k_2}
+\end{equation}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.65\textwidth]{misc/phantom_omni.jpg}
+	\caption{Interface haptique proposé par 3D Systems}
+	\label{fig_haptic_interface}
+\end{figure}
+
+\input{fig_speich_impedance_model}
 
 \begin{sidewaystable}
 %\begin{table}
@@ -392,9 +458,13 @@ Dans une tâche uni-dimensionnelle de réception de balle, \cite{tsuji_bio-mimet
 	\caption{Estimations d'impédance du bras dans la littérature, seuls les paramètres sur les axes principaux ont été pris en compte (pas les paramètres de couplage)} \label{tab_impedance_litterature}
 	\begin{tabular}{| p{50mm} | c || c  c | c  c | c  c |} 
 		\hline
-		Etudes & Eff. & $K_{max}$ & $K_{min}$ & $B_{max}$ & $B_{min}$ & $M_{max}$ & $M_{min}$ \\ \hline
+		Etudes & Eff. & $K_{max}$ & $K_{min}$ \si{\newton\per\metre} & $B_{max}$ & $B_{min}$ \si{\newton\second\per\metre} & $M_{max}$ & $M_{min}$ \si{\kilogram} \\ \hline
+		%
+		\cite{tsuji_human_1995}*: maintien de posture (bras occulté) & 4 & \SI{448\pm40}{}& \SI{22\pm6}{} & \SI{23.0\pm1.5}{} & \SI{2.0\pm0.2}{} & \SI{2.41\pm0.10}{} & \SI{0.46\pm0.07}{} \\ \hline
 		%
 		\cite{burdet_central_2001}**: pointage en présence de champs de force & 9 & \SI{800\pm194}{}  & \SI{182\pm91}{} & / & / & / & / \\ \hline
+		%
+		\cite{speich_modeling_2005}$^\dagger$: maintien de posture & 5 & \SI{330}{}  & \SI{13}{} & \SI{47.6}{} & \SI{9.2}{} & \SI{4.03}{} & \SI{0.68}{} \\ \hline
 		%
 		\cite{tsuji_bio-mimetic_2008}*: prépation d'impact & 4 & \SI{189\pm71}{}  & \SI{57\pm35}{} & \SI{28.1\pm2.4}{} & \SI{17.6\pm3.0}{} & \SI{1.90\pm0.16}{} & \SI{0.83\pm0.17}{} \\
 		\cite{tsuji_bio-mimetic_2008}*: maintien de posture & 4 & \SI{98\pm45}{}  & \SI{44\pm24}{} & \SI{25.4\pm2.5}{} & \SI{12.4\pm1.7}{} & \SI{1.74\pm0.10}{} & \SI{0.94\pm0.06}{} \\ \hline
@@ -409,7 +479,7 @@ Dans une tâche uni-dimensionnelle de réception de balle, \cite{tsuji_bio-mimet
 		%
 		\cite{lee_simple_2017}*: reception de balle & 3 & \SI{333\pm142}{}  & / & \SI{8.8\pm6.8}{} & / & \SI{1.5\pm0.56}{} & / \\ \hline
 		%
-		\multicolumn{8}{l}{(*) écart type, (**)\SI{90}{\percent} des données, ($\dagger$) modèles à plus de 3 paramètres}
+		\multicolumn{8}{l}{(*) écart type, (**) \SI{90}{\percent} des données, ($\dagger$) modèle à 5 paramètres}
 	\end{tabular}
 %\end{table}
 \end{sidewaystable}
@@ -425,15 +495,15 @@ Ainsi, la littérature scientifique offre pléthore d'exemples d'estimations d'i
 \end{enumerate*}	
 La focalisation a été faite principalement sur le membre supérieur, ici. Le modèle KBM, malgré sa simplicité offre la possibilité de décrire des interactions entre un opérateur humain et son environnement pour des faibles déplacements proches d'une trajectoire d'équilibre, parfois appelée trajectoire virtuelle \cite{tsuji_human_1997}. Ce modèle, qui est une linéarison, n'est donc valide que pour décrire de faibles déviations, autrement dit pour décrire un comportement de rejet de perturbations de faibles amplitudes. En effet, comme suggéré par \cite{popescu_elbow_2003} en discussion de leur article, si les propriétés visco-élastiques du coude améliorent la robustesse vis à vis de perturbations, c'est principalement le réflexe ostéotendieux, et des comportements automatiques ou non à plus longue latence qui permettent de maintenir une trajectoire, ces derniers étant très difficilement modélisable grâce à l'impédance.
 
-Dans des simulations, \cite{kistemaker_vivo_2011} ont évalué la capacité du modèle KBM, de décrire le comportement d'un modèle musculaire de Hill, présenté en \cref{fig_hill_muscle_model}, prenant en compte la raideur ajoutée en série par les tendons, contrairement au modèle KBM. Malgré la capacité du modèle KBM à bien décrire le comportement simulé par le modèle de Hill, ils montrent que les paramètres identifiés du modèle KBM n'ont plus de ressemblances avec les paramètres originellement simulés. Ils observent par ailleurs, que les paramètres estimés sont sensibles à la méthode d'identification, et aussi au type de perturbations introduites, du fait de relations non linéaires entre les paramètres des deux modèles. Il est donc important de garder à l'esprit que les paramètres d'un modèle KBI n'ont propbablement pas d'équivalences biologiques, car l'ensemble formé par le SNC et CMS est bien plus complet que le modèle de Hill. 
+Dans des simulations, \cite{kistemaker_vivo_2011} ont évalué la capacité du modèle KBM à décrire le comportement d'un modèle musculaire de Hill, présenté en \cref{fig_hill_muscle_model}, prenant en compte la raideur ajoutée en série par les tendons, contrairement au modèle KBM classique. Malgré la capacité du modèle KBM à bien décrire le comportement simulé par le modèle de Hill, ils montrent que les paramètres identifiés du modèle KBM n'ont plus de ressemblances avec les paramètres originellement simulés. Ils observent par ailleurs, que les paramètres estimés sont sensibles à la méthode d'identification, et aussi au type de perturbations introduites, du fait de relations non linéaires entre les paramètres des deux modèles. Il est donc important de garder à l'esprit que les paramètres d'un modèle KBI n'ont propbablement pas d'équivalences biologiques, car l'ensemble formé par le SNC et CMS est bien plus complet que le modèle de Hill. 
 
-En extension de ces remarques, on peut noter, comme l'ont fait \cite{latash_joint_1993}, que la présence de muscles biarticulaires (eg. biceps brachial) rend l'étude d'une articulation isolée complexe, voir illusoire selon les auteurs, même s'ils concèdent que cette étape est nécessaire. Un autre point souligné par les auteurs, concerne les arcs réflexes et leur influence sur la raideur globale. Ils notent que la problématique principale provient des latences avec lesquels les reflexes courts puis longs interviennent, rendant l'identification des paramètres en raideur sensible à la durée sur laquelle ils sont observés. Finalement, les auteurs avancent que les liens entre raideur, amortissement et élongation et vitesse des muscles complexifient encore plus la réalité du comportement d'une articulation lorsqu'elle est soumise à des perturbations.
+En extension de ces remarques, on peut noter, comme l'ont fait \cite{latash_joint_1993}, que la présence de muscles biarticulaires (eg. biceps brachial) rend l'étude d'une articulation isolée complexe, voire illusoire (selon les auteurs), même s'ils concèdent que cette étape est nécessaire. Un autre point souligné par les auteurs, concerne les arcs réflexes et leur influence sur la raideur globale. Ils notent que la problématique principale provient des latences avec lesquels les reflexes courts puis longs interviennent, rendant l'identification des paramètres en raideur sensible à la durée sur laquelle ils sont observés. Finalement, les auteurs avancent que les liens entre raideur, amortissement et élongation et vitesse des muscles complexifient encore plus la réalité du comportement d'une articulation lorsqu'elle est soumise à des perturbations.
 
-La complexité d'une seule articulation est ainsi approchée avec un modèle de 13 paramètes \textcolor{red}{[le fournir en annexe ?]}, prenant en compte plusieurs des différentes problématiques exposées. Toutefois, dès lors qu'on souhaite étudier plusieurs articulations, la complexité de tels modèles rend les identifications encore moins applicables, ce qui peut expliquer l'absence d'études expérimentales l'utilisant (à notre connaissance). L'idée principale des auteurs est presque sémantique, il cherche à montrer que nombreuses études antérieures utilisait le terme de raideur de manière abusive. Ils introduisent les termes de raideur apparente et quasi-raideur, pour parler des de la force en fonction de la position. En effet, comme expliqué en \cref{app_link_joint_endpoint}, pour qu'on puisse parler de raideur, de l'énergie potentielle doit être emmaganisée. Ainsi, si la nature de la force résistive est ignorée, les auteurs conseillent d'utiliser le terme de raideur apparente, et si les estimations de raideur ne sont pas conduites à l'équilibre de quasi-raideur.
+La complexité d'une seule articulation est ainsi approchée avec un modèle de 13 paramètes \textcolor{red}{[le fournir en annexe ?]}, prenant en compte plusieurs des différentes problématiques exposées. Toutefois, dès lors qu'on souhaite étudier plusieurs articulations, la complexité de tels modèles rend les identifications encore moins applicables, ce qui peut expliquer l'absence d'études expérimentales l'utilisant (à notre connaissance). L'idée principale des auteurs est presque sémantique, il cherche à montrer que de nombreuses études antérieures utilisent le terme de raideur de manière abusive. Ils introduisent les termes de \emph{raideur apparente} et de \emph{quasi-raideur}, pour parler des dérivées de la force en fonction de la position. En effet, comme expliqué en \cref{app_link_joint_endpoint}, pour qu'on puisse parler de raideur, de l'énergie potentielle doit être emmaganisée. Ainsi, si la nature de la force résistive est ignorée, les auteurs conseillent d'utiliser le terme de raideur apparente, et si les estimations de raideur ne sont pas conduites à l'équilibre de quasi-raideur.
 
 \textcolor{red}{[je n'ai pas très bien compris la problématique de l'estimation de la raideur en dehors de son point d'équilibre (quasi stiffness).]}
 
-Le modèle KBM malgré ses limites a l'avantage d'être extrêmement simple, bien qu'il puisse reproduire des comportements de rejet en perturbations pour de faibles mouvements, ses paramètres ne doivent pas être regardés comme des réalités physiques.
+Finalement, malgré ses limites, le modèle KBM a l'avantage d'être extrêmement simple. Toutefois, bien qu'il puisse reproduire des comportements de rejet en perturbation pour de faibles mouvements, ses paramètres ne doivent pas être regardés comme des réalités physiques.
 
 %\paragraph{Autre modélisation}
 %

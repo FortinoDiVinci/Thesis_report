@@ -1,0 +1,37 @@
+\begin{figure}
+	\centering	
+	\begin{tikzpicture}
+			
+		\begin{axis} [%
+				ybar,
+				height=6cm,
+				width=10cm,
+				xtick={2004, 2007, 2010, 2013, 2016, 2019},
+				/pgf/number format/1000 sep={},
+				ylabel={Ventes},
+				scaled y ticks={base 10:-3},
+				]
+			\addplot coordinates {
+				(2004,97000) 
+				(2005,120000) 
+				(2006,112000) 
+				(2007,114000)
+				(2008,113000) 
+				(2009,60000) 
+				(2010,121000) 
+				(2011,166000)
+				(2012,159000) 
+				(2013,178000) 
+				(2014,221000) 
+				(2015,254000)
+				(2016,294000) 
+				(2017,400000) 
+				(2018,422000) 
+				(2019,373000)
+			};
+		\end{axis}
+		
+	\end{tikzpicture}
+\caption{Etude conduite par Statista en 2021, concernant le nombre de ventes de robots industriels dans le monde}
+\label{fig_indus_rob_growth}
+\end{figure}

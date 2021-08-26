@@ -1,0 +1,51 @@
+\begin{figure} [h]	
+	\centering
+	\begin{circuitikz}
+		\coordinate (O) at (0,0);
+		\coordinate (O1) at ($(O) + (0, 0.75)$);
+		\coordinate (O2) at ($(O) + (0, -0.75)$);
+		
+		\coordinate (M1) at ($(O) + (2, 0)$);
+		\coordinate (M2) at ($(M1) + (2, 0)$);
+		
+		\coordinate (A1) at ($(M2) + (0, 0.75)$);
+		\coordinate (A2) at ($(M2) + (0, -0.75)$);
+		
+		\coordinate (B) at ($(M2) + (2, 0)$);
+		
+		\draw (O1) to[spring=$k_1$] ($(M1) + (0,0.75)$);
+		\draw (O2) to[damper=$b_1$] ($(M1) + (0,-0.75)$);
+		\draw (A1) to[spring=$k_2$] ($(B) + (0,0.75)$);
+		\draw (A2) to[damper=$b_2$] ($(B) + (0,-0.75)$);
+		%\draw (M1) to[mass=$m$] ++ (M2);
+		%\draw (M1) -- (M2);
+		%\draw ($(M1) + (0.5,0.5)$)  rectangle node[fill=white](mass){$m$} ($(M2) + (-0.5,-0.5)$);
+		\node[rectangle, right of = M1, align=center, node distance = 1cm, draw, minimum width = 1cm, minimum height = 1cm] (mass) {$m$};
+		
+		\draw (O2) -- (O1);
+		\draw ($(M1) + (0,0.75)$) -- ($(M1) + (0,-0.75)$);
+		\draw (M1) -- (mass.west);
+		\draw (M2) -- (mass.east);
+		\draw (A2) -- (A1);
+		\draw ($(B) + (0,0.75)$) -- ($(B) + (0,-0.75)$);
+		
+		%\draw[fill=black] (O) circle (0.05);
+		\draw[fill=black] (M1) circle (0.05);
+		\draw[fill=black] (M2) circle (0.05);
+		\draw[fill=black] (B) circle (0.05);		
+		
+		\draw (B) --+ (0.5,0);
+		\draw ($(B) + (0.5,-0.25)$) -- ($(B) + (0.5,0.25)$);
+		\foreach \i in {-0.25, -0.15, ..., 0.3} {
+			\draw ($(B) + (0.5, \i)$) --+ (45:0.25);
+		}
+
+		\draw[{Latex[length=2mm]}-] (O.center) --+ (-0.5,0)
+			node[near end, above] {$f$};
+		\draw[dashed, gray] (O1) --+ (0,0.75)
+		node[near end, above, yshift=1.5mm, black]{$x$};
+
+	\end{circuitikz}
+	\caption{Modèle en impédance à 5 paramètres}
+	\label{fig_speich_5param_imp_model}
+\end{figure}
