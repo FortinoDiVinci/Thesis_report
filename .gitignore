@@ -18,7 +18,7 @@
 # figure
 *.fig
 *.png
-*.jpg
+.jpg
 *.pdf
 *.avi
 
@@ -30,3 +30,14 @@
 # machine learning
 *.ckpt
 *.p
+
+# latex
+*.gz
+*.log
+*.fls
+*.fdb_latexmk
+*.blg
+*.bbl
+*.aux
+*.toc
+*.run.xml
