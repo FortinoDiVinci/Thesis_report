@@ -2,7 +2,8 @@
 %%%% 3 avril 2021 %%%%
 
 %\documentclass[fr]{tcthesis}
-\documentclass{book}
+%\PassOptionsToPackage{table,xcdraw,svgnames}{xcolor} % for quotation boxes
+\documentclass[multi=pane,border=4mm,tikz,crop]{book}
 
 \usepackage{tikz} % figure de façon générale - T. Chevet (la référence tikz)
 \usetikzlibrary{shapes}
@@ -11,6 +12,7 @@
 \usetikzlibrary{babel}
 \usetikzlibrary{patterns}
 \usetikzlibrary{matrix}
+\usetikzlibrary{backgrounds}
 \usepackage{circuitikz}
 \usepackage{pgfplots}
 \usepackage{subcaption}
@@ -25,6 +27,9 @@
 \usepackage{rotating} % for sideway table notably
 \usepackage[inline]{enumitem}
 \usepackage[framemethod=default]{mdframed} % for text boxes
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+%\usepackage{adjustbox,libertine,soul,standalone,xcolor} % for quotation boxes
 %
 \newcommand{\vect}[1]{
 	\boldsymbol{\MakeLowercase{#1}}
@@ -49,6 +54,8 @@
 %\setulmarginsandblock{2.5cm}{2.5cm}{*}
 %\checkandfixthelayout
 
+%%
+
 \begin{document}
 	
 %%%%%
@@ -66,6 +73,14 @@
 	frametitleaboveskip=-9pt,}
 \begin{mdframed}[]\relax%
 }{\end{mdframed}}
+
+%%%% for quotation
+global\mdfdefinestyle{quotationStyle}{%
+	linecolor=gray!50,linewidth=3pt,%
+	leftmargin=1cm,rightmargin=1cm,%
+	topline=false,bottomline=false,%
+	rightline=false,backgroundcolor=red!1
+}
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tableofcontents
