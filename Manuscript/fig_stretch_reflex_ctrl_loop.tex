@@ -25,26 +25,26 @@
 			node[midway, above] {\phantom{p}force\phantom{p}};
 			
 		\draw[-{Latex[length=3mm]}] (tendon.north) |- (golgi_fb.east)
-			node[near end, above] {\phantom{p}force feedback\phantom{p}};
+			node[near end, above] {\phantom{p} retour de force\phantom{p}};
 		\draw[-{Latex[length=3mm]}] (golgi_fb.south) -- (alpha.north);
 		\draw[-{Latex[length=3mm]}] (spindles.west) -| (alpha.south)
-			node[near start, align=center] {\phantom{p}length \& velocity \\ feedbacks\phantom{p}};
+			node[near start, align=center] {\phantom{p} longueur \& \\ vitesse \phantom{p}};
 		\draw[-{Latex[length=3mm]}] (gamma.east) -| (spindles.south);
 		\draw[-{Latex[length=3mm]}] (nodeLoad.center) |- (spindles.east);
 		% arrows
 		\draw[{Latex[length=3mm]}-] (alpha.west) --+ ($ (-1, 0) $)
-			node[near end, above] {cmd};
+			node[near end, above] {consigne};
 		\draw[{Latex[length=3mm]}-] (gamma.west) --+ ($ (-1, -0) $)
-			node[near end, left, align=center] {length \\ cmd};
+			node[near end, left, align=center] {cons. \\ longueur};
 		\draw[{Latex[length=3mm]}-] (golgi_fb.west) --+ ($ (-1, -0) $)
-			node[near end, left, align=center] {force \\ cmd};
+			node[near end, left, align=center] {cons. \\ force};
 		\draw[{Latex[length=3mm]}-] (load.north) --+ ($ (0, 1) $)
 			node[near end, right] {$f_e$};	
 		%
 		\draw[-{Latex[length=3mm]}] (load.east) --+ ($ (1.75, 0) $)
-			node[midway, above] {length};
+			node[midway, above] {longueur};
 		
 	\end{tikzpicture}
-	\caption{Spinal stretch reflex control action}
+	\caption{Schéma bloc des réflexes spinaux et de leurs retroactions}
 	\label{fig_stretch_reflex_control_loop}
 \end{figure}

@@ -10,17 +10,17 @@
 
 Les robots peuvent se définir techniquement, comme des ensembles mécatroniques physiques, capables de sentir leur environnement à travers des \emph{capteurs}, de prendre des décisions avec différents niveaux d'autonomie grâce à des \emph{algorithmes} et outils de l'automatique pour enfin agir à travers des \emph{actionneurs}. On remarquera que si cette manière large de qualifier les robots permet à la fois d'inclure des véhicules, des bras articulés, des automates, des exosquelettes, des androïdes et même les répliquants de P. K. Dick, elle ne prend pas en compte les simulations et robots virtuels tant qu'ils n'opèrent pas sur le monde physique - \textit{contrairement à Skynet}.
 
-Suivant cette définition, on peut trouver des trâces de proto-robots dès l'antiquité à travers les mythes du golem, créature d'argile du folklore hébraïque, et dans la mythologie grècque avec l'histoire de Galatée, statue d'ivoire devenant femme, transcrite au I\textsuperscript{er} siècle dans les Métamorphoses d'Ovide. Si dans ces deux exemples, c'est une divinité qui insuffle la vie, au XIV\textsuperscript{ème} siècle, dans le roman épistolaire de M. Shelley, c'est bien un homme, Victor Frankenstein qui donne l'étincelle à sa création.
+Suivant cette définition, on peut trouver des trâces de proto-robots dès l'antiquité à travers les mythes du golem, créature d'argile du folklore hébraïque, et dans la mythologie grècque avec l'histoire de Galatée, statue d'ivoire devenant femme, transcrite au I\textsuperscript{er} siècle dans les Métamorphoses d'Ovide. Si dans ces deux exemples, c'est une divinité qui insuffle la vie, au XIX\textsuperscript{ème} siècle, dans le roman épistolaire de M. Shelley, c'est bien un homme, Victor Frankenstein qui apporte l'étincelle à sa création.
 
 Si on s'éloigne de la littérature, les premiers enjeux techniques liés à la robotique ont été principalement dirigés vers la mécanique, comme on peut le voir avec les \emph{automates} créés par des inventeurs du XII\textsuperscript{ème} siècle comme Al-Jazari \cite{ceccarelli_distinguished_2009} puis en France au XVIII\textsuperscript{ème} siècle par Jacques de Vaucanson. Il faudra toutefois attendre la seconde moitiée du XX\textsuperscript{ème} siècle, pour voir apparaître les premiers robots dans des contextes industriels, avec Unimaton, la première companie à concevoir et proposer des robots articulés motorisés \cite{devol_programmed_1961}.
 
-Ces machines autonomes s'avèrent effectivement très performantes pour les tâches répétitives qui parsèment les lignes de productions dépeintes avec un humour satirique dans les Temps Modernes de C. Chaplin. C'est ainsi que les années 1970 voit l'installation de bras articulés émerger dans le monde, notamment pour l'industrie automobile \cite{lazaric_origines_1992}. Ces robots se démocratisent ensuite à d'autres secteurs où leur rapidité et précision permettent, dans des environnements contrôllés, d'automatiser entièrement ou partiellement la production de produits manufacturés. Les installations de robot industriel passent ainsi de \SI{97000}{} à \SI{373000}{} unités de 2004 à 2019, comme le montre la \cref{fig_indus_rob_growth}.
+Ces machines autonomes s'avèrent effectivement très performantes pour les tâches répétitives qui parsèment les lignes de productions dépeintes avec un humour satirique dans les Temps Modernes de C. Chaplin. C'est ainsi que les années 1970 voit l'installation de bras articulés émerger dans le monde, notamment pour l'industrie automobile \cite{lazaric_origines_1992}. Ces robots se démocratisent ensuite à d'autres secteurs où leur rapidité et précision permettent, dans des environnements contrôllés, d'automatiser entièrement ou partiellement la production de produits manufacturés. Les installations de robot industriel passent ainsi de \SI{97000}{} à \SI{373000}{} unités de 2004 à 2019 dans le monde, comme le montre la \cref{fig_indus_rob_growth}.
 
 \input{fig_industrial_robotic_growth}
 
 Ces robots industriels qui évoluent dans des cages pour protéger les opérateurs humains, peuvent s'avérer dangereux \cite[Chapter~4]{dhillon_robot_1991}. Une recherche sur la base de données de l'\textit{Occupational Safety and Health Administration} (OSHA), - \textit{une agence gouvernementale fédérale étasunienne pour la prévention des blessures, maladies et décès dans le cadre du travail }- avec le mot clé 'robot', informe de 13 cas de fatalités humaines entre 2003 et 2019, dont huit cas où le robot semble explicitement responsable du décès \cite{OSHA_robot_accident}. Ces accidents bien que précoccupants sont à relativiser par rapport à l'ensemble des accidents du travail. Ainsi, \cite{gihleb_industrial_2020} indiquent que les robots industriels entraînent une chute significative des accidents professionnels. Une réduction de \SI{28}{\percent} des blessures dans les entreprises manufacturières entre 2005 et 2011, aux Etats-Unis d'Amérique et en Allemagne serait ainsi liée à l'augmentation des équipements robotisés.
 
-Pourtant, si les robots peuvent surpasser l'humain dans des cadres particuliers, la versatilité des animaux biologiques semble encore un pas de géant pour les machines artificielles. Ainsi, pour que les robots puissent évoluer dans des environnements non maîtrisés, qui regroupent dans les faits la plupart des environnements existants, il leur faut tendre vers la capacité d'adaptation du vivant. En effet, à ce jour, si la cuisine reste une tâche à la portée de n'importe quel être humain - \textit{ou du moins de la plupart} -, l'environnement offert par les fourneaux reste plutôt hostile aux robots. Malgré l'existance de projets concernant des robots chefs, un robot cuisinier se résume plutôt à l'habile mariage d'un autocuiseur et d'un mixeur alors que cette thèse est écrite.
+Pourtant, si les robots peuvent surpasser l'humain dans des cadres particuliers, la versatilité des animaux biologiques semble encore un pas de géant pour les machines artificielles. Ainsi, pour que les robots puissent évoluer dans des environnements non maîtrisés, qui regroupent dans les faits la plupart des environnements existants, il leur faut tendre vers la capacité d'adaptation du vivant. En effet, à ce jour, si la cuisine reste une activité à la portée de n'importe quel être humain - \textit{ou du moins de la plupart} -, l'environnement offert par les fourneaux reste plutôt hostile aux robots. Malgré l'existance de projets concernant des robots chefs, un robot cuisinier se résume plutôt à l'habile mariage d'un autocuiseur et d'un mixeur alors que cette thèse est écrite (\cref{fig_illustration_robot_cuisine}).
 
 \input{fig_robot_cuisine}
 
@@ -32,7 +32,7 @@ La qualification humaine est donc loin d'être totalement remplacée par des mac
 
 C'est notamment pour répondre à cette problématique que le concept de robot collaboratif, raccourci en cobot, s'est dégagé. Défini par \cite{peshkin_cobots_1999}, les cobots sont des robots conçus pour réaliser des interactions directes avec des opérateurs humains, dans des espaces de travail partagés\footnote{\label{footnote_cobot}"Collaborative robots 'cobots' are intended for direct interaction with a human worker, handling a shared payload", \cite{peshkin_cobots_1999}.}. C'est donc l'application qui permet d'affirmer qu'il s'agit d'un cobot, or pour atteindre cette collaboration le robot devra répondre à plusieurs enjeux.
 
-En effet, comme évoqué précédemment, pour éviter des dommages collateraux et transformer le robot en Roy Batty de P.K. Dick ou Ava de A. Garland, la conception du robot doit être pensée pour la sécurité des opérateurs. Cette compatibilité à évoluer proche d'humains peut être prévue d'une part dès la conception du robot, à travers %
+En effet, pour éviter des dommages collateraux et transformer le robot en Roy Batty de P.K. Dick ou Ava de A. Garland, la conception du robot doit être pensée pour la sécurité des opérateurs. Cette compatibilité à évoluer proche d'humains peut être prévue d'une part dès la conception du robot, à travers %
 \begin{enumerate*}
 	\item des actionneurs spécifiques, comme ceux à impédance variables qui sont explorés plus loin, 
 	\item des capteurs dédiés, permettant par exemple de détecter des contacts sur des zones specifiques (qu'ils soient embarqués ou non sur le robot) ;
@@ -46,9 +46,9 @@ ou d'autre part lors de sa programmation grâce à des stratégies de commande p
 	\label{fig_cobot_example}
 \end{figure}
 
-Un robot collaboratif peut alors apporter de l'assistance lors de tâches sur des objets à géométrie variables nécessitant la manipulation d'équipements lourds, pouvant entraîner des troubles musculosquelettiques. Ainsi comme on peut le constater sur la \cref{fig_cobot_example}, l'opérateur humain guide un bras robotisé équipé d'une tête dédiée. Ainsi pendant le meulage de pièces à morphologies variées, l'opérateur apporte son savoir-faire de meuleur difficile à programmer pour un robot autonome. Toutefois, il est important de noter que dans le cas de ce cobot utilisé par la fonderie Ferry Capitain, le but n'est pas d'améliorer les performances des meuleurs, mais de les soulager de la charge des meules qui pèsent jusqu'à 5kg \cite{ravallec_travail_2015}.
+Un robot collaboratif peut alors apporter de l'assistance lors de tâches sur des objets à géométrie variables nécessitant la manipulation d'équipements lourds, pouvant entraîner des troubles musculosquelettiques. Comme on peut le constater sur la \cref{fig_cobot_example}, un opérateur humain guide un bras robotisé équipé d'une tête dédiée. Ainsi pendant le meulage de pièces à morphologies variées, l'opérateur apporte son savoir-faire de meuleur difficile à programmer pour un robot autonome. Toutefois, il est important de noter que dans le cas de ce cobot utilisé par la fonderie Ferry Capitain, le but n'est pas d'améliorer les performances des meuleurs, mais de les soulager de la charge des meules qui pèsent jusqu'à 5kg \cite{ravallec_travail_2015}.
 
-Dans un champ d'application aux antipodes d'un contexte industriel, le Dr. P. Gorphe de l'institut Gustave Roussy a coordonné le projet TORS pour l'évaluation de la faisabilité d'interventions peux invasives pour les opérations Oto-Rhino-Laryngologie (ORL). Ainsi, en couplant l'utilisation du robot chirurgical, le Da Vinci Xi et une endoscopie, les chirurgiens de l'institut ont pu enlever une tumeur logée dans le rhinopharynx d’un jeune patient \cite{parisel_chirurgie_2018}. Cette opération qui est une première européenne en 2018, évite de conduire une intervention risquée aux séquelles lourdes pour le patient (ouverture du palais pour accéder au pharynx). Le médecin téléopère le robot à l'aide d'une interface qui permet de manipuler le robot chirurgien avec une assistance filtrant les vibrations, pouvant démultiplier la précision des mouvements grâce à des facteurs d'échelle, et permettant d'accéder, comme dans cet exemple, à des zones presque inatteignables précédemment. Il est important de noter toutefois, que malgré les récents développements \cite{abiri_multi-modal_2019}, aucun retour d'efforts et donc aucune sensation haptique n'est permise avec le robot actuel.
+Dans un champ d'application aux antipodes d'un contexte industriel, le Dr. P. Gorphe de l'institut Gustave Roussy a coordonné le projet TORS pour l'évaluation de la faisabilité d'interventions peu invasives pour les opérations Oto-Rhino-Laryngologie (ORL). Ainsi, en couplant l'utilisation du robot chirurgical, le Da Vinci Xi et une endoscopie, les chirurgiens de l'institut ont pu enlever une tumeur logée dans le rhinopharynx d’un jeune patient \cite{parisel_chirurgie_2018}. Cette opération qui est une première européenne en 2018, évite de conduire une intervention risquée aux séquelles lourdes pour le patient (ouverture du palais pour accéder au pharynx). Le médecin téléopère le robot à l'aide d'une interface qui permet de manipuler le robot chirurgien avec une assistance filtrant les vibrations, pouvant démultiplier la précision des mouvements grâce à des facteurs d'échelle, et permettant d'accéder, comme dans cet exemple, à des zones presque inatteignables précédemment. Il est important de noter toutefois, que malgré les récents développements \cite{abiri_multi-modal_2019}, aucun retour d'efforts et donc aucune sensation haptique n'est permise avec le robot actuel.
 
 \subsection{Vers quels types de collaboration ?}
 
@@ -67,48 +67,77 @@ Comme déjà avancé, la faiblesse des robots réside dans leur manque de résil
 Ainsi, dans des environnements accidentés, que ce soit pour des missions de secours ou d'exploration, la présence de robots peut-être préférable à celle d'humains. Dans ces cas, l'humain peut guider à distance le robot, qui peut par la suite être ammené à entrer en contact avec des victimes de catastrophes variées. Dans ce cas, on voit que les interactions entre le robot et les humains peuvent être de nature différentes, on peut ainsi lister dans ce seul cas 
 \begin{enumerate*}
 	\item la téléopération ou télémanipulation, avec le guidage du robot,
-	\item l'évolution avec la présence d'humains,
+	\item les déplacements en présence d'humains,
 	\item le contact physique direct ou indirect avec des humains.
 \end{enumerate*}
 
 Fort heureusement, les évènements conduisants au besoin de tels robots ne sont pas monnaie courante, et le développement de la robotique collaborative se dirige aussi vers des applications proches de celles décrites dans les exemples précédemments cités. C'est pour ce type d'environnements mieux maîtrisés que \cite{helms_robwork_2002} définissent plusieurs scénarios dans le cadre d'interactions physiques à l'invasivité croissante selon trois critères qui sont la zone de travail, la pièce de travail et le processus :
 
 \begin{enumerate}
-	\item la \emph{coexistance}, qui se définit par le travail du robot en présence d'opérateurs humains, pour des tâches indépendantes, mais sans la présence de cage pour la cellule robotisée. L'espace de travail est donc partagé, mais les outils et pièces de travail ne sont pas communs. (seul l'espace de travail est partagé (\cref{subfig_cobot_coex}))
+	\item la \emph{coexistance}, qui se définit par le travail du robot en présence d'opérateurs humains, pour des tâches indépendantes, mais sans la séparation physique par des cages pour la cellule robotisée. L'espace de travail est donc partagé, mais les outils et pièces de travail ne sont pas communs. (\cref{subfig_cobot_coex})
 	\item la \emph{coopération par alternance}, qui vient ajouter la possibilité de travailler sur des pièces identiques séquentiellement, et donc de manière espacée dans le temps. On peut penser à un robot faisant du "\textit{pick and place}" pour positionner un objet lourd, puis à l'opérateur réalisant sa tâche une fois l'objet positionné et le robot en retrait. (la pièce de travail est partagée mais le processus est séparé dans le temps (\cref{subfig_cobot_alter}))
 	\item la \emph{coopération simultanée}, qui retire le besoin d'être séquentiel, ainsi l'objet peut-être manipulé en même temps par le robot et l'opérateur, ce qui constitue un contact indirect entre les deux agents, à travers l'objet manipulé. Le robot peut par exemple positionner une pièce massive en la soulevant, pour rendre accessible une zone particulière de l'objet pour l'opérateur. (le processus n'est plus que séparé dans l'espace (\cref{subfig_cobot_simul}))
-	\item et l'\emph{assistance physique}, qui voit les deux agents travailler ensemble sur un même objet. On peut alors distinguer deux configurations comme le fait \cite{ministere_guide_2017}, en fonction si le système d'assitance physique est guidé par l'opérateur, où s'il est fixé à l'opérateur, comme le serait un exosquelette. (l'ensemble des critères sont communs (\cref{subfig_cobot_assist}))
+	\item l'\emph{assistance physique}, qui voit les deux agents travailler ensemble sur un même objet. On peut alors distinguer deux configurations comme le fait \cite{ministere_guide_2017}, en fonction de si le système d'assitance physique est guidé par l'opérateur, où s'il est fixé à l'opérateur, comme le serait un exosquelette. (l'ensemble des critères sont communs (\cref{subfig_cobot_assist}))
 \end{enumerate}
 
 \input{fig_cobot_workspace_scenarios}
 
 \subsubsection{Les modalités de collaboration}
 
-Dans une revue de la littérature concernant les interactions entre humains et robots (HRI, "\textit{Human-Robot interaction}"), \cite{goodrich_humanrobot_2008} découpent les interactions possibles en 2 catégories déjà évoquées : 
+Dans une revue de la littérature concernant les interactions entre humains et robots (HRI, "\textit{Human-Robot interaction}"), \cite{goodrich_humanrobot_2008} découpent les interactions possibles en 2 catégories : 
 \begin{enumerate}
 	\item les interactions à \emph{distance}, où le robot et l'humain sont séparés physiquement voire temporellement, comme c'est le cas des rovers envoyés sur la Lune ou Mars,
-	\item les interactions de \emph{proximité}, où les barrières physiques n'existent plus, qui se découpent elles mêmes en deux sous catégories :
-	\begin{enumerate}[label=\alph*)]
-		\item les interactions \emph{physiques} (pHRI, "\textit{physical Human-Robot interaction}"),
-		\item les interactions \emph{sociales}, avec les travaux d'abord en psychologie \cite{dearborn_review_1909} puis en sciences cognitives\footnote{\label{footnote_cognitive} Champ pluridisciplianire regroupant psychologie, philosophie, linguistique, neurosciences et anthropologie} concernant la \emph{théorie de l'esprit}\footnote{\label{footnote_TOM} "\textit{La théorie de l’esprit correspond à la capacité à inférer des états mentaux à autrui, comme des croyances, des désirs, ou des intentions.}", \cite{duval_theorie_2011}} \cite{baron-cohen_evolution_2000} qui ont été transposés pour la robotique \cite{scassellati_theory_2002}.
-	\end{enumerate}
+	\item les interactions de \emph{proximité}, où les barrières physiques n'existent plus.
 \end{enumerate}
 
+Au sein de ces catégories, on peut encore faire la distinctions entre plusieurs types d'interactions :
+\begin{enumerate}[label=\alph*)]
+	\item les interactions \emph{physiques} (pHRI, "\textit{physical Human-Robot interaction}"), où le robot entre en contact matériel avec un ou plusieurs humains,
+	\item les interactions \emph{sociales}, avec les travaux d'abord en psychologie \cite{dearborn_review_1909} puis en sciences cognitives\footnote{\label{footnote_cognitive} Champ pluridisciplianire regroupant psychologie, philosophie, linguistique, neurosciences et anthropologie} concernant la \emph{théorie de l'esprit}\footnote{\label{footnote_TOM} "\textit{La théorie de l’esprit correspond à la capacité à inférer des états mentaux à autrui, comme des croyances, des désirs, ou des intentions.}" \cite{duval_theorie_2011}} \cite{baron-cohen_evolution_2000} qui ont été transposés pour la robotique \cite{scassellati_theory_2002}.
+\end{enumerate}
 
+Il exite toutefois des passerelles entre ces différentes catégories qui ne sont pas hermétiques. On pourra en effet citer les travaux concernant la communication d'émotions, ou l'amélioration des interactions sociales à travers des interfaces tactiles ou kinesthésiques \cite{bailenson_virtual_2007, tsetserukou_affective_2009, teyssier_conveying_2020}, où interactions physiques et sociales sont donc combinées.
+
+Une autre manière de classer les interactions entre agents, serait de regarder les médias ou canaux sensoriels utilisés \cite{ajoudani_progress_2018}. En effet, pour transmettre de l'information à un humain, il faut faire appel à ses différents sens, dont le plus proficient en vu de communiquer est l'audition, toutefois, la communication ne se limite pas à l'utilisation de ce seul sens, et les interactions sociales humaines sont enrichies par la vue, le toucher, et l'odorat \cite[Chapter~1]{cherry_human_1978}. Ces différents sens ont des caractéristiques qui leurs sont propres, que ce soit au niveau des temps de réaction \cite{chan_finger_2012, jain_comparative_2015}, des débits d'information \cite{kondo_auditory_2017}, etc.
+
+\textcolor{red}{Parler des interactions entre humains ?? source d'inspiration pour la robotique ?}
 
 \subsubsection{Les interactions haptiques}
+
+Ces travaux se concentrent sur les interactions physiques, où la collaboration se situe dans le cadre du scénario 4 (\cref{subfig_cobot_assist}). Ces interactions haptiques peuvent se manifester sous différentes formes, avec des intérêts disparates. 
+
+Ainsi, lors de la télémanipulation d'un robot "esclave", informer le manipulateur sur les forces qui s'exercent sur le robot peut être une information cruciale, comme évoqué pour la chirurgie robotisée. On parle dans ce cas de \emph{retour de forces}, qui permettent d'améliorer la \emph{transparence} du robot en récréant la sensation de l'effort exercé lors d'un contact physique. Le chirurgien aurait alors la sensation d'être en contact direct avec les organes du patient \cite{pacchierotti_improving_2014}. Cependant, la transparence parfaite, c'est à dire sans délai, avec une transmission sans erreur de force et des propriétés d'impédance équivalentes, pose des problématiques de stabilité \cite{enayati_haptics_2016}. Un autre point important concerne le capteur de force, dont le positionnement est critique. En effet, plus le capteur est éloigné de l'embou de l'effecteur final, plus sa précision risque d'être dégradée \cite{eppinger_dynamic_1986, tiwana_review_2012}.
+
+La perception des efforts est toutefois différentes du sens du toucher \textit{stricto sensu}, c'est ce qui amène à introduire les \emph{retours tactiles}. Ces derniers permettent de transmettre des sensations comme la rugosité, la température, la texture, les vibrations etc, pour enrichir une interaction physique \cite{tiwana_review_2012, el_rassi_review_2020}. Les retours tactiles ont l'avantage de ne pas poser de problématique de stabilité lors du contrôle robotisé, et peuvent être utilisés de manière complémentaire aux retours de forces pour enrichir la transparence et balancer le compromis transparence-stabilité \cite{pacchierotti_cutaneous_2015, lim_role_2015}.
+
+Les interactions haptiques permettent donc d'étoffer les sensations, elles peuvent aussi assister la force appliquée lors de tâches collaboratives. Lors d'une manipulation avec un robot, l'\emph{amplification des efforts} de l'opérateur permet d'utiliser son expertise, tout en apportant la force de la motorisation, comme décrit dans les travaux de \cite{cagneau_passive_2008, lamy_human_2010}, en utilisant deux capteurs de force positionnés judicieusement aux interfaces entre la poigné et l'outil par exemple.
+
+Il est aussi possible de guider le mouvemement de l'utilisateur, pour par exemple le faire évoluer sur un plan, ou empêcher l'effecteur du robot de sortir d'un volume prédéfini en utilisant des \emph{guides et butées virtuels}, comme décrit dans les travaux de \cite{restrepo_iterative_2017}. Les contraintes géométriques doivent être préprogrammées, et sont donc sensibles aux changements contextuels de l'environnement. Des travaux essaient de palier cette limitation en utilisant de la détection d'intention pour des scénarios prédéfinis \cite{bu_online_2016}. Dans des contextes chirurgicaux, les organes et tissus peuvent bouger, \cite{bowyer_deformation_2014} ont proposé une méthodologie basée sur des invariants de déformation, pour proposer des guides virtuels dynamiques.
 
 \begin{aside}[Collaboration et performances]
 	\textcolor{red}{[petit encadré sur la collaboration en impédance ? \cite{ganesh_two_2014}.}
 \end{aside}
 
-\subsection{Les contrôles robotiques lors d'interactions physiques}
+\subsection{Les lois de commande robotiques lors d'interactions physiques}
+
+Comme rappelé par \cite{hogan_impedance_1985}, lorsqu'un robot interagit avec un environnement, qu'il s'agisse d'un humain ou d'un objet quelconque, un couplage se crée entre les 2 systèmes physiques. Ainsi de manière général lorsque des systèmes physiques s'interfèrent, les flux de puissance intantannée se définissent le long des degrés de liberté concernés, comme le produit de deux grandeurs l'effort et le flux. Or, aucun des systèmes seuls ne peut imposer ces deux variables simultanément. Dans le cas d'interactions physiques robotisées, on s'intéressera aux forces $\vect{f}$ et vitesses $\vect{v}$, comme montré sur la \cref{fig_physical_interaction}.
+
+\input{fig_interaction_port}
+
+Il faut toutefois trouver un moyen de d'imposer un comportement au robot, pour qu'il puisse à la fois obtenir un contrôle en position et en force souhaité. Dans un premier temps, des lois de commande hybrides ont été proposées en contrôlant, par exemple, la position sur une trajectoire tangeante, et la force sur l'axe normal à cette trajectoire \cite{raibert_hybrid_1981}. Ce type de contrôle se prête plutôt bien à des tâches industrielles comme la soudure.
+
+S'il est souvent compliqué de modéliser l'environnement, une autre approche consiste à imposer un comportement dynamique à l'interaction des deux systèmes. Ainsi plutôt que d'essayer de contrôler la force et la position du robot, il est possible de fournir une trajectoire à laquelle une dynamique mécanique est imposée. Pour imposer une telle dynamique, il faut toutefois faire une supposition sur la nature de l'environnement, et la causalité des ports d'intéractions. De manière général, on peut assumer qu'un environnement passif génère un mouvement lorsqu'il est soumis à une force \cite{hogan_impedance_1985}, il faut donc que le robot lui impose cette force en se comportant comme un système en impédance (voir \cref{chap_1_sec_2_subsec_1_impedance_definition}).
+
+
+
+\textcolor{red}{Contrôle en impédance / admittance}
+
 
 \newpage%%%
 \section{Modéliser le comportement humain}
 %%%
 
-\subsection{Les sciences du mouvement humain}
+\subsection{Les fondements de la biomécanique du corps humain}
 
 \subsubsection{Rappels sur la biologie du corps humain} \label{chap_1_sec_modelling_human_subsec_1_1}
 
@@ -118,16 +147,17 @@ Dans une revue de la littérature concernant les interactions entre humains et r
 
 La dénomination de \emph{muscle} désigne ici spécifiquement une sous-catégorie de muscles, appelés muscles squelettiques ou "volontaires" qui permettent la réalisation de mouvements conscients, par opposition aux muscles lisses que l'on trouve typiquement sur des organes comme l'estomac ou les intestins, qui ne sont pas contrôlés consciemment. Ces muscles représentent généralement \SI{75}{\percent} de la masse de l'ensemble des muscles, soit \SI{40}{\percent} de la masse molle non grasse du corps humain, c'est à dire moins de \SI{30}{\percent} de la masse totale \cite{buckinx_pitfalls_2018}.
 
-Les muscles se composent notamment de longues cellules regroupées en faiseaux, les fibres musculaires ou myocytes, qui sont capables de \emph{contractions} lorsqu'elles sont stimulées. Ces fibres enveloppées dans l'epimysium sont fixées aux os grâce à des tissus d'insertion comme les tendons, permettant des points d'ancrage sur les os. Comme le montre la \cref{fig_schema_muscle_activation}, lorsque les fibres musculaires d'un muscle se contractent, elles exercent une force sur les points d'ancrage, qui permet aux articulations de se mouvoir grâce au couple généré. Pour une description plus exhaustive des muscles squelettiques, on pourra se référer à \cite[Chapter~1]{mcmahon_muscles_1984}, \cite[Chapter~2]{tresilian_sensorimotor_2013} ou \cite{nishikawa_neuromechanics_2007} pour ne citer que trois exemples.
+Les muscles se composent notamment de longues cellules regroupées en faiseaux, les fibres musculaires ou myocytes, qui sont capables de \emph{contractions} lorsqu'elles sont stimulées. Ces fibres enveloppées dans une membrane, l'epimysium, sont fixées aux os grâce à des tissus d'insertion comme les tendons, permettant des points d'ancrage sur les os. Comme le montre la \cref{fig_schema_muscle_activation}, lorsque les fibres musculaires d'un muscle se contractent, elles exercent une force sur les points d'ancrage, qui permet aux articulations de se mouvoir grâce au couple généré. Pour une description plus exhaustive des muscles squelettiques, on pourra se référer à \cite[Chapter~1]{mcmahon_muscles_1984}, \cite[Chapter~2]{tresilian_sensorimotor_2013} ou \cite{nishikawa_neuromechanics_2007} pour ne citer que trois exemples.
 
 \input{schema_muscle}
 
-Les \emph{tendons} suivent donc le même principe de fonctionnement que les ficelles d'un pantin. Ces tissus de connexion solides sont composés de faisceaux de fibres de collagène qui leur offrent des propriétés viscoélastiques différentes des muscles. Le tendon calcanéen, plus connu par son appellation liée au héro grec Achille, permet ainsi lors de la marche ou de la course d'accumuler de l'énergie lorsqu'il est étendu, puis de la restituer comme le ferait un ressort. Des économies d'énergie pouvant dépasser \SI{30}{\percent} peuvent ainsi être réalisées lors de différents types de locomotion chez l'humain \cite{ker_spring_1987, alexander_energy-saving_1991, bramble_endurance_2004}.
+%Les \emph{tendons} suivent le même principe de fonctionnement que les ficelles d'un pantin. 
+Les \emph{tendons} font la liaisons entre les muscles aux os. Ces tissus de connexion solides sont composés de faisceaux de fibres de collagène qui leur offrent des propriétés viscoélastiques différentes des muscles. Le tendon calcanéen, plus connu par son appellation liée au héro grec Achille, permet ainsi lors de la marche ou de la course d'accumuler de l'énergie lorsqu'il est étendu, puis de la restituer comme le ferait un ressort. Des économies d'énergie pouvant dépasser \SI{30}{\percent} peuvent ainsi être réalisées lors de différents types de locomotion chez l'humain \cite{ker_spring_1987, alexander_energy-saving_1991, bramble_endurance_2004}.
 
-Ainsi, l'ensemble musculo-tendineux est connu pour ses propriétés visco-élastiques \cite{bernstein_construction_1947, hill_series_1950}. Les expériences réalisées par A. V. Hill dans la première moitiée du XX\textsuperscript{ème} siècle \cite{hill_first_1970}, notamment les premières expériences sur des muscles de grenouilles \cite{hill_myothermic_1931, hill_heat_1938} ont permis de proposer une modélisation des propriétés passives des fibres musculaires. Ainsi, en stimulant le gastrocnemius d'une grenouille pour le tétaniser, en le maintenant dans une forme isométrique avant de le relacher (\cref{fig_experience_hill_1938}), les observations sur la force exercée ainsi que la vitesse de contraction du muscle on permis d'arriver aux conclusions suivantes :
+Ainsi, l'ensemble musculo-tendineux est connu pour ses propriétés visco-élastiques \cite{bernstein_construction_1947, hill_series_1950}. Les expériences réalisées par A. V. Hill dans la première moitiée du XX\textsuperscript{ème} siècle \cite{hill_first_1970}, notamment les premières expériences sur des muscles de grenouilles \cite{hill_myothermic_1931, hill_heat_1938} ont permis de proposer une modélisation des propriétés passives des fibres musculaires. Ainsi, en stimulant le muscle gastrocnémien d'une grenouille (communément appelé mollet chez l'Homme) pour le tétaniser, en le maintenant dans une forme isométrique avant de le relacher (\cref{fig_experience_hill_1938}), les observations sur la force exercée ainsi que la vitesse de contraction du muscle ont permis d'arriver aux conclusions suivantes :
 %
 \begin{itemize}
-	\item les muscles ont un élément actif, $CE$, qui permet d'exercer la force de contraction,
+	\item les muscles ont un élément actif, $CE$ (\cref{fig_hill_muscle_model}), qui permet d'exercer la force de contraction,
 	\item les muscles ont un élément élastique, $K_{SEE}$, dont on observe le comportement en \cref{fig_experience_hill_1938_ii} ($\Delta x_1$) qui correspond à une action tendineuse en série avec l'action contractile des muscles,
 	\item les muscles ont un second élément élastique, $K_{PEE}$, parallèle à l'action des muscles,
 	\item la force de contraction dépend de sa vitesse, ce qui indique un comportement amortissant, $B$, aussi en parallèle.
@@ -135,7 +165,7 @@ Ainsi, l'ensemble musculo-tendineux est connu pour ses propriétés visco-élast
 
 \input{fig_hills_experiment}
 
-On peut alors modéliser le comportement passif du muscle avec la représentation dite de Hill. Il faut toutefois remarquer, que la viscosité observée ne provient pas de liquides visqueux dans les muscles, mais plutôt de caractéristiques physiologiques des protéines à l'origine des contractions, qui peuvent être assimilées à de la viscosité.
+On peut alors modéliser le comportement passif du muscle avec la représentation dite de Hill. Il faut toutefois remarquer, que la viscosité observée ne provient pas de liquides visqueux dans les muscles, mais plutôt de caractéristiques physiologiques des protéines à l'origine des contractions, qui peuvent être assimilées à de la viscosité. Par ailleurs, comme souligné par Hill, si l'élément série $K_{SEE}$ est assimilé à un tendon, ses expériences étant phénoménologiques et non histologiques, rien n'exclu que d'autres sources fibreuses contribuent à ce comportement.
 
 \input{fig_hill_muscle_model}
 
@@ -158,9 +188,9 @@ La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du r
 \textcolor{red}{[ajouter des informations concernant les délais des actions volontaires ? \cite{libet_unconscious_1985}}
 
 \newpage
-\subsection{Modéliser le comportement humain en interaction physique grâce à l'impédance}
+\subsection{Modéliser le comportement humain en interaction physique grâce à l'impédance mécanique}
 
-\subsubsection{Définition}
+\subsubsection{Définition} \label{chap_1_sec_2_subsec_1_impedance_definition}
 
 L'\emph{impédance} $H$, peut se définir pour un système, comme le rapport d'un \emph{potentiel} extensif $E$ sur un \emph{flux} intensif $\phi$. Dit autrement, il s'agit de la capacité d'un système dynamique, d'opposer une force dont l'intensité est proportionnelle à une quantité caractéristique variable dans le temps, lorsqu'il est soumis à un flux de particules en mouvements.
 
@@ -219,7 +249,7 @@ L'impédance permet aussi de décrire les interactions physiques entre plusieurs
 
 \subsubsection{Modulation des propriétés visco-élastiques articulaires}
 
-Si l'on considère l'articulation d'un membre, une même trajectoire peut être décrite avec des cocontractions variées - \textit{c'est à dire aussi bien la contraction des muscles générant le mouvement (agonistes), que ceux s'y opposant (antagonistes)} -, que ce soit dans le cas de trajectoires statiques et donc isométriques \cite{dolan_dynamic_1993, d_j_newham_knee_2001}, ou en mouvement \cite{yamazaki_reciprocal_1994, milner_damping_1998, gribble_role_2003}. 
+Si l'on considère l'articulation d'un membre, une même trajectoire peut être décrite avec des cocontractions variées - \textit{c'est à dire aussi bien la contraction des muscles générant le mouvement (agonistes), que ceux s'y opposant (antagonistes)} -, que ce soit dans le cas de trajectoires statiques et donc isométriques \cite{dolan_dynamic_1993, newham_knee_2001}, ou en mouvement \cite{yamazaki_reciprocal_1994, milner_damping_1998, gribble_role_2003}. 
 
 Ainsi, \cite{gribble_role_2003} ont montré que les cocontractions du membre supérieur augmentaient lorsque la précision requise pour une tâche de pointage augmentait. Des mesures de l'activité musculaire étaient effectuées à l'aide de capteur EMG pendant la tâche, ainsi que sur une durée de \SI{200}{\milli\second} après l'arrêt du mouvement. Lorsque la taille de la cible diminuait, les cocontractions augmentaient et les erreurs de mouvement diminuaient. Ces résultats suggèrent selon les auteurs, que de SNC peut adapter les cocontractions pour améliorer la précision d'un mouvement, et aussi son rejet des perturbations externes.
 

@@ -7,7 +7,7 @@
 
 \usepackage{tikz} % figure de façon générale - T. Chevet (la référence tikz)
 \usetikzlibrary{shapes}
-\usetikzlibrary{arrows.meta}
+\usetikzlibrary{arrows, arrows.meta}
 \usetikzlibrary{calc}
 \usetikzlibrary{babel}
 \usetikzlibrary{patterns}
@@ -75,7 +75,7 @@
 }{\end{mdframed}}
 
 %%%% for quotation
-global\mdfdefinestyle{quotationStyle}{%
+\global\mdfdefinestyle{quotationStyle}{%
 	linecolor=gray!50,linewidth=3pt,%
 	leftmargin=1cm,rightmargin=1cm,%
 	topline=false,bottomline=false,%
