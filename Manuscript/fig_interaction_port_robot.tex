@@ -13,7 +13,14 @@
 		\draw[>=Latex, <-] ($(robot.east) - (0,0.5)$) -- ($(env.west) - (0,0.5)$)
 		node[midway, above] {$\vect{v}$};
 		%
+		\node[block, below of = robot, align=center, node distance=3cm] (robot2) {Robot \\ (Admittance)};
+		\node[block, below of = env, align=center, node distance=3cm] (human) {Humain \\ (Impedance)};
+		%
+		\draw[>=Latex, <-] ($(robot2.east) + (0,0.5)$) -- ($(human.west) + (0,0.5)$)
+		node[midway, above] {$\vect{f}$};
+		\draw[>=Latex, ->] ($(robot2.east) - (0,0.5)$) -- ($(human.west) - (0,0.5)$)
+		node[midway, above] {$\vect{v}$};
 	\end{tikzpicture}
-	\caption{Port d'intéraction entre un robot et son environnement}
+	\caption{Ports d'interaction entre un robot et son environnement dans deux configurations différentes.}
 	\label{fig_physical_interaction_robot}
 \end{figure}
