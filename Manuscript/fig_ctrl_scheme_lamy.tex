@@ -70,15 +70,15 @@
 	
 	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (transf.east);
 	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
-		node[midway, align = center, below] {$\vect{F}_e$};
+		node[midway, align = center, below] {$\vect{f}$};
 	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
-		node[midway, align = center, below] {$\vect{V}_e$};
+		node[midway, align = center, below] {$\vect{v}$};
 	
 	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
 	
 	\end{tikzpicture}
 	}
-	\caption{Schéma simplifié du contrôle en transparence avec capteur de force proposé par \cite{lamy_achieving_2009}, avec Cor. un correcteur pour générer un le signal de commande en vitesse articulaire.} % Figure caption
+	\caption{Schéma simplifié du contrôle en transparence avec capteur de force proposé par \cite{lamy_achieving_2009}, avec Cor. un correcteur permettant de générer un signal de commande en vitesse articulaire $\dot{\vect{q}}_d$, et $Z_{env}$ l'impédance de l'environnement.} % Figure caption
 		%Bloc diagram of the admittance control with a force sensor, proposed by \cite{Lamy_achieving_2009}}
 		%
 	\label{lamy_control} % Label 
