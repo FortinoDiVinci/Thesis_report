@@ -151,8 +151,6 @@
 	pages = {309--317},
 }
 
-
-
 @article{newham_knee_2001,
 	title = {Knee muscle isometric strength, voluntary activation and antagonist co-contraction in the first six months after stroke},
 	volume = {23},
@@ -173,8 +171,6 @@
 	pages = {379--386},
 }
 
-
-
 @article{dolan_dynamic_1993,
 	title = {Dynamic and loaded impedance components in the maintenance of human arm posture},
 	volume = {23},
@@ -189,7 +185,6 @@
 	keywords = {Humans, Impedance measurement, Muscles, Elbow, biocontrol, biomechanics, Central nervous system, Centralized control, Damping, dynamic impedance, elbow joints, equilibrium positions, human arm posture, joint damping, joint impedances, joint inertia, joint stiffness, loaded impedance, Motor drives, muscle, muscles, physiological models, resultant displacements, Shape, Shoulder, shoulder joints, stiffness-damping-mass characteristics},
 	pages = {698--709},
 }
-
 
 @article{granata_costbenefit_2000,
 	title = {Cost–{Benefit} of {Muscle} {Cocontraction} in {Protecting} {Against} {Spinal} {Instability}},
@@ -275,7 +270,6 @@
 	pages = {153--163}
 }
 
-
 @article{burdet_central_2001,
 	title = {The central nervous system stabilizes unstable dynamics by learning optimal impedance},
 	volume = {414},
@@ -314,7 +308,6 @@
 	year = {2001},
 	pages = {446--449}
 }
-
 
 @article{hogan_adaptive_1984,
 	title = {Adaptive control of mechanical impedance by coactivation of antagonist muscles},
@@ -500,6 +493,20 @@
 	publisher={Medgiz, Moscow}
 }
 
+@book{shadmehr_computational_2004,
+	address = {Cambridge, MA, USA},
+	series = {Computational {Neuroscience} {Series}},
+	title = {The {Computational} {Neurobiology} of {Reaching} and {Pointing}: {A} {Foundation} for {Motor} {Learning}},
+	isbn = {978-0-262-19508-9},
+	shorttitle = {The {Computational} {Neurobiology} of {Reaching} and {Pointing}},
+	abstract = {An introduction to the computational biology of reaching and pointing, with an emphasis on motor learning.},
+	language = {en},
+	publisher = {A Bradford Book},
+	author = {Shadmehr, Reza and Wise, Steven P.},
+	editor = {Sejnowski, Terrence J. and Poggio, Tomaso A.},
+	month = oct,
+	year = {2004},
+}
 
 @article{hill_series_1950,
 	title = {The series elastic componet of muscle},
@@ -2417,4 +2424,46 @@
 	author = {Alonso, Victoria and de la Puente, Paloma},
 	year = {2018},
 	pages = {83},
+}
+
+
+@inproceedings{castellini_semg-based_2014,
+	title = {{sEMG}-based estimation of human stiffness: {Towards} impedance-controlled rehabilitation},
+	shorttitle = {{sEMG}-based estimation of human stiffness},
+	doi = {10.1109/BIOROB.2014.6913844},
+	abstract = {In rehabilitation robotics, surface electromyography (sEMG) is extensively used as a human-machine interface, mainly for prosthetic/orthotic control purposes. The technique has been proved to be a highly accurate way of detecting a human subject's intended position, force and torque configurations. Widely applied in the clinics, it is gaining even more momentum as polyarticulated, ever-more dexterous self-powered rehabilitation artifacts appear on the market. In this paper we present a preliminary result about the usage of the same technique to estimate a human subject's hand stiffness in the presence of force-feedback. A novel force feedback control concept based on the modulation of the robot arm stiffness according to the estimated hand stiffness is presented. Thus, the robot arm is set to mimic the stiffness properties of the subject that is controlling the arm, in real time. Six intact subjects were immersed in a simple teleoperation task, in which force feedback was present; the hand stiffness was measured via force perturbation at the master's manipulandum and associated with the sEMG signals. This live estimation of stiffness was then used to control the impedance of the slave. Experimental results show that this system leads to high positional precision but high contact forces when the estimated stiffness is high, and vice-versa. The system has potential applications in impedance control of rehabilitation devices such as, e.g., upper / lower limb prostheses, self-powered orthoses and exoskeleta, leading to an ever-better integration with patients.},
+	booktitle = {5th {IEEE} {RAS}/{EMBS} {International} {Conference} on {Biomedical} {Robotics} and {Biomechatronics}},
+	author = {Castellini, C. and Arquer, A. and Artigas, J.},
+	month = aug,
+	year = {2014},
+	note = {ISSN: 2155-1782},
+	keywords = {Impedance, electromyography, medical robotics, medical signal processing, Muscles, patient rehabilitation, Estimation, force feedback, telerobotics, Torque, prosthetics, manipulators, position control, torque control, force control, Stability criteria, Electrodes, force configuration, force feedback control, human computer interaction, human stiffness, human-machine interface, impedance-controlled rehabilitation, orthotic control, orthotics, position configuration, prosthetic control, rehabilitation robotics, robot arm stiffness, sEMG-based estimation, surface electromyography, teleoperation task, torque configuration},
+	pages = {604--609},
+}
+
+@inproceedings{huang_adaptive_2020,
+	title = {Adaptive {Compliance} {Shaping} with {Human} {Impedance} {Estimation}},
+	doi = {10.23919/ACC45564.2020.9147875},
+	abstract = {Human impedance parameters play a key part in the stability of strength amplification exoskeletons. While many methods exist to estimate the stiffness of human muscles offline, online estimation has the potential to radically improve the performance of strength amplification controllers by reducing conservatism in the controller tuning. We propose an amplification controller with online-adapted exoskeleton compliance that takes advantage of a novel, online human stiffness estimator based on surface electromyography (sEMG) sensors and stretch sensors connected to the forearm and upper arm of the human. These sensor signals and exoskeleton position and velocity are fed into a random forest regression model that we train to predict human stiffness, with a training set that involves both movement and intentional muscle co-contraction. Ground truth stiffness is based on system identification in essentially perturburator-style experiments. Our estimator's accuracy is verified both by the offline validation results and by the stability of the controller even as stiffness changes (a scenario where the ground truth stiffness is not available). Online estimation of stiffness is shown to improve the bandwidth of strength amplification while remaining robustly stable.},
+	booktitle = {2020 {American} {Control} {Conference} ({ACC})},
+	author = {Huang, H. and Cappel, H. F. and Thomas, G. C. and He, B. and Sentis, L.},
+	month = jul,
+	year = {2020},
+	note = {ISSN: 2378-5861},
+	keywords = {adaptive control, electromyography, Exoskeletons, medical robotics, Muscles, Estimation, Torque, Stability analysis, control system synthesis, Sensors, human impedance estimation, regression analysis, adaptive compliance shaping, amplification controller, controller tuning, exoskeleton position, Forestry, human stiffness estimator, intentional muscle co-contraction, online estimation, online-adapted exoskeleton compliance, perturburator-style experiments, random forest regression model, random forests, robust control, strength amplification controllers, strength amplification exoskeletons, surface electromyography sensors, wearable robots},
+	pages = {5131--5138},
+}
+
+@article{lance_reflex_1973,
+	title = {The {Reflex} {Effects} of {Muscle} {Vibration}},
+	volume = {3},
+	url = {https://www.karger.com/Article/FullText/394159},
+	doi = {10.1159/000394159},
+	language = {english},
+	urldate = {2021-09-22},
+	journal = {Human Reflexes, Pathophysiology of Motor Systems, Methodology of Human Reflexes},
+	author = {Lance, J. W. and Burke, D. and Andrews, C. J.},
+	year = {1973},
+	note = {Publisher: Karger Publishers},
+	pages = {444--462},
 }

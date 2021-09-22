@@ -27,6 +27,7 @@
 \usepackage{rotating} % for sideway table notably
 \usepackage[inline]{enumitem}
 \usepackage[framemethod=default]{mdframed} % for text boxes
+\usepackage[french]{minitoc}
 %\usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
 %\usepackage{adjustbox,libertine,soul,standalone,xcolor} % for quotation boxes
@@ -81,8 +82,11 @@
 	topline=false,bottomline=false,%
 	rightline=false,backgroundcolor=red!1
 }
-	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\dominitoc
+%\setcounter{minitocdepth}{3}  
+
 \tableofcontents
 \setcounter{page}{1}
 

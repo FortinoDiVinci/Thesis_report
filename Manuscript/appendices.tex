@@ -2,7 +2,10 @@
 \begin{appendices}
 	%\chapter{Annexes}
 	\crefalias{section}{appendix}
-	
+
+	%%%%%%%
+	% APP 1
+	%%%%%%%	
 	\section{Liens entre les paramètres articulaires et cartésiens} \label{app_link_joint_endpoint}
 	
 	\subsection{Raideur}
@@ -45,6 +48,71 @@
 	
 	\begin{equation}
 		\matr{M} = \left(\jacobian{}{}{t}\right)^{-1} I \jacobian{}{}{-1}
+	\end{equation}
+	
+	%%%%%%%
+	% APP 2
+	%%%%%%%
+	\newpage
+	\section{Compensation des biais du capteur de force} \label{app_force_sensor_bias}
+	
+	Le capteur de force 6 axes Mini45 de la marque ATI est placé à l'interface entre l'embout du youBot et de la poignée -\textit{ conçue par les soins de La Fabrique, laboratoire de fabrication de CentraleSupélec}.
+	
+	Ce capteur permet d'obtenir les forces et couples d'interaction $\vect{f}_e^s$ en Newton et Newton-mètre dans son référentiel, toutefois, les forces retournées $\vect{f}_s$ sont sensibles à plusieurs facteurs extérieurs comme la température et la luminosité. Les effets liés à la lumière ont pu être compensés grâce à du papier collant opaque, toutefois la température n'étant pas métrisable dans le laboratoire, il faut régulièrement compenser ses effets.
+	
+	Ainsi, les données du capteur de force sont victimes de biais $\vect{b}_{f/\tau}$ dont la dynamique est toutefois suffisemment lente pour permettre une manipulation du robot sans avoir à les corriger en ligne. Ses biais sont donc compensés à chaque nouvelle manipulation dont la durée n'exècede pas \SI{10}{\minute}. Il faut aussi prendre en compte le poids et les autres effets dynamique provoqués par la poignée $\vect{f}_p$. On peut alors écrire les données retournées par le capteur sous la forme suivante :
+	
+	\begin{equation}
+		\vect{f}_s(t) = \vect{f}_e^s(t) + \vect{f}_p(t) + \vect{b}_{f/\tau}
+	\end{equation}
+	
+	Les biais $\vect{b}_{f/\tau} \in \Re^{6\times1}$ sont supposés parfaitement statiques pour chaque axe. Pour la poignée, seuls les effets liés à la gravité sont pris en compte, on peut donc considérer qu'ils ne varient qu'en fonction de l'orientation de l'effecteur et donc que des données articulaires du robot, d'où $\vect{f}_p(t) \approx \vect{f}_p(q) \in \Re^{6\times1}$. Cette considération est directement liée à la géométrie de la poignée, dont la masse $m_p$ et la longueur\footnote{entre les centres de masse du capteur de force et de la poignée} $l_p$ peuvent être déterminées à partir des données des fichiers de conception ou identifiées à partir de mesures.
+	
+	Ainsi, pour identifier ces éléments géométriques, on peut donner au robot des trajectoires et poses à réaliser en l'absence de contact sur l'effecteur final, avec des vitesses lentes. De cette manière, les forces d'interactions $\vect{f}_e^s$ sont presques nulles, les effets centrifuges et de Corriolis étant négligeables pour de faibles accélérations avec les caractériques physiques de la poignée comparativement aux forces d'intéractions attendues. On peut alors facilement poser le système suivant, avec $\boldsymbol{\mathcal{R}}$ la matrice de rotation entre la base du robot et l'effecteur final, et $\vect{g} = \begin{bmatrix} 0 & 0 & g\end{bmatrix}^t$ le vecteur de l'accélération statique :
+	
+	\begin{equation}
+		\vect{f}_s(\vect{q}, t) = \vect{b}_f + \boldsymbol{\mathcal{R}}(\vect{q}) \vect{g} \cdot m_p + \vect{f}_e^s(t)
+	\end{equation}
+	
+	On peut, à partir de l'ensemble des mesures $\vect{f}_s$ effectuées, conduire une identification de la masse $m_p$ avec une méthode des moindres carrés, en écrivant le vecteur d'état $\vect{\xi}_f = \begin{bmatrix} b_{fx} & b_{fy} & b_{fz} & m_p \end{bmatrix}^t$ :
+	%
+	\begin{equation}
+		\vect{f}_s(\vect{q}, t) = \begin{bmatrix}\matr{I}_{3\times3} & \boldsymbol{\mathcal{R}}(\vect{q})\vect{g} \end{bmatrix} \vect{\xi}_f + \vect{\epsilon}_f = \matr{\phi}_{3\times4} \vect{\xi}_f + \vect{\epsilon}_f
+	\end{equation}
+	%
+	\begin{equation}
+		\vect{\xi}_f = \left(\matr{\phi}^t\matr{\phi}\right)^{-1} \matr{\phi}^t \vect{f}_s + \vect{\rho}_f \text{ ,}
+	\end{equation}
+	%
+	avec $\vect{\epsilon}_f \in \Re^{3\times1}$ le vecteur regroupant le bruit blanc et les effets dynamiques négligés et $\vect{\rho}_f = \left(\matr{\phi}^t\matr{\phi}\right)^{-1} \matr{\phi}^t \vect{\epsilon}_f$ la minimisation de l'erreur quadratique.
+	
+	On peut ensuite déterminer le bras de levier $l_p$ avec une méthode similaire en notant la relation :
+	%
+	\begin{equation}
+		\vect{\tau}_s(\vect{q}, t) = \vect{b}_\tau + \boldsymbol{\mathcal{R}}(\vect{q}) \vect{g} \times  \begin{bmatrix}0&0&m_p\end{bmatrix}^t \cdot l_p + \vect{\tau}_e^s(t) \text{ ,}
+	\end{equation}
+	%
+	et à partir des mesures de couples $\vect{\tau}_s$ effectuées, conduire l'identification de $l_p$ avec un nouveau vecteur d'état $\vect{\xi}_\tau = \begin{bmatrix} b_{\tau x} & b_{\tau y} & b_{\tau z} & l_p \end{bmatrix}^t$ :
+	
+	\begin{equation}
+		\vect{\tau}_s(\vect{q}, t) = \begin{bmatrix}\matr{I}_{3\times3} & \boldsymbol{\mathcal{R}}(\vect{q})\vect{g} \times  \begin{bmatrix}0&0&m_p\end{bmatrix}^t\end{bmatrix} \vect{\xi}_\tau + \vect{\epsilon}_\tau = \matr{\phi}_{3\times4} \vect{\xi}_\tau + \vect{\epsilon}_\tau
+	\end{equation}
+	
+	\begin{equation}
+		\vect{\xi}_\tau = \left(\matr{\phi}^t\matr{\phi}\right)^{-1} \matr{\phi}^t \vect{\tau}_s + \vect{\rho}_\tau \text{.}
+	\end{equation}
+	
+	Les données géométriques de masse $m_p$ et de longueur $l_p$ ne varient pas contrairement aux biais, elles ne sont donc pas à estimer de nouveau.
+	
+	Pour chaque nouvelle expérience, les biais peuvent être de estimés simplement en maintenant le robot dans sa position initiale brièvement (\SI{1}{\second}) afin de récolter suffisemment de données pour une identification par la méthode des moindres carrés, en soustrayant l'effet du poids de la poignée, dont tous les paramètres sont connus.
+	
+	Pour la poignée utilisée :
+	
+	\begin{equation}
+		\begin{aligned}
+			m_p &= 0.1096 \si{\kilogram}\\
+			l_p &= 0.0103 \si{\meter}
+		\end{aligned}
 	\end{equation}
 	
 \end{appendices}
