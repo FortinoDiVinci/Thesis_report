@@ -3,8 +3,12 @@
 
 %\documentclass[fr]{tcthesis}
 %\PassOptionsToPackage{table,xcdraw,svgnames}{xcolor} % for quotation boxes
-\documentclass[multi=pane,border=4mm,tikz,crop]{book}
+%\documentclass[multi=pane,border=4mm,tikz,crop]{book}
+\documentclass[tikz,french,10pt]{book}
 
+%\usepackage[french]{babel}
+\usepackage{polyglossia}
+	\setmainlanguage{french}
 \usepackage{tikz} % figure de façon générale - T. Chevet (la référence tikz)
 \usetikzlibrary{shapes}
 \usetikzlibrary{arrows, arrows.meta}
@@ -18,6 +22,7 @@
 \usepackage{subcaption}
 %\DeclareCaptionSubType[roman]{figure}
 \usepackage[separate-uncertainty = true,multi-part-units=single]{siunitx} % for SI units
+%\sisetup{range-phrase=--}
 \usepackage{amsmath} % for splited equation notably
 \usepackage{amssymb} % for delta equality notably
 %\usepackage[square]{natbib}
@@ -27,7 +32,19 @@
 \usepackage{rotating} % for sideway table notably
 \usepackage[inline]{enumitem}
 \usepackage[framemethod=default]{mdframed} % for text boxes
+\usepackage[skins]{tcolorbox}
+	\tcbuselibrary{breakable}
 \usepackage[french]{minitoc}
+%\usepackage{hyperref}
+%\usepackage{cite}
+\usepackage[
+	style = authoryear,
+	maxcitenames = 2,
+	maxbibnames = 99,
+%	hyperref=true,
+]{biblatex}
+\usepackage{layout}
+\usepackage[marginparwidth=0pt]{geometry}
 %\usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
 %\usepackage{adjustbox,libertine,soul,standalone,xcolor} % for quotation boxes
@@ -40,6 +57,10 @@
 	\boldsymbol{\MakeUppercase{#1}}
 }
 %
+\newcommand{\matrCal}[1]{
+\boldsymbol{\mathcal{\MakeUppercase{#1}}}
+}
+%
 \newcommand{\jacobian}[3]{ %
 	\ifthenelse{\isempty{#1}}
 	{%
@@ -49,6 +70,30 @@
 		\boldsymbol{\mathcal{J}_{#2}}(#1)^{#3} %
 	}	
 }
+%
+\newcommand{\jacobianHat}[3]{ %
+	\ifthenelse{\isempty{#1}}
+	{%
+		\boldsymbol{\hat{\mathcal{J}}_{#2}^{#3}} %
+	}
+	{%
+		\boldsymbol{\hat{\mathcal{J}}_{#2}}(#1)^{#3} %
+	}	
+}
+%
+\newcommand{\jacobianDot}[3]{ %
+	\ifthenelse{\isempty{#1}}
+	{%
+		\boldsymbol{\dot{\mathcal{J}}_{#2}^{#3}} %
+	}
+	{%
+		\boldsymbol{\dot{\mathcal{J}}_{#2}}(#1)^{#3} %
+	}	
+}
+%
+\DeclareMathOperator{\sign}{sgn}
+%
+\renewcommand{\Re}{\rm I\!R}
 
 % The following modifies the margins with the memoir commands
 %\setlrmarginsandblock{2.5cm}{3.5cm}{*}
@@ -57,23 +102,47 @@
 
 %%
 
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+
+\addbibresource{bibliography/chapter1.bib}
+%\addbibresource{bibliography/chapter2.bib}
+
+\definecolor{Prune}{RGB}{99,0,60}
+
+\newtcolorbox{aside}[1]{
+	enhanced,%
+	breakable,%
+	top = 1em,%
+	title = {\textbf{Aparté:}~#1},%
+	attach boxed title to top left = {%
+		yshift = -\tcboxedtitleheight/2,%
+		xshift = 1cm,
+	},
+	boxed title style = {%
+		size = small,
+		colback = Prune,
+	},
+	colframe = Prune,
+	colback = white,
+}
+
 \begin{document}
-	
+
 %%%%%
-\newenvironment{aside}[1][]{%
-\mdfsetup{%
-	frametitle={%
-		\tikz[baseline=(current bounding box.east),outer sep=1pt]
-		%\node[anchor=east,rectangle,fill=blue!20]
-		\node[anchor=east,rectangle,fill={rgb:red,99;green,0;blue,60},text=white]
-		%\definecolor{Prune}{RGB}{99,0,60}
-		{Aparté:~#1};}}
-	%
-\mdfsetup{innertopmargin=10pt,linecolor={rgb:red,99;green,0;blue,60},%
-	linewidth=2pt,topline=true,
-	frametitleaboveskip=-9pt,}
-\begin{mdframed}[]\relax%
-}{\end{mdframed}}
+%\newenvironment{aside}[1][]{%
+%\mdfsetup{%
+%	frametitle={%
+%		\tikz[baseline=(current bounding box.east),outer sep=1pt]
+%		%\node[anchor=east,rectangle,fill=blue!20]
+%		\node[anchor=east,rectangle,fill={rgb:red,99;green,0;blue,60},text=white]
+%		%\definecolor{Prune}{RGB}{99,0,60}
+%		{Aparté:~#1};}}
+%	%
+%\mdfsetup{innertopmargin=10pt,linecolor={rgb:red,99;green,0;blue,60},%
+%	linewidth=2pt,topline=true,
+%	frametitleaboveskip=-9pt,}
+%\begin{mdframed}[]\relax%
+%}{\end{mdframed}}
 
 %%%% for quotation
 \global\mdfdefinestyle{quotationStyle}{%
@@ -85,10 +154,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \dominitoc
-%\setcounter{minitocdepth}{3}  
-
+\setcounter{secnumdepth}{3} 
+\renewcommand{\thesubsubsection}{\thesubsection.\alph{subsubsection}}
 \tableofcontents
 \setcounter{page}{1}
+\adjustmtc
+\setcounter{minitocdepth}{4}  
 
 \include{introduction}
 \include{chapter1}
@@ -99,7 +170,6 @@
 \include{conclusion}
 \include{appendices}
 
-\bibliographystyle{apalike} %abbrvnat
-\bibliography{bibliography/chapter1}
+\printbibliography
 
 \end{document}

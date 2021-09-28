@@ -33,16 +33,16 @@
 	
 	\node[left of = c1, node distance = 1.5cm] (tau_r) {};
 	
-	\node[block, right of = c1] (imp_ctrl) {$Cor.$};
+	\node[block, right of = c1] (imp_ctrl) {$\vect{K}_p + \frac{\vect{K}_i}{s}$};
 	
-	%\comp[b]{c2}{($(imp_ctrl) + (2.5,0)$)};
+	\comp[b]{c2}{($(imp_ctrl) + (2.5,0)$)};
 	
-	\node[block, above of = imp_ctrl, align = center, node distance = 2cm, xshift=1cm] (transf) {transformation};
-	%\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\jacobian{q}{}{t}$};
+	\node[block, above of = c2, align = center, node distance = 2cm] (neg) {$-1$};
+	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\jacobian{q}{}{t}$};
 	
-	%\node[block, right of = c2] (kv) {$\vect{K}_v$};
+	\node[block, right of = c2] (kv) {$\vect{K}_v$};
 	
-	\node[big_block, right of = imp_ctrl, node distance = 2.7cm] (robot) {$Robot$};
+	\node[big_block, right of = kv, node distance = 2.7cm] (robot) {$Robot$};
 	
 	\node[right of = robot, node distance = 1.75cm] (force) {};
 	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];
@@ -50,35 +50,34 @@
 	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
 	
 	\draw[{Latex[length=3mm]}-] (c1.west) --+ (-1.5,0)
-		node[align = center, above] {$\vect{\tau}_r = 0$};
-	\draw[{Latex[length=3mm]}-] (c1.north) |- (transf.west);
+	node[align = center, above] {$\vect{\tau}_r = 0$};
+	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
 	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
 	
-	%\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (c2.west)
-	%node[midway, align = center, above] {$\dot{\vect{q}}_d$};
-	%\draw[-{Latex[length=3mm]}] (c2.east) -- (kv.west);
+	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (c2.west)
+	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
+	\draw[-{Latex[length=3mm]}] (c2.east) -- (kv.west);
 	
-	%\draw[-{Latex[length=3mm]}] (kv.east) -- (robot.west)
-	%node[midway, above] {$\vect{\tau}_d$};
-	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (robot.west)
-		node[midway, above] {$\dot{\vect{q}}_d$};
+	\draw[-{Latex[length=3mm]}] (kv.east) -- (robot.west)
+	node[midway, above] {$\vect{\tau}_d$};
 	
-	%\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
+	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
 	
-	%\draw[-{Latex[length=3mm]}] (robot.south) --+ (0,-0.5)  
-	%	node[below] {$\dot{\vect{q}}_m$} -| (c2.south);
+	\draw[-{Latex[length=3mm]}] (robot.south) --+ (0,-0.5)  
+	node[below] {$\dot{\vect{q}}_m$}
+	-| (c2.south);
 	
-	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (transf.east);
+	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
 	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
-		node[midway, align = center, below] {$\vect{f}$};
+	node[midway, align = center, below] {$\vect{F}_e$};
 	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
-		node[midway, align = center, below] {$\vect{v}$};
+	node[midway, align = center, below] {$\vect{V}_e$};
 	
 	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
 	
 	\end{tikzpicture}
 	}
-	\caption{Schéma simplifié du contrôle en transparence avec capteur de force proposé par \cite{lamy_achieving_2009}, avec Cor. un correcteur permettant de générer un signal de commande en vitesse articulaire $\dot{\vect{q}}_d$, et $Z_{env}$ l'impédance de l'environnement.} % Figure caption
+	\caption{Schéma bloc de contrôle en transparence avec capteur de force proposé par \textcite{Lamy_achieving_2009}} % Figure caption
 		%Bloc diagram of the admittance control with a force sensor, proposed by \cite{Lamy_achieving_2009}}
 		%
 	\label{lamy_control} % Label 

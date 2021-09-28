@@ -1,0 +1,121 @@
+\begin{figure*} [!htb]
+		
+		\centering
+		
+		\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+		\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+		\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+		
+		\newcommand{\comp}[3][]{ % comparator command
+			\node[comp] (#2) at #3 {};
+			\draw (#2) -- + (45:0.25) -- + (45:-0.33);
+			\draw (#2) -- + (-45:0.25) -- + (-45:-0.33);
+			\ifthenelse{
+				\isempty{#1}{}
+			}{}
+			{
+				\ifthenelse{
+					\equal{#1}{a}
+				}{
+					\node[above right] at (#2) {$-$\phantom{p}};
+				}{}
+				\ifthenelse{
+					\equal{#1}{b}
+				}{
+					\node[below right] at (#2) {$-$\phantom{l}};
+				}{}
+			}
+		}
+		\resizebox{\textwidth}{!}{
+		\begin{tikzpicture} [node distance = 2cm, scale = 0.75]
+		
+		\comp[]{c1}{(0, 0)};
+		
+		\node[block, left of = c1, node distance = 1.75cm] (inverse_jac) {$\jacobianHat{q}{}{-1}$};
+		
+		\comp[]{c2}{($ (inverse_jac) + (-2.5,0) $)};
+		
+		\node[block, left of = c2] (vect1) {$ \begin{pmatrix}1 & 0 & 0\end{pmatrix}^t $};
+		
+		\node[block, above of = vect1] (vect2) {$ \begin{pmatrix}0 & 1 & 0\end{pmatrix}^t $};
+		
+		\node[block, left of = vect1, node distance = 2.5cm] (p) {$ K_x $};
+		
+		\node[block, left of = vect2, node distance = 2.5cm] (pi) {$C_z(s)$};
+		
+		\comp[a]{cpi}{($(pi) + (-1.75,0)$)};
+		
+		\comp[b]{cp}{($(p) + (-1.75,0)$)};
+		
+		\node[block, below of = inverse_jac] (null_proj) {$ \matr{N}_2(q) $};
+		
+		\node[block, left of = null_proj, node distance = 2.3cm] (p2) {$ K_2 $};
+		
+		\comp[b]{cp2}{($(p2) + (-1.75,0)$)};
+		
+		\node[big_block, right of = c1, node distance = 2.1cm] (robot) {$Robot$};
+		
+		\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
+		
+		\draw[-{Latex[length=3mm]}] (inverse_jac.east) -- (c1.west);
+		\draw[-{Latex[length=3mm]}] (null_proj.east) -| (c1.south)
+		node[near start, above] {$ \dot{\vect{q}}_2^p $};
+		
+		\draw[-{Latex[length=3mm]}] (c2.east) -- 
+		node[above, yshift=2mm]{$\begin{pmatrix} \dot{x}_d \\ \dot{z}_d \\ 0 \end{pmatrix}$} (inverse_jac.west);
+		\draw[-{Latex[length=3mm]}] (vect2.east) -| (c2.north);
+		\draw[-{Latex[length=3mm]}] (vect1.east) -- (c2.west);
+		
+		\draw[-{Latex[length=3mm]}] (p.east) -- (vect1.west);
+		\draw[-{Latex[length=3mm]}] (cp.east) -- (p.west);
+		\draw[{Latex[length=3mm]}-] (cp.west) --+ ($ (-1, 0) $)
+		node[near end, above] {$x_0$};
+		\draw[{Latex[length=3mm]}-] (cp.south) --+ ($ (0, -1) $)
+		node[near end, left] {$\vect{x}(1)=x$};
+		
+		\draw[-{Latex[length=3mm]}] (pi.east) -- (vect2.west);
+		\draw[-{Latex[length=3mm]}] (cpi.east) -- (pi.west);
+		\draw[{Latex[length=3mm]}-] (cpi.west) --+ ($ (-1, 0) $)
+		node[near end, above] {$f_{z0} = 0$};
+		\draw[{Latex[length=3mm]}-] (cpi.north) --+ ($ (0, 1) $)
+		node[at end, right] {$-\vect{f}_e(2)=-f_z$};
+		
+		\draw[-{Latex[length=3mm]}] (p2.east) --
+		node [above, xshift=-0.7mm]{$\dot{\vect{q}}_2$} (null_proj.west);
+		\draw[-{Latex[length=3mm]}] (cp2.east) -- (p2.west);
+		\draw[{Latex[length=3mm]}-] (cp2.west) --+ ($ (-1, 0) $)
+		node[near end, above] {$\vect{q}_0$};
+		\draw[{Latex[length=3mm]}-] (cp2.south) --+ ($ (0, -1) $)
+		node[near end, left] {$\vect{q}$};
+		
+		\draw[-{Latex[length=3mm]}] (c1.east) -- (robot.west)
+		node[midway, align = center, above, xshift=-1mm] {$\dot{\vect{q}}_d$};
+		
+		\draw[-{Latex[length=3mm]}] (robot.north) -- +(0,0.75)
+		node[left] {$(\vect{q}, \dot{\vect{q}}, \vect{\tau})$};
+		
+		\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.75) $) -- ($(env.west) + (0, 0.75) $)
+		node[midway, align = center, above, xshift=-1.5mm] {$\vect{F}_e=\begin{pmatrix} f_x \\ f_z \\ \tau_\theta \end{pmatrix}$};
+		
+		\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.75) $) -- ($(env.west) + (0, -0.75) $)
+		node[midway] (xdot) {};
+		
+		\fill (xdot) circle [radius=2.5pt];
+		
+		\node[block, below of = xdot, scale=0.7, node distance = 1.5cm] (integrator) {\Large$\int $};
+		
+		\draw[-{Latex[length=3mm]}] (xdot.center) --  node[near start, left, yshift = -1mm]{$\dot{\vect{x}}$} (integrator.north);
+		
+		\draw[-{Latex[length=3mm]}] (integrator.west) -- +(-1, 0)
+		node[left, anchor=east] {$\vect{x}=\begin{pmatrix} x \\ z \\ \theta \end{pmatrix}$};
+		
+		%$\dot{$
+		
+		\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
+		
+		\end{tikzpicture}
+		}
+		\caption{Schéma bloc du contrôle interactif du robot, pour une tâche guidée sur une dimension le long de $ \vect{z} $.  $ \vect{f}_e $ représente les forces d'interaction dans le référentielle de la base du robot, $ \vect{q} $ les positions articulaires, $ \vect{\tau} $ les couples articulaires et $ \vect{x} $ les coordonnées cartésiennes de l'effecteur du robot. $ C_z = K_p+\frac{K_i}{s} $ est un correcteur Proportionnel Intégral (PI) responsable de la commande en admittance interactive.}
+			%Block diagram of the interactive robot control for a guided task on a 1 dimensional trajectory along the $ \vect{z} $ axis. $ \vect{f}_e $ represents the interaction forces in the robot base frame, $ \vect{q} $ the robot joint positions, $ \vect{\tau} $ the joint torques and $ \vect{x} $ the robot's endpoint Cartesian coordinates. $ C_z = K_p+\frac{K_i}{s} $ is a proportional integral (PI) controller responsible for the interactive admittance control.} \vspace{-10pt} % Figure caption
+		\label{fig_comanipulation_ctrl} % Label 
+	\end{figure*}
