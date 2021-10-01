@@ -33,21 +33,21 @@
 	
 	\node[left of = c1, node distance = 1.5cm] (tau_r) {};
 	
-	\node[block, right of = c1] (imp_ctrl) {$\vect{K}_p + \frac{\vect{K}_i}{s}$};
+	\node[block, right of = c1] (imp_ctrl) {$\matr{K}_p + \frac{\matr{K}_i}{s}$};
 	
 	\comp[b]{c2}{($(imp_ctrl) + (2.5,0)$)};
 	
 	\node[block, above of = c2, align = center, node distance = 2cm] (neg) {$-1$};
 	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\jacobian{q}{}{t}$};
 	
-	\node[block, right of = c2] (kv) {$\vect{K}_v$};
+	\node[block, right of = c2] (kv) {$\matr{K}_v$};
 	
 	\node[big_block, right of = kv, node distance = 2.7cm] (robot) {$Robot$};
 	
 	\node[right of = robot, node distance = 1.75cm] (force) {};
 	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];
 	
-	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-Z_{env}$};
+	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-\matr{Z}_{env}$};
 	
 	\draw[{Latex[length=3mm]}-] (c1.west) --+ (-1.5,0)
 	node[align = center, above] {$\vect{\tau}_r = 0$};
@@ -77,8 +77,8 @@
 	
 	\end{tikzpicture}
 	}
-	\caption{Schéma bloc de contrôle en transparence avec capteur de force proposé par \textcite{Lamy_achieving_2009}} % Figure caption
+	\caption{Schéma bloc de contrôle en transparence avec capteur de force proposé par \textcite{lamy_achieving_2009}} % Figure caption
 		%Bloc diagram of the admittance control with a force sensor, proposed by \cite{Lamy_achieving_2009}}
 		%
-	\label{lamy_control} % Label 
+	\label{fig_lamy_control} % Label 
 \end{figure}

@@ -18,13 +18,13 @@ Si on s'éloigne de la littérature, les premiers enjeux techniques liés à la 
 
 Ces machines autonomes s'avèrent effectivement très performantes pour les tâches répétitives qui parsèment les lignes de production dépeintes avec un humour satirique dans les Temps Modernes de C. Chaplin. C'est ainsi que les années 1970 voient l'installation de bras articulés émerger dans le monde, notamment pour l'industrie automobile \parencite{lazaric_origines_1992}. Ces robots se démocratisent ensuite à d'autres secteurs où leur rapidité et précision permettent, dans des environnements contrôlés, d'automatiser entièrement ou partiellement la production de produits manufacturés. Les installations de robots industriels passent ainsi de \SI{97000}{} à \SI{373000}{} unités de 2004 à 2019 dans le monde, comme le montre la \cref{fig_indus_rob_growth}.
 
-\input{fig_industrial_robotic_growth}
+\input{latex_figures/fig_industrial_robotic_growth}
 
-Ces robots industriels qui évoluent dans des cages pour protéger les opérateurs humains, peuvent s'avérer dangereux \cite[Chapter~4]{dhillon_robot_1991}. Une recherche sur la base de données de l'\textit{Occupational Safety and Health Administration} (OSHA), - \textit{une agence gouvernementale fédérale étasunienne pour la prévention des blessures, maladies et décès dans le cadre du travail }- avec le mot clé 'robot', informe de 13 cas de fatalités humaines entre 2003 et 2019, dont huit cas où le robot semble explicitement responsable du décès \parencite{OSHA_robot_accident}. Ces accidents bien que précoccupants sont à relativiser par rapport à l'ensemble des accidents du travail. Ainsi, \parencite{gihleb_industrial_2020} indiquent que les robots industriels entraînent une chute significative des accidents professionnels. Une réduction de \SI{28}{\percent} des blessures dans les entreprises manufacturières entre 2005 et 2011, aux Etats-Unis d'Amérique et en Allemagne, serait ainsi liée à l'augmentation des équipements robotisés.
+Ces robots industriels qui évoluent dans des cages pour protéger les opérateurs humains, peuvent s'avérer dangereux \cite[Chapitre~4]{dhillon_robot_1991}. Une recherche sur la base de données de l'\textit{Occupational Safety and Health Administration} (OSHA), - \textit{une agence gouvernementale fédérale étasunienne pour la prévention des blessures, maladies et décès dans le cadre du travail }- avec le mot clé 'robot', informe de 13 cas de fatalités humaines entre 2003 et 2019, dont huit cas où le robot semble explicitement responsable du décès \parencite{OSHA_robot_accident}. Ces accidents bien que précoccupants sont à relativiser par rapport à l'ensemble des accidents du travail. Ainsi, \parencite{gihleb_industrial_2020} indiquent que les robots industriels entraînent une chute significative des accidents professionnels. Une réduction de \SI{28}{\percent} des blessures dans les entreprises manufacturières entre 2005 et 2011, aux Etats-Unis d'Amérique et en Allemagne, serait ainsi liée à l'augmentation des équipements robotisés.
 
 Pourtant, si les robots peuvent surpasser l'humain dans des cadres particuliers, la versatilité des animaux biologiques semble encore un pas de géant pour les machines artificielles. Ainsi, pour que les robots puissent évoluer dans des environnements non maîtrisés, qui regroupent dans les faits la plupart des environnements existants, il leur faut tendre vers la capacité d'adaptation du vivant. A ce jour, si la cuisine reste une activité à la portée de n'importe quel être humain - \textit{ou du moins de la plupart} -, l'environnement offert par les fourneaux reste plutôt hostile aux robots. Malgré l'existance de projets concernant des robots chefs, un robot cuisinier se résume plutôt à l'habile mariage d'un autocuiseur et d'un mixeur alors que cette thèse est écrite (\cref{fig_illustration_robot_cuisine}).
 
-\input{fig_robot_cuisine}
+\input{latex_figures/fig_robot_cuisine}
 
 Un autre exemple criant, qui témoigne de la difficulté des robots à interagir avec des environnements humains, est celui livré par les véhicules autonomes. Ainsi, il n'existe aucun projet viable de robot conduisant une voiture comme le ferait un humain, c'est à dire en manipulant volant, pédales, levier de vitesses... Par contre, la course aux véhicules sans conducteur roule à pleine vitesse avec des démonstrateurs fonctionnels sur des portions spécifiques de route.
 
@@ -82,7 +82,7 @@ Fort heureusement, les évènements conduisant au besoin de tels robots ne sont 
 	\item l'\emph{assistance physique}, qui voit les deux agents travailler ensemble sur un même objet. On peut alors distinguer deux configurations comme le fait le \parencite{ministere_guide_2017}, en fonction de si le système d'assistance physique est guidé par l'opérateur, où s'il est fixé à l'opérateur, comme le serait un exosquelette. (l'ensemble des critères sont communs (\cref{subfig_cobot_assist}))
 \end{enumerate}
 
-\input{fig_cobot_workspace_scenarios}
+\input{latex_figures/fig_cobot_workspace_scenarios}
 
 \subsubsection{Les modalités de collaboration}
 
@@ -100,7 +100,7 @@ Au sein de ces catégories, on peut encore faire la distinction entre plusieurs 
 
 Il exite toutefois des passerelles entre ces différentes catégories qui ne sont pas hermétiques. On pourra en effet citer les travaux concernant la communication d'émotions, ou l'amélioration des interactions sociales à travers des interfaces tactiles ou kinesthésiques \parencite{bailenson_virtual_2007, tsetserukou_affective_2009, teyssier_conveying_2020}, où interactions physiques et sociales sont donc combinées.
 
-Une autre manière de classer les interactions entre agents, serait de regarder les médias ou canaux sensoriels utilisés \parencite{ajoudani_progress_2018}. En effet, pour transmettre de l'information à un humain, il faut faire appel à ses différents sens, dont le plus commun en vue de communiquer est l'audition, toutefois, la communication ne se limite pas à l'utilisation de ce seul sens, et les interactions sociales humaines sont enrichies par la vue, le toucher, et l'odorat \cite[Chapter~1]{cherry_human_1978}. Ces différents sens ont des caractéristiques qui leurs sont propres, que ce soit au niveau des temps de réaction \parencite{chan_finger_2012, jain_comparative_2015}, des débits d'information \parencite{kondo_auditory_2017}, etc.
+Une autre manière de classer les interactions entre agents, serait de regarder les médias ou canaux sensoriels utilisés \parencite{ajoudani_progress_2018}. En effet, pour transmettre de l'information à un humain, il faut faire appel à ses différents sens, dont le plus commun en vue de communiquer est l'audition, toutefois, la communication ne se limite pas à l'utilisation de ce seul sens, et les interactions sociales humaines sont enrichies par la vue, le toucher, et l'odorat \cite[Chapitre~1]{cherry_human_1978}. Ces différents sens ont des caractéristiques qui leurs sont propres, que ce soit au niveau des temps de réaction \parencite{chan_finger_2012, jain_comparative_2015}, des débits d'information \parencite{kondo_auditory_2017}, etc.
 
 %\textcolor{red}{Parler des interactions entre humains ?? source d'inspiration pour la robotique ?}
 
@@ -125,18 +125,18 @@ Il est aussi possible de guider le mouvement de l'utilisateur, pour par exemple 
 
 Comme rappelé par \parencite{hogan_impedance_1985}, lorsqu'un robot interagit avec un environnement, qu'il s'agisse d'un humain ou d'un objet quelconque, un couplage se crée entre les 2 systèmes physiques. Ainsi de manière général lorsque des systèmes physiques s'interfèrent, les flux de puissance instantanée se définissent le long des degrés de liberté concernés, comme le produit de deux grandeurs ; l'effort et le flux. Or, aucun des systèmes seuls ne peut imposer ces deux variables simultanément. Dans le cas d'interactions physiques robotisées, on s'intéressera aux forces $\vect{f}$ et vitesses $\vect{v}$, comme montré sur la \cref{fig_physical_interaction}.
 
-\input{fig_interaction_port}
+\input{latex_figures/fig_interaction_port}
 
 Il faut toutefois trouver un moyen d'imposer un comportement au robot, pour qu'il puisse à la fois être contrôlé en position et en force. Dans un premier temps, des lois de commandes hybrides ont été proposées en contrôlant, par exemple, la position sur une trajectoire tangente, et la force sur l'axe normal à cette trajectoire \parencite{raibert_hybrid_1981}. Ce type de commandes se prêtent plutôt bien à des tâches industrielles comme la soudure.
 
 %S'il est souvent compliqué de modéliser l'environnement, 
 Une autre approche consiste à imposer un comportement dynamique à l'interaction des deux systèmes. Ainsi plutôt que d'essayer de contrôler la force et la position du robot, il est possible de fournir une trajectoire à laquelle une dynamique mécanique est imposée. Pour imposer une telle dynamique, il faut toutefois faire une supposition sur la nature de l'environnement, et la causalité des ports d'interactions. De manière générale, on peut assumer qu'un environnement passif génère un mouvement lorsqu'il est soumis à une force \parencite{hogan_impedance_1985}, il faut donc que le robot lui impose cette force en se comportant comme un système en impédance \parencite{hogan_impedance_1985b} (voir \cref{chap_1_sec_2_subsec_1_impedance_definition} pour la définition de l'impédance).
 
-\input{fig_interaction_port_robot}
+\input{latex_figures/fig_interaction_port_robot}
 
-Lors d'interactions entre un humain et un robot, la logique peut être inversée en implémentant un contrôle en admittance. Avec une structure proposée par \parencite{newman_stability_1992}, il est possible de manipuler un robot par son effecteur final, en rejetant notamment les phénomènes de frictions et en approchant le comportement du robot à celui d'un système masse-amortissement-ressort. Comme expliqué par \cite[Chapter~3]{lamy_conception_2011}, on peut alors conférer au robot un comportement d'inertie pure, dont la valeur est limitée par des considérations de stabilité. Manipuler le robot revient alors à déplacer une masse dans l'espace.
+Lors d'interactions entre un humain et un robot, la logique peut être inversée en implémentant un contrôle en admittance. Avec une structure proposée par \parencite{newman_stability_1992}, il est possible de manipuler un robot par son effecteur final, en rejetant notamment les phénomènes de frictions et en approchant le comportement du robot à celui d'un système masse-amortissement-ressort. Comme expliqué par \textcite[Chapitre~3]{lamy_conception_2011}, on peut alors conférer au robot un comportement d'inertie pure, dont la valeur est limitée par des considérations de stabilité. Manipuler le robot revient alors à déplacer une masse inertielle dans l'espace.
 
-\input{fig_ctrl_scheme_lamy_simple.tex}
+\input{latex_figures/fig_ctrl_scheme_lamy_simple.tex}
 
 Les contrôles en admittance et impédance sont complémentaires dans leur approche, notamment dans leurs forces et faiblesses. En effet, les performances d'un contrôleur en impédance se dégradent lorsque l'environnement devient souples, notamment en terme de précision, alors que celles d'un contrôleur en admittance sont excellentes avec ce type d'environnement \parencite{valency_accuracyrobustness_2003}. Inversement, lorsque l'environnement est rigide, des instabilités peuvent survenir avec le contrôleur en admittance. Certains auteurs ont donc proposé des méthodes pour essayer d'unifier ces deux approches \parencite{ott_unified_2010}.
 
@@ -158,7 +158,7 @@ De ce fait, pour optimiser la balance performances - \textit{en terme de transpa
 
 La dénomination de \emph{muscle} désigne ici spécifiquement une sous-catégorie de muscles, appelés muscles squelettiques ou "volontaires" qui permettent la réalisation de mouvements conscients, par opposition aux muscles lisses que l'on trouve typiquement sur des organes comme l'estomac ou les intestins, qui ne sont pas contrôlés consciemment. Ces muscles représentent généralement \SI{75}{\percent} de la masse de l'ensemble des muscles, soit \SI{40}{\percent} de la masse molle non grasse du corps humain, c'est à dire moins de \SI{30}{\percent} de la masse totale \parencite{buckinx_pitfalls_2018}.
 
-Les muscles se composent notamment de longues cellules regroupées en faiseaux, les fibres musculaires ou myocytes, qui sont capables de \emph{contractions} lorsqu'elles sont stimulées. Ces fibres enveloppées dans une membrane, l'epimysium, sont fixées aux os grâce à des tissus d'insertion comme les tendons, permettant des points d'ancrage sur les os. Comme le montre la \cref{fig_schema_muscle_activation}, lorsque les fibres musculaires d'un muscle se contractent, elles exercent une force sur les points d'ancrage, qui permet aux articulations de se mouvoir grâce au couple généré. Pour une description plus exhaustive des muscles squelettiques, on pourra se référer à \cite[Chapter~1]{mcmahon_muscles_1984}, \cite[Chapter~2]{tresilian_sensorimotor_2013} ou \parencite{nishikawa_neuromechanics_2007} pour ne citer que trois exemples.
+Les muscles se composent notamment de longues cellules regroupées en faiseaux, les fibres musculaires ou myocytes, qui sont capables de \emph{contractions} lorsqu'elles sont stimulées. Ces fibres enveloppées dans une membrane, l'epimysium, sont fixées aux os grâce à des tissus d'insertion comme les tendons, permettant des points d'ancrage sur les os. Comme le montre la \cref{fig_schema_muscle_activation}, lorsque les fibres musculaires d'un muscle se contractent, elles exercent une force sur les points d'ancrage, qui permet aux articulations de se mouvoir grâce au couple généré. Pour une description plus exhaustive des muscles squelettiques, on pourra se référer à \cite[Chapitre~1]{mcmahon_muscles_1984}, \cite[Chapitre~2]{tresilian_sensorimotor_2013} ou \parencite{nishikawa_neuromechanics_2007} pour ne citer que trois exemples.
 
 \input{schema_muscle}
 
@@ -174,11 +174,11 @@ Ainsi, l'ensemble musculo-tendineux est connu pour ses propriétés visco-élast
 	\item la force de contraction dépend de sa vitesse, ce qui indique un comportement amortissant, $B$, aussi en parallèle.
 \end{itemize}
 
-\input{fig_hills_experiment}
+\input{latex_figures/fig_hills_experiment}
 
 On peut alors modéliser le comportement passif du muscle avec la représentation dite de Hill. Il faut toutefois remarquer, que la viscosité observée ne provient pas de liquides visqueux dans les muscles, mais plutôt de caractéristiques physiologiques des protéines à l'origine des contractions, qui peuvent être assimilées à de la viscosité. Par ailleurs, comme souligné par Hill, si l'élément série $K_{SEE}$ est assimilé à un tendon, ses expériences étant phénoménologiques et non histologiques, rien n'exclu que d'autres sources fibreuses contribuent à ce comportement.
 
-\input{fig_hill_muscle_model}
+\input{latex_figures/fig_hill_muscle_model}
 
 %\paragraph{Le Système Nerveux Central}
 \subsubsection{Le Système Nerveux Central}
@@ -191,7 +191,7 @@ En effet, des fibres musculaires sensorielles, les \emph{fuseaux neuromusculaire
 
 C'est ainsi que le réflexe ostéotendineux permet d'assurer une continuité dans le comportement élastique des muscles au-delà de la rupture de ce comportement passif \parencite{nichols_improvement_1976, houk_regulation_1979}. Par ailleurs, ce réflexe permet une meilleure robustesse aux perturbations extérieures. En effet, lorsqu'un mouvement est commandé par les motoneurones $\alpha$, un déplacement est attendu et contrôlé par les motoneurones $\gamma$, qui peuvent en cas d'écart entre le mouvement réalisé et attendu, inhiber ou augmenter l'activité des motoneurones $\alpha$, tout en jouant sur les contractions des fuseaux neuromusculaires, qui peuvent être modélisées de manière similaire aux fibres musculaires.
 
-\input{fig_stretch_reflex_ctrl_loop}
+\input{latex_figures/fig_stretch_reflex_ctrl_loop}
 
 La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle. \textcolor{blue}{Ainsi, le réflexe d'extension ou ostéotendineux, très étudié, survient pour le membre supérieur humain entre \SIlist{20;50}{\milli\second} \parencite{lacquaniti_transient_1991, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011} après une perturbation. Pour le membre inférieur, des latences ont été relevées au delà de \SI{50}{\milli\second} \parencite{allum_mechanical_1982, sinkjaer_muscle_1988, toft_mechanical_1989}. L'initiation d'actions volontaires ne peut émerger qu'après \SIrange{100}{120}{\milli\second} \parencite{libet_unconscious_1985, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, or entre ces actions volontaires et le réflexe d'étirement, \parencite{kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011} observent d'autres comportements réflexes, qualifiés de longs délais ou spinaux, dont les origines ne sont pas uniques \parencite{pruszynski_long-latency_2011}.}
 
@@ -268,7 +268,7 @@ Comme le témoignent plusieurs travaux, les cocontractions musculaires ont notam
 
 %On retrouve l'inertie $I$, l'amortissement $B$ (modélisation linéaire de la dépendance à la vitesse) et la raideur $K$ du bras, les commandes neurales $u$ du biceps et triceps sont notées respectivement avec les indices $b$ et $t$ et sont comprises entre 0 et 1, $T$ correspond au couple isométrique maximum que l'on peut voir émerger lorsque le bras est dans une position intermédiaire, $\theta \approx$ \ang{0} \parencite{hogan_adaptive_1984, linnamo_maximal_2006}. Enfin, on retrouve le couple généré par l'effet de la gravité sur le bras, avec $m$ la masse du bras, $g$ l'accélération statique, et $l$ la longeur du bras. 
 
-%\input{fig_hogan_arm_cocontraction_model}
+%\input{latex_figures/fig_hogan_arm_cocontraction_model}
 
 \parencite{milner_adaptation_2002} ont conduit une expérience sur l'articulation du poignet d'une dizaine de participants à l'aide d'un manipulandum. Pendant des mouvements rapides (\SI{3.14}{\radian\per\second}) et lents (\SI{0.57}{\radian\per\second}) de \ang{20}, avec des charges variables destabilisantes, dépendantes de la position - \textit{raideur négative} -, puis de la vitesse - \textit{amortissement négatif} - et des vibrations à \SI{5.5}{\hertz} et \SI{10}{\hertz}, les participants devaient réaliser une tâche de pointage uni-articulaire. Des mesures EMGs étaient enregistrées à partir de \SI{250}{\milli\second} avant et jusqu'à \SI{1500}{\milli\second} après le déclenchement du mouvement, sur six muscles responsables des flexions et extensions du poignet. Le critère de stabilité était évalué par rapport au décrément des oscillations en position une fois la cible atteinte. Ainsi, après avoir demandé aux participants de réduire au plus vite ces oscillations, si des mouvements en dehors d'une cible de \ang{3} étaient observés après \SI{800}{\milli\second}, alors le mouvement était considéré non conforme au critère de stabilité. Les résultats de l'étude indiquent que les cocontrations étaient impliquées à différents degrés pour stabiliser le poignet en présence d'environnements déstabilisants.
 
@@ -299,7 +299,7 @@ Dès les années 80, \parencite{hogan_adaptive_1984} propose un modèle linéair
 
 On retrouve l'inertie $I$, l'amortissement $B$ (modélisation linéaire de la dépendance à la vitesse) et la raideur $K$ du bras, les commandes neurales $u$ du biceps et triceps sont notées respectivement avec les indices $b$ et $t$ et sont comprises entre 0 et 1, $T$ correspond au couple isométrique maximum que l'on peut voir émerger lorsque le bras est dans une position intermédiaire, $\theta \approx$ \ang{0} \parencite{hogan_adaptive_1984, linnamo_maximal_2006}. Enfin, on retrouve le couple généré par l'effet de la gravité sur le bras, avec $m$ la masse du bras, $g$ l'accélération statique, et $l$ la longueur entre le centre de rotation et le centre de masse du bras.
 
-\input{fig_hogan_arm_cocontraction_model}
+\input{latex_figures/fig_hogan_arm_cocontraction_model}
 
 Pour étendre les travaux concernant la modélisation articulaire en impédance du membre supérieur, \parencite{bennett_time-varying_1992} ont étudié une tâche rythmique en mouvement. Les travaux antérieurs s'intéressant en grande majorité à des configurations isométriques des membres, ce qui permet une linéarisation plus aisée du modèle pour de faibles déviations. Lors d'une tâche en mouvement, il faut non seulement linéariser le modèle en impédance autour d'une trajectoire de référence $(\theta_0, \tau_0)$ non statique, mais aussi considérer que ses paramètres sont variables dans le temps $t$, que ce soit à cause de leur dépendance à la position ou à la vitesse \parencite{milner_dependence_1993, kuxhaus_dependence_2014}. \parencite{bennett_time-varying_1992} propose donc de linéariser le modèle \cref{eq_bennet_1922_a} pour des petites déviations, avec $f$ une fonction non linéaire regroupant les propriétés des muscles, tissus conjonctifs et réflexes sans distinctions.
 
@@ -323,7 +323,7 @@ Ainsi, quand de faibles perturbations viennent modifier la trajectoire de réfé
 
 Pour compléter les liens qui semblent exister entre la raideur articulaire et la fréquence du mouvement pour le membre supérieur, \parencite{abe_modulation_2003} ont étudié un panel de fréquences plus détaillé, dans le plan vertical. Ils trouvent une relation quadratique entre la raideur et la fréquence du mouvement, avec un minimum proche de la fréquence naturelle du bras, proche de \SI{1}{\hertz} (voir \cref{fig_stiffnessVSfrequency_abe_2003}). Il est important de noter que lorsque le bras est soumis à l'effet de son poids, la relation \cref{eq_natural_frequency} est modifée $\omega_0 = \sqrt{\frac{K + mgl}{I}}$.
 
-\input{fig_stiffnessVSfrequency}
+\input{latex_figures/fig_stiffnessVSfrequency}
 
 Dans le cadre d'une tâche de pointage en extension dans le plan horizontal, et donc pour des mouvements discrets, par opposition aux mouvements rythmiques précédemment présentés \textcolor{red}{[encart sur les implications entre mouvements rythmiques et discrets ? \parencite{hogan_rhythmic_2007}]}, \parencite{popescu_elbow_2003} proposent une augmentation du modèle en impédance pour tenir compte d'un retard du centre de masse sur la rotation angulaire \cref{eq_impedance_popescu_2003}, en choisissant le retard $t_d$ de \SI{5}{\milli\second}. 
 
@@ -341,7 +341,7 @@ Dans l'objectif de différencier la contribution des réflexes $T_r$, qui agisse
 
 \textcolor{red}{[je ne comprends pas où passe la non linéarité (statique) dans leurs équations, est-ce G ???]}
 
-\input{fig_kearney_hammerstein_model}
+\input{latex_figures/fig_kearney_hammerstein_model}
 
 On peut alors légitimement se demander comment ces modèles uni-articulaires se transposent sur des modèles humains plus complets intégrant plusieurs articulations. En effet, les mouvements purement uni-articulaires sont plutôt rares dans des contextes écologiques \parencite{hogan_mechanics_1985}, pour bien étudier la complexité de la modulation des propriétés viscoélastiques lors d'une tâche physiologiquement réaliste, il convient donc de prendre en compte des données pluri-articulaires. C'est de cette manière que l'on peut étudier la coordination et génération de mouvements stables dans des conditions réalistes.
 
@@ -349,7 +349,7 @@ On peut alors légitimement se demander comment ces modèles uni-articulaires se
 
 Dès lors qu'on cherche à étudier plusieurs articulations simultanément, viennent les questions des effets de couplages et de l'impédance cartésienne. On peut aussi remarquer, que plus on s'intéresse à d'articulations conjointement, plus de variables devront être observées. Ainsi, \parencite{hogan_mechanics_1985, mussa-ivaldi_neural_1985} se sont intéressés à  l'évaluation de l'impédance mécanique du bras et plus précisement de sa raideur, dans un cas où à la fois les articulations du coude et de l'épaule sont impliquées. En utilisant un manipulandum dans le plan horizontal et en soutenant le bras à l'aide d'une corde pour limiter les effets de la gravité, des estimations d'impédance étaient conduites à différentes postures dans des conditions isométriques, notamment grâce aux mesures angulaires $\theta_1'$ et $\theta_2'$ données par les 2 moteurs du manipulandum. 
 
-\input{fig_mussa_ivaldi_manipulandum}
+\input{latex_figures/fig_mussa_ivaldi_manipulandum}
 
 En effet, les mesures directement sur les articulations humaines étant plus complexes, une estimation cartésienne de l'impédance est faite, le long des axes $\vect{x}$ et $\vect{y}$. En anglais, on parle de "goal directed impedance" ou "endpoint impedance", on se pose donc la question de la modulation de l'impédance pour atteindre un comportement viscoélastique spécifique au niveau d'un effecteur, ici la poignée. \parencite{mussa-ivaldi_neural_1985} cherchent donc à obtenir les positions de la poignée (\cref{eq_mussa_ivaldi_position}), rigidement maintenue à la main de l'utilisateur, ainsi que les forces d'interaction (\cref{eq_mussa_ivaldi_force}) entre le manipulandum et l'utilisateur humain.
 
@@ -390,10 +390,10 @@ Il est intéressant de noter que la matrice de raideur peut être séparée en d
 	D'abord introduite par \parencite{mussa-ivaldi_neural_1985} pour la raideur puis étendue à l'ensemble des paramètres dynamiques en impédance par \parencite{dolan_dynamic_1993}, les ellipses permettent une représentation graphique facilement lisible des forces de restitution dans le cadre de tâches planaires, pour des déplacements induits sur un cercle unitaire.
 	Pour ce tracé, la matrice d'impédance doit être séparée en une matrice symétrique $Z_s$ et antisymétrique, seuls les composants de la matrice symétrique sont représentés. Les axes de l'ellipse sont déterminés par les valeurs propres de cette dernière matrice, et l'orientation est obtenue grâce à la formule suivante: $\phi=\tan^{-1}((\lambda_2-Z_{s11})/Z_{s21})$. \textcolor{red}{en annexe plutôt ?}	
 	La \cref{fig_ellipse_dolan} montre un exemple de cette représentation.
-	%\input{fig_ellipse_impedance}
+	%\input{latex_figures/fig_ellipse_impedance}
 \end{aside}
 
-\input{fig_ellipse_impedance}
+\input{latex_figures/fig_ellipse_impedance}
 
 %\begin{definition}[TEST]
 %	test test test
@@ -404,7 +404,7 @@ Il est intéressant de noter que la matrice de raideur peut être séparée en d
 
 En réalisant des estimations d'impédance sur quatre participants, à différentes postures, avec différents types de perturbations - \textit{courtes et non prévisibles (\SI{120}{\milli\second}), statique et prévisible (charge)} -, \parencite{mussa-ivaldi_neural_1985} indiquent que la modulation de la raideur cartésienne se fait principalement grâce à la configuration géométrique du bras. En effet, en simulant un bras à 2 DDL avec des raideurs articulaires constantes, ils trouvent une modulation de la raideur cartésienne proche de leur estimation. La géométrie semble dicter l'orientation et la forme de la raideur cartésienne qui restent relativement invariants lors des différents essais, toutefois, l'amplitude de la raideur peut varier jusqu'à doubler, la modulation du comportement en raideur par le SNC ne peut donc pas être négligé. Ce qui a aussi pu être observé par \parencite{shadmehr_postural_1993} (même équipe de recherche) sous la forme de champ de force postural.
 
-Ces résultats ne sont toutefois pas trouvés à nouveau par \parencite{lacquaniti_time-varying_1993} dans le plan vertical, pour une tâche de réception de balle en chute libre. Ces derniers auteurs ont mesuré les angles du poignet $ \theta_w $ et du coude $ \theta_e $ à l'aide d'un goniomètre fermement attaché du bras à la main, pour déterminer la raideur et l'amortissement de ces deux articulations, sur sept participants. En utilisant le jacobien $ \jacobian{}{}{} $, \cref{jacobian_lacquaniti}, ils ont facilement pu passer dans le plan cartésien \cite[Chapter~5]{khalil_modeling_2002} après quelques mesures géométriques concernant l'avant bras $l_{fa}$ et le troisième métacarpien $l_{m}$ (os reliant le poignet au majeur). Les relations entre les paramètres articulaires et cartésiens sont explicités dans \parencite{hogan_mechanics_1985, tsuji_human_1997}. Voir \cref{app_link_joint_endpoint} pour les relations entre les paramètres articulaires et cartésiens.
+Ces résultats ne sont toutefois pas trouvés à nouveau par \parencite{lacquaniti_time-varying_1993} dans le plan vertical, pour une tâche de réception de balle en chute libre. Ces derniers auteurs ont mesuré les angles du poignet $ \theta_w $ et du coude $ \theta_e $ à l'aide d'un goniomètre fermement attaché du bras à la main, pour déterminer la raideur et l'amortissement de ces deux articulations, sur sept participants. En utilisant le jacobien $ \jacobian{}{}{} $, \cref{jacobian_lacquaniti}, ils ont facilement pu passer dans le plan cartésien \cite[Chapitre~5]{khalil_modeling_2002} après quelques mesures géométriques concernant l'avant bras $l_{fa}$ et le troisième métacarpien $l_{m}$ (os reliant le poignet au majeur). Les relations entre les paramètres articulaires et cartésiens sont explicités dans \parencite{hogan_mechanics_1985, tsuji_human_1997}. Voir \cref{app_link_joint_endpoint} pour les relations entre les paramètres articulaires et cartésiens.
 
 \begin{equation} \label{jacobian_lacquaniti}
 	\begin{bmatrix}
@@ -428,7 +428,7 @@ Ces résultats ne sont toutefois pas trouvés à nouveau par \parencite{lacquani
 
 Ils remarquent bien des variations de la géométrie du bras et de l'impédance articulaire, toutefois, la modulation avant l'impact de la balle leur semble réalisée de manière indépendante de la configuration géométrique. Ils observent que l'amplitude de la résistance à l'impact augmente, (à la fois la raideur et l'amortissement), et que l'orientation de l'amortissement se rapproche de la verticale, juste avant l'impact de le balle. Pour vérifier que ces changements n'étaient pas uniquement du à des facteurs géométriques ils ont comparé leur corrélation à l'inertie équivalente au niveau de la main, et ont constaté des variations des degrés de corrélation au cour de la tâche.
 
-\parencite{gomi_human_1997, gomi_task-dependent_1998} ont conduit plusieurs expériences statiques et en mouvements, avec des variations de cocontractions, en utilisant un manipulandum dans le plan horizontal, dans des conditions proches de celles décrites par \parencite{mussa-ivaldi_neural_1985} (voir \cref{fig_mussa_ivaldi_manipulandum}). Un modèle dynamique rigide en série du bras pour 2 articulations (comme détaillé par \cite[Chapter~9]{khalil_modeling_2002}) sans les effets de la gravité (compensés par le manipulandum) est utilisé :
+\parencite{gomi_human_1997, gomi_task-dependent_1998} ont conduit plusieurs expériences statiques et en mouvements, avec des variations de cocontractions, en utilisant un manipulandum dans le plan horizontal, dans des conditions proches de celles décrites par \parencite{mussa-ivaldi_neural_1985} (voir \cref{fig_mussa_ivaldi_manipulandum}). Un modèle dynamique rigide en série du bras pour 2 articulations (comme détaillé par \cite[Chapitre~9]{khalil_modeling_2002}) sans les effets de la gravité (compensés par le manipulandum) est utilisé :
 %
 \begin{equation} \label{eq_arm_dynamic_model}
 	\matr{\Gamma}(\ddot{\vect{q}}, \dot{\vect{q}}, \vect{q}) = \matr{A}(\vect{q})\ddot{\vect{q}} + \matr{C}(\dot{\vect{q}},\vect{q}) \dot{\vect{q}} \text{ ,}
@@ -477,7 +477,7 @@ Comparativement au modèle décrit en \cref{eq_gomi_impedance_model}, le modèle
 %
 En comparant les erreurs de reconstruction de ces différents modèles, après identification de leurs paramètres, \textcite{dolan_dynamic_1993} concluent que pour de faibles perturbations autour d'un point d'équilibre, la relation liant la force cartésienne aux variables cinématiques cartésiennes est mieux décrite à l'aide du modèle KBM. En effet, sur les onze sujets de l'expérience (seul les données pour deux sont présentées dans l'article), et les cinq postures proposées, le modèle KBM avait presque systématiquement des erreurs significativement plus faibles que celle du modèle sans relation à la vitesse \cref{eq_dolan_mod1}, ce qui indique l'importance des termes relatifs à la vitesse. De plus, le modèle prenant en compte les forces de Coriolis \cref{eq_dolan_mod2} avait toujours des erreurs plus importantes, ce qui indique que les effets liés à la vitesse viennent principalement des propriétés dynamiques passives du bras, et non des effets centrifuges et de Coriolis.
 
-\input{fig_KPTee_model}
+\input{latex_figures/fig_KPTee_model}
 
 \textcolor{red}{[Capactité de reproduire en simulation des mouvements humains à l'aide d'une correction en rejet de perturbation sur un modèle en impédance \parencite{tee_model_2004}, je n'arrive pas à comprendre la causalité de leur modèle...]}
 
@@ -537,7 +537,7 @@ Pour des tâches haptiques ou de téléopération, où le poignet et les doigts 
 	\label{fig_haptic_interface}
 \end{figure}
 
-\input{fig_speich_impedance_model}
+\input{latex_figures/fig_speich_impedance_model}
 
 \begin{sidewaystable}
 %\begin{table}

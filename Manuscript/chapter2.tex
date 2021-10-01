@@ -7,85 +7,184 @@
 
 \subsubsection{Compensation du modèle dynamique}
 
+Idée principale 
+Avantages (manipulation du robot sur n'importe quelle articulation ...)
+Limites (nécessité d'avoir un robot réversible avec une bonne identification du modèle) "The main reasons for this are limited robustness to unmodeled dynamics, parameter uncertainties, actuator bandwidth, and amplitude limitations."
+Decouplage du controle des propriétés dynamiques \parencite{ott_decoupling_2003}
+
 \subsubsection{Exploitation du modèle dynamique}
+
+Utilisation des propriétés dynamiques d'un robot: \textcite{keppler_elastic_2018, keppler_elastic_2018b, mengacci_elastic_2021}
+Haddadin ... (suppose une conception déjà pensée pour avoir certaines propriétés)
+Exploitation des propriétés de la tâches (rythmiques) \parencite[Chapitre~2,4]{williamson_robot_1999}
 
 \subsection{Commandes en impédance}
 
+Court rappel sur la commande en impédance
+
 \subsubsection{Contrôle en impédance virtuelle}
+
+Présenter les travaux de Hogan où l'on cherche à donner au robot un comportement en impédance lorsqu'il interragit avec un environnement (\parencite{hogan_impedance_1985b} verifier que c'est la bonne publication de Hogan)
+
+\subsubsection{Contrôle en admittance virtuelle} \label{chap2_sec_cmd_collab_subsec_cmd_imp_2}
+
+L'appelation de contrôle en admittance a été introduite par \textcite{newman_stability_1992} en référence a une méthode de contrôle utilisant les forces d'interactions pour générer un mouvement. Comme expliqué par \textcite{keemink_admittance_2018}, dans leur revue de la littérature des contrôles en admittance, on peut considérer que tous types de contrôle utilisant une relation reliant une force vers un mouvement désiré peut être assimilé à un contrôle en admittance, la force et le mouvement pouvant être asservis et suivis simultanément. L'admittance est l'inverse de l'impédance, ainsi ces contrôles se placent dans une causalité inversée par rapport aux contrôles en impédance, plus répandus, il existe donc une complémentarité entre ces deux types de contrôles \parencite{ott_unified_2010, keemink_admittance_2018}.
+
+Le contrôle d'un robot en admittance est particulièrment adapté lorsque les interactions entre un utilisateur humain et un robot sont localisées au niveau de l'effecteur final, et que l'objectif principal est de manipuler le robot pour qu'il soit guidé par les mouvements de l'utilisateur (bien que ces conditions ne soient pas nécessaires). Ce type de contrôle peut s'avérer particulièrement utile lorsque le robot est amené à interargir avec des environnements souples \parencite{ott_unified_2010}. On peut alors utiliser un ou plusieurs capteurs de force pour mesurer les forces d'intéraction $\vect{f}_e$ qui sont utilisées pour générer des consignes de vitesse. Il est intéressant de noter que certains travaux récents proposent des contrôles en admittance sans l'utilisation de capteur de force, en utilisant des approches par observateurs pour estimer les couples articulaires par exemple \parencite{yang_force_2021}.
+
+On retrouve ainsi ce type de contrôle pour certaines tâches de téléopération où l'on cherche à reproduire l'impédance du bras humain obtenue lors de la manipulation d'un robot esclave, et aussi lorsqu'on cherche à transmettre les sensations tactiles du robot maître lorsque'il entre en contact avec son environnement, on pourra parler de contrôle en admittance bilatéral \parencite{hashtrudi-zaad_analysis_2001, tufail_impedance_2014}. On retrouve aussi ce type de contrôle pour les exosquelettes \parencite{huang_admittance_2017}, où l'on souhaite que le robot soit le plus transparent possible afin de ne pas gêner le mouvement humain, mais aussi pour guider le mouvement dans des applications de rehabilitation \cite{ozkul_design_2011}. Le contrôle en admittance peut être couplé en alternance avec des modes plus raides pour permettre l'injection de perturbations pour la qualification de propriétés des ensembles SNC et CMS, notamment pour des cas pathologiques \parencite{stienen_act-4d_2011}.
+
+\textcite{lamy_achieving_2009} s'est intéressé à ce type de contrôle collaboratif en étudiant notamment les dynamiques apparentes d'un robot pendant un contrôle en admittance, en cherchant à annuler les phénomènes liés à la vitesse comme les frottements visqueux et sec, et en minimisant l'inertie apparente, tout en assurant la stabilité des interactions.
+
+\paragraph{Natural Admittance Controller} \label{chap2_sec_cmd_collab_subsec_cmd_imp_2_1}
+
+Dans le cas du contrôle en admittance articulaire d'abord décrit par \parencite{newman_stability_1992}, il est possible d'imposer à un système physique un comportement en impédance en utilisant un capteur de force. Lorsque le capteur de force est placé sur l'effecteur, on parle de retour d'effort non colocalisé, les efforts n'étant pas mesurés au niveau articulaire. La \cref{fig_lamy_control} présente la boucle de contrôle permettant avec des réglages adéquats décrits notamment par \parencite{lamy_achieving_2009}, de donner un comportement en impédance avec une raideur et un amortissement nuls, tout en minimisant l'inertie. 
+
+%
+\input{latex_figures/fig_ctrl_scheme_lamy}
+
+Le schéma décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ la matrice jacobienne du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, représentés par la matrice diagonale $ \matr{K}_v \in \Re^n $,  permettent de compenser les effets dûs aux frottements secs \parencite{newman_stable_1994}. La matrice diagonale $ \matr{K}_i \in \Re^n $ contient les gains des correcteurs en admittance de la boucle en couples d'interaction, permettant de réduire l'inertie apparente du robot \parencite[Chapitre~3]{lamy_conception_2011}.
+
+Ainsi pour le cas uni-articulaire, \textcite[Chapitre~3]{lamy_conception_2011} trouve une relation directe entre l'inertie apparente du robot $J_r$ et les gains des correcteur intégral $k_i$ et proportionnel $k_v$ en basse fréquence, avec $b_m$ l'amortissement côté moteur du modèle viscoélastique entre moteur et capteur d'effort \parencite[Chapitre~2]{lamy_conception_2011} :
+
+\begin{equation}
+	J_r = \frac{k_v + b_m}{k_i k_v}
+\end{equation}
+
+%
+La réduction apparente de l'inertie est limitée du fait de la présence de flexibilités dans les articulations. En effet, les gains permettant sa réduction sont limités par la stabilité de la boucle, comme détaillé dans \textcite[Chapitre~3]{lamy_conception_2011}. La passivité est utilisée pour garantir la stabilité des interactions en l'absence de modélisation de l'environnement. En effet, sans information sur la raideur possible de l'environnement, seule la passivité peut garantir une interaction stable. Ainsi, \textcite[Chapitre~3]{lamy_conception_2011} montre que seule l'inertie du côté de la motorisation peut être annulée, en se reposant sur un calcul négligeant les frottements entre la motorisation et l'articulation \parencite[équation 3.4 à 3.9]{lamy_conception_2011}. Les contraintes conservatrices induites par la passivité peuvent toutefois être relâchées, à condition de connaître l'amplitude des variations des propriétés viscoélastiques de l'environnement.
 
 \subsubsection{Contrôle d'actionneurs à impédance variables}
 
-\textcite{keppler_elastic_2018}
+Présentation des actionneurs à impédance variable, 
+Ces actionneurs augmentent la complexité du contrôle
+Contrôle basique \parencite{pratt_series_1995}.
+Travaux de ESPi 
 
-\section{Contrôle articulaire en admittance} \label{sec_robot_sub_ctrl_loop_sub_joint}
 
-Étant donné que les interactions entre l'humain et le robot sont localisées en son effecteur, un contrôle en impédance utilisant un capteur de force se prête bien à l'expérience. La littérature existante pour ce type de contrôle est assez riche, que ce soit dans les travaux de thèse de \textcite{lamy_conception_2011}, pour la minimisation de l'inertie lors de tâches collaboratives \parencite{lamy_achieving_2009}, pour des tâches de téléopération \parencite{ajoudani_tele-impedance_2012} où l'on cherche à imiter l'impédance du bras humain, ou dans le cas de robots redondants \parencite{ficuciello_cartesian_2014}. Plusieurs revues de l'état de l'art ont par ailleurs été publiées, pour le cas particulier des composants à impédance variable \parencite{vanderborght_variable_2013}, dans le cas spécifique du contrôle en admittance \parencite{keemink_admittance_2018}, pour essayer d'unifier les contrôles en impédance et admittance \parencite{ott_unified_2010}, et aussi dans le cas de mouvements bio-inspirés \parencite{al-shuka_active_2018}.
+%%%%%%
+\section{Contrôle en admittance proposé}
 
-\subsection{Natural Admittance Controller} \label{sec_robot_sub_ctrl_loop_sub_joint_par_NAC}
+Dans le cadre de l'expérience devant être mise en place (\cref{chap4}), un utilisateur doit pouvoir manipuler un robot par son effecteur final, en minimisant l'influence du robot pour le rendre aussi transparent que possible, tout en assurant la stabilité des interactions. Le contrôle en admittance décrit \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2} se prête particulièrement à l'application désirée, aussi dans un premier temps, le schéma de contrôle articulaire \cref{fig_lamy_control} est considéré pour réaliser l'interaction physique.
 
-Dans le cas du contrôle en admittance articulaire d'abord décrit par \parencite{newman_stability_1992}, il est possible d'imposer à un système physique un comportement en impédance en utilisant un capteur de force. Dans le cas étudié, le capteur de force étant placé sur l'effecteur, on parlera de retour d'effort non colocalisé, les efforts n'étant pas mesurés au niveau articulaire. La \cref{lamy_control} présente la boucle de contrôle permettant avec des réglages adéquats décrits notamment par \parencite{lamy_achieving_2009}, de donner un comportement en impédance avec une raideur et un amortissement nuls, tout en minimisant l'inertie. 
+La tâche étant unidimensionnelle, seuls des mouvements sur l'axe vertical $\vect{z}$ sont souhaités. Or des phénomènes de couplage entre les différents axes peuvent être mis en évidence. Considérons le cas simplifié où $\matr{K}_i$ est nulle :
 
-%
-\input{fig_ctrl_scheme_lamy}
-
-Le schéma décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ le jacobien du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, de gains $ \vect{K}_v \in \Re^n $,  permettent de minimiser les effets dûs aux frottements. Les gains $ \vect{K}_i \in \Re^n $ des correcteurs en admittance de la boucle en couple d'interaction, permettent de réduire l'inertie apparente.
-
-%
-La réduction apparente de l'inertie est limitée du fait de la présence de flexibilités dans les articulations. En effet, les gains permettant sa réduction sont limités par la stabilité de la boucle, comme détaillé au chapitre 3 des travaux de thèse de \parencite{lamy_conception_2011}.
-
-%
-Dans le cadre de l'expérience devant être mise en place, seuls des mouvements sur l'axe vertical $\vect{z}$ sont souhaités. Or des phénomènes de couplage mis en évidence par l'équation \cref{eq_coupling_effects} interviennent entre les différents axes avec ce type de contrôle.
-
-%
-Considérons le cas simplifié où $K_i$ est nul :
-%
 \begin{equation} \label{eq_vel_setpoint}
-\begin{split}
-\dot{\vect{q}}_d = k_p \jacobian{q}{}{t} \vect{F}_e
-\end{split}
+	\dot{\vect{q}}_d = \matr{K}_p \jacobian{\vect{q}}{}{t} \vect{F}_e \text{\, ,}
 \end{equation}
 %
-Or :
+or :
 %
 \begin{equation} \label{eq_link_joint_endpoint_velocity}
-\begin{split}
-\dot{\vect{X}} = \jacobian{q}{}{} \dot{\vect{q}}
-\end{split}
+	\dot{\vect{X}} = \jacobian{\vect{q}}{}{} \dot{\vect{\vect{q}}} \text{\, ,}
 \end{equation}
 %
-En associant les équations \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoint_velocity}, et en notant la pseudo inverse par l'exposant $*$ :
+en associant les équations \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoint_velocity}, et en notant la pseudo inverse par l'exposant $^*$ :
 \begin{equation} \label{eq_coupling_effects}
-\begin{split}
-\jacobian{q_d}{}{*} \dot{\vect{X}}_d = K_p \jacobian{q}{}{t} \vect{F}_e \\	
-\dot{\vect{X}}_d = K_p \jacobian{q_d}{}{} \jacobian{q}{}{t} \vect{F}_e
-\end{split}
+	\begin{split}
+		\jacobian{q_d}{}{*} \dot{\vect{X}}_d = \matr{K}_p \jacobian{\vect{q}}{}{t} \vect{F}_e \\	
+		\dot{\vect{X}}_d = \jacobian{\vect{q}_d}{}{} \matr{K}_p \jacobian{\vect{q}}{}{t} \vect{F}_e
+	\end{split}
 \end{equation}
+
+Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{\vect{q}_d}{}{} \jacobian{\vect{q}}{}{t} $ soit diagonal si $\matr{K}_p = k_p \matr{I}$ ou que la matrice jacobienne soit diagonale pour les valeurs articulaires $\vect{q}$ et $\vect{q}_d$. Or il ne s'agit pas d'une propriété du jacobien en robotique, il n'y a donc aucune garantie sur ces diagonalités. Le youBot possède 5 articulations, toutefois, pour le contrôle décrit (\cref{sec_robot_sub_ctrl_loop_sub_endpoint}) deux articulations sont maintenues en position, le robot a donc trois degrés de liberté et trois articulations actionnées, d'où $\jacobian{}{}{} \in \Re^{3\times3}$. Le calcul du jacobien est donné en \cref{app_jacobian_sub_3joints}, la dernière ligne du jacobien rend la diagonalité impossible, quelque soit les valeurs articulaires.
+
+Dans le cas où les gains $\vect{k}_p$ seraient tous identiques,on peut vérifier les effets de couplage résultant des termes hors de la diagonale de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3joints}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors le système d'équations \cref{eq_coupling_effect_jacobian}.
+
+\begin{equation} \label{eq_elem_coupling}
+	\begin{split}
+		A &= (l_2 \sin(q_a + q_b) + l_3 \sin(q_a + q_b + q_c)) \\
+		B &= (l_2 \sin(q_1 + q_2) + l_3 \sin(q_1 + q_2 + q_3)) \\
+		C &= (l_2 \sin(q_a + q_b) + l_1 \sin(q_a) + l_3 \sin(q_a + q_b + q_c)) \\
+		D &= (l_2 \sin(q_1 + q_2) + l_1 \sin(q_1) + l_3 \sin(q_1 + q_2 + q_3)) \\
+		E &= (l_2 \cos(q_1 + q_2) + l_3 \cos(q_1 + q_2 + q_3)) \\
+		F &= (l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) + l_3 \cos(q_1 + q_2 + q_3)) \\
+		G &= (l_2 \cos(q_a + q_b) + l_3 \cos(q_a + q_b + q_c)) \\
+		H &= (l_2 \cos(q_a + q_b) + l_1 \cos(q_a) + l_3 \cos(q_a + q_b + q_c)) \\
+		I &= \sin(q_1 + q_2 + q_3) \\
+		J &= \cos(q_1 + q_2 + q_3) \\
+		K &= -2 l_2 \sin(q_1 + q_2) - l_1 \sin(q_1) \\
+		L &=  2 l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) \\
+	\end{split}
+\end{equation}
+
+\begin{equation} \label{eq_coupling_effect_jacobian}
+	\begin{split}
+		\jacobian{q_d}{}{} \jacobian{q}{}{t} &= 
+		\begin{pmatrix}
+			-l_1 s_a - l_2 s_{ab} - l_3 s_{abc} & -l_2 s_{ab} - l_3 s_{abc}  & -l_3 s_{abc} \\
+			l_1 c_a + l_2 c_{ab} + l_3 c_{abc} & l_2 c_{ab} + l_3 c_{abc}  & l_3 c_{abc} \\
+			1 & 1 & 1 \\
+		\end{pmatrix} \\&
+		\begin{pmatrix}
+			-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & l_1 c_1 + l_2 c_{12} + l_3 c_{123} & 1 \\
+			-l_2 s_{12} - l_3 s_{123} & l_2 c_{12} + l_3 c_{123}  & 1 \\
+			-l_3 s_{123} & l_3 c_{123} & 1 \\
+		\end{pmatrix}	\\
+		\jacobian{q_d}{}{} \jacobian{q}{}{t} &= 
+		\begin{pmatrix}
+			A B + C D + l_3^2 s_{abc} I &
+			-E A - C F + l_3^2 s_{abc} J &
+			-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc} \\
+			-G B - D H - l_3^2 c_{abc} I &
+			G E + H F + l_3^2 c_{abc} J &
+			2 l_2 c_{ab} + l_1 c_{a} + 3 l_3 c_{abc} \\
+			K - 3 l_3 I &
+			L + 3 l_3 J &
+			3 \\
+		\end{pmatrix}
+	\end{split}
+\end{equation}
+
+Un système à 6 équations et 6 variables se pose alors pour vérifier la diagonalité de la matrice $\jacobian{q_d}{}{} \jacobian{q}{}{t}$. Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est à dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. Si l'on compare les éléments de la diagonale et hors de la diagonale de l'équation \cref{eq_coupling_effect_jacobian}, qui ont un effet sur x, on peut étudier l'amplitude des phénomènes de couplages comparativement aux effets de transmission souhaités, dans l'équation \cref{eq_coupling_effects}. On pose alors l'équation unidimensionnelle \cref{jacobian_coupling_effect_x}.
+
+\begin{equation}  \label{jacobian_coupling_effect_x}
+	x_d = k_p \left(
+	(A B + C D + l_3^2 s_{abc} I) f_x +
+	(-E A - C F + l_3^2 s_{abc} J) f_z + 
+	(-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc}) \tau_\theta \right)	
+\end{equation}
+
+En faisant la supposition que l'erreur de trainage entre $ q_d $ et $ q $ est négligeable, on peut écrire \cref{jacobian_coupling_effect_x} sous une nouvelle forme, en notant $ x_d^t $ et $ x_d^c $, respectivement les effets souhaités et les effets de couplages sur la consignes en $ x $.
+
+\begin{equation} \label{eq_coupling_effect_x_2}
+	\begin{split}
+		x_d^t &= k_p (A^2 + C^2 + (l_3 s_{abc})^2) f_x \\
+		x_d^c &= -k_p \left( l_1^2 \frac{s_{2a}}{2} + l_2^2 s_{2(ab)} + 3 l_3^2  \frac{s_{2(abc)}}{2} + l_1 l_2 s_{2ab} + l_1 l_3 s_{2abc} + 2 l_2 l_3 s_{2(ab)c} \right) f_z - ...\\
+		... \  & k_p \left(2 l_2 s_{ab} + l_1 s_{a} + 3 l_3 s_{abc} \right) \tau_\theta
+	\end{split}		
+\end{equation}
+
+La \cref{fig_coupling_effect_joint_ctrl_b} montre la variation du terme non linéaire entre $ k_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires. La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans la \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}, et les valeurs des deux autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{fig_coupling_effect_joint_ctrl_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associé aux couples $ \tau_\theta $. 
 %
-Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ soit diagonal. Or il ne s'agit pas d'une propriété du jacobien en robotique. Dans le cas du robot étudié, ayant 3 degrés de liberté et 3 articulations actionnées, il est assez direct d'invalider la garantie de la diagonalité matricielle. L'\cref{app_coupling_effect} démontre la non diagonalité, puis propose une estimation des effets de couplages sur l'axe $ \vect{x} $.
+\input{latex_figures/fig_coupling_effect_joint_ctrl}
+
+%
+La mise en place expérimentale de la stratégie de contrôle articulaire décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} est venue valider la théorie décrite dans cette annexe. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités par l'utilisateur. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre". Il y a donc nécessité de restreindre les mouvements sur l'axe $\vec{x}$.
 
 \subsection{Guide virtuel}
 
-Une solution envisageable pour limiter les mouvements à l'axe vertical $\mathbf{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \parencite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\mathbf{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{virtual_guide_control} a permis d'observer la dégradation de la transparence.
+Une solution envisageable pour limiter les mouvements à l'axe vertical $\mathbf{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \textcite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\mathbf{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{fig_virtual_guide_control} a permis d'observer la dégradation de la transparence.
 
 %
-\input{fig_ctrl_scheme_virt_guide}
+\input{latex_figures/fig_ctrl_scheme_virt_guide}
 
-\section{Contrôle cartésien en admittance} \label{sec_robot_sub_ctrl_loop_sub_endpoint}
+\subsection{Contrôle cartésien en admittance} \label{sec_robot_sub_ctrl_loop_sub_endpoint}
 
-La tâche étudiée étant limitée dans un espace de travail cartésien, il est intéressant de réaliser l'asservissement directement dans cet espace. Des commandes cartésiennes en vitesse, qui seront passées au niveau articulaire à l'aide de l'équation \cref{eq_link_joint_endpoint_velocity} annulent les effets théoriques de couplages mis en évidence dans la \cref{sec_robot_sub_ctrl_loop_sub_joint}. On vérifie ainsi que dans le cas d'un asservissement idéal, aucun phénomène de couplage n'a lieu.
+La tâche étudiée étant limitée dans un espace de travail cartésien, il est intéressant de réaliser l'asservissement directement dans cet espace. Des commandes cartésiennes en vitesse, qui seront passées au niveau articulaire à l'aide de l'équation \cref{eq_link_joint_endpoint_velocity} annulent les effets théoriques de couplages mis en évidence dans la \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2}. On vérifie ainsi que dans le cas d'un asservissement idéal, aucun phénomène de couplage n'a lieu.
 
 %
 Si l'on considère un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{matrix}( x & z )\end{matrix} $, avec le couple de degrés de liberté $ \begin{matrix}( x & z & \theta )\end{matrix} $, hors de toutes configurations singulières, comme présenté en \cref{fig_exp_bench}, alors le jacobien $\jacobian{}{}{} \in \Re^{3\times3}$ est défini et inversible, son expression est donnée en \cref{app_jacobian_sub_3}.
 %
-\subsection{Boucle de contrôle principale} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_main}
+\subsubsection{Boucle de contrôle principale} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_main}
 
-L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé (\cref{fig_comanipulation_ctrl}), fortement inspiré par la méthodologie décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p $ et $ K_i $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
+L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé (\cref{fig_comanipulation_ctrl}), fortement inspiré par la méthodologie décrite en \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p $ et $ K_i $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
 %
 \begin{equation} \label{eq_Fz_endpoint}
 \dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \begin{pmatrix} 0 & \left(K_p + \frac{K_i}{s}\right)f_z & 0 \end{pmatrix}^t
 \end{equation}
 %
-\subsection{Boucle de contrôle secondaire autour de x\textsubscript{0}} 
+\subsubsection{Boucle de contrôle secondaire autour de x\textsubscript{0}} 
 
 Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un contrôle cartésien permet d'annuler les effets de couplages théoriques dans le cas d'un contrôle idéal. Toutefois, si l'on considère l'erreur $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot et $\jacobianHat{}{}{}$ le jacobien estimé, alors l'équation \cref{eq_Fz_endpoint_coupling} décrit les phénomènes induits :
 %
@@ -116,7 +215,7 @@ Pour remédier à cette problématique, il suffit d'ajouter un asservissement pr
 \end{split}
 \end{equation}
 
-\subsection{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}
+\subsubsection{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}
 
 Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - \textit{pour les tâches en $\mathbf{z}$ et en $\mathbf{x}$} -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On souhaite donc maintenir le robot dans une certaine configuration, qui reflète les positions articulaires médianes lors de la tâche de jonglerie. Toutefois, on ne veut pas que cette nouvelle tâche nuise à la transparence du robot. 
 
@@ -154,11 +253,11 @@ La boucle de commande considérée pour l'expérience est réalisée en vitesse 
 %
 avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection de $ \dot{\vect{q}}_2 $ dans le noyau de la tâche $ \dot{\vect{q}}_1 $. L'\cref{app_projection_effects_on_main_task} s'intéresse plus en détails aux effets de cette projection sur la tâche principale.
 
-\subsection{Contrôle en transparence complet}
+\subsubsection{Contrôle en transparence complet}
 
 Ainsi en combinant les 3 tâches, on obtient le schéma de contrôle présenté en \cref{fig_comanipulation_ctrl} :
 
-\input{fig_ctrl_scheme}
+\input{latex_figures/fig_ctrl_scheme}
 %
 avec : 
 \begin{enumerate}
@@ -173,11 +272,11 @@ avec :
 \end{enumerate}
 
 
-\section{Influence sur la tâche} \label{sec_robot_sub_task_influence}
+\subsection{Influence sur la tâche} \label{sec_robot_sub_task_influence}
 
-Les gains du correcteur $ C_z $ en admittance sont soumis au compromis performance-stabilité. Ainsi, pour améliorer la transparence et diminuer les dynamiques apparentes du robot, des gains de contrôle élevés doivent être implémentés. Toutefois, la robustesse du robot doit permettre de maintenir une stabilité lors d'interaction physique avec de larges gammes de raideurs, de manière à supporter les possibles co-contractions des participants. Pour assurer cette robustesse, les gains devront donc être limités. Comme rappelé au \cref{sec_robot_sub_ctrl_loop_sub_joint_par_NAC}, l'inertie d'un robot ne peut pas être parfaitement compensée, dès lors qu'il existe des flexibilités dans les articulations, et sa réduction est limité par la stabilité.
+Les gains du correcteur $ C_z $ en admittance sont soumis au compromis performance-stabilité. Ainsi, pour améliorer la transparence et diminuer les dynamiques apparentes du robot, des gains de contrôle élevés doivent être implémentés. Toutefois, la robustesse du robot doit permettre de maintenir une stabilité lors d'interaction physique avec de larges gammes de raideurs, de manière à supporter les possibles co-contractions des participants. Pour assurer cette robustesse, les gains devront donc être limités. Comme rappelé au \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2_1}, l'inertie d'un robot ne peut pas être parfaitement compensée, dès lors qu'il existe des flexibilités dans les articulations, et sa réduction est limité par la stabilité.
 
-\subsection{Réduction de l'inertie apparente} \label{sec_robot_sub_task_influence_sub_inertia_red}
+\subsubsection{Réduction de l'inertie apparente} \label{sec_robot_sub_task_influence_sub_inertia_red}
 
 %\paragraph{Analyse théorique} 
 %
@@ -235,7 +334,7 @@ Les gains du correcteur $ C_z $ en admittance sont soumis au compromis performan
 %
 %[analyse à terminer...]
 
-\subsection{Validation expérimentale}
+\subsubsection{Validation expérimentale}
 
 Pour assurer des interactions sûres et robustes, une cartographie de la stabilité a été déterminée empiriquement sous deux conditions expérimentales. Premièrement on a opéré avec la co-manipulation la plus contraignante, ce qui correspond à un déplacement rythmique du robot avec des co-contractions intentionnelles du bras et de la main aussi intenses que possible. Ensuite, la deuxième condition correspond à une exécution nominal de la tâche de jonglerie, avec des co-contractions plus faibles. Pour chacune de ces conditions, le comportement de la boucle fermée est classé dans quatre catégories : 
 \begin{enumerate*} [label=\roman*),itemjoin={,\quad}]
@@ -253,4 +352,4 @@ Une ébauche de l'analyse théorique des dynamiques apparentes du robot est donn
 
 %%%%%%%%%%%%%%
 % INPUT STABILITY MAPPING FIGURE HERE
-%\input{fig_stability_map}
+%\input{latex_figures/fig_stability_map}

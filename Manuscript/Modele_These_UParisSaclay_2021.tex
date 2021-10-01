@@ -10,23 +10,22 @@
 \usepackage{polyglossia}
 	\setmainlanguage{french}
 \usepackage{tikz} % figure de façon générale - T. Chevet (la référence tikz)
-\usetikzlibrary{shapes}
-\usetikzlibrary{arrows, arrows.meta}
-\usetikzlibrary{calc}
-\usetikzlibrary{babel}
-\usetikzlibrary{patterns}
-\usetikzlibrary{matrix}
-\usetikzlibrary{backgrounds}
+	\usetikzlibrary{shapes}
+	\usetikzlibrary{arrows, arrows.meta}
+	\usetikzlibrary{calc}
+	\usetikzlibrary{babel}
+	\usetikzlibrary{patterns}
+	\usetikzlibrary{matrix}
+	\usetikzlibrary{backgrounds}
 \usepackage{circuitikz}
 \usepackage{pgfplots}
 \usepackage{subcaption}
 %\DeclareCaptionSubType[roman]{figure}
-\usepackage[separate-uncertainty = true,multi-part-units=single]{siunitx} % for SI units
+\usepackage[separate-uncertainty=true,multi-part-units=single]{siunitx} % for SI units
 %\sisetup{range-phrase=--}
 \usepackage{amsmath} % for splited equation notably
 \usepackage{amssymb} % for delta equality notably
 %\usepackage[square]{natbib}
-\usepackage{cleveref} % should be loaded last
 \usepackage{xifthen} %for conditional test
 \usepackage[toc,page]{appendix} % for appendices [title]
 \usepackage{rotating} % for sideway table notably
@@ -45,6 +44,7 @@
 ]{biblatex}
 \usepackage{layout}
 \usepackage[marginparwidth=0pt]{geometry}
+\usepackage{cleveref} % should be loaded last
 %\usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
 %\usepackage{adjustbox,libertine,soul,standalone,xcolor} % for quotation boxes
@@ -95,17 +95,26 @@
 %
 \renewcommand{\Re}{\rm I\!R}
 
+%compute get angle for arc
+\newcommand{\pgfExtractAngle}[3]{%
+	\pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}
+	{\pgfpointanchor{#3}{center}}
+	\global\let#1\pgfmathresult
+}
+
 % The following modifies the margins with the memoir commands
 %\setlrmarginsandblock{2.5cm}{3.5cm}{*}
 %\setulmarginsandblock{2.5cm}{2.5cm}{*}
 %\checkandfixthelayout
+
+
 
 %%
 
 \DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
 
 \addbibresource{bibliography/chapter1.bib}
-%\addbibresource{bibliography/chapter2.bib}
+\addbibresource{bibliography/chapter2.bib}
 
 \definecolor{Prune}{RGB}{99,0,60}
 
