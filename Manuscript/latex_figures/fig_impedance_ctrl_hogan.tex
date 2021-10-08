@@ -1,0 +1,123 @@
+\begin{figure}[h]
+	
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{bloc} = [rectangle, draw, minimum width = 1cm, minimum height = 0.8cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+
+	\resizebox{\textwidth}{!}{
+		\begin{tikzpicture}[node distance = 1.5cm, line width=0.7, label distance = -0.5mm]
+		
+		\comp{c1}{(0, 0)};
+		
+		\node[bloc, left of = c1] (K) {$\matr{K}$};
+		\node[bloc, above of = K, node distance = 1cm] (B) {$\matr{B}$};
+		
+		\comp[b]{c2}{($(K) + (-1.5,0)$)};
+		\comp[a]{c3}{($(B) + (-1.5,0)$)};
+		
+		\node[bloc, above of = B, node distance = 1cm] (J) {$\jacobian{\vect{q}}{}{}$};
+		
+		\node[bloc, right of = c1] (M) {$\matr{M}^{-1}$};
+		\node[bloc, right of = M, node distance = 2cm] (J1) {$\jacobian{\vect{q}}{}{-1}$};
+		\node[bloc, right of = J1, node distance = 2cm] (I) {$\matr{A}(\vect{q})$};
+		
+		\comp[b]{c4}{($(I) + (1.5,0)$)};
+		
+		\node[bloc, right of = c4, node distance = 1.75cm] (bras) {$Bras$}; % \includegraphics[width=.08\textwidth]{joints_arm_drawing.jpg}
+		\node[right of = bras, label={$\vect{F}_{ext}$}] (bras_env) {};
+		\node[bloc, right of = bras_env, node distance = 1.25cm] (env) {$Env.$};
+		\draw[-{Latex[length=2mm]}] ($(env.south west) + (-0.1, -0.1)$) -- ($(env.north east) + (0.2, 0.15)$);
+		
+		\node[bloc, below of = bras, node distance = 1.25cm] (Jt) {$\jacobian{\vect{q}}{}{t}$};
+		
+		\comp[a]{c5}{($(c4) + (0,1.75)$)};
+		
+		\comp{c6}{($(c5) + (-1.5,0)$)};
+		
+		\node[bloc, above of = c6, node distance = 2cm] (I1) {$\matr{A}(\vect{q})$};
+		\node[bloc, left of = I1, node distance = 2cm] (J2) {$\jacobian{\vect{q}}{}{-1}$};
+		\node[bloc, left of = J2, node distance = 2cm] (dJ) {$\jacobianDot{\vect{q}}{}{}$};
+		
+		\node[bloc, left of = c6, node distance = 2cm] (C) {$\matr{C}(\vect{q}, \dot{\vect{q}})$};
+		
+		\draw[{Latex[length=3mm]}-] (c2.west) -- +(-1,0)
+		node[left, above] {$\vect{X}_0$};
+		\draw[{Latex[length=3mm]}-] (c2.south) -- +(0,-1)
+		node[right] {$\vect{L}(\vect{q})$};
+		\draw[-{Latex[length=3mm]}] (c2.east) -- (K.west);
+		
+		\draw[{Latex[length=3mm]}-] (c3.west) -- +(-1,0)
+		node[left, above] {$\dot{\vect{X}}_0$};
+		\draw[{Latex[length=3mm]}-] (J.east) -- +(1,0)
+		node[right, above] {$\dot{\vect{q}}$};
+		\draw[{Latex[length=3mm]}-] (c3.north) |- (J);
+		\draw[-{Latex[length=3mm]}] (c3.east) -- (B);
+		
+		\draw[-{Latex[length=3mm]}] (K.east) -- (c1.west);
+		\draw[-{Latex[length=3mm]}] (B.east) -| (c1.north);
+		
+		\draw[-{Latex[length=3mm]}] (c1.east) -- (M.west);
+		\draw[-{Latex[length=3mm]}] (M.east) -- (J1.west);
+		\draw[-{Latex[length=3mm]}] (J1.east) -- (I.west);
+		
+		\draw[-{Latex[length=3mm]}] (I.east) -- (c4.west);
+		\draw[-{Latex[length=3mm]}] (Jt.west) -| (c4.south)
+		node[above, near start]{$\vect{\tau}_{ext}$};
+		
+		\draw[-{Latex[length=3mm]}] (c5.south) -- (c4.north);
+		\draw[-{Latex[length=3mm]}] (c6.east) -- (c5.west);
+		\draw[-{Latex[length=3mm]}] (I1.east) -| (c5.north);
+		
+		\draw[-{Latex[length=3mm]}] (J2.east) -- (I1.west);
+		\draw[-{Latex[length=3mm]}] (J2.west) -- (dJ.east);
+		\draw[{Latex[length=3mm]}-] (dJ.west) -- +(-1,0)
+		node[left, above] {$\vect{q}$};
+		
+		\draw[-{Latex[length=3mm]}] (c6.west) -- (C.east);
+		\draw[{Latex[length=3mm]}-] (C.west) -- +(-1,0)
+		node[left, above] {$\dot{\vect{q}}$};
+		\draw[{Latex[length=3mm]}-] (c6.north) |- +(-1.25, 0.6)
+		node[left, above] {$\vect{g}(\vect{q})$};
+		\draw[{Latex[length=3mm]}-] (c6.south) |- +(-1.25, -0.8)
+		node[left, above] {$\vect{V}_f(\dot{\vect{q}})$};
+		
+		\draw[-{Latex[length=3mm]}] (c4.east) -- (bras.west)
+		node[midway, above, xshift=-1.5mm] {$\vect{\tau}_{act}$};
+		\draw[-{Latex[length=3mm]}] (bras.east) -- (env.west);
+		\draw[-{Latex[length=3mm]}] ($0.5*(bras.north east) + 0.5*(bras.north) $) -- +(0,0.75)
+		node[above] {$\vect{q}$};
+		\draw[-{Latex[length=3mm]}] ($0.5*(bras.north west) + 0.5*(bras.north) $) -- +(0,0.75)
+		node[left, above] {$\dot{\vect{q}}$};
+		\draw[-{Latex[length=3mm]}] (bras_env.center) |- (Jt.east);		
+		\fill (bras_env) circle[radius=1.75pt];
+		\fill ($(bras_env) + (0,-1.25)$) circle[radius=1.75pt];
+		
+		\draw[-{Latex[length=3mm]}] (bras_env.center) -- ($(bras_env) + (0, -2)$) -| (c1);
+		
+		\end{tikzpicture}
+	}
+	\caption{Schéma équivalent décrivant la loi de commande \eqref{equ_impedance_control} définie par \cite{hogan_impedance_1985}}
+	\label{bloc_schema_hogan_1985}
+\end{figure}

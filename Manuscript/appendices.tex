@@ -1,7 +1,7 @@
 \clearpage
 \begin{appendices}
 	%\chapter{Annexes}
-	\crefalias{section}{appendix}
+	\crefalias{section}{annexe}
 
 	%%%%%%%
 	% APP 1
@@ -73,7 +73,7 @@
 		\end{split}
 	\end{equation}
 	
-	Les conversions par rapport aux conventions du robot réel, le youBot arm de KUKA\textsuperscript{TM}, sont décrites dans la \cref{tab_kuka_conventions}.
+	Les conversions par rapport aux conventions du robot réel, le youBot arm de KUKA\textsuperscript{TM}, sont décrites dans le \cref{tab_kuka_conventions}.
 	
 	\begin{table}[htbp] 
 		\newcommand{\specialcell}[2][c]{%
@@ -96,7 +96,7 @@
 	Pour passer du modèle géométrique direct réduit, au modèle à 5 articulations actionnées, il faut ajouter deux liaisons rotoïdes. La première liaison au niveau de la base du robot, a son axe de rotation autour de l'axe $ \vect{z} $ défini dans le repère du robot. La deuxième rotation se place au niveau de l'effecteur final du robot, avec un axe de rotation dans le prolongement du bras. 
 	
 	%
-	Le modèle n'est cette fois ci plus contenu dans un plan, et le formalisme proposé par Denavit-Hartenberg permet d'exprimer les coordonnées de l'effecteur dans l'espace, le choix de la convention de Khalil-Kleinfinger (\cite{khalil_new_1986}) est fait avec les paramètres des cinq liaisons rotoïdes données dans la \cref{tab_DH_params}, avec la matrice de passage homogène $ \matrCal{T} $ donnée par l'équation \cref{eq_matrix_khalil}.
+	Le modèle n'est cette fois ci plus contenu dans un plan, le formalisme proposé par Denavit-Hartenberg permet alors d'exprimer les coordonnées de l'effecteur dans l'espace. Le choix de la convention de \textcite{khalil_new_1986} est fait avec les paramètres des cinq liaisons rotoïdes données dans la \cref{tab_DH_params}, avec la matrice de passage homogène $ \matrCal{T} $ donnée par l'équation \cref{eq_matrix_khalil}.
 	
 	\begin{equation} \label{eq_matrix_khalil}
 	\mathcal{T}_{n-1}^n = 
@@ -123,7 +123,7 @@
 				%\multicolumn{5}{r}{$^{a}$ Synchronisation avec les axes du capteurs de forces.}
 			\end{tabular}
 		\end{center}
-		\caption{Paramètres de Denavit-Hartenberg, dans la convention de Khalil-Kleinfinger}
+		\caption{Paramètres de Denavit-Hartenberg, dans la convention de \textcite{khalil_new_1986}}
 		\label{tab_DH_params}	
 	\end{table}
 	
@@ -296,6 +296,26 @@
 	\end{matrix}
 	\end{equation}	
 	
+	%%%%%%%
+	% APP 4
+	%%%%%%%
+	\newpage
+	\section{Effets de l'erreur de trainage} \label{app_latency_error_effect}
+	
+	L'erreur de trainage montrée dans l'équation \cref{eq_Fz_endpoint_coupling}, entraîne des effets indésirables sur tous les axes. Sur l'axe $ \vect{x} $, l'erreur cartésienne $ \dot{x}_\epsilon $, peut être estimée en prenant la première ligne du jacobien $ \jacobian{}{}{} $ multipliée par l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ sur les 3 articulations.
+	
+	\begin{equation}
+		\dot{x}_\epsilon = \begin{pmatrix}
+		-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & -l_2 s_{12} - l_3 s_{123}  & -l_3 s_{123}
+		\end{pmatrix} \dot{\vect{q}}_\epsilon
+	\end{equation}
+	
+	Si l'on considère une erreur de trainage égale sur chaque articulation, que l'on nomme $ \dot{q}_\epsilon $, et qu'on fixe les angles à leur position $ \vect{q}_0 $, alors comme le montre l'équation \cref{eq_following_err_x} on obtient un coefficient qui est multiplié par $ \dot{q}_\epsilon $. Ce coefficient pour les valeurs données en \cref{fig_coupling_effect_joint_ctrl} vaut 0.279, ce qui revient à dire, que dans le cas considéré, plus d'un quart de l'erreur de trainage articulaire est directement projeté en vitesse cartésienne sur l'axe $ \vect{x} $.
+	
+	\begin{equation} \label{eq_following_err_x}
+		\dot{x}_\epsilon = -(l_1 s_1 + l_2 s_{12} + l_3 s_{123} + l_2 s_{12} + l_3 s_{123} + l_3 s_{123}) \dot{q}_\epsilon
+	\end{equation}
+
 	
 	%%%%%%%
 	% APP n

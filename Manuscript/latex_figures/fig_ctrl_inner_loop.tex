@@ -1,0 +1,59 @@
+\begin{figure}[!ht]
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	\resizebox{\textwidth}{!}{
+		\begin{tikzpicture} [node distance = 2cm]
+			
+			\comp[b]{ci}{(0, 0)};
+			\node[block, right of = ci, align = center] (current) {PID\\courant};
+			\node[block, right of = current] (pwm) {MLI\footnotemark};
+			\node[block, right of = pwm] (motor) {Moteur};
+			\node[block, left of = ci, align = center] (velocity) {PID\\vitesse};
+			\node[block, left of = velocity, align = center, node distance = 2.5cm] (rampGen) {Générateur\\de rampe};
+			\comp[b]{cv}{($ (rampGen) + (-2,0) $)};
+			%
+			\node[block, below of = motor, align = center, node distance = 1.4cm] (currentSensor) {Capteur de\\courant};
+			\node[block, below of = currentSensor, align = center, node distance = 1.4cm] (velocitySensor) {Capteur de\\vitesse};			
+			
+			\draw[-{Latex[length=3mm]}] (cv.east) -- (rampGen.west);
+			\draw[-{Latex[length=3mm]}] (rampGen.east) -- (velocity.west);
+			\draw[-{Latex[length=3mm]}] (velocity.east) -- (ci.west)
+				node[midway, above]{$i_d$};
+			\draw[-{Latex[length=3mm]}] (ci.east) -- (current.west);
+			\draw[-{Latex[length=3mm]}] (current.east) -- (pwm.west);
+			\draw[-{Latex[length=3mm]}] (pwm.east) -- (motor.west);
+			
+			\draw[-{Latex[length=3mm]}] (currentSensor.west) -| (ci.south);
+			\draw[-{Latex[length=3mm]}] (velocitySensor.west) -| (cv.south);
+			\draw[-{Latex[length=3mm]}] ($(cv.west) + (-1.25,0)$) -- (cv.west)
+				node[midway, above]{$\dot{q}_d$};
+			
+		\end{tikzpicture}
+	}
+	\caption{Schéma de contrôle cascade proposé par les pilotes moteurs implantés sur le youBot, pour un moteur \parencite{TRINAMIC_manual_2011}, et une régulation en vitesse}
+	\label{fig_trinamic_cascade_ctrl_loop}
+\end{figure}
+\footnotetext{MLI: modulation à largeur d'amplitude, aussi connue sous l'acronyme anglais PWM pour \textit{pulse width modulation}.}

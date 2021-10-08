@@ -1,4 +1,4 @@
-\chapter{Contexte} \label{chap_1}
+\chapter{Contexte} \label{chap1}
 \minitoc
 %\layout
 
@@ -121,7 +121,7 @@ Il est aussi possible de guider le mouvement de l'utilisateur, pour par exemple 
 	Dans une expérience s'intéressant à l'apprentissage dans le cadre de collaborations haptiques non conscientes \parencite{ganesh_two_2014} ont montré que l'assistance physique (pour la réhabilitation par exemple) permet non seulement d'améliorer les performances comparativement à une pratique solitaire, mais aussi la vitesse d'apprentissage. Pour arriver à ces conclusions, les auteurs ont utilisé 2 manipulandums en binôme pouvant être connectés passivement par une raideur et un amortissement, sans que les participants soient informés de ces liens.
 \end{aside}
 
-\subsection{Les lois de commande robotique lors d'interactions physiques}
+\subsection{Les lois de commande robotique lors d'interactions physiques} \label{chap1_sec_rob_collab_subsec_ctrl}
 
 Comme rappelé par \parencite{hogan_impedance_1985}, lorsqu'un robot interagit avec un environnement, qu'il s'agisse d'un humain ou d'un objet quelconque, un couplage se crée entre les 2 systèmes physiques. Ainsi de manière général lorsque des systèmes physiques s'interfèrent, les flux de puissance instantanée se définissent le long des degrés de liberté concernés, comme le produit de deux grandeurs ; l'effort et le flux. Or, aucun des systèmes seuls ne peut imposer ces deux variables simultanément. Dans le cas d'interactions physiques robotisées, on s'intéressera aux forces $\vect{f}$ et vitesses $\vect{v}$, comme montré sur la \cref{fig_physical_interaction}.
 
@@ -142,7 +142,7 @@ Les contrôles en admittance et impédance sont complémentaires dans leur appro
 
 De ce fait, pour optimiser la balance performances - \textit{en terme de transparence ou de précision selon le contrôle} - robustesse, il faudrait s'intéresser à la modélisation des interactions et donc améliorer la connaissance des environnements étudiés. Dans le cadre d'interactions impliquant l'humain, des modèles permettant de qualifier les interactions physiques humains - robots sont étudiés, ce qui peut aussi permettre à terme de reproduire des performances humaines, dont la versatilité a déjà été évoquée. 
 
-\newpage%%%
+%\newpage%%%
 \section{Modéliser le comportement humain}
 %%%
 
@@ -193,7 +193,7 @@ C'est ainsi que le réflexe ostéotendineux permet d'assurer une continuité dan
 
 \input{latex_figures/fig_stretch_reflex_ctrl_loop}
 
-La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle. \textcolor{blue}{Ainsi, le réflexe d'extension ou ostéotendineux, très étudié, survient pour le membre supérieur humain entre \SIlist{20;50}{\milli\second} \parencite{lacquaniti_transient_1991, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011} après une perturbation. Pour le membre inférieur, des latences ont été relevées au delà de \SI{50}{\milli\second} \parencite{allum_mechanical_1982, sinkjaer_muscle_1988, toft_mechanical_1989}. L'initiation d'actions volontaires ne peut émerger qu'après \SIrange{100}{120}{\milli\second} \parencite{libet_unconscious_1985, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, or entre ces actions volontaires et le réflexe d'étirement, \parencite{kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011} observent d'autres comportements réflexes, qualifiés de longs délais ou spinaux, dont les origines ne sont pas uniques \parencite{pruszynski_long-latency_2011}.}
+La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle. Ainsi, le réflexe d'extension ou ostéotendineux, très étudié, survient pour le membre supérieur humain entre \SIlist{20;50}{\milli\second} \parencite{lacquaniti_transient_1991, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011} après une perturbation. Pour le membre inférieur, des latences ont été relevées au delà de \SI{50}{\milli\second} \parencite{allum_mechanical_1982, sinkjaer_muscle_1988, toft_mechanical_1989}. L'initiation d'actions volontaires ne peut émerger qu'après \SIrange{100}{120}{\milli\second} \parencite{libet_unconscious_1985, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, or entre ces actions volontaires et le réflexe d'étirement, \parencite{kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011} observent d'autres comportements réflexes, qualifiés de longs délais ou spinaux, dont les origines ne sont pas uniques \parencite{pruszynski_long-latency_2011}.
 
 \subsection{Modéliser le comportement humain en interaction physique grâce à l'impédance mécanique}
 
@@ -389,11 +389,12 @@ Il est intéressant de noter que la matrice de raideur peut être séparée en d
 \begin{aside}{Représentation elliptique}
 	D'abord introduite par \parencite{mussa-ivaldi_neural_1985} pour la raideur puis étendue à l'ensemble des paramètres dynamiques en impédance par \parencite{dolan_dynamic_1993}, les ellipses permettent une représentation graphique facilement lisible des forces de restitution dans le cadre de tâches planaires, pour des déplacements induits sur un cercle unitaire.
 	Pour ce tracé, la matrice d'impédance doit être séparée en une matrice symétrique $Z_s$ et antisymétrique, seuls les composants de la matrice symétrique sont représentés. Les axes de l'ellipse sont déterminés par les valeurs propres de cette dernière matrice, et l'orientation est obtenue grâce à la formule suivante: $\phi=\tan^{-1}((\lambda_2-Z_{s11})/Z_{s21})$. \textcolor{red}{en annexe plutôt ?}	
-	La \cref{fig_ellipse_dolan} montre un exemple de cette représentation.
-	%\input{latex_figures/fig_ellipse_impedance}
+	%La \cref{fig_ellipse_dolan} montre un exemple de cette représentation.
+	
+	\input{latex_figures/fig_ellipse_impedance}
 \end{aside}
 
-\input{latex_figures/fig_ellipse_impedance}
+%\input{latex_figures/fig_ellipse_impedance}
 
 %\begin{definition}[TEST]
 %	test test test
@@ -611,9 +612,9 @@ Par ailleurs, pour limiter les effets non linéaires les perturbations doivent e
 Finalement, à moins de se placer dans des configurations isométriques, ou de contraindre la trajectoire de référence, la \emph{trajectoire virtuelle} n'est pas mesurable et doit être estimée. Ainsi dans une situation transposable à un contexte industriel, il faut être capable de reconstruire les trajectoires en force et en position sur un intervalle suffisant - \textit{en fonction du comportement perturbé }-, et avec une précision importante du fait des difficultés précedemment evoquées.
 
 \begin{description}[font=$\bullet$,labelindent=.5cm]
-	\item Un \emph{banc expérimental}, avec des équipements compatibles avec un environnement industriel réaliste, a été conçu et mis en place et utilisé pour conduire des estimations d'impédance du membre supérieur humain lors d'interactions physiques avec un robot. Le banc expérimental qui comprend un robot polyarticulé, un capteur de force 6 axe et un système de capture de mouvement par caméra est décrit dans le \cref{chap_4}.
+	\item Un \emph{banc expérimental}, avec des équipements compatibles avec un environnement industriel réaliste, a été conçu et mis en place et utilisé pour conduire des estimations d'impédance du membre supérieur humain lors d'interactions physiques avec un robot. Le banc expérimental qui comprend un robot polyarticulé, un capteur de force 6 axe et un système de capture de mouvement par caméra est décrit dans le \cref{chap4} et le contrôle du robot dans le \cref{chap2}, \cref{chap2_sec_ctrl_vfo_subsec_cartesian}.
 	%
-	\item Deux méthodes de reconstruction disctinctes des \emph{trajectoires virtuelles} en position et force sont proposées pour permettre l'estimation des paramètres d'impédance du bras humain. Ces méthodes présentés dans le \cref{chap_3} ont été validées sur des trajectoires non perturbées et en simulation.
+	\item Deux méthodes de reconstruction disctinctes des \emph{trajectoires virtuelles} en position et force sont proposées pour permettre l'estimation des paramètres d'impédance du bras humain. Ces méthodes présentés dans le \cref{chap3} ont été validées sur des trajectoires non perturbées et en simulation.
 	%
 	\item Méthode d'identifications robustes ? (ARX basique... est-ce une vraie contribution ?)
 \end{description}

@@ -49,9 +49,9 @@
 		
 		\node[block, below of = inverse_jac] (null_proj) {$ \matr{N}_2(q) $};
 		
-		\node[block, left of = null_proj, node distance = 2.3cm] (p2) {$ K_2 $};
+		\node[block, left of = null_proj, node distance = 2.3cm] (p2) {$ \matr{C}_{q_2}(s) $};
 		
-		\comp[b]{cp2}{($(p2) + (-1.75,0)$)};
+		\comp[b]{cp2}{($(p2) + (-2,0)$)};
 		
 		\node[big_block, right of = c1, node distance = 2.1cm] (robot) {$Robot$};
 		
@@ -98,7 +98,7 @@
 		node[midway, align = center, above, xshift=-1.5mm] {$\vect{F}_e=\begin{pmatrix} f_x \\ f_z \\ \tau_\theta \end{pmatrix}$};
 		
 		\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.75) $) -- ($(env.west) + (0, -0.75) $)
-		node[midway] (xdot) {};
+			node[midway] (xdot) {};
 		
 		\fill (xdot) circle [radius=2.5pt];
 		

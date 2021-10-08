@@ -1,30 +1,113 @@
-\chapter[Commandes pour les interactions phy. humain-robot]{Structure de commande pour les interactions physiques humain-robot} \label{chap_2}
+\chapter[Commandes pour les interactions phy. humain-robot]{Structure de commande pour les interactions physiques humain-robot} \label{chap2}
 \minitoc
 
-\section{Les commandes collaboratives lors d'interactions physiques humain-robot}
+\section{Les commandes collaboratives lors d'interactions physiques humain-robot} \label{chap2_sec_cmd_collab}
 
-\subsection{Utilisation du modèle dynamique du robot}
+%\subsection{Utilisation du modèle dynamique du robot}
+%
+%\subsubsection{Compensation du modèle dynamique}
+%
+%Idée principale 
+%Avantages (manipulation du robot sur n'importe quelle articulation ...)
+%Limites (nécessité d'avoir un robot réversible avec une bonne identification du modèle) "The main reasons for this are limited robustness to unmodeled dynamics, parameter uncertainties, actuator bandwidth, and amplitude limitations."
+%Decouplage du controle des propriétés dynamiques \parencite{ott_decoupling_2003}
+%
+%\subsubsection{Exploitation du modèle dynamique}
+%
+%Utilisation des propriétés dynamiques d'un robot: \textcite{keppler_elastic_2018, keppler_elastic_2018b, mengacci_elastic_2021}
+%Haddadin ... (suppose une conception déjà pensée pour avoir certaines propriétés)
+%Exploitation des propriétés de la tâches (rythmiques) \parencite[Chapitre~2,4]{williamson_robot_1999}
 
-\subsubsection{Compensation du modèle dynamique}
+\subsection{Commandes en impédance} \label{chap2_sec_cmd_collab_subsec_cmd_imp}
 
-Idée principale 
-Avantages (manipulation du robot sur n'importe quelle articulation ...)
-Limites (nécessité d'avoir un robot réversible avec une bonne identification du modèle) "The main reasons for this are limited robustness to unmodeled dynamics, parameter uncertainties, actuator bandwidth, and amplitude limitations."
-Decouplage du controle des propriétés dynamiques \parencite{ott_decoupling_2003}
+Comme expliqué en \cref{chap1_sec_rob_collab_subsec_ctrl}, contrôler un robot en impédance revient à exercer un contrôle en force indirect.
 
-\subsubsection{Exploitation du modèle dynamique}
+\subsubsection{Contrôle en impédance virtuelle} \label{chap2_sec_cmd_collab_subsec_cmd_imp_1}
 
-Utilisation des propriétés dynamiques d'un robot: \textcite{keppler_elastic_2018, keppler_elastic_2018b, mengacci_elastic_2021}
-Haddadin ... (suppose une conception déjà pensée pour avoir certaines propriétés)
-Exploitation des propriétés de la tâches (rythmiques) \parencite[Chapitre~2,4]{williamson_robot_1999}
+Ainsi pour imiter et reproduire le comportement dynamique qu'auraient des composants à paramètres en impédance variables, il est possible de programmer un comportement dynamique souhaité. En utilisant les mesures ou estimations en position, vitesse, accélération et force, il est possible de définir des lois de commande pour réaliser un contrôle en impédance, qu'on pourra appeler virtuel car il simule une impédance, \textcite{vanderborght_variable_2013} parlent de contrôle actif de l'impédance. 
 
-\subsection{Commandes en impédance}
+\paragraph{Robots rigides} \label{chap2_sec_cmd_collab_subsec_cmd_imp_1_1}
 
-Court rappel sur la commande en impédance
+C'est ainsi que \textcite{hogan_impedance_1985b} définit un loi de commande permettant d'imposer, un comportement virtuel en impédance pour un bras robotisé rigide. Il est, dans un premier temps, nécessaire d'identifier un modèle dynamique du bras articulé, avec $\vect{q}$ les positions angulaires, $\dot{q}$ les vitesses angulaires, $\matr{A}$ la matrice d'inertie du robot, $\matr{C}$ la matrice liée aux couples de Corriolis et centrifuge, $\vect{V}_f $ les couples dépendant de la vitesse (frottements), $\vect{g}$ les couples statiques dépendant de la configuration du robot (poids), et $\vect{\tau}_{act}$ et $\vect{\tau}_{ext}$ respectivement les couples des actionneurs et de l'interface :
 
-\subsubsection{Contrôle en impédance virtuelle}
+\begin{equation} \label{eq_modele_bras_hogan_1985}
+	\matr{A}(\vect{\theta})\ddot{\vect{q}} + \matr{C}(\vect{q}, \dot{\vect{q}})\dot{\vect{q}} + \vect{V}(\dot{\vect{q}}) + \vect{g}(\vect{q}) = \vect{\tau}_{act} + \vect{\tau}_{ext} 
+\end{equation}
 
-Présenter les travaux de Hogan où l'on cherche à donner au robot un comportement en impédance lorsqu'il interragit avec un environnement (\parencite{hogan_impedance_1985b} verifier que c'est la bonne publication de Hogan)
+On défini ensuite le comportement en impédance cartésienne (KBM) que l'on souhaite imposer au bras, avec les indices $0$ désignant l'état d'équilibre que l'on souhaite imposer, aux positions $\vect{X}$ et vitesses $\dot{\vect{X}}$ :
+
+\begin{equation} \label{eq_impedance_hogan_1985}
+	\vect{F}_{ext} = \matr{K}(\vect{x}_0 - \vect{x}) + \matr{B}(\dot{\vect{x}}_0 - \dot{\vect{x}}) + \matr{M}\ddot{\vect{x}}
+\end{equation}
+
+De ces deux équations, \textcite{hogan_impedance_1985b} déduit le modèle de commande permettant de parvenir au comportement souhaité en annulant les dynamiques naturelles du bras, avec $\vect{L}(\vect{q})$ le modèle géométrique direct (donné en \cref{app_direct_kinem} pour le robot étudié) et $\jacobianDot{\vect{q}}{}{}\dot{\vect{q}}$ issue de la dérivation de la relation $ \dot{\vect{x}} = \jacobian{\vect{q}}{}{} \dot{\vect{q}}$ :
+
+\begin{equation} \label{equ_impedance_control}
+	\begin{aligned}
+		\vect{\tau}_{act} & = \matr{A}(\vect{q}) \jacobian{\vect{q}}{}{-1} \matr{M}^{-1} \matr{K} (\vect{X}_0 - \vect{L}(\vect{q})) + \vect{g}(\vect{q}) & \text{(termes en position)} \\
+		& + \matr{A}(\vect{q}) \jacobian{\vect{q}}{}{-1} \matr{M}^{-1} \matr{B} (\dot{\vect{q}}_0 - \jacobian{\vect{q}}{}{} \dot{\vect{q}}) + \vect{V}_f (\dot{\vect{q}}) & \text{(termes en vitesse)} \\
+		& + \matr{A}(\vect{q}) \jacobian{\vect{q}}{}{-1} \matr{M}^{-1} \vect{F}_{ext} - \jacobian{\vect{q}}{}{t} \vect{F}_{ext} & \text{(termes en force)} \\
+		& - \matr{A}(\vect{q}) \jacobian{\vect{q}}{}{-1} \jacobianDot{\vect{q}}{}{}\dot{\vect{q}} + \matr{C}(\vect{q},\dot{\vect{q}})\dot{\vect{q}} & \text{(termes de couplages inertiels)}
+	\end{aligned}
+\end{equation}
+
+%\input{latex_figures/fig_impedance_ctrl_hogan}
+
+Comme on peut l'observer sur l'équation \eqref{equ_impedance_control}% ainsi que sur son schéma équivalent en \cref{bloc_schema_hogan_1985}
+, la commande en impédance proposée ne nécessite pas la connaissance du modèle géométrique inverse du robot. Elle comprend deux entrées $\dot{\vect{X}}_0$ et $\vect{X}_0$, et trois matrices de paramètres $\matr{K}$, $\matr{B}$ et $\matr{M}$ qui peuvent être définies pour modifier le comportement en impédance que l'on souhaite imposer. La \cref{bloc_feedback_linearization} montre le cas de la commande en impédance linéarisée par bouclage. Si l'on prend $\matr{H}(\vect{q}, \dot{\vect{q}}) = \matr{C}(\vect{q}, \dot{\vect{q}}) + \vect{V}_f(\dot{\vect{q}}) + \vect{g}(\vect{q})$, les éléments du modèle dynamique du bras, alors le schéma de contrôle est équivalent au système présenté par \textcite{hogan_impedance_1985b}.
+
+\input{latex_figures/fig_impedance_ctrl_hogan_feedback_linearization}
+
+\paragraph{Robots avec flexibilités} \label{chap2_sec_cmd_collab_subsec_cmd_imp_1_2}
+
+Le contrôle en impédance a aussi été étendu aux robots présentant des flexibilités articulaires \cref{eq_robot_flex_dynamic_model}, et donc ayant déjà une impédance articulaire matérielle définie lors de leur conception (comme pour les actionneurs décrits par \textcite{pratt_series_1995}), avec notamment $\matr{K}_{tr}$ la raideur de la transmission entre les couples moteurs $\vect{\theta}$ et articulaires  $\vect{q}$ et $\matr{A}_{m}$ l'inertie de la motorisation. \textcite{ott_decoupling_2003} proposent une structure de commande en cascade avec un contrôle des couples internes $\vect{\tau}_m $ permettant de découpler les dynamiques moteurs et articulaires.
+
+\begin{equation} \label{eq_robot_flex_dynamic_model}
+	\begin{split}
+		&\matr{A}(\vect{q})\ddot{\vect{q}} + \matr{C}(\vect{q}, \dot{\vect{q}})\dot{\vect{q}} + \vect{g}(\vect{q}) = \vect{\tau} + \vect{\tau}_{ext} \\
+		&\matr{A}_m \ddot{\vect{\theta}} + \vect{\tau} = \vect{\tau}_m \\
+		&\vect{\tau} = \matr{K}_{tr} \left(\vect{\theta} - \vect{q}\right)
+	\end{split}
+\end{equation}
+
+Le découplage est alors possible en utilisant un changement de variables pour exprimer le système d'équation en fonction des états ($\vect{q}, \dot{\vect{q}}, \vect{\tau}, \dot{\vect{\tau}}$), puis en réalisant une compensation par bouclage pour une partie des dynamiques de couples \cref{eq_feedback_compensation_ott}, avec la loi de commande $\vect{u}$ \cref{eq_decoupling_inner_torque_ott} qui permet le découplage souhaité \parencite{ott_decoupling_2003}, en notant $\vect{\epsilon}_\tau = \vect{\tau} - \vect{\tau}_d $ l'erreur de trainage de la boucle de couples interne vis à vis de la consigne $\vect{\tau}_d$, et $\matr{K}_s$ et $\matr{K}_t$ des matrices de gains définies positives.
+
+\begin{equation} \label{eq_feedback_compensation_ott}
+	\vect{\tau}_m = \vect{u} + \matr{A}_m\matr{A}(q)^{-1} (\vect{\tau} + \vect{\tau}_{ext} - \matr{C}(\vect{q}, \dot{\vect{q}})\dot{\vect{q}} - \vect{g}(\vect{q}))
+\end{equation}
+
+\begin{equation} \label{eq_decoupling_inner_torque_ott}
+	\vect{u} = \vect{\tau}_d + \matr{A}_m \matr{K}_{tr}^{-1} \left(\ddot{\vect{\tau}_d} - \matr{K}_s \dot{\vect{\epsilon}}_\tau -\matr{K}_t \vect{\epsilon}_\tau \right) 
+\end{equation}
+%u=τd+BK−1(τ¨d−Ksz˙−Ktz)
+
+Il est toutefois important de noter que dans le cas des robots flexibles, un contrôle en impédance exact n'est pas atteignable \parencite{ott_decoupling_2003}, il est seulement possible d'approcher un comportement choisi de manière virtuel injecté en cascade sur la consigne $\vect{\tau}_d$, les travaux de \textcite{ott_decoupling_2003} ne décrivent donc qu'une approximation d'un comportement en impédance cible, où la masse inertielle du robot est conservée.
+
+Dans des travaux plus récents, \textcite{keppler_elastic_2018, keppler_elastic_2018b} %, mengacci_elastic_2021} 
+expliquent que lorsque des robots conçus avec des raideurs ou impédances articulaires sont contrôlés en impédance, assigner un comportement virtuel trop éloigné des dynamiques initiales a de grande chance d'échouer en pratique. En effet, bien que l'idée semble correcte en théorie, les erreurs de modélisation, la bande passante des actionneurs, les limitations d'amplitudes, etc \parencite{keppler_elastic_2018} viennent borner le champ des possibles pour les dynamiques virtuelles souhaités. 
+
+Une autre approche, nommée préservation des structures élastiques (PSE)\footnote{Elastic structure preserving (ESP) \parencite{keppler_elastic_2018}} consiste alors à modifier au minimum les dynamiques originelles, et notamment les raideurs non linéaires, pour viser un comportement cartésien amorti ou même en raideur amortie (PSEi)\footnote{Elastic structure preserving impedance (ESPi) \parencite{keppler_elastic_2018b}} comme montré sur la \cref{fig_schema_ESP_keppler}.
+
+%%%%
+\begin{figure}[h]
+	\centering
+	\includegraphics[height=0.65\textwidth]{misc/robotic_figure_ESPI_keppler.png}
+	\caption{(a) Schéma d'une articulation avec une flexibilité en raideur. (b) Contrôle PSEi. (c) Contrôle PSE. \parencite{keppler_elastic_2018b}}
+	\label{fig_schema_ESP_keppler}
+\end{figure}
+
+L'exploitation des dynamiques intialement présentes d'un robot avec des flexibilités avait déjà été présentée, notamment pour des tâches rythmiques dans les travaux de thèse de \textcite{williamson_robot_1999}. Comme expliqué par \textcite{pratt_series_1995}, contrairement a une idée qui veut que la présence de flexibilité soit rarement souhaitable \parencite{salisbury_design_1991}, la présence d'élasticité et de manière plus générale d'impédance au niveau articulaire présente des intérêts multiples dont on pourra citer 
+\begin{enumerate*}[label=(\roman*)]
+	\item la tolérence au choc, 
+	\item la possibilité de transformer des problèmes de contrôle en force en commandes en position,
+	\item la simplification des critères de stabilité,
+	\item et surtout la possibilité d'emmaganiser de l'énergie pour des contrôles plus efficients.
+\end{enumerate*}
+Ce dernier point est notamment étudié lors des tâches rythmiques ou l'exploitation de la raideur permet une amélioration des performances notamment d'un point de vu de l'efficacité énergétique. 
+
+On pourra par exemple citer les travaux de \textcite{haddadin_exploiting_2011}, qui se sont efforcés d'exploiter la raideur et l'amortissement d'une main mécanique, placée à l'extrémité d'un bras robotisé \parencite{burger_driver_2010} ayant des flexbilités articulaires non négligeables \cref{eq_robot_flex_dynamic_model}. Ces efforts ont été orientés pour réaliser une tâche de dribble avec un ballon de basket, sans système de vision, en programmant un observateur de la balle uniquement fondé sur les forces de contact, avec un contrôle d'impédance virtuelle pour assurer les interactions physiques. La main flexible a notamment permis d'absorber les chocs et d'augmenter le temps de contact avec la balle.
+
+On notera que ces contrôles sont simplifiés lorsque l'équipement robotisé permet à la fois une mesure de la position angulaire moteur et articulaire, et que les flexibilités sont connues, ce qui n'est pas le cas de la plupart des robots industriels.
 
 \subsubsection{Contrôle en admittance virtuelle} \label{chap2_sec_cmd_collab_subsec_cmd_imp_2}
 
@@ -52,22 +135,36 @@ Ainsi pour le cas uni-articulaire, \textcite[Chapitre~3]{lamy_conception_2011} t
 \end{equation}
 
 %
-La réduction apparente de l'inertie est limitée du fait de la présence de flexibilités dans les articulations. En effet, les gains permettant sa réduction sont limités par la stabilité de la boucle, comme détaillé dans \textcite[Chapitre~3]{lamy_conception_2011}. La passivité est utilisée pour garantir la stabilité des interactions en l'absence de modélisation de l'environnement. En effet, sans information sur la raideur possible de l'environnement, seule la passivité peut garantir une interaction stable. Ainsi, \textcite[Chapitre~3]{lamy_conception_2011} montre que seule l'inertie du côté de la motorisation peut être annulée, en se reposant sur un calcul négligeant les frottements entre la motorisation et l'articulation \parencite[équation 3.4 à 3.9]{lamy_conception_2011}. Les contraintes conservatrices induites par la passivité peuvent toutefois être relâchées, à condition de connaître l'amplitude des variations des propriétés viscoélastiques de l'environnement.
+La réduction apparente de l'inertie est limitée du fait de la présence de flexibilités dans les articulations (même faibles). En effet, les gains des correcteurs sont bornés par la stabilité de la boucle, comme détaillé dans \textcite[Chapitre~3]{lamy_conception_2011}, ce dernier utilise la passivité pour garantir la stabilité des interactions en l'absence de modélisation de l'environnement. En effet, sans information sur la raideur d'un environnement, seule la passivité peut assurer une interaction stable. Ainsi, \textcite[Chapitre~3]{lamy_conception_2011} montre que seule l'inertie du côté de la motorisation peut être annulée, en se reposant sur un calcul négligeant les frottements entre la motorisation et l'articulation \parencite[équation 3.4 à 3.9]{lamy_conception_2011}. Les contraintes conservatrices induites par la passivité peuvent toutefois être relâchées, à condition de connaître l'amplitude des variations des propriétés viscoélastiques de l'environnement.
 
-\subsubsection{Contrôle d'actionneurs à impédance variables}
+\subsubsection{Contrôle d'actionneurs à impédance variables (AIV)} \label{chap2_sec_cmd_collab_subsec_cmd_imp_3}
 
-Présentation des actionneurs à impédance variable, 
-Ces actionneurs augmentent la complexité du contrôle
-Contrôle basique \parencite{pratt_series_1995}.
-Travaux de ESPi 
+Une autre méthode pour les interactions physiques est d'utiliser des robots avec des articulations dont l'impédance est contrôlable. On va alors au delà du concept de robots flexibles contrôlés en impédance virtuelle (\cref{chap2_sec_cmd_collab_subsec_cmd_imp_1_2}), puisque non seulement ces actionneurs présentes des propriétés intrinsèques en impédance, mais ces propriétés peuvent en plus être modulées \parencite{albu-schaffer_anthropomorphic_2011}. Les caractéristiques intéressantes des actionneurs flexibles sont donc conservées, avec notamment l'absorption des chocs et la capacité d'emmaganisiner de l'énergie pour ensuite la restituer.
 
+Comme détaillé par \textcite{vanderborght_variable_2013}, dans une revue de la littérature concernant ces actionneurs, ce contrôle se fait au prix d'une augmentation du nombre de moteurs, ou d'actionneurs. Par exemple, pour une raideur modulable, il faudra compter un moteur pour le contrôle en position, et un supplémentaire pour le réglage du ou des éléments élastiques \parencite{huang_torque-stiffness-controlled_2016}. Contrairement à la modulation d'impédance virtuelle, les changements des propriétés ne peuvent pas être réalisée "\textit{instantannément}", et les valeurs des gains sont limités par des considérations physiques. Toutefois, un avantage non négligeable des AIV réside dans la possible simplification de mise en place du contrôle en impédance, notamment comparativement aux actionneurs ayant des flexibilités fixes.
+
+On trouve des contrôles de raideur bio-inspirés avec une modulation rappelant la démarche de \textcite{hogan_adaptive_1984} pour simuler une adaptation de la raideur grâce aux co-contractions, avec les travaux de \textcite{yamaguchi_realization_1998} pour la marche d'un robot reproduisant les membres inférieurs humain, ou de \textcite{mengacci_elastic_2021} pour les membres supérieurs, en proposant une extension des travaux sur la PSE (\cref{chap2_sec_cmd_collab_subsec_cmd_imp_1_2}) aux actionneurs agonistes-antagoniste.
+
+\begin{aside}{AIV et contrôles ryhtmiques}
+	Les AIV sont particulièrement adaptés aux tâches rythmiques, où le stockage d'énergie permet d'améliorer l'efficacité du robot. C'est aussi pour conserver cette efficacité que l'amortissement est généralement très faibles. Ainsi, pour la locomotion, des contrôles en couples et raideurs articulaires combinés ont permis à \textcite{huang_torque-stiffness-controlled_2016} de constater que ces techniques permettent de gérer une balance entre la rapidité et la souplesse des mouvements générés. Il est d'autant plus intéressant de noter que les commandes étaient produites à l'aide d'oscillateurs dont la conception est inspirée biologiquement par les structures neurales de certains animaux \parencite{matsuoka_sustained_1985,ijspeert_central_2008,guertin_mammalian_2009}. 
+\end{aside}
+
+Il est important de souligner, comme rappelé par \textcite{vanderborght_variable_2013} que les actionneurs à raideur variable présentent l'inconvéniant de diminuer la fréquence de résonnance mécanique, ce qui limite la bande passante réalisable. Cette résonnance mécanique peut être contrecarrée à l'aide d'amortissement virtuel, ce qui vient toutefois dégrader les performances énergétiques, ou d'actionneurs combinant une raideur et un amortissement variables.
+
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{misc/variable_actuator.png}
+	\caption{(a) MACCEPA à deux degrés de liberté et une raideur variable et (b) MACCEPA complet avec deux degrés de liberté et deux raideurs variables indépendantes \parencite{weckx_two-degree_2014}. On peut facilement distinger les moteurs gérant la position de ceux modulant la raideur.}
+	\label{fig_variable_stiffness_actuator}
+\end{figure}
 
 %%%%%%
-\section{Contrôle en admittance proposé}
+\section{Contrôle en admittance proposé} \label{chap2_sec_ctrl_vfo}
 
 Dans le cadre de l'expérience devant être mise en place (\cref{chap4}), un utilisateur doit pouvoir manipuler un robot par son effecteur final, en minimisant l'influence du robot pour le rendre aussi transparent que possible, tout en assurant la stabilité des interactions. Le contrôle en admittance décrit \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2} se prête particulièrement à l'application désirée, aussi dans un premier temps, le schéma de contrôle articulaire \cref{fig_lamy_control} est considéré pour réaliser l'interaction physique.
 
-La tâche étant unidimensionnelle, seuls des mouvements sur l'axe vertical $\vect{z}$ sont souhaités. Or des phénomènes de couplage entre les différents axes peuvent être mis en évidence. Considérons le cas simplifié où $\matr{K}_i$ est nulle :
+\subsection{Effets de couplage} \label{chap2_sec_ctrl_vfo_subsec_coupling}
+
+La tâche étant unidimensionnelle, seuls des mouvements sur l'axe vertical $\vec{z}$ sont souhaités. Or des phénomènes de couplage entre les différents axes peuvent être mis en évidence. Considérons le cas simplifié où $\matr{K}_i$ est nulle :
 
 \begin{equation} \label{eq_vel_setpoint}
 	\dot{\vect{q}}_d = \matr{K}_p \jacobian{\vect{q}}{}{t} \vect{F}_e \text{\, ,}
@@ -87,9 +184,9 @@ en associant les équations \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoi
 	\end{split}
 \end{equation}
 
-Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{\vect{q}_d}{}{} \jacobian{\vect{q}}{}{t} $ soit diagonal si $\matr{K}_p = k_p \matr{I}$ ou que la matrice jacobienne soit diagonale pour les valeurs articulaires $\vect{q}$ et $\vect{q}_d$. Or il ne s'agit pas d'une propriété du jacobien en robotique, il n'y a donc aucune garantie sur ces diagonalités. Le youBot possède 5 articulations, toutefois, pour le contrôle décrit (\cref{sec_robot_sub_ctrl_loop_sub_endpoint}) deux articulations sont maintenues en position, le robot a donc trois degrés de liberté et trois articulations actionnées, d'où $\jacobian{}{}{} \in \Re^{3\times3}$. Le calcul du jacobien est donné en \cref{app_jacobian_sub_3joints}, la dernière ligne du jacobien rend la diagonalité impossible, quelque soit les valeurs articulaires.
+Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{\vect{q}_d}{}{} \jacobian{\vect{q}}{}{t} $ soit diagonal si $\matr{K}_p = k_p \matr{I}$ ou que la matrice jacobienne soit diagonale pour les valeurs articulaires $\vect{q}$ et $\vect{q}_d$. Or il ne s'agit pas de propriétés du jacobien en robotique, il n'y a donc aucune garantie sur ces diagonalités. Le youBot possède 5 articulations, pour le contrôle décrit (\cref{chap2_sec_ctrl_vfo_subsec_cartesian}) deux articulations sont maintenues en position, le robot a donc trois degrés de liberté et trois articulations actionnées, d'où $\jacobian{}{}{} \in \Re^{3\times3}$. Le calcul du jacobien est donné en \cref{app_jacobian_sub_3joints}, la dernière ligne du jacobien rend la diagonalité impossible, quelque soit les valeurs articulaires.
 
-Dans le cas où les gains $\vect{k}_p$ seraient tous identiques,on peut vérifier les effets de couplage résultant des termes hors de la diagonale de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3joints}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors le système d'équations \cref{eq_coupling_effect_jacobian}.
+Dans le cas où les gains $\vect{k}_p$ seraient tous identiques ($\matr{K}_p = K_p\matr{I}$), on peut vérifier les effets de couplage résultant des termes hors de la diagonale de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3joints}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors le système d'équations \cref{eq_coupling_effect_jacobian}.
 
 \begin{equation} \label{eq_elem_coupling}
 	\begin{split}
@@ -139,7 +236,7 @@ Dans le cas où les gains $\vect{k}_p$ seraient tous identiques,on peut vérifie
 Un système à 6 équations et 6 variables se pose alors pour vérifier la diagonalité de la matrice $\jacobian{q_d}{}{} \jacobian{q}{}{t}$. Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est à dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. Si l'on compare les éléments de la diagonale et hors de la diagonale de l'équation \cref{eq_coupling_effect_jacobian}, qui ont un effet sur x, on peut étudier l'amplitude des phénomènes de couplages comparativement aux effets de transmission souhaités, dans l'équation \cref{eq_coupling_effects}. On pose alors l'équation unidimensionnelle \cref{jacobian_coupling_effect_x}.
 
 \begin{equation}  \label{jacobian_coupling_effect_x}
-	x_d = k_p \left(
+	x_d = K_p \left(
 	(A B + C D + l_3^2 s_{abc} I) f_x +
 	(-E A - C F + l_3^2 s_{abc} J) f_z + 
 	(-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc}) \tau_\theta \right)	
@@ -149,44 +246,44 @@ En faisant la supposition que l'erreur de trainage entre $ q_d $ et $ q $ est n�
 
 \begin{equation} \label{eq_coupling_effect_x_2}
 	\begin{split}
-		x_d^t &= k_p (A^2 + C^2 + (l_3 s_{abc})^2) f_x \\
-		x_d^c &= -k_p \left( l_1^2 \frac{s_{2a}}{2} + l_2^2 s_{2(ab)} + 3 l_3^2  \frac{s_{2(abc)}}{2} + l_1 l_2 s_{2ab} + l_1 l_3 s_{2abc} + 2 l_2 l_3 s_{2(ab)c} \right) f_z - ...\\
-		... \  & k_p \left(2 l_2 s_{ab} + l_1 s_{a} + 3 l_3 s_{abc} \right) \tau_\theta
+		x_d^t &= K_p (A^2 + C^2 + (l_3 s_{abc})^2) f_x \\
+		x_d^c &= -K_p \left( l_1^2 \frac{s_{2a}}{2} + l_2^2 s_{2(ab)} + 3 l_3^2  \frac{s_{2(abc)}}{2} + l_1 l_2 s_{2ab} + l_1 l_3 s_{2abc} + 2 l_2 l_3 s_{2(ab)c} \right) f_z - ...\\
+		... \  & K_p \left(2 l_2 s_{ab} + l_1 s_{a} + 3 l_3 s_{abc} \right) \tau_\theta
 	\end{split}		
 \end{equation}
 
-La \cref{fig_coupling_effect_joint_ctrl_b} montre la variation du terme non linéaire entre $ k_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires. La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans la \cref{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}, et les valeurs des deux autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{fig_coupling_effect_joint_ctrl_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associé aux couples $ \tau_\theta $. 
+La \cref{subfig_coupling_effect_b} montre la variation du terme non linéaire entre $ K_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires. La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans la \cref{chap2_sec_ctrl_vfo_subsec_cartesian_3}, et les valeurs des deux autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{subfig_coupling_effect_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associé aux couples $ \tau_\theta $. 
 %
 \input{latex_figures/fig_coupling_effect_joint_ctrl}
 
 %
-La mise en place expérimentale de la stratégie de contrôle articulaire décrite en \cref{sec_robot_sub_ctrl_loop_sub_joint} est venue valider la théorie décrite dans cette annexe. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités par l'utilisateur. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre". Il y a donc nécessité de restreindre les mouvements sur l'axe $\vec{x}$.
+La mise en place expérimentale de la stratégie de contrôle articulaire décrite par \textcite{lamy_achieving_2009} est venue valider cette analyse. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre". Les mouvements sur l'axe $\vec{x}$ doivent donc être resteints.
 
-\subsection{Guide virtuel}
+\subsection{Guide virtuel} \label{chap2_sec_ctrl_vfo_subsec_virtual_guide}
 
-Une solution envisageable pour limiter les mouvements à l'axe vertical $\mathbf{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \textcite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\mathbf{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{fig_virtual_guide_control} a permis d'observer la dégradation de la transparence.
+Une solution envisageable pour limiter les mouvements à l'axe vertical $\vec{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \textcite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\vec{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{fig_virtual_guide_control} a permis d'observer une dégradation de la transparence.
 
 %
 \input{latex_figures/fig_ctrl_scheme_virt_guide}
 
-\subsection{Contrôle cartésien en admittance} \label{sec_robot_sub_ctrl_loop_sub_endpoint}
+\subsection{Contrôle cartésien en admittance} \label{chap2_sec_ctrl_vfo_subsec_cartesian}
 
-La tâche étudiée étant limitée dans un espace de travail cartésien, il est intéressant de réaliser l'asservissement directement dans cet espace. Des commandes cartésiennes en vitesse, qui seront passées au niveau articulaire à l'aide de l'équation \cref{eq_link_joint_endpoint_velocity} annulent les effets théoriques de couplages mis en évidence dans la \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2}. On vérifie ainsi que dans le cas d'un asservissement idéal, aucun phénomène de couplage n'a lieu.
+La tâche étudiée étant limitée dans un espace de travail cartésien, il est intéressant de réaliser l'asservissement directement dans cet espace. Les commandes cartésiennes en vitesse, peuvent être passées au niveau articulaire à l'aide de l'équation \cref{eq_link_joint_endpoint_velocity} \parencite{khalil_modeling_2002} assurant l'absence des effets de couplages, mis en évidence dans la \cref{chap2_sec_ctrl_vfo_subsec_coupling}. On vérifie ainsi que dans le cas d'un asservissement idéal ($\dot{\vect{q}}=\dot{\vect{q}}_d$), aucun phénomène de couplage n'ait lieu. En réalité, des effets de couplage peuvent être entrainés par l'erreur de trainage de la boucle de vitesse articulaire (voir \cref{chap2_sec_ctrl_vfo_subsec_cartesian_2}).
 
 %
-Si l'on considère un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{matrix}( x & z )\end{matrix} $, avec le couple de degrés de liberté $ \begin{matrix}( x & z & \theta )\end{matrix} $, hors de toutes configurations singulières, comme présenté en \cref{fig_exp_bench}, alors le jacobien $\jacobian{}{}{} \in \Re^{3\times3}$ est défini et inversible, son expression est donnée en \cref{app_jacobian_sub_3}.
+Si l'on considère un robot avec 3 articulations d'actionnées, opérant dans le plan $ \begin{matrix}( \vec{x} & \vec{z} )\end{matrix} $, avec le couple de degrés de liberté $ \begin{matrix}( \vec{x} & \vec{z} & \vec{\theta} )\end{matrix} $, hors de toutes configurations singulières, alors le jacobien $\jacobian{}{}{} \in \Re^{3\times3}$ est défini et inversible. Son expression est donnée en \cref{app_jacobian_sub_3joints}.
 %
-\subsubsection{Boucle de contrôle principale} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_main}
+\subsubsection{Boucle de contrôle principale} \label{chap2_sec_ctrl_vfo_subsec_cartesian_1}
 
-L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé (\cref{fig_comanipulation_ctrl}), fortement inspiré par la méthodologie décrite en \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p $ et $ K_i $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
+L'objectif étant toujours de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé (\cref{fig_comanipulation_ctrl}), fortement inspiré par la méthodologie décrite en \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p \in \Re $ et $ K_i \in \Re $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ des forces d'interactions $ f_e $, $ f_z $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
 %
 \begin{equation} \label{eq_Fz_endpoint}
-\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \begin{pmatrix} 0 & \left(K_p + \frac{K_i}{s}\right)f_z & 0 \end{pmatrix}^t
+	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \begin{bmatrix} 0 & \left(K_p + \frac{K_i}{s}\right)f_z & 0 \end{bmatrix}^t
 \end{equation}
 %
-\subsubsection{Boucle de contrôle secondaire autour de x\textsubscript{0}} 
+\subsubsection{Boucle de contrôle secondaire autour de x\textsubscript{0}} \label{chap2_sec_ctrl_vfo_subsec_cartesian_2}
 
-Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un contrôle cartésien permet d'annuler les effets de couplages théoriques dans le cas d'un contrôle idéal. Toutefois, si l'on considère l'erreur $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot et $\jacobianHat{}{}{}$ le jacobien estimé, alors l'équation \cref{eq_Fz_endpoint_coupling} décrit les phénomènes induits :
+Comme expliqué en début de \cref{chap2_sec_ctrl_vfo_subsec_cartesian}, un contrôle cartésien permet d'annuler les effets de couplages théoriques dans le cas d'un contrôle idéal. Toutefois, si l'on considère l'erreur cartésienne de l'asservissement en vitesse $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot et $\jacobianHat{}{}{}$ le jacobien estimé, alors l'équation \cref{eq_Fz_endpoint_coupling} décrit les phénomènes induits :
 %
 \begin{equation} \label{eq_Fz_endpoint_coupling}
 \begin{split}
@@ -196,66 +293,97 @@ Comme expliqué en début de \cref{sec_robot_sub_ctrl_loop_sub_endpoint}, un con
 \end{split}
 \end{equation}
 
-On distingue deux sources d'erreurs pouvant donner lieu à des phénomènes de couplage : 
+On distingue alors deux sources d'erreurs pouvant donner lieu à des phénomènes de couplage : 
 \begin{enumerate}
-	\item l'erreur de trainage $ \dot{q}_{\epsilon} $ provoquée par la dynamique de la boucle en vitesse articulaire du robot, et multipliée par le jacobien réel du robot $ \jacobian{q}{}{} $,
-	\item les erreurs d'estimation du jacobien $ \Delta\jacobian{q}{}{} $, qui sont multipliées par les consignes de vitesses articulaires $ \dot{q_d} $.
+	\item l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ provoquée par la dynamique de la boucle en vitesse articulaire du robot, et multipliée par le jacobien réel du robot $ \jacobian{q}{}{} $,
+	\item les erreurs d'estimation du jacobien $ \Delta\jacobian{q}{}{} $, qui sont multipliées par les consignes de vitesses articulaires $ \dot{\vect{q}}_d $.
 \end{enumerate}
-La deuxième source d'erreur est difficile à quantifier, puisqu'elle provient d'une erreur de modélisation. On peut aussi considérer l'erreur de mesure des vitesses articulaires, qui comme l'erreur précédente, nécessite des équipements d'observation externes au robot (\textit{eg. caméra}), et un calibrage précis pour une évaluation.
+La deuxième source d'erreur est difficile à quantifier, puisqu'elle provient d'une erreur de modélisation. Par ailleurs, on pourrait considérer les erreurs de mesure des vitesses articulaires, qui comme l'erreur précédente, nécessite des équipements d'observation externes au robot (\textit{eg. caméra}), et un calibrage précis pour leur évaluation.
 
 %
-Les calculs théoriques de l'évaluation de la première erreur décrite, montrent son influence sur l'axe $ \vect{x} $ en \cref{app_latency_error_effect}. Or, en ayant choisi d'asservir le contrôle uniquement sur les forces en $ \vect{z} $, les forces exercées sur l'axe $ \vect{x} $ ne sont plus perçues par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la co-manipulation.
+Les calculs théoriques de l'évaluation de la première erreur décrite, montrent son influence sur l'axe $ \vec{x} $ en \cref{app_latency_error_effect}. En ayant choisi d'asservir le contrôle uniquement sur les forces en $ \vec{z} $, les forces exercées sur l'axe $ \vec{x} $ ne sont plus utilisées par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la co-manipulation. En l'absence d'asservissement sur l'axe $ \vec{x} $, il n'est donc pas possible d'assurer l'absence de déplacement sur cet axe, une dérive est donc possible.
 
 %
-Pour remédier à cette problématique, il suffit d'ajouter un asservissement proportionnel de gain $ K_x $ sur la position en $ \vect{x} $, pour maintenir la position $ x_0 $, comme montré sur la \cref{fig_exp_bench}. Cette tâche étant orthogonale à la principale - \textit{dans un cas idéal} - la transparence n'en est pas affectée. L'équation \cref{eq_Fz_endpoint} devient alors :
-%
+Pour remédier à cette problématique, il suffit d'ajouter un asservissement proportionnel de gain $ K_x $ sur la position en $ \vec{x} $, pour maintenir la position $ x_0 $. Cette tâche étant orthogonale à la principale - \textit{dans un cas idéal} - la transparence n'en est pas affectée. L'équation \cref{eq_Fz_endpoint} devient alors :
+
 \begin{equation} \label{eq_Fz_endpoint_total}
-\begin{split}
-\dot{\vect{q}}_d &= \jacobianHat{q}{}{-1} \left(\begin{bmatrix} 0 & C_z & 0 \end{bmatrix} \cdot {\vect{f}_e} + \begin{bmatrix} K_x & 0 & 0 \end{bmatrix} \cdot (\vect{x}_0 - {\vect{x}})\right)
-\end{split}
+	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \left(\begin{bmatrix} 0 & C_z & 0 \end{bmatrix} \cdot {\vect{f}_e} + \begin{bmatrix} K_x & 0 & 0 \end{bmatrix} \cdot (\vect{x}_0 - {\vect{x}})\right)
 \end{equation}
 
-\subsubsection{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}} \label{sec_robot_sub_ctrl_loop_sub_endpoint_par_q0}
+\subsubsection{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}} \label{chap2_sec_ctrl_vfo_subsec_cartesian_3}
 
-Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - \textit{pour les tâches en $\mathbf{z}$ et en $\mathbf{x}$} -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On souhaite donc maintenir le robot dans une certaine configuration, qui reflète les positions articulaires médianes lors de la tâche de jonglerie. Toutefois, on ne veut pas que cette nouvelle tâche nuise à la transparence du robot. 
+Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - \textit{pour les tâches en $\vec{z}$ et en $\vec{x}$} -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On souhaite donc maintenir le robot dans une certaine configuration, qui reflète les positions articulaires médianes lors de la tâche de jonglerie. Toutefois, on ne veut pas que cette nouvelle tâche nuise à la transparence du robot. 
 
-%
-Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâche de transparence en $\mathbf{z}$. La méthodologie détaillée de projection de tâches dans les noyaux d'autres tâches est très bien résumée dans l'article de \parencite{dietrich_overview_2015}. Ainsi on peut écrire $ \jacobian{}{1}{} $ le jacobien de la tâche en principale, qui se résume en fait à la deuxième ligne du jacobien $ \jacobian{}{}{} $ (\cref{app_jacobian_sub_3}), et noter l'exposant $ \mathbf{W}+ $ pour la pseudo-inverse pondérée, définie par l'équation \cref{eq_pseudo_inverse}.
+Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâche de transparence en $\vec{z}$. La méthodologie détaillée de projection de tâches dans les noyaux d'autres tâches est très bien résumée dans l'article de \textcite{dietrich_overview_2015}. Ainsi on peut écrire $ \jacobian{}{1}{} $ \cref{eq_jacobian_main_task} le jacobien de la tâche en principale, qui se résume en fait à la deuxième ligne du jacobien $ \jacobian{}{}{} $ (\cref{app_jacobian_sub_3}), et noter l'exposant $ \matr{W}+ $ pour la pseudo-inverse pondérée, définie par l'équation \cref{eq_pseudo_inverse}.
 %
 \begin{equation} \label{eq_pseudo_inverse}
-\begin{split}
-\matr{A}^{\matr{W}+} = \matr{W}^{-1}\matr{A}^t\left(\matr{AW}^{-1}\matr{A}^t\right)^{-1}
-\end{split}
+	\matr{A}^{\matr{W}+} = \matr{W}^{-1}\matr{A}^t\left(\matr{AW}^{-1}\matr{A}^t\right)^{-1}
 \end{equation}
 
-Ainsi, comme défini par \parencite{dietrich_overview_2015}, le projecteur $ \matr{N}_2 $ dans le noyau d'une tâche principale en couple $ \vect{\tau}_1 $ s'écrit :
+Ainsi, comme défini par \textcite{dietrich_overview_2015}, le projecteur $ \matr{N}_2 $ dans le noyau d'une tâche principale en couple $ \vect{\tau}_1 $ s'écrit :
 %
 \begin{equation} \label{eq_null_space_proj}
-\begin{split}
-\vect{\tau}_2^p = \matr{N}_2^\tau(q)\vect{\tau}_2	
-\end{split}
+	\vect{\tau}_2^p = \matr{N}_2^\tau(q)\vect{\tau}_2	
 \end{equation}
 %
 avec $ \vect{\tau}_2^p \in \Re^n $ le couple de la tâche projetée qui n'interfère pas avec le couple de la tâche principale $ \vect{\tau}_1 $, et $ \matr{N}_2^\tau(q) $ défini dans l'équation \cref{eq_null_space_proj_2} :
 %
 \begin{equation} \label{eq_null_space_proj_2}
-\matr{N}_2^\tau(q) = \matr{I} - \jacobian{q}{1}{t}\left(\jacobian{q}{1}{\matr{W}+}\right)^t
+	\matr{N}_2^\tau(q) = \matr{I} - \jacobian{q}{1}{t}\left(\jacobian{q}{1}{\matr{W}+}\right)^t
 \end{equation}
 
-\parencite{dietrich_overview_2015} se sont intéressés aux effets de la matrice de pondération $ \matr{W} $. Ainsi, ils montrent que dans un cas statique, la projection est bien vérifiée en utilisant la matrice identité comme poids. Toutefois, ils montrent aussi que lorsque des dynamiques non négligeables rentrent en compte pour le robot, alors, la relation n'est plus vérifiée avec cette pondération. Il faut alors utiliser comme matrice de pondération la matrice d'inertie du robot.
+\textcite{dietrich_overview_2015} se sont intéressés aux effets de la matrice de pondération $ \matr{W} $. Ainsi, ils montrent que dans un cas statique, la projection est bien vérifiée en utilisant la matrice identité. Toutefois, ils montrent aussi que lorsque des dynamiques non négligeables rentrent en compte pour le robot, alors, la relation n'est plus vérifiée avec cette pondération. Il faut alors utiliser comme matrice de pondération la matrice d'inertie du robot.
 
 %
-La boucle de commande considérée pour l'expérience est réalisée en vitesse et non en couple comme c'est le cas dans l'article cité. Comme expliqué par \parencite{sadeghian_multi-priority_2011}, la relation est alors :
+La boucle de commande considérée pour l'expérience est réalisée en vitesse et non en couple comme c'est le cas dans l'article cité. Comme expliqué par \textcite{sadeghian_multi-priority_2011}, la relation est alors :
 %
 \begin{equation} \label{eq_null_space_proj_velocities}
-\dot{\vect{q}}_2^p = \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2,
+	\dot{\vect{q}}_2^p = \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2,
 \end{equation}
 %
-avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection de $ \dot{\vect{q}}_2 $ dans le noyau de la tâche $ \dot{\vect{q}}_1 $. L'\cref{app_projection_effects_on_main_task} s'intéresse plus en détails aux effets de cette projection sur la tâche principale.
+avec $ (\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}) $ la projection de $ \dot{\vect{q}}_2 $ dans le noyau de la tâche $ \dot{\vect{q}}_1 $. Il est alors facile de vérifier les effets de la projection :
+
+\begin{equation} \label{eq_jacobian_main_task}
+	\jacobian{q}{1}{} = 
+	\begin{pmatrix}
+	l_1 c_1 + l_2 c_{12} + l_3 c_{123} & l_2 c_{12} + l_3 c_{123}  & l_3 c_{123}
+	\end{pmatrix}
+\end{equation}
+
+En injectant $ \jacobian{}{1}{} $ dans chacune des projections décrites par les équations \cref{eq_null_space_proj_2,eq_null_space_proj_velocities}, on peut vérifier leur validité. On s'intéresse alors aux effets de cette projection au niveau cartésien, comme le montrent les équations \cref{eq_null_space_cartesian_proj_2,eq_null_space_proj_cartesian_velocities}.
+%
+\begin{equation} \label{eq_null_space_cartesian_proj_2}
+	\vect{f}_2^p = \left( \jacobian{q}{}{t} \right)^{-1} \vect{\tau}^p_2 = \left( \jacobian{q}{}{t} \right)^{-1} \left( \matr{I} - \jacobian{q}{1}{t}\left(\jacobian{q}{1}{\matr{W}+}\right)^t \right) \vect{\tau}_2
+\end{equation}
+%	
+\begin{equation} \label{eq_null_space_proj_cartesian_velocities}
+	\dot{\vect{x}}_2^p = \jacobian{q}{}{} \dot{\vect{q}}_2^p = \jacobian{q}{}{} \left(\matr{I} - \jacobian{q}{1}{\matr{W}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2
+\end{equation}
+
+Ainsi, on veut vérifier si les précédentes équations génèrent des effets sur $ \dot{z} $, la vitesse cartésienne en $ \vec{z} $. On s'intéresse donc à la deuxième ligne de la matrice de la projection de l'équation \cref{eq_null_space_proj_cartesian_velocities}, qu'on obtient en considérant la deuxième ligne de la matrice $ \jacobian{}{}{} $, que l'on a déjà définie sous le nom $ \jacobian{}{1}{} $. On a alors, en utilisant la définition de la pseudo inverse donnée en équation \cref{eq_pseudo_inverse}, avec l'identité $ \matr{I} \in \Re^{3\times3} $ comme matrice de pondération :
+
+\begin{equation}
+	\begin{split}
+		\dot{\vect{x}}_2^p(2) &= \dot{z}_2^p = \jacobian{q}{1}{} \dot{\vect{q}}_2^p = \jacobian{q}{1}{} \left(\matr{I} - \jacobian{q}{1}{\matr{I}+} \jacobian{q}{1}{}\right)\dot{\vect{q}}_2 \\
+		%
+		\dot{z}_2^p &= \left( \jacobian{q}{1}{} - \jacobian{q}{1}{} \matr{I}^{-1} \jacobian{q}{1}{t} \left( \jacobian{q}{1}{} \matr{I}^{-1} \jacobian{q}{1}{t} \right)^{-1} \jacobian{q}{1}{} \right) \dot{\vect{q}}_2 \\
+		%
+		\dot{z}_2^p &= \left( \jacobian{q}{1}{} - \jacobian{q}{1}{} \jacobian{q}{1}{t} \left( \jacobian{q}{1}{} \jacobian{q}{1}{t} \right)^{-1} \jacobian{q}{1}{} \right) \dot{\vect{q}}_2 
+		%
+	\end{split}
+\end{equation} 	
+
+Or :
+%
+\begin{equation*}
+	\left(\jacobian{q}{1}{} \jacobian{q}{1}{t} \right)\left( \jacobian{q}{1}{} \jacobian{q}{1}{t} \right)^{-1} = \matr{I},
+\end{equation*} 
+%
+d'où $ \dot{z}_2^p = 0 $. On a donc bien une projection dans le noyau de la tâche principale.
 
 \subsubsection{Contrôle en transparence complet}
 
-Ainsi en combinant les 3 tâches, on obtient le schéma de contrôle présenté en \cref{fig_comanipulation_ctrl} :
+La combinaison des trois tâches offre le schéma de contrôle présenté en \cref{fig_comanipulation_ctrl}. La transparence est assurée par la tâche principale active sur $\vec{z}$, les deux autres tâches n'ont pas d'influence sur la première puisque l'une est orthogonale et l'autre projeté en son noyaux. Ces tâches annexes assurent notamment le maintien d'une position le long de l'axe $\vec{x}$ pour éviter les dérives dûes aux erreurs de trainages, modélisations et mesures.
 
 \input{latex_figures/fig_ctrl_scheme}
 %
@@ -263,20 +391,101 @@ avec :
 \begin{enumerate}
 	\item[$\bullet$] $ \vect{x} \in \Re^3 $ les coordonnées cartésiennes de l'effecteur dans le référentiel fixe - \textit{base du robot} -, défini par 2 translations et une rotation $ \begin{pmatrix} x & z & \theta \end{pmatrix} $, 
 	\item[$\bullet$] $ \vect{f}_e \in \Re^3 $ les forces d'interactions entre l'effecteur et l'environnement toujours dans le référentiel fixe - \textit{une transformation est donc nécessaire, pour sortir du référentiel du capteur} - défini par 2 forces et 1 couple, 
-	\item[$\bullet$] $ \vect{q} $ les 3 positions articulaires,
-	\item[$\bullet$] $ \vect{q}_0 $ les 3 consignes de positions articulaires,
-	\item[$\bullet$] $ x_0 $ la consigne en position sur l'axe $ \vect{x} $,
+	\item[$\bullet$] $ \vect{q} \in \Re^3 $ le vecteur des positions articulaires,
+	\item[$\bullet$] $ \vect{q}_0 \in \Re^3 $ le vecteur des consignes de positions articulaires,
+	\item[$\bullet$] $ x_0 = -0.2$ la consigne en position sur l'axe $ \vect{x} $ (en \SI{\metre}{}),
+	\item[$\bullet$] $ f_{z0} = 0$ la référence de force en $\vec{z}$,
 	\item[$\bullet$] $ C_z(s) $ le correcteur pour la transparence le long de l'axe $ \vect{z} $,
+	\item[$\bullet$] $ \matr{C}_{q_2}(s) $ le correcteur pour le maintien de la configuration $ \vect{q}_0 $,
 	\item[$\bullet$] $ \jacobianHat{q}{}{} $ l'estimation du jacobien de l'effecteur,
 	\item[$\bullet$] $ \matr{N}_2(q) $ le projecteur dans le noyau de la tâche principale.	
 \end{enumerate}
 
+Il reste alors le réglage des gains des différents correcteurs.
 
-\subsection{Influence sur la tâche} \label{sec_robot_sub_task_influence}
+\subsection{Réglage des correcteurs} \label{sec_robot_sub_task_ctrl_tunning}
 
-Les gains du correcteur $ C_z $ en admittance sont soumis au compromis performance-stabilité. Ainsi, pour améliorer la transparence et diminuer les dynamiques apparentes du robot, des gains de contrôle élevés doivent être implémentés. Toutefois, la robustesse du robot doit permettre de maintenir une stabilité lors d'interaction physique avec de larges gammes de raideurs, de manière à supporter les possibles co-contractions des participants. Pour assurer cette robustesse, les gains devront donc être limités. Comme rappelé au \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2_1}, l'inertie d'un robot ne peut pas être parfaitement compensée, dès lors qu'il existe des flexibilités dans les articulations, et sa réduction est limité par la stabilité.
+\subsubsection{Correcteur en admittance}
 
-\subsubsection{Réduction de l'inertie apparente} \label{sec_robot_sub_task_influence_sub_inertia_red}
+Les gains du correcteur $ C_z $ en admittance sont soumis au compromis transparence-stabilité. Ainsi, pour améliorer la transparence réduisant les dynamiques apparentes du robot, des gains de contrôle élevés sont souhaitables. Toutefois, la robustesse du robot doit permettre de maintenir une stabilité lors d'interaction physique avec de larges gammes de raideurs, de manière à supporter les possibles co-contractions des participants. Pour assurer cette robustesse, les gains devront donc être limités. Comme rappelé au \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2_1}, l'inertie d'un robot ne peut pas être parfaitement compensée, dès lors qu'il existe des flexibilités dans les articulations, et sa réduction est limité par la stabilité. Le robot ne devant interargir qu'avec des humains, le réglage utilisé par \textcite[Chapitre~3]{lamy_conception_2011}, où la passivité assure notamment des interactions stables avec des environnements ayant des raideurs presque infinies (marbre), est conservateur et ne permet pas une transparence maximale. 
+
+Pour assurer des interactions sûres et robustes, une cartographie (\cref{fig_exp_stability_map}) de la stabilité a été déterminée empiriquement sous deux conditions expérimentales. Premièrement une co-manipulation la plus contraignante possible a été réalisée, qui correspond à un déplacement rythmique du robot avec des co-contractions intentionnelles du bras et de la main aussi intenses que possible. Ensuite, la deuxième condition a été exécuté dans des conditions nominales de la tâche de jonglerie, avec des co-contractions plus faibles. Pour chacune de ces conditions, le comportement de la boucle fermée est classé dans quatre catégories : 
+\begin{enumerate*} [label=\roman*),itemjoin={,\quad}]
+	\item Instable, impraticable
+	\item Critique, à peine praticable 
+	\item Mal amorti, assez inconfortable
+	\item Bien amorti, ou sans oscillation, confortable.
+\end{enumerate*}
+
+Des exemples théoriques des comportements décrits de la réponse en boucle fermée sont montrés en \cref{subfig_exp_stability_map_b}. La cartographie empirique de la stabilité est donnée en \cref{subfig_exp_stability_map_a}, en fonction du couple de paramètres $ (K_p, K_i) $. Des marqueurs signalent le résultat des couples testés pour la première conditions, et une zone hachurée indique la région confortable (iv) pour la deuxième condition. Comme on peut s'y attendre, la région de stabilité est plus vaste pour la condition avec un environnement plus souple, en concordance avec ce qui a été montré dans la littérature \parencite{ott_unified_2010,keemink_admittance_2018}. 
+
+La transparence étant difficilement qualifiable, puisqu'elle repose en partie sur le ressenti de l'utilisateur, qui peut être subjectif, l'avantage d'un réglage expérimental est de pouvoir prendre en compte ce ressenti (qui peut évidement être biaisé). Le couple de paramètres du correcteur est donc choisi tel que le comportement soit stable et jugé le plus agréable possible lors de la première condition \cref{eq_admittance_ctrl_gains}.
+
+\begin{equation} \label{eq_admittance_ctrl_gains}
+	(K_p, K_i) = (0.015, 0.08)
+\end{equation}
+
+%%%%%%%%%%%%%%
+% INPUT STABILITY MAPPING FIGURE HERE
+\input{latex_figures/fig_stability_map}
+
+%
+%Une ébauche de l'analyse théorique des dynamiques apparentes du robot est donnée en \cref{app_apparent_dyn_robot}.
+
+\subsubsection{Autres correcteurs}
+
+\paragraph{Boucles internes}
+
+Ces boucles ont été les premières à être corrigées, depuis les plus rapides (boucles de courant/couple) au plus lentes (boucles de vitesse angulaire). La correction a été réalisée sans observer la réponse des différentes articulations en boucle ouverte, avec une méthode inspirée par les réglages proposés initialement par \textcite{ziegler_optimum_1945}. 
+
+\input{latex_figures/fig_ctrl_inner_loop.tex}
+
+Les boucles de courant sont soumises à des bruits importants, aussi, le choix de correcteurs sans action dérivée a été fait, pour obtenir une correction proportionnelle-intégrale \cref{eq_PI}. Le cahier des charges a été défini tel que la réponse à un échelon de consigne soit la plus rapide possible ($t<$\SI{1}{\milli\second}), sans erreur statique et avec un dépassement inférieur à \SI{5}{\percent}. Conformément à la méthode de \textcite{ziegler_optimum_1945}, le gain proportionnel est réglé seul dans un premier jusqu'à obtenir un régime critique, et donc oscillatoire dont on relève la période $T_c$. Le gain proportionnel $K_{pc}$ est alors divisé par deux et le paramètre $T_{ic}$ de l'action intégrale est estimée à partir de $T_c$. La réponse a ensuite été ajustée par essais-erreurs pour essayer d'améliorer les performances, tout en essayant d'éviter les saturations de courant. Les valeurs de gains des correcteurs obtenues sont exposées dans le \cref{tab_joint_ctrl_gains}.
+
+\begin{equation} \label{eq_PI}
+	C_{PI}(s) = K_{pc}\left(1 + \frac{1}{T_{ic} s}\right) = K_{c}\frac{1 + T_{ic} s}{T_{ic} s} \approx K_{c} + \frac{K_{ci}}{\delta t_{PIc}}s^{-1} 
+\end{equation}
+
+Comme on peut le constater sur la documentation des pilotes moteurs \parencite[Chapitre~12.3]{TRINAMIC_manual_2011}, la période d'échantillonnage des régulateurs de courant $\delta t_{PIc}$ est par défaut de \SI{100}{\micro\second} et les gains saisis sont divisés par des coefficients tel que $K_{c} = P_{PARAMi}/256$ et $K_{ci} = I_{PARAMi}/262144$, pour une correction discrète définie par :
+
+\begin{equation} \label{eq_PI_discrete}
+	C_{PI}(z) = K_{c} + K_{ci} \frac{z}{z - 1}
+\end{equation} 
+
+Le réglage de la correction des vitesses articulaires a suivi un processus équivalent en suivant les recommandations faites par \textcite{newman_stability_1992,lamy_conception_2011}. Il est important de noter, qu'en plus du correcteur proportionnel proposé par \textcite{lamy_conception_2011}, une action intégrale a été ajoutée. En effet, dans un second temps, après la mise en place d'un contrôle en admittance, des dérives ont été constatées lorsque le robot était laissé libre de ses mouvements, sans forces d'interaction. L'ajout de l'action intégrale sur la boucle interne en vitesse a permis de réduire ces comportements sans constat d'impacts négatifs lors des interactions physiques.
+
+La période d'échantillonnage des régulateurs de vitesse articulaire $\delta t_{PIv}$ est par défaut de \SI{1}{\milli\second} et les gains saisis sont divisés par des coefficients tel que $K_{v} = P_{PARAMv}/256$ et $K_{vi} = I_{PARAMv}/65536$. De plus, pour simplifier le contrôle ainsi que sa modélisation, le générateur de rampe proposé par \textcite{TRINAMIC_manual_2011} a été désactivé.
+
+\begin{table}
+	\centering
+	\begin{tabular}{| l | c  c  c | } 
+		\hline
+		Articulations & J$^{\circ}$2 & J$^{\circ}$3 & J$^{\circ}$4 \\ \hline
+		$P_{PARAMi}$ & 1500 & 1450 & 950 \\ \hline
+		$I_{PARAMi}$ & 10000 & 34000 & 12288 \\ \hline
+		$P_{PARAMv}$ & 2500 & 2000 & 500 \\ \hline
+		$I_{PARAMv}$ & 3000 & 3000 & 256 \\ 
+		\hline
+	\end{tabular} % expertise factor
+	\caption{Valeurs implémentées dans les pilotes moteurs à travers le paquet ROS dédié au youBot.}
+	\label{tab_joint_ctrl_gains}
+\end{table}
+
+\paragraph{Boucles secondaires}
+
+Finalement le réglage des derniers correcteurs a aussi été effectué empiriquement. Le gain $K_x$ pour la correction sur la position a été choisi de manière à fonctionner comme un guide le long de l'axe $\vec{z}$ en $x_0$. Ainsi, si un utilisateur essait de forcer un mouvement sur l'axe $\vec{x}$, le robot opposera un effort comme un ressort. Le contrôle du robot ayant été conçu pour fonctionner autour d'une configuration prédéfinie, des sécurités ont été programmées pour bloquer le robot lorsque des mouvements trop éloignés de $x_0$ sont réalisés.
+
+Le correcteur articulaire $\matr{C}_{q2}$ a été défini comme un proportionnel dérivé \cref{eq_joint_ctrl_q0}, avec des gains identiques pour chaque articulation.
+
+\begin{equation} \label{eq_joint_ctrl_q0}
+	\matr{C}_{q2}(s) = (K_{pq2} + K_{dq2} s) \matr{I}_{3\times3}
+\end{equation}
+
+\begin{equation}
+	(K_x, K_{pq2}, K_{dq2}) = (20, 5, 0.1)
+\end{equation}
+
+%\subsubsection{Réduction de l'inertie apparente} \label{sec_robot_sub_task_ctrl_tunning_sub_inertia_red}
 
 %\paragraph{Analyse théorique} 
 %
@@ -333,23 +542,3 @@ Les gains du correcteur $ C_z $ en admittance sont soumis au compromis performan
 %\end{equation}
 %
 %[analyse à terminer...]
-
-\subsubsection{Validation expérimentale}
-
-Pour assurer des interactions sûres et robustes, une cartographie de la stabilité a été déterminée empiriquement sous deux conditions expérimentales. Premièrement on a opéré avec la co-manipulation la plus contraignante, ce qui correspond à un déplacement rythmique du robot avec des co-contractions intentionnelles du bras et de la main aussi intenses que possible. Ensuite, la deuxième condition correspond à une exécution nominal de la tâche de jonglerie, avec des co-contractions plus faibles. Pour chacune de ces conditions, le comportement de la boucle fermée est classé dans quatre catégories : 
-\begin{enumerate*} [label=\roman*),itemjoin={,\quad}]
-	\item Instable, impraticable
-	\item Critique, à peine praticable 
-	\item Mal amorti, assez inconfortable
-	\item Bien amorti, ou sans oscillation, confortable.
-\end{enumerate*}
-
-%
-Des exemples théoriques des comportements décrits de la réponse en boucle fermée sont montrés en \cref{fig_exp_stability_map_b}. La cartographie empirique de la stabilité est donnée en \cref{fig_exp_stability_map_a}, en fonction du couple de paramètres $ (K_p, K_i) $. Des marqueurs signalent le résultat des couples testés pour la première conditions, et une zone hachurée indique la région confortable (iv) pour la deuxième condition. Comme on peut s'y attendre, la région de stabilité est plus vaste pour la condition avec un environnement plus souple, en concordance avec ce qui a été montré dans la littérature \parencite{ott_unified_2010,keemink_admittance_2018}. 
-
-%
-Une ébauche de l'analyse théorique des dynamiques apparentes du robot est donnée en \cref{app_apparent_dyn_robot}.
-
-%%%%%%%%%%%%%%
-% INPUT STABILITY MAPPING FIGURE HERE
-%\input{latex_figures/fig_stability_map}
