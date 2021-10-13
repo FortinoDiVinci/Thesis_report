@@ -1,0 +1,83 @@
+\tikzsetnextfilename{fig_youBot_cobot}
+
+\begin{figure}[!htb] 
+	\centering		
+	\resizebox{.4\linewidth}{!}{%
+		
+		\begin{tikzpicture} [node distance = 2cm]
+		
+			\path (0,0) coordinate (origin) 
+			node[below left] {$ \mathcal{O} $};
+			
+			\path ($ (origin) + (2.5,0) $) coordinate (originR);
+			
+			\node[opacity=0.5](youBot) at ($(originR) + (-0.1,2.5)$) {\includegraphics[width=2.2in]{misc/youBot.pdf}};
+			
+			\newcommand{\coeff}{20}
+			
+			\path ($ (originR) + \coeff*(0,0.147/2) $) coordinate (joint0);
+			
+			\path ($ (joint0) + \coeff*(-0.033,0) $) coordinate (joint1)
+			node[below left] {$ q_1 $};
+			
+			\newcommand{\alp}{0.35}
+			
+			\path ($ (joint1) + \coeff*(-0.155*\alp, {0.155*(1 - \alp)}) $) coordinate (joint2)
+			node[below left] {$ q_2 $};
+			
+			\renewcommand{\alp}{0.75}
+			
+			\path ($ (joint2) + \coeff*(0.135*\alp, {0.135*(1 - \alp)}) $) coordinate (joint3)
+			node[above left] {$ q_3 $};
+			
+			\renewcommand{\alp}{0.55}
+			
+			\path ($ (joint3) + \coeff*(0.113*\alp, {0.113*(1 - \alp)}) $) coordinate (endeffector);
+			
+			\node[right of = endeffector, node distance = 0.5cm](hand) 
+			{\includegraphics[width=0.75in]{misc/hand}};
+			%\node[right of = hand, align=center, xshift=-3mm]{hand};
+			
+			\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (0, 5) $)
+			node[at end, left] {$\vect{z}$};
+			\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (5, 0) $)
+			node[at end, below] {$\vect{x}$};
+			
+			\draw (originR.center) -- (joint0.center);
+			
+			\draw (joint0.center) -- (joint1.center);
+			\fill (joint1) circle[radius=2.75pt];
+			
+			\draw (joint1.center) -- (joint2.center);
+			\fill (joint2) circle[radius=2.75pt];
+			
+			\draw (joint2.center) -- (joint3.center);
+			\fill (joint3) circle[radius=2.75pt];
+			
+			\draw (joint3.center) -- (endeffector.center);
+			\fill[blue] (endeffector) circle[radius=2.75pt];
+			
+			\draw  [loosely dotted] ($ (joint3.center) + (-0.5,0) $) -- ($ (joint3.center) + (2,0) $);
+			
+			\draw[-{Latex[length=2mm]}] ($(joint1.center) + (0.5, -0.1)$) arc (-10:100:0.5)
+			node[midway, right] {};
+			
+			\draw[-{Latex[length=2mm]}] ($(joint2.center) + (0.5, -0.1)$) arc (0:100:0.5)
+			node[midway, right] {};
+			
+			\draw[-{Latex[length=2mm]}] ($(joint3.center) + (0.5, -0.1)$) arc (0:100:0.5)
+			node[midway, right] {};
+			
+			\pgfExtractAngle{\thetal}{joint3}{endeffector}
+			
+			\draw[-{Latex[length=2mm]}] ($(joint3.center) + (1.5, 0)$) arc (0:\thetal:1.5)
+			node[midway, right] {$\theta$};
+			
+			\draw[blue] [loosely dotted, line width=0.55mm] ( $ (endeffector.center) + (0, 0.5) $ )  --+ (0,-6) 
+			node[at end, right] {$ x_0 $};
+		
+		\end{tikzpicture}
+	}%	
+		\caption{Schéma du robot utilisé, youBot de KUKA, avec ses cinq articulations rotoïdes. Seules trois sont contrôlées en admittance, la première et la dernière étant simplement contrôlées en position. Les trois degrés de liberté $(\vec{x}, \vec{z}, \vec{\theta})$} sont représentés.
+		\label{fig_youBot_3joints}
+	\end{figure}

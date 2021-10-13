@@ -1,5 +1,6 @@
 %% structure
 
+\usepackage{shellesc}
 \usepackage{polyglossia}
 	\setmainlanguage{french}
 \usepackage{tikz} 
@@ -10,6 +11,7 @@
 	\usetikzlibrary{patterns}
 	\usetikzlibrary{matrix}
 	\usetikzlibrary{backgrounds}
+	\usetikzlibrary{external}
 \usepackage{circuitikz}
 \usepackage{pgfplots}
 \usepackage{subcaption}
@@ -22,6 +24,7 @@
 %\sisetup{range-phrase=--}
 \usepackage{amsmath} % for splited equation notably
 \usepackage{amssymb} % for delta equality notably
+\usepackage{mathtools}
 %\usepackage[square]{natbib}
 \usepackage{xifthen} %for conditional test
 \usepackage[toc,page]{appendix} % for appendices [title]
@@ -114,9 +117,14 @@
 %%
 
 \DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+\DeclareLabelname[movie]{
+	\field{director}
+	\field{producer}
+}
 
 \addbibresource{bibliography/chapter1.bib}
 \addbibresource{bibliography/chapter2.bib}
+\addbibresource{bibliography/chapter3.bib}
 
 \definecolor{Prune}{RGB}{99,0,60}
 
@@ -137,3 +145,12 @@
 	colback = white,
 }
 
+\tikzexternalize
+\tcbsetforeverylayer{shield externalize}
+
+\tikzsetexternalprefix{pdf_figures/}
+
+\tikzexternaldisable
+
+\crefname{annexe}{annexe}{annexes}
+\renewcommand{\appendixtocname}{Annexes}%

@@ -1,0 +1,87 @@
+% figure 
+\begin{figure}[!htb] 
+	\tikzsetnextfilename{fig_joint_torque_response}
+	\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tikzpicture}
+			\centering
+			%
+			\begin{axis}[%
+				name=ax1,
+				width=.6\linewidth,
+				height=.4\linewidth,
+				scale only axis,    
+				%xmin=111.9,
+				%xmax=114.3,
+				xlabel={temps (\SI{}{\second})},
+				ymin=-0.599,
+				ymax=0.599,
+				ylabel={couple (\SI{}{\newton\meter})},
+				%xlabel style={font=\large,yshift=1.5em},
+				%ylabel style={font=\large,yshift=-2.5em},
+				axis x line = bottom,
+				axis y line = left, 
+				%tick label style={font=\small},
+				]
+				%
+				\addplot [
+				color=red,
+				solid,
+				line width=.75pt
+				]
+				table [col sep=comma, x=time, y=j4_torque] {misc/joint_4_torque_response.csv};
+				%
+				\addplot [
+					color=blue,
+					dashed,
+					line width=.75pt
+					]
+				table [col sep=comma, x=time, y=j4_torque_cmd] {misc/joint_4_torque_response.csv};
+				%legend{$consigne$,$mesure$}
+				
+				% define coordinates at bottom left and top left of rectangle
+				\coordinate (c1) at (axis cs:137.75,-0.53);
+				\coordinate (c2) at (axis cs:138,0.595);
+				\coordinate (c3) at (axis cs:137.75,0.595);			
+				% draw a rectangle
+				\draw (c1) rectangle (c2);
+			\end{axis}
+			%
+			\begin{axis}[%
+				name=ax2,
+				width=.35\linewidth,
+				height=.45\linewidth,
+				scaled ticks=false,   
+				xlabel={temps (\SI{}{\second})},
+				axis x line = bottom,
+				axis y line = left, 
+				xmin=137.75,xmax=138,
+				ymin=-0.53,ymax=0.595,
+				at={($(ax1.south east)+(1cm,0)$)},
+				]
+				%
+				\addplot [
+					color=blue,
+					dashed,
+					line width=1.pt
+					]
+				table [domain=137.75:138, col sep=comma, x=time, y=j4_torque_cmd] {misc/joint_4_torque_response.csv};
+				%
+					\addplot [
+					color=red,
+					solid,
+					line width=1.0pt
+					]
+				table [domain=137.75:138, col sep=comma, x=time, y=j4_torque] {misc/joint_4_torque_response.csv};
+			\end{axis}
+			
+			% draw dashed lines from rectangle in first axis to corners of second
+			\draw [dashed] (c1) -- (ax2.south west);
+			\draw [dashed] (c2) -- (ax2.north west);
+			
+			\end{tikzpicture}
+		}	
+	\caption{Réponse en couple à un échelon de la quatrième articulation, en contact avec du polystyrène pour les valeurs de couples négatives. Les données mesurées ne sont fournies qu'à \SI{1}{\kilo\hertz}.}
+\end{figure}
+	%%
+	%

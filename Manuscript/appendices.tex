@@ -1,14 +1,14 @@
 \clearpage
 \begin{appendices}
 	%\chapter{Annexes}
-	\crefalias{section}{annexe}
+	\crefalias{chapter}{annexe}
 
 	%%%%%%%
 	% APP 1
 	%%%%%%%	
-	\section{Liens entre les paramètres articulaires et cartésiens} \label{app_link_joint_endpoint}
+	\chapter{Liens entre les paramètres articulaires et cartésiens} \label{app_link_joint_endpoint}
 	
-	\subsection{Raideur}
+	\section{Raideur}
 	
 	La raideur articulaire $ \matr{R} $ est par définition la capacité d'une ou plusieurs articulations $\vect{q}$ à emmaganiser de l'énergie élastique, qui se caractérise par une relation, possiblement non linéaire, entre la force exercée et le déplacement, tel que l'intégrale de la force en fonction de la position soit définie (énergie élastique) \parencite{hogan_mechanics_1985, shadmehr_control_1993}.
 	
@@ -40,11 +40,11 @@
 		 = \matr{0}_{3\times 1}
 	\end{equation}
 	
-	\subsection{Amortissement / Viscosité}
+	\section{Amortissement / Viscosité}
 	
 	Idem raideur ??
 	
-	\subsection{Masse et inertie}
+	\section{Masse et inertie}
 	
 	\begin{equation}
 		\matr{M} = \left(\jacobian{}{}{t}\right)^{-1} I \jacobian{}{}{-1}
@@ -54,10 +54,9 @@
 	%%%%%%%
 	% APP 2
 	%%%%%%%
-	\newpage
-	\section{Calcul du Modèle Géométrique Direct} \label{app_direct_kinem}
+	\chapter{Calcul du Modèle Géométrique Direct} \label{app_direct_kinem}
 	
-	\subsection{Modèle à 3 articulations colinéaires} \label{app_direct_kinem_sub_3}
+	\section{Modèle à 3 articulations colinéaires} \label{app_direct_kinem_sub_3}
 	
 	Dans le cas très simple du robot plan, dont on rappelle la structure simplifiée, avec les notations des différentes longueurs et conventions d'angles en \cref{fig_robot_simplified_model}, le calcul du modèle géométrique direct ne nécessite pas de passer par la convention de Denavit-Hartenberg, et les combinaisons de transformations homogènes.
 	
@@ -91,7 +90,7 @@
 		\label{tab_kuka_conventions}	
 	\end{table}
 	
-	\subsection{Modèle complet du youBot arm de KUKA\textsuperscript{TM}} \label{app_direct_kinem_sub_5}
+	\section{Modèle complet du youBot arm de KUKA\textsuperscript{TM}} \label{app_direct_kinem_sub_5}
 	
 	Pour passer du modèle géométrique direct réduit, au modèle à 5 articulations actionnées, il faut ajouter deux liaisons rotoïdes. La première liaison au niveau de la base du robot, a son axe de rotation autour de l'axe $ \vect{z} $ défini dans le repère du robot. La deuxième rotation se place au niveau de l'effecteur final du robot, avec un axe de rotation dans le prolongement du bras. 
 	
@@ -180,10 +179,9 @@
 	%%%%%%%
 	% APP 3
 	%%%%%%%
-	\newpage
-	\section{Calcul du Jacobien} \label{app_jacobian}
+	\chapter{Calcul du Jacobien} \label{app_jacobian}
 	
-	\subsection{Jacobien du modèle réduit} \label{app_jacobian_sub_3joints}
+	\section{Jacobien du modèle réduit} \label{app_jacobian_sub_3joints}
 	
 	En dérivant le modèle géométrique direct proposé en \cref{app_direct_kinem_sub_3}, par chacune des articulations actionnables $ ( q_1, q_2, q_3 ) $, et en simplifiant l'écriture des cosinus et sinus respectivement par $ c $ et $ s $ avec les indices désignant les articulations - \textit{eg. $ \sin(q_1+q_2) $ est donné par $ s_{12} $} - pour une meilleure lisibilité, on obtient le résultat présenté en équation \cref{eq_jacobian_detailed}, pour $ \jacobian{}{}{} \in \Re^{3 \times 3} $.
 	
@@ -196,7 +194,7 @@
 		\end{pmatrix}
 	\end{equation}
 	
-	\subsection{Jacobien du youBot arm complet} \label{app_jacobian_sub_5joints}
+	\section{Jacobien du youBot arm complet} \label{app_jacobian_sub_5joints}
 	
 	On rappelle en équation \cref{eq_jacobian_joint_space}, la relation liant les vitesses articulaires aux vitesses cartésiennes à l'aide du jacobien, avec $ \vect{v} \in \Re^3 $ et $ \vect{\omega} \in \Re^3 $, respectivement les vitesses cartésiennes linéaires et angulaires de l'effecteur. On note $ \jacobian{}{v}{}, \in \Re^{3\times n} $ et $ \jacobian{}{\omega}{} \in \Re^{3\times n} $, les jacobiens linéaire et angulaire, et $ \jacobian{}{}{} \in \Re^{6\times n} $ le jacobien du robot, avec $ n $, le nombre d'articulations actionnées. 
 	
@@ -260,47 +258,70 @@
 	avec $ x^0_s $, $ y^0_s $ et $ z^0_s $ les coordonnées cartésiennes de l'effecteur du robot, qui peuvent être obtenues à partir du vecteur de translation $ \vect{t}^0_s $ contenu dans la matrice de transformation homogène $ \matrCal{T}^0_s $. Ainsi on obtient les éléments du jacobien des vitesses linéaires en équation \cref{eq_linear_jacobian}.
 	
 	\begin{equation} \label{eq_linear_jacobian}
-	\begin{matrix}
-	\begin{matrix}[l]
-	\frac{\partial x_s^0}{\partial q_1} = s_1 (l_1 s_2 - a_0 + l_2 s_{23} + l_3 s_{234}) & 
-	%
-	\frac{\partial y_s^0}{\partial q_1} = -c_1 (l_1 s_{2} - a_0 + l_2 s_{23} + l_3 s_{234}) \\
-	%
-	\frac{\partial x_s^0}{\partial q_2} = -c_1 (l_1 c_2 + l_2 c_{23} + l_3 c_{234}) &
-	%
-	\frac{\partial y_s^0}{\partial q_2} = -s_1 (l_1 c_{2} + l_2 s_{23} + l_3 s_{234}) \\
-	%
-	\frac{\partial x_s^0}{\partial q_3} = -c_1 (l_2 c_{23} + l_3 c_{234}) &
-	%
-	\frac{\partial y_s^0}{\partial q_3} = -s_1 (l_2 s_{23} + l_3 s_{234}) \\
-	%
-	\frac{\partial x_s^0}{\partial q_4} = -c_1 (l_3 c_{234}) &
-	%
-	\frac{\partial y_s^0}{\partial q_4} = -s_1 (l_3 s_{234}) \\
-	%
-	\frac{\partial x_s^0}{\partial q_5} = 0 &
-	%
-	\frac{\partial y_s^0}{\partial q_5} = 0 \\
-	\end{matrix} \\
-	\begin{matrix}[l]
-	\frac{\partial z_s^0}{\partial q_1} = 0 \\
-	%
-	\frac{\partial z_s^0}{\partial q_2} = -l_1 s_2 - l_2 s_{23} - l_3 s_{234} \\
-	%
-	\frac{\partial z_s^0}{\partial q_3} = -l_2 s_{23} - l_3 s_{234} \\
-	%
-	\frac{\partial z_s^0}{\partial q_4} = -l_3 s_{234} \\
-	%
-	\frac{\partial z_s^0}{\partial q_5} = 0 \\
-	\end{matrix}
-	\end{matrix}
+		\begin{matrix}
+			\begin{matrix*}[l]
+				\frac{\partial x_s^0}{\partial q_1} = s_1 (l_1 s_2 - a_0 + l_2 s_{23} + l_3 s_{234}) & 
+				%
+				\frac{\partial y_s^0}{\partial q_1} = -c_1 (l_1 s_{2} - a_0 + l_2 s_{23} + l_3 s_{234}) \\
+				%
+				\frac{\partial x_s^0}{\partial q_2} = -c_1 (l_1 c_2 + l_2 c_{23} + l_3 c_{234}) &
+				%
+				\frac{\partial y_s^0}{\partial q_2} = -s_1 (l_1 c_{2} + l_2 s_{23} + l_3 s_{234}) \\
+				%
+				\frac{\partial x_s^0}{\partial q_3} = -c_1 (l_2 c_{23} + l_3 c_{234}) &
+				%
+				\frac{\partial y_s^0}{\partial q_3} = -s_1 (l_2 s_{23} + l_3 s_{234}) \\
+				%
+				\frac{\partial x_s^0}{\partial q_4} = -c_1 (l_3 c_{234}) &
+				%
+				\frac{\partial y_s^0}{\partial q_4} = -s_1 (l_3 s_{234}) \\
+				%
+				\frac{\partial x_s^0}{\partial q_5} = 0 &
+				%
+				\frac{\partial y_s^0}{\partial q_5} = 0 \\
+			\end{matrix*} \\
+			\begin{matrix*}[l]
+				\frac{\partial z_s^0}{\partial q_1} = 0 \\
+				%
+				\frac{\partial z_s^0}{\partial q_2} = -l_1 s_2 - l_2 s_{23} - l_3 s_{234} \\
+				%
+				\frac{\partial z_s^0}{\partial q_3} = -l_2 s_{23} - l_3 s_{234} \\
+				%
+				\frac{\partial z_s^0}{\partial q_4} = -l_3 s_{234} \\
+				%
+				\frac{\partial z_s^0}{\partial q_5} = 0 \\
+			\end{matrix*}
+		\end{matrix}
 	\end{equation}	
 	
 	%%%%%%%
 	% APP 4
 	%%%%%%%
-	\newpage
-	\section{Effets de l'erreur de trainage} \label{app_latency_error_effect}
+	\chapter{Détails du calcul des effets de couplages} \label{app_coupling_effect_details}
+	
+	Le détail de la multiplication matricielle \cref{eq_coupling_effect_jacobian} est donné ci-dessous :
+	
+	\begin{equation} \label{eq_elem_coupling}
+		\begin{split}
+			A_\mathcal{J} &= (l_2 \sin(q_a + q_b) + l_3 \sin(q_a + q_b + q_c)) \\
+			B_\mathcal{J} &= (l_2 \sin(q_1 + q_2) + l_3 \sin(q_1 + q_2 + q_3)) \\
+			C_\mathcal{J} &= (l_2 \sin(q_a + q_b) + l_1 \sin(q_a) + l_3 \sin(q_a + q_b + q_c)) \\
+			D_\mathcal{J} &= (l_2 \sin(q_1 + q_2) + l_1 \sin(q_1) + l_3 \sin(q_1 + q_2 + q_3)) \\
+			E_\mathcal{J} &= (l_2 \cos(q_1 + q_2) + l_3 \cos(q_1 + q_2 + q_3)) \\
+			F_\mathcal{J} &= (l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) + l_3 \cos(q_1 + q_2 + q_3)) \\
+			G_\mathcal{J} &= (l_2 \cos(q_a + q_b) + l_3 \cos(q_a + q_b + q_c)) \\
+			H_\mathcal{J} &= (l_2 \cos(q_a + q_b) + l_1 \cos(q_a) + l_3 \cos(q_a + q_b + q_c)) \\
+			I_\mathcal{J} &= \sin(q_1 + q_2 + q_3) \\
+			J_\mathcal{J} &= \cos(q_1 + q_2 + q_3) \\
+			K_\mathcal{J} &= -2 l_2 \sin(q_1 + q_2) - l_1 \sin(q_1) \\
+			L_\mathcal{J} &=  2 l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) \\
+		\end{split}
+	\end{equation}
+	
+	%%%%%%%
+	% APP 5
+	%%%%%%%
+	\chapter{Effets de l'erreur de trainage} \label{app_latency_error_effect}
 	
 	L'erreur de trainage montrée dans l'équation \cref{eq_Fz_endpoint_coupling}, entraîne des effets indésirables sur tous les axes. Sur l'axe $ \vect{x} $, l'erreur cartésienne $ \dot{x}_\epsilon $, peut être estimée en prenant la première ligne du jacobien $ \jacobian{}{}{} $ multipliée par l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ sur les 3 articulations.
 	
@@ -320,8 +341,7 @@
 	%%%%%%%
 	% APP n
 	%%%%%%%
-	\newpage
-	\section{Compensation des biais du capteur de force} \label{app_force_sensor_bias}
+	\chapter{Compensation des biais du capteur de force} \label{app_force_sensor_bias}
 	
 	Le capteur de force 6 axes Mini45 de la marque ATI est placé à l'interface entre l'embout du youBot et de la poignée -\textit{ conçue par les soins de La Fabrique, laboratoire de fabrication de CentraleSupélec}.
 	

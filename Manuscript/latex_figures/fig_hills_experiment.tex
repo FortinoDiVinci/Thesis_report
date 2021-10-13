@@ -1,6 +1,6 @@
 \begin{figure} [h]
 	\resizebox{\textwidth}{!}{%
-	\begin{minipage}[b]{.5\linewidth}
+	\begin{minipage}[b]{.6\linewidth}
 		\centering
 		\subcaptionbox{Expérience de Hill sur un muscle de grenouille tétanisé \label{fig_experience_hill_1938_i}}
 		{
@@ -14,14 +14,15 @@
 			\end{tikzpicture}
 		}		
 	\end{minipage}
-	\begin{minipage}[b]{.5\linewidth}
+	\begin{minipage}[b]{.4\linewidth}
 		\centering
 		\subcaptionbox{Observations de l'expérience de Hill \label{fig_experience_hill_1938_ii}}
 		{
+			\tikzsetnextfilename{fig_hills_experiment_b}
 			\begin{tikzpicture}
 			\def\varXi{0.9}%
 			\def\varW{2*\pi}%
-			\begin{scope}[yshift = 1.7cm]
+			\begin{scope}[yshift = 1.9cm]
 			\begin{axis}[
 				scale only axis,
 				axis lines=middle,
@@ -71,7 +72,7 @@
 				ytick={0.4, 0.6, 1},
 				xtick={5},
 				xlabel={time},
-				x label style={at={(axis description cs:0.9,-0.1)},anchor=north},
+				x label style={at={(axis description cs:0.9,0)},anchor=north},
 				ylabel={longueur},
 				y label style={at={(axis description cs:0,.5)},rotate=90,anchor=south},
 				]
@@ -104,6 +105,6 @@
 		}
 	\end{minipage}
 	}% resizebox
-	\caption{ (\subref{fig_experience_hill_1938_i}) Expérience réalisée par Hill sur le gastrocnemius d'une grenouille (i), avec le stimulateur (ii) permettant de tétaniser la muscle, le mécanisme (iii) maintenant le muscle dans une configuration isométrique et la charge (iv). Ce schéma est une reproduction issue de \cite[Chapter~1]{mcmahon_muscles_1984}. (\subref{fig_experience_hill_1938_ii}) Jusqu'à $t_r$, l'expérience est dans la configuration dépeinte à gauche, la tension exercée par le muscle est $T$. Puis, le mécanisme libère la barre, le muscle se contracte alors rapidement de $\Delta x_1$, et la tension chute à une valeur de $T_0$ ce qui correspond à un comportement en raideur non amortie $K_{SEE}$, puis on observe une contraction graduelle en l'absence de changement de tension, ce qui est équivalent à une raideur $K_{PEE}$ amortie.}
+	\caption{ (\subref{fig_experience_hill_1938_i}) Expérience réalisée par Hill sur le gastrocnemius d'une grenouille (i), avec le stimulateur (ii) permettant de tétaniser la muscle, le mécanisme (iii) maintenant le muscle dans une configuration isométrique et la charge (iv). Ce schéma est une reproduction issue de \cite[Chapitre~1]{mcmahon_muscles_1984}. (\subref{fig_experience_hill_1938_ii}) Jusqu'à $t_r$, l'expérience est dans la configuration dépeinte à gauche, la tension exercée par le muscle est $T$. Puis, le mécanisme libère la barre, le muscle se contracte alors rapidement de $\Delta x_1$, et la tension chute à une valeur de $T_0$ ce qui correspond à un comportement en raideur non amortie $K_{SEE}$, puis on observe une contraction graduelle en l'absence de changement de tension, ce qui est équivalent à une raideur $K_{PEE}$ amortie.}
 	\label{fig_experience_hill_1938}
 \end{figure}

@@ -1,1 +1,32 @@
 \chapter{Estimation d’impédance mécanique} \label{chap3}
+
+\section{Etat de l'art}
+
+\subsection{Méthodes de perturbations}
+
+\subsubsection{Perturbations stochastiques}
+
+\parencite{perreault_multiple-input_1999} : "small stochastic force perturbations to estimate the impedance transfer function matrix and subsystem impulse response functions in the presence of output measurement noise and input coupling (via linear and nonlinear numerical simulations). Unlike the previous methods, a model structure was not assumed, although the system was assumed to behave linearly for small perturbations. System properties were estimated by using a previously developed multiple-input, single-output (MISO) system identification technique [15] applied to each output simultaneously, resulting in a multiple-input, multiple-output (MIMO) methodology. The unpredictable magnitude and direction of stochastic perturbations make it difficult for subjects to generate forces equal in magnitude and opposite in direction, hence minimize the likelihood of voluntary reactions [14], though compensatory actions such as muscle cocontraction or relaxation may still occur. However, random perturbations are also desirable as they obviate the need for separate measurements in different directions and provide a frequency-rich input to the subject in a relatively short time frame, rendering them more attractive for use with patients." (description faite par \textcite{palazzolo_stochastic_2007})
+
+\parencite{perreault_multijoint_2004}
+"Figure 2A shows typical endpoint displacements and forces recorded for a single trial during which the subject exerted a constant voluntary force in the –Y direction. Each trial lasted for 41 s. Data from the first 2 s (a) were used to record baseline values. At 2 s, an auditory cue instructed the subject to generate a predetermined endpoint force. The subject was given 4 s (b) to reach this specified target, after which the manipulator applied a stochastic position perturbation to the subject’s hand. The final 30 s of data (c) was used for dynamic stiffness estimation. The applied displacement perturbations had peak-to-peak amplitudes of approximately 2 cm in each direction. The corresponding endpoint force amplitudes varied from trial to trial depending upon arm stiffness. The endpoint displacement frequency content was designed to be within the range of physiologically encountered perturbations (Mann et al. 1989) yet contain enough information for adequate identification of the endpoint dynamics. Figure 2B shows the spectra of the endpoint perturbations used in this study. These perturbations were flat to 3 Hz, above which they decayed at a rate of 40 dB/decade."
+
+\parencite{palazzolo_stochastic_2007} : "In addition to the application of force perturbations, a simple proportional-derivative (PD) controller is used to gently bring the patient's arm to a test location and limit large-scale deviations from that location." ...
+"Perturbation commands were generated at a sampling rate of 500 Hz by filtering a set of uniformly distributed random numbers with an eighth-order Butterworth filter that had a cutoff frequency of 15 Hz (selected to exceed the natural frequency of the human arm, ∼2 to 3 Hz)" ...
+"Trials lasted for 50 s (25000 data points) allowing a number of sequential epochs of data to be averaged to reduce random error while allowing an acceptable spectral resolution. Patients were instructed to “simply relax and allow the robot to shake your arm” during the trials (six 50 s trials separated by 30 s of rest). The following section describes how a spectral estimate of impedance was computed using the force and displacement measurements."
+
+
+\subsubsection{Autres perturbations}
+
+\paragraph{Position}
+
+\parencite{mussa-ivaldi_neural_1985} : "When the hand was under a  visual target, we applied a  random sequence of displacements of variable magnitude and orientation. The displacement magnitudes were either 5 or 8 mm, whereas the orientatrons were selected at random from a list of eight possible angles ranging from 0 to 325”, 45” apart. The movement following the onset of the disturbance from the 
+manipulandum had a duration of about 120 msec (for both the 5 and 8 mm displacements) and were followed by a holding phase in the displaced position lasting 1.5 sec. The intertrial intervals ranged from 1 to 5 sec. We began sampling (at a rate of 100 samples/set) and storing the voltage across the potentiometers, together with the command input voltage to the torque motors, 100 msec before the onset of the displacements."
+
+
+
+\paragraph{Force}
+
+\parencite{dolan_dynamic_1993} :  A Cartesian-error-based inverse-dynamics  control  approach  was  used to  make the perturbation forces in various directions as uniform as possible. In order to  limit conscious, voluntary response to  perturbations, subjects  were  asked  to  not  consciously  attempt  to  re-center the  handle  on  the  shadow until  the  manipulator had  stopped pushing against the arm.  Several underdamped, rapidly rising ( t r   = 0.2 s ) position perturbations were successively applied. Perturbations typically lasted  1.5-2.0  s. The interval between re-centering  and  the  next  perturbation was  between  3  and  5s, so that  the perturbation onset was not  easily predictable by the  subjects.  The  imposed  trajectories  caused  arm  endpoint oscillations  with  maximum  velocities  and  accelerations  of approximately 0.8  m/s  and  1.5  d s 2 ,   respectively. A  typical set  of  position  and  force  traces  for  a  single  perturbation  is shown  in  Fig.  3.
+
+\subsection{Méthodes d'identifications}

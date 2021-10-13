@@ -56,7 +56,9 @@ De ces deux équations, \textcite{hogan_impedance_1985b} déduit le modèle de c
 Comme on peut l'observer sur l'équation \eqref{equ_impedance_control}% ainsi que sur son schéma équivalent en \cref{bloc_schema_hogan_1985}
 , la commande en impédance proposée ne nécessite pas la connaissance du modèle géométrique inverse du robot. Elle comprend deux entrées $\dot{\vect{X}}_0$ et $\vect{X}_0$, et trois matrices de paramètres $\matr{K}$, $\matr{B}$ et $\matr{M}$ qui peuvent être définies pour modifier le comportement en impédance que l'on souhaite imposer. La \cref{bloc_feedback_linearization} montre le cas de la commande en impédance linéarisée par bouclage. Si l'on prend $\matr{H}(\vect{q}, \dot{\vect{q}}) = \matr{C}(\vect{q}, \dot{\vect{q}}) + \vect{V}_f(\dot{\vect{q}}) + \vect{g}(\vect{q})$, les éléments du modèle dynamique du bras, alors le schéma de contrôle est équivalent au système présenté par \textcite{hogan_impedance_1985b}.
 
+\tikzexternalenable 
 \input{latex_figures/fig_impedance_ctrl_hogan_feedback_linearization}
+\tikzexternaldisable
 
 \paragraph{Robots avec flexibilités} \label{chap2_sec_cmd_collab_subsec_cmd_imp_1_2}
 
@@ -124,7 +126,9 @@ On retrouve ainsi ce type de contrôle pour certaines tâches de téléopératio
 Dans le cas du contrôle en admittance articulaire d'abord décrit par \parencite{newman_stability_1992}, il est possible d'imposer à un système physique un comportement en impédance en utilisant un capteur de force. Lorsque le capteur de force est placé sur l'effecteur, on parle de retour d'effort non colocalisé, les efforts n'étant pas mesurés au niveau articulaire. La \cref{fig_lamy_control} présente la boucle de contrôle permettant avec des réglages adéquats décrits notamment par \parencite{lamy_achieving_2009}, de donner un comportement en impédance avec une raideur et un amortissement nuls, tout en minimisant l'inertie. 
 
 %
+\tikzexternalenable 
 \input{latex_figures/fig_ctrl_scheme_lamy}
+\tikzexternaldisable
 
 Le schéma décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ la matrice jacobienne du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, représentés par la matrice diagonale $ \matr{K}_v \in \Re^n $,  permettent de compenser les effets dûs aux frottements secs \parencite{newman_stable_1994}. La matrice diagonale $ \matr{K}_i \in \Re^n $ contient les gains des correcteurs en admittance de la boucle en couples d'interaction, permettant de réduire l'inertie apparente du robot \parencite[Chapitre~3]{lamy_conception_2011}.
 
@@ -162,6 +166,10 @@ Il est important de souligner, comme rappelé par \textcite{vanderborght_variabl
 
 Dans le cadre de l'expérience devant être mise en place (\cref{chap4}), un utilisateur doit pouvoir manipuler un robot par son effecteur final, en minimisant l'influence du robot pour le rendre aussi transparent que possible, tout en assurant la stabilité des interactions. Le contrôle en admittance décrit \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2} se prête particulièrement à l'application désirée, aussi dans un premier temps, le schéma de contrôle articulaire \cref{fig_lamy_control} est considéré pour réaliser l'interaction physique.
 
+\tikzexternalenable
+\input{latex_figures/fig_youBot_cobot}
+\tikzexternaldisable
+
 \subsection{Effets de couplage} \label{chap2_sec_ctrl_vfo_subsec_coupling}
 
 La tâche étant unidimensionnelle, seuls des mouvements sur l'axe vertical $\vec{z}$ sont souhaités. Or des phénomènes de couplage entre les différents axes peuvent être mis en évidence. Considérons le cas simplifié où $\matr{K}_i$ est nulle :
@@ -186,85 +194,89 @@ en associant les équations \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoi
 
 Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{\vect{q}_d}{}{} \jacobian{\vect{q}}{}{t} $ soit diagonal si $\matr{K}_p = k_p \matr{I}$ ou que la matrice jacobienne soit diagonale pour les valeurs articulaires $\vect{q}$ et $\vect{q}_d$. Or il ne s'agit pas de propriétés du jacobien en robotique, il n'y a donc aucune garantie sur ces diagonalités. Le youBot possède 5 articulations, pour le contrôle décrit (\cref{chap2_sec_ctrl_vfo_subsec_cartesian}) deux articulations sont maintenues en position, le robot a donc trois degrés de liberté et trois articulations actionnées, d'où $\jacobian{}{}{} \in \Re^{3\times3}$. Le calcul du jacobien est donné en \cref{app_jacobian_sub_3joints}, la dernière ligne du jacobien rend la diagonalité impossible, quelque soit les valeurs articulaires.
 
-Dans le cas où les gains $\vect{k}_p$ seraient tous identiques ($\matr{K}_p = K_p\matr{I}$), on peut vérifier les effets de couplage résultant des termes hors de la diagonale de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3joints}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors le système d'équations \cref{eq_coupling_effect_jacobian}.
+Dans le cas où les gains $\vect{k}_p$ seraient tous identiques ($\matr{K}_p = K_p\matr{I}$), on peut vérifier les effets de couplage résultant des termes hors de la diagonale de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3joints}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors le système d'équations \cref{eq_coupling_effect_jacobian}, dont le détail est donné en \cref{app_coupling_effect_details}.
 
-\begin{equation} \label{eq_elem_coupling}
-	\begin{split}
-		A &= (l_2 \sin(q_a + q_b) + l_3 \sin(q_a + q_b + q_c)) \\
-		B &= (l_2 \sin(q_1 + q_2) + l_3 \sin(q_1 + q_2 + q_3)) \\
-		C &= (l_2 \sin(q_a + q_b) + l_1 \sin(q_a) + l_3 \sin(q_a + q_b + q_c)) \\
-		D &= (l_2 \sin(q_1 + q_2) + l_1 \sin(q_1) + l_3 \sin(q_1 + q_2 + q_3)) \\
-		E &= (l_2 \cos(q_1 + q_2) + l_3 \cos(q_1 + q_2 + q_3)) \\
-		F &= (l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) + l_3 \cos(q_1 + q_2 + q_3)) \\
-		G &= (l_2 \cos(q_a + q_b) + l_3 \cos(q_a + q_b + q_c)) \\
-		H &= (l_2 \cos(q_a + q_b) + l_1 \cos(q_a) + l_3 \cos(q_a + q_b + q_c)) \\
-		I &= \sin(q_1 + q_2 + q_3) \\
-		J &= \cos(q_1 + q_2 + q_3) \\
-		K &= -2 l_2 \sin(q_1 + q_2) - l_1 \sin(q_1) \\
-		L &=  2 l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) \\
-	\end{split}
-\end{equation}
-
-\begin{equation} \label{eq_coupling_effect_jacobian}
-	\begin{split}
-		\jacobian{q_d}{}{} \jacobian{q}{}{t} &= 
-		\begin{pmatrix}
-			-l_1 s_a - l_2 s_{ab} - l_3 s_{abc} & -l_2 s_{ab} - l_3 s_{abc}  & -l_3 s_{abc} \\
-			l_1 c_a + l_2 c_{ab} + l_3 c_{abc} & l_2 c_{ab} + l_3 c_{abc}  & l_3 c_{abc} \\
-			1 & 1 & 1 \\
-		\end{pmatrix} \\&
-		\begin{pmatrix}
-			-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & l_1 c_1 + l_2 c_{12} + l_3 c_{123} & 1 \\
-			-l_2 s_{12} - l_3 s_{123} & l_2 c_{12} + l_3 c_{123}  & 1 \\
-			-l_3 s_{123} & l_3 c_{123} & 1 \\
-		\end{pmatrix}	\\
-		\jacobian{q_d}{}{} \jacobian{q}{}{t} &= 
-		\begin{pmatrix}
-			A B + C D + l_3^2 s_{abc} I &
-			-E A - C F + l_3^2 s_{abc} J &
-			-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc} \\
-			-G B - D H - l_3^2 c_{abc} I &
-			G E + H F + l_3^2 c_{abc} J &
-			2 l_2 c_{ab} + l_1 c_{a} + 3 l_3 c_{abc} \\
-			K - 3 l_3 I &
-			L + 3 l_3 J &
-			3 \\
-		\end{pmatrix}
-	\end{split}
-\end{equation}
-
+%\begin{equation} \label{eq_elem_coupling}
+%	\begin{split}
+%		A &= (l_2 \sin(q_a + q_b) + l_3 \sin(q_a + q_b + q_c)) \\
+%		B &= (l_2 \sin(q_1 + q_2) + l_3 \sin(q_1 + q_2 + q_3)) \\
+%		C &= (l_2 \sin(q_a + q_b) + l_1 \sin(q_a) + l_3 \sin(q_a + q_b + q_c)) \\
+%		D &= (l_2 \sin(q_1 + q_2) + l_1 \sin(q_1) + l_3 \sin(q_1 + q_2 + q_3)) \\
+%		E &= (l_2 \cos(q_1 + q_2) + l_3 \cos(q_1 + q_2 + q_3)) \\
+%		F &= (l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) + l_3 \cos(q_1 + q_2 + q_3)) \\
+%		G &= (l_2 \cos(q_a + q_b) + l_3 \cos(q_a + q_b + q_c)) \\
+%		H &= (l_2 \cos(q_a + q_b) + l_1 \cos(q_a) + l_3 \cos(q_a + q_b + q_c)) \\
+%		I &= \sin(q_1 + q_2 + q_3) \\
+%		J &= \cos(q_1 + q_2 + q_3) \\
+%		K &= -2 l_2 \sin(q_1 + q_2) - l_1 \sin(q_1) \\
+%		L &=  2 l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) \\
+%	\end{split}
+%\end{equation}
+{\footnotesize
+	\begin{align} \label{eq_coupling_effect_jacobian}
+		\MoveEqLeft\jacobian{q_d}{}{} \jacobian{q}{}{t}\nonumber\\
+		& =	\begin{pmatrix}
+				-l_1 s_a - l_2 s_{ab} - l_3 s_{abc} & -l_2 s_{ab} - l_3 s_{abc}  & -l_3 s_{abc} \\
+				l_1 c_a + l_2 c_{ab} + l_3 c_{abc} & l_2 c_{ab} + l_3 c_{abc}  & l_3 c_{abc} \\
+				1 & 1 & 1
+			\end{pmatrix}
+			\begin{pmatrix}
+				-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & l_1 c_1 + l_2 c_{12} + l_3 c_{123} & 1 \\
+				-l_2 s_{12} - l_3 s_{123} & l_2 c_{12} + l_3 c_{123}  & 1 \\
+				-l_3 s_{123} & l_3 c_{123} & 1
+			\end{pmatrix}\nonumber\\
+		%\resizebox{\linewidth}{!}{%
+		&  = \begin{pmatrix}
+				A_\mathcal{J} B_\mathcal{J} + C_\mathcal{J} D_\mathcal{J} + l_3^2 s_{abc} I_\mathcal{J} &
+				-E_\mathcal{J} A_\mathcal{J} - C_\mathcal{J} F_\mathcal{J} + l_3^2 s_{abc} J_\mathcal{J} &
+				-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc} \\
+				-G_\mathcal{J} B_\mathcal{J} - D_\mathcal{J} H_\mathcal{J} - l_3^2 c_{abc} I_\mathcal{J} &
+				G_\mathcal{J} E_\mathcal{J} + H_\mathcal{J} F_\mathcal{J} + l_3^2 c_{abc} J_\mathcal{J} &
+				2 l_2 c_{ab} + l_1 c_{a} + 3 l_3 c_{abc} \\
+				K_\mathcal{J} - 3 l_3 I_\mathcal{J} &
+				L_\mathcal{J} + 3 l_3 J_\mathcal{J} &
+				3
+			\end{pmatrix}
+		%}
+	\end{align}
+}
+%}
 Un système à 6 équations et 6 variables se pose alors pour vérifier la diagonalité de la matrice $\jacobian{q_d}{}{} \jacobian{q}{}{t}$. Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est à dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. Si l'on compare les éléments de la diagonale et hors de la diagonale de l'équation \cref{eq_coupling_effect_jacobian}, qui ont un effet sur x, on peut étudier l'amplitude des phénomènes de couplages comparativement aux effets de transmission souhaités, dans l'équation \cref{eq_coupling_effects}. On pose alors l'équation unidimensionnelle \cref{jacobian_coupling_effect_x}.
 
-\begin{equation}  \label{jacobian_coupling_effect_x}
-	x_d = K_p \left(
-	(A B + C D + l_3^2 s_{abc} I) f_x +
-	(-E A - C F + l_3^2 s_{abc} J) f_z + 
-	(-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc}) \tau_\theta \right)	
-\end{equation}
+
+\begin{multline}  \label{jacobian_coupling_effect_x}
+	x_d = K_p \big(
+		(A_\mathcal{J} B_\mathcal{J} + C_\mathcal{J} D_\mathcal{J} + l_3^2 s_{abc} I_\mathcal{J}) f_x +
+		(-E_\mathcal{J} A_\mathcal{J} - C_\mathcal{J} F_\mathcal{J} + l_3^2 s_{abc} J_\mathcal{J}) f_z\\
+		+ (-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc}) \tau_\theta \big)
+\end{multline}
+
 
 En faisant la supposition que l'erreur de trainage entre $ q_d $ et $ q $ est négligeable, on peut écrire \cref{jacobian_coupling_effect_x} sous une nouvelle forme, en notant $ x_d^t $ et $ x_d^c $, respectivement les effets souhaités et les effets de couplages sur la consignes en $ x $.
 
-\begin{equation} \label{eq_coupling_effect_x_2}
-	\begin{split}
-		x_d^t &= K_p (A^2 + C^2 + (l_3 s_{abc})^2) f_x \\
-		x_d^c &= -K_p \left( l_1^2 \frac{s_{2a}}{2} + l_2^2 s_{2(ab)} + 3 l_3^2  \frac{s_{2(abc)}}{2} + l_1 l_2 s_{2ab} + l_1 l_3 s_{2abc} + 2 l_2 l_3 s_{2(ab)c} \right) f_z - ...\\
-		... \  & K_p \left(2 l_2 s_{ab} + l_1 s_{a} + 3 l_3 s_{abc} \right) \tau_\theta
-	\end{split}		
-\end{equation}
+\begin{align} \label{eq_coupling_effect_x_2}
+		x_d^t &= K_p (A_\mathcal{J}^2 + C_\mathcal{J}^2 + (l_3 s_{abc})^2) f_x \\
+		x_d^c & = \begin{multlined}[t]
+			-K_p \left( l_1^2 \frac{s_{2a}}{2} + l_2^2 s_{2(ab)} + 3 l_3^2  \frac{s_{2(abc)}}{2} + l_1 l_2 s_{2ab} + l_1 l_3 s_{2abc} + 2 l_2 l_3 s_{2(ab)c} \right) f_z \\
+			- K_p \left(2 l_2 s_{ab} + l_1 s_{a} + 3 l_3 s_{abc} \right) \tau_\theta
+		\end{multlined}
+\end{align}
 
 La \cref{subfig_coupling_effect_b} montre la variation du terme non linéaire entre $ K_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires. La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans la \cref{chap2_sec_ctrl_vfo_subsec_cartesian_3}, et les valeurs des deux autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{subfig_coupling_effect_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associé aux couples $ \tau_\theta $. 
-%
-\input{latex_figures/fig_coupling_effect_joint_ctrl}
 
-%
+\tikzexternalenable %\tikzsetnextfilename{fig_coupling_effect_joint_ctrl_a}
+\input{latex_figures/fig_coupling_effect_joint_ctrl}
+\tikzexternaldisable
+
 La mise en place expérimentale de la stratégie de contrôle articulaire décrite par \textcite{lamy_achieving_2009} est venue valider cette analyse. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre". Les mouvements sur l'axe $\vec{x}$ doivent donc être resteints.
 
 \subsection{Guide virtuel} \label{chap2_sec_ctrl_vfo_subsec_virtual_guide}
 
 Une solution envisageable pour limiter les mouvements à l'axe vertical $\vec{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \textcite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\vec{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{fig_virtual_guide_control} a permis d'observer une dégradation de la transparence.
 
-%
+\tikzexternalenable
 \input{latex_figures/fig_ctrl_scheme_virt_guide}
+\tikzexternaldisable
 
 \subsection{Contrôle cartésien en admittance} \label{chap2_sec_ctrl_vfo_subsec_cartesian}
 
@@ -385,7 +397,9 @@ d'où $ \dot{z}_2^p = 0 $. On a donc bien une projection dans le noyau de la tâ
 
 La combinaison des trois tâches offre le schéma de contrôle présenté en \cref{fig_comanipulation_ctrl}. La transparence est assurée par la tâche principale active sur $\vec{z}$, les deux autres tâches n'ont pas d'influence sur la première puisque l'une est orthogonale et l'autre projeté en son noyaux. Ces tâches annexes assurent notamment le maintien d'une position le long de l'axe $\vec{x}$ pour éviter les dérives dûes aux erreurs de trainages, modélisations et mesures.
 
+\tikzexternalenable 
 \input{latex_figures/fig_ctrl_scheme}
+\tikzexternaldisable
 %
 avec : 
 \begin{enumerate}
@@ -393,7 +407,7 @@ avec :
 	\item[$\bullet$] $ \vect{f}_e \in \Re^3 $ les forces d'interactions entre l'effecteur et l'environnement toujours dans le référentiel fixe - \textit{une transformation est donc nécessaire, pour sortir du référentiel du capteur} - défini par 2 forces et 1 couple, 
 	\item[$\bullet$] $ \vect{q} \in \Re^3 $ le vecteur des positions articulaires,
 	\item[$\bullet$] $ \vect{q}_0 \in \Re^3 $ le vecteur des consignes de positions articulaires,
-	\item[$\bullet$] $ x_0 = -0.2$ la consigne en position sur l'axe $ \vect{x} $ (en \SI{\metre}{}),
+	\item[$\bullet$] $ x_0 = -0.2$ la consigne en position sur l'axe $ \vect{x} $ (en \SI{}{\meter}),
 	\item[$\bullet$] $ f_{z0} = 0$ la référence de force en $\vec{z}$,
 	\item[$\bullet$] $ C_z(s) $ le correcteur pour la transparence le long de l'axe $ \vect{z} $,
 	\item[$\bullet$] $ \matr{C}_{q_2}(s) $ le correcteur pour le maintien de la configuration $ \vect{q}_0 $,
@@ -427,7 +441,9 @@ La transparence étant difficilement qualifiable, puisqu'elle repose en partie s
 
 %%%%%%%%%%%%%%
 % INPUT STABILITY MAPPING FIGURE HERE
+\tikzexternalenable 
 \input{latex_figures/fig_stability_map}
+\tikzexternaldisable
 
 %
 %Une ébauche de l'analyse théorique des dynamiques apparentes du robot est donnée en \cref{app_apparent_dyn_robot}.
@@ -436,11 +452,13 @@ La transparence étant difficilement qualifiable, puisqu'elle repose en partie s
 
 \paragraph{Boucles internes}
 
-Ces boucles ont été les premières à être corrigées, depuis les plus rapides (boucles de courant/couple) au plus lentes (boucles de vitesse angulaire). La correction a été réalisée sans observer la réponse des différentes articulations en boucle ouverte, avec une méthode inspirée par les réglages proposés initialement par \textcite{ziegler_optimum_1945}. 
+Ces boucles ont été les premières à être corrigées, depuis les plus rapides (boucles de courant/couple) au plus lentes (boucles de vitesse angulaire). La correction a été réalisée sans observer la réponse des différentes articulations en boucle ouverte, avec une méthode inspirée par les réglages proposés initialement par \textcite{ziegler_optimum_1942}. 
 
+\tikzexternalenable 
 \input{latex_figures/fig_ctrl_inner_loop.tex}
+\tikzexternaldisable
 
-Les boucles de courant sont soumises à des bruits importants, aussi, le choix de correcteurs sans action dérivée a été fait, pour obtenir une correction proportionnelle-intégrale \cref{eq_PI}. Le cahier des charges a été défini tel que la réponse à un échelon de consigne soit la plus rapide possible ($t<$\SI{1}{\milli\second}), sans erreur statique et avec un dépassement inférieur à \SI{5}{\percent}. Conformément à la méthode de \textcite{ziegler_optimum_1945}, le gain proportionnel est réglé seul dans un premier jusqu'à obtenir un régime critique, et donc oscillatoire dont on relève la période $T_c$. Le gain proportionnel $K_{pc}$ est alors divisé par deux et le paramètre $T_{ic}$ de l'action intégrale est estimée à partir de $T_c$. La réponse a ensuite été ajustée par essais-erreurs pour essayer d'améliorer les performances, tout en essayant d'éviter les saturations de courant. Les valeurs de gains des correcteurs obtenues sont exposées dans le \cref{tab_joint_ctrl_gains}.
+Les boucles de courant sont soumises à des bruits importants, aussi, le choix de correcteurs sans action dérivée a été fait, pour obtenir une correction proportionnelle-intégrale \cref{eq_PI}. Le cahier des charges a été défini tel que la réponse à un échelon de consigne soit la plus rapide possible ($t<$\SI{1}{\milli\second}), sans erreur statique et avec un dépassement inférieur à \SI{10}{\percent}. Conformément à la méthode de \textcite{ziegler_optimum_1942}, le gain proportionnel est réglé seul dans un premier jusqu'à obtenir un régime critique, et donc oscillatoire dont on relève la période $T_c$. Le gain proportionnel $K_{pc}$ est alors divisé par deux et le paramètre $T_{ic}$ de l'action intégrale est estimée à partir de $T_c$. La réponse a ensuite été ajustée par essais-erreurs pour essayer d'améliorer les performances, tout en essayant d'éviter les saturations de courant. Les valeurs de gains des correcteurs obtenues sont exposées dans le \cref{tab_joint_ctrl_gains}.
 
 \begin{equation} \label{eq_PI}
 	C_{PI}(s) = K_{pc}\left(1 + \frac{1}{T_{ic} s}\right) = K_{c}\frac{1 + T_{ic} s}{T_{ic} s} \approx K_{c} + \frac{K_{ci}}{\delta t_{PIc}}s^{-1} 
@@ -448,11 +466,19 @@ Les boucles de courant sont soumises à des bruits importants, aussi, le choix d
 
 Comme on peut le constater sur la documentation des pilotes moteurs \parencite[Chapitre~12.3]{TRINAMIC_manual_2011}, la période d'échantillonnage des régulateurs de courant $\delta t_{PIc}$ est par défaut de \SI{100}{\micro\second} et les gains saisis sont divisés par des coefficients tel que $K_{c} = P_{PARAMi}/256$ et $K_{ci} = I_{PARAMi}/262144$, pour une correction discrète définie par :
 
+\tikzexternalenable 
+\input{latex_figures/fig_joint_torque_response}
+\tikzexternaldisable
+
 \begin{equation} \label{eq_PI_discrete}
 	C_{PI}(z) = K_{c} + K_{ci} \frac{z}{z - 1}
 \end{equation} 
 
 Le réglage de la correction des vitesses articulaires a suivi un processus équivalent en suivant les recommandations faites par \textcite{newman_stability_1992,lamy_conception_2011}. Il est important de noter, qu'en plus du correcteur proportionnel proposé par \textcite{lamy_conception_2011}, une action intégrale a été ajoutée. En effet, dans un second temps, après la mise en place d'un contrôle en admittance, des dérives ont été constatées lorsque le robot était laissé libre de ses mouvements, sans forces d'interaction. L'ajout de l'action intégrale sur la boucle interne en vitesse a permis de réduire ces comportements sans constat d'impacts négatifs lors des interactions physiques.
+
+\tikzexternalenable 
+\input{latex_figures/fig_joint_velocity_response}
+\tikzexternaldisable
 
 La période d'échantillonnage des régulateurs de vitesse articulaire $\delta t_{PIv}$ est par défaut de \SI{1}{\milli\second} et les gains saisis sont divisés par des coefficients tel que $K_{v} = P_{PARAMv}/256$ et $K_{vi} = I_{PARAMv}/65536$. De plus, pour simplifier le contrôle ainsi que sa modélisation, le générateur de rampe proposé par \textcite{TRINAMIC_manual_2011} a été désactivé.
 

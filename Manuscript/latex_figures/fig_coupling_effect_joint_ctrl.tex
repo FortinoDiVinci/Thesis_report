@@ -6,6 +6,7 @@
 			\centering
 			\subcaptionbox{\label{subfig_coupling_effect_a}}
 			{
+				\tikzsetnextfilename{fig_coupling_effect_joint_ctrl_a}
 				\begin{tikzpicture} [%
 					declare function = {%
 						xTerm(\x,\y) =  ((27*sin(deg(\x) + deg(\y)))/200 + (113*sin(deg(\x) + deg(\y) + deg(1497/1000)))/1000)^2 + ((27*sin(deg(\x) + deg(\y)))/200 + (113*sin(deg(\x) + deg(\y) + deg(1497/1000)))/1000 + (31*sin(deg(\x)))/200)^2 + (12769*sin(deg(\x) + deg(\y) + deg(1497/1000))^2)/1000000;
@@ -33,6 +34,7 @@
 			\centering
 			\subcaptionbox{\label{subfig_coupling_effect_b}}
 			{
+				\tikzsetnextfilename{fig_coupling_effect_joint_ctrl_b}
 				\begin{tikzpicture}  [%
 				declare function = {%
 					zTerm(\x,\y) =  -(961*sin(2*deg(\x)))/80000 - (729*sin(2*deg(\x) + 2*deg(\y)))/40000 - (38307*sin(2*deg(\x) + 2*deg(\y) + deg(1497/500)))/2000000 - (3051*sin(2*deg(\x) + 2*deg(\y) + deg(1497/1000)))/100000 - (837*sin(2*deg(\x) + deg(\y)))/40000 - (3503*sin(2*deg(\x) + deg(\y) + deg(1497/1000)))/200000;
