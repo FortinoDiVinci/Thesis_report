@@ -27,28 +27,32 @@
 	%
 	\begin{tikzpicture} [node distance = 2cm]
 		\node (nA) at (0,0) {};
-		\node[block, right of = nA, align=center, node distance = 3.25cm] (KBI) {$Is^2 + Bs + K$};
-		\node[block, below of = nA, align=center, minimum width = 0.8cm, minimum height = 0.8cm, , node distance = 1cm] (derv) {$s$};
-		\node[block, below of = derv, align=center] (delay) {$e^{-s\tau_d}$};
+		\node[block, right of = nA, align=center, node distance = 3.25cm] (KBI) {$h_i(s)$}; %{$Is^2 + Bs + K$};
+		\node[block, below of = nA, align=center, minimum width = 0.8cm, minimum height = 0.8cm, node distance = 1.5cm] (derv) {$s$}; %{$\frac{d}{dt}$};
+		\node[block, below right of = derv, align=center] (delay) {$e^{-s\tau_d}$}; %{delay $\tau_d$};%
 		\node[block, right of = delay, align=center] (statNL) {$n_{RS}(*)$};
-		\node[block, right of = statNL, align=center, node distance = 3cm] (reflex) {\large$\frac{1}{(\frac{s}{\omega_0})^2+2\frac{\xi}{\omega_0}s+1}$};
+		\node[block, right of = statNL, align=center] (reflex) {$h_r(s)$}; %{\large$\frac{1}{(\frac{s}{\omega_0})^2+2\frac{\xi}{\omega_0}s+1}$};
 		%
 		\comp[]{c1}{($(KBI) + (3.75,0)$)};
 		%
 		\draw[-{Latex[length=2mm]}] ($(nA.center) + (-0.75,0)$) -- (KBI.west)
 			node[near start, above] {$\theta$};
 		\draw[-{Latex[length=2mm]}] (KBI.east) -- (c1.west)
-		node[near end, above] {$T_i$};
+			node[near end, above] {$T_i$};
 		\draw[-{Latex[length=2mm]}] (nA.center) -- (derv.north);
-		\draw[-{Latex[length=2mm]}] (derv.south) -- (delay.north);
+		\draw[-{Latex[length=2mm]}] (derv.south) |- (delay.west);
 		\draw[-{Latex[length=2mm]}] (delay.east) -- (statNL.west);
 		\draw[-{Latex[length=2mm]}] (statNL.east) -- (reflex.west);
 		\draw[-{Latex[length=2mm]}] (reflex.east) -| (c1.south)
-		node[near end, right] {$T_r$};
+			node[near end, right] {$T_r$};
 		\draw[-{Latex[length=2mm]}] (c1.east) --+ (1,0)
 			node[near end, above] {$T$};
 		%
+		\draw[decorate,decoration={brace,amplitude=7pt}] ($(statNL.north west) + (0,.25)$) -- ($(reflex.north east) + (0,.25)$) node [midway,yshift=.75cm] {Système de Hammerstein};
+		%
+		\draw[decorate,decoration={brace,amplitude=6pt}] ($(delay.north west) + (0,.25)$) -- ($(delay.north east) + (0,.25)$) node [midway,yshift=.75cm] {délais};
+		%
 	\end{tikzpicture}
-	\caption{Modèle des propriétés intrinsèques de la cheville, avec la contribution des réflexes représentée par un modèle de Hammerstein, avec la non linéarité statique $n_{RS}$.}
+	\caption{Modèle des propriétés intrinsèques $h_i$ de la cheville, avec la contribution des réflexes représentée par un modèle de Hammerstein, avec la non linéarité statique $n_{RS}$. Dans le cas du modèle utilisé par \textcite{ludvig_identification_2011}, les fonctions $h_i$ et $h_r$ dépendent du temps.}
 	\label{fig_hammerstein_model_kearney}
 \end{figure}

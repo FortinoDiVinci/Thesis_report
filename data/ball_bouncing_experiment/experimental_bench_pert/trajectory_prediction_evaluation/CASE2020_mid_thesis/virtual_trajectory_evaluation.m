@@ -8,6 +8,8 @@
 clear all
 close all
 
+addpath('../../Other data')
+
 file_name = 'successful_exp_data.mat';
 load(file_name);
 
@@ -267,8 +269,8 @@ if DISP_TOTAL_ERRORS_HISTOGRAM
     subplot(2,2,1)
     histHandle = histogram(z_error(:),50);
     hold on, grid on
-    avg_z_error_r = mean2(z_error(:));
-    std_z_error_r = std2(z_error(:));   
+    avg_z_error_r = mean(z_error(:)); % mean2 ?
+    std_z_error_r = std(z_error(:)); % std2 ?
     line([0, 0]+(avg_z_error_r+std_z_error_r), [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([0, 0]+(avg_z_error_r-std_z_error_r), [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([0, 0]+avg_z_error_r, [0, max(histHandle.Values)], 'Color','red','LineStyle','--','linewidth',2);
@@ -277,8 +279,8 @@ if DISP_TOTAL_ERRORS_HISTOGRAM
     subplot(2,2,2)
     histHandle = histogram(dz_error(:),50);
     hold on, grid on
-    avg_dz_error_r = mean2(dz_error(:));
-    std_dz_error_r = std2(dz_error(:));   
+    avg_dz_error_r = mean(dz_error(:));
+    std_dz_error_r = std(dz_error(:));   
     line([0, 0]+(avg_dz_error_r+std_dz_error_r), [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([0, 0]+(avg_dz_error_r-std_dz_error_r), [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([0, 0]+avg_dz_error_r, [0, max(histHandle.Values)], 'Color','red','LineStyle','--','linewidth',2);
@@ -287,8 +289,8 @@ if DISP_TOTAL_ERRORS_HISTOGRAM
     subplot(2,2,3)
     histHandle = histogram(ddz_error(:),50);
     hold on, grid on
-    avg_ddz_error_r = mean2(ddz_error(:));
-    std_ddz_error_r = std2(ddz_error(:));   
+    avg_ddz_error_r = mean(ddz_error(:));
+    std_ddz_error_r = std(ddz_error(:));   
     line([0, 0]+(avg_ddz_error_r+std_ddz_error_r), [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([0, 0]+(avg_ddz_error_r-std_ddz_error_r), [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([0, 0]+avg_ddz_error_r, [0, max(histHandle.Values)], 'Color','red','LineStyle','--','linewidth',2);
@@ -297,8 +299,8 @@ if DISP_TOTAL_ERRORS_HISTOGRAM
     subplot(2,2,4)
     histHandle = histogram(fz_error(:),50);
     hold on, grid on
-    avg_fz_error_r = mean2(fz_error(:));
-    std_fz_error_r = std2(fz_error(:));   
+    avg_fz_error_r = mean(fz_error(:));
+    std_fz_error_r = std(fz_error(:));   
     line([0, 0]+(avg_fz_error_r+std_fz_error_r), [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([0, 0]+(avg_fz_error_r-std_fz_error_r), [0, max(histHandle.Values)], 'Color','black','LineStyle','--','linewidth',2);
     line([0, 0]+avg_fz_error_r, [0, max(histHandle.Values)], 'Color','red','LineStyle','--','linewidth',2);

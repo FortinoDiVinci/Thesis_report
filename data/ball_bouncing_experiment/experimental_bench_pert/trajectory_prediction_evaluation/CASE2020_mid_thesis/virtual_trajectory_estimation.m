@@ -1,6 +1,8 @@
 clear all
 close all
 
+addpath('../../Other data')
+
 load('successful_exp_data.mat')
 load('successful_exp_data_filtered_forces.mat')
 

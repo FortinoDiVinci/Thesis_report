@@ -7,7 +7,7 @@
 
 clear all
 close all
-
+addpath('../../Other data')
 file_name = 'successful_exp_data.mat';
 load(file_name);
 

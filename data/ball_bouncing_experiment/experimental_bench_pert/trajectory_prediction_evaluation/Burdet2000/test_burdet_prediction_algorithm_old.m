@@ -2,13 +2,15 @@
 clear all
 close all
 
-addpath('../../youBot_analysis/Utils');
+addpath('../../../../utils');
+addpath('../../utils');
+addpath('../../utils/cycles');
 
 %%%%%%%%%%
 % MACRO
 
 % GLOBAL LOOP (iterations of the algorithme
-NUMBER_OF_GLOBAL_ITERATIONS = 100; % nb pseudo random signals generated
+NUMBER_OF_GLOBAL_ITERATIONS = 10; % nb pseudo random signals generated
 NUMBER_OF_CONFIGURATIONS = 3;
 NB_TIME_DISTORTIONS = [1, 5, 9]; % should be of size NUMBER_OF_CONFIGURATIONS
 TIME_DISTORTION_GROWTH = [0, 0.03, 0.03]; % provided as percentage
@@ -16,79 +18,90 @@ TIME_DISTORTION_GROWTH = [0, 0.03, 0.03]; % provided as percentage
 % INPUT SIGNAL
 TIME_VARIANT_MAGN = 1;
 TIME_VARIANT_PHASE = 1;
+USE_REAL_SIGNAL = 1;
+if USE_REAL_SIGNAL
+    NUMBER_OF_GLOBAL_ITERATIONS = 1;
+end
 
 % DISPLAY
 DISP_ALL_CANDIDATE_AND_BEST_MATCH_FOR_CYCLES = 0; % depending on the number
 % of candidate it might lead Matlab to crash if set to 1
 
 for SIGNAL_IDX = 1:NUMBER_OF_GLOBAL_ITERATIONS
-%%%%%%%%%%%%%%%%%%%%%%
-%% SIGNAL GENERATION
 
-% "ideal" signal
-dt = 1e-3;      % time sampling
-f = 0.8;        % sine frequency
-alp = 10;       % frequency multiplier for second sine
-phi = pi/2;     % phase delay of second sine
-a1 = 1;         % first sine magnitude
-a2 = 0;%a1/5;   % 2nd sine magnitude
-t_max = 80 - dt;
-t = 0:dt:t_max; % time vector
-t_under_samp = 0:10*dt:t_max; % time
+if ~USE_REAL_SIGNAL
+    %%%%%%%%%%%%%%%%%%%%%%
+    %% SIGNAL GENERATION
 
-if TIME_VARIANT_MAGN
-    a1t = step(dsp.ColoredNoise('InverseFrequencyPower',2,'SamplesPerFrame',length(t)/10));
-    a1t = 1 + interp1(t_under_samp, a1t/(max(a1t)-min(a1t)), t);
-    % deal with last nan
-    nan_idx = find(isnan(a1t));
-    for nan_i = 1:length(nan_idx)
-        a1t(nan_idx(nan_i)) = a1t(nan_idx(nan_i)-1);
+    % "ideal" signal
+    dt = 1e-3;      % time sampling
+    f = 0.8;        % sine frequency
+    alp = 10;       % frequency multiplier for second sine
+    phi = pi/2;     % phase delay of second sine
+    a1 = 1;         % first sine magnitude
+    a2 = 0;%a1/5;   % 2nd sine magnitude
+    t_max = 80 - dt;
+    t = 0:dt:t_max; % time vector
+    t_under_samp = 0:10*dt:t_max; % time
+
+    if TIME_VARIANT_MAGN
+        a1t = step(dsp.ColoredNoise('InverseFrequencyPower',2,'SamplesPerFrame',length(t)/10));
+        a1t = 1 + interp1(t_under_samp, a1t/(max(a1t)-min(a1t)), t);
+        % deal with last nan
+        nan_idx = find(isnan(a1t));
+        for nan_i = 1:length(nan_idx)
+            a1t(nan_idx(nan_i)) = a1t(nan_idx(nan_i)-1);
+        end
+        fc = 0.5; % cut off frequency
+        [b,a] = butter(4,fc/(1/(2*dt)),'low'); 
+        a1t = filtfilt(b,a,a1t);
+    else
+        a1t = a1;
     end
-    fc = 0.5; % cut off frequency
-    [b,a] = butter(4,fc/(1/(2*dt)),'low'); 
-    a1t = filtfilt(b,a,a1t);
-else
-    a1t = a1;
-end
 
-if TIME_VARIANT_PHASE
-    phit = step(dsp.ColoredNoise('InverseFrequencyPower',2,'SamplesPerFrame',length(t)/10));
-    phit = phi.*interp1(t_under_samp, phit/(max(phit)-min(phit)), t);
-    nan_idx = find(isnan(phit));
-    for nan_i = 1:length(nan_idx)
-        phit(nan_idx(nan_i)) = phit(nan_idx(nan_i)-1);
+    if TIME_VARIANT_PHASE
+        phit = step(dsp.ColoredNoise('InverseFrequencyPower',2,'SamplesPerFrame',length(t)/10));
+        phit = phi.*interp1(t_under_samp, phit/(max(phit)-min(phit)), t);
+        nan_idx = find(isnan(phit));
+        for nan_i = 1:length(nan_idx)
+            phit(nan_idx(nan_i)) = phit(nan_idx(nan_i)-1);
+        end
+        fc = 0.25; % cut off frequency
+        [b,a] = butter(4,fc/(1/(2*dt)),'low'); 
+        phit = filtfilt(b,a,phit);
+    else
+        phit = phi;
     end
-    fc = 0.25; % cut off frequency
-    [b,a] = butter(4,fc/(1/(2*dt)),'low'); 
-    phit = filtfilt(b,a,phit);
+
+    sig = a1t.*sin(2*pi*f.*t + phit) + a2*sin(alp*pi*f.*t + phi);
+
+    figure 
+    plot(t,sig)
+
+    % low freq noise + gaussian noise
+    lf = f/20;
+    la = a1/4;
+    %lsig = la*sin(2*pi*lf.*t);
+    lsig = 0;
+    nsig = awgn(sig + lsig, 35);
+
+    hold on
+    plot(t, nsig)
+
+    % 50Hz filtering
+    fc = 50; % cut off frequency
+    [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
+    fsig = filtfilt(b,a,nsig);
+
+    plot(t, fsig)
+    legend('original', 'noisy', 'filtered')
+    title("Input signal n" + num2str(SIGNAL_IDX))
 else
-    phit = phi;
+    file_name = '../../data_2020_Nov_17/data_without_impacts_2020_11_17.mat';
+    load(file_name);
+    
+    %do data processing for the position and force signal
 end
-
-sig = a1t.*sin(2*pi*f.*t + phit) + a2*sin(alp*pi*f.*t + phi);
-
-figure 
-plot(t,sig)
-
-% low freq noise + gaussian noise
-lf = f/20;
-la = a1/4;
-%lsig = la*sin(2*pi*lf.*t);
-lsig = 0;
-nsig = awgn(sig + lsig, 35);
-
-hold on
-plot(t, nsig)
-
-% 50Hz filtering
-fc = 50; % cut off frequency
-[b,a] = butter(2,fc/(1/(2*dt)),'low'); 
-fsig = filtfilt(b,a,nsig);
-
-plot(t, fsig)
-legend('original', 'noisy', 'filtered')
-title("Input signal n" + num2str(SIGNAL_IDX))
-
 %%%%%%%%%%%%%%%%%%%%%
 %% CYCLE SPLITTING
 

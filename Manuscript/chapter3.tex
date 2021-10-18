@@ -2,31 +2,143 @@
 
 \section{Etat de l'art}
 
-\subsection{Méthodes de perturbations}
+\subsection{Méthodes de perturbations} \label{chap3_sec_st_art_sub_pert}
 
-\subsubsection{Perturbations stochastiques}
+"This temporal segmentation implies that whatever is estimated more than 200 ms after the perturbation onset may be influenced by voluntary control." \parencite{piovesan_measuring_2012}
 
-\parencite{perreault_multiple-input_1999} : "small stochastic force perturbations to estimate the impedance transfer function matrix and subsystem impulse response functions in the presence of output measurement noise and input coupling (via linear and nonlinear numerical simulations). Unlike the previous methods, a model structure was not assumed, although the system was assumed to behave linearly for small perturbations. System properties were estimated by using a previously developed multiple-input, single-output (MISO) system identification technique [15] applied to each output simultaneously, resulting in a multiple-input, multiple-output (MIMO) methodology. The unpredictable magnitude and direction of stochastic perturbations make it difficult for subjects to generate forces equal in magnitude and opposite in direction, hence minimize the likelihood of voluntary reactions [14], though compensatory actions such as muscle cocontraction or relaxation may still occur. However, random perturbations are also desirable as they obviate the need for separate measurements in different directions and provide a frequency-rich input to the subject in a relatively short time frame, rendering them more attractive for use with patients." (description faite par \textcite{palazzolo_stochastic_2007})
+"It was found that the estimated stiffness and damping depended critically on the type of perturbation." ...
+Our finding that the estimated dynamical parameters depend greatly on i) the nature of the perturbation, ii) the time interval over which the response is being fitted and iii) are very sensitive to measurement errors is supported by the very wide range of joint stiffness reported in the literature \parencite{kistemaker_vivo_2011}
 
-\parencite{perreault_multijoint_2004}
+\subsubsection{Perturbations stochastiques} \label{chap3_sec_st_art_sub_pert_1}
+
+\parencite{perreault_multiple-input_1999} : "small stochastic force perturbations to estimate the impedance transfer function matrix and subsystem impulse response functions in the presence of output measurement noise and input coupling (via linear and nonlinear numerical simulations). Unlike the previous methods, a model structure was not assumed, although the system was assumed to behave linearly for small perturbations. System properties were estimated by using a previously developed multiple-input, single-output (MISO) system identification technique [15] applied to each output simultaneously, resulting in a multiple-input, multiple-output (MIMO) methodology. The unpredictable magnitude and direction of stochastic perturbations make it difficult for subjects to generate forces equal in magnitude and opposite in direction, hence minimize the likelihood of voluntary reactions [14], though compensatory actions such as muscle cocontraction or relaxation may still occur. However, random perturbations are also desirable as they obviate the need for separate measurements in different directions and provide a frequency-rich input to the subject in a relatively short time frame, rendering them more attractive for use with patients." (description faite par \textcite{palazzolo_stochastic_2007}) \parencite{perreault_multiple-input_1999}
+
+"Simulated planar stochastic force perturbations with a bandwidth of approximately 9 Hz were used as inputs. Figure 2 shows the input force spectrum used for all simulations. Unless otherwise specified, the force perturbations in the two orthogonal directions were mutually independent. Force perturbations had a peak-to-peak amplitude of approximately 1 N, ..."
+
+
+Force stochastic perturbation compared to steady state stiffness \parencite{perreault_multiple-input_1999}:
+"The methods described here use stochastic endpoint perturbations of the limb to estimate its stifgness properties. Such perturbations evoke both the dynamic and static mechanisms described above, and the properties evoked by these mechanisms can be quantified by the presented system identification approaches. By using independent stochastic perturbations in each of the endpoint directions of interest, the instantaneous direction of the multidimensional perturbation changes continuously to sweep out the entire stiffness yield during a relatively short experimental trial. Because of this experimental efficiency, a number of different conditions can be conveniently examined during a single experimental session. This is in contrast to the standard steady-state stiffness estimation method that uses a number of trials, one for each perturbation direction of interest. Resolution is thus limited by the number of experimental trials, with the additional uncertainty of trial-to-trial variations in subject performance. Furthermore, the number of different conditions that can be tested in one session is significantly reduced because of the number of trials required. Estimation of steady-state stiffness also requires that the subjects `do not intervene' in response to step or pulse changes in endpoint position for time intervals several times longer than voluntary reaction times. Although this paradigm is widely used, methods for detecting voluntary reactions (which can significantly influence measured stiffness) are subjective and rely primarily on consistency of responses. Interventions that occur in consistent and expected ways cannot be detected. In contrast, stochastic perturbations minimize the likelihood of voluntary reactions due to their inherently random nature. If properly designed, stochastic perturbations can be innocuous and largely ignored by the subjects. In addition, they yield functionally relevant data that are sufficiently rich in information to allow full and experimentally eÅcient characterization of the limb's directional and dynamic stiffness properties."
+
+\parencite{perreault_effects_2001, perreault_multijoint_2004} : 
 "Figure 2A shows typical endpoint displacements and forces recorded for a single trial during which the subject exerted a constant voluntary force in the –Y direction. Each trial lasted for 41 s. Data from the first 2 s (a) were used to record baseline values. At 2 s, an auditory cue instructed the subject to generate a predetermined endpoint force. The subject was given 4 s (b) to reach this specified target, after which the manipulator applied a stochastic position perturbation to the subject’s hand. The final 30 s of data (c) was used for dynamic stiffness estimation. The applied displacement perturbations had peak-to-peak amplitudes of approximately 2 cm in each direction. The corresponding endpoint force amplitudes varied from trial to trial depending upon arm stiffness. The endpoint displacement frequency content was designed to be within the range of physiologically encountered perturbations (Mann et al. 1989) yet contain enough information for adequate identification of the endpoint dynamics. Figure 2B shows the spectra of the endpoint perturbations used in this study. These perturbations were flat to 3 Hz, above which they decayed at a rate of 40 dB/decade."
 
 \parencite{palazzolo_stochastic_2007} : "In addition to the application of force perturbations, a simple proportional-derivative (PD) controller is used to gently bring the patient's arm to a test location and limit large-scale deviations from that location." ...
 "Perturbation commands were generated at a sampling rate of 500 Hz by filtering a set of uniformly distributed random numbers with an eighth-order Butterworth filter that had a cutoff frequency of 15 Hz (selected to exceed the natural frequency of the human arm, ∼2 to 3 Hz)" ...
 "Trials lasted for 50 s (25000 data points) allowing a number of sequential epochs of data to be averaged to reduce random error while allowing an acceptable spectral resolution. Patients were instructed to “simply relax and allow the robot to shake your arm” during the trials (six 50 s trials separated by 30 s of rest). The following section describes how a spectral estimate of impedance was computed using the force and displacement measurements."
 
-
-\subsubsection{Autres perturbations}
+\subsubsection{Autres perturbations} \label{chap3_sec_st_art_sub_pert_2}
 
 \paragraph{Position}
 
 \parencite{mussa-ivaldi_neural_1985} : "When the hand was under a  visual target, we applied a  random sequence of displacements of variable magnitude and orientation. The displacement magnitudes were either 5 or 8 mm, whereas the orientatrons were selected at random from a list of eight possible angles ranging from 0 to 325”, 45” apart. The movement following the onset of the disturbance from the 
 manipulandum had a duration of about 120 msec (for both the 5 and 8 mm displacements) and were followed by a holding phase in the displaced position lasting 1.5 sec. The intertrial intervals ranged from 1 to 5 sec. We began sampling (at a rate of 100 samples/set) and storing the voltage across the potentiometers, together with the command input voltage to the torque motors, 100 msec before the onset of the displacements."
 
+Perturbations sinusoïdales en position: \parencite{bennett_catching_1994}
+"An electromagnetic servo motor capable of  1WN peak  force applied movements to the am-rest through a low-friction ball joint, approximately at mid-hand level." ... "Thus  in  experiment 3, sinusoidal  displacements were applied and force responses were measured for normal and electrical activation of  muscle" -> "imposed during point-to-point position-controlled movements" \parencite{popescu_elbow_2003}
 
+Perturbation en position pendant des mouvements au profil de vitesse répétable:
+"Since the trajectory prediction is accurate for only a short time interval (Fig. 1), a good position perturbation must be brief, and the constant position plateau must be reached as quickly as possible. However, a very fast or abrupt transition to the plateau requires the mechanical interface to produce high forces within a brief time, which can lead to vibration. A short transition phase, which miminized vibration (Fig. 1), was achieved by using as servo command a sixth-order polynomial with zero velocity and zero acceleration at the boundaries and zero end jerk (Burdet and Osu, 1999)."
+...
+" As the velocity profile of any movement was roughly similar to the mean velocity profile of the preceding trials, the shape of the mean profile was used as a template for the current trajectory."  \parencite{burdet_method_2000}
 
 \paragraph{Force}
 
 \parencite{dolan_dynamic_1993} :  A Cartesian-error-based inverse-dynamics  control  approach  was  used to  make the perturbation forces in various directions as uniform as possible. In order to  limit conscious, voluntary response to  perturbations, subjects  were  asked  to  not  consciously  attempt  to  re-center the  handle  on  the  shadow until  the  manipulator had  stopped pushing against the arm.  Several underdamped, rapidly rising ( t r   = 0.2 s ) position perturbations were successively applied. Perturbations typically lasted  1.5-2.0  s. The interval between re-centering  and  the  next  perturbation was  between  3  and  5s, so that  the perturbation onset was not  easily predictable by the  subjects.  The  imposed  trajectories  caused  arm  endpoint oscillations  with  maximum  velocities  and  accelerations  of approximately 0.8  m/s  and  1.5  d s 2 ,   respectively. A  typical set  of  position  and  force  traces  for  a  single  perturbation  is shown  in  Fig.  3.
 
-\subsection{Méthodes d'identifications}
+"Small force perturbations for brief periods (about 0.2 s), with nine randomized timings and eight directions, were applied during movement. The subject was also instructed to move his or her hand in as relaxed a way as possible and ‘not to intervene voluntarily’ (i.e., not to correct his or her movements even if the target was missed because of the perturbation), as in studies by Latash (1992b, 1994). Only those trajectories close to the reference trajectory ((3 cm at each time step) were recorded for data analysis. In one experiment, eight data sets (72 trials in one set) were recorded without failed trials which deviated more than 3 cm from the reference trajectory except for the perturbation duration." \parencite{gomi_human_1997} (perturbations en position utilisé pour les expériences statiques)
+
+"The initial 10 trials of the sequence were 'premovement' bumps, in that the subjects relaxed at the start target, which was followed by a brief, bi-polar and symmetric torque pulse. These torque perturbations consisted of bi-directional pulses, each with a 15-ms width (30 ms total perturbation time) and approximately 20-Nm amplitude." \parencite{popescu_elbow_2003}
+
+Estimations are based on spectral decomposition and modal testing principles and use a brief (5 N-20 ms) force pulse to estimate the mechanical behavior of the upper limb during free response. \parencite{piovesan_measuring_2012}
+
+\subsection{Méthodes d'identifications} \label{chap3_sec_st_art_sub_ident}
+
+\subsubsection{Méthodes régressives} \label{chap3_sec_st_art_sub_ident_1}
+
+Estimation des paramètres inertiels avant la régression linéaire:
+"Thus if Zi can be pre-estimated, we can reduce the number of estimation parameters from 11 to eight in each condition. In other words, the left-hand side of (5) could be calculated by using pre-estimated structural parameters Zi, and this could be subtracted from ds \SI{}{\percent} 95 in advance to estimate other parameters, Dij, and Rij. In our analysis shown below, Zi are pre-determined from all data sets." ...
+
+"At the start of the perturbation, it is reasonable to presuppose from the causality that the offset in position and torque for each trial is due to trial fluctuations, and thus could be canceled out. According to this idea, the following procedure was applied to extract the variational component of position dq:
+Here, the superscripts denote the number of the trial, and tp denotes the start time of the perturbation. qi4 denotes the ith trajectory unbiased at the perturbation start. The same procedure was used for velocity, acceleration, and torque data. To eliminate the effect of fluctuation among trials, the data for different trials with the same perturbation were averaged. We used the variational data of the short period after the perturbation commenced (tp<t<tp+test) for the static condition test=0.4 s; for the dynamic condition test=0.28 s) for the parameter estimation described above."
+\parencite{gomi_human_1997}
+
+Comme détaillé dans le \cref{chap3}, pour estimer les paramètres correctement, une dynamique suffisemment longue doit pouvoir être observée pour tous les paramètres, toutefois, des actions volontaires peuvent survenir dès [durée et source], pour devenir dominantes au delà de \SI{250}{\milli\second} \parencite{erden_hand_2015}, rendant la modélisation en impédance inadéquate. s
+
+\subsubsection{Méthodes non paramétrique} \label{chap3_sec_st_art_sub_ident_2}
+
+"We have described nonparametric methods for characterizing endpoint dynamic stiffness properties, i.e., no particular model structure describing endpoint stiffness has been assumed a priori. Our only assumption is that endpoint stiffness is linear for small perturbations and can thus be fully characterized by either its frequency response matrix or its impulse response matrix. This is in contrast to previously used methods for estimating endpoint dynamics (Dolan et al. 1993; Tsuji et al. 1995; Gomi and Kawato 1997), which have assumed a model structure (typically second order) and fit the parameters of this model directly to the data. Based upon previous single-joint studies, it is likely that the assumption of second-order stiffness properties will be reasonably accurate for fixed postural conditions and small perturbations. However, mechanisms certainly exist to make the system non-second-order and/or nonlinear. For example, stiffness estimates are known to vary with perturbation amplitude (Kearney and Hunter 1982) and mean contraction level (Hunter and Kearney 1982) for postural conditions. Furthermore, individual joint stiffnesses have been found to be linear but non-second-order during changing contraction levels (MacNeil et al. 1992) and following a large perturbation (Kirsch and Kearney 1997). Also, stretch reflex responses during perturbations with quite restricted bandwidths produce a nonlinear stiffness component that will not be captured by a second-order model (Kearney and Stein 1997). It is thus unlikely that the second-order description of multijoint endpoint stiffness will survive more general testing. Furthermore, endpoint stiffness has previously been estimated only in the horizontal plane, typically with the weight of the arm supported against gravity, with the implicit assumption that both the elbow and shoulder act as hinge joints. This is obviously a vast simplification for the shoulder, which is actually a complex of several different joints with multiple degrees of freedom. It is thus expected that examination of the endpoint stiffness properties of the arm under more general and realistic conditions will reveal behavior that is of higher order than second.
+
+A nonparametric approach such as the one described here is preferred for exploring a system whose properties are only poorly established." \parencite{perreault_multiple-input_1999}
+
+"The near perfect overlap of the nonparametric transfer functions  and  the  second-order  fits  indicates  that  the endpoint  dynamics  estimated  for  this  trial  were  well approximated by a system with inertial, viscous and elastic components." \parencite{perreault_effects_2001}
+
+"Classical regressive methods are limited to estimating an average value of stiffness across several trials; by contrast, our time-frequency technique can estimate the variation of stiffness and damping across trials, thereby providing a tool to study the relationship between stiffness modulation and adaptive learning. The proposed method is non-parametric and we tested it on higher-than-second-order and non-linear systems. Modal analysis was used as a parameter identification method for second-order systems to allow a direct comparison with regressive techniques. Linearity, repeatability of the trajectory, and steady state were not necessary assumptions, and a stiff robot was not required because a free response was measured." 
+...
+"For linear second order systems, simulations of postural and forward reaching tasks were analyzed, imposing non-linearly time-varying stiffness and damping profiles. The estimation of stiffness and damping parameters was achieved using modal analysis, thus solving an inverse vibrational problem instant by instant where both the eigenvalues and the eigenvectors of the vibrational system were measured. Eigenvalues (i.e. the natural frequencies of the mechanical system) were evaluated by analyzing a reassigned spectrogram in the time-frequency domain, specifically identifying the instantaneous vibrational frequencies as a function of time. The eigenvectors (i.e. the vibrational modes) of the system were evaluated using an approach based on the separability of the modes' time series (the frequency of each mode is sufficiently different from the others to be separately identifiable). The separation of each mode was obtained by filtering the free response signals around the resonant frequencies of the system. The adequacy of our method was evaluated using a noise sensitivity analysis, also including signal dependent noise which is common in biological systems." ...
+"The spectrogram-based method proposed here requires a separate estimation of the inertial body segment parameters (BSP). BSPs can be obtained from models that apply to the geometry and the morphology of the subject. We investigated the sensitivity of the time-frequency technique to the nine inertial models proposed in [41], applied to the set of anthropometric measures described in Table 1. The same set of inertial parameters was imposed on the simulated system and used for stiffness and damping estimation. The inertial models of Hanavan (HV) and Dempster (DE), which performed poorly in the estimation of torque via inverse dynamic as discussed in [41], also produced less accurate estimations of stiffness and damping (see Supplement S2 for details) and were excluded from the statistical analysis. We also analyzed the sensitivity of the estimates produced by our method to the direction of the perturbation using eight perturbation directions, uniformly distributed in the Cartesian space along the octants." \parencite{piovesan_measuring_2012}
+
+"Yet the disadvantage of such techniques, and the one described before, is that it assumes linearity of the musculoskeletal system [33] and it remains to be shown how well it is capable describing the non-linear dynamics of the real (neuro-)musculoskeletal system." \parencite{kistemaker_vivo_2011}
+
+\subsubsection{Autres méthodes} \label{chap3_sec_st_art_sub_ident_3}
+
+\paragraph{Utilisation des capteurs électromyographiques}
+
+\section{Méthode proposée} \label{chap3_sec_method}
+
+Les identifications d'impédance sont réalisées hors ligne.
+
+\subsection{Injection des perturbations} \label{chap3_sec_method_sub_pert}
+
+Afin de limiter les effets extérieurs sur la tâche étudiée, et aussi pour réduire les effets non-linéaires du comportement viscoélastique en rejet de perturbation du bras humain, l'amplitude et la durée des perturbations devront être faibles, comme expliqué en \cref{chap3_sec_st_art_sub_pert}. Par ailleurs aucun système externe n'est prévu pour l'injection des perturbations, ce qui permet de rendre l'expérience plus facilement transposable, et de minimiser l'incidence d'équipements exogènes sur la réalisation de la tâche pour les participants. Les perturbations doivent donc être générées par le robot lui même, avec la stratégie de commande décrite en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_4}.
+
+Les perturbations en position requièrent une raideur importante pour atteindre un régime permanent rapidement de manière stable, ce qui semble peut compatible avec la stratégie de contrôle décrite en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_4}. De plus, dans le cadre de tâches en mouvement, avec des dynamiques non négligeables et des trajectoires non triviales dont la répétabilité insuffisante est étudiée plus loin (\cref{chap3_sec_method_sub_virt_traj}), le retour sur la trajectoire virtuelle non perturbée est complexe et risque fortement de dégrader les performances pour la réalisation de la tâche. Des perturbations en force sont donc seulement considérées par la suite, leur implémentation étant plus adaptée au contexte expérimental défini.
+
+Au vu des éléments décrits dans la littérature en \cref{chap3_sec_st_art_sub_pert}, les perturbations stochastiques, pourraient être très intéressantes, mais elles risqueraient de perturber les utilisateurs sur des intervalles de temps importants, ce qui pourrait entraîner des modifications volontaires de la trajectoire de référence, rendant son estimation alors presque impossible. D'autre part, certains auteurs notent que ce type de perturbations peut inhiber certains réflexes \parencite{kistemaker_vivo_2011,mizrahi_mechanical_2015} \textcolor{red}{[vérifier la/les références]} et donc modifier l'écologie de la tâche. Afin de limiter au maximum l'influence des perturbations, des impulsions courtes sont préférables, d'autant qu'elles permettent à la fois des identifications avec les méthodes régressives \parencite{gomi_human_1997,erden_end-point_2015} et avec les méthodes non paramétriques \parencite{piovesan_measuring_2012}. En effet, en réglant leur amplitude et leur durée de manière adéquate, elles pourraient devenir imperceptibles aux utilisateurs comparativement au bruit et aux dynamiques déjà existants sur le système.
+
+Trois solutions sont enisageables pour introduire des perturbations en force directement avec le robot :
+
+\begin{enumerate}
+	\item Modifier la référence de force $ f_{z0} $,
+	\item Introduire des perturbations en vitesse (cartésienne ou articulaire),
+	\item Introduire des perturbations dans la boucle interne en courant.
+\end{enumerate}
+
+La première solution est la plus facile à implémenter. Elle permet d'obtenir sans aucune modification de la boucle de contrôle une perturbation en force, dont l'amplitude est contrôlée par la boucle externe avec le capteur de force. Le régime transitoire de ces perturbations est toutefois soumis à la dynamique de la boucle externe en force, et donc, la dynamique la plus lente du système. Il pourrait alors être compliqué de garantir la brièveté des impulsions.
+
+La deuxième solution nécessite de compenser les boucles internes en vitesses articulaires du robot. De cette manière, en introduisant une perturbation en vitesse et en compensant la dynamique de ces boucles, il est possible de maîtriser indirectement des perturbations en courant, et donc en couple articulaire. Le régime transitoire de la perturbation sera soumis à la dynamique de la boucle de vitesse, plus rapide que la boucle externe en force. Cette méthode permet donc d'approcher des perturbations en courant, sans toutefois avoir besoin d'accéder aux boucles internes.
+
+La dernière solution nécessite d'une part, de pouvoir intervenir au niveau des consignes de courant des boucles internes du robot, ce qui n'est pas le cas de la plupart des robots industriels. Le youBot de KUKA, permet toutefois d'accéder à ces niveaux de contrôle. Aussi, dans le cas de robots avec des fléxibilités, et dynamiques non-négligeables, introduire des perturbations au niveau des couples moteurs ne permet pas de garantir l'amplitude des perturbations en force au niveau de l'effecteur final, à moins de compenser parfaitement les dynamiques internes du robot (cet inconvéniant s'applique donc aussi à la seconde méthode de perturbation décrite). 
+
+Selon la nature des perturbations on préfèrera certaines des solutions proposées. En effet, si l'on souhaite introduire des perturbations lentes voire statiques, la première solution est la plus simple et la moins gourmande en calcul. Au contraire, pour des perturbations inférieures à la centaines de millisecondes, opter pour la première solution n'est plus envisageable. Dans ce cas, on préfèrera l'une des deux autres solutions, selon qu'on ait ou non, accès aux boucles en courant du robot, la dernière solution permettant d'introduire les perturbations les plus brèves. 
+
+Or comme expliqué, on souhaite des perturbations de faibles amplitudes et brèves. Au vu des éléments de la littérature, une amplitude d'environs \SI{5}{\newton} est visée dont la direction est colinéaire à la tâche, c'est à dire le long de l'axe vertical $\vec{z}$. Le sens doit être défini de manière aléatoire pour limiter la prévisibilité de la perturbation, mais aussi observer d'éventuelles différences, selon qu'on soit contre ou avec la gravité. La perturbation serait alors constituée d'un unique front montant puis descendant, pour une durée cible totale de \SI{50}{\milli\second}.
+
+Après vérification expérimentale, ... [expliquer qu'on est capable de générer ce type de perturbation malgré les dynamiques et flexibilités du robot, précisier la forme de la commande, éventuellement parler de l'input shaping ?? (qui aurait pu être mis en place pour être plus rigoureux peut être en apparté.)]
+
+\subsection{Reconstruction de la trajectoire virtuelle} \label{chap3_sec_method_sub_virt_traj}
+
+L'une des difficultés soulevées par l'estimation d'impédance lors de tâches en mouvement est l'estimation de la trajectoire dites \emph{virtuelle} \parencite{tsuji_human_1997}, c'est à dire, la trajectoire qui aurait lieu en l'absence de toutes perturbations. Dans un premier temps, plusieurs méthodes proposées dans la littérature ont été implémentées sur des trajectoires non-perturbées, de manière à pouvoir facilement évaluer leur capacité à approcher une trajectoire nominale. Seuls les effets de la gravité sur le poids du bras ne sont pas compensés, le poids du robot est quant à lui annulé par le contrôle adopté, mais sa masse inertielle ne l'est pas totalement \parencite[Chapitre~3]{lamy_conception_2011}. 
+
+"apparté sur la mesure de la position à partir d'un système de vision"
+
+\subsubsection{Moyenne}
+
+Lorsqu'une tâche est suffisemment répétable, chacune des trajectoires réalisées sont proches de la moyenne des trajectoires précédentes. Cette méthode est assi bien utilisée pour des tâches de pointage \parencite{gomi_human_1997} que pour des mouvements rythmiques \parencite{bennett_time-varying_1992}. Ainsi, après avoir déterminés les paramètres géométriques des matrices inertielles et de Coriolis (modèle \cref{eq_gomi_impedance_model}), \textcite{gomi_human_1997} estiment les matrices de raideur et de viscosité articulaires en utilisant les trajectoires moyennes pour estimer le mouvement non perturbé :
+
+\begin{equation}
+	\delta \vect{q}^i(t) = \vect{q}^i_s(t) - \frac{1}{n} \sum_{i}^{n} \vect{q}^i_s(t) \text{,}
+\end{equation}
+
+avec $ \vect{q}^i_s(t) $ la i\textsuperscript{ème} trajectoire avec l'offset présent juste avant la perturbation retiré. 
+
+\subsubsection{Table de correspondance}
+
+\subsubsection{Filtrage}
+
+\subsubsection{Splines}
+
+\subsubsection{Sommes de sinus}
+
+\subsubsection{Réseaux de neurones récurrents}
+
+\subsection{Identification}

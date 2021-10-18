@@ -7,7 +7,7 @@
 
 clear all
 close all
-
+addpath('../../Other data')
 file_name = 'successful_exp_data.mat';
 load(file_name);
 
@@ -172,7 +172,8 @@ learning_cycles = zn2_cycle_np(:, 1:floor(length(zn2_cycle_np(1,:))/2));
 validation_cycles = zn2_cycle_np(:, floor(length(zn2_cycle_np(1,:))/2)+1:end);
 
 for cycle_idx = 1:length(halfn_cycle_np)
-    idx_fit(cycle_idx,:) = [1:ceil(halfn_cycle_np(cycle_idx)), length(t_norm)-idx_traj_fit:length(t_norm)];
+    %idx_fit(cycle_idx,:) = [1:ceil(halfn_cycle_np(cycle_idx)), length(t_norm)-idx_traj_fit:length(t_norm)]; 
+    idx_fit(cycle_idx,:) = [(-290:1)+ceil(halfn_cycle_np(cycle_idx)), length(t_norm)-idx_traj_fit:length(t_norm)];   
 end
 
 cycle_fit = cell(length(validation_cycles(1,:)),1);
