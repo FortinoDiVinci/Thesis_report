@@ -121,6 +121,10 @@ L'une des difficultés soulevées par l'estimation d'impédance lors de tâches 
 
 "apparté sur la mesure de la position à partir d'un système de vision"
 
+\input{latex_figures/fig_unperturbed_position_test_trajectory}
+
+"préciser la précision souhaitée"
+
 \subsubsection{Moyenne}
 
 Lorsqu'une tâche est suffisemment répétable, chacune des trajectoires réalisées sont proches de la moyenne des trajectoires précédentes. Cette méthode est assi bien utilisée pour des tâches de pointage \parencite{gomi_human_1997} que pour des mouvements rythmiques \parencite{bennett_time-varying_1992}. Ainsi, après avoir déterminés les paramètres géométriques des matrices inertielles et de Coriolis (modèle \cref{eq_gomi_impedance_model}), \textcite{gomi_human_1997} estiment les matrices de raideur et de viscosité articulaires en utilisant les trajectoires moyennes pour estimer le mouvement non perturbé :
@@ -132,6 +136,31 @@ Lorsqu'une tâche est suffisemment répétable, chacune des trajectoires réalis
 avec $ \vect{q}^i_s(t) $ la i\textsuperscript{ème} trajectoire avec l'offset présent juste avant la perturbation retiré. 
 
 \subsubsection{Table de correspondance}
+
+\textcite{burdet_method_2000} ont proposé une méthode de prédiction de trajectoire en ligne, qui leur a permis d'injecter des perturbations en position lors de tâche en mouvement. Les auteurs déclarent obtenir des erreurs de prédiction de la position inférieure au centimètre après \SI{200}{\milli\second}. L'idée est d'utiliser la répétabilité du mouvement, ou du moins sa structure globale qui est supposée peu variante, notamment son profil de vitesse. Ainsi, en utilisant la moyenne des dix trajectoires précédentes, les auteurs proposent de créer un ensemble de profils de vitesse candidats, en modulant la moyenne obtenue aussi bien en modifiant l'amplitude du signal, qu'en appliquant différents retards. Au total, 121 courbes candidates sont générées (11 amplitudes $\times$ 11 retards), et celle générant le moins d'erreur sur les dernières \SI{100}{\milli\second} est choisi à l'aide de la formule récursive suivante :
+
+\begin{equation} \label{eq_cost_function_burdet_2000}
+	d_{i,k} = (v_k - w_{i,k})^2 + \alpha d_{i,k-1} \text{,}
+\end{equation}
+avec $v_k$ la vitesse de l'échantillon temporel actuel $k$ et $w_{i,k}$ le i\textsuperscript{ème} prodil de vitesse candidat à l'instant $k$ et $\alpha$ un facteur d'oubli qui limite la mémoire aux cent dernières millisecondes.
+
+Cette méthode suppose toutefois une répétabilité significative, puisque comme précisé par les auteurs, si la dernière trajectoire effective avait un écart type supérieur à 1.05 fois le précédent, alors elle n'était pas intégrée pour la moyenne glissante des 10 dernières trajectoires. En effet, \textcite{burdet_method_2000} se placent dans le cadre d'une tâche de pointage, où l'objectif est constant. Or, dans le cadre d'une tâche rythmique, soumise notamment à la trajetoire, potentiellement chaotique, d'une balle, de nombreuses configurations peuvent se présenter.
+
+Une version adaptée de cette méthode a été reproduite sur les trajectoires en position, en reprenant la fonction de coût \cref{eq_cost_function_burdet_2000} et aussi en utilisant l'erreur quadratique (RMSE) sur \SI{100}{\milli\second} pour choisir le meilleur candidat. Par ailleurs, la contrainte de pouvoir réaliser l'estimation en ligne étant relâchée, un nombre plus grande de courbes candidates ont été générées (15 amplitudes $\times$ 11 retards $ = 165$). Deux exemples de l'application de la version adaptée de l'algorithme sont fournis en \cref{fig_test_burdet_2000_success,fig_test_burdet_2000_failure}, pour un cas satisfaisant et un cas non satisfaisant. Dans tous les cas, les performances sont conformes à celles divulguées par \textcite{burdet_method_2000}.
+
+%\LoadCSV {mycsv} {misc/test1_burdet/best_candidates.csv}
+%\readarraysepchar{,}
+%\readdef{misc/test1_burdet/best_candidates.csv}\myrawdata
+%\setsepchar{,}
+%\readlist*{\mydata}{\myrawdata}
+%\newcommand\pertIdx{\mydata[2,3]}
+
+%{\mydata[2,3]}
+
+\tikzexternalenable
+\input{latex_figures/fig_test_burdet_trajectory_prediction}
+\input{latex_figures/fig_test_burdet_trajectory_prediction_fail}
+\tikzexternaldisable
 
 \subsubsection{Filtrage}
 

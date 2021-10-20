@@ -1,0 +1,40 @@
+\begin{figure}[!htb] 
+	\tikzsetnextfilename{fig_unperturbed_position_test_trajectory}
+	\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tikzpicture}
+			\centering
+			%
+			%\LoadCSV {mycsv} {misc/test1_burdet/best_candidates.csv}
+			%\indexP{\GetCSV{mycsv}{2}{3}} 
+			
+			\begin{axis}[%
+				name=ax1,
+				width=.95\linewidth,
+				height=.4\linewidth,
+				scale only axis,    
+				xmin=30,
+				xmax=150,
+				xlabel={temps (\SI{}{\second})},
+				%ymin=-0.599,
+				%ymax=0.599,
+				ylabel={Position (\SI{}{\meter})},
+				axis x line = bottom,
+				axis y line = left, 
+				]
+				%
+				\addplot [
+					color=blue,
+					solid,
+					%densely dotted,
+					%line width=1.pt
+					]
+				table [col sep=comma, x=time, y=position] {misc/unperturbed_position_signal.csv};
+				%				
+			\end{axis}
+			
+			\end{tikzpicture}
+		}	
+	\caption{text text}
+	\label{fig_unp_position_test_trajectory}
+\end{figure}
