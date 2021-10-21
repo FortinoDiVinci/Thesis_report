@@ -27,11 +27,11 @@ LOW_PASS_FREQ = 20; % Hz (50 Hz)
 
 % INPUT SIGNAL
 EXTERNAL_INPUT_SIGNAL = 1;
-EXTERNAL_IS_FORCE = 0; % set to 0 to use position
+EXTERNAL_IS_FORCE = 1; % set to 0 to use position
 if EXTERNAL_INPUT_SIGNAL
     addpath('../../force_torque_sensor');
     %load("preliminary_experimental_data/data_vfo_10.mat"); 
-    necessary_variables = {'forces_unf','torque_unf','thetas', 'dt',...
+    necessary_variables = {'forces_unf','torques_unf','thetas', 'dt',...
         'mocap_marker_robot_base','t','idx_ball_off_ramp','dist', 't_dist', ...
         'SINGLE_MOCAP_FITTING'};
     load("data_2020_Nov_17/data_without_impacts_2020_11_17.mat", necessary_variables{:}); 
@@ -42,10 +42,10 @@ if EXTERNAL_INPUT_SIGNAL
     if iscell(forces_unf)
         if SINGLE_MOCAP_FITTING % first data cell should be deleted
             forces_unf(1) = [];
-            if exist('torque_unf') == 1 % test if it is a var in workspace
-                torque_unf(1) = [];
+            if exist('torques_unf') == 1 % test if it is a var in workspace
+                torques_unf(1) = [];
             else
-                torque_unf = forces_unf;
+                torques_unf = forces_unf;
             end
             thetas(1) = [];
             mocap_marker_robot_base(1) = [];
@@ -108,6 +108,9 @@ if EXTERNAL_INPUT_SIGNAL
         [f_int,~,~]= forces_filtering(forces_unf{SIGNAL_IDX}', torques_unf{SIGNAL_IDX}', ...
             thetas{SIGNAL_IDX}', t');
         nsig = -1.*f_int(3,:);
+        tmp = mocap_marker_robot_base{SIGNAL_IDX};
+        nsig_pos = tmp(:,3)'; % z position
+        clear tmp
     else % External signal is position
         tmp = mocap_marker_robot_base{SIGNAL_IDX};
         nsig = tmp(:,3)'; % z position
@@ -118,8 +121,13 @@ if EXTERNAL_INPUT_SIGNAL
     [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
     fsig = filtfilt(b,a,nsig);
     fc = 2; % cut off frequency
-    [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
-    sig = filtfilt(b,a,nsig);
+    if EXTERNAL_IS_FORCE
+        [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
+        sig = filtfilt(b,a,nsig_pos);
+    else
+        [b,a] = butter(2,fc/(1/(2*dt)),'low'); 
+        sig = filtfilt(b,a,nsig);
+    end
     
     [b,a] = butter(2,10/(1/(2*dt)),'low'); 
     msig = filtfilt(b,a,nsig);
@@ -188,6 +196,8 @@ end
 %idx = 1+(0:1/dt/f:t_max/dt);
 dsig = Iu_diffcent(t',sig');
 idx_pks = crossing(dsig);
+mag_var = abs(diff(nsig(idx_pks)));
+mag_var = mag_var(1:2:end)';
 idx_pks = idx_pks(1:2:end); % selection of only half the peaks
 
 plot(t(idx_pks), fsig(idx_pks), 'k^')
@@ -200,10 +210,22 @@ end
 % legappend('cycle') % could not fix it...
 
 % freq variations
-freq_var = 1./(diff(idx_pks)*dt);
+freq_var = (1./(diff(idx_pks)*dt))';
 figure
+subplot(2,1,1)
 plot(freq_var)
 title("Cycles frequencies variations n" + num2str(SIGNAL_IDX))% + " _base freq " + num2str(f))
+subplot(2,1,2)
+plot(mag_var)
+title("Cycles magnitudes variations n" + num2str(SIGNAL_IDX))% + " _base freq " + num2str(f))
+
+% complete_signal_properties = table(mag_var,freq_var);
+% write(complete_signal_properties,'force_signal_properties.csv','Delimiter',',');
+% 
+% time = downsample(t((31069:81069)),10)';
+% force = downsample(nsig((31069:81069)),10)';  
+% complete_signal = table(time,force);
+% write(complete_signal,'force_signal.csv','Delimiter',',');
 
 if EXTERNAL_INPUT_SIGNAL
     

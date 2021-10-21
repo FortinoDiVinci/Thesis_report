@@ -27,7 +27,7 @@
 				\foreach \i in {2,3,...,16} {			
 					\addplot [
 						color=blue,
-						solid,
+						smooth,
 						%line width=.75pt,
 						opacity=0.3,
 						]
@@ -37,7 +37,7 @@
 				\foreach \i in {50,51,...,65} {			
 					\addplot [
 					color=blue,
-					solid,
+					smooth,
 					%line width=.75pt,
 					opacity=0.3,
 					]
@@ -47,7 +47,7 @@
 				\foreach \i in {150,151,...,165} {			
 				\addplot [
 					color=blue,
-					solid,
+					smooth,
 					%line width=.75pt,
 					opacity=0.3,
 					]
@@ -144,7 +144,7 @@
 			
 			\end{tikzpicture}
 		}	
-	\caption{Exemple d'application de la méthodologie de \textcite{burdet_method_2000} pour une estimation de trajectoire en position sur \SI{200}{\milli\second} peu satisfaisante. A la fin de cette fenêtre temporelle, l'erreur est de \SI{5.9}{\milli\meter} pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative d'environ \SI{7}{\percent}.}
+	\caption{Exemple d'application de la méthodologie de \textcite{burdet_method_2000} pour une estimation de trajectoire en position sur \SI{200}{\milli\second} peu satisfaisante (cycle 25 de la \cref{fig_unp_position_test_trajectory}). A la fin de cette fenêtre temporelle, l'erreur est de \SI{5.9}{\milli\meter} pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative d'environ \SI{7}{\percent}.}
 	\label{fig_test_burdet_2000_failure}
 \end{figure}
 	%%

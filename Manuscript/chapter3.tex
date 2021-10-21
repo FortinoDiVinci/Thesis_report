@@ -119,11 +119,30 @@ Après vérification expérimentale, ... [expliquer qu'on est capable de génér
 
 L'une des difficultés soulevées par l'estimation d'impédance lors de tâches en mouvement est l'estimation de la trajectoire dites \emph{virtuelle} \parencite{tsuji_human_1997}, c'est à dire, la trajectoire qui aurait lieu en l'absence de toutes perturbations. Dans un premier temps, plusieurs méthodes proposées dans la littérature ont été implémentées sur des trajectoires non-perturbées, de manière à pouvoir facilement évaluer leur capacité à approcher une trajectoire nominale. Seuls les effets de la gravité sur le poids du bras ne sont pas compensés, le poids du robot est quant à lui annulé par le contrôle adopté, mais sa masse inertielle ne l'est pas totalement \parencite[Chapitre~3]{lamy_conception_2011}. 
 
-"apparté sur la mesure de la position à partir d'un système de vision"
+Pour être capable d'estimer la trajectoire virtuelle, il est nécessaire de s'intéresser aux propriétés des signaux concernés, c'est à dire aussi bien à la position qu'à la force le long de l'axe $\vec{z}$. C'est dans ce but que plus de \SI{2}{\hour} d'enregistrements ont été réalisés avec un sujet expérimenté sur deux configurations : 
+\begin{enumerate*}[label=\roman*)]
+	\item l'une en l'absence perturbations induites volontairement par le robot, l'utilisateur a donc été uniquement soumis au poids de son bras, ainsi qu'à la masse inertielle du robot avec le contrôle décrit au \cref{chap2},
+	\item l'autre avec les perturbations prévisibles utilisées pour simuler l'impact de la balle, on peut alors parler de retour haptique simulant la pesanteur de la balle.
+\end{enumerate*}
+Les essais ont été découpés en session de \SI{5}{\minute}, avec des temps de repos pour limiter les phénomènes liés à la fatigue. L'une de ces intéractions est partiellement présentée, pour la trajectoire en position en \cref{fig_unp_position_test_trajectory} et pour la force en \cref{fig_unp_force_test_trajectory}. On peut constater sur la \cref{subfig_unp_position_test_trajectory_b} que l'amplitude cyclique des trajectoires en position est comprise entre  \SIlist{5;10}{\centi\meter} et la fréquence cyclique entre \SIlist{0.7;1.1}{\hertz}. Si on s'intéresse à l'ensemble des trajectoires, on peut constater que l'amplitude du mouvement reste toujours inféreure à \SI{11}{\centi\meter}. Si on se penche sur la force, on peut observer sur la \cref{subfig_unp_force_test_trajectory_b} une variation d'amplitude en force comprise entre \SIlist{7;15}{\newton}, et sur l'ensemble des essais cette amplitude ne dépasse jamais \SI{16}{\newton}.
 
+\tikzexternalenable
 \input{latex_figures/fig_unperturbed_position_test_trajectory}
 
-"préciser la précision souhaitée"
+\input{latex_figures/fig_unperturbed_force_test_trajectory}
+
+Les analyses spectrales en \cref{fig_fft_freq_analysis}, conduites sur l'ensemble des trajectoires confirment bien que les signaux en force sont plus riches que ceux en position. On retrouve la fréquence principale qui correspond à celle imposée par la tâche, déjà observable sur la \cref{subfig_unp_position_test_trajectory_b} autour de \SI{0.85}{\hertz}. Les différences de puissance entre signaux avec et sans retours haptiques ne semblent visible que sur la force, au delà de \SI{6}{\hertz}.
+
+\input{latex_figures/fig_fft_frequencies_analysis}
+\tikzexternaldisable
+
+\begin{aside}{Mesures exogènes}
+	Le robot, youBot, de Kuka utilisé pour les expériences, n'est pas complètement réversible et possède des flexibilités non négligeables. Par conséquent, mesurer les forces d'interactions en utilisant les courants moteurs s'avèrerait peu précis tout comme estimer la position de l'effecteur final depuis les données articulaires. C'est pour pallier ces problématiques que des capteurs externes au robot ont été implémentés. Un capteur de forces et couples 6 axes a donc été installé à l'interface entre l'effecteur final du robot et la poignée pour mesurer les forces d'interactions entre le robot et l'utilisateur. De même, pour obtenir la position cartésienne de la poignée avec plus de précision, un système de vision a été installée avec des marqueurs sur les parties rigides du dernier segment du robot. Ces équipements permettent selon les données des constructeurs d'atteindre une précision de \SI{125}{\milli\newton} pour les forces et submillimétrique pour les positions.
+\end{aside}
+
+L'identification des paramètres en impédance étant complètement dépendante de l'estimation des trajectoires virtuelles en force et en position pour écrire la relation différentielle liant les forces et positions, une précision maximale est souhaitable. Ne pouvant pas garantir une résolution supérieure à celle fournie par les capteurs, un objectif cohérent serait d'essayer de maintenir la précision des données en visant une définition similaire à celle des équipements. 
+
+"etude de la diffusion des erreurs en fonction des entrées/sorties ?" 
 
 \subsubsection{Moyenne}
 
@@ -146,7 +165,7 @@ avec $v_k$ la vitesse de l'échantillon temporel actuel $k$ et $w_{i,k}$ le i\te
 
 Cette méthode suppose toutefois une répétabilité significative, puisque comme précisé par les auteurs, si la dernière trajectoire effective avait un écart type supérieur à 1.05 fois le précédent, alors elle n'était pas intégrée pour la moyenne glissante des 10 dernières trajectoires. En effet, \textcite{burdet_method_2000} se placent dans le cadre d'une tâche de pointage, où l'objectif est constant. Or, dans le cadre d'une tâche rythmique, soumise notamment à la trajetoire, potentiellement chaotique, d'une balle, de nombreuses configurations peuvent se présenter.
 
-Une version adaptée de cette méthode a été reproduite sur les trajectoires en position, en reprenant la fonction de coût \cref{eq_cost_function_burdet_2000} et aussi en utilisant l'erreur quadratique (RMSE) sur \SI{100}{\milli\second} pour choisir le meilleur candidat. Par ailleurs, la contrainte de pouvoir réaliser l'estimation en ligne étant relâchée, un nombre plus grande de courbes candidates ont été générées (15 amplitudes $\times$ 11 retards $ = 165$). Deux exemples de l'application de la version adaptée de l'algorithme sont fournis en \cref{fig_test_burdet_2000_success,fig_test_burdet_2000_failure}, pour un cas satisfaisant et un cas non satisfaisant. Dans tous les cas, les performances sont conformes à celles divulguées par \textcite{burdet_method_2000}.
+Une version adaptée de cette méthode a été reproduite sur les trajectoires en position, en reprenant la fonction de coût \cref{eq_cost_function_burdet_2000} et aussi en utilisant l'erreur quadratique (RMSE) sur \SI{100}{\milli\second} pour choisir le meilleur candidat. Par ailleurs, la contrainte de pouvoir réaliser l'estimation en ligne étant relâchée, un nombre plus important de courbes candidates ont été générées (15 amplitudes $\times$ 11 retards $ = 165$). Deux exemples de l'application de la version adaptée de l'algorithme sont fournis en \cref{fig_test_burdet_2000_success,fig_test_burdet_2000_failure}, pour un cas satisfaisant et un cas non satisfaisant. Dans tous les cas, les performances sont conformes à celles divulguées par \textcite{burdet_method_2000}.
 
 %\LoadCSV {mycsv} {misc/test1_burdet/best_candidates.csv}
 %\readarraysepchar{,}

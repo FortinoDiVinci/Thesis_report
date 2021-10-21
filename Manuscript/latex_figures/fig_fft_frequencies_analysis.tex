@@ -1,0 +1,85 @@
+\begin{figure}[!htb] 
+	\centering
+		\resizebox{\textwidth}{!}{
+			\subcaptionbox{Analyse spectrale des trajectoires en position\label{subfig_fft_frequencies_analysis_a}}
+			{
+				\tikzsetnextfilename{subfig_fft_frequencies_analysis_a}
+				\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					width=.95\linewidth,
+					height=.25\linewidth,
+					scale only axis,
+					ymode=log,  %log scale
+					xlabel={fréquence (\SI{}{\hertz})},
+					ylabel={Puissance (\SI{}{\watt\per\hertz})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					%
+					\addplot [
+						color=blue,
+						solid,
+						]
+					table [col sep=comma, x=f, y=pos_power] {misc/fft_analysis_unperturbed.csv};
+					\addlegendentry{sans pertubations};
+					%
+					\addplot [
+						color=red,
+						solid,
+						]
+					table [col sep=comma, x=f, y=pos_power] {misc/fft_analysis_perturbed.csv};
+					\addlegendentry{avec retours haptiques};
+					%	
+				\end{axis}
+				
+				\end{tikzpicture}
+			}
+		}
+		\\
+		\resizebox{\textwidth}{!}{
+			\subcaptionbox{Analyse spectrale des trajectoires en force\label{subfig_fft_frequencies_analysis_b}}
+			{
+				\tikzsetnextfilename{subfig_fft_frequencies_analysis_b}
+				\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					width=.95\linewidth,
+					height=.25\linewidth,
+					scale only axis,
+					ymode=log,  %log scale
+					xlabel={fréquence (\SI{}{\hertz})},
+					ylabel={Puissance (\SI{}{\watt\per\hertz})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					%
+					\addplot [
+						color=blue,
+						solid,
+						]
+					table [col sep=comma, x=f, y=for_power] {misc/fft_analysis_unperturbed.csv};
+					\addlegendentry{sans pertubations};
+					%
+					\addplot [
+						color=red,
+						solid,
+						]
+					table [col sep=comma, x=f, y=for_power] {misc/fft_analysis_perturbed.csv};
+					\addlegendentry{avec retours haptiques};
+					%	
+				\end{axis}
+				
+				\end{tikzpicture}
+			}
+		}	
+	\caption[]{Moyenne des analyses spectrales conduites sur un total de 14 interactions d'environ \SI{5}{\minute}, pour chacune des deux configurations testées : 
+	\begin{enumerate*}[label=\roman*)]
+		\item sans aucune perturbation
+		\item avec les perturbations introduites par les retours haptiques des impacts de balle simulés
+	\end{enumerate*}, pour les signaux en position et force.}
+%}
+	\label{fig_fft_freq_analysis}
+\end{figure}

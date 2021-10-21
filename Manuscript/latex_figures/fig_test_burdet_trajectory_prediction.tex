@@ -37,7 +37,7 @@
 				\foreach \i in {50,51,...,65} {			
 					\addplot [
 					color=blue,
-					solid,
+					smooth,
 					%line width=.75pt,
 					opacity=0.3,
 					]
@@ -47,16 +47,17 @@
 				\foreach \i in {150,151,...,165} {			
 				\addplot [
 					color=blue,
-					solid,
+					smooth,
 					%line width=.75pt,
 					opacity=0.3,
 					]
 					table [col sep=comma, x=idx, y index = \i] {misc/test1_burdet/candidates_subsamp.csv};
 				}
+				\addlegendentry{Candidats};
 				%
 				\addplot [
 					color=black,
-					solid,
+					smooth,
 					%densely dotted,
 					line width=1.pt
 					]
@@ -87,10 +88,10 @@
 				\draw [dashed] (d1) -- (d2);
 				\draw [dashed] (e1) -- (e2);
 	
-				\draw[>=latex, <->] ($(d1) + (rel axis cs:0,0.75)$) -- node [midway,above,align=center,fill=white,yshift=.35cm] {\footnotesize apprentissage\\ \footnotesize\SI{100}{\milli\second}} ($(c1) + (rel axis cs:0,0.75)$);
-				\draw[>=latex, <->] ($(c1) + (rel axis cs:0,0.75)$) -- node [midway,above,align=center,yshift=.15cm] {\footnotesize \SI{200}{\milli\second}} ($(e1) + (rel axis cs:0,0.75)$);
+				\draw[>=latex, <->] ($(d1) + (rel axis cs:0,0.45)$) -- node [midway,above,align=center,fill=white,yshift=.35cm] {\footnotesize apprentissage\\ \footnotesize\SI{100}{\milli\second}} ($(c1) + (rel axis cs:0,0.45)$);
+				\draw[>=latex, <->] ($(c1) + (rel axis cs:0,0.45)$) -- node [midway,above,align=center,yshift=.15cm] {\footnotesize \SI{200}{\milli\second}} ($(e1) + (rel axis cs:0,0.45)$);
 				
-				%define coordinates at bottom left and top left of rectangle
+				%define coordinates of rectangle
 				\coordinate (r1) at (axis cs:600,0.5);
 				\coordinate (r2) at (axis cs:850,1.5);
 				\coordinate (r3) at (axis cs:600,1.5);
@@ -118,6 +119,7 @@
 					line width=1.pt,
 					]
 				table [domain=600:850, col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test1_burdet/best_candidates.csv};
+				\addlegendentry{Mesures};
 %				%
 				\addplot [
 					color=red,
@@ -125,7 +127,7 @@
 					line width=1.pt,
 					]
 				table [domain=600:850, col sep=comma, x expr=\coordindex, y=burdet_candidate] {misc/test1_burdet/best_candidates.csv};
-				
+				\addlegendentry{Meilleur cand.};
 %				\coordinate (c1) at (axis cs:580, \pgfkeysvalueof{/pgfplots/ymin});
 %				\coordinate (c2) at (axis cs:580, \pgfkeysvalueof{/pgfplots/ymax});				
 %				\coordinate (d1) at (axis cs:480, \pgfkeysvalueof{/pgfplots/ymin});
@@ -144,7 +146,7 @@
 			
 			\end{tikzpicture}
 		}	
-	\caption{Exemple d'application de la méthodologie de \textcite{burdet_method_2000} pour une estimation de trajectoire en position sur \SI{200}{\milli\second} satisfaisante. A la fin de cette fenêtre temporelle, l'erreur est submillimétrique (\SI{0.5}{\milli\meter}) pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative inférieure à \SI{1}{\percent}.}
+	\caption{Exemple d'application de la méthodologie de \textcite{burdet_method_2000} pour une estimation de trajectoire en position sur \SI{200}{\milli\second} satisfaisante (cycle 16 de la \cref{fig_unp_position_test_trajectory}). A la fin de cette fenêtre temporelle, l'erreur est submillimétrique (\SI{0.5}{\milli\meter}) pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative inférieure à \SI{1}{\percent}.}
 	\label{fig_test_burdet_2000_success}
 \end{figure}
 	%%

@@ -1,40 +1,126 @@
 \begin{figure}[!htb] 
-	\tikzsetnextfilename{fig_unperturbed_position_test_trajectory}
 	\centering
 		\resizebox{\textwidth}{!}{
-			\begin{tikzpicture}
-			\centering
-			%
-			%\LoadCSV {mycsv} {misc/test1_burdet/best_candidates.csv}
-			%\indexP{\GetCSV{mycsv}{2}{3}} 
-			
-			\begin{axis}[%
-				name=ax1,
-				width=.95\linewidth,
+			\subcaptionbox{Morceau de \SI{50}{\second} de la trajectoire en position\label{subfig_unp_position_test_trajectory_a}}
+			{
+				\tikzsetnextfilename{subfig_unp_position_test_trajectory_a}
+				\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					name=ax1,
+					width=.6\linewidth,
+					height=.3\linewidth,
+					scale only axis,    
+					xlabel={temps (\SI{}{\second})},
+					ylabel={Position (\SI{}{\meter})},
+					axis x line = bottom,
+					axis y line = left, 
+					xmin=70,xmax=100,
+					]
+					%
+					\addplot [
+						color=blue,
+						%solid,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=position] {misc/unperturbed_position_signal.csv};
+					%	
+					%define coordinates of rectangle
+					\coordinate (r1) at (axis cs:91,0.262);
+					\coordinate (r2) at (axis cs:93,0.342);
+					\coordinate (r3) at (axis cs:91,0.342);
+					\coordinate (r4) at (axis cs:93,0.262);			
+					\draw (r1) rectangle (r2);
+					%			
+				\end{axis}
+				%
+				\begin{axis}[%
+				name=ax2,
+				width=.35\linewidth,
 				height=.4\linewidth,
-				scale only axis,    
-				xmin=30,
-				xmax=150,
-				xlabel={temps (\SI{}{\second})},
-				%ymin=-0.599,
-				%ymax=0.599,
-				ylabel={Position (\SI{}{\meter})},
+				scaled ticks=false,   
+				xlabel={temps (\SI{}{\milli\second})},
 				axis x line = bottom,
 				axis y line = left, 
+				xmin=91,xmax=93,
+				%ymin=.025,ymax=0.25,
+				at={($(ax1.south east)+(1cm,0)$)},
 				]
 				%
 				\addplot [
-					color=blue,
-					solid,
-					%densely dotted,
-					%line width=1.pt
-					]
-				table [col sep=comma, x=time, y=position] {misc/unperturbed_position_signal.csv};
-				%				
-			\end{axis}
-			
-			\end{tikzpicture}
+				color=blue,
+				smooth,
+				%line width=1.pt,
+				]
+				table [domain=91:93, col sep=comma, x=time, y=position] {misc/unperturbed_position_signal.csv};
+				%					
+				\end{axis}
+				% draw dashed lines from rectangle in first axis to corners of second
+				\draw [dashed] (r4) -- (ax2.south west);
+				\draw [dashed] (r2) -- (ax2.north west);	
+				%
+				\end{tikzpicture}
+			}
 		}	
-	\caption{text text}
+	
+		\resizebox{\textwidth}{!}{
+			\subcaptionbox{Caractéristiques fréquentielle et d'amplitude des cycles\label{subfig_unp_position_test_trajectory_b}}
+			{
+				\tikzsetnextfilename{subfig_unp_position_test_trajectory_b}
+				\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					axis y line*=left,
+					width=.95\linewidth,
+					height=.4\linewidth,
+					scale only axis,    
+					xlabel={cycles},
+					ylabel={\textcolor{blue}{Amplitude (\SI{}{\meter})}},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					%
+					\addplot [
+						color=blue,
+						solid,
+						]
+					table [col sep=comma, x expr=\coordindex,  y=mag_var] {misc/unperturbed_position_signal_properties.csv};
+					%	
+					%define coordinates of rectangle
+					\coordinate (r1) at (axis cs:42,.055);
+					\coordinate (r2) at (axis cs:67,.095);			
+					\draw[dashed,rounded corners] (r1) rectangle (r2);
+					\node[below, align=center,fill=white,yshift=-2mm] at (axis cs:54.5, .095) {\SIrange{70}{100}{\second}};			
+				\end{axis}
+				%				
+				\begin{axis}[%
+					axis y line*=right,
+					width=.95\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					%xlabel={cycles},
+					ylabel={\textcolor{red}{Fréquence (\SI{}{\hertz})}},
+					axis x line = bottom,
+					axis y line = right, 
+					xticklabels=\empty,
+					]
+					%
+					\addplot [
+						color=red,
+						solid,
+						]
+					table [col sep=comma, x expr=\coordindex,  y=freq_var] {misc/unperturbed_position_signal_properties.csv};
+				%
+				%\draw [dashed] (r2) -- (ax1.south west);
+				%\draw [dashed] (r3) -- (ax1.south east);
+				%				
+				\end{axis}
+				
+				\end{tikzpicture}
+			}
+		}
+	\caption{Exemple d'une trajectoire en position de \SI{4.5}{\minute}, en l'absence de perturbations et de retours haptiques, pour un total de plus de 220 cycles. Lors de l'interaction avec le robot, le bras de l'utilisateur est soumis à son propre poids ainsi qu'à la masse inertielle du robot.}
 	\label{fig_unp_position_test_trajectory}
 \end{figure}
