@@ -1,7 +1,7 @@
 \begin{figure}[!htb] 
 	\centering
 		\resizebox{\textwidth}{!}{
-			\subcaptionbox{Morceau de \SI{30}{\second} de la trajectoire en force (affichage sous-échantillonné à \SI{100}{\hertz})\label{subfig_unp_force_test_trajectory_a}}
+			\subcaptionbox{Morceau de \SI{30}{\second} de la trajectoire en force (affichage sous-échantillonné à \SI{100}{\hertz}, pour la première session)\label{subfig_unp_force_test_trajectory_a}}
 			{
 				\tikzsetnextfilename{subfig_unp_force_test_trajectory_a}
 				\begin{tikzpicture}
@@ -10,7 +10,7 @@
 				\begin{axis}[%
 					name=ax1,
 					width=.6\linewidth,
-					height=.3\linewidth,
+					height=.25\linewidth,
 					scale only axis,    
 					xlabel={temps (\SI{}{\second})},
 					ylabel={Position (\SI{}{\meter})},
@@ -37,7 +37,7 @@
 				\begin{axis}[%
 					name=ax2,
 					width=.35\linewidth,
-					height=.4\linewidth,
+					height=.35\linewidth,
 					scaled ticks=false,   
 					xlabel={temps (\SI{}{\milli\second})},
 					axis x line = bottom,
@@ -64,7 +64,7 @@
 		}	
 	
 		\resizebox{\textwidth}{!}{
-			\subcaptionbox{Caractéristiques fréquentielle et d'amplitude des cycles\label{subfig_unp_force_test_trajectory_b}}
+			\subcaptionbox{Caractéristiques d'amplitude des cycles\label{subfig_unp_force_test_trajectory_b}}
 			{
 				\tikzsetnextfilename{subfig_unp_force_test_trajectory_b}
 				\begin{tikzpicture}
@@ -72,7 +72,7 @@
 				%				
 				\begin{axis}[%
 					width=.95\linewidth,
-					height=.3\linewidth,
+					height=.25\linewidth,
 					scale only axis,    
 					xlabel={cycles},
 					ylabel={Amplitude (\SI{}{\newton})},

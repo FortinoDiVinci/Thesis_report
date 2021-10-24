@@ -1,24 +1,150 @@
 % figure 
 \begin{figure}[!htb] 
-	\tikzsetnextfilename{fig_test_burdet_trajectory_prediction}
 	\centering
 		\resizebox{\textwidth}{!}{
-			\begin{tikzpicture}
-			\centering
-			%
-			%\LoadCSV {mycsv} {misc/test1_burdet/best_candidates.csv}
-			%\indexP{\GetCSV{mycsv}{2}{3}} 
-			
-			\begin{axis}[%
+			\subcaptionbox{Estimation satisfaisante (cycle 16 de la \cref{fig_unp_position_test_trajectory}). A la fin de la fenêtre temporelle de \SI{200}{\milli\second}, l'erreur est submillimétrique (\SI{0.5}{\milli\meter}) pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative inférieure à \SI{1}{\percent}.\label{subfig_fig_test_burdet_2000_success}}
+			{
+				\tikzsetnextfilename{fig_test_burdet_trajectory_prediction_a}
+				\begin{tikzpicture}
+				\centering
+				%
+				
+				\begin{axis}[%
+					name=ax1,
+					width=.45\linewidth,
+					height=.3\linewidth,
+					scale only axis,   
+					xlabel={temps (\SI{}{\milli\second})},
+					ylabel={Position (\SI{}{\centi\meter})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					% first 15 candidates
+					\foreach \i in {2,3,...,16} {			
+						\addplot [
+							color=blue,
+							solid,
+							opacity=0.3,
+							]
+						table [col sep=comma, x=idx, y index=\i] {misc/test1_burdet/candidates_subsamp.csv};
+					}
+					%
+					\foreach \i in {50,51,...,65} {			
+						\addplot [
+						color=blue,
+						smooth,
+						opacity=0.3,
+						]
+						table [col sep=comma, x=idx, y index = \i] {misc/test1_burdet/candidates_subsamp.csv};
+					}
+					%
+					\foreach \i in {150,151,...,165} {			
+					\addplot [
+						color=blue,
+						smooth,
+						opacity=0.3,
+						]
+						table [col sep=comma, x=idx, y index = \i] {misc/test1_burdet/candidates_subsamp.csv};
+					}
+					\addlegendentry{Candidats};
+					%
+					\addplot [
+						color=black,
+						smooth,
+						line width=1.pt
+						]
+					table [col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test1_burdet/best_candidates.csv};
+					%
+					\addplot [
+						color=red,
+						dashed,
+						line width=1.pt
+						]
+					table [col sep=comma, x expr=\coordindex, y=burdet_candidate] {misc/test1_burdet/best_candidates.csv};
+					
+					\coordinate (c1) at (axis cs:580, \pgfkeysvalueof{/pgfplots/ymin});
+					\coordinate (c2) at (axis cs:580, \pgfkeysvalueof{/pgfplots/ymax});				
+					\coordinate (d1) at (axis cs:480, \pgfkeysvalueof{/pgfplots/ymin});
+					\coordinate (d2) at (axis cs:480, \pgfkeysvalueof{/pgfplots/ymax});			
+					\coordinate (e1) at (axis cs:780, \pgfkeysvalueof{/pgfplots/ymin});
+					\coordinate (e2) at (axis cs:780, \pgfkeysvalueof{/pgfplots/ymax});
+	
+					\draw [dashed] (c1) -- (c2);
+					\draw [dashed] (d1) -- (d2);
+					\draw [dashed] (e1) -- (e2);
+		
+					\draw[>=latex, <->] ($(d1) + (rel axis cs:0,0.45)$) -- node [midway,above,align=center,fill=white,yshift=.35cm] {\footnotesize apprentissage\\ \footnotesize\SI{100}{\milli\second}} ($(c1) + (rel axis cs:0,0.45)$);
+					\draw[>=latex, <->] ($(c1) + (rel axis cs:0,0.45)$) -- node [midway,above,align=center,yshift=.15cm] {\footnotesize \SI{200}{\milli\second}} ($(e1) + (rel axis cs:0,0.45)$);
+					
+					%define coordinates of rectangle
+					\coordinate (r1) at (axis cs:600,0.5);
+					\coordinate (r2) at (axis cs:850,1.5);
+					\coordinate (r3) at (axis cs:600,1.5);
+					\coordinate (r4) at (axis cs:850,0.5);			
+					\draw (r1) rectangle (r2);
+					
+				\end{axis}
+				%
+				\begin{axis}[%
+					name=ax2,
+					width=.5\linewidth,
+					height=.4\linewidth,
+					scaled ticks=false,   
+					xlabel={temps (\SI{}{\milli\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					xmin=600,xmax=850,
+					at={($(ax1.south east)+(1cm,0)$)},
+					]
+					%
+					\addplot [
+						color=black,
+						solid,
+						line width=1.pt,
+						]
+					table [domain=600:850, col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test1_burdet/best_candidates.csv};
+					\addlegendentry{Mesures};
+	%				%
+					\addplot [
+						color=red,
+						dashed,
+						line width=1.pt,
+						]
+					table [domain=600:850, col sep=comma, x expr=\coordindex, y=burdet_candidate] {misc/test1_burdet/best_candidates.csv};
+					\addlegendentry{Meilleur cand.};		
+					\coordinate (e1) at (axis cs:780, \pgfkeysvalueof{/pgfplots/ymin});
+					\coordinate (e2) at (axis cs:780, \pgfkeysvalueof{/pgfplots/ymax});
+					
+					\draw [dashed] (c1) -- (c2);
+					\draw [dashed] (d1) -- (d2);
+					\draw [dashed] (e1) -- (e2);
+					
+				\end{axis}
+				% draw dashed lines from rectangle in first axis to corners of second
+				\draw [dashed] (r4) -- (ax2.south west);
+				\draw [dashed] (r2) -- (ax2.north west);
+				
+				\end{tikzpicture}
+			}
+		}
+	\\
+		\resizebox{\textwidth}{!}{
+			\subcaptionbox{Estimation peu satisfaisante (cycle 25 de la \cref{fig_unp_position_test_trajectory}). A la fin de la fenêtre temporelle de \SI{200}{\milli\second}, l'erreur est de \SI{5.9}{\milli\meter} pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative d'environ \SI{7}{\percent}.\label{subfig_fig_test_burdet_2000_failure}}
+			{
+				\tikzsetnextfilename{fig_test_burdet_trajectory_prediction_b}
+				\begin{tikzpicture}
+				\centering
+				%
+				%\LoadCSV {mycsv} {misc/test1_burdet/best_candidates.csv}
+				%\indexP{\GetCSV{mycsv}{2}{3}} 
+				
+				\begin{axis}[%
 				name=ax1,
 				width=.45\linewidth,
-				height=.4\linewidth,
-				scale only axis,    
-				%xmin=111.9,
-				%xmax=114.3,
-				xlabel={temps (\SI{}{\milli\second})},
-				%ymin=-0.599,
-				%ymax=0.599,
+				height=.3\linewidth,
+				scale only axis, 
+				xlabel={temps (\SI{}{\milli\second})}				    
+				ymin=-0.05,
 				ylabel={Position (\SI{}{\centi\meter})},
 				axis x line = bottom,
 				axis y line = left, 
@@ -26,128 +152,114 @@
 				% first 15 candidates
 				\foreach \i in {2,3,...,16} {			
 					\addplot [
-						color=blue,
-						solid,
-						%line width=.75pt,
-						opacity=0.3,
-						]
-					table [col sep=comma, x=idx, y index=\i] {misc/test1_burdet/candidates_subsamp.csv};
+					color=blue,
+					smooth,
+					opacity=0.3,
+					]
+					table [col sep=comma, x=idx, y index=\i] {misc/test2_burdet/candidates_subsamp.csv};
 				}
 				%
 				\foreach \i in {50,51,...,65} {			
 					\addplot [
 					color=blue,
 					smooth,
-					%line width=.75pt,
 					opacity=0.3,
 					]
-					table [col sep=comma, x=idx, y index = \i] {misc/test1_burdet/candidates_subsamp.csv};
+					table [col sep=comma, x=idx, y index = \i] {misc/test2_burdet/candidates_subsamp.csv};
 				}
 				%
 				\foreach \i in {150,151,...,165} {			
-				\addplot [
+					\addplot [
 					color=blue,
 					smooth,
-					%line width=.75pt,
 					opacity=0.3,
 					]
-					table [col sep=comma, x=idx, y index = \i] {misc/test1_burdet/candidates_subsamp.csv};
+					table [col sep=comma, x=idx, y index = \i] {misc/test2_burdet/candidates_subsamp.csv};
 				}
-				\addlegendentry{Candidats};
 				%
 				\addplot [
-					color=black,
-					smooth,
-					%densely dotted,
-					line width=1.pt
-					]
-				table [col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test1_burdet/best_candidates.csv};
+				color=black,
+				solid,
+				line width=1.pt
+				]
+				table [col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test2_burdet/best_candidates.csv};
 				%
 				\addplot [
-					color=red,
-					dashed,
-					%densely dotted,
-					line width=1.pt
-					]
-				table [col sep=comma, x expr=\coordindex, y=burdet_candidate] {misc/test1_burdet/best_candidates.csv};
-				%
-				%define coordinates at bottom left and top left of rectangle
-				%\coordinate (c1) at (axis cs:75.6,.025);
-				%\coordinate (c2) at (axis cs:75.95,0.25);
-				%\coordinate (c3) at (axis cs:75.6,0.25);			
-				%\draw (c1) rectangle (c2);
+				color=red,
+				dashed,
+				line width=1.pt
+				]
+				table [col sep=comma, x expr=\coordindex, y=burdet_candidate] {misc/test2_burdet/best_candidates.csv};
+				%				
+				\coordinate (c1) at (axis cs:438, \pgfkeysvalueof{/pgfplots/ymin});
+				\coordinate (c2) at (axis cs:438, \pgfkeysvalueof{/pgfplots/ymax});				
+				\coordinate (d1) at (axis cs:338, \pgfkeysvalueof{/pgfplots/ymin});
+				\coordinate (d2) at (axis cs:338, \pgfkeysvalueof{/pgfplots/ymax});			
+				\coordinate (e1) at (axis cs:638, \pgfkeysvalueof{/pgfplots/ymin});
+				\coordinate (e2) at (axis cs:638, \pgfkeysvalueof{/pgfplots/ymax});
 				
-				\coordinate (c1) at (axis cs:580, \pgfkeysvalueof{/pgfplots/ymin});
-				\coordinate (c2) at (axis cs:580, \pgfkeysvalueof{/pgfplots/ymax});				
-				\coordinate (d1) at (axis cs:480, \pgfkeysvalueof{/pgfplots/ymin});
-				\coordinate (d2) at (axis cs:480, \pgfkeysvalueof{/pgfplots/ymax});			
-				\coordinate (e1) at (axis cs:780, \pgfkeysvalueof{/pgfplots/ymin});
-				\coordinate (e2) at (axis cs:780, \pgfkeysvalueof{/pgfplots/ymax});
-
 				\draw [dashed] (c1) -- (c2);
 				\draw [dashed] (d1) -- (d2);
 				\draw [dashed] (e1) -- (e2);
-	
-				\draw[>=latex, <->] ($(d1) + (rel axis cs:0,0.45)$) -- node [midway,above,align=center,fill=white,yshift=.35cm] {\footnotesize apprentissage\\ \footnotesize\SI{100}{\milli\second}} ($(c1) + (rel axis cs:0,0.45)$);
-				\draw[>=latex, <->] ($(c1) + (rel axis cs:0,0.45)$) -- node [midway,above,align=center,yshift=.15cm] {\footnotesize \SI{200}{\milli\second}} ($(e1) + (rel axis cs:0,0.45)$);
 				
-				%define coordinates of rectangle
-				\coordinate (r1) at (axis cs:600,0.5);
-				\coordinate (r2) at (axis cs:850,1.5);
-				\coordinate (r3) at (axis cs:600,1.5);
-				\coordinate (r4) at (axis cs:850,0.5);			
+				\draw[>=latex, <->] ($(d1) + (rel axis cs:0,0.75)$) -- node [midway,above,align=center,fill=white,yshift=.35cm] {\footnotesize apprentissage\\ \footnotesize\SI{100}{\milli\second}} ($(c1) + (rel axis cs:0,0.75)$);
+				\draw[>=latex, <->] ($(c1) + (rel axis cs:0,0.75)$) -- node [midway,above,align=center,yshift=.15cm] {\footnotesize \SI{200}{\milli\second}} ($(e1) + (rel axis cs:0,0.75)$);
+				
+				%define coordinates at bottom left and top left of rectangle
+				\coordinate (r1) at (axis cs:400,0.5);
+				\coordinate (r2) at (axis cs:650,3);
+				\coordinate (r3) at (axis cs:400,3);
+				\coordinate (r4) at (axis cs:650,0.5);			
 				\draw (r1) rectangle (r2);
 				
-			\end{axis}
-			%
-			\begin{axis}[%
+				\end{axis}
+				%
+				\begin{axis}[%
 				name=ax2,
 				width=.5\linewidth,
-				height=.45\linewidth,
+				height=.4\linewidth,
 				scaled ticks=false,   
 				xlabel={temps (\SI{}{\milli\second})},
 				axis x line = bottom,
 				axis y line = left, 
-				xmin=600,xmax=850,
-				%ymin=.025,ymax=0.25,
+				xmin=400,xmax=650,
+				%ymin=-.05,%ymax=0.25,
 				at={($(ax1.south east)+(1cm,0)$)},
 				]
 				%
 				\addplot [
-					color=black,
-					solid,
-					line width=1.pt,
-					]
-				table [domain=600:850, col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test1_burdet/best_candidates.csv};
-				\addlegendentry{Mesures};
-%				%
+				color=black,
+				solid,
+				line width=1.pt,
+				]
+				table [domain=400:650, col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test2_burdet/best_candidates.csv};
+				%				%
 				\addplot [
-					color=red,
-					dashed,
-					line width=1.pt,
-					]
-				table [domain=600:850, col sep=comma, x expr=\coordindex, y=burdet_candidate] {misc/test1_burdet/best_candidates.csv};
-				\addlegendentry{Meilleur cand.};
-%				\coordinate (c1) at (axis cs:580, \pgfkeysvalueof{/pgfplots/ymin});
-%				\coordinate (c2) at (axis cs:580, \pgfkeysvalueof{/pgfplots/ymax});				
-%				\coordinate (d1) at (axis cs:480, \pgfkeysvalueof{/pgfplots/ymin});
-%				\coordinate (d2) at (axis cs:480, \pgfkeysvalueof{/pgfplots/ymax});			
-				\coordinate (e1) at (axis cs:780, \pgfkeysvalueof{/pgfplots/ymin});
-				\coordinate (e2) at (axis cs:780, \pgfkeysvalueof{/pgfplots/ymax});
+				color=red,
+				dashed,
+				line width=1.pt,
+				]
+				table [domain=400:650, col sep=comma, x expr=\coordindex, y=burdet_candidate] {misc/test2_burdet/best_candidates.csv};
+								
+				\coordinate (d1) at (axis cs:438, \pgfkeysvalueof{/pgfplots/ymin});
+				\coordinate (d2) at (axis cs:438, \pgfkeysvalueof{/pgfplots/ymax});			
+				\coordinate (e1) at (axis cs:638, \pgfkeysvalueof{/pgfplots/ymin});
+				\coordinate (e2) at (axis cs:638, \pgfkeysvalueof{/pgfplots/ymax});
 				
 				\draw [dashed] (c1) -- (c2);
 				\draw [dashed] (d1) -- (d2);
 				\draw [dashed] (e1) -- (e2);
 				
-			\end{axis}
-			% draw dashed lines from rectangle in first axis to corners of second
-			\draw [dashed] (r4) -- (ax2.south west);
-			\draw [dashed] (r2) -- (ax2.north west);
-			
-			\end{tikzpicture}
-		}	
-	\caption{Exemple d'application de la méthodologie de \textcite{burdet_method_2000} pour une estimation de trajectoire en position sur \SI{200}{\milli\second} satisfaisante (cycle 16 de la \cref{fig_unp_position_test_trajectory}). A la fin de cette fenêtre temporelle, l'erreur est submillimétrique (\SI{0.5}{\milli\meter}) pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative inférieure à \SI{1}{\percent}.}
-	\label{fig_test_burdet_2000_success}
+				\end{axis}
+				% draw dashed lines from rectangle in first axis to corners of second
+				\draw [dashed] (r4) -- (ax2.south west);
+				\draw [dashed] (r2) -- (ax2.north west);
+				
+				\end{tikzpicture}
+			}
+		}		
+	\caption{Exemples d'application de la méthodologie de \textcite{burdet_method_2000} pour deux estimations de trajectoire en position sur \SI{200}{\milli\second}. Sur l'ensemble des courbes candidates, seules 45 sont représentées.}
+	\label{fig_test_burdet_2000}
 \end{figure}
 	%%
 	%

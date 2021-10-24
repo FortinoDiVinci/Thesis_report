@@ -144,7 +144,7 @@ L'identification des paramètres en impédance étant complètement dépendante 
 
 "etude de la diffusion des erreurs en fonction des entrées/sorties ?" 
 
-\subsubsection{Moyenne}
+\subsubsection{Moyenne} \label{chap3_sec_method_sub_virt_traj_1}
 
 Lorsqu'une tâche est suffisemment répétable, chacune des trajectoires réalisées sont proches de la moyenne des trajectoires précédentes. Cette méthode est assi bien utilisée pour des tâches de pointage \parencite{gomi_human_1997} que pour des mouvements rythmiques \parencite{bennett_time-varying_1992}. Ainsi, après avoir déterminés les paramètres géométriques des matrices inertielles et de Coriolis (modèle \cref{eq_gomi_impedance_model}), \textcite{gomi_human_1997} estiment les matrices de raideur et de viscosité articulaires en utilisant les trajectoires moyennes pour estimer le mouvement non perturbé :
 
@@ -154,7 +154,9 @@ Lorsqu'une tâche est suffisemment répétable, chacune des trajectoires réalis
 
 avec $ \vect{q}^i_s(t) $ la i\textsuperscript{ème} trajectoire avec l'offset présent juste avant la perturbation retiré. 
 
-\subsubsection{Table de correspondance}
+Cette méthodologie a été implémenté sans succès sur les trajectoires rythmiques en position, les mouvements n'étant pas suffisemment répétable, y compris après des normalisations temporelle et d'amplitude. Un algorithme plus poussé décrit dans la section suivante a permis une nette amélioration des résultats.
+
+\subsubsection{Table de correspondance} \label{chap3_sec_method_sub_virt_traj_2}
 
 \textcite{burdet_method_2000} ont proposé une méthode de prédiction de trajectoire en ligne, qui leur a permis d'injecter des perturbations en position lors de tâche en mouvement. Les auteurs déclarent obtenir des erreurs de prédiction de la position inférieure au centimètre après \SI{200}{\milli\second}. L'idée est d'utiliser la répétabilité du mouvement, ou du moins sa structure globale qui est supposée peu variante, notamment son profil de vitesse. Ainsi, en utilisant la moyenne des dix trajectoires précédentes, les auteurs proposent de créer un ensemble de profils de vitesse candidats, en modulant la moyenne obtenue aussi bien en modifiant l'amplitude du signal, qu'en appliquant différents retards. Au total, 121 courbes candidates sont générées (11 amplitudes $\times$ 11 retards), et celle générant le moins d'erreur sur les dernières \SI{100}{\milli\second} est choisi à l'aide de la formule récursive suivante :
 
@@ -165,7 +167,11 @@ avec $v_k$ la vitesse de l'échantillon temporel actuel $k$ et $w_{i,k}$ le i\te
 
 Cette méthode suppose toutefois une répétabilité significative, puisque comme précisé par les auteurs, si la dernière trajectoire effective avait un écart type supérieur à 1.05 fois le précédent, alors elle n'était pas intégrée pour la moyenne glissante des 10 dernières trajectoires. En effet, \textcite{burdet_method_2000} se placent dans le cadre d'une tâche de pointage, où l'objectif est constant. Or, dans le cadre d'une tâche rythmique, soumise notamment à la trajetoire, potentiellement chaotique, d'une balle, de nombreuses configurations peuvent se présenter.
 
-Une version adaptée de cette méthode a été reproduite sur les trajectoires en position, en reprenant la fonction de coût \cref{eq_cost_function_burdet_2000} et aussi en utilisant l'erreur quadratique (RMSE) sur \SI{100}{\milli\second} pour choisir le meilleur candidat. Par ailleurs, la contrainte de pouvoir réaliser l'estimation en ligne étant relâchée, un nombre plus important de courbes candidates ont été générées (15 amplitudes $\times$ 11 retards $ = 165$). Deux exemples de l'application de la version adaptée de l'algorithme sont fournis en \cref{fig_test_burdet_2000_success,fig_test_burdet_2000_failure}, pour un cas satisfaisant et un cas non satisfaisant. Dans tous les cas, les performances sont conformes à celles divulguées par \textcite{burdet_method_2000}.
+Une version adaptée de cette méthode a été reproduite sur les trajectoires en position, en reprenant la fonction de coût \cref{eq_cost_function_burdet_2000} et aussi en utilisant l'erreur quadratique (RMSE) sur \SI{100}{\milli\second} pour choisir le meilleur candidat. Par ailleurs, la contrainte de pouvoir réaliser l'estimation en ligne étant relâchée, un nombre plus important de courbes candidates ont été générées (15 amplitudes $\times$ 11 retards $ = 165$). Deux exemples de l'application de la version adaptée de l'algorithme sont fournis en \cref{fig_test_burdet_2000}, pour un cas satisfaisant et un cas non satisfaisant. Dans tous les cas, les performances sont conformes à celles divulguées par \textcite{burdet_method_2000}, c'est à dire une précision subcentimétrique.
+
+Une évaluation sur l'ensemble des sessions de la racine des erreurs quadratiques moyennes du meilleur candidat révèlent un score moyen de \SI{1.04}{\milli\meter} sur plus de 3000 cycles, pour une fenêtre d'évaluation de \SI{200}{\milli\second}.
+
+Cette méthode ne se prête toutefois pas aux trajectoires en force qui ne sont pas suffisemment régulières. En effet, elles peuvent présenter des oscillations à l'intérieur des cycles, comme l'atteste la \cref{subfig_unp_force_test_trajectory_a}, et aussi des formes plus variables que les trajectoire en position. Une moyenne des dix derniers signaux ne permettrait pas de retranscire la richesse de ce signal, et des distortions plus importantes seraient nécessaires que de simples décalages temporels et modifications d'amplitude.
 
 %\LoadCSV {mycsv} {misc/test1_burdet/best_candidates.csv}
 %\readarraysepchar{,}
@@ -173,20 +179,63 @@ Une version adaptée de cette méthode a été reproduite sur les trajectoires e
 %\setsepchar{,}
 %\readlist*{\mydata}{\myrawdata}
 %\newcommand\pertIdx{\mydata[2,3]}
-
 %{\mydata[2,3]}
 
 \tikzexternalenable
 \input{latex_figures/fig_test_burdet_trajectory_prediction}
-\input{latex_figures/fig_test_burdet_trajectory_prediction_fail}
+%\input{latex_figures/fig_test_burdet_trajectory_prediction_fail}
 \tikzexternaldisable
 
-\subsubsection{Filtrage}
+\subsubsection{Splines} \label{chap3_sec_method_sub_virt_traj_3}
 
-\subsubsection{Splines}
+Si on regarde en détail des portions des signaux en position de l'ordre de quelques centaines de millisecondes, on peut remarquer que la structure du mouvement peut s'apparenter à des trajectoires polynomiques par morceaux. D'où l'idée d'estimer le mouvement en utilisant des fonctions polynomiques comme les \emph{splines}, qui sont très souvent utilisées sous leur forme cubique $S_3$ pour les interpolations.
 
-\subsubsection{Sommes de sinus}
+\begin{equation} \label{eq_cubic_spline}
+	S_3 = a_0 x^3 + a_1 x^2 + a_2 x + a_3
+\end{equation}
 
-\subsubsection{Réseaux de neurones récurrents}
+Une spline cubique $S_3$ permet donc le relier des couples de noeuds $(n_{i-1}, n_i)$ en assurant que la continuité des dérivées première et seconde au niveau de ces jonctions. Ainsi l'expression \cref{eq_cubic_spline} peut être réécrite pour tout point $n$ sur les intervalles donnés par les couples de noeuds, sous la forme \cref{eq_explicit_cubic_spline}, avec $y_i$ la valeur du noeud $n_i$.
 
-\subsection{Identification}
+\begin{multline}\label{eq_explicit_cubic_spline}
+	_iS_3(n) = \frac{\ddot{n}_i(n - n_{i-1})^3 + \ddot{n}_{i-1}(n_{i} - n)^3}{6(n_i - n_{i-1})} + \left( \frac{y_i}{(n_i - n_{i-1}} - \frac{\ddot{n}_i(n_i - n_{i-1})}{6}\right)(n - n_{i-1})  \\ 
+	+ \left( \frac{y_{i-1}}{(n_i - n_{i-1}} - \frac{\ddot{n}_{i-1}(n_i - n_{i-1})}{6}\right)(n_{i-1} - n)
+\end{multline} 
+
+Plusieurs solutions s'offrent alors pour essayer d'estimer un morceau de trajectoire en utilisant cette structure. On peut estimer plusieurs noeuds sur une portion définie et relier ces noeuds à l'aide de splines cubiques en utilisant l'équation \cref{eq_explicit_cubic_spline}. Cette stratégie pourrait permettre  de tenir compte des comportements oscillatoires observables sur les signaux de force (\cref{subfig_unp_force_test_trajectory_a}). Toutefois, même si on simplifie la problématique de l'estimation de trajectoire à quelques noeuds, on reporte une difficultée qui est de définir ces points d'intersections. 
+
+Une autre solution serait de regarder seulement deux points, et donc de n'utiliser qu'un seul polynôme d'ordre trois pour estimer un morceau de trajectoire. Le premier point est simple à définir, il suffit de prendre le dernier point non perturbé de la trajectoire, c'est à dire, juste avant l'injection effective de la perturbation. Le second point suppose de connaître grossièrement la durée réelle des effets de la perturbation, afin de choisir un nouveau point non perturbé, ou le moins possible. Ce dernier point ne doit pas non plus être trop éloigné du premier, car les trajectoires en position et force ne sont assimilables à des splines que par morceaux. Il y a donc un compromis à trouver sur cette distance.
+
+Pour évaluer la précision des splines en fonction de la durée de la fenêtre d'interpolation, les moyennes des racines des erreurs quadratiques (RMSE) ont été évaluées pour \SI{200}{\milli\second}, sur l'ensemble des trajectoires non-perturbées de la session i), c'est à dire sur plus de xx cycles, où l'évaluation était conduite sur une région aléatoire de chaque cycle. La \cref{fig_spline_rmse_evaluation} dévoile les résultats de la moyenne de ces erreurs pour chaque durée des intervalles d'interpolation. Les scores obtenus sont évidemment influencés à la fois par les fenêtres d'interpolation et d'évaluation. Le choix de la durée de la fenêtre d'évaluation est détaillé en \cref{chap3_sec_method_sub_ident}.
+
+\input{latex_figures/fig_spline_rmse_evaluation}
+
+En première approximation, on peut estimer le temps de réponse du modèle viscoélastique du bras humain en rejet de perturbation de faible amplitude. Le facteur d'amortissement $\xi$ et la pulsation naturelle non amortie $\omega_n$ peuvent être facilement représentés en fonction des paramètres du modèle KBM :
+
+\begin{equation}
+	\begin{split}
+		\xi =& \frac{B}{2\sqrt{MK}} \\
+		\omega_n =& \sqrt{\frac{K}{M}}
+	\end{split}
+\end{equation}
+
+Pour des réponses impulsionnelles pseudo-amorties classiques \cref{eq_2nd_order_impulse_response} montrées en \cref{fig_KBM_typical_impulse_response} avec des couples de paramètres $(K,B,M)$ typiquement obtenus par \textcite{erden_end-point_2015} : $(539,44,2.8)$ et $(280,12,0.6)$, rapplé dans le \cref{tab_}, on obtient des facteurs d'amortissement inférieur à 1, et donc des réponses oscillantes. Dans le premier cas, $\xi=0.56$, on a donc un temps de premier pic $t_p$ à \SI{83}{\milli\second}, dans le second cas, $\xi=0.46$, avec un $t_p$ de \SI{60}{\milli\second}.
+
+\begin{equation} \label{eq_2nd_order_impulse_response}
+	y_i(t) = \frac{\omega_n}{K\sqrt{1-\xi^2}}e^{-\xi\omega_nt}\sin(\omega_n\sqrt{1-\xi^2}t) e(t)
+\end{equation}
+
+\input{latex_figures/fig_KBM_typical_impulse_response}
+
+On peut voir sur la \cref{fig_KBM_typical_impulse_response} que les réponses se stabilisent après \SI{500}{\milli\second}.
+
+\subsubsection{Filtrage} \label{chap3_sec_method_sub_virt_traj_4}
+
+\subsubsection{Réseaux de neurones récurrents} \label{chap3_sec_method_sub_virt_traj_5}
+
+\subsubsection{Sommes de sinus} \label{chap3_sec_method_sub_virt_traj_6}
+
+\subsubsection{Bilan des choix méthodologiques} \label{chap3_sec_method_sub_virt_traj_7}
+
+Pour comparer les différentes méthodes...
+
+\subsection{Identification} \label{chap3_sec_method_sub_ident}

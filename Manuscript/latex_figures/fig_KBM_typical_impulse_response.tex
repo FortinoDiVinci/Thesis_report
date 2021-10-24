@@ -1,0 +1,54 @@
+% figure 
+\begin{figure}[!htb] 
+	\tikzsetnextfilename{fig_KBM_typical_impulse_response}
+	\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tikzpicture} [
+				/pgf/declare function={
+					omega_n1 = 13.8744;
+					xi1 = 0.5663;
+					K1 = 539;
+					omega_n2 = 21.6025;
+					xi2 = 0.4629;
+					K2 = 280;
+					}
+				]
+			\centering
+			%
+			\begin{axis}[%
+				name=ax1,
+				width=.95\linewidth,
+				height=.3\linewidth,
+				scale only axis,   
+				xlabel={temps (\SI{}{\second})},
+				ylabel={Position (\SI{}{\meter})},
+				axis x line = bottom,
+				axis y line = left, 
+				]
+				%
+				\addplot [
+					color=blue,
+					smooth,
+					domain=0:1,
+					samples=1000,
+					]
+				{omega_n1/(sqrt(1-xi1^2))*exp(-xi1*omega_n1*x)*sin(deg(omega_n1*sqrt(1-xi1^2)*x))/K1};
+				%
+				\addplot [
+					color=red,
+					smooth,
+					domain=0:1,
+					samples=1000,
+				]
+				{omega_n1/(sqrt(1-xi2^2))*exp(-xi2*omega_n2*x)*sin(deg(omega_n2*sqrt(1-xi2^2)*x))/K2};
+				\addlegendentry{$(539,44,2.8)$};	
+				\addlegendentry{$(280,12,0.6)$};	
+			\end{axis}
+			
+			\end{tikzpicture}
+		}	
+	\caption{Réponse impulsionnelle du modèle viscoélastique à un dirac d'amplitude unitaire de \SI{1}{\newton}, pour les valeurs extrêmes des paramètres identififés par \textcite{erden_end-point_2015}.}
+	\label{fig_KBM_typical_impulse_response}
+\end{figure}
+	%%
+	%

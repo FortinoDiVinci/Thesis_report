@@ -1,0 +1,78 @@
+\begin{figure}[!htb] 
+	\tikzsetnextfilename{fig_spline_rmse_evaluation}
+	\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tikzpicture}
+			\centering
+			%
+			\begin{axis}[%
+				width=.95\linewidth,
+				height=.25\linewidth,
+				scale only axis,
+				xlabel={Fenêtre d'interpolation (\SI{}{\second})},
+				ylabel={Erreur (\SI{}{\milli\meter})},
+				axis x line = bottom,
+				axis y line = left, 
+				no markers,
+				xmin = 100,
+				]
+				%
+				\addplot [
+					color=blue,
+					solid,
+					]
+				table [col sep=comma, x=time_window, y=perc50] {misc/spline_rmse_evaluation_tot.csv};
+				\addlegendentry{médiane};
+				%
+				\addplot+ [
+					color=blue,
+					dashed,
+					opacity=0.5,
+					name path=A,
+					forget plot,
+					] 
+				table [domain=101:500, col sep=comma, x=time_window, y=perc25] {misc/spline_rmse_evaluation_tot.csv};
+				\addplot+ [
+					color=blue,
+					dashed,
+					opacity=0.5,
+					name path=B,
+					forget plot,
+					] 
+				table [domain=101:500, col sep=comma, x=time_window, y=perc75] {misc/spline_rmse_evaluation_tot.csv};		
+				%
+				\addplot+ [
+					color=blue,
+					dotted,
+					opacity=0.3,
+					name path=C,
+					forget plot,
+					] 
+				table [domain=101:500, col sep=comma, x=time_window, y=perc10] {misc/spline_rmse_evaluation_tot.csv};
+				\addplot+ [
+					color=blue,
+					dotted,
+					opacity=0.3,
+					name path=D,
+					forget plot,
+					] 
+				table [domain=101:500, col sep=comma, x=time_window, y=perc90] {misc/spline_rmse_evaluation_tot.csv};
+				%
+				\addplot [
+					fill=blue!5,
+					]
+				fill between [of=C and D];			
+				\addlegendentry{\SI{90}{\percent}};	
+				%
+				\addplot [
+				fill=blue!15,
+				]
+				fill between [of=A and B];		
+				\addlegendentry{écart interquartile};	
+			\end{axis}
+			
+			\end{tikzpicture}
+		}	
+	\caption{Distribution des racines des erreurs quadratiques moyennes (RMSE) en fonction de la fenêtre d'interpolation de splines cubiques.}
+	\label{fig_spline_rmse_evaluation}
+\end{figure}
