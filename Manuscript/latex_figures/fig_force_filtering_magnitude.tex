@@ -1,0 +1,46 @@
+\begin{figure}[!htb] 
+	\tikzsetnextfilename{fig_force_filtering_magnitude}
+	\centering
+	\resizebox{\textwidth}{!}{
+		\begin{tikzpicture}
+			\centering
+			%
+			\begin{axis}[%
+				width=.95\linewidth,
+				height=.3\linewidth,
+				scale only axis,
+				xlabel={fréquence (\SI{}{\hertz})},
+				ylabel={Atténuation (\SI{}{\decibel})},
+				axis x line = bottom,
+				axis y line = left, 
+				xmode=log,
+				xtick = {31.4159, 50.2655, 53.4071, 62.8319, 94.2478},
+				xticklabels = {5, 8, 8.5, 10, 15},
+				xmin=31.4159,
+				ymax=3, ymin=-80,
+				]
+				%
+				\addplot [
+					color=blue,
+					solid,
+					]
+				table [col sep=comma, x=freq, y=magnitude] {misc/filter_bode_magnitude.csv};
+				%
+				\coordinate (fpDw) at (axis cs:50.2655, \pgfkeysvalueof{/pgfplots/ymin});
+				\coordinate (fpUp) at (axis cs:50.2655, \pgfkeysvalueof{/pgfplots/ymax});
+				\coordinate (fcDw) at (axis cs:53.4071, \pgfkeysvalueof{/pgfplots/ymin});
+				\coordinate (fcUp) at (axis cs:53.4071, \pgfkeysvalueof{/pgfplots/ymax});
+				%\coordinate (atLeft) at (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, -20);
+				%\coordinate (atRight) at (axis cs:15, -20);
+				\coordinate (atLeft) at (rel axis cs:0, 0.7229);
+				\coordinate (atRight) at (rel axis cs:1, 0.7229);
+				%
+				\draw [dashed, opacity=.5] (fpDw) -- (fpUp);
+				\draw [dashed, opacity=.5] (fcDw) -- (fcUp);
+				\draw [dashed, opacity=.5] (atLeft) -- (atRight);
+			\end{axis}		
+		\end{tikzpicture}
+	}	
+	\caption{Réponse en amplitude du filtre d'ordre 2997.}
+	\label{fig_force_filtering_magnitude}
+\end{figure}

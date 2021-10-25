@@ -184,7 +184,6 @@ Cette méthode ne se prête toutefois pas aux trajectoires en force qui ne sont 
 \tikzexternalenable
 \input{latex_figures/fig_test_burdet_trajectory_prediction}
 %\input{latex_figures/fig_test_burdet_trajectory_prediction_fail}
-\tikzexternaldisable
 
 \subsubsection{Splines} \label{chap3_sec_method_sub_virt_traj_3}
 
@@ -218,7 +217,7 @@ En première approximation, on peut estimer le temps de réponse du modèle visc
 	\end{split}
 \end{equation}
 
-Pour des réponses impulsionnelles pseudo-amorties classiques \cref{eq_2nd_order_impulse_response} montrées en \cref{fig_KBM_typical_impulse_response} avec des couples de paramètres $(K,B,M)$ typiquement obtenus par \textcite{erden_end-point_2015} : $(539,44,2.8)$ et $(280,12,0.6)$, rapplé dans le \cref{tab_}, on obtient des facteurs d'amortissement inférieur à 1, et donc des réponses oscillantes. Dans le premier cas, $\xi=0.56$, on a donc un temps de premier pic $t_p$ à \SI{83}{\milli\second}, dans le second cas, $\xi=0.46$, avec un $t_p$ de \SI{60}{\milli\second}.
+Pour des réponses impulsionnelles pseudo-amorties classiques \cref{eq_2nd_order_impulse_response} montrées en \cref{fig_KBM_typical_impulse_response} avec des couples de paramètres $(K,B,M)$ typiquement obtenus par \textcite{erden_hand_2015} : $(539,44,2.8)$ et $(280,12,0.6)$, rapplé dans le \cref{tab_impedance_litterature}, on obtient des facteurs d'amortissement inférieur à 1, et donc des réponses oscillantes. Dans le premier cas, $\xi=0.56$, on a donc un temps de premier pic $t_p$ à \SI{83}{\milli\second}, dans le second cas, $\xi=0.46$, avec un $t_p$ de \SI{60}{\milli\second}.
 
 \begin{equation} \label{eq_2nd_order_impulse_response}
 	y_i(t) = \frac{\omega_n}{K\sqrt{1-\xi^2}}e^{-\xi\omega_nt}\sin(\omega_n\sqrt{1-\xi^2}t) e(t)
@@ -226,9 +225,33 @@ Pour des réponses impulsionnelles pseudo-amorties classiques \cref{eq_2nd_order
 
 \input{latex_figures/fig_KBM_typical_impulse_response}
 
-On peut voir sur la \cref{fig_KBM_typical_impulse_response} que les réponses se stabilisent après \SI{500}{\milli\second}.
+On peut voir sur la \cref{fig_KBM_typical_impulse_response} que les réponses se stabilisent après \SI{400}{\milli\second}, en effet, dans les deux cas décrits, un écart submillimétrique par rapport à l'équilibre est atteint après \SI{430}{\milli\second}. Le biais induit par l'interpolation sur une trajectoire encore perturbée est toutefois moindre que cet écart sur la fenêtre des \SI{200}{\milli\second} utile pour l'identification. Or, comme montré par la \cref{fig_spline_rmse_evaluation}, la médiane des erreurs RMS dépasse \SI{1}{\milli\meter} à partir d'une interpolation de \SI{300}{\milli\second}.
+
+Il est important de noter que cette méthode qui se prête assez bien à l'estimation de trajectoire en position, n'est, tout comme les méthodes précédemment décrites, pas adaptées à l'estimation des trajectoires en force. En effet, les oscillations présentes à l'intérieur des cycles faussent facilement la dérivée des points d'interpolation, conduisant à des estimations erronées ne décrivant pas le comportement en force avec une précision de l'ordre de la centaine de milli Newton. D'autres solutions doivent être envisagées pour la trajectoire en force.
 
 \subsubsection{Filtrage} \label{chap3_sec_method_sub_virt_traj_4}
+
+Si on observe le spectre des trajectoires en force avec et sans perturbations (\cref{subfig_fft_frequencies_analysis_b}), on remarque des différences de puissance au delà de \SI{6}{\hertz}, il semble donc que les perturbations induites par les simulations des impacts de balle ont des effets au-delà de cette fréquence. Il est intéressant de noter, que les oscillations intra-cycliques ont des plages de fréquences comprises entre \SIlist{5;7.5}{\hertz}, comme on peut le constater sur la \cref{subfig_force_filtering_a} qui présente trois cycles consécutifs en force, présentant des oscillations variées.
+
+\input{latex_figures/fig_force_filtering.tex}
+
+En notant que la durée des perturbations introduites en force est inférieure à \SI{100}{\milli\second} (\cref{chap3_sec_method_sub_pert}), il est possible de proposer un filtrage qui couperait les perturbations en force mais pas le comportement "virtuel". Un filtre passe-bas avec les performances suivantes a été conçu avec l'aide de Matlab:
+\begin{enumerate}[label={-}]
+	\item une fréquence de passe bande de \SI{8}{\hertz},
+	\item une fréquence de coupe bande de \SI{8.5}{\hertz},
+	\item une amplitude des rebonds sur les fréquences non filtrées de \SI{0.1}{\decibel},
+	\item une atténuation des fréquences filtrées de \SI{20}{\decibel}.
+\end{enumerate}
+Le filtre ainsi conçu est d'ordre 2997. L'ordre important du filtre est expliqué par la pente importante requise entre \SIlist{8;8.5}{\hertz}, et les faibles rebonds exigés pour ne pas dénaturer le signal d'origine sur les basses fréquences. L'amplitude du diagramme de Bode du filtre est montrée en \cref{fig_force_filtering_magnitude}.
+
+\input{latex_figures/fig_force_filtering_magnitude.tex}
+\tikzexternaldisable
+
+Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de référence, il a été appliqué aux trajectoires non-perturbées de la première session i), comme on peut le voir sur trois cycles en \cref{subfig_force_filtering_a}. La racine de l'erreur quadratique moyenne entre ce filtrage et un filtrage passe-bas de Butterworth d'ordre 2, avec une fréquence de coupure de \SI{50}{\hertz} (ce dernier filtrage permet de retirer le bruit du capteur de force), donne un résultat de \SI{108}{\milli\newton}. Ainsi, même si certains comportements, notamment au niveau des pics de force peuvent être atténués par le filtrage proposé, le signal n'est globalement pas modifié au-delà de la précision du capteur de force (\SI{125}{\milli\newton}).
+
+Toutefois, si on s'intéresse maintenant à la rejection des perturbations, dont on peut voir l'exemple en \cref{subfig_force_filtering_b}, pour une perturbation non prévisible ainsi que pour le retour haptique de la balle, le point de départ du signal filtré à l'instant de la perturbation indique une erreur significative. En effet, si la perturbation semble bien filtrée, et le comportement oscillatoire conservé, à l'instant $t_p$ de la perturbation, un écart de \SI{847}{\milli\newton} vient biaiser l'estimation de la trajectoire virtuelle en force. Des écart similaires se retrouvent sur la plupart des perturbations filtrées, alors qu'on s'attendrait à ce qu'à l'instant de la perturbation, les valeurs coïncident. Il faut donc une solution complémentaire pour palier cette problématique.
+
+
 
 \subsubsection{Réseaux de neurones récurrents} \label{chap3_sec_method_sub_virt_traj_5}
 
