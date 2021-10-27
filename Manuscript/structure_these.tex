@@ -12,9 +12,11 @@
 	\usetikzlibrary{matrix}
 	\usetikzlibrary{backgrounds}
 	\usetikzlibrary{external}
+	\usetikzlibrary{fit} %positioning, 
 \usepackage{circuitikz}
 \usepackage{pgfplots}
 	\usetikzlibrary{pgfplots.fillbetween}
+	\usetikzlibrary{pgfplots.groupplots}
 \usepackage{subcaption}
 \usepackage{capt-of} % for caption of fig type outside of figure env
 %\DeclareCaptionSubType[roman]{figure}
@@ -26,6 +28,7 @@
 \usepackage{amsmath} % for splited equation notably
 \usepackage{amssymb} % for delta equality notably
 \usepackage{mathtools}
+\usepackage{algorithm,algpseudocode}
 %\usepackage[square]{natbib}
 \usepackage{xifthen} %for conditional test
 \usepackage[toc,page]{appendix} % for appendices [title]
@@ -100,7 +103,9 @@
 \DeclareMathOperator{\sign}{sgn}
 %
 \renewcommand{\Re}{\rm I\!R}
-
+%
+\newcommand{\mean}[1]{\overline{#1}}
+%
 %compute get angle for arc
 \newcommand{\pgfExtractAngle}[3]{%
 	\pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}

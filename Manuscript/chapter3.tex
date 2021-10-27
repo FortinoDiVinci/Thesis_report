@@ -245,15 +245,73 @@ En notant que la durée des perturbations introduites en force est inférieure �
 Le filtre ainsi conçu est d'ordre 2997. L'ordre important du filtre est expliqué par la pente importante requise entre \SIlist{8;8.5}{\hertz}, et les faibles rebonds exigés pour ne pas dénaturer le signal d'origine sur les basses fréquences. L'amplitude du diagramme de Bode du filtre est montrée en \cref{fig_force_filtering_magnitude}.
 
 \input{latex_figures/fig_force_filtering_magnitude.tex}
-\tikzexternaldisable
 
 Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de référence, il a été appliqué aux trajectoires non-perturbées de la première session i), comme on peut le voir sur trois cycles en \cref{subfig_force_filtering_a}. La racine de l'erreur quadratique moyenne entre ce filtrage et un filtrage passe-bas de Butterworth d'ordre 2, avec une fréquence de coupure de \SI{50}{\hertz} (ce dernier filtrage permet de retirer le bruit du capteur de force), donne un résultat de \SI{108}{\milli\newton}. Ainsi, même si certains comportements, notamment au niveau des pics de force peuvent être atténués par le filtrage proposé, le signal n'est globalement pas modifié au-delà de la précision du capteur de force (\SI{125}{\milli\newton}).
 
 Toutefois, si on s'intéresse maintenant à la rejection des perturbations, dont on peut voir l'exemple en \cref{subfig_force_filtering_b}, pour une perturbation non prévisible ainsi que pour le retour haptique de la balle, le point de départ du signal filtré à l'instant de la perturbation indique une erreur significative. En effet, si la perturbation semble bien filtrée, et le comportement oscillatoire conservé, à l'instant $t_p$ de la perturbation, un écart de \SI{847}{\milli\newton} vient biaiser l'estimation de la trajectoire virtuelle en force. Des écart similaires se retrouvent sur la plupart des perturbations filtrées, alors qu'on s'attendrait à ce qu'à l'instant de la perturbation, les valeurs coïncident. Il faut donc une solution complémentaire pour palier cette problématique.
 
+Une composante basse fréquence ou continue semble en effet devoir être supprimée des perturbations. La durée des perturbations en force étant approximativement de \SI{60}{\milli\second}, on se propose d'extraire \SI{85}{\milli\second} du signal suite à une perturbation. La composante continue est alors déterminée grâce l'\cref{algo_pert_filtering}, avec $repeat()$ une fonction permettant de répéter un signal, pour garantir la stabilité du filtrage et $filter()$ la fonction de filtrage bi-directionnelle qui minimise le déphasage.
 
+\begin{algorithm}
+	\caption{Algorithme d'extraction des perturbations par filtrage}\label{algo_pert_filtering}
+	\begin{algorithmic}[1]
+		\Procedure{Perturbation filtering}{$f_z,i_p$}\Comment{$i_p$ index des pert.}
+		\State $l_p \gets 85$
+		\State $f_{zc} \gets f_z$
+		\For{$i \text{ in } i_p$}
+		\State $f_{ip} \gets f_z(i:i+l_p-1)$\Comment{extraction de la pert.}
+		\State $frep_{ip} \gets repeat(f_{ip}, x_{rep})$\Comment{répétission du signal}
+		\State $frep_f \gets filter(frep_{ip})$\Comment{1er filtrage}
+		\State $idx \gets ceil(x_{rep}/2)*l_p*(0:l_p-1)$\Comment{extraction du signal utile}
+		\State $l_i \gets interp(f_z(1), f_z(end), dt)$\Comment{interpolation linéaire à 1/dt \SI{}{\hertz}}
+		\State $c_i \gets frep_f(idx) - l_i$\Comment{estimation de la composante continue}
+		\State $f_{zc}(i:i+l_p-1) \gets f_{zc}(i:i+l_p-1) - c_i $
+		\EndFor
+		\State $f_{virt} = filter(f_{zc})$
+		\State \textbf{return} $f_{virt}$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+Cette méthode ne garantie toutefois pas un bon point de départ, même si elle diminue systématiquement l'écart observé avant la perturbation, comme on peut le voir sur quatre exemple en \cref{fig_force_filtering_algorithm}. En effet, si on s'intéresse à l'erreur RMS entre le signal en force non filtré et filtré à l'instant avant chaque perturbation, on obtient une erreur de \SI{675}{\milli\newton} sur un total de 71 perturbations, alors que cette même erreur moyenne passe à \SI{470}{\milli\newton} avec l'algorithme, soit une réduction de cette erreur \SI{30}{\percent} par rapport au filtrage seul.
+
+\input{latex_figures/fig_force_filtering_algo_bis.tex}
+\tikzexternaldisable
 
 \subsubsection{Réseaux de neurones récurrents} \label{chap3_sec_method_sub_virt_traj_5}
+
+Afin d'essayer de prendre en compte plus de paramètres qui peuvent avoir une influence sur la trajectoire virtuelle, comme celle de la balle qui n'a pas été utilisée jusqu'à présent, on peut utiliser des modèles types boîtes noires qui sont régulièrement utilisés pour la prédiction de trajectoire, notamment dans le domaine automobile \parencite{messaoud_relational_2019,mercat_kinematic_2020}. Les réseaux de neurones récurrents (RNN\footnote{Recurrent Neural Network}) sont adaptés à la prédiction de séries temporelles, comme les trajectoires. En effet, contrairement à d'autres modèles neuronaux comme ceux à propagation avant - \textit{feedforward neural network} -, les RNN permettent de prendre en compte leur état interne, et donc leur mémoire, pour réaliser leur prédiction. 
+
+\begin{aside}{Réseaux LSTM}
+	L'architecture LSTM\footnote{Long Short Term Memory: réseau récurrent à mémoire court et long terme} \parencite{hochreiter_long_1997} est la structure la plus classiquement utilisée pour ce type de problème. Elle permet notamment au réseau de se souvenir d'états dans le passé malgré les problématiques posées par la disparition du gradiant, notamment grâce à l'utilisation de deux états internes, l'état caché $\vect{h}$ et celui de la cellule $\vect{c}$. Les quatre couches neurales typiques d'une cellule LSTM se définissent chacune avec une fonction d'activation qui prend en paramètre les entrées et états cachés pondérés par des matrices de poids $\matr{W}_i$, ainsi que des vecteurs de biais $\vect{b}_i$, comme montré sur l'équation \cref{eq_lstm_ft} à titre d'exemple pour la porte d'oubli $\vect{f}_t$ avec la fonction sigmoïde $\sigma$.
+	
+	\begin{equation} \label{eq_lstm_ft}
+		\vect{f}_t = \sigma(\matr{W}_1 \left[\vect{h}_{t-1}, \vect{x}_t\right] + \vect{b}_1)
+	\end{equation}
+	
+	\input{latex_figures/fig_lstm_architecture.tex}
+	
+\end{aside}
+
+Une architecture LSTM classique a donc été mise en oeuvre, et entraînée avec les sessions i) et ii). Les entrée injectées $\vect{x}_t$ à chaque instant $t$ sont : 
+\begin{enumerate*}[label=\alph*)]
+	\item la position cartésienne données par le système de vision,
+	\item la force d'interaction entre le robot et l'utilisateur,
+	\item la position simulée de la balle,
+	\item un boléen explicitant la main utilisée (gauche ou droite), et
+	\item un autre boléen précisant si les impacts de la balle sont simulés.
+\end{enumerate*}
+Les signaux $\vect{s}$ sont normalisés en variance \cref{eq_variance_normalisation}, et sous-échantillonnés à \SI{100}{\hertz}, un cycle entier pouvant faire plus d'une seconde. Les dernières \SI{200}{\milli\second} des cycles en force sont masquées, et la fonction de coût est évaluée à l'aide de la moyenne des erreurs quadratique entre la prédiction $\hat{\vect{y}}$ et le signal non masqué $\vect{y}$ avec une pondération différente pour insister sur l'importance de la partie masquée notée avec l'indice $m$, contrairement à la région non masquée du cycle notée avec l'incide $um$ dans l'équation \cref{eq_lstm_cost_function}.
+
+\begin{equation} \label{eq_variance_normalisation}
+	\vect{s}_n = (\vect{s} - \mean{\vect{s}})/\text{std}(\vect{s})
+\end{equation}
+
+\begin{equation} \label{eq_lstm_cost_function}
+	loss = \alpha \mean{\sum(\hat{\vect{y}}_m - \vect{y}_m)^2} + (1-\alpha) \mean{\sum(\hat{\vect{y}}_{um} - \vect{y}_{um})^2}
+\end{equation}
+
+Cette mise en place schématique a prouvé la faisabilité d'une telle approche, mais un réglage plus fin des hyperparamètres, l'utilisation d'une fonction de coût plus avancée (vraisemblance), et éventuellement la conception d'une architecture plus avancée (plusieurs cellules LSTM, ...), et une base de données plus fournie seraient nécessaire pour arriver à des résultats concluants.
 
 \subsubsection{Sommes de sinus} \label{chap3_sec_method_sub_virt_traj_6}
 

@@ -1,0 +1,158 @@
+\begin{figure}[!htb] 
+	\centering
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{\label{subfig_force_filtering_algo_a}}
+		{
+			\tikzsetnextfilename{fig_force_filtering_algo_a}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					width=.27\linewidth,
+					height=.25\linewidth,
+					scale only axis,
+					xlabel={temps (\SI{}{\second})},
+					ylabel={Force (\SI{}{\newton})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					%
+					\addplot [
+						color=blue,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv};
+					%
+					\addplot [
+						color=red,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv};
+					%
+					\addplot [
+						color=blue!50!red,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv};
+					%\addlegendentry{\SI{50}{\hertz}};
+					%\addlegendentry{filtrage seul};
+					%\addlegendentry{algorithme};
+					%
+				\end{axis}		
+			\end{tikzpicture}
+			\hspace{-5mm}
+		}
+		\subcaptionbox{\label{subfig_force_filtering_algo_b}}
+		{
+			\tikzsetnextfilename{fig_force_filtering_algo_b}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					width=.27\linewidth,
+					height=.25\linewidth,
+					scale only axis,
+					xlabel={temps (\SI{}{\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					%
+					\addplot [
+					color=blue,
+					smooth,
+					]
+					table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv};
+					%
+					\addplot [
+					color=red,
+					smooth,
+					]
+					table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv};
+					%
+					\addplot [
+					color=blue!50!red,
+					smooth,
+					]
+					table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv};
+					%
+				\end{axis}		
+			\end{tikzpicture}
+			\hspace{-5mm}
+		}
+		\subcaptionbox{\label{subfig_force_filtering_algo_c}}
+		{
+			\tikzsetnextfilename{fig_force_filtering_algo_c}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					width=.27\linewidth,
+					height=.25\linewidth,
+					scale only axis,
+					xlabel={temps (\SI{}{\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					%
+					\addplot [
+						color=blue,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv};
+					%
+					\addplot [
+						color=red,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv};
+					%
+					\addplot [
+						color=blue!50!red,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv};
+					%
+				\end{axis}		
+			\end{tikzpicture}
+			\hspace{-5mm}
+		}	
+		\subcaptionbox{\label{subfig_force_filtering_algo_d}}
+		{
+			\tikzsetnextfilename{fig_force_filtering_algo_d}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					width=.27\linewidth,
+					height=.25\linewidth,
+					scale only axis,
+					xlabel={temps (\SI{}{\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					%
+					\addplot [
+						color=blue,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv};
+					%
+					\addplot [
+						color=red,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv};
+					%
+					\addplot [
+						color=blue!50,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv};
+					%
+				\end{axis}		
+			\end{tikzpicture}
+		}
+	}	
+	\caption{Exemples du filtrage passe-bas décrit en \cref{chap3_sec_method_sub_virt_traj_4}, pour des trajectoires en force.}
+	\label{fig_force_filtering_algorithm}
+\end{figure}

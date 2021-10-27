@@ -1,0 +1,173 @@
+\begin{figure}[!htb] 
+	\tikzsetnextfilename{fig_force_filtering_algo}
+	\centering
+	\resizebox{\textwidth}{!}{
+		\begin{tikzpicture}
+			\begin{groupplot}[
+				group style={
+					group name=my fancy plots,
+					group size=4 by 1,
+					%xticklabels at=edge bottom,
+					horizontal sep=0pt,
+					},
+				width=.24\linewidth,
+				%xmin=-6, xmax=6
+				ymin=-6, ymax=7,
+				scale only axis,
+				axis y line=left,
+				axis x line=bottom,
+				]
+				
+				\nextgroupplot[
+					xmin=42.6,xmax=43.63,
+					x axis line style={-{Bar[width=15pt]}}, 
+					xtick={42.6,43,43.4},
+					height=.3\linewidth,
+					]
+				\addplot [
+					color=blue!50,
+					smooth,
+					thick
+					]
+				table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv}; 
+				%
+				\addplot [
+					color=blue!50!red,
+					smooth,
+					]
+				table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv};  
+				%
+				\addplot [
+					color=red,
+					dashed,
+					thick,
+					smooth,
+					]
+				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv};
+				%
+				\addplot [
+					black,
+					only marks,
+					mark=x,
+					mark options={scale=2},
+					]
+				table [col sep=comma, x=time, y=pert] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv}; 
+				%%
+				\nextgroupplot[
+					xmin=72.57,xmax=73.63,
+					axis x discontinuity=parallel,
+					axis y line=none,
+					x axis line style={{Bar[width=15pt]}-},
+					%xtick={72.7,72.9,73.1,73.3,73.5},
+					height=.3\linewidth,
+				]
+				%%
+				\addplot [
+					color=blue!50,
+					smooth,
+					thick
+					]
+				table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv}; 
+				%
+				\addplot [
+					color=blue!60!red,
+					smooth
+					]
+				table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv};   
+				%
+				\addplot [					
+					color=red,
+					dashed,
+					thick,
+					smooth,
+					]
+				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv};
+				%
+				\addplot [
+					black,
+					only marks,
+					mark=x,
+					mark options={scale=2},
+					]
+				table [col sep=comma, x=time, y=pert] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv}; 
+				%%
+				\nextgroupplot[
+					xmin=222.57,xmax=223.83,
+					axis x discontinuity=parallel,
+					axis y line=none,
+					x axis line style={{Bar[width=15pt]}-},
+					height=.3\linewidth,
+					]
+				%%
+				\addplot [
+					color=blue!50,
+					smooth,
+					thick
+					]
+				table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv}; 
+				%
+				\addplot [
+					color=blue!60!red,
+					smooth,
+					]
+				table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv}; 
+				%
+				\addplot [
+					color=red,
+					dashed,
+					thick,
+					smooth,
+					]
+				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv};  
+				%
+				\addplot [
+					black,
+					only marks,
+					mark=x,
+					mark options={scale=2},
+					]
+				table [col sep=comma, x=time, y=pert] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv}; 
+				%%
+				\nextgroupplot[
+					xmin=252.47,xmax=254,
+					axis x discontinuity=parallel,
+					axis y line=none,
+					%x axis line style={{Bar[width=15pt]}-},
+					xtick={252.8,253.3,253.8},
+					height=.3\linewidth,
+					]
+				%%
+				\addplot [
+					color=blue!50,
+					smooth,
+					thick
+					]
+				table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv}; 
+				%
+				\addplot [
+					color=blue!60!red,
+					smooth,
+					]
+				table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv}; 
+				%
+				\addplot [
+					color=red,
+					dashed,
+					thick,
+					smooth,
+					]
+				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv};    
+				%
+				\addplot [
+					black,
+					only marks,
+					mark=x,
+					mark options={scale=2},
+					]
+				table [col sep=comma, x=time, y=pert] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv};            
+			\end{groupplot}
+		\end{tikzpicture}
+	}	
+\caption{Exemples des quatre trajectoires en force, le signal filtré à \SI{50}{\hertz} est donné en bleu pâle, le filtrage passe-bas décrit en \cref{chap3_sec_method_sub_virt_traj_4} est représenté en tirets rouges, comparativement à l'\cref{algo_pert_filtering} en violets. L'instant d'introduction des perturbations en couple est indiqué par une croix noire.}
+\label{fig_force_filtering_algorithm}
+\end{figure}
