@@ -5,7 +5,7 @@ function [tau, tau_detailed ] = InvDynModel_3DOF(f_env,th,dth,ddth, varargin)
 %        - Fv, Fs are the viscous, and static friction matrices
 %        - tau is a vector of joint torques
 %        - q, dq, ddq joint angles, velocities and accelerations
-%        - fenv must be the force exerted on the environment  by the robot,
+%        - fenv must be the force exerted by the environment on the robot,
 %             that is equal to minus the force provided by the sensor in 
 %             the robot frame
 

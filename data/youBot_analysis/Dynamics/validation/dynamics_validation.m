@@ -25,7 +25,7 @@ th0 = q_dh - (q0_kuka - q_rob);  % simulation convention
 [b,a] = butter(2,50/(1/(2*dt)),'low'); % 2nd order 50Hz low pass filter
 f_filt = filtfilt(b,a, f_tmp')';
 tau_filt = filtfilt(b,a, tau_tmp')';
-% fe = -f(env->rob) = f(rob->env) = -f(sensor)
+% fe = f(env->rob) = -f(rob->env) = -f(sensor)
 fe = -1.*[f_filt(1,:); f_filt(3,:); tau_filt(2,:)]; % [fx;fz;fth]
 
 %f_tot = [0,0,0]';
