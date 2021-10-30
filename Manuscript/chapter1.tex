@@ -127,6 +127,7 @@ Il est aussi possible de guider le mouvement de l'utilisateur, pour par exemple 
 
 Comme rappelé par \parencite{hogan_impedance_1985}, lorsqu'un robot interagit avec un environnement, qu'il s'agisse d'un humain ou d'un objet quelconque, un couplage se crée entre les 2 systèmes physiques. Ainsi de manière général lorsque des systèmes physiques s'interfèrent, les flux de puissance instantanée se définissent le long des degrés de liberté concernés, comme le produit de deux grandeurs ; l'effort et le flux. Or, aucun des systèmes seuls ne peut imposer ces deux variables simultanément. Dans le cas d'interactions physiques robotisées, on s'intéressera aux forces $\vect{f}$ et vitesses $\vect{v}$, comme montré sur la \cref{fig_physical_interaction}.
 
+\tikzexternalenable
 \input{latex_figures/fig_interaction_port}
 
 Il faut toutefois trouver un moyen d'imposer un comportement au robot, pour qu'il puisse à la fois être contrôlé en position et en force. Dans un premier temps, des lois de commandes hybrides ont été proposées en contrôlant, par exemple, la position sur une trajectoire tangente, et la force sur l'axe normal à cette trajectoire \parencite{raibert_hybrid_1981}. Ce type de commandes se prêtent plutôt bien à des tâches industrielles comme la soudure.
@@ -138,7 +139,6 @@ Une autre approche consiste à imposer un comportement dynamique à l'interactio
 
 Lors d'interactions entre un humain et un robot, la logique peut être inversée en implémentant un contrôle en admittance. Avec une structure proposée par \parencite{newman_stability_1992}, il est possible de manipuler un robot par son effecteur final, en rejetant notamment les phénomènes de frictions et en approchant le comportement du robot à celui d'un système masse-amortissement-ressort. Comme expliqué par \textcite[Chapitre~3]{lamy_conception_2011}, on peut alors conférer au robot un comportement d'inertie pure, dont la valeur est limitée par des considérations de stabilité. Manipuler le robot revient alors à déplacer une masse inertielle dans l'espace.
 
-\tikzexternalenable 
 \input{latex_figures/fig_ctrl_scheme_lamy_simple.tex}
 \tikzexternaldisable
 
@@ -164,7 +164,7 @@ La dénomination de \emph{muscle} désigne ici spécifiquement une sous-catégor
 
 Les muscles se composent notamment de longues cellules regroupées en faiseaux, les fibres musculaires ou myocytes, qui sont capables de \emph{contractions} lorsqu'elles sont stimulées. Ces fibres enveloppées dans une membrane, l'epimysium, sont fixées aux os grâce à des tissus d'insertion comme les tendons, permettant des points d'ancrage sur les os. Comme le montre la \cref{fig_schema_muscle_activation}, lorsque les fibres musculaires d'un muscle se contractent, elles exercent une force sur les points d'ancrage, qui permet aux articulations de se mouvoir grâce au couple généré. Pour une description plus exhaustive des muscles squelettiques, on pourra se référer à \cite[Chapitre~1]{mcmahon_muscles_1984}, \cite[Chapitre~2]{tresilian_sensorimotor_2013} ou \parencite{nishikawa_neuromechanics_2007} pour ne citer que trois exemples.
 
-\input{schema_muscle}
+\input{latex_figures/fig_muscle_schema}
 
 %Les \emph{tendons} suivent le même principe de fonctionnement que les ficelles d'un pantin. 
 Les \emph{tendons} font la liaison entre les muscles aux os. Ces tissus de connexion solides sont composés de faisceaux de fibres de collagène qui leur offrent des propriétés viscoélastiques différentes des muscles. Le tendon calcanéen, plus connu par son appellation liée au héro grec Achille, permet ainsi lors de la marche ou de la course d'accumuler de l'énergie lorsqu'il est étendu, puis de la restituer comme le ferait un ressort. Des économies d'énergie pouvant dépasser \SI{30}{\percent} peuvent ainsi être réalisées lors de différents types de locomotion chez l'humain \parencite{ker_spring_1987, alexander_energy-saving_1991, bramble_endurance_2004}.
@@ -180,13 +180,10 @@ Ainsi, l'ensemble musculo-tendineux est connu pour ses propriétés visco-élast
 
 \tikzexternalenable 
 \input{latex_figures/fig_hills_experiment}
-\tikzexternaldisable
 
 On peut alors modéliser le comportement passif du muscle avec la représentation dite de Hill. Il faut toutefois remarquer, que la viscosité observée ne provient pas de liquides visqueux dans les muscles, mais plutôt de caractéristiques physiologiques des protéines à l'origine des contractions, qui peuvent être assimilées à de la viscosité. Par ailleurs, comme souligné par Hill, si l'élément série $K_{SEE}$ est assimilé à un tendon, ses expériences étant phénoménologiques et non histologiques, rien n'exclu que d'autres sources fibreuses contribuent à ce comportement.
 
-\tikzexternalenable 
 \input{latex_figures/fig_hill_muscle_model}
-\tikzexternaldisable
 
 %\paragraph{Le Système Nerveux Central}
 \subsubsection{Le Système Nerveux Central} \label{chap_1_sec_modelling_human_subsec_1_2}
@@ -199,7 +196,6 @@ En effet, des fibres musculaires sensorielles, les \emph{fuseaux neuromusculaire
 
 C'est ainsi que le réflexe ostéotendineux permet d'assurer une continuité dans le comportement élastique des muscles au-delà de la rupture de ce comportement passif \parencite{nichols_improvement_1976, houk_regulation_1979}. Par ailleurs, ce réflexe permet une meilleure robustesse aux perturbations extérieures. En effet, lorsqu'un mouvement est commandé par les motoneurones $\alpha$, un déplacement est attendu et contrôlé par les motoneurones $\gamma$, qui peuvent en cas d'écart entre le mouvement réalisé et attendu, inhiber ou augmenter l'activité des motoneurones $\alpha$, tout en jouant sur les contractions des fuseaux neuromusculaires, qui peuvent être modélisées de manière similaire aux fibres musculaires.
 
-\tikzexternalenable 
 \input{latex_figures/fig_stretch_reflex_ctrl_loop}
 \tikzexternaldisable
 
@@ -319,7 +315,6 @@ On retrouve l'inertie $I$, l'amortissement $B$ (modélisation linéaire de la d�
 
 \tikzexternalenable 
 \input{latex_figures/fig_hogan_arm_cocontraction_model}
-\tikzexternaldisable
 
 Pour étendre les travaux concernant la modélisation articulaire en impédance du membre supérieur, \textcite{bennett_time-varying_1992} ont étudié une tâche rythmique en mouvement. Les travaux antérieurs s'intéressant en grande majorité à des configurations isométriques des membres, ce qui permet une linéarisation plus aisée du modèle pour de faibles déviations. Lors d'une tâche en mouvement, il faut non seulement linéariser le modèle en impédance autour d'une trajectoire de référence $(\theta_0, \tau_0)$ non statique, mais aussi considérer que ses paramètres sont variables dans le temps $t$, que ce soit à cause de leur dépendance à la position ou à la vitesse \parencite{milner_dependence_1993, kuxhaus_dependence_2014}. \textcite{bennett_time-varying_1992} propose donc de linéariser le modèle \cref{eq_bennet_1922_a} pour des petites déviations, avec $f$ une fonction non linéaire regroupant les propriétés des muscles, tissus conjonctifs et réflexes sans distinctions.
 
@@ -343,9 +338,7 @@ Ainsi, quand de faibles perturbations viennent modifier la trajectoire de réfé
 
 Pour compléter les liens qui semblent exister entre la raideur articulaire et la fréquence du mouvement pour le membre supérieur, \textcite{abe_modulation_2003} ont étudié un panel de fréquences plus détaillé, dans le plan vertical. Ils trouvent une relation quadratique entre la raideur et la fréquence du mouvement, avec un minimum proche de la fréquence naturelle du bras, proche de \SI{1}{\hertz} (voir \cref{fig_stiffnessVSfrequency_abe_2003}). Il est important de noter que lorsque le bras est soumis à l'effet de son poids, la relation \cref{eq_natural_frequency} est modifée $\omega_0 = \sqrt{\frac{K + mgl}{I}}$.
 
-\tikzexternalenable 
 \input{latex_figures/fig_stiffnessVSfrequency}
-\tikzexternaldisable
 
 Dans le cadre d'une tâche de pointage en extension dans le plan horizontal, et donc pour des mouvements discrets, par opposition aux mouvements rythmiques précédemment présentés, \textcite{popescu_elbow_2003} proposent une augmentation du modèle en impédance pour tenir compte d'un retard du centre de masse sur la rotation angulaire $\theta$, en choisissant le retard $t_d$ de \SI{5}{\milli\second}. \textcolor{orange}{Pour une nouvelle dynamique \cref{eq_impedance_popescu_2003} de l'angle $\alpha$ formé entre le centre de rotation et le centre de masse, et l'angle $\theta$ entre le poignet et le centre de rotation. Cette nouvelle dynamique offre donc un modèle augmenté donné en équation \cref{eq_impedance_model_popescu_2003}}. 
 %
@@ -367,9 +360,7 @@ Les résultats des estimations d'impédance de \textcite{popescu_elbow_2003} té
 
 Dans l'objectif de différencier la contribution des réflexes $T_r$, qui agissent avec un délais $\tau_d$, des couples provoqués par les propriétés intrinsèques des muscles $T_i$ pour des mouvements de la cheville $\theta$, \textcite{kearney_differential_1994, kearney_identification_1997} proposent un modèle en cascade avec une non linéairité statique $n_{RS}$ due à l'action des réflexes, qui est modélisée par un système de Hammerstein, montré en \cref{fig_hammerstein_model_kearney}. \textcolor{orange}{Les propriétés viscoélastiques intrinsèques $h_i$ sont représentées classiquement par un modèle linéaire du second ordre, et les propriétés réflexes $h_r$ le sont par un autre modèle du second ordre, qui subit aussi un retard $\tau_d$, du aux délais des réflexes, évoqués en \cref{chap_1_sec_modelling_human_subsec_1_2}. \textcite{ludvig_identification_2011} ont proposé une amélioration de ces travaux pour prendre en compte les variations des paramètres lors de trajectoires dynamiques.}
 
-\tikzexternalenable
 \input{latex_figures/fig_kearney_hammerstein_model}
-\tikzexternaldisable
 
 \textcolor{orange}{Ainsi, pour essayer d'approcher un modèle viscoélastique du comportement articulaire en impédance, les auteurs ont essayé de tenir compte d'observations biologiques, comme celle concernant les cocontractions, la viscoélasticité musculaire, des phénomènes de inertiels et aussi liés aux réflexes.}
 
@@ -379,7 +370,6 @@ On peut alors légitimement se demander comment ces modèles uni-articulaires se
 
 Dès lors qu'on cherche à étudier plusieurs articulations simultanément, viennent les questions des effets de couplages et de l'impédance cartésienne. On peut aussi remarquer, que plus on s'intéresse à d'articulations conjointement, plus de variables devront être observées. Ainsi, \parencite{hogan_mechanics_1985, mussa-ivaldi_neural_1985} se sont intéressés à  l'évaluation de l'impédance mécanique du bras et plus précisement de sa raideur, dans un cas où à la fois les articulations du coude et de l'épaule sont impliquées. En utilisant un manipulandum dans le plan horizontal et en soutenant le bras à l'aide d'une corde pour limiter les effets de la gravité, des estimations d'impédance étaient conduites à différentes postures dans des conditions isométriques, notamment grâce aux mesures angulaires $\theta_1'$ et $\theta_2'$ données par les 2 moteurs du manipulandum. 
 
-\tikzexternalenable
 \input{latex_figures/fig_mussa_ivaldi_manipulandum}
 \tikzexternaldisable
 
@@ -500,7 +490,6 @@ En comparant les erreurs de reconstruction de ces différents modèles, après i
 
 \tikzexternalenable
 \input{latex_figures/fig_KPTee_model}
-\tikzexternaldisable
 
 \textcolor{red}{[Capactité de reproduire en simulation des mouvements humains à l'aide d'une correction en rejet de perturbation sur un modèle en impédance \parencite{tee_model_2004}, je n'arrive pas à comprendre la causalité de leur modèle...]}
 
@@ -560,7 +549,6 @@ Pour des tâches haptiques ou de téléopération, où le poignet et les doigts 
 	\label{fig_haptic_interface}
 \end{figure}
 
-\tikzexternalenable
 \input{latex_figures/fig_speich_impedance_model}
 \tikzexternaldisable
 

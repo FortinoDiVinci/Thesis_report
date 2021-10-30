@@ -1,0 +1,136 @@
+\begin{figure}[!htb] 
+	\centering
+	\resizebox{\textwidth}{!}{
+%		\subcaptionbox{\label{subfig_sine_sum_trajectory_a}}
+%		{			
+			\tikzsetnextfilename{subfig_sine_sum_trajectory_a}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					width=.48\linewidth,
+					height=.3\linewidth,
+					scale only axis,
+					xlabel={temps (\SI{}{\second})},
+					ylabel={Force (\SI{}{\newton})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
+					%
+					\addplot [
+						color=blue,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=force] {misc/trajectory_estimation_sines/sine_optimisation_trajectory_1.csv};
+					%
+					\addplot [
+						color=red,
+						smooth,
+						]
+					table [col sep=comma, x=time, y=virtual] {misc/trajectory_estimation_sines/sine_optimisation_trajectory_1.csv};
+					%
+					\coordinate (fitLeftUp) at (axis cs:147.6875, \pgfkeysvalueof{/pgfplots/ymax});
+					\coordinate (pDw) at (axis cs:147.7275, \pgfkeysvalueof{/pgfplots/ymin});
+					\coordinate (maskUp) at (axis cs:147.8275, \pgfkeysvalueof{/pgfplots/ymax});
+					\coordinate (fitRightDw) at (axis cs:147.9375, \pgfkeysvalueof{/pgfplots/ymin});
+					\path[pattern=north west lines, pattern color=pink] (pDw) rectangle (fitLeftUp);
+					\path[pattern=north west lines, pattern color=gray] (pDw) rectangle (maskUp);
+					\path[pattern=north west lines, pattern color=pink] (maskUp) rectangle (fitRightDw);
+					%					
+					\addlegendentry{$\vect{f}_z$};
+					\addlegendentry{$\tilde{\vect{f}}_z$};
+					%\draw [dashed, opacity=.5] (axis cs:1300, 5) -- (axis cs:0, 5);
+					%\draw [dashed, opacity=.5] (pDw) -- (pUp);
+					%\draw[>=latex, <->] (axis cs:1300, 5) -- node 		[midway,above,align=center,fill=white,xshift=.5cm] {non-masqué} (axis cs:0, 5);
+				\end{axis}		
+			\end{tikzpicture}
+%			}
+%			\subcaptionbox{\label{subfig_sine_sum_trajectory_b}}
+%			{			
+				\tikzsetnextfilename{subfig_sine_sum_trajectory_b}
+				\begin{tikzpicture}
+					\centering
+					%
+					\begin{axis}[%
+						width=.48\linewidth,
+						height=.3\linewidth,
+						scale only axis,
+						xlabel={temps (\SI{}{\second})},
+						axis x line = bottom,
+						axis y line = left, 
+						]
+						%
+						\addplot [
+							color=blue,
+							smooth,
+							forget plot,
+							]
+						table [col sep=comma, x=time, y=force] {misc/trajectory_estimation_sines/sine_optimisation_trajectory_2.csv};
+						%
+						\addplot [
+							color=red,
+							smooth,
+							forget plot,
+							]
+						table [col sep=comma, x=time, y=virtual] {misc/trajectory_estimation_sines/sine_optimisation_trajectory_2.csv};
+						%
+%						\coordinate (fitLeftUp) at (axis cs:204.8875, \pgfkeysvalueof{/pgfplots/ymax});
+%						\coordinate (pDw) at (axis cs:204.9275, \pgfkeysvalueof{/pgfplots/ymin});
+%						\coordinate (maskUp) at (axis cs:205.0275, \pgfkeysvalueof{/pgfplots/ymax});
+%						\coordinate (fitRightDw) at (axis cs:205.1375, \pgfkeysvalueof{/pgfplots/ymin});
+						\addplot[
+							draw=none, 
+							pattern=north west lines, 
+							pattern color=pink, 
+							area legend, 
+							%legend image post style={draw opacity=0},% remove the border 
+							] 
+						coordinates {
+							(204.8875, 7.7) %7.68
+							(204.8875, -6.4)
+							(204.9275, -6.4)
+							(204.9275, 7.7)
+						};
+						\addplot[
+							draw=none, 
+							pattern=north west lines, 
+							pattern color=gray, 
+							area legend, 
+							%legend image post style={draw opacity=0},% remove the border 
+							] 
+						coordinates {
+							(204.9275, 7.7) %7.68
+							(204.9275, -6.4)
+							(205.0275, -6.4)
+							(205.0275, 7.7)
+						};
+						\addplot[
+							draw=none, 
+							pattern=north west lines, 
+							pattern color=pink, 
+							area legend, 
+							%legend image post style={draw opacity=0},% remove the border 
+							] 
+						coordinates {
+							(205.0275, 7.7) %7.68
+							(205.0275, -6.4)
+							(205.1375, -6.4)
+							(205.1375, 7.7)
+						};
+%						\path[pattern=north west lines, pattern color=pink] (pDw) rectangle (fitLeftUp);
+%						\addlegendimage{pattern=north west lines, pattern color=pink}
+						\addlegendentry{optimisation};
+%						\path[pattern=north west lines, pattern color=gray] (pDw) rectangle (maskUp);
+%						\addlegendimage{pattern=north west lines, pattern color=gray}
+						\addlegendentry{masque};
+%						\path[pattern=north west lines, pattern color=pink] (maskUp) rectangle (fitRightDw);
+						%
+						%\draw [dashed, opacity=.5] (pDw) -- (pUp);
+						%\node at (axis cs:0,0) [] {\pgfkeysvalueof{/pgfplots/ymax}};
+					\end{axis}		
+				\end{tikzpicture}
+%			}	
+		}	
+	\caption{Exemples d'estimation de trajectoire grâce à des sommes de sinusoïdes optimisées. }
+	\label{fig_sine_sum_trajectory}
+\end{figure}

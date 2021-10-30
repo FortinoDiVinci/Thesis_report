@@ -58,7 +58,6 @@ Comme on peut l'observer sur l'équation \eqref{equ_impedance_control}% ainsi qu
 
 \tikzexternalenable 
 \input{latex_figures/fig_impedance_ctrl_hogan_feedback_linearization}
-\tikzexternaldisable
 
 \paragraph{Robots avec flexibilités} \label{chap2_sec_cmd_collab_subsec_cmd_imp_1_2}
 
@@ -124,11 +123,8 @@ On retrouve ainsi ce type de contrôle pour certaines tâches de téléopératio
 \paragraph{Natural Admittance Controller} \label{chap2_sec_cmd_collab_subsec_cmd_imp_2_1}
 
 Dans le cas du contrôle en admittance articulaire d'abord décrit par \parencite{newman_stability_1992}, il est possible d'imposer à un système physique un comportement en impédance en utilisant un capteur de force. Lorsque le capteur de force est placé sur l'effecteur, on parle de retour d'effort non colocalisé, les efforts n'étant pas mesurés au niveau articulaire. La \cref{fig_lamy_control} présente la boucle de contrôle permettant avec des réglages adéquats décrits notamment par \parencite{lamy_achieving_2009}, de donner un comportement en impédance avec une raideur et un amortissement nuls, tout en minimisant l'inertie. 
-
-%
-\tikzexternalenable 
+ 
 \input{latex_figures/fig_ctrl_scheme_lamy}
-\tikzexternaldisable
 
 Le schéma décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ la matrice jacobienne du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, représentés par la matrice diagonale $ \matr{K}_v \in \Re^n $,  permettent de compenser les effets dûs aux frottements secs \parencite{newman_stable_1994}. La matrice diagonale $ \matr{K}_i \in \Re^n $ contient les gains des correcteurs en admittance de la boucle en couples d'interaction, permettant de réduire l'inertie apparente du robot \parencite[Chapitre~3]{lamy_conception_2011}.
 
@@ -166,9 +162,7 @@ Il est important de souligner, comme rappelé par \textcite{vanderborght_variabl
 
 Dans le cadre de l'expérience devant être mise en place (\cref{chap4}), un utilisateur doit pouvoir manipuler un robot par son effecteur final, en minimisant l'influence du robot pour le rendre aussi transparent que possible, tout en assurant la stabilité des interactions. Le contrôle en admittance décrit \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2} se prête particulièrement à l'application désirée, aussi dans un premier temps, le schéma de contrôle articulaire \cref{fig_lamy_control} est considéré pour réaliser l'interaction physique.
 
-\tikzexternalenable
 \input{latex_figures/fig_youBot_cobot}
-\tikzexternaldisable
 
 \subsection{Effets de couplage} \label{chap2_sec_ctrl_vfo_subsec_coupling}
 
@@ -264,9 +258,7 @@ En faisant la supposition que l'erreur de trainage entre $ q_d $ et $ q $ est n�
 
 La \cref{subfig_coupling_effect_b} montre la variation du terme non linéaire entre $ K_p $ et $ f_z $ dans \cref{eq_coupling_effect_x_2} en fonction des valeurs articulaires. La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans la \cref{chap2_sec_ctrl_vfo_subsec_cartesian_3}, et les valeurs des deux autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{subfig_coupling_effect_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend ni en compte l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associé aux couples $ \tau_\theta $. 
 
-\tikzexternalenable %\tikzsetnextfilename{fig_coupling_effect_joint_ctrl_a}
 \input{latex_figures/fig_coupling_effect_joint_ctrl}
-\tikzexternaldisable
 
 La mise en place expérimentale de la stratégie de contrôle articulaire décrite par \textcite{lamy_achieving_2009} est venue valider cette analyse. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre". Les mouvements sur l'axe $\vec{x}$ doivent donc être resteints.
 
@@ -274,9 +266,7 @@ La mise en place expérimentale de la stratégie de contrôle articulaire décri
 
 Une solution envisageable pour limiter les mouvements à l'axe vertical $\vec{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \textcite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\vec{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{fig_virtual_guide_control} a permis d'observer une dégradation de la transparence.
 
-\tikzexternalenable
 \input{latex_figures/fig_ctrl_scheme_virt_guide}
-\tikzexternaldisable
 
 \subsection{Contrôle cartésien en admittance} \label{chap2_sec_ctrl_vfo_subsec_cartesian}
 
@@ -397,9 +387,7 @@ d'où $ \dot{z}_2^p = 0 $. On a donc bien une projection dans le noyau de la tâ
 
 La combinaison des trois tâches offre le schéma de contrôle présenté en \cref{fig_comanipulation_ctrl}. La transparence est assurée par la tâche principale active sur $\vec{z}$, les deux autres tâches n'ont pas d'influence sur la première puisque l'une est orthogonale et l'autre projetée en son noyaux. Ces tâches annexes assurent notamment le maintien d'une position le long de l'axe $\vec{x}$ pour éviter les dérives dûes aux erreurs de trainages, modélisations et mesures.
 
-\tikzexternalenable 
 \input{latex_figures/fig_ctrl_scheme}
-\tikzexternaldisable
 %
 avec : 
 \begin{enumerate}
@@ -441,9 +429,7 @@ La transparence étant difficilement qualifiable, puisqu'elle repose en partie s
 
 %%%%%%%%%%%%%%
 % INPUT STABILITY MAPPING FIGURE HERE
-\tikzexternalenable 
 \input{latex_figures/fig_stability_map}
-\tikzexternaldisable
 
 %
 %Une ébauche de l'analyse théorique des dynamiques apparentes du robot est donnée en \cref{app_apparent_dyn_robot}.
@@ -454,9 +440,7 @@ La transparence étant difficilement qualifiable, puisqu'elle repose en partie s
 
 Ces boucles ont été les premières à être corrigées, depuis les plus rapides (boucles de courant/couple) au plus lentes (boucles de vitesse angulaire). La correction a été réalisée sans observer la réponse des différentes articulations en boucle ouverte, avec une méthode inspirée par les réglages proposés initialement par \textcite{ziegler_optimum_1942}. 
 
-\tikzexternalenable 
 \input{latex_figures/fig_ctrl_inner_loop.tex}
-\tikzexternaldisable
 
 Les boucles de courant sont soumises à des bruits importants, aussi, le choix de correcteurs sans action dérivée a été fait, pour obtenir une correction proportionnelle-intégrale \cref{eq_PI}. Le cahier des charges a été défini tel que la réponse à un échelon de consigne soit la plus rapide possible ($t<$\SI{1}{\milli\second}), sans erreur statique et avec un dépassement inférieur à \SI{10}{\percent}. Conformément à la méthode de \textcite{ziegler_optimum_1942}, le gain proportionnel est réglé seul dans un premier temps jusqu'à obtenir un régime critique, et donc oscillatoire dont on relève la période $T_c$. Le gain proportionnel $K_{pc}$ est alors divisé par deux et le paramètre $T_{ic}$ de l'action intégrale est estimé à partir de $T_c$. La réponse a ensuite été ajustée par essais-erreurs pour essayer d'améliorer les performances, tout en essayant d'éviter les saturations de courant. Les valeurs de gains des correcteurs obtenues sont exposées dans le \cref{tab_joint_ctrl_gains}.
 
@@ -466,17 +450,14 @@ Les boucles de courant sont soumises à des bruits importants, aussi, le choix d
 
 Comme on peut le constater sur la documentation des pilotes moteurs \parencite[Chapitre~12.3]{TRINAMIC_manual_2011}, la période d'échantillonnage des régulateurs de courant $\delta t_{PIc}$ est par défaut de \SI{100}{\micro\second} et les gains saisis sont divisés par des coefficients tel que $K_{c} = P_{PARAMi}/256$ et $K_{ci} = I_{PARAMi}/262144$, pour une correction discrète définie par :
 
-\tikzexternalenable 
 \input{latex_figures/fig_joint_torque_response}
-\tikzexternaldisable
 
 \begin{equation} \label{eq_PI_discrete}
 	C_{PI}(z) = K_{c} + K_{ci} \frac{z}{z - 1}
 \end{equation} 
 
 Le réglage de la correction des vitesses articulaires a suivi un processus équivalent en suivant les recommandations faites par \textcite{newman_stability_1992,lamy_conception_2011}. Il est important de noter, qu'en plus du correcteur proportionnel proposé par \textcite{lamy_conception_2011}, une action intégrale a été ajoutée. En effet, dans un second temps, après la mise en place d'un contrôle en admittance, des dérives ont été constatées lorsque le robot était laissé libre de ses mouvements, sans forces d'interaction. L'ajout de l'action intégrale sur la boucle interne en vitesse a permis de réduire ces comportements sans constat d'impacts négatifs lors des interactions physiques.
-
-\tikzexternalenable 
+ 
 \input{latex_figures/fig_joint_velocity_response}
 \tikzexternaldisable
 

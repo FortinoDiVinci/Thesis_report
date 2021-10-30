@@ -1,4 +1,5 @@
 \chapter{Estimation d’impédance mécanique} \label{chap3}
+\minitoc
 
 \section{Etat de l'art}
 
@@ -121,8 +122,8 @@ L'une des difficultés soulevées par l'estimation d'impédance lors de tâches 
 
 Pour être capable d'estimer la trajectoire virtuelle, il est nécessaire de s'intéresser aux propriétés des signaux concernés, c'est à dire aussi bien à la position qu'à la force le long de l'axe $\vec{z}$. C'est dans ce but que plus de \SI{2}{\hour} d'enregistrements ont été réalisés avec un sujet expérimenté sur deux configurations : 
 \begin{enumerate*}[label=\roman*)]
-	\item l'une en l'absence perturbations induites volontairement par le robot, l'utilisateur a donc été uniquement soumis au poids de son bras, ainsi qu'à la masse inertielle du robot avec le contrôle décrit au \cref{chap2},
-	\item l'autre avec les perturbations prévisibles utilisées pour simuler l'impact de la balle, on peut alors parler de retour haptique simulant la pesanteur de la balle.
+	\item\label{item_unp_session} l'une en l'absence perturbations induites volontairement par le robot, l'utilisateur a donc été uniquement soumis au poids de son bras, ainsi qu'à la masse inertielle du robot avec le contrôle décrit au \cref{chap2},
+	\item\label{item_haptic_session} l'autre avec les perturbations prévisibles utilisées pour simuler l'impact de la balle, on peut alors parler de retour haptique simulant la pesanteur de la balle.
 \end{enumerate*}
 Les essais ont été découpés en session de \SI{5}{\minute}, avec des temps de repos pour limiter les phénomènes liés à la fatigue. L'une de ces intéractions est partiellement présentée, pour la trajectoire en position en \cref{fig_unp_position_test_trajectory} et pour la force en \cref{fig_unp_force_test_trajectory}. On peut constater sur la \cref{subfig_unp_position_test_trajectory_b} que l'amplitude cyclique des trajectoires en position est comprise entre  \SIlist{5;10}{\centi\meter} et la fréquence cyclique entre \SIlist{0.7;1.1}{\hertz}. Si on s'intéresse à l'ensemble des trajectoires, on peut constater que l'amplitude du mouvement reste toujours inféreure à \SI{11}{\centi\meter}. Si on se penche sur la force, on peut observer sur la \cref{subfig_unp_force_test_trajectory_b} une variation d'amplitude en force comprise entre \SIlist{7;15}{\newton}, et sur l'ensemble des essais cette amplitude ne dépasse jamais \SI{16}{\newton}.
 
@@ -204,7 +205,7 @@ Plusieurs solutions s'offrent alors pour essayer d'estimer un morceau de traject
 
 Une autre solution serait de regarder seulement deux points, et donc de n'utiliser qu'un seul polynôme d'ordre trois pour estimer un morceau de trajectoire. Le premier point est simple à définir, il suffit de prendre le dernier point non perturbé de la trajectoire, c'est à dire, juste avant l'injection effective de la perturbation. Le second point suppose de connaître grossièrement la durée réelle des effets de la perturbation, afin de choisir un nouveau point non perturbé, ou le moins possible. Ce dernier point ne doit pas non plus être trop éloigné du premier, car les trajectoires en position et force ne sont assimilables à des splines que par morceaux. Il y a donc un compromis à trouver sur cette distance.
 
-Pour évaluer la précision des splines en fonction de la durée de la fenêtre d'interpolation, les moyennes des racines des erreurs quadratiques (RMSE) ont été évaluées pour \SI{200}{\milli\second}, sur l'ensemble des trajectoires non-perturbées de la session i), c'est à dire sur plus de xx cycles, où l'évaluation était conduite sur une région aléatoire de chaque cycle. La \cref{fig_spline_rmse_evaluation} dévoile les résultats de la moyenne de ces erreurs pour chaque durée des intervalles d'interpolation. Les scores obtenus sont évidemment influencés à la fois par les fenêtres d'interpolation et d'évaluation. Le choix de la durée de la fenêtre d'évaluation est détaillé en \cref{chap3_sec_method_sub_ident}.
+Pour évaluer la précision des splines en fonction de la durée de la fenêtre d'interpolation, les moyennes des racines des erreurs quadratiques (RMSE) ont été évaluées pour \SI{200}{\milli\second}, sur l'ensemble des trajectoires non-perturbées de la session \cref{item_unp_session}, c'est à dire sur plus de xx cycles, où l'évaluation était conduite sur une région aléatoire de chaque cycle. La \cref{fig_spline_rmse_evaluation} dévoile les résultats de la moyenne de ces erreurs pour chaque durée des intervalles d'interpolation. Les scores obtenus sont évidemment influencés à la fois par les fenêtres d'interpolation et d'évaluation. Le choix de la durée de la fenêtre d'évaluation est détaillé en \cref{chap3_sec_method_sub_ident}.
 
 \input{latex_figures/fig_spline_rmse_evaluation}
 
@@ -246,7 +247,7 @@ Le filtre ainsi conçu est d'ordre 2997. L'ordre important du filtre est expliqu
 
 \input{latex_figures/fig_force_filtering_magnitude.tex}
 
-Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de référence, il a été appliqué aux trajectoires non-perturbées de la première session i), comme on peut le voir sur trois cycles en \cref{subfig_force_filtering_a}. La racine de l'erreur quadratique moyenne entre ce filtrage et un filtrage passe-bas de Butterworth d'ordre 2, avec une fréquence de coupure de \SI{50}{\hertz} (ce dernier filtrage permet de retirer le bruit du capteur de force), donne un résultat de \SI{108}{\milli\newton}. Ainsi, même si certains comportements, notamment au niveau des pics de force peuvent être atténués par le filtrage proposé, le signal n'est globalement pas modifié au-delà de la précision du capteur de force (\SI{125}{\milli\newton}).
+Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de référence, il a été appliqué aux trajectoires non-perturbées de la première session \cref{item_unp_session}, comme on peut le voir sur trois cycles en \cref{subfig_force_filtering_a}. La racine de l'erreur quadratique moyenne entre ce filtrage et un filtrage passe-bas de Butterworth d'ordre 2, avec une fréquence de coupure de \SI{50}{\hertz} (ce dernier filtrage permet de retirer le bruit du capteur de force), donne un résultat de \SI{108}{\milli\newton}. Ainsi, même si certains comportements, notamment au niveau des pics de force peuvent être atténués par le filtrage proposé, le signal n'est globalement pas modifié au-delà de la précision du capteur de force (\SI{125}{\milli\newton}).
 
 Toutefois, si on s'intéresse maintenant à la rejection des perturbations, dont on peut voir l'exemple en \cref{subfig_force_filtering_b}, pour une perturbation non prévisible ainsi que pour le retour haptique de la balle, le point de départ du signal filtré à l'instant de la perturbation indique une erreur significative. En effet, si la perturbation semble bien filtrée, et le comportement oscillatoire conservé, à l'instant $t_p$ de la perturbation, un écart de \SI{847}{\milli\newton} vient biaiser l'estimation de la trajectoire virtuelle en force. Des écart similaires se retrouvent sur la plupart des perturbations filtrées, alors qu'on s'attendrait à ce qu'à l'instant de la perturbation, les valeurs coïncident. Il faut donc une solution complémentaire pour palier cette problématique.
 
@@ -256,7 +257,7 @@ Une composante basse fréquence ou continue semble en effet devoir être supprim
 	\caption{Algorithme d'extraction des perturbations par filtrage}\label{algo_pert_filtering}
 	\begin{algorithmic}[1]
 		\Procedure{Perturbation filtering}{$f_z,i_p$}\Comment{$i_p$ index des pert.}
-		\State $l_p \gets 85$
+		\State $l_p \gets ceil(85e-3/dt)$\Comment{\SI{85}{\milli\second} d'échantillons}
 		\State $f_{zc} \gets f_z$
 		\For{$i \text{ in } i_p$}
 		\State $f_{ip} \gets f_z(i:i+l_p-1)$\Comment{extraction de la pert.}
@@ -280,28 +281,33 @@ Cette méthode ne garantie toutefois pas un bon point de départ, même si elle 
 
 \subsubsection{Réseaux de neurones récurrents} \label{chap3_sec_method_sub_virt_traj_5}
 
-Afin d'essayer de prendre en compte plus de paramètres qui peuvent avoir une influence sur la trajectoire virtuelle, comme celle de la balle qui n'a pas été utilisée jusqu'à présent, on peut utiliser des modèles types boîtes noires qui sont régulièrement utilisés pour la prédiction de trajectoire, notamment dans le domaine automobile \parencite{messaoud_relational_2019,mercat_kinematic_2020}. Les réseaux de neurones récurrents (RNN\footnote{Recurrent Neural Network}) sont adaptés à la prédiction de séries temporelles, comme les trajectoires. En effet, contrairement à d'autres modèles neuronaux comme ceux à propagation avant - \textit{feedforward neural network} -, les RNN permettent de prendre en compte leur état interne, et donc leur mémoire, pour réaliser leur prédiction. 
+Afin d'essayer de prendre en compte plus de paramètres qui peuvent avoir une influence sur la trajectoire virtuelle, comme celle de la balle qui n'a pas été utilisée jusqu'à présent, on peut utiliser des modèles types boîtes noires qui sont régulièrement utilisés pour la prédiction de trajectoire, notamment dans le domaine automobile \parencite{messaoud_relational_2019,mercat_kinematic_2020}. Les réseaux de neurones récurrents (RNN\footnote{Recurrent Neural Network}) sont adaptés à la prédiction de séries temporelles \parencite{yu_review_2019}, comme les trajectoires. En effet, contrairement à d'autres modèles neuronaux comme ceux à propagation avant - \textit{feedforward neural network} -, les RNN permettent de prendre en compte leur état interne, et donc leur mémoire, pour réaliser leur prédiction. 
 
-\begin{aside}{Réseaux LSTM}
-	L'architecture LSTM\footnote{Long Short Term Memory: réseau récurrent à mémoire court et long terme} \parencite{hochreiter_long_1997} est la structure la plus classiquement utilisée pour ce type de problème. Elle permet notamment au réseau de se souvenir d'états dans le passé malgré les problématiques posées par la disparition du gradiant, notamment grâce à l'utilisation de deux états internes, l'état caché $\vect{h}$ et celui de la cellule $\vect{c}$. Les quatre couches neurales typiques d'une cellule LSTM se définissent chacune avec une fonction d'activation qui prend en paramètre les entrées et états cachés pondérés par des matrices de poids $\matr{W}_i$, ainsi que des vecteurs de biais $\vect{b}_i$, comme montré sur l'équation \cref{eq_lstm_ft} à titre d'exemple pour la porte d'oubli $\vect{f}_t$ avec la fonction sigmoïde $\sigma$.
+\begin{aside}{Réseaux récurrent LSTM}
+	L'architecture LSTM\footnote{Long Short Term Memory: réseau récurrent à mémoire court et long terme} \parencite{hochreiter_long_1997} est la structure la plus classiquement utilisée pour ce type de problème. Elle permet notamment au réseau de se souvenir d'états dans le passé malgré les problématiques posées par la disparition du gradiant, notamment grâce à l'utilisation de deux états internes, l'état caché $\vect{h}$ et celui de la cellule $\vect{c}$. Les quatre couches neurales typiques d'une cellule LSTM se définissent chacune avec une fonction d'activation qui prend en paramètre les entrées et états cachés pondérés par des matrices de poids $\matr{W}_i$, ainsi que des vecteurs de biais $\vect{b}_i$, comme montré sur l'équation \cref{eq_lstm_ft} à titre d'exemple pour la porte d'oubli $\vect{f}_t$ avec la fonction sigmoïde $\sigma$ (voir \cref{app_lstm_rnn}).
 	
 	\begin{equation} \label{eq_lstm_ft}
 		\vect{f}_t = \sigma(\matr{W}_1 \left[\vect{h}_{t-1}, \vect{x}_t\right] + \vect{b}_1)
 	\end{equation}
+	\begin{equation} \label{eq_lstm_ct}
+		\vect{c}_t = \vect{f}_t \hadamard \vect{c}_{t-1} + \vect{i}_t \hadamard \tilde{\vect{c}}_{t-1} 
+	\end{equation}
 	
+	\tikzexternalenable
 	\input{latex_figures/fig_lstm_architecture.tex}
+	\tikzexternaldisable
 	
 \end{aside}
 
-Une architecture LSTM classique a donc été mise en oeuvre, et entraînée avec les sessions i) et ii). Les entrée injectées $\vect{x}_t$ à chaque instant $t$ sont : 
+Une architecture LSTM classique a donc été mise en oeuvre, et entraînée avec les sessions i) et ii). Les entrées injectées $\vect{x}_t$ à chaque instant $t$ sont : 
 \begin{enumerate*}[label=\alph*)]
-	\item la position cartésienne données par le système de vision,
+	\item la position cartésienne donnée par le système de vision,
 	\item la force d'interaction entre le robot et l'utilisateur,
 	\item la position simulée de la balle,
 	\item un boléen explicitant la main utilisée (gauche ou droite), et
 	\item un autre boléen précisant si les impacts de la balle sont simulés.
 \end{enumerate*}
-Les signaux $\vect{s}$ sont normalisés en variance \cref{eq_variance_normalisation}, et sous-échantillonnés à \SI{100}{\hertz}, un cycle entier pouvant faire plus d'une seconde. Les dernières \SI{200}{\milli\second} des cycles en force sont masquées, et la fonction de coût est évaluée à l'aide de la moyenne des erreurs quadratique entre la prédiction $\hat{\vect{y}}$ et le signal non masqué $\vect{y}$ avec une pondération différente pour insister sur l'importance de la partie masquée notée avec l'indice $m$, contrairement à la région non masquée du cycle notée avec l'incide $um$ dans l'équation \cref{eq_lstm_cost_function}.
+Les signaux $\vect{s}$ sont normalisés en variance \cref{eq_variance_normalisation}, et sous-échantillonnés à \SI{100}{\hertz}, un cycle entier pouvant faire plus d'une seconde (limite de la mémoire des cellules LSTM). Les dernières \SI{200}{\milli\second} des cycles en force sont masquées, et la fonction de coût est évaluée à l'aide de la moyenne des erreurs quadratique entre la prédiction en force $\hat{\vect{y}}$ et le signal non masqué $\vect{y}$ avec une pondération différente pour insister sur l'importance de la partie masquée notée avec l'indice $m$, contrairement à la région non masquée du cycle notée avec l'incide $um$ dans l'équation \cref{eq_lstm_cost_function}.
 
 \begin{equation} \label{eq_variance_normalisation}
 	\vect{s}_n = (\vect{s} - \mean{\vect{s}})/\text{std}(\vect{s})
@@ -311,9 +317,62 @@ Les signaux $\vect{s}$ sont normalisés en variance \cref{eq_variance_normalisat
 	loss = \alpha \mean{\sum(\hat{\vect{y}}_m - \vect{y}_m)^2} + (1-\alpha) \mean{\sum(\hat{\vect{y}}_{um} - \vect{y}_{um})^2}
 \end{equation}
 
-Cette mise en place schématique a prouvé la faisabilité d'une telle approche, mais un réglage plus fin des hyperparamètres, l'utilisation d'une fonction de coût plus avancée (vraisemblance), et éventuellement la conception d'une architecture plus avancée (plusieurs cellules LSTM, ...), et une base de données plus fournie seraient nécessaire pour arriver à des résultats concluants.
+Cette mise en place embryonnaire a confirmé la faisabilité d'une telle approche, mais un réglage plus fin des hyperparamètres, l'utilisation d'une fonction de coût plus avancée (vraisemblance), et éventuellement la conception d'une architecture plus complexe (plusieurs cellules LSTM, ...), et une base de données plus fournie seraient nécessaire pour arriver à des résultats véritablement concluants. Sur les 471 morceaux de \SI{1.5}{\second} de trajectoires testées (ne faisant ni partie des ensembles d'entraînement, ni de validation), le modèle obtient respectivement des erreurs RMS de \SI{788}{\milli\newton} et \SI{1.19}{\newton} pour les parties de la trajectoire non masquée et masquée, après réinterpolation des données à \SI{1}{\kilo\hertz}.
+
+\tikzexternalenable
+\input{latex_figures/fig_lstm_prediction.tex}
 
 \subsubsection{Sommes de sinus} \label{chap3_sec_method_sub_virt_traj_6}
+
+Les signaux de force présentant des oscillations intracycliques, essayer d'approcher une portion avec des sommes de sinus semble assez intuitif. On peut définir une forme très générale de la force, montré en équation \cref{eq_sum_sine_force_trajectory}. Il faut dans un premier définir les hyperparamètres $n$ (nombre de sinusoïdes) et $l_b$ (boléen pour la présence de composante linéaire), de cette équation, mais aussi choisir une méthode permettant d'obtenir le reste des paramètres propres à chacun des morceaux étudiés. Avec $a$ et $b$ les composantes linéaires, $A_i$ l'amplitude, $f_i$ la fréquence, et $\phi_i$ la phase de la ième sinusoïde.
+
+\begin{equation} \label{eq_sum_sine_force_trajectory}
+	\hat{\vect{f}_z}(t) = l_b(at + b) + \sum_{i=1}^{n}A_i \sin(2\pi f_i + \phi_i)
+\end{equation}
+
+Le nombre de sinusoïdes a été limité à cinq pour à la fois réduire la complexité du problème et éviter les phénomènes de surapprentissage. De même comme la force se compose d'au moins deux fréquences, celle du cycle, et celle des oscillations observées, $n$ peut être borné ainsi : $2\le n\le5$. On a alors huit combinaisons possibles pour les hyperparamètres en considérant $l_b$. Pour obtenir les autres paramètres, on pose un problème d'optimisation \cref{eq_sine_optimisation}pour chercher à minimiser l'erreur quadratique non linéaire sur une portion du signal considérée non-perturbée, à l'aide d'un algorithme Levenberg-Marquardt \parencite{more_levenberg-marquardt_1978}.
+
+\begin{equation} \label{eq_sine_optimisation}
+	\min_x \norm{f(x=\{A_i, f_i, \phi_i, a, b\})}^2_2
+\end{equation}
+
+Contrairement aux travaux de \textcite{abe_modulation_2003}, qui ont approché la trajectoire en position à l'aide de sommes de sinusoïdes, l'optimisation est réalisée uniquement à partir des données du cycle concerné, aucune information concernant les cycles précédents ou suivants n'est utilisée. Des portions avant et après la perturbation sont utilisées pour résoudre le problème posé (ce qui n'est pas possible dans une prédiction en ligne). 
+
+Dans un esprit similaire à ce qui a été fait pour entraîner le réseau de neurones récurrent (\cref{chap3_sec_method_sub_virt_traj_5}), \SI{100}{\milli\second} du signal sont masquées, en considérant qu'elles correspondent à la portion perturbée de la force d'interaction. \SI{40}{\milli\second} avant la perturbation sont alors considérées en plus de \SI{110}{\milli\second} après le masque. Une portion plus importante du signal est considérée après la perturbation, pour obtenir suffisement d'échantillons temporels pour l'identification. La \cref{fig_sine_sum_trajectory} présente l'exemple de deux cycles en force. 
+
+\input{latex_figures/fig_sine_sum_trajectory.tex}
+\tikzexternaldisable
+
+Il est important de noter que la résolution du problème optimal \cref{eq_sine_optimisation} est sensible aux conditions initiales. Or, en observant les paramètres obtenus après la résolution de trajectoires non-perturbées, à différents instants du cycle en force pour les données de la session \cref{item_unp_session}, il ne semble pas qu'une unique initialisation soit une solution prometteuse. Cette supposition a été confirmée en comparant deux méthodes 
+\begin{enumerate*}[label=\alph*)]
+	\item\label{item_method_opt_init_a}  pour chaque expérience, la première résolution est réalisée en prenant 250 points de départ définis aléatoirement dans les bornes définies dans le \cref{tab_sine_opt_intials}, puis pour les autres trajectoires, les conditions initiales sont définies comme les paramètres obtenus lors de la première résolution,
+	\item\label{item_method_opt_init_b}  50 points de départ sont choisis similairement, cette fois pour chaque résolution.
+\end{enumerate*}
+La seconde méthode \cref{item_method_opt_init_b} a apporté des résultats systématiquement meilleurs, quelque soient les hyperparamètres choisis.
+
+\begin{table}[htbp] 
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|}
+			\hline  
+			& $A_i$ (\si{\newton}) & $f_i$ (\si{\hertz}) & $\phi_i$ (\si{\radian\per\second}) & $a$ (\si{\newton\per\second}) & $b$ (\si{\newton}) \\
+			\hline
+			$b_l$ & 0 & 0 & $ -pi/2 $ & -100 & -100 \\
+			\hline
+			$x_0$ & 1 & $ 0.9(2i-1) $  & 0 & 1e-3 & 1e-3 \\
+			\hline
+			$b_u$ & 10 & 10 & $ pi/2 $ & 100 & 100 \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Limites inférieures ($b_l$) et supérieures ($b_u$) pour les conditions initiales, et premier point de départ défini manuellement ($ x_0 $)}
+	\label{tab_sine_opt_intials}	
+\end{table}
+
+Les huit différents modèles ont ensuite été comparés entre eux toujours en utilisant les données des essais de la session \cref{item_unp_session}, en regardant à la fois les \SI{100}{\milli\second} masquées et les \SI{100}{\milli\second} suivantes. Le critère d'\textcite{akaike_fitting_1969} (AIc) a été utilisé afin de pénaliser le nombre de paramètres qui, lorsqu'ils sont trop nombreux peuvent indtroduire du surapprentissage, et en même temps récompenser la précision des modèles.
+
+\begin{aside}
+	comparaison des critères d'Akaike, de Schwarz's Bayesian criterion, et Corrected AIC (Hurvich and Tsai, 1989)
+\end{aside}
 
 \subsubsection{Bilan des choix méthodologiques} \label{chap3_sec_method_sub_virt_traj_7}
 

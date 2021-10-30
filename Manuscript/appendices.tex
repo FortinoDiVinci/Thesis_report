@@ -60,7 +60,9 @@
 	
 	Dans le cas très simple du robot plan, dont on rappelle la structure simplifiée, avec les notations des différentes longueurs et conventions d'angles en \cref{fig_robot_simplified_model}, le calcul du modèle géométrique direct ne nécessite pas de passer par la convention de Denavit-Hartenberg, et les combinaisons de transformations homogènes.
 	
+	\tikzexternalenable
 	\input{latex_figures/fig_robot_model}
+	\tikzexternaldisable
 	
 	Ainsi, en cherchant à calculer géométriquement les coordonnées $ x_e $, $ z_e $ et $ \theta_e $, par rapport à la base du robot $ ( x_0, 0 ) $ on obtient les résultats présentés dans l'équation \cref{eq_direct_kinematic}.
 	
@@ -337,6 +339,48 @@
 		\dot{x}_\epsilon = -(l_1 s_1 + l_2 s_{12} + l_3 s_{123} + l_2 s_{12} + l_3 s_{123} + l_3 s_{123}) \dot{q}_\epsilon
 	\end{equation}
 
+	%%%%%%%
+	% APP 6
+	%%%%%%%
+	\chapter[LSTM]{Réseaux de neurones récurrents à mémoire court et long terme (LSTM)} \label{app_lstm_rnn}
+	
+	Une cellule LSTM classique se compose de quatre couche neuronale. Chacun de ces niveaux se compose d'une fonction d'activation $f_a$ (sigmoïde ou tangente hyperbolique), d'une matrice de gain $\matr{W}_i$ et d'un vecteur de biais $\vect{b}_i$, sous la forme suivante $f_a(\matr{W}_i \vect{e}_t + \vect{b}_i)$, avec $\vect{e}$ le vecteur du signal d'entrée. Par ailleurs l'une des particularités des cellules LSTM est qu'elles contiennent deux états, celui de la cellule $\vect{c}_t$ et l'état caché $\vect{h}_t$. Ce dernier état est concaténé au vecteur d'entrée du pas suivant $\vect{x}_{t+1}$, autrement dit l'ancien état caché et regroupé avec l'entrée de la cellule $\vect{e}_t = [\vect{h}_{t-1}, \vect{x}_{t}]$.
+	
+	Les couches neuronales peuvent être regroupée sous forme de trois portes. La première appelée porte d'oubli permet de se débarrasser d'anciennes données, à l'aide d'une fonction d'activation sigmoïdique qui fourni un facteur d'oubli compris entre 0 et 1 pour selectionner partiellement des informations du précédent état de la cellule.
+	
+	\begin{equation} \label{eq_lstm_ft_app}
+		\vect{f}_t = \sigma(\matr{W}_f \vect{e}_t + \vect{b}_f)
+	\end{equation}
+	
+	La porte suivante, dites d'entrée, se compose de deux couches. La première, $\vect{i}_t$, permet de définir les valeurs qui seront mises à jour, à l'aide aussi de la fonction sigmoïde et la seconde,  $\tilde{\vect{c}}_t$, permet de soumettre un vecteur de candidats pour mettre à jour l'état de la cellule, cette fois à l'aide de la tangente hyperbolique.
+	
+	\begin{equation} \label{eq_lstm_it}
+		\vect{i}_t = \sigma(\matr{W}_i \vect{e}_t + \vect{b}_i)
+	\end{equation}
+	
+	\begin{equation} \label{eq_lstm_ctt}
+		\tilde{\vect{c}}_t = \tanh(\matr{W}_c \vect{e}_t + \vect{b}_c)
+	\end{equation}
+	
+	L'ancien état de la cellule $\vect{c}_{t-1}$ est alors mis à jour en utilisant des opérations élémentaires, d'abord avec le produit de Hadamard, noté $\hadamard$, pour oublier une partie des états, puis en y ajoutant le vecteur des nouveaux candidats.
+	
+	\begin{equation} \label{eq_lstm_ct_app}
+		\vect{c}_t = \vect{f}_t \hadamard \vect{c}_{t-1} + \vect{i}_t \hadamard \tilde{\vect{c}}_{t-1} 
+	\end{equation}
+	
+	Finalement la porte de sortie est une version filtrée et combinée des deux états de la cellule, comme montré sur l'équation \cref{eq_lstm_ht}.
+	
+	\begin{equation} \label{eq_lstm_ot}
+		\vect{o}_t =  \sigma(\matr{W}_o \vect{e}_t + \vect{b}_o)
+	\end{equation}
+	
+	\begin{equation} \label{eq_lstm_ht}
+		\vect{h}_t =  \vect{o}_t \hadamard \tanh(\vect{c}_t)
+	\end{equation}
+	
+	\tikzexternalenable
+	\input{latex_figures/fig_lstm_architecture_detailed.tex}
+	\tikzexternaldisable
 	
 	%%%%%%%
 	% APP n

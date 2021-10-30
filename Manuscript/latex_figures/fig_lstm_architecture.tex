@@ -1,8 +1,9 @@
 %% modified version of the script by J. Leon, Beerware
+\tikzsetnextfilename{fig_lstm_architecture}
 \centering
 \begin{tikzpicture}[
 	% GLOBAL CFG
-	font=\sf \scriptsize,
+	font= \scriptsize,
 	>=LaTeX,
 	% Styles
 	cell/.style={% For the main box
@@ -50,7 +51,7 @@
 		text opacity=1,
 	},
 	mylabel/.style={% something new that I have learned
-		font=\scriptsize\sffamily
+		font=\scriptsize%\sffamily
 	},
 	ArrowC1/.style={% Arrows with rounded corners
 		rounded corners=.25cm,
@@ -84,7 +85,7 @@
 	\node[ct, label={[mylabel]Caché}] (h) at (-4,-1.5) {$\vect{h}_{t-1}$};
 	\node[ct, label={[mylabel]left:Entrée}] (x) at (-2.5,-3) {$\vect{x}_t$};
 	
-	% Draw External outputs? named as basis c2,h2,x2
+	% Draw External outputs? named as basis c2,h2
 	\node[ct] (c2) at (4,1.5) {$\vect{c}_t$};
 	\node[ct, label={[mylabel]Sortie}] (h2) at (4,-1.5) {$\vect{h}_t$};
 	
@@ -123,5 +124,5 @@
 	
 \end{tikzpicture}
 \vspace{1mm}
-\captionof{figure}{Architecture LSTM classique, les couches neuronales sont représentées par les rectangles violets, et les opérateurs élémentaires (opération élément par élément, par exemple produit de Hadamard pour les multiplications) sont représentés par des ellipses ou cercles gris. Le point noir indique la concaténation des entrées et de l'état caché précédent.}
+\captionof{figure}{Architecture LSTM classique, les couches neuronales sont représentées par les rectangles violets, et les opérateurs élémentaires (opération élément par élément, par exemple produit de Hadamard pour les multiplications \parencite{styan_hadamard_1973}, noté $\hadamard$) sont représentés par des ellipses ou cercles gris. Le point noir indique la concaténation de $\vect{h}_{t-1}$ et $\vect{x}_t$.}
 \label{fig_lstm_architecture}
