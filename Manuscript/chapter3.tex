@@ -368,11 +368,25 @@ La seconde méthode \cref{item_method_opt_init_b} a apporté des résultats syst
 	\label{tab_sine_opt_intials}	
 \end{table}
 
-Les huit différents modèles ont ensuite été comparés entre eux toujours en utilisant les données des essais de la session \cref{item_unp_session}, en regardant à la fois les \SI{100}{\milli\second} masquées et les \SI{100}{\milli\second} suivantes. Le critère d'\textcite{akaike_fitting_1969} (AIc) a été utilisé afin de pénaliser le nombre de paramètres qui, lorsqu'ils sont trop nombreux peuvent indtroduire du surapprentissage, et en même temps récompenser la précision des modèles.
+Les huit différents modèles ont ensuite été comparés entre eux toujours en utilisant les données des essais de la session \cref{item_unp_session}, en regardant à la fois les \SI{100}{\milli\second} masquées et les \SI{100}{\milli\second} suivantes. Le critère d'\textcite{akaike_new_1974} (AIC\footnote{A(kaike) Information Criterion}) a été utilisé afin de pénaliser le nombre de paramètres qui, lorsqu'ils sont trop nombreux peuvent introduire du surapprentissage, et en même temps récompenser la précision des modèles.
 
-\begin{aside}
-	comparaison des critères d'Akaike, de Schwarz's Bayesian criterion, et Corrected AIC (Hurvich and Tsai, 1989)
+\begin{aside}{Critères de sélection de modèle}
+	En statistique, le AIC permet de comparer l'adéquation de modèles par rapport à un jeu de données, en estimant la quantité d'information perdue par un modèle, car comme le dit l'aphorisme attribué au statisticien Georges Box, les modèles sont toujours faux, mais certains sont utiles\footnote{"All models are wrong but some are useful" \parencite{box_robustness_1979}}. Ce critère est marquée par le principe de parcimonie aussi mis en avant par \textcite{box_science_1976}, en s'intéressant au compromis entre la justesse d'un modèle et sa simplicité. Ainsi dans la formulation \cref{eq_aic} du critère, on trouve $k$ le nombre de paramètres du modèle et $L$ le maximum de vraisemblance.
+	%
+	\begin{equation} \label{eq_aic}
+		AIC = -2\ln(L) + 2k
+	\end{equation}
+	
+	Le modèle le plus fidèle est alors celui ayant la valeur de critère la plus faible. Si on suppose que les erreurs résiduelles sont identiques et indépedantes et suivent une distribution normale, alors le maximum de vraissemblance peut s'écrire sous la forme \cref{eq_likelihood_normal} \parencite[p~217]{akaike_information_1998}, avec $n_s$ le nombre d'échantillons, et $c$ une constante dépendant uniquement des données (et donc qui peut-être ignorée pour l'évaluation du critère).
+	%
+	\begin{equation} \label{eq_likelihood_normal}
+		\ln(L) = -\frac{n_s}{2}\ln\left(\frac{\sum_{i=1}^{n_s}y_i - \hat{y}_i}{n_s}\right) + c
+	\end{equation}
+	
+	Depuis son introduction, d'autres critères ont été développés, ou sont venus combler des faiblesses de l'AIC. Par exemple le critère de \textcite{schwarz_estimating_1978} (BIC\footnote{Bayesian Information Criterion}), qui pénalise plus fortement les dégrés de liberté des modèles et garanti de trouver le "vrai" modèle s'il est disponible parmis les candidats (lorsque $n_s\to\infty$). On pourra toutefois noter que le "véritable" modèle, ne fait jamais parti des modèles candidats. Par ailleurs, pour combler la faiblesse de l'AIC lorsque le nombre d'échantillons est trop faible, \textcite{hurvich_regression_1989} ont proposé une version corrigée du critère qui limite les phénomènes de surapprentissage (AICc), et des corrections du critère ont encore été proposées récemment \parencite{delsole_correcting_2021}.
 \end{aside}
+
+C'est la somme de trois sinus ($n=3$) sans composants linéaires ($l_b=0$) qui a obtenu le score d'AIC le plus faible. Le même résultat a été obtenu avec l'AICc et le BIC. Ce modèle obtient respectivement des erreurs RMS de \SI{}{\milli\newton} et \SI{}{\milli\newton} pour les \SIlist{100;200}{\milli\second} qui suivent l'introduction de la perturbation.
 
 \subsubsection{Bilan des choix méthodologiques} \label{chap3_sec_method_sub_virt_traj_7}
 

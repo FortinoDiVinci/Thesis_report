@@ -1,0 +1,25 @@
+\begin{figure} [h]
+	\centering
+	\resizebox{\textwidth}{!}{%
+	\begin{minipage}[b]{.5\linewidth}
+	\centering
+	\subcaptionbox{Muscle tendu \label{stretched_muscle}}
+	{
+	\begin{tikzpicture} [node distance = 2cm]
+		\node[](stretched_muscle) at ($(0,0)$) {\includegraphics[width=.5\textwidth]{misc/schema_muscle_stretched.png}};
+	\end{tikzpicture}
+	}
+	\end{minipage}
+	\begin{minipage}[b]{.5\linewidth}
+	\centering
+	\subcaptionbox{Muscle contracté \label{contracted_muscle}} 
+	{
+		\begin{tikzpicture} [node distance = 2cm]
+		\node[](contracted_muscle) at ($(0,0)$) {\includegraphics[width=.5\textwidth]{misc/schema_muscle_contracted.png}};
+		\end{tikzpicture}
+	}
+	\end{minipage}
+	}% resizebox
+	\caption{Schéma illustratif d'une contraction musculaire}
+	\label{fig_schema_muscle_activation}
+\end{figure}
