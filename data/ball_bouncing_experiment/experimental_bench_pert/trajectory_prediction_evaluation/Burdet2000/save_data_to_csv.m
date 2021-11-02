@@ -4,7 +4,7 @@ clear all
 addpath('../../utils')
 addpath('../../utils/cycles')
 
-load('data/burdet_algo_20Hz_failure2.mat', 'b_cand', 'cand', 'i', ...,
+load('data/burdet_algo_20Hz_failure.mat', 'b_cand', 'cand', 'i', ...,
     'alt_b_cand', 'cycles', 'pred_indexes', 'learn_idx', 'nsig', 't');
 
 figure
@@ -65,15 +65,30 @@ legend([p0 p1(1) p3 p4], ["Actual signal", "Candidates", "BC Burdet", "BC min RM
 
 cand_table_subsamp = table(idx,candidates);
 
-write(cand_table,'candidates.csv','Delimiter',',');
-write(cand_table_subsamp,'candidates_subsamp.csv','Delimiter',',');
-write(best_cand_table,'best_candidates.csv','Delimiter',',');
+%write(cand_table,'candidates.csv','Delimiter',',');
+%write(cand_table_subsamp,'candidates_subsamp.csv','Delimiter',',');
+%write(best_cand_table,'best_candidates.csv','Delimiter',',');
 
-position = downsample(nsig,10);
-time = downsample(t,10);
+position = downsample(nsig((31069:81069)),10)';  
+time = downsample(t((31069:81069)),10)'; 
 
 figure
+subplot(2,1,1)
 plot(time, position)
+subplot(2,1,2)
+plot(position)
 
 complete_signal = table(time,position);
-write(complete_signal,'position_signal.csv','Delimiter',',');
+%write(complete_signal,'position_signal.csv','Delimiter',',');
+
+%% frequency analysis
+% 
+% fs = mean(1./diff(t));
+% nsig_clip = nsig(1,5000:end-2000)';  % first 5 sec and last 2 sec are often non cyclic  
+% y = fft(nsig_clip);
+% n = length(nsig_clip); % number of samples
+% f_r = (0:n-1)*(fs/n);  % frequency range
+% power = abs(y).^2/n;   % power of the DFT
+% 
+% figure
+% semilogy(f_r, power)

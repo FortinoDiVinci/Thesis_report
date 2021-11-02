@@ -1,0 +1,46 @@
+\begin{figure}[!htb] 
+	\centering
+	%\resizebox{\textwidth}{!}{		
+		\tikzsetnextfilename{fig_local_sensitivity_analysis}
+		\begin{tikzpicture}
+			\centering
+			%
+			\begin{axis}[%
+				width=.95\linewidth,
+				height=.3\linewidth,
+				scale only axis,
+				ybar,
+				ymode=log,
+				log origin y=infty,
+				%enlarge y limits={abs=2em},
+				%bar width = {.4em},
+				enlargelimits=0.15,
+				%ylabel={percentage},
+%				enlargelimits=true,
+				symbolic x coords={K,B,M},
+				legend style={at={(0.87,0.97)},anchor=north east},
+%				nodes near coords = {\tiny \pgfmathprintnumber\pgfplotspointmeta},
+				nodes near coords align={vertical},
+				xtick distance=1,
+				ymin=0,
+				x=3cm,
+				]
+				%
+				\addplot coordinates {
+					(K,5.0504e+05) (B,505.4539) (M,0.2113)
+				};
+				%
+				\addplot coordinates {
+					(K,5.0504e+05) (B,0.4230) (M,0.0421)
+				};
+				%
+				\addplot coordinates {
+					(K,5.1012e+07) (B,5.1012e+06) (M,5.0756e+05)
+				};
+				\legend{$a_0$, $a_1$, $b_0+b_1$}
+			\end{axis}		
+		\end{tikzpicture}
+		%}	
+	\caption{Analyse de sensibilités locale, pour les valeurs $y_0$ données dans le \cref{tab_typical_coefficient_sensitivity_analysis}.}
+	\label{fig_local_sensitivity_analysis}
+\end{figure}

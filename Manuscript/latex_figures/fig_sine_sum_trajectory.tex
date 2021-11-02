@@ -29,10 +29,10 @@
 						]
 					table [col sep=comma, x=time, y=virtual] {misc/trajectory_estimation_sines/sine_optimisation_trajectory_1.csv};
 					%
-					\coordinate (fitLeftUp) at (axis cs:147.6875, \pgfkeysvalueof{/pgfplots/ymax});
+					\coordinate (fitLeftUp) at (axis cs:147.6175, \pgfkeysvalueof{/pgfplots/ymax});
 					\coordinate (pDw) at (axis cs:147.7275, \pgfkeysvalueof{/pgfplots/ymin});
 					\coordinate (maskUp) at (axis cs:147.8275, \pgfkeysvalueof{/pgfplots/ymax});
-					\coordinate (fitRightDw) at (axis cs:147.9375, \pgfkeysvalueof{/pgfplots/ymin});
+					\coordinate (fitRightDw) at (axis cs:147.9775, \pgfkeysvalueof{/pgfplots/ymin});
 					\path[pattern=north west lines, pattern color=pink] (pDw) rectangle (fitLeftUp);
 					\path[pattern=north west lines, pattern color=gray] (pDw) rectangle (maskUp);
 					\path[pattern=north west lines, pattern color=pink] (maskUp) rectangle (fitRightDw);
@@ -86,8 +86,8 @@
 							%legend image post style={draw opacity=0},% remove the border 
 							] 
 						coordinates {
-							(204.8875, 7.7) %7.68
-							(204.8875, -6.4)
+							(204.8175, 7.7) %7.68
+							(204.8175, -6.4)
 							(204.9275, -6.4)
 							(204.9275, 7.7)
 						};
@@ -114,8 +114,8 @@
 						coordinates {
 							(205.0275, 7.7) %7.68
 							(205.0275, -6.4)
-							(205.1375, -6.4)
-							(205.1375, 7.7)
+							(205.1775, -6.4)
+							(205.1775, 7.7)
 						};
 %						\path[pattern=north west lines, pattern color=pink] (pDw) rectangle (fitLeftUp);
 %						\addlegendimage{pattern=north west lines, pattern color=pink}
@@ -131,6 +131,6 @@
 				\end{tikzpicture}
 %			}	
 		}	
-	\caption{Exemples d'estimation de trajectoire grâce à des sommes de sinusoïdes optimisées. }
+	\caption{Exemples d'estimation de trajectoire grâce à des sommes de sinusoïdes optimisées.}
 	\label{fig_sine_sum_trajectory}
 \end{figure}

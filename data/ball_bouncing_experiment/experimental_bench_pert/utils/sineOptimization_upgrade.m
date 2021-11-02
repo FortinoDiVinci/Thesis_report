@@ -1,11 +1,11 @@
-function [traj_opt, xmulti, errormulti] = sineOptimization_upgrade(t, sig, idx_p, varargin)
+function [traj_opt, xmulti, errormulti, exitflag] = sineOptimization_upgrade(t, sig, idx_p, varargin)
 % sineOptimization
 % The virtual signal, or unperturbed signal, is computed thanks to a sine
 % optimization fitting
 %
 % Inputs:
 % t: time vector of the complete signal   Nx1
-% sig: completet input signal vector      Nx1
+% sig: complete  input signal vector      Nx1
 % idx_p: perturbation index     
 % Varargin
 % pertLength: perturbations length         default = 65 samples
@@ -166,8 +166,8 @@ else
     error('Unknown solver name')
 end
 % multiple starting points opt
-ms = MultiStart('Display','off','UseParallel',true);
-[xmulti,errormulti] = run(ms, problem, nb_start_pts);
+ms = MultiStart('Display','off'); %,'UseParallel',true
+[xmulti,errormulti,exitflag] = run(ms, problem, nb_start_pts);
  
 % optimal parameters
 for i = 1:nb_sine

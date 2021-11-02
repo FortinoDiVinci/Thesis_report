@@ -17,17 +17,17 @@ base_save_path = "trajectory_prediction_evaluation/Burdet2000/";
 % MACRO
 
 % GLOBAL LOOP (iterations of the algorithme
-NB_OF_GLOBAL_ITERATIONS = 1; % nb pseudo random signals generated
+NB_OF_GLOBAL_ITERATIONS = 14; % nb pseudo random signals generated
 NB_OF_CONFIGURATIONS = 1; % For the time distorsion
 NB_TIME_DISTORTIONS = [1];%[1, 5, 9]; % should be of size NB_OF_CONFIGURATIONS
 TIME_DISTORTION_GROWTH = [0];%[0, 0.03, 0.03]; % provided as percentage
 CLEAR_TEMPORARY_DATA = 1; % Not setting this var to 1 can lead to memory crashes
 SAVE_FIGURES = 0;
-LOW_PASS_FREQ = 20; % Hz (50 Hz)
+LOW_PASS_FREQ = 50; % Hz (50 Hz)
 
 % INPUT SIGNAL
 EXTERNAL_INPUT_SIGNAL = 1;
-EXTERNAL_IS_FORCE = 1; % set to 0 to use position
+EXTERNAL_IS_FORCE = 0; % set to 0 to use position
 if EXTERNAL_INPUT_SIGNAL
     addpath('../../force_torque_sensor');
     %load("preliminary_experimental_data/data_vfo_10.mat"); 
@@ -35,6 +35,7 @@ if EXTERNAL_INPUT_SIGNAL
         'mocap_marker_robot_base','t','idx_ball_off_ramp','dist', 't_dist', ...
         'SINGLE_MOCAP_FITTING'};
     load("data_2020_Nov_17/data_without_impacts_2020_11_17.mat", necessary_variables{:}); 
+    load("trajectory_prediction_evaluation/random_gen_list.mat")
     t_in = t;
     clear t
     %idx_start = [1.5e4];
@@ -56,6 +57,11 @@ if EXTERNAL_INPUT_SIGNAL
         end
     end
     idx_start_arr = cell2mat(idx_ball_off_ramp);
+    if idx_start_arr(9) == 2 
+        % an error occured in data_without_impacts_2020_11_17 9th session
+        % it is manually fed
+        idx_start_arr(9) = 18000;
+    end
     idx_end_arr = cellfun(@length,forces_unf);
     if NB_OF_GLOBAL_ITERATIONS > length(forces_unf)
         NB_OF_GLOBAL_ITERATIONS = length(forces_unf);
@@ -67,12 +73,12 @@ else
 end
 
 % DISPLAY
-DISP_ALL_CANDIDATES_AND_BEST_MATCH_FOR_CYCLES = 1; % depending on the number
+DISP_ALL_CANDIDATES_AND_BEST_MATCH_FOR_CYCLES = 0; % depending on the number
 % of candidate it might lead Matlab to crash if set to 1
 % a temporrary condition has been added
 
 % Other methods to compare with
-DO_SPLINE_INTERP = 1;
+DO_SPLINE_INTERP = 0;
 
 if DO_SPLINE_INTERP
     DISP_SPLINE_ALL_CANDIDATES = 1;
@@ -97,6 +103,8 @@ for i = 1:NB_OF_METHODS
         end
     end
 end
+
+best_candidates_burdet_rmse = [];
 
 for SIGNAL_IDX = 1:NB_OF_GLOBAL_ITERATIONS
 %%%%%%%%%%%%%%%%%%%%%%
@@ -290,7 +298,12 @@ for i = 1:length(cycles)
 end
 title('Normalized cyclic data')
 
-RAND_GEN = rand([1 length(ncycles)]);
+%
+if EXTERNAL_INPUT_SIGNAL % the same random sequence is used for all methods
+    RAND_GEN = RAND_GEN_LIST{SIGNAL_IDX};
+else
+    RAND_GEN = rand([1 length(ncycles)]);
+end
 
 for CONFIG_IDX = 1:NB_OF_CONFIGURATIONS
 % ALGORITHM PARAMETERS
@@ -437,14 +450,22 @@ for i = k+1:length(cycles)-1 % ncycles
         end
     end
     
-    
+    % the best candidate is not defined until the end of the 200ms of the
+    % evaluation window, therefore the end is populated with nan
+    if length(b_cand) < pred_indexes(end)
+        b_cand = [b_cand, NaN(1, pred_indexes(end) - length(b_cand))];
+    end
+    if length(alt_b_cand) < pred_indexes(end)
+        alt_b_cand = [alt_b_cand, NaN(1, pred_indexes(end) - length(alt_b_cand))];
+    end
+    %rms(nansum([cycles(i).force(learn_idx); -cand(c,learn_idx)],1));
+    rms_err(i, 1) = rms(nansum([cycles(i).force(pred_indexes); -b_cand(pred_indexes)],1)); % ncycles
+    rms_err(i, 2) = rms(nansum([cycles(i).force(pred_indexes); -alt_b_cand(pred_indexes)],1)); % ncycles
     
     % the prediction begins at time 300ms + rand_val and is evaluated on 
     % 300ms : pred_indexes
     % validation is on the 100 samples before the prediction
     val_indexes = pred_indexes(1) + (-99:-1);
-    rms_err(i, 1) = rms( cycles(i).force(pred_indexes) - b_cand(pred_indexes) ); % ncycles
-    rms_err(i, 2) = rms( cycles(i).force(pred_indexes) - alt_b_cand(pred_indexes) ); % ncycles
 
     errors(SIGNAL_IDX, CONFIG_IDX, 1).appendData(cycles(i).force([val_indexes,...
         pred_indexes]) - b_cand([val_indexes, pred_indexes])); % ncycles
@@ -458,36 +479,38 @@ for i = k+1:length(cycles)-1 % ncycles
 %         alt_b_cand([val_indexes, pred_indexes]), "minRMSE candidate for config" + num2str(CONFIG_IDX)); 
     
     if DISP_ALL_CANDIDATES_AND_BEST_MATCH_FOR_CYCLES
-    figure
-    p1 = plot(o_cand(:,:)', 'Color', [0.3010 0.7450 0.9330]);
-    hold on
-    p0 = plot(cycles(i).force, 'Color', [0 0.4470 0.7410]); % ncycles
-    plot(b_cand, 'k')   
-    p2 = plot(alt_b_cand, 'k');
-    p3 = plot(1:pred_indexes(1), b_cand(1:pred_indexes(1)), 'Color', [0.4660 0.6740 0.1880]);
-    plot(pred_indexes, b_cand(pred_indexes), 'Color', [0.8500 0.3250 0.0980])
-    for p_idx = 1:length(p1)
-        p1(p_idx).Color(4) = 0.3;
-    end
-    p2.Color(4) = 0.7;
-    
-    p4 = plot(1:pred_indexes(1), alt_b_cand(1:pred_indexes(1)), '--','Color', [0.4660 0.6740 0.1880]);
-    plot(pred_indexes, alt_b_cand(pred_indexes), '--', 'Color', [0.8500 0.3250 0.0980])
-    if DO_SPLINE_INTERP  && CONFIG_IDX == 1
-        p5 = plot(pred_indexes, mean_spline_cand, ':k');
-        p6 = plot(pred_indexes, b_spline_cand, ':', 'Color', [0.4940, 0.1840, 0.5560]);
-        p7 = plot(pred_indexes, w_spline_cand, ':k', 'Color', [0.6350, 0.0780, 0.1840]);
-        legend([p0 p1(1) p3 p4 p5 p6 p7], {"Actual signal", "Candidates", ...
-            "BC Burdet", "BC min RMSE", "Mean spline", "Best spline", "Worst spline"});
-    else
-        legend([p0 p1(1) p3 p4], {"Actual signal", "Candidates", "BC Burdet", "BC min RMSE"});
-    end
-    %title(num2str(SIGNAL_IDX) + "_" + num2str(CONFIG_IDX) + "- RMS Error c " + ...
-    %    num2str(1000*rms_err(i,1),4) + ", min RMSE " + num2str(1000*rms_err(i,2),4) + "in perthousand")
-    title("Example of candidates and choices for a cycle of signal " + ...
-        num2str(SIGNAL_IDX) + " and config " + num2str(CONFIG_IDX));
+        figure
+        p1 = plot(o_cand(:,:)', 'Color', [0.3010 0.7450 0.9330]);
+        hold on
+        p0 = plot(cycles(i).force, 'Color', [0 0.4470 0.7410]); % ncycles
+        plot(b_cand, 'k')   
+        p2 = plot(alt_b_cand, 'k');
+        p3 = plot(1:pred_indexes(1), b_cand(1:pred_indexes(1)), 'Color', [0.4660 0.6740 0.1880]);
+        plot(pred_indexes, b_cand(pred_indexes), 'Color', [0.8500 0.3250 0.0980])
+        for p_idx = 1:length(p1)
+            p1(p_idx).Color(4) = 0.3;
+        end
+        p2.Color(4) = 0.7;
+
+        p4 = plot(1:pred_indexes(1), alt_b_cand(1:pred_indexes(1)), '--','Color', [0.4660 0.6740 0.1880]);
+        plot(pred_indexes, alt_b_cand(pred_indexes), '--', 'Color', [0.8500 0.3250 0.0980])
+        if DO_SPLINE_INTERP  && CONFIG_IDX == 1
+            p5 = plot(pred_indexes, mean_spline_cand, ':k');
+            p6 = plot(pred_indexes, b_spline_cand, ':', 'Color', [0.4940, 0.1840, 0.5560]);
+            p7 = plot(pred_indexes, w_spline_cand, ':k', 'Color', [0.6350, 0.0780, 0.1840]);
+            legend([p0 p1(1) p3 p4 p5 p6 p7], {"Actual signal", "Candidates", ...
+                "BC Burdet", "BC min RMSE", "Mean spline", "Best spline", "Worst spline"});
+        else
+            legend([p0 p1(1) p3 p4], {"Actual signal", "Candidates", "BC Burdet", "BC min RMSE"});
+        end
+        %title(num2str(SIGNAL_IDX) + "_" + num2str(CONFIG_IDX) + "- RMS Error c " + ...
+        %    num2str(1000*rms_err(i,1),4) + ", min RMSE " + num2str(1000*rms_err(i,2),4) + "in perthousand")
+        title("Example of candidates and choices for a cycle of signal " + ...
+            num2str(SIGNAL_IDX) + " and config " + num2str(CONFIG_IDX));
     end % DISP_ALL_CANDIDATES_AND_BEST_MATCH_FOR_CYCLES
 end
+
+rms_err(1:10,:) = NaN;
 
 %% Display analytics
 
@@ -527,6 +550,9 @@ if DO_SPLINE_INTERP && CONFIG_IDX == 1 % TODO Correct that..
         num2str(mean(rms_err(k+1:end,5))) + ...
         " (+/- " + num2str(std(rms_err(k+1:end,5))) + ")")
 end
+
+best_candidates_burdet_rmse = [best_candidates_burdet_rmse; rms_err];
+
 if SAVE_FIGURES
     drawnow
     saveAllFig(base_save_path + "misc_savefig",...
@@ -540,10 +566,12 @@ if CLEAR_TEMPORARY_DATA
     mean_rmse_meth_burdet std_rmse_meth_burdet mean_rmse_meth_minRmse ...
     std_rmse_meth_minRmse DISP_ALL_CANDIDATES_AND_BEST_MATCH_FOR_CYCLES ...
     errors base_save_path SAVE_FIGURES CLEAR_TEMPORARY_DATA DO_SPLINE_INTERP ...
-    DISP_SPLINE_ALL_CANDIDATES EXTERNAL_INPUT_SIGNAL RAND_GEN_LIST
+    DISP_SPLINE_ALL_CANDIDATES EXTERNAL_INPUT_SIGNAL RAND_GEN_LIST t_in ...
+    best_candidates_burdet_rmse forces_unf torques_unf thetas LOW_PASS_FREQ ...
+    EXTERNAL_IS_FORCE dt idx_start_arr idx_end_arr mocap_marker_robot_base
 end
 end % for CONFIG_IDX = 1:NB_OF_CONFIGURATIONS
-RAND_GEN_LIST{SIGNAL_IDX} = RAND_GEN;
+% RAND_GEN_LIST{SIGNAL_IDX} = RAND_GEN;
 % clear everything but macros and analytics
 if CLEAR_TEMPORARY_DATA
     clearvars -except NB_OF_GLOBAL_ITERATIONS NB_OF_CONFIGURATIONS NB_OF_METHODS...
@@ -551,9 +579,14 @@ if CLEAR_TEMPORARY_DATA
     CONFIG_IDX TIME_DISTORTION_GROWTH mean_rmse_meth_burdet std_rmse_meth_burdet ...
     mean_rmse_meth_minRmse std_rmse_meth_minRmse DISP_ALL_CANDIDATES_AND_BEST_MATCH_FOR_CYCLES ...
     errors base_save_path SAVE_FIGURES CLEAR_TEMPORARY_DATA DO_SPLINE_INTERP ...
-    DISP_SPLINE_ALL_CANDIDATES EXTERNAL_INPUT_SIGNAL RAND_GEN_LIST
+    DISP_SPLINE_ALL_CANDIDATES EXTERNAL_INPUT_SIGNAL RAND_GEN_LIST t_in ...
+    best_candidates_burdet_rmse forces_unf torques_unf thetas LOW_PASS_FREQ ...
+    EXTERNAL_IS_FORCE dt idx_start_arr idx_end_arr mocap_marker_robot_base
 end
 end % for SIGNAL_IDX = 1:NB_OF_GLOBAL_ITERATIONS
+
+mean(best_candidates_burdet_rmse)
+prctile(best_candidates_burdet_rmse, [10,25,50,75,90])
 
 % figure
 % hold on 
@@ -581,5 +614,7 @@ end % for SIGNAL_IDX = 1:NB_OF_GLOBAL_ITERATIONS
 %     
 % end
 
+best_candidates_burdet_rmse
+
 %save("test_prediction_trajectoire_real_force_1.mat")
-save("test_prediction_trajectoire_real_position_1.mat")
+%save("test_prediction_trajectoire_real_position_1.mat")

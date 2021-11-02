@@ -104,9 +104,10 @@ methods
     function self = computeDiffTraject(self, varargin)
 
         differential_direction = -1; % x - x0
-        solver_name = 'lsqcurvefit'; % for sine method with optimisation
+        % for sine method with optimisation
+        solver_name = 'lsqnonlin'; %'lsqcurvefit';
         lin_comp = 1;
-        nb_sine = 4;
+        nb_sine = 3;
         
         if ~isempty(varargin)
             for ii = 1:2:length(varargin)
@@ -181,7 +182,7 @@ methods
         end
 
         if self.interp_window < self.estim_window
-            optim_fit = self.estim_window - self.interp_window + 10;
+            optim_fit = 110;%self.estim_window - self.interp_window + 10;
         else
             optim_fit = 40; % TODO ??
         end
@@ -273,14 +274,14 @@ methods
             elseif virtual_trajectory_method == 7
                 % multiple starts
                 if ii == 1
-                    [opt,param_opt,~] = sineOptimization_upgrade(self.time,...
+                    [opt,param_opt,~,self.exit_flag(ii)] = sineOptimization_upgrade(self.time,...
                     self.complete_traject, idx, 'pertLength', self.interp_window, ...
                     'uFitLength', optim_fit, 'lFitLength', 40, 'outputIndex', (idx-2+self.delay:idx+...
                     self.estim_window+1+self.delay), 'nbSine', nb_sine, 'linearComp', lin_comp, ...
                     'multiStart', 250, 'solverName', solver_name);
                     self.opt_param(:,ii) = param_opt;
                 else
-                    [opt,self.opt_param(:,ii),~] = sineOptimization_upgrade(self.time,...
+                    [opt,self.opt_param(:,ii),~,self.exit_flag(ii)] = sineOptimization_upgrade(self.time,...
                         self.complete_traject, idx, 'pertLength', self.interp_window,...
                         'uFitLength', optim_fit, 'lFitLength', 40, 'outputIndex',...
                         (idx-2+self.delay:idx+self.estim_window+1+self.delay), ...
@@ -289,7 +290,7 @@ methods
                 end
                 self.virt_traject(:,ii) = opt;
             elseif virtual_trajectory_method == 8
-                [opt,self.opt_param(:,ii),~] = sineOptimization_upgrade(self.time, self.complete_traject, ...
+                [opt,self.opt_param(:,ii),~,self.exit_flag(ii)] = sineOptimization_upgrade(self.time, self.complete_traject, ...
                     idx, 'pertLength', self.interp_window, 'uFitLength', 150, ...
                     'lFitLength', optim_fit, 'outputIndex', (idx-2+self.delay:idx+...
                     self.estim_window+1+self.delay), 'nbSine', nb_sine, 'linearComp', lin_comp,...
@@ -300,9 +301,7 @@ methods
             self.tmp_diff_traject(:,ii) = (self.virt_traject(:,ii) - ...
                 self.traject(:,ii))*differential_direction;
             self.diff_traject(:,ii) = self.tmp_diff_traject(3:end-2,ii);
-
         end
-
     end
 
     function self = computeDerivatives(self)

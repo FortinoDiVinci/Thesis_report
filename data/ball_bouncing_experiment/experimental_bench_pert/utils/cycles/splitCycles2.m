@@ -1,21 +1,25 @@
-function cycles_list = splitCycles(positions, forces, times, cut_idx, pert_idx, pert_val)
+function cycles_list = splitCycles2(positions, velocities, forces, times, cut_idx, pert_idx, pert_val)
 % Creates a cycle list from position and force data, according to the
 % indexes called cut_idx
     
     % provided either one of position and force is possible
-    if all([isempty(positions), isempty(forces)])
+    if all([isempty(positions), isempty(forces), isempty(velocities)])
         error("No data provided")
-    elseif isempty(positions)
+    end
+    POS_NULL=0;
+    FOR_NULL=0;
+    VEL_NULL=0;
+    if isempty(positions)
         warning("No position provided")
         POS_NULL=1;
-        FOR_NULL=0;
-    elseif isempty(forces)
+    end
+    if isempty(velocities)
+        warning("No velocity provided")
+        VEL_NULL=1;
+    end
+    if isempty(forces)
         warning("No force provided")
-        POS_NULL=0;
         FOR_NULL=1;
-    else
-        POS_NULL=0;
-        FOR_NULL=0;
     end
     p = [];
     f = [];
@@ -24,15 +28,18 @@ function cycles_list = splitCycles(positions, forces, times, cut_idx, pert_idx, 
         if ~POS_NULL
             p = positions(idx);
         end
+        if ~VEL_NULL
+            v = velocities(idx);
+        end
         if ~FOR_NULL
             f = forces(idx);
         end
         t = times(idx);
-        cycles_list(i-1) = CYCLE_DATA(t, p, [], f, idx);
+        cycles_list(i-1) = CYCLE_DATA(t, p, v, f, idx);
     end
     
     % specify the cycles that are perturbed
-    if nargin >= 5 
+    if nargin >= 6 
         for cycle = cycles_list
             bool_pert_cyc = logical(cycle.time(1) < times(pert_idx)) & logical(cycle.time(end) > times(pert_idx));
             if(any(bool_pert_cyc))

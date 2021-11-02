@@ -170,7 +170,7 @@ for exp_nb = tot_nb_exp:-1:2
         'OptSolverName', 'lsqnonlin', 'OptNbSine', 2);
 end
 
-save('test_sine_opt_6.mat', 'delta_fz', 'phase', 'z', 'z_b', '-v7.3');
+% save('test_sine_opt_6.mat', 'delta_fz', 'phase', 'z', 'z_b', '-v7.3');
 
 return
 

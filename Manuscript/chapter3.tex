@@ -209,26 +209,26 @@ Pour évaluer la précision des splines en fonction de la durée de la fenêtre 
 
 \input{latex_figures/fig_spline_rmse_evaluation}
 
-En première approximation, on peut estimer le temps de réponse du modèle viscoélastique du bras humain en rejet de perturbation de faible amplitude. Le facteur d'amortissement $\xi$ et la pulsation naturelle non amortie $\omega_n$ peuvent être facilement représentés en fonction des paramètres du modèle KBM :
+En première approximation, on peut estimer le temps de réponse du modèle viscoélastique du bras humain en rejet de perturbation de faible amplitude. Le facteur d'amortissement $\xi_p$ et la pulsation naturelle non amortie $\omega_n$ peuvent être facilement représentés en fonction des paramètres du modèle KBM :
 
 \begin{equation}
 	\begin{split}
-		\xi =& \frac{B}{2\sqrt{MK}} \\
+		\xi_p =& \frac{B}{2\sqrt{MK}} \\
 		\omega_n =& \sqrt{\frac{K}{M}}
 	\end{split}
 \end{equation}
 
-Pour des réponses impulsionnelles pseudo-amorties classiques \cref{eq_2nd_order_impulse_response} montrées en \cref{fig_KBM_typical_impulse_response} avec des couples de paramètres $(K,B,M)$ typiquement obtenus par \textcite{erden_hand_2015} : $(539,44,2.8)$ et $(280,12,0.6)$, rapplé dans le \cref{tab_impedance_litterature}, on obtient des facteurs d'amortissement inférieur à 1, et donc des réponses oscillantes. Dans le premier cas, $\xi=0.56$, on a donc un temps de premier pic $t_p$ à \SI{83}{\milli\second}, dans le second cas, $\xi=0.46$, avec un $t_p$ de \SI{60}{\milli\second}.
+Pour des réponses impulsionnelles pseudo-amorties classiques \cref{eq_2nd_order_impulse_response} montrées en \cref{fig_KBM_typical_impulse_response} avec des couples de paramètres $(K,B,M)$ typiquement obtenus par \textcite{erden_hand_2015} : $(539,44,2.8)$ et $(280,12,0.6)$, rapplé dans le \cref{tab_impedance_litterature}, on obtient des facteurs d'amortissement inférieur à 1, et donc des réponses oscillantes. Dans le premier cas, $\xi_p=0.56$, on a donc un temps de premier pic $t_p$ à \SI{83}{\milli\second}, dans le second cas, $\xi_p=0.46$, avec un $t_p$ de \SI{60}{\milli\second}.
 
 \begin{equation} \label{eq_2nd_order_impulse_response}
-	y_i(t) = \frac{\omega_n}{K\sqrt{1-\xi^2}}e^{-\xi\omega_nt}\sin(\omega_n\sqrt{1-\xi^2}t) e(t)
+	y_i(t) = \frac{\omega_n}{K\sqrt{1-\xi_p^2}}e^{-\xi_p\omega_nt}\sin(\omega_n\sqrt{1-\xi_p^2}t) e(t)
 \end{equation}
 
 \input{latex_figures/fig_KBM_typical_impulse_response}
 
 On peut voir sur la \cref{fig_KBM_typical_impulse_response} que les réponses se stabilisent après \SI{400}{\milli\second}, en effet, dans les deux cas décrits, un écart submillimétrique par rapport à l'équilibre est atteint après \SI{430}{\milli\second}. Le biais induit par l'interpolation sur une trajectoire encore perturbée est toutefois moindre que cet écart sur la fenêtre des \SI{200}{\milli\second} utile pour l'identification. Or, comme montré par la \cref{fig_spline_rmse_evaluation}, la médiane des erreurs RMS dépasse \SI{1}{\milli\meter} à partir d'une interpolation de \SI{300}{\milli\second}.
 
-Il est important de noter que cette méthode qui se prête assez bien à l'estimation de trajectoire en position, n'est, tout comme les méthodes précédemment décrites, pas adaptées à l'estimation des trajectoires en force. En effet, les oscillations présentes à l'intérieur des cycles faussent facilement la dérivée des points d'interpolation, conduisant à des estimations erronées ne décrivant pas le comportement en force avec une précision de l'ordre de la centaine de milli Newton. D'autres solutions doivent être envisagées pour la trajectoire en force.
+Il est important de noter que cette méthode qui se prête assez bien à l'estimation de trajectoire en position, n'est, tout comme les méthodes précédemment décrites, pas adaptées à l'estimation des trajectoires en force. En effet, les oscillations présentes à l'intérieur des cycles faussent facilement la dérivée des points d'interpolation, conduisant à des estimations erronées ne décrivant pas le comportement en force avec une précision de l'ordre de la centaine de millinewton. D'autres solutions doivent être envisagées pour la trajectoire en force.
 
 \subsubsection{Filtrage} \label{chap3_sec_method_sub_virt_traj_4}
 
@@ -247,7 +247,7 @@ Le filtre ainsi conçu est d'ordre 2997. L'ordre important du filtre est expliqu
 
 \input{latex_figures/fig_force_filtering_magnitude.tex}
 
-Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de référence, il a été appliqué aux trajectoires non-perturbées de la première session \cref{item_unp_session}, comme on peut le voir sur trois cycles en \cref{subfig_force_filtering_a}. La racine de l'erreur quadratique moyenne entre ce filtrage et un filtrage passe-bas de Butterworth d'ordre 2, avec une fréquence de coupure de \SI{50}{\hertz} (ce dernier filtrage permet de retirer le bruit du capteur de force), donne un résultat de \SI{108}{\milli\newton}. Ainsi, même si certains comportements, notamment au niveau des pics de force peuvent être atténués par le filtrage proposé, le signal n'est globalement pas modifié au-delà de la précision du capteur de force (\SI{125}{\milli\newton}).
+Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de référence, il a été appliqué aux trajectoires non-perturbées de la première expérience de la session \cref{item_unp_session}, qui représente un totla de \SI{288.6}{\second}. On peut voir un exemple du filtrage sur trois cycles consécutifs en \cref{subfig_force_filtering_a}. La racine de l'erreur quadratique moyenne entre ce filtrage et un passe-bas de Butterworth d'ordre 2, avec une fréquence de coupure de \SI{50}{\hertz} (ce dernier permet de retirer le bruit du capteur de force), donne un résultat de \SI{108}{\milli\newton}. En faisant la même analyse avec le signal bruité, cette même erreur n'est que de \SI{123}{\milli\newton}. Ainsi, même si certains comportements, notamment au niveau des pics de force peuvent être atténués par le filtrage proposé, le signal n'est globalement pas modifié au-delà de la précision du capteur de force (\SI{125}{\milli\newton}).
 
 Toutefois, si on s'intéresse maintenant à la rejection des perturbations, dont on peut voir l'exemple en \cref{subfig_force_filtering_b}, pour une perturbation non prévisible ainsi que pour le retour haptique de la balle, le point de départ du signal filtré à l'instant de la perturbation indique une erreur significative. En effet, si la perturbation semble bien filtrée, et le comportement oscillatoire conservé, à l'instant $t_p$ de la perturbation, un écart de \SI{847}{\milli\newton} vient biaiser l'estimation de la trajectoire virtuelle en force. Des écart similaires se retrouvent sur la plupart des perturbations filtrées, alors qu'on s'attendrait à ce qu'à l'instant de la perturbation, les valeurs coïncident. Il faut donc une solution complémentaire pour palier cette problématique.
 
@@ -338,7 +338,7 @@ Le nombre de sinusoïdes a été limité à cinq pour à la fois réduire la com
 
 Contrairement aux travaux de \textcite{abe_modulation_2003}, qui ont approché la trajectoire en position à l'aide de sommes de sinusoïdes, l'optimisation est réalisée uniquement à partir des données du cycle concerné, aucune information concernant les cycles précédents ou suivants n'est utilisée. Des portions avant et après la perturbation sont utilisées pour résoudre le problème posé (ce qui n'est pas possible dans une prédiction en ligne). 
 
-Dans un esprit similaire à ce qui a été fait pour entraîner le réseau de neurones récurrent (\cref{chap3_sec_method_sub_virt_traj_5}), \SI{100}{\milli\second} du signal sont masquées, en considérant qu'elles correspondent à la portion perturbée de la force d'interaction. \SI{40}{\milli\second} avant la perturbation sont alors considérées en plus de \SI{110}{\milli\second} après le masque. Une portion plus importante du signal est considérée après la perturbation, pour obtenir suffisement d'échantillons temporels pour l'identification. La \cref{fig_sine_sum_trajectory} présente l'exemple de deux cycles en force. 
+Dans un esprit similaire à ce qui a été fait pour entraîner le réseau de neurones récurrent (\cref{chap3_sec_method_sub_virt_traj_5}), \SI{100}{\milli\second} du signal sont masquées, en considérant qu'elles correspondent à la portion perturbée de la force d'interaction. \SI{110}{\milli\second} avant la perturbation sont alors considérées en plus de \SI{150}{\milli\second} après le masque. Une portion plus importante du signal est considérée après la perturbation, pour obtenir suffisement d'échantillons temporels pour l'identification. La \cref{fig_sine_sum_trajectory} présente l'exemple de deux cycles en force. 
 
 \input{latex_figures/fig_sine_sum_trajectory.tex}
 \tikzexternaldisable
@@ -371,7 +371,7 @@ La seconde méthode \cref{item_method_opt_init_b} a apporté des résultats syst
 Les huit différents modèles ont ensuite été comparés entre eux toujours en utilisant les données des essais de la session \cref{item_unp_session}, en regardant à la fois les \SI{100}{\milli\second} masquées et les \SI{100}{\milli\second} suivantes. Le critère d'\textcite{akaike_new_1974} (AIC\footnote{A(kaike) Information Criterion}) a été utilisé afin de pénaliser le nombre de paramètres qui, lorsqu'ils sont trop nombreux peuvent introduire du surapprentissage, et en même temps récompenser la précision des modèles.
 
 \begin{aside}{Critères de sélection de modèle}
-	En statistique, le AIC permet de comparer l'adéquation de modèles par rapport à un jeu de données, en estimant la quantité d'information perdue par un modèle, car comme le dit l'aphorisme attribué au statisticien Georges Box, les modèles sont toujours faux, mais certains sont utiles\footnote{"All models are wrong but some are useful" \parencite{box_robustness_1979}}. Ce critère est marquée par le principe de parcimonie aussi mis en avant par \textcite{box_science_1976}, en s'intéressant au compromis entre la justesse d'un modèle et sa simplicité. Ainsi dans la formulation \cref{eq_aic} du critère, on trouve $k$ le nombre de paramètres du modèle et $L$ le maximum de vraisemblance.
+	En statistique, le AIC permet de comparer l'adéquation de modèles par rapport à un jeu de données, en estimant la quantité d'information perdue par un modèle, car comme le dit l'aphorisme attribué au statisticien Georges Box, les modèles sont toujours faux, mais certains sont utiles\footnote{"All models are wrong but some are useful"0 \parencite{box_robustness_1979}}. Ce critère est marquée par le principe de parcimonie aussi mis en avant par \textcite{box_science_1976}, en s'intéressant au compromis entre la justesse d'un modèle et sa simplicité. Ainsi dans la formulation \cref{eq_aic} du critère, on trouve $k$ le nombre de paramètres du modèle et $L$ le maximum de vraisemblance.
 	%
 	\begin{equation} \label{eq_aic}
 		AIC = -2\ln(L) + 2k
@@ -386,10 +386,139 @@ Les huit différents modèles ont ensuite été comparés entre eux toujours en 
 	Depuis son introduction, d'autres critères ont été développés, ou sont venus combler des faiblesses de l'AIC. Par exemple le critère de \textcite{schwarz_estimating_1978} (BIC\footnote{Bayesian Information Criterion}), qui pénalise plus fortement les dégrés de liberté des modèles et garanti de trouver le "vrai" modèle s'il est disponible parmis les candidats (lorsque $n_s\to\infty$). On pourra toutefois noter que le "véritable" modèle, ne fait jamais parti des modèles candidats. Par ailleurs, pour combler la faiblesse de l'AIC lorsque le nombre d'échantillons est trop faible, \textcite{hurvich_regression_1989} ont proposé une version corrigée du critère qui limite les phénomènes de surapprentissage (AICc), et des corrections du critère ont encore été proposées récemment \parencite{delsole_correcting_2021}.
 \end{aside}
 
-C'est la somme de trois sinus ($n=3$) sans composants linéaires ($l_b=0$) qui a obtenu le score d'AIC le plus faible. Le même résultat a été obtenu avec l'AICc et le BIC. Ce modèle obtient respectivement des erreurs RMS de \SI{}{\milli\newton} et \SI{}{\milli\newton} pour les \SIlist{100;200}{\milli\second} qui suivent l'introduction de la perturbation.
+C'est la somme de trois sinus ($n=3$) sans composants linéaires ($l_b=0$) qui a obtenu le score d'AIC le plus faible. Le même résultat a été obtenu avec l'AICc et le BIC. Ce modèle obtient respectivement des erreurs RMS de \SIlist{279;385}{\milli\newton} pour les \SIlist{100;200}{\milli\second} qui suivent l'introduction de la perturbation.
+
+%\input{latex_figures/aic_comparison.tex}
 
 \subsubsection{Bilan des choix méthodologiques} \label{chap3_sec_method_sub_virt_traj_7}
 
-Pour comparer les différentes méthodes...
+Les différentes méthodes et techniques proposées pour essayer d'approcher les trajectoires "virtuelles" ont ainsi chacunes des avantages et inconvénients qui ont été présentés. C'est l'interpolation d'une spline cubique qui a été retenue pour la position. Cette méthode a l'avantage d'être simple à implémenter tout en présentant une précision submilimétrique. Sa principale faiblesse, qui est qu'elle utilise un point d'arrivé potentiellement encore perturbé et donc biaisé, peut aussi être vu comme une force. En effet, lorsque le bras est perturbé, les premières actions volontaires peuvent survenir après un peu plus de \SI{100}{\milli\second} (\cref{chap_1_sec_modelling_human_subsec_1_2}), la trajectoire virtuelle peut alors être modifiée, même si ses changements sont considérées négligeables par certains auteurs \parencite{erden_hand_2015}. En réalisant une interpolation entre la trajectoire avant et après la perturbation, on peut s'attendre à ce que l'influence des actions volontaires soit réduite. 
+
+La trajectoire virtuelle en force a été plus laborieuse à approcher, le signal étant plus riche fréquentiellement. Des méthodes plus sophistiquées donc ont été proposées. Le choix a du réellement être fait entre la méthode par filtrages successifs et l'optimisation de sommes de sinusoïdes, l'approche par réseau de neurones n'ayant pas été suffisemment poussée pour produire des résultats compétitifs. Pour départager ces deux dernières méthodes, on peut comparer leurs erreurs RMS respectivement sur \SIlist{100;200}{\milli\second}, résumé dans le \cref{tab_force_estimation_comparison}. Il est important de noter que l'estimation des erreurs est encore faite sur l'ensemble des expériences de la session \cref{item_unp_session}. La méthode de filtrages successifs obtient des errreurs supérieures à celles annoncées par le filtrage simple, mais comme expliqué dans la \cref{chap3_sec_method_sub_virt_traj_4}, le filtrage seul n'était pas suffisant pour couper les perturbations.
+
+\begin{table}[htbp] 
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline  
+			Méthode & \SI{100}{\milli\second} RMS & \SI{200}{\milli\second} RMS \\
+			\hline
+			Filtrage & \SI{471}{\milli\newton} & \SI{377}{\milli\newton} \\
+			\hline
+			Sinusoïdes & \SI{385}{\milli\newton} & \SI{279}{\milli\newton} \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Comparaison de la racine des erreurs quadratiques moyennes des deux méthodes les plus prometteuses pour la force.}
+	\label{tab_force_estimation_comparison}	
+\end{table}
+
+Ainsi, la méthode d'opitmisation avec une somme de trois sinusoïdes est non seulement plus rigoureuse, mais apporte aussi de meilleurs résultats. C'est donc cette dernière qui est retenue. On peut par ailleurs noter que les intervalles choisis pour réaliser le calcul optimal peuvent aussi être améliorés.
 
 \subsection{Identification} \label{chap3_sec_method_sub_ident}
+
+Une fois les trajectoires virtuelles $\hat{x}_{z0}, \hat{f}_{z0}$ obtenues, il ne reste plus qu'à identifier les paramètres en impédance du modèle \cref{eq_KBM_model_used} liant les différentiels de trajectoires en force $\delta f_z = f_z - \hat{f}_{z0}$ et position $\delta x_z = x_z - \hat{x}_{z0}$. 
+
+\begin{equation}\label{eq_KBM_model_used}
+	\delta f_z = M \delta \ddot{x}_z + B \delta \dot{x}_z + K \delta x_z
+\end{equation}
+
+On pourrait alors simplement calculer les dérivées des signaux de position pour réaliser minimisation de l'erreur quadratique avec l'aide de la méthode des moindres carrés, comme indiqué sur l'équation \cref{eq_least_squares_KBM_2}, avec $\matr{\Theta} = \left[\delta\vect{x}_z, \delta\dot{\vect{x}}_z, \delta\ddot{\vect{x}}_z \right] \in \Re^{n_s\times 3} $,  $\vect{\xi} = [K,B,M]^t \in \Re^3$ et $\vect{\rho} \in \Re^{n_s}$ le vecteur de résidus, où $n_s$ représente le nombre d'échantillons utilisés pour l'identification.
+
+\begin{align} 
+	\delta \vect{f}_z =& \matr{\Theta} \vect{\xi} + \vect{\rho}\label{eq_least_squares_KBM}\\
+	\vect{\xi} =&  \left(\matr{\Theta}^t\matr{\Theta}\right)^{-1}\matr{\Theta}^t\delta \vect{f}_z\label{eq_least_squares_KBM_2}
+\end{align}
+
+L'inconvénient d'une telle méthode réside notamment sa nécessité d'utiliser les dérivées du signal en position, dont la trajectoire virtuelle estimée contient déjà des erreurs. Ainsi, on dériverait deux fois des erreurs pour l'accélération, ce qui dégraderait fortement l'identification des paramètres. Pour ne pas avoir à utiliser les dérivées de la position, on peut poser le problème différemment.
+
+Si on s'intéresse au modèle discretisé à l'instant $t_k$ à l'aide d'un bloqueur d'ordre zéro \cref{eq_KBM_model_discrete}, en notant $q$ l'opérateur de délais, $a_i$ et $b_j$ les coefficients du modèle discret, qui sont liés aux paramètres $K$, $B$ et $M$ et $e$ un bruit blanc, alors l'identification peut se passer des dérivées. 
+
+\begin{equation}\label{eq_KBM_model_discrete}
+	(1 + a_1q^{-1} + a_0q^{-2})\delta x_z[t_k] = (b_1 + b_0q^{-1})\delta f_z[t_k] + e[t_k]
+\end{equation}
+
+On a donc la fonction de tranfert discrète $H_d$ suivante :
+
+\begin{equation}\label{eq_KBM_discrete_tf}
+	H_d(z) = \frac{X_z(z)}{F_z(z)} = \frac{b_1 z + b_0}{z^2 + a_1 z + a_0}
+\end{equation}
+
+On peut déduire les liens entre les paramètres $K$, $B$ et $M$ et les coefficients $a_i$ et $b_j$ en regardant les valeurs propres $\lambda_i$ \cref{eq_KBM_model_eigenvalues} du modèle KBM \cref{eq_KBM_model_used} et les pôles $\alpha_i$ \cref{eq_discrete_model_poles} de la fonction de transfert discrète \cref{eq_KBM_discrete_tf}, avec la relation $e^{\lambda_iT} = \alpha_i$, où $T$ correspond au temps d'échantillonnage. Ainsi, on pose le système d'équations \cref{eq_poles_eigenvalues}.
+
+\begin{equation} \label{eq_KBM_model_eigenvalues}
+	\begin{cases}
+		\lambda_1 = \frac{-B + \sqrt{B^2-4MK}}{2M}\\
+		\lambda_2 = \frac{-B - \sqrt{B^2-4MK}}{2M}
+	\end{cases}
+\end{equation}
+
+\begin{equation} \label{eq_discrete_model_poles}
+	\begin{cases}
+		\alpha_1 = \frac{-a_1 + \sqrt{a_1^2-4a_0}}{2}\\
+		\alpha_2 = \frac{-a_1 - \sqrt{a_1^2-4a_0}}{2}
+	\end{cases}
+\end{equation}
+
+\begin{equation} \label{eq_poles_eigenvalues}
+	\begin{cases}
+		\frac{-a_1 + \sqrt{a_1^2-4a_0}}{2} = e^{\frac{-B + \sqrt{B^2-4MK}}{2M}T}\\
+		\frac{-a_1 - \sqrt{a_1^2-4a_0}}{2} = e^{\frac{-B - \sqrt{B^2-4MK}}{2M}T}
+	\end{cases}
+\end{equation}
+
+Le système \cref{eq_poles_eigenvalues} permet alors par combinaison de déduire une relation liant $M$, $B$ et $a_0$ \cref{eq_rel_B_M}, puis en injectant cette relation dans une des équations du système \cref{eq_poles_eigenvalues} de déduire une deuxième relation \cref{eq_rel_M_K}.
+
+\begin{equation} \label{eq_rel_B_M}
+	\begin{split}
+		\ln(\alpha_1) + \ln(\alpha_2) &= -\frac{B}{M}T\\
+		B = -\ln(\alpha_1\alpha_2)\frac{M}{T} &= -\ln(a_0)\frac{M}{T}
+	\end{split}
+\end{equation}
+
+\begin{equation} \label{eq_rel_M_K}
+	M = \frac{KT^2}{\left(\ln(\alpha_1) - \frac{\ln(a_0)}{2}\right)^2-\left(\frac{\ln(a_0)}{2}\right)^2} = \frac{-KT^2}{\ln(\alpha_1)\left(\ln(\alpha_1) - \ln(a_0)\right)}
+\end{equation}
+
+Finalement, la dernière relation nécessaire peut être obtenue en regardant le gain statique, puisqu'on a $\lim\limits_{t\to\infty} \delta f_z(t) = \lim\limits_{s\to0} sF_z(s) = \lim\limits_{z\to1} (z-1)F_z(z)$, ce qui permet de déduire $K$ :
+
+\begin{equation} \label{eq_rel_K}
+	K = \frac{1 + a_1 + a_0}{b_1 + b_0}
+\end{equation}
+
+Grâce aux relations \cref{eq_rel_K,eq_rel_M_K,eq_rel_B_M}, on peut déduire les paramètres continues du modèle KBM \cref{eq_KBM_model_used} à partir des coefficients discrets. Ces derniers peuvent alors être identifiés grâce à une autoregression de type ARX\footnote{Autoregressive with Extra Input}. 
+
+\subsubsection{Analyse de sensibilité locale} \label{chap3_sec_method_sub_ident_1}
+
+Etant donné que l'identification n'est pas directement réalisée sur les paramètes en impédance mais sur des coefficients discrets, qui seront soumis à de potentielles erreurs, soit liées au bruit, soit aux erreurs d'estimation des trajectoires virtuelles, soit à des phénomènes non modélisés. Il est intéressant d'étudier l'impact de mauvaises identifications sur les paramètres $K$, $B$ et $M$, et donc d'étudier la robustesse de l'identification. Pour cette étude, une simple analyse de sensibilité locale des paramètres $x_i$ peut-être conduite en prenant des valeurs normalisées ou typiques des coefficients $y_i$.
+
+\begin{equation}\label{eq_local_sensitivity_analysis}
+	\left. \frac{\partial x_i}{\partial y_i} \right\lvert_{y_0}
+\end{equation}
+
+\input{latex_figures/local_sensitivity_analysis.tex}
+
+La \cref{fig_local_sensitivity_analysis}, réalisée avec des valeurs typiques (\cref{tab_typical_coefficient_sensitivity_analysis}) des coefficients, révèle la plus grande volatilité de la raideur $K$, qui a une sensibilité plus de dix fois plus importantes que l'amortissement $B$, à chacun des coefficients. On peut par ailleurs noter que la masse $M$ ne dépend presque pas des coefficients $a_i$ du dénominateur et que l'ensemble des paramètres sont plutôt sensibles aux coefficients $b_i$ du numérateur. Cette courte analyse nous amène à attendre plus de variabilités sur les raideurs identifiées, que sur les autres paramètes.
+
+\begin{table}[htbp] 
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|}
+			\hline  
+			$a_0$ & $a_1$ & $b_0$ & $b_1$ \\
+			\hline
+			0.99 & -1.99 & 9.93e-7 & 9.87e-7\\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Vauleurs typiques utilisées pour les coefficients, correspondant aux couples $(K,B,M) = (200,10,1)$}
+	\label{tab_typical_coefficient_sensitivity_analysis}	
+\end{table}
+
+\subsubsection{Validation en simulation} \label{chap3_sec_method_sub_ident_2}
+
+Afin de valider cette méthodologie complète, on se propose de la mettre à l'épreuve d'une simulation utilisant des signaux réels en force. 
+
+\subsubsection{Trajectoire virtuelle connue} \label{chap3_sec_method_sub_ident_2_1}
+
+\subsubsection{Trajectoire virtuelle estimée} \label{chap3_sec_method_sub_ident_2_2}
+
+L'ajout d'un délais $\delta_t$ est introduit pour prendre en compte la latence induite par le système d'acquisition de la position.
