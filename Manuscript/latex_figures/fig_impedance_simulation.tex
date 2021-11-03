@@ -1,0 +1,87 @@
+\begin{figure} [h]
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	\subcaptionbox{Schéma de la simulation\label{subfig_impedance_simulation_a}}
+	{	
+		\tikzsetnextfilename{subfig_impedance_simulation_a}		
+		\begin{tikzpicture} [node distance = 2cm]	
+			\comp[]{c1}{(0, 0)};
+			
+			\node[left of = c1, node distance = 1cm] (fz) {};
+			
+			\node[block, right of = c1] (imp_model_1) {$\frac{1}{K + Bs + Ms^2}$};
+			
+			\node[block, below of = imp_model_1] (imp_model_2) {$\frac{1}{K + Bs + Ms^2}$};
+				
+			\draw[-{Latex[length=3mm]}] ($(fz.center) + (-.5,0)$) -- (c1.west)
+				node[align = center, above, near start] {$\vect{f}_z$};
+			
+			\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_model_1.west);
+				
+			\draw[-{Latex[length=3mm]}] (fz.center) |- (imp_model_2.west);
+			
+			\draw[-{Latex[length=3mm]}] (imp_model_1.east) --+ (1,0)
+				node[align = center, below, midway] {$\vect{x}_z$};
+			
+			\draw[-{Latex[length=3mm]}] (imp_model_2.east) --+ (1,0)
+				node[align = center, below, midway] {$\vect{x}_{z0}$};
+			
+			\draw[{Latex[length=3mm]}-] (c1.north) --+ (0,.75)
+				node[align = center, right] {$\vect{f}_p$};
+			
+			\fill (fz) circle [radius=2.5pt];
+		\end{tikzpicture}
+		\vspace{5mm}
+	}
+	\subcaptionbox{Aspect de la perturbation en force $\vect{f}_p$\label{subfig_impedance_simulation_b}}
+	{
+		\tikzsetnextfilename{subfig_impedance_simulation_b}		
+		\begin{tikzpicture}
+			\centering
+			%
+			\begin{axis}[%
+				width=.3\linewidth,
+				height=.2\linewidth,
+				scale only axis,
+				xlabel={temps (\SI{}{\milli\second})},
+				ylabel={Force (\SI{}{\newton})},
+				axis x line = bottom,
+				axis y line = left, 
+				xmax=150,
+				]
+				%
+				\addplot [
+				color=blue,
+				smooth,
+				]
+				table [col sep=comma, x expr=\coordindex, y=simul_force_pert] {misc/simulated_force_perturbation.csv};
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\caption{Simulation pour l'identificaiton des paramètres en impédance avec des signaux en force issus d'expérimentation sans perturbations.}
+	\label{fig_impedance_simulation} % Label 
+\end{figure}

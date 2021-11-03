@@ -1,0 +1,91 @@
+\begin{figure}[!htb] 
+	\centering
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (539,44,2.8)$\label{subfig_interp_spline_id_a}}
+		{		
+			\tikzsetnextfilename{subfig_interp_spline_id_a}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					name=ax1,
+					width=.48\linewidth,
+					height=.3\linewidth,
+					scale only axis,
+					xlabel={temps (\si{\milli\second})},
+					ylabel={Erreur relative (\si{\percent})},
+					axis x line = bottom,
+					axis y line = left, 
+					%ymax=1,
+					%xmax=79,
+					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					legend style={at={(0.05,0.95)},anchor=north west},
+					]
+				%
+				\addplot+[
+					smooth,
+					mark=none,
+					]
+				table [col sep=comma, x=time_window, y=Ke] {misc/spline_window_interp_id_2.csv};
+				%
+				\addplot+[
+					smooth,
+					mark=none,
+					]
+				table [col sep=comma, x=time_window, y=Be] {misc/spline_window_interp_id_2.csv};
+				%
+				\addplot+[
+					smooth,
+					mark=none,
+					]
+				table [col sep=comma, x=time_window, y=Me] {misc/spline_window_interp_id_2.csv};							
+				\addlegendentry{$K$}; 
+				\addlegendentry{$B$}; 
+				\addlegendentry{$M$}; 
+				\end{axis}				
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$(K,B,M) = (280,12,0.6)$\label{subfig_interp_spline_id_b}}
+		{			
+			\tikzsetnextfilename{subfig_interp_spline_id_b}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					name=ax1,
+					width=.48\linewidth,
+					height=.3\linewidth,
+					scale only axis,
+					xlabel={temps (\si{\milli\second})},
+					ylabel={Erreur relative (\si{\percent})},
+					axis x line = bottom,
+					axis y line = left, 
+					%ymax=1,
+					%xmax=79,
+					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					]
+					%
+					\addplot+[
+						smooth,
+						mark=none,
+						]
+					table [col sep=comma, x=time_window, y=Ke] {misc/spline_window_interp_id_1.csv};
+					%
+					\addplot+[
+						smooth,
+						mark=none,
+						]
+					table [col sep=comma, x=time_window, y=Be] {misc/spline_window_interp_id_1.csv};
+					%
+					\addplot+[
+						smooth,
+						mark=none,
+						]
+					table [col sep=comma, x=time_window, y=Me] {misc/spline_window_interp_id_1.csv};
+				\end{axis}	
+			\end{tikzpicture}	
+		}
+	}	
+	\caption{Evolution des erreurs relatives d'identification des paramètres en impédance, en fonction de la fenêtre d'interpolation des splines.}
+	\label{fig_interp_spline_id}
+\end{figure}

@@ -341,7 +341,6 @@ Contrairement aux travaux de \textcite{abe_modulation_2003}, qui ont approché l
 Dans un esprit similaire à ce qui a été fait pour entraîner le réseau de neurones récurrent (\cref{chap3_sec_method_sub_virt_traj_5}), \SI{100}{\milli\second} du signal sont masquées, en considérant qu'elles correspondent à la portion perturbée de la force d'interaction. \SI{110}{\milli\second} avant la perturbation sont alors considérées en plus de \SI{150}{\milli\second} après le masque. Une portion plus importante du signal est considérée après la perturbation, pour obtenir suffisement d'échantillons temporels pour l'identification. La \cref{fig_sine_sum_trajectory} présente l'exemple de deux cycles en force. 
 
 \input{latex_figures/fig_sine_sum_trajectory.tex}
-\tikzexternaldisable
 
 Il est important de noter que la résolution du problème optimal \cref{eq_sine_optimisation} est sensible aux conditions initiales. Or, en observant les paramètres obtenus après la résolution de trajectoires non-perturbées, à différents instants du cycle en force pour les données de la session \cref{item_unp_session}, il ne semble pas qu'une unique initialisation soit une solution prometteuse. Cette supposition a été confirmée en comparant deux méthodes 
 \begin{enumerate*}[label=\alph*)]
@@ -509,16 +508,46 @@ La \cref{fig_local_sensitivity_analysis}, réalisée avec des valeurs typiques (
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{Vauleurs typiques utilisées pour les coefficients, correspondant aux couples $(K,B,M) = (200,10,1)$}
+	\caption{Valeurs typiques utilisées pour les coefficients, correspondant aux couples $(K,B,M) = (200,10,1)$}
 	\label{tab_typical_coefficient_sensitivity_analysis}	
 \end{table}
 
 \subsubsection{Validation en simulation} \label{chap3_sec_method_sub_ident_2}
 
-Afin de valider cette méthodologie complète, on se propose de la mettre à l'épreuve d'une simulation utilisant des signaux réels en force. 
+Afin de valider cette méthodologie complète, on se propose de la mettre à l'épreuve d'une simulation utilisant des signaux réels en force. On injecte un signal en force non-perturbé dans un modèle en impédance, et en parallèle on injecte ce même signal additionné avec des perturbations simulées, aux caractéristiques similaires aux réelles, pour obtenir à la fois une trajectoire perturbée à travers un modèle en impédance et une trajectoire virtuelle. La \cref{fig_impedance_simulation} résume cette simulation.
 
-\subsubsection{Trajectoire virtuelle connue} \label{chap3_sec_method_sub_ident_2_1}
+\input{latex_figures/fig_impedance_simulation.tex}
 
-\subsubsection{Trajectoire virtuelle estimée} \label{chap3_sec_method_sub_ident_2_2}
+Il est important de noter que cette simulation repose sur une simplification qui considère que le mouvement et la resistance aux perturbations sont générés par le même modèle, ce qui n'est pas le cas. Toutefois, la trajectoire en position réalisée par cette simulation est plus complexe que la trajectoire observée expérimentalement, ce qui a comme principale conséquence de dégrader les performances des méthodes d'estimation de la trajectoire en position. L'identification étant réalisée sur un différentiel, l'attention est donc plutôt portée sur le rejet des perturbations et donc sur le comportement en impédance.
+
+Les perturbations en force $\vect{f}_p$ sont espacées de \SI{2.8}{\second}. Pour reproduire des perturbations réalistes, un signal créneau de \SI{30}{\milli\second} est filtré dans un modèle du second ordre (\cref{subfig_impedance_simulation_b}).
+
+\paragraph{Trajectoire virtuelle connue} \label{chap3_sec_method_sub_ident_2_1}
+
+Dans un premier temps, on cherche à valider la méthode d'identification sans considérer sa robustesse aux erreurs induites par les estimations des trajectoires virtuelles. Pour cette analyse, la simulation proposée n'est pas nécessaire, on peut se contenter d'envoyer la perturbation $\vect{f}_p$ directement dans un modèle en impédance, pour obtenir la réponse en position $\delta \vect{x}$. Il est ensuite intéressant d'étudier l'influence de la taille de l'échantillon sur l'identification. Les deux modèles présentés en \cref{fig_KBM_typical_impulse_response} sont simulés, et l'analyse est conduite en faisant varier la taille de la fenêtre d'identification entre \SIlist{7;300}{\milli\second} à \SI{1}{\kilo\hertz}, comme montré en \cref{fig_identification_window}.
+
+\tikzexternaldisable
+\input{latex_figures/fig_identification_window.tex}
+
+On constate que quelque soit les deux sets de paramètres essayés, en l'absence d'erreur sur la trajectoire virtuelle, toutes les variables ont des erreurs relatives inférieures à \SI{1}{\percent} dès \SI{80}{\milli\second}. Après \SI{200}{\milli\second} ces erreurs sont de l'ordre de \SI{0.1}{\percent}. Avant \SI{150}{\milli\second}, c'est la raideur qui a les erreurs relatives les plus importantes.
+
+Cette analyse confirme donc l'efficacité de l'identification, il reste à évaluer l'incidence des erreurs d'estimation de trajectoires virtuelles sur l'identification des paramètres.
+
+\paragraph{Trajectoire virtuelle estimée} \label{chap3_sec_method_sub_ident_2_2}
+
+La simulation \cref{fig_impedance_simulation} devient alors très pertinente, puisqu'elle permet pour un modèle donné de reproduire la méthodologie complète présentée, depuis l'estimation des trajectoires virtuelles en position et force jusqu'à l'identification des paramètres en impédance $K$, $B$ et $M$.
+
+Il est alors possible d'évaluer séparemment l'influence des erreurs sur la position et la force, les deux trajectoires virtuelles simulées étant accessibles. Ainsi, le compromis concernant la fenêtre d'interpolation pour les splines (\cref{chap3_sec_method_sub_virt_traj_3}) peut être évalué partiellement (les comportements volontaires n'étant pas modélisés). En faisant varier la fenêtre d'interpolation entre \SIlist{200;500}{\milli\second}, on peut regarder comment les erreurs d'estimation de trajectoire en position sont corrélées à celles des paramètres identifiés.
+
+\input{latex_figures/fig_interp_spline_id.tex}
+
+Interprétation concernant la figure, choix de la fenêtre d'interpolation.
+
+De la même manière, on peut regarder comment les fenêtres utilisées pour résoudre le problème d'optimisation des sinusoïdes influent sur les erreurs d'identification des paramètres.
+
+%\input{latex_figures/}
+
+Interprétation concernant la figure, choix des fenêtres d'optimisation.
+
 
 L'ajout d'un délais $\delta_t$ est introduit pour prendre en compte la latence induite par le système d'acquisition de la position.

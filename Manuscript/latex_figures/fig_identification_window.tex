@@ -1,0 +1,172 @@
+\begin{figure}[!htb] 
+	\centering
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (539,44,2.8)$\label{subfig_sine_sum_trajectory_a}}
+		{		
+			\tikzsetnextfilename{subfig_sine_sum_trajectory_a}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					name=ax1,
+					width=.20\linewidth,
+					height=.3\linewidth,
+					scale only axis,
+					xlabel={temps (\si{\milli\second})},
+					ylabel={Erreur relative (\si{\percent})},
+					axis x line = bottom,
+					axis y line = left, 
+					ymax=1,
+					xmax=79,
+					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					%legend style={at={(0.75,0.95)},anchor=north east},
+					]
+					%
+					\addplot+[
+						%color=blue,
+						smooth,
+						mark=none,
+						]
+					table [col sep=semicolon, x=identif_window, y=K1] {misc/identification_window.csv};
+					%
+					\addplot+[
+						%color=red,
+						smooth,
+						mark=none,
+						]
+					table [col sep=semicolon, x=identif_window, y=B1] {misc/identification_window.csv};
+					%
+					\addplot+[
+						%color=red,
+						smooth,
+						mark=none,
+						]
+					table [col sep=semicolon, x=identif_window, y=M1] {misc/identification_window.csv};
+				\end{axis}	
+				\begin{axis}[%
+					width=.28\linewidth,
+					height=.3\linewidth,
+					scale only axis,
+					xlabel={temps (\si{\milli\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					xmin=80,				
+					yticklabel style={
+						%/pgf/number format/precision=3,
+						/pgf/number format/fixed},
+					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					at={($(ax1.south east)+(0,0)$)},
+					scaled y ticks=false,
+					]
+					%
+					\addplot+[
+						%color=blue,
+						smooth,
+						mark=none,
+					]
+					table [col sep=semicolon, x=identif_window, y=K1, restrict x to domain=80:300] {misc/identification_window.csv};
+					%
+					\addplot+[
+						%color=red,
+						smooth,
+						mark=none,
+					]
+					table [col sep=semicolon, x=identif_window, y=B1, restrict x to domain=80:300] {misc/identification_window.csv};
+					%
+					\addplot+[
+						%color=red,
+						smooth,
+						mark=none,
+					]
+					table [col sep=semicolon, x=identif_window, y=M1, restrict x to domain=80:300] {misc/identification_window.csv};				
+					\addlegendentry{$K$}; 
+					\addlegendentry{$B$}; 
+					\addlegendentry{$M$}; 
+				\end{axis}	
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$(K,B,M) = (280,12,0.6)$\label{subfig_sine_sum_trajectory_b}}
+		{			
+			\tikzsetnextfilename{subfig_sine_sum_trajectory_b}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					name=ax1,
+					width=.20\linewidth,
+					height=.3\linewidth,
+					scale only axis,
+					xlabel={temps (\si{\milli\second})},
+					%ylabel={Erreur relative (\si{\percent})},
+					axis x line = bottom,
+					axis y line = left, 
+					ymax=1,
+					xmax=79,
+					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					legend style={at={(0.75,0.95)},anchor=north east},
+					]
+					%
+					\addplot+[
+						%color=blue,
+						smooth,
+						mark=none,
+						]
+					table [col sep=semicolon, x=identif_window, y=K2] {misc/identification_window.csv};
+					%
+					\addplot+[
+						%color=red,
+						smooth,
+						mark=none,
+						]
+					table [col sep=semicolon, x=identif_window, y=B2] {misc/identification_window.csv};
+					%
+					\addplot+[
+						%color=red,
+						smooth,
+						mark=none,
+						]
+					table [col sep=semicolon, x=identif_window, y=M2] {misc/identification_window.csv};
+					\end{axis}	
+					\begin{axis}[%
+						width=.28\linewidth,
+						height=.3\linewidth,
+						scale only axis,
+						xlabel={temps (\si{\milli\second})},
+						axis x line = bottom,
+						axis y line = left, 
+						xmin=80,				
+						yticklabel style={
+							%/pgf/number format/precision=3,
+							/pgf/number format/fixed},
+						yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+						at={($(ax1.south east)+(0,0)$)},
+						scaled y ticks=false,
+						]
+						%
+						\addplot+[
+							%color=blue,
+							smooth,
+							mark=none,
+							]
+						table [col sep=semicolon, x=identif_window, y=K1, restrict x to domain=80:300] {misc/identification_window.csv};
+						%
+						\addplot+[
+							%color=red,
+							smooth,
+							mark=none,
+							]
+						table [col sep=semicolon, x=identif_window, y=B1, restrict x to domain=80:300] {misc/identification_window.csv};
+						%
+						\addplot+[
+							%color=red,
+							smooth,
+							mark=none,
+							]
+						table [col sep=semicolon, x=identif_window, y=M1, restrict x to domain=80:300] {misc/identification_window.csv};
+					\end{axis}	
+			\end{tikzpicture}	
+		}
+	}	
+	\caption{Convergence des erreurs relatives d'identification en fonction de la taille de la fenêtre d'estimation.}
+	\label{fig_identification_window}
+\end{figure}
