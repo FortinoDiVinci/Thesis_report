@@ -1,0 +1,49 @@
+\begin{figure} [h]
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	\tikzsetnextfilename{fig_impedance_simulation_real_position}		
+	\begin{tikzpicture} [node distance = 2cm]	
+		
+		\comp[]{c1}{(0, 0)};
+		
+		\node[block, left of = c1] (imp_model_1) {$\frac{1}{K + Bs + Ms^2}$};
+				
+		\draw[-{Latex[length=3mm]}] (imp_model_1.east) -- (c1.west);
+		
+		\draw[-{Latex[length=3mm]}] (c1.east) --+ (1,0)
+			node[align = center, below, midway] {$\vect{x}_{z}$};
+			
+		\draw[{Latex[length=3mm]}-] (imp_model_1.west) --+ (-1,0)
+			node[align = center, below, midway] {$\vect{f}_{p}$};
+			
+		\draw[{Latex[length=3mm]}-] (c1.south) --+ (0,-1) --+ (-4,-1) 
+			node[align = center, below] {$\vect{x}_{z0}$};	
+
+	\end{tikzpicture}
+	\caption{Simulation pour l'identificaiton des paramètres en impédance avec des signaux en force issus d'expérimentation sans perturbations.}
+	\label{fig_impedance_simulation_real_position} % Label 
+\end{figure}

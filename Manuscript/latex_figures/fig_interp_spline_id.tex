@@ -16,29 +16,27 @@
 					ylabel={Erreur relative (\si{\percent})},
 					axis x line = bottom,
 					axis y line = left, 
-					%ymax=1,
-					%xmax=79,
 					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
-					legend style={at={(0.05,0.95)},anchor=north west},
+					%legend style={at={(0.05,0.95)},anchor=north west},
 					]
 				%
 				\addplot+[
 					smooth,
 					mark=none,
 					]
-				table [col sep=comma, x=time_window, y=Ke] {misc/spline_window_interp_id_2.csv};
+				table [col sep=comma, x=time_window, y=Ke] {misc/spline_window_interp_id_500ms_2.csv};
 				%
 				\addplot+[
 					smooth,
 					mark=none,
 					]
-				table [col sep=comma, x=time_window, y=Be] {misc/spline_window_interp_id_2.csv};
+				table [col sep=comma, x=time_window, y=Be] {misc/spline_window_interp_id_500ms_2.csv};
 				%
 				\addplot+[
 					smooth,
 					mark=none,
 					]
-				table [col sep=comma, x=time_window, y=Me] {misc/spline_window_interp_id_2.csv};							
+				table [col sep=comma, x=time_window, y=Me] {misc/spline_window_interp_id_500ms_2.csv};
 				\addlegendentry{$K$}; 
 				\addlegendentry{$B$}; 
 				\addlegendentry{$M$}; 
@@ -60,8 +58,6 @@
 					ylabel={Erreur relative (\si{\percent})},
 					axis x line = bottom,
 					axis y line = left, 
-					%ymax=1,
-					%xmax=79,
 					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					]
 					%
@@ -69,19 +65,19 @@
 						smooth,
 						mark=none,
 						]
-					table [col sep=comma, x=time_window, y=Ke] {misc/spline_window_interp_id_1.csv};
+					table [col sep=comma, x=time_window, y=Ke] {misc/spline_window_interp_id_500ms_1.csv};
 					%
 					\addplot+[
 						smooth,
 						mark=none,
 						]
-					table [col sep=comma, x=time_window, y=Be] {misc/spline_window_interp_id_1.csv};
+					table [col sep=comma, x=time_window, y=Be] {misc/spline_window_interp_id_500ms_1.csv};
 					%
 					\addplot+[
 						smooth,
 						mark=none,
 						]
-					table [col sep=comma, x=time_window, y=Me] {misc/spline_window_interp_id_1.csv};
+					table [col sep=comma, x=time_window, y=Me] {misc/spline_window_interp_id_500ms_1.csv};
 				\end{axis}	
 			\end{tikzpicture}	
 		}

@@ -1,0 +1,118 @@
+\begin{figure}[!htb] 
+	\centering
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (539,44,2.8)$\label{subfig_interp_spline_id_R2_a}}
+		{		
+			\tikzsetnextfilename{subfig_interp_spline_id_R2_a}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					name=ax1,
+					width=.48\linewidth,
+					height=.3\linewidth,
+					scale only axis,
+					xlabel={temps (\si{\milli\second})},
+					ylabel={$R^2$ (\si{\percent})},
+					axis x line = bottom,
+					axis y line = left, 
+					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					ytick = {.5,.6,.7,.8,.9},
+					ymin=0.5,
+					legend style={at={(0.975,0.04)},anchor=south east},
+					]
+					%
+					\addplot[
+						smooth,
+						mark=none,
+						color=blue,
+						]
+					table [col sep=comma, x=interp_window, y=qrtl_R2_2_2] {misc/spline_window_interp_id_r2.csv};
+					%
+					\addlegendentry{médiane};
+					%
+					\addplot+ [
+						color=blue,
+						dashed,
+						opacity=0.5,
+						name path=A,
+						forget plot,
+						mark=none,
+						] 
+					table [col sep=comma, x=interp_window, y=qrtl_R2_2_1] {misc/spline_window_interp_id_r2.csv};
+					\addplot+ [
+						color=blue,
+						dashed,
+						opacity=0.5,
+						name path=B,
+						forget plot,
+						mark=none,
+						] 
+					table [col sep=comma, x=interp_window, y=qrtl_R2_2_3] {misc/spline_window_interp_id_r2.csv};	
+					%
+					\addplot [
+						fill=blue!15,
+						]
+					fill between [of=A and B];		
+					\addlegendentry{écart interquartile};	
+				\end{axis}				
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$(K,B,M) = (280,12,0.6)$\label{subfig_interp_spline_id_R2_b}}
+		{			
+			\tikzsetnextfilename{subfig_interp_spline_id_R2_b}		
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					name=ax1,
+					width=.48\linewidth,
+					height=.3\linewidth,
+					scale only axis,
+					xlabel={temps (\si{\milli\second})},
+					%ylabel={$R^2$ (\si{\percent})},
+					axis x line = bottom,
+					axis y line = left, 
+					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					ytick = {.5,.6,.7,.8,.9},
+					ymin=0.5,
+					%legend style={at={(0.05,0.95)},anchor=north west},
+					]
+					%
+					\addplot[
+						smooth,
+						mark=none,
+						color=blue,
+						]
+					table [col sep=comma, x=interp_window, y=qrtl_R2_1_2] {misc/spline_window_interp_id_r2.csv};
+					%
+					\addplot+ [
+						color=blue,
+						dashed,
+						opacity=0.5,
+						name path=A,
+						forget plot,
+						mark=none,
+						] 
+					table [col sep=comma, x=interp_window, y=qrtl_R2_1_1] {misc/spline_window_interp_id_r2.csv};
+					\addplot+ [
+						color=blue,
+						dashed,
+						opacity=0.5,
+						name path=B,
+						forget plot,
+						mark=none,
+						] 
+					table [col sep=comma, x=interp_window, y=qrtl_R2_1_3] {misc/spline_window_interp_id_r2.csv};	
+					%
+					\addplot [
+						fill=blue!15,
+						]
+					fill between [of=A and B];		
+				\end{axis}				
+			\end{tikzpicture}				
+		}
+	}	
+	\caption{Evolution du coefficient de détermination $R^2$ de la reconstruction de la position $\delta \vect{x}_{z0}$ à partir des paramètres en impédance identifiés, en fonction de la fenêtre d'interpolation des splines.}
+	\label{fig_interp_spline_id_R2}
+\end{figure}
