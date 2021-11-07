@@ -289,24 +289,42 @@ methods
             end
             self.arx_id{ii}.Name = 'Arx ID';
         end
-        syms Ks Bs Ms
-        assume(Ks, 'real')
-        assume(Bs, 'real')
-        assume(Ms, 'real')
-        a0 = self.arxCoeffA0(Bs,Ms); % a1 = A1/A2
-        a1 = self.arxCoeffA1(Ks,Bs,Ms); % a0 = A0/A2
-        b = self.arxCoeffsB(Ks,Bs,Ms); % Kh(1 + b0) = (B1 + B0)/A2
-        for ii = 1:self.nb_id 
-            eq.A(1) = a1 - self.arx_id{ii}.A(2)/self.arx_id{ii}.A(1) == 0;
-            eq.A(2) = a0 - self.arx_id{ii}.A(3)/self.arx_id{ii}.A(1) == 0;
-            eq.B(1) = b - (self.arx_id{ii}.B(1) + self.arx_id{ii}.B(2))/...
-                self.arx_id{ii}.A(1) == 0;
-            sol = vpasolve([eq.A(1),eq.A(2),eq.B(1)],[Ks;Bs;Ms]);
-            self.xi(1, ii) = double(sol.Ks);
-            self.xi(2, ii) = double(sol.Bs);
-            self.xi(3, ii) = double(sol.Ms);
-            self.xi(4, ii) = double(0);
-        end
+
+% The symbolic resolution is more than 60 times slower
+%         syms Ks Bs Ms
+%         assume(Ks, 'real')
+%         assume(Bs, 'real')
+%         assume(Ms, 'real')
+%         a0 = self.arxCoeffA0(Bs,Ms); % a1 = A1/A2
+%         a1 = self.arxCoeffA1(Ks,Bs,Ms); % a0 = A0/A2
+%         b = self.arxCoeffsB(Ks,Bs,Ms); % Kh(1 + b0) = (B1 + B0)/A2
+%         for ii = 1:self.nb_id 
+%             eq.A(1) = a1 - self.arx_id{ii}.A(2)/self.arx_id{ii}.A(1) == 0;
+%             eq.A(2) = a0 - self.arx_id{ii}.A(3)/self.arx_id{ii}.A(1) == 0;
+%             eq.B(1) = b - (self.arx_id{ii}.B(1) + self.arx_id{ii}.B(2))/...
+%                 self.arx_id{ii}.A(1) == 0;
+%             sol = vpasolve([eq.A(1),eq.A(2),eq.B(1)],[Ks;Bs;Ms]);
+%             self.xi(1, ii) = double(sol.Ks);
+%             self.xi(2, ii) = double(sol.Bs);
+%             self.xi(3, ii) = double(sol.Ms);
+%             self.xi(4, ii) = double(0);
+%         end
+%         
+%         K = self.xi(1, :);
+%         B = self.xi(2, :);
+%         M = self.xi(3, :);
+%         rho = self.xi(4, :);
+        
+        a1 = cellfun(@(x) x.A(2)./x.A(1), self.arx_id);
+        a0 = cellfun(@(x) x.A(3)./x.A(1), self.arx_id);
+        b = cellfun(@(x) (x.B(1) + x.B(2))./x.A(1), self.arx_id);
+        
+        alpha1 = (-a1 + sqrt(a1.^2 - 4.*a0))./2;
+        
+        self.xi(4, :) = 0;%zeros(size(self.xi(4, :)));
+        self.xi(1, :) = (1 + a1 + a0)./b; % K
+        self.xi(3, :) = real((-self.xi(1, :)'.*dt^2)./(log(alpha1).*(log(alpha1) - log(a0)))); % M
+        self.xi(2, :) = -log(a0).*(self.xi(3, :)')./dt; % B
         
         if rm_offset
             errorStat(self, 'RmOffsets');
