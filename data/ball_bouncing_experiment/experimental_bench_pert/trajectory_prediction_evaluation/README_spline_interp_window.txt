@@ -115,3 +115,47 @@ max interp = 500
 step = 3
 non symbolic identification
 ----------------
+spline_window_interp_id_500ms_k_1:
+K=280, B=12, M=0.6
+simulated force (perturbation)
+both directions
+real virtual position
+perturbation mag = 20*Kv
+min interp = 200
+max interp = 500
+step = 3
+non symbolic identification
+---------------
+spline_window_interp_id_500ms_k_2:
+K=539, B=44, M=2.8
+simulated force (perturbation)
+both directions
+real virtual position
+perturbation mag = 20*Kv
+min interp = 200
+max interp = 500
+step = 3
+non symbolic identification
+----------------
+spline_window_interp_id_500ms_m_1:
+K=280, B=12, M=0.6
+simulated force (perturbation)
+both directions
+real virtual position filtered at 25Hz instead of 50Hz
+perturbation mag = ~5N
+min interp = 200
+max interp = 500
+step = 3
+non symbolic identification
+---------------
+spline_window_interp_id_500ms_m_2:
+K=539, B=44, M=2.8
+simulated force (perturbation)
+both directions
+real virtual position filtered at 25Hz instead of 50Hz
+perturbation mag = ~5N
+min interp = 200
+max interp = 500
+step = 3
+non symbolic identification
+----------------

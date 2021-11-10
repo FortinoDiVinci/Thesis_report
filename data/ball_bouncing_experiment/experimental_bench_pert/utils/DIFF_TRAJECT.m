@@ -108,6 +108,8 @@ methods
         solver_name = 'lsqnonlin'; %'lsqcurvefit';
         lin_comp = 1;
         nb_sine = 3;
+        lw_fit_length = 110;
+        up_fit_length = 150;
         
         if ~isempty(varargin)
             for ii = 1:2:length(varargin)
@@ -161,6 +163,12 @@ methods
                         nb_sine = varargin{ii+1};
                     case 'OptlinearComp'
                         lin_comp = varargin{ii+1};
+                    case 'LowerFitLen'
+                        %TODO: check input
+                        lw_fit_length = varargin{ii+1};
+                    case 'UpperFitLen'
+                        %TODO: check input
+                        up_fit_length = varargin{ii+1};
                 end
             end
         else
@@ -291,8 +299,8 @@ methods
                 self.virt_traject(:,ii) = opt;
             elseif virtual_trajectory_method == 8
                 [opt,self.opt_param(:,ii),~,self.exit_flag(ii)] = sineOptimization_upgrade(self.time, self.complete_traject, ...
-                    idx, 'pertLength', self.interp_window, 'uFitLength', 150, ...
-                    'lFitLength', optim_fit, 'outputIndex', (idx-2+self.delay:idx+...
+                    idx, 'pertLength', self.interp_window, 'uFitLength', up_fit_length, ...
+                    'lFitLength', lw_fit_length, 'outputIndex', (idx-2+self.delay:idx+...
                     self.estim_window+1+self.delay), 'nbSine', nb_sine, 'linearComp', lin_comp,...
                     'multiStart', 50, 'solverName', solver_name);
                 self.virt_traject(:,ii) = opt;

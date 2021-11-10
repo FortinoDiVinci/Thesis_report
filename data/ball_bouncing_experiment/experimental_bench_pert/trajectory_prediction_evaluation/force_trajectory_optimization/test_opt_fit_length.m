@@ -1,10 +1,10 @@
 clear all
 
-load '../data_2020_Nov_17/data_without_impacts_2020_11_17.mat' 't' 'dt' ...
-     'thetas' 'forces_unf' 'mocap_marker_robot_base' 'idx_ball_off_ramp'
-addpath('../utils') % 
-addpath('../../../force_torque_sensor') % for force pre-processing
-addpath('../../../utils') % 
+load '../../data_2020_Nov_17/data_without_impacts_2020_11_17.mat' 't' 'dt' ...
+     'thetas' 'forces_unf' 'idx_ball_off_ramp'
+addpath('../../utils') % 
+addpath('../../../../force_torque_sensor') % for force pre-processing
+addpath('../../../../utils') % 
 
 DO_BOTH_DIRECTION = 1; % set to zero for only positive perturbation, 
                        % and to 1 to to have positive & negative pert.
@@ -14,7 +14,7 @@ HEAVY_DATA = 1; % when testing numerous configuration, only the median and
                 % the quartile error of K, B, M and R2 are kept to avoid 
                 % crashing                        
                         
-base_file_name = "test_spline_interp_window_500ms_m_";
+base_file_name = "test_opt_force_window_a_";
                         
 if DO_BOTH_DIRECTION
     pert_dir = -1;
@@ -22,33 +22,22 @@ else
     pert_dir = 1;
 end
 
-M_list = [0.6, 2.8];%[2.8];%
-B_list = [12, 44];%[44];%
-K_list = [280, 539];%[539];%
+M_list = [0.6];%[0.6, 2.8];%[2.8];%
+B_list = [12];%[12, 44];%[44];%
+K_list = [280];%[280, 539];%[539];%
 
 exp_nb = 7;
 t = t{exp_nb} - t{exp_nb}(1); % t0 = 0s
 [b,a] = butter(2,50/(1/(2*dt)),'low'); % BW 2nd order low pass filter (cutoff freq. 50 Hz)
 idx_s = idx_ball_off_ramp{exp_nb};
 
-if REAL_VIRT_POSITION
-    [b,a] = butter(2,25/(1/(2*dt)),'low'); % to deal with mocap jumps
-    p_tmp = mocap_marker_robot_base{exp_nb};
-    p = filtfilt(b,a,p_tmp(:,3));
-    f = zeros(size(p));
-    clear forces_unf thetas p_tmp mocap_marker_robot_base idx_ball_off_ramp
+f_tmp = forces_filtering(forces_unf{exp_nb}', forces_unf{exp_nb}', thetas{exp_nb}', t); % from sensor base to robot base
+f_tmp = -f_tmp(3,:)'; % fz conversion from f(e->r) to f(r->e), robot force on the environment
+f = filtfilt(b,a,f_tmp); % zero phase digital filtering
+clear forces_unf thetas f_tmp idx_ball_off_ramp
 
-    input_position.signals.values = p;
-    input_position.time = t;
-else
-    f_tmp = forces_filtering(forces_unf{exp_nb}', forces_unf{exp_nb}', thetas{exp_nb}', t); % from sensor base to robot base
-    f_tmp = -f_tmp(3,:)'; % fz conversion from f(e->r) to f(r->e), robot force on the environment
-    f = filtfilt(b,a,f_tmp); % zero phase digital filtering
-    clear forces_unf thetas f_tmp mocap_marker_robot_base idx_ball_off_ramp
-
-    input_force.signals.values = f;
-    input_force.time = t;
-end
+input_force.signals.values = f;
+input_force.time = t;
 
 % perturbation introduced in simulation
 ext_signal = 1;
@@ -89,111 +78,109 @@ for config_nb = 1:length(M_list)
     Bv = B_list(config_nb);
     Kv = K_list(config_nb);
         
-    K_f = 8000;%20*Kv; % w0^2*5
-    
-    if REAL_VIRT_POSITION
-        out = sim('../Impedance_env_simulation/KBM_sim_real_position',t_max);
-    else
-        out = sim('../Impedance_env_simulation/KBM_sim',t_max);
-    end
+    K_f = 5*w0^2;%20*Kv;
+
+    out = sim('../../Impedance_env_simulation/KBM_sim',t_max);
     
     fz = out.force.data;
+    fz0 = out.virt_force.data;
     z = out.position.data;
     z0 = out.virt_position.data;
     t = out.force.Time;
+    % get the rising edges indexes of the perturbations
+    % This method seems to induce errors...   
     pert_val = pert_mag.*alt_direction(pert_idx);
 
     % PARAMETERS
-    idx_wndw_virt_traj_min = ceil(0.200/dt); % 200ms (position)
-    idx_wndw_virt_traj_max = ceil(0.450/dt); % 500ms (position)
-    STEP = 5;
-    idx_wndw_imp_eval_min = ceil(0.100/dt); % 100ms
-    idx_wndw_imp_eval_max = ceil(0.300/dt); % 300ms
-    %idx_wndw_imp_eval    = ceil(0.200/dt); % 200ms       
+    idx_wndw_fit_b_min = ceil(0.030/dt); % 30ms 
+    idx_wndw_fit_b_max = ceil(0.120/dt); % 120ms 
+    idx_wndw_fit_a_min = ceil(0.080/dt); % 80ms 
+    idx_wndw_fit_a_max = ceil(0.200/dt); % 200ms 
+    mask_size = ceil(0.100/dt); % 100ms 
+    STEP = 10;
+    idx_wndw_imp_eval_list = ceil([.1,.15,.2,.25,.3]./dt); % 100ms - 300ms 
     idx_delay            = ceil(0.000/dt); % 0ms
     %idx_window = max(idx_wndw_imp_eval, idx_wndw_virt_traj);
     nb_param = 3; % K B M
 
-    idx_samples = (idx_wndw_virt_traj_min:STEP:idx_wndw_virt_traj_max)';
+    idx_lw = (idx_wndw_fit_b_min:STEP:idx_wndw_fit_b_max)';
+    idx_up = (idx_wndw_fit_a_min:STEP:idx_wndw_fit_a_max)';
     % DATA PRE-PROCESSING
-    delta_z{1} = DIFF_TRAJECT(idx_wndw_imp_eval_max, idx_wndw_virt_traj_min, z, t, pert_idx, pert_val, idx_delay);
-    for i = idx_samples'
-        delta_z{(i-idx_wndw_virt_traj_min)/STEP+1} = DIFF_TRAJECT(idx_wndw_imp_eval_max, i, z, t, pert_idx, pert_val, idx_delay);
-        delta_z{(i-idx_wndw_virt_traj_min)/STEP+1}.computeDiffTraject('VirtTrajMethod', 'spline');
-        delta_z{(i-idx_wndw_virt_traj_min)/STEP+1}.computeDerivatives();
-    end
-    %delta_fz = DIFF_TRAJECT(idx_wndw_imp_eval, idx_wndw_virt_f_traj, fz, t, pert_idx, pert_val, idx_delay);
-    %delta_fz.computeDiffTraject('VirtTrajMethod', 'sineOptM', 'OptNbSine', 3, 'OptlinearComp', 0); % this step might take few seconds
-
-    for i = 1:length(pert_idx)
-        idx = pert_idx(i) + (0:idx_wndw_imp_eval_max-1);
-        diff_force(:,i) = fz(idx) - f(idx);
-        diff_pos(:,i) = z(idx) - z0(idx);
-    end
-
-    %impedance{1} = IMPEDANCE_DATA(3, length(pert_idx), idx_wndw_imp_eval);
-    %impedance{1}.init_y(delta_fz.diff_traject(1:idx_wndw_imp_eval,:) - ...
-    %    delta_fz.diff_traject(1,:));
-    if HEAVY_DATA
-        nb_id_wdw = length(idx_wndw_imp_eval_min:STEP:idx_wndw_imp_eval_max);
-        K_all = zeros(length(pert_idx),nb_id_wdw,length(delta_z),'single');
-        for j = nb_id_wdw:-1:1
-            idx_wndw_imp_eval = idx_wndw_imp_eval_min + (j-1)*STEP;
-            impedance = IMPEDANCE_DATA(3, length(pert_idx), idx_wndw_imp_eval);
-            impedance.init_y(diff_force);
+    kj = 1;
+    ki = 1;
+    for i = idx_lw'
+        for j = idx_up'
             tic
-            for i = length(delta_z):-1:1
-                impedance.init_phi(delta_z{i}.diff_traject(1:idx_wndw_imp_eval,:) - ...
-                    delta_z{i}.diff_traject(1,:), ...
-                    delta_z{i}.d_diff_traject(1:idx_wndw_imp_eval,:), ... % speed
-                    delta_z{i}.dd_diff_traject(1:idx_wndw_imp_eval,:));
+            if ki == 1 && kj == 1
+                continue
+            end
+            delta_fz{ki,kj} = DIFF_TRAJECT(max(idx_wndw_imp_eval_list), mask_size, ...
+                fz, t, pert_idx, pert_val, idx_delay);
+            delta_fz{ki,kj}.computeDiffTraject('VirtTrajMethod', 'sineOptM', ...
+                'LowerFitLen', i,'UpperFitLen', j);
+            timeElapsed(kj,ki) = toc;
+            timeElapsed(kj,ki)
+            kj = kj + 1;
+        end
+        ki = ki + 1;
+        kj = 1;
+    end
+    
+    % real differential force and position
+    for i = 1:length(pert_idx)
+        idx = pert_idx(i) + (0:max(idx_wndw_imp_eval_list)-1);
+        diff_pos(:,i) = z(idx) - z0(idx);
+        diff_for(:,i) = fz(idx) - fz0(idx);
+    end
+
+    % trajectory error in force
+    kj = 1;
+    ki = 1;
+    for i = 1:length(idx_lw)
+        for j = 1:length(idx_up)
+            error_force(:,:,ki,kj) = single(diff_for - delta_fz{1,1}.diff_traject);%delta_fz{ki,kj}.diff_traject);
+            kj = kj + 1;
+        end
+        ki = ki + 1;
+        kj = 1;
+    end
+    
+    for i = 1:size(diff_pos,2)
+        d_diff_pos(:,i) = Iu_diffcent(diff_pos(:,i), delta_fz{1,1}.t_traject(3:end-2,i));
+        dd_diff_pos(:,i) = Iu_diffcent(d_diff_pos(:,i), delta_fz{1,1}.t_traject(3:end-2,i));
+    end
+    
+    nb_id_wdw = length(idx_wndw_imp_eval_list);
+    K_all = zeros(length(pert_idx),nb_id_wdw,size(delta_fz,1),size(delta_fz,2),'single');
+    B_all = zeros(size(K_all),'single');
+    M_all = zeros(size(K_all),'single');
+    r2_all = zeros(size(K_all),'single');
+    for j = nb_id_wdw:-1:1
+        idx_wndw_imp_eval = idx_wndw_imp_eval_list(j);
+        impedance = IMPEDANCE_DATA(3, length(pert_idx), idx_wndw_imp_eval);
+        impedance.init_phi(diff_pos, d_diff_pos, dd_diff_pos);
+        tic
+        for i = size(delta_fz,1):-1:1
+            for j = size(delta_fz,2):-1:1
+                impedance.init_y(delta_fz{i,j}.diff_traject(1:idx_wndw_imp_eval,:) - ...
+                    delta_fz{i,j}.diff_traject(1,:));
                 impedance.arx('NulInitialCond');
                 impedance.causalSim(dt,'NulInitialCond'); 
                 K_all(:,j,i) = impedance.xi(1,:);
                 B_all(:,j,i) = impedance.xi(2,:);
                 M_all(:,j,i) = impedance.xi(3,:);
-                r2_all(:,j,i) = impedance.r2_pos;        
-            end        
-            timeElapsed(j) = toc;
-            timeElapsed(j)
-        end
-    else
-        for i = length(delta_z):-1:1
-            tic
-            for j = length(idx_wndw_imp_eval_min:STEP:idx_wndw_imp_eval_max):-1:1
-                idx_wndw_imp_eval = idx_wndw_imp_eval_min + (j-1)*STEP;
-                impedance{i,j} = IMPEDANCE_DATA(3, length(pert_idx), idx_wndw_imp_eval);
-                impedance{i,j}.init_y(diff_force(1:idx_wndw_imp_eval,:));
-                impedance{i,j}.init_phi(delta_z{i}.diff_traject(1:idx_wndw_imp_eval,:) - ...
-                    delta_z{i}.diff_traject(1,:), ...
-                    delta_z{i}.d_diff_traject(1:idx_wndw_imp_eval,:), ... % speed
-                    delta_z{i}.dd_diff_traject(1:idx_wndw_imp_eval,:)); % acc
-                impedance{i,j}.arx('NulInitialCond');
-                impedance{i,j}.causalSim(dt,'NulInitialCond'); 
+                r2_all(:,j,i) = impedance.r2_pos;  
             end
-            timeElapsed(i) = toc;
-            timeElapsed(i)
-        end
+        end        
+        timeElapsedImp(j) = toc;
+        timeElapsedImp(j)
     end
 
-%     impedance{1}.init_phi(delta_z{1}.diff_traject(1:idx_wndw_imp_eval,:) - ...
-%         delta_z{1}.diff_traject(1,:), ...
-%             delta_z{1}.d_diff_traject(1:idx_wndw_imp_eval,:), ... % speed
-%             delta_z{1}.dd_diff_traject(1:idx_wndw_imp_eval,:)); % acc
-%     impedance{1}.arx('NulInitialCond');
-%     impedance{1}.causalSim(dt,'NulInitialCond'); 
-    if HEAVY_DATA
-         save(file_name+".mat", 'delta_z', 'diff_force', 'r2_all', ...
-             'idx_wndw_virt_traj_min', 'idx_wndw_virt_traj_max',...
-             'idx_wndw_imp_eval_min', 'idx_wndw_imp_eval_max', 'Mv', 'Bv', ...
-             'Kv', 'STEP', 'K_all', 'B_all', 'M_all', '-v7.3');
-         %clear K_all B_all M_all r2_all
-    else
-        save(file_name+".mat", 'impedance', 'idx_wndw_imp_eval_min', ...
-        'delta_z', 'diff_force', 'idx_wndw_virt_traj_min', 'idx_wndw_virt_traj_max',...
-        'Mv', 'Bv', 'Kv', 'STEP', 'idx_wndw_imp_eval_max', '-v7.3');
-    end
-
+     save(file_name+".mat", 'delta_fz', 'diff_force', 'diff_pos', 'r2_all', ...
+         'idx_wndw_fit_b_min', 'idx_wndw_fit_b_max', 'idx_wndw_fit_a_min', ...
+         'idx_wndw_fit_a_max', 'mask_size', 'Mv', 'Bv', 'Kv', 'STEP', ...
+         'K_all', 'B_all', 'M_all', 'error_force', '-v7.3');    
+     
 %     acc = cellfun(@(x) prctile(real(x.r2_pos), [25,50,75])', impedance, 'UniformOutput', false);
 %     quartiles_r2 = cell2mat(acc);
 %     acc = cellfun(@(x) prctile(abs(real(x.xi(1,:))-Kv)/Kv, [25,50,75])', impedance, 'UniformOutput', false);
