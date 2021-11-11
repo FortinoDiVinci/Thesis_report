@@ -1,9 +1,9 @@
 \begin{figure}[!htb] 
 	\centering
 	\resizebox{\textwidth}{!}{	
-		\subcaptionbox{$(K,B,M) = (539,44,2.8)$\label{subfig_sine_sum_trajectory_a}}
+		\subcaptionbox{$(K,B,M) = (539,44,2.8)$\label{subfig_identification_window_a}}
 		{		
-			\tikzsetnextfilename{subfig_sine_sum_trajectory_a}
+			\tikzsetnextfilename{subfig_identification_window_a}
 			\begin{tikzpicture}
 				\centering
 				%
@@ -12,7 +12,7 @@
 					width=.20\linewidth,
 					height=.3\linewidth,
 					scale only axis,
-					xlabel={temps (\si{\milli\second})},
+					%xlabel={temps (\si{\milli\second})},
 					ylabel={Erreur relative (\si{\percent})},
 					axis x line = bottom,
 					axis y line = left, 
@@ -48,6 +48,7 @@
 					height=.3\linewidth,
 					scale only axis,
 					xlabel={temps (\si{\milli\second})},
+					xlabel style={xshift=-8mm}, 
 					axis x line = bottom,
 					axis y line = left, 
 					xmin=80,				
@@ -85,9 +86,9 @@
 				\end{axis}	
 			\end{tikzpicture}
 		}
-		\subcaptionbox{$(K,B,M) = (280,12,0.6)$\label{subfig_sine_sum_trajectory_b}}
+		\subcaptionbox{$(K,B,M) = (280,12,0.6)$\label{subfig_identification_window_b}}
 		{			
-			\tikzsetnextfilename{subfig_sine_sum_trajectory_b}
+			\tikzsetnextfilename{subfig_identification_window_b}
 			\begin{tikzpicture}
 				\centering
 				%
@@ -96,7 +97,7 @@
 					width=.20\linewidth,
 					height=.3\linewidth,
 					scale only axis,
-					xlabel={temps (\si{\milli\second})},
+					%xlabel={temps (\si{\milli\second})},
 					%ylabel={Erreur relative (\si{\percent})},
 					axis x line = bottom,
 					axis y line = left, 
@@ -132,6 +133,7 @@
 						height=.3\linewidth,
 						scale only axis,
 						xlabel={temps (\si{\milli\second})},
+						xlabel style={xshift=-8mm}, 
 						axis x line = bottom,
 						axis y line = left, 
 						xmin=80,				

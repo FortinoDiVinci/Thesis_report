@@ -104,20 +104,62 @@ Dans des travaux plus récents, \textcite{erden_hand_2015} ont souhaité réduir
 %"At the start of the perturbation, it is reasonable to presuppose from the causality that the offset in position and torque for each trial is due to trial fluctuations, and thus could be canceled out. According to this idea, the following procedure was applied to extract the variational component of position dq:
 %Here, the superscripts denote the number of the trial, and tp denotes the start time of the perturbation. qi4 denotes the ith trajectory unbiased at the perturbation start. The same procedure was used for velocity, acceleration, and torque data. To eliminate the effect of fluctuation among trials, the data for different trials with the same perturbation were averaged. We used the variational data of the short period after the perturbation commenced (tp<t<tp+test) for the static condition test=0.4 s; for the dynamic condition test=0.28 s) for the parameter estimation described above." \parencite{gomi_human_1997}
 
-\subsubsection{Méthodes non paramétrique} \label{chap3_sec_st_art_sub_ident_2}
+\subsubsection{Méthodes non-paramétrique} \label{chap3_sec_st_art_sub_ident_2}
 
-"We have described nonparametric methods for characterizing endpoint dynamic stiffness properties, i.e., no particular model structure describing endpoint stiffness has been assumed a priori. Our only assumption is that endpoint stiffness is linear for small perturbations and can thus be fully characterized by either its frequency response matrix or its impulse response matrix. This is in contrast to previously used methods for estimating endpoint dynamics (Dolan et al. 1993; Tsuji et al. 1995; Gomi and Kawato 1997), which have assumed a model structure (typically second order) and fit the parameters of this model directly to the data. Based upon previous single-joint studies, it is likely that the assumption of second-order stiffness properties will be reasonably accurate for fixed postural conditions and small perturbations. However, mechanisms certainly exist to make the system non-second-order and/or nonlinear. For example, stiffness estimates are known to vary with perturbation amplitude (Kearney and Hunter 1982) and mean contraction level (Hunter and Kearney 1982) for postural conditions. Furthermore, individual joint stiffnesses have been found to be linear but non-second-order during changing contraction levels (MacNeil et al. 1992) and following a large perturbation (Kirsch and Kearney 1997). Also, stretch reflex responses during perturbations with quite restricted bandwidths produce a nonlinear stiffness component that will not be captured by a second-order model (Kearney and Stein 1997). It is thus unlikely that the second-order description of multijoint endpoint stiffness will survive more general testing. Furthermore, endpoint stiffness has previously been estimated only in the horizontal plane, typically with the weight of the arm supported against gravity, with the implicit assumption that both the elbow and shoulder act as hinge joints. This is obviously a vast simplification for the shoulder, which is actually a complex of several different joints with multiple degrees of freedom. It is thus expected that examination of the endpoint stiffness properties of the arm under more general and realistic conditions will reveal behavior that is of higher order than second.
+Le comportement en impédance du bras regroupant plusieurs phénomènes non linéaires, certains auteurs \parencite{perreault_multiple-input_1999,ludvig_identification_2011,piovesan_measuring_2012,guarin_unbiased_2018} ont cherché à identifier les caractéristiques viscoélastiques du bras, en limitant  les suppositions sur le modèle, grâce à des méthodes dites non paramétriques. De cette manière, ils espèrent notamment séparer les comportements réflexes des propriétés intrinsèques des membres humains, pouvoir relacher des hypothèses contriagnantes, ou valables dans des cas statiques uniqument et mieux s'approcher de réalités biologiques. Ces méthodes d'identifications reposent principalement sur des perturbations stochastiques, bien que \textcite{piovesan_measuring_2012} utilisent des perturbations impulsionnelles et \textcite{guarin_unbiased_2018} des perturbations indicielles.
 
-A nonparametric approach such as the one described here is preferred for exploring a system whose properties are only poorly established." \parencite{perreault_multiple-input_1999}
+On distingue les méthodes proposées par \textcite{perreault_multiple-input_1999,perreault_effects_2001}, qui ne prennent comme seul présupposé que le comportement cartésien de la raideur est linéaire pour de faibles perturbations, et donc que les propriétés dynamiques de la raideur peuvent être caractérisées par les matrices de réponses fréquentielles ou impulsionnelles, grâce à l'utilisation de perturbations stochastiques (\cref{chap3_sec_st_art_sub_pert_2}). Les auteurs représentent alors le modèle viscoélastique d'un membre dans le plan comme un système à plusieurs entrées ($\vec{f_x}$,$\vec{f_y}$) et plusieurs sorties ($\vec{x}$,$\vec{y}$) qui peuvent être représenté par plusieurs systèmes à plusieurs entrées et d'uniques sorties, avec des effets de couplages ($c$) et du bruit $n$ sur chaque sortie.
 
-"The near perfect overlap of the nonparametric transfer functions  and  the  second-order  fits  indicates  that  the endpoint  dynamics  estimated  for  this  trial  were  well approximated by a system with inertial, viscous and elastic components." \parencite{perreault_effects_2001}
+\tikzexternalenable
+\input{latex_figures/fig_mimo_model_perrault.tex}
+
+Les auteurs proposent alors deux méthodes, l'une fréquentielle et l'autre temporelle pour réaliser l'identification. La méthode fréquentielle repose sur l'analyse inter et auto spectrale des entrées et sorties, qui sont liées par la relation \cref{eq_mimo_cross_spectra}, avec $G_{x_iy_j}$ l'inter-spectre entre l'entrée $x_i$ et la sortie $y_j$, $G_{x_ix_k}$ l'inter-spectre entre les entrées $x_i$ et $x_k$ et $H_{y_jx_k}$ la fonction de transfert reliant l'entrée $x_k$ à la sortie $y_j$. 
+
+\begin{equation}\label{eq_mimo_cross_spectra}
+	G_{x_iy_j}(f) = \sum_{k=1}^{N}H_{y_jx_k}(f)\cdot G_{x_ix_k}(f)
+\end{equation}
+
+La raideur cartésienne dynamique planaire (deux dimensions) peut alors être obtenue à l'aide de la cohérence $\gamma_{x_1x_2}$ entre les deux entrées du système \cref{eq_mimo_coherence}, comme indiqué sur le système d'équations \cref{eq_mimo_endpoint_stiffness_id}, avec $j \in [1,2]$.
+
+\begin{equation}\label{eq_mimo_endpoint_stiffness_id}
+	\begin{cases}
+		H_{y_jx_1}(f) = \dfrac{G_{x_1y_j}(f)\cdot \left(1 - \dfrac{G_{x_1x_2}(f)G_{x_2y_j}(f)}{G_{x_2x_2}(f)\cdot G_{x_1y_j}(f)} \right)}{G_{x_1x_1}(f)\cdot \left( 1 - \gamma^2_{x_1x_2}(f)\right)} \\[5mm]
+		H_{y_jx_2}(f) = \dfrac{G_{x_2y_j}(f)\cdot \left(1 - \dfrac{G_{x_2x_1}(f)G_{x_1y_j}(f)}{G_{x_1x_1}(f)\cdot G_{x_2y_j}(f)} \right)}{G_{x_2x_2}(f)\cdot \left( 1 - \gamma^2_{x_1x_2}(f)\right)}
+	\end{cases}
+\end{equation}
+
+\begin{equation} \label{eq_mimo_coherence}
+	\gamma^2_{x_1x_2}(f) = \dfrac{\abs{G_{x_1x_2}(f)}^2}{G_{x_1x_1}(f)\cdot G_{x_2x_2}(f)}
+\end{equation}
+
+L'autre méthode repose sur les réponses impulsionnelles et les inter et auto-corrélation des entrées et sorties. Le symbole $\phi$ est utilisé pour noter la corrélation, et les entrées et sorties sont écrites de manière analogique à la méthode fréquentielle décrite précedemment avec des indices. L'opérateur de convolution est noté $*$.
+
+\begin{equation}\label{eq_mimo_cross_correlation}
+\phi_{x_iy_j}(t) = \sum_{k=1}^{N}h_{y_jx_k}(t) * \phi_{x_ix_k}(t)
+\end{equation}
+
+La raideur dynamique peut alors être estimée en représentant le système d'équation \cref{eq_mimo_cross_correlation} sous forme matriciel, puis en utilisant l'inversion matricielle, en notant que la convolution peut s'écrire sous la forme du produit d'une matrice et d'un vecteur \cref{eq_mimo_convolution}, comme détaillé par \textcite{hunter_two-sided_1983}.
+
+\begin{equation}\label{eq_mimo_convolution}
+	h(k)*\phi(k) \equiv \sum_{i=-p}^{q}h(i)\phi(i-k) = \matr{\Phi}\cdot\vect{h}
+\end{equation}
+
+Dans un autre courant de la littérature, \textcite{ludvig_identification_2011} s'appuient sur la méthode d'identification itératives dites "cascade-parallèle" de \textcite{kearney_identification_1997}, avec la représentation des réflexes par un système de Hammerstein, sur la vitesse (voir \cref{fig_kearney_hammerstein_model}), qui permet d'identifier avec des cheminements différents la raideur intrinsèque de celle induite par les réflexes. Avec leur amélioration de l'algorithme proposé précedemment pour des identifications autour d'un point opérationnel, \textcite{ludvig_identification_2011} permettent l'identification des propriétés viscoélastiques en fonction du temps le long d'une trajectoire dynamique, pour une articulation.
+
+Dans un premier temps, le couple mesuré doit être séparé entre celui lié aux propriétés intrinsèques et celui lié aux réflexes. Pour réussir à faire cette séparation, \textcite{kearney_identification_1997} identifie dans un premier temps la raideur intrinsèque seule, puisque le délais de la raideur réflexe rend nul cette dernière au début de la réaction. Passé ce délais, le couple intrinsèque $\hat{\tau}_{i}$ est estimée à l'aide du modèle identifié aux instants précédents et de la position. La différence entre le couple mesuré et le couple intrinsèque estimé fourni alors le couple réflexe estimé restant $\hat{\tau}_{ir}$. Le système non linéaire de hammerstein est alors identifié, et le couple réflexe $\hat{\tau}_{r}$ est cette fois estimé à partir de l'identification conduite. Il reste alors un couple résiduel $\tau_{rr}$ qui est la différence entre la mesure et la somme des couples $\hat{\tau}_{i}$ et $\hat{\tau}_{r}$. Le procédé est alors itéré sur le couple résiduel, et s'arrête lorsque la qualité de l'identification cesse de s'améliorer.
+
+La raideur intrinsèque est identifiée de manière similaire à la méthode temporelle décrite précédemment, avec l'utilisation des réponses impulsionnelles estimées. Pour que l'identification tienne compte de la variabilité des parmètres en fonction du temps, la méthode est utilisée avec des corrélations dépendantes du temps \parencite{lortie_identification_2001}. Les fonctions de corrélation sont alors estimiées à chaque pas de temps, et les moyennes sont effectuées sur un ensemble de réalisations décrivant le même comportement variant en fonction du temps. L'identification matricielle est effectuée en utilisant une pseudo inversion aussi détaillé par \textcite{lortie_identification_2001}.
+
+Le système non linéaire de Hammerstein est identifié par itération en fixant tantôt la non-linéarité statique, puis le système dynamique toujours et en cherchant à minimiser l'erreur quadratique, entre une prédiction des composants du système de Hammerstein. Ces composants sont obtenus avec une méthode similaire à celle utilisé pour les propriétés intrinsèques avec des estimations de la réponse impulsionnelle.
+  
+%\textcite{ludvig_identification_2011}, inspiré par \textcite{kearney_identification_1997}  "parallel-cascade (PC) nonlinear system identification method to separate intrinsic and reflex contributions to dynamic joint stiffness under stationary conditions ... The new algorithm employs ensemble methods and PC methods to estimate TV intrinsic and reflex stiffness "
 
 "Classical regressive methods are limited to estimating an average value of stiffness across several trials; by contrast, our time-frequency technique can estimate the variation of stiffness and damping across trials, thereby providing a tool to study the relationship between stiffness modulation and adaptive learning. The proposed method is non-parametric and we tested it on higher-than-second-order and non-linear systems. Modal analysis was used as a parameter identification method for second-order systems to allow a direct comparison with regressive techniques. Linearity, repeatability of the trajectory, and steady state were not necessary assumptions, and a stiff robot was not required because a free response was measured." 
 ...
 "For linear second order systems, simulations of postural and forward reaching tasks were analyzed, imposing non-linearly time-varying stiffness and damping profiles. The estimation of stiffness and damping parameters was achieved using modal analysis, thus solving an inverse vibrational problem instant by instant where both the eigenvalues and the eigenvectors of the vibrational system were measured. Eigenvalues (i.e. the natural frequencies of the mechanical system) were evaluated by analyzing a reassigned spectrogram in the time-frequency domain, specifically identifying the instantaneous vibrational frequencies as a function of time. The eigenvectors (i.e. the vibrational modes) of the system were evaluated using an approach based on the separability of the modes' time series (the frequency of each mode is sufficiently different from the others to be separately identifiable). The separation of each mode was obtained by filtering the free response signals around the resonant frequencies of the system. The adequacy of our method was evaluated using a noise sensitivity analysis, also including signal dependent noise which is common in biological systems." ...
 "The spectrogram-based method proposed here requires a separate estimation of the inertial body segment parameters (BSP). BSPs can be obtained from models that apply to the geometry and the morphology of the subject. We investigated the sensitivity of the time-frequency technique to the nine inertial models proposed in [41], applied to the set of anthropometric measures described in Table 1. The same set of inertial parameters was imposed on the simulated system and used for stiffness and damping estimation. The inertial models of Hanavan (HV) and Dempster (DE), which performed poorly in the estimation of torque via inverse dynamic as discussed in [41], also produced less accurate estimations of stiffness and damping (see Supplement S2 for details) and were excluded from the statistical analysis. We also analyzed the sensitivity of the estimates produced by our method to the direction of the perturbation using eight perturbation directions, uniformly distributed in the Cartesian space along the octants." \parencite{piovesan_measuring_2012}
 
-"Yet the disadvantage of such techniques, and the one described before, is that it assumes linearity of the musculoskeletal system [33] and it remains to be shown how well it is capable describing the non-linear dynamics of the real (neuro-)musculoskeletal system." \parencite{kistemaker_vivo_2011}
+%"Yet the disadvantage of such techniques, and the one described before, is that it assumes linearity of the musculoskeletal system [33] and it remains to be shown how well it is capable describing the non-linear dynamics of the real (neuro-)musculoskeletal system." \parencite{kistemaker_vivo_2011}
 
 \subsubsection{Autres méthodes} \label{chap3_sec_st_art_sub_ident_3}
 
@@ -166,7 +208,7 @@ Pour être capable d'estimer la trajectoire virtuelle, il est nécessaire de s'i
 \end{enumerate*}
 Les essais ont été découpés en session de \SI{5}{\minute}, avec des temps de repos pour limiter les phénomènes liés à la fatigue. L'une de ces intéractions est partiellement présentée, pour la trajectoire en position en \cref{fig_unp_position_test_trajectory} et pour la force en \cref{fig_unp_force_test_trajectory}. On peut constater sur la \cref{subfig_unp_position_test_trajectory_b} que l'amplitude cyclique des trajectoires en position est comprise entre  \SIlist{5;10}{\centi\meter} et la fréquence cyclique entre \SIlist{0.7;1.1}{\hertz}. Si on s'intéresse à l'ensemble des trajectoires, on peut constater que l'amplitude du mouvement reste toujours inféreure à \SI{11}{\centi\meter}. Si on se penche sur la force, on peut observer sur la \cref{subfig_unp_force_test_trajectory_b} une variation d'amplitude en force comprise entre \SIlist{7;15}{\newton}, et sur l'ensemble des essais cette amplitude ne dépasse jamais \SI{16}{\newton}.
 
-\tikzexternalenable
+%\tikzexternalenable
 \input{latex_figures/fig_unperturbed_position_test_trajectory}
 
 \input{latex_figures/fig_unperturbed_force_test_trajectory}
@@ -174,7 +216,7 @@ Les essais ont été découpés en session de \SI{5}{\minute}, avec des temps de
 Les analyses spectrales en \cref{fig_fft_freq_analysis}, conduites sur l'ensemble des trajectoires confirment bien que les signaux en force sont plus riches que ceux en position. On retrouve la fréquence principale qui correspond à celle imposée par la tâche, déjà observable sur la \cref{subfig_unp_position_test_trajectory_b} autour de \SI{0.85}{\hertz}. Les différences de puissance entre signaux avec et sans retours haptiques ne semblent visible que sur la force, au delà de \SI{6}{\hertz}.
 
 \input{latex_figures/fig_fft_frequencies_analysis}
-\tikzexternaldisable
+%\tikzexternaldisable
 
 \begin{aside}{Mesures exogènes}
 	Le robot, youBot, de Kuka utilisé pour les expériences, n'est pas complètement réversible et possède des flexibilités non négligeables. Par conséquent, mesurer les forces d'interactions en utilisant les courants moteurs s'avèrerait peu précis tout comme estimer la position de l'effecteur final depuis les données articulaires. C'est pour pallier ces problématiques que des capteurs externes au robot ont été implémentés. Un capteur de forces et couples 6 axes a donc été installé à l'interface entre l'effecteur final du robot et la poignée pour mesurer les forces d'interactions entre le robot et l'utilisateur. De même, pour obtenir la position cartésienne de la poignée avec plus de précision, un système de vision a été installée avec des marqueurs sur les parties rigides du dernier segment du robot. Ces équipements permettent selon les données des constructeurs d'atteindre une précision de \SI{125}{\milli\newton} pour les forces et submillimétrique pour les positions.
@@ -221,7 +263,7 @@ Cette méthode ne se prête toutefois pas aux trajectoires en force qui ne sont 
 %\newcommand\pertIdx{\mydata[2,3]}
 %{\mydata[2,3]}
 
-\tikzexternalenable
+%\tikzexternalenable
 \input{latex_figures/fig_test_burdet_trajectory_prediction}
 %\input{latex_figures/fig_test_burdet_trajectory_prediction_fail}
 
@@ -246,7 +288,9 @@ Une autre solution serait de regarder seulement deux points, et donc de n'utilis
 
 Pour évaluer la précision des splines en fonction de la durée de la fenêtre d'interpolation, les moyennes des racines des erreurs quadratiques (RMSE) ont été évaluées pour \SI{200}{\milli\second}, sur l'ensemble des trajectoires non-perturbées de la session \cref{item_unp_session}, c'est à dire sur plus de xx cycles, où l'évaluation était conduite sur une région aléatoire de chaque cycle. La \cref{fig_spline_rmse_evaluation} dévoile les résultats de la moyenne de ces erreurs pour chaque durée des intervalles d'interpolation. Les scores obtenus sont évidemment influencés à la fois par les fenêtres d'interpolation et d'évaluation. Le choix de la durée de la fenêtre d'évaluation est détaillé en \cref{chap3_sec_method_sub_ident}.
 
+%\tikzexternaldisable
 \input{latex_figures/fig_spline_rmse_evaluation}
+%\tikzexternalenable
 
 En première approximation, on peut estimer le temps de réponse du modèle viscoélastique du bras humain en rejet de perturbation de faible amplitude. Le facteur d'amortissement $\xi_p$ et la pulsation naturelle non amortie $\omega_n$ peuvent être facilement représentés en fonction des paramètres du modèle KBM :
 
@@ -257,7 +301,11 @@ En première approximation, on peut estimer le temps de réponse du modèle visc
 	\end{split}
 \end{equation}
 
-Pour des réponses impulsionnelles pseudo-amorties classiques \cref{eq_2nd_order_impulse_response} montrées en \cref{fig_KBM_typical_impulse_response} avec des couples de paramètres $(K,B,M)$ typiquement obtenus par \textcite{erden_hand_2015} : $(539,44,2.8)$ et $(280,12,0.6)$, rapplé dans le \cref{tab_impedance_litterature}, on obtient des facteurs d'amortissement inférieur à 1, et donc des réponses oscillantes. Dans le premier cas, $\xi_p=0.56$, on a donc un temps de premier pic $t_p$ à \SI{83}{\milli\second}, dans le second cas, $\xi_p=0.46$, avec un $t_p$ de \SI{60}{\milli\second}.
+Pour des réponses impulsionnelles pseudo-amorties classiques \cref{eq_2nd_order_impulse_response} montrées en \cref{fig_KBM_typical_impulse_response} avec des couples de paramètres $(K,B,M)$ typiquement obtenus par \textcite{erden_hand_2015} : 
+\begin{enumerate*}[label=(\alph*)]
+	\item\label{item_model_a} $(539,44,2.8)$
+	\item\label{item_model_b} $(280,12,0.6)$
+\end{enumerate*}, rappelé dans le \cref{tab_impedance_litterature}, on obtient des facteurs d'amortissement inférieur à 1, et donc des réponses oscillantes. Dans le premier cas, $\xi_p=0.56$, de premier pic a lieu à \SI{83}{\milli\second}, et dans le second cas, $\xi_p=0.46$, le premier pic à \SI{60}{\milli\second}.
 
 \begin{equation} \label{eq_2nd_order_impulse_response}
 	y_i(t) = \frac{\omega_n}{K\sqrt{1-\xi_p^2}}e^{-\xi_p\omega_nt}\sin(\omega_n\sqrt{1-\xi_p^2}t) e(t)
@@ -286,14 +334,14 @@ Le filtre ainsi conçu est d'ordre 2997. L'ordre important du filtre est expliqu
 
 \input{latex_figures/fig_force_filtering_magnitude.tex}
 
-Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de référence, il a été appliqué aux trajectoires non-perturbées de la première expérience de la session \cref{item_unp_session}, qui représente un totla de \SI{288.6}{\second}. On peut voir un exemple du filtrage sur trois cycles consécutifs en \cref{subfig_force_filtering_a}. La racine de l'erreur quadratique moyenne entre ce filtrage et un passe-bas de Butterworth d'ordre 2, avec une fréquence de coupure de \SI{50}{\hertz} (ce dernier permet de retirer le bruit du capteur de force), donne un résultat de \SI{108}{\milli\newton}. En faisant la même analyse avec le signal bruité, cette même erreur n'est que de \SI{123}{\milli\newton}. Ainsi, même si certains comportements, notamment au niveau des pics de force peuvent être atténués par le filtrage proposé, le signal n'est globalement pas modifié au-delà de la précision du capteur de force (\SI{125}{\milli\newton}).
+Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de référence, il a été appliqué aux trajectoires non-perturbées de la première expérience de la session \cref{item_unp_session}, qui représente un total de \SI{288.6}{\second}. On peut voir un exemple du filtrage sur trois cycles consécutifs en \cref{subfig_force_filtering_a}. La racine de l'erreur quadratique moyenne entre ce filtrage et un passe-bas de Butterworth d'ordre 2, avec une fréquence de coupure de \SI{50}{\hertz} (ce dernier permet de retirer le bruit du capteur de force), donne un résultat de \SI{108}{\milli\newton}. En faisant la même analyse avec le signal bruité, cette même erreur n'est que de \SI{123}{\milli\newton}. Ainsi, même si certains comportements, notamment au niveau des pics de force peuvent être atténués par le filtrage proposé, le signal n'est globalement pas modifié au-delà de la précision du capteur de force (\SI{125}{\milli\newton}).
 
 Toutefois, si on s'intéresse maintenant à la rejection des perturbations, dont on peut voir l'exemple en \cref{subfig_force_filtering_b}, pour une perturbation non prévisible ainsi que pour le retour haptique de la balle, le point de départ du signal filtré à l'instant de la perturbation indique une erreur significative. En effet, si la perturbation semble bien filtrée, et le comportement oscillatoire conservé, à l'instant $t_p$ de la perturbation, un écart de \SI{847}{\milli\newton} vient biaiser l'estimation de la trajectoire virtuelle en force. Des écart similaires se retrouvent sur la plupart des perturbations filtrées, alors qu'on s'attendrait à ce qu'à l'instant de la perturbation, les valeurs coïncident. Il faut donc une solution complémentaire pour palier cette problématique.
 
 Une composante basse fréquence ou continue semble en effet devoir être supprimée des perturbations. La durée des perturbations en force étant approximativement de \SI{60}{\milli\second}, on se propose d'extraire \SI{85}{\milli\second} du signal suite à une perturbation. La composante continue est alors déterminée grâce l'\cref{algo_pert_filtering}, avec $repeat()$ une fonction permettant de répéter un signal, pour garantir la stabilité du filtrage et $filter()$ la fonction de filtrage bi-directionnelle qui minimise le déphasage.
 
 \begin{algorithm}
-	\caption{Algorithme d'extraction des perturbations par filtrage}\label{algo_pert_filtering}
+	\caption{Extraction des perturbations par filtrage}\label{algo_pert_filtering}
 	\begin{algorithmic}[1]
 		\Procedure{Perturbation filtering}{$f_z,i_p$}\Comment{$i_p$ index des pert.}
 		\State $l_p \gets ceil(85e-3/dt)$\Comment{\SI{85}{\milli\second} d'échantillons}
@@ -316,7 +364,7 @@ Une composante basse fréquence ou continue semble en effet devoir être supprim
 Cette méthode ne garantie toutefois pas un bon point de départ, même si elle diminue systématiquement l'écart observé avant la perturbation, comme on peut le voir sur quatre exemple en \cref{fig_force_filtering_algorithm}. En effet, si on s'intéresse à l'erreur RMS entre le signal en force non filtré et filtré à l'instant avant chaque perturbation, on obtient une erreur de \SI{675}{\milli\newton} sur un total de 71 perturbations, alors que cette même erreur moyenne passe à \SI{470}{\milli\newton} avec l'algorithme, soit une réduction de cette erreur \SI{30}{\percent} par rapport au filtrage seul.
 
 \input{latex_figures/fig_force_filtering_algo_bis.tex}
-\tikzexternaldisable
+%\tikzexternaldisable
 
 \subsubsection{Réseaux de neurones récurrents} \label{chap3_sec_method_sub_virt_traj_5}
 
@@ -332,9 +380,9 @@ Afin d'essayer de prendre en compte plus de paramètres qui peuvent avoir une in
 		\vect{c}_t = \vect{f}_t \hadamard \vect{c}_{t-1} + \vect{i}_t \hadamard \tilde{\vect{c}}_{t-1} 
 	\end{equation}
 	
-	\tikzexternalenable
+	%\tikzexternalenable
 	\input{latex_figures/fig_lstm_architecture.tex}
-	\tikzexternaldisable
+	%\tikzexternaldisable
 	
 \end{aside}
 
@@ -358,7 +406,7 @@ Les signaux $\vect{s}$ sont normalisés en variance \cref{eq_variance_normalisat
 
 Cette mise en place embryonnaire a confirmé la faisabilité d'une telle approche, mais un réglage plus fin des hyperparamètres, l'utilisation d'une fonction de coût plus avancée (vraisemblance), et éventuellement la conception d'une architecture plus complexe (plusieurs cellules LSTM, ...), et une base de données plus fournie seraient nécessaire pour arriver à des résultats véritablement concluants. Sur les 471 morceaux de \SI{1.5}{\second} de trajectoires testées (ne faisant ni partie des ensembles d'entraînement, ni de validation), le modèle obtient respectivement des erreurs RMS de \SI{788}{\milli\newton} et \SI{1.19}{\newton} pour les parties de la trajectoire non masquée et masquée, après réinterpolation des données à \SI{1}{\kilo\hertz}.
 
-\tikzexternalenable
+%\tikzexternalenable
 \input{latex_figures/fig_lstm_prediction.tex}
 
 \subsubsection{Sommes de sinus} \label{chap3_sec_method_sub_virt_traj_6}
@@ -438,7 +486,7 @@ La trajectoire virtuelle en force a été plus laborieuse à approcher, le signa
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline  
-			Méthode & \SI{100}{\milli\second} RMS & \SI{200}{\milli\second} RMS \\
+			Méthode & RMS \SI{100}{\milli\second} & RMS \SI{200}{\milli\second} \\
 			\hline
 			Filtrage & \SI{471}{\milli\newton} & \SI{377}{\milli\newton} \\
 			\hline
@@ -559,13 +607,13 @@ Afin de valider cette méthodologie complète, on se propose de la mettre à l'�
 
 Il est important de noter que cette simulation repose sur une simplification qui considère que le mouvement et la résistance aux perturbations sont générés par le même modèle, ce qui n'est pas le cas. Toutefois, la trajectoire en position réalisée par cette simulation est plus complexe que la trajectoire observée expérimentalement, ce qui a comme principale conséquence de dégrader les performances des méthodes d'estimation de la trajectoire en position. L'identification étant réalisée sur un différentiel, l'attention est donc plutôt portée sur le rejet des perturbations et donc sur le comportement en impédance.
 
-Les perturbations en force $\vect{f}_p$ sont espacées de \SI{2.8}{\second}. Pour reproduire des perturbations réalistes, un signal créneau de \SI{30}{\milli\second} est filtré dans un modèle du second ordre (\cref{subfig_impedance_simulation_b}).
+Les perturbations en force $\vect{f}_p$ sont espacées de \SI{2.1}{\second}. Pour reproduire des perturbations réalistes, un signal créneau de \SI{30}{\milli\second} est filtré dans un modèle du second ordre (\cref{subfig_impedance_simulation_b}).
 
 \paragraph{Trajectoire virtuelle connue} \label{chap3_sec_method_sub_ident_2_1}
 
 Dans un premier temps, on cherche à valider la méthode d'identification sans considérer sa robustesse aux erreurs induites par les estimations des trajectoires virtuelles. Pour cette analyse, la simulation proposée n'est pas nécessaire, on peut se contenter d'envoyer la perturbation $\vect{f}_p$ directement dans un modèle en impédance, pour obtenir la réponse en position $\delta \vect{x}$. Il est ensuite intéressant d'étudier l'influence de la taille de l'échantillon sur l'identification. Les deux modèles présentés en \cref{fig_KBM_typical_impulse_response} sont simulés, et l'analyse est conduite en faisant varier la taille de la fenêtre d'identification entre \SIlist{7;300}{\milli\second} à \SI{1}{\kilo\hertz}, comme montré en \cref{fig_identification_window}.
 
-\tikzexternaldisable
+%\tikzexternaldisable
 \input{latex_figures/fig_identification_window.tex}
 
 On constate que quelque soit les deux sets de paramètres essayés, en l'absence d'erreur sur la trajectoire virtuelle, toutes les variables ont des erreurs relatives $r_\epsilon$ \cref{eq_relative_error} inférieures à \SI{1}{\percent} dès \SI{80}{\milli\second}. Après \SI{200}{\milli\second} ces erreurs sont de l'ordre de \SI{0.1}{\percent}. Avant \SI{150}{\milli\second}, c'est la raideur qui a les erreurs relatives les plus importantes.
@@ -578,32 +626,45 @@ Cette analyse confirme donc l'efficacité de l'identification, il reste à éval
 
 \paragraph{Trajectoire virtuelle estimée} \label{chap3_sec_method_sub_ident_2_2}
 
-La simulation \cref{fig_impedance_simulation} devient alors très pertinente, puisqu'elle permet pour un modèle donné de reproduire la méthodologie complète présentée, depuis l'estimation des trajectoires virtuelles en position et force jusqu'à l'identification des paramètres en impédance $K$, $B$ et $M$.
+La simulation \cref{fig_impedance_simulation} permet pour un modèle donné de reproduire la méthodologie complète présentée, depuis l'estimation des trajectoires virtuelles en position et force jusqu'à l'identification des paramètres en impédance $K$, $B$ et $M$. Il est alors possible d'évaluer séparemment l'influence des erreurs sur la position et la force, les deux trajectoires virtuelles simulées étant accessibles. 
 
-Il est alors possible d'évaluer séparemment l'influence des erreurs sur la position et la force, les deux trajectoires virtuelles simulées étant accessibles. Ainsi, le compromis concernant la fenêtre d'interpolation pour les splines (\cref{chap3_sec_method_sub_virt_traj_3}) peut être évalué partiellement (les comportements volontaires n'étant pas modélisés). Pour se rapprocher d'un cas réaliste pour la position, sur laquelle est adressé l'attention dans un premier temps, la simulation \cref{subfig_impedance_simulation_a} est modifiée. Seul le différentielle de force et de trajectoire sont simulés, le différentiel de position est alors additionné à une trajectoire en position non perturbée pour obtenir $\vect{x}_z$, comme montré sur la \cref{fig_impedance_simulation_real_position}. Ensuite, en faisant varier la fenêtre d'interpolation entre \SIlist{200;500}{\milli\second}, on peut regarder comment les erreurs d'estimation de trajectoire en position sont corrélées à celles des paramètres identifiés.
+Ainsi, le compromis concernant la fenêtre d'interpolation pour les splines (\cref{chap3_sec_method_sub_virt_traj_3}) peut être évalué partiellement (les comportements volontaires n'étant pas modélisés). Pour se rapprocher d'un cas réaliste pour la position, sur laquelle est adressé l'attention dans un premier temps, la simulation \cref{subfig_impedance_simulation_a} est modifiée. Seul le différentiel de force et de trajectoire sont simulés, le différentiel de position est alors additionné à une trajectoire en position non perturbée pour obtenir $\vect{x}_z$, comme montré sur la \cref{fig_impedance_simulation_real_position}. Ensuite, en faisant varier la fenêtre d'interpolation $f_i$ entre \SIlist{200;400}{\milli\second}, et la fenêtre d'identification $f_o$ entre \SIlist{100;300}{\milli\second}, on peut regarder comment les erreurs d'estimation de trajectoire en position sont corrélées à celles des paramètres identifiés (\cref{fig_interp_spline_and_id_window}).
 
+%\tikzexternalenable
 \input{latex_figures/fig_impedance_simulation_real_position.tex}
 
-\tikzexternalenable
-\input{latex_figures/fig_interp_spline_id.tex}
-
 %Les résultats présentés par la \cref{fig_interp_spline_id} dévoilent l'influence des paramètres du modèle sur la précision des identifications. 
-Les estimations ont été conduites sur 225 perturbations simulées, d'une des expériences de la session \cref{item_unp_session}. Les médianes des erreurs relatives des paramètres évalués sur 225 identifications, pour chacune des fenêtres d'interpolation comprises de \SIrange{200}{500}{\milli\second} sont indiquées sur la \cref{fig_interp_spline_id}.
+Les estimations ont été conduites sur 143 perturbations simulées, avec les trajectoires en position d'une des expériences de la session \cref{item_unp_session}, avec un pas de \SI{3}{\milli\second} pour chaque fenêtre $f_i$ et $f_o$. On peut constater sur la \cref{fig_interp_spline_and_id_window} que les erreurs induites par les splines sont biaisées par la modèle simulé. En effet, lorsque les paramètres sont élevés comme pour le modèle \cref{item_model_a} (\cref{subfig_interp_spline_and_id_window_param_2}), alors, quelque soit la fenêtre d'observation étudiée, pour les fenêtres d'interpolation des splines inférieures à \SI{250}{\milli\second}, l'erreur relative de la raideur médiane est supérieure à \SI{100}{\percent}. Alors que pour l'autre modèle \cref{item_model_b}, les erreurs relatives ne sont jamais supérieures à \SI{20}{\percent}. Il faut une fenêtre $f_i$ supérieure à \SI{325}{\milli\second} avec le modèle \cref{item_model_a} pour obtenir des erreurs de moins de \SI{10}{\percent}.
 
-Les erreurs sont à comparer avec celles de la \cref{fig_identification_window} pour une fenêtre d'identification de \SI{200}{\milli\second}, c'est à dire des erreurs de l'ordre de \SI{0.1}{\percent}. On peut donc constater la sensibilité de la méthode proposée aux erreurs d'estimation sur trajectoire en position, puisqu'on observe une augmentation des erreurs à des valeurs comprises entre \SIlist{0.0;218.9}{\percent} pour la raideur, entre \SIlist{0.1;118.5}{\percent} pour l'amortissement et \SIlist{0.2;19.4}{\percent} pour la masse. De plus ces erreurs ne suivent pas exactement les mêmes évolutions selon le modèle mis à l'épreuve. On distingue toutefois la tendance de la raideur à converger vers des erreurs inférieures à \SI{10}{\percent} après \SI{350}{\milli\second}, tandis que celle de l'amortissement semble converger vers \SI{115}{\percent}, après avoir atteint un minimum entre \SIlist{225;260}{\milli\second}. Le choix d'une fenêtre d'interpolation pour les splines n'est donc pas simple. %=INDEX($A:$A;EQUIV(MAX(B:B);B:B;0)) on cvs file
+%\input{latex_figures/fig_interp_spline_id.tex}
+\input{latex_figures/fig_interp_spline_and_id_window.tex}
 
-Un traitement supplémentaire est nécessaire pour limiter ces erreurs, on peut notamment s'intéresser aux coefficients de détermination $R^2$ \cref{eq_coef_determination} de la reconstruction de la position à partir des paramètres identifier pour voir si l'identification permet de reproduire les données en sortie. Un faible coefficient de détermination signifie que le modèle utilisé n'est pas en adéquation avec les données en entrée et sortie. Dans ce cas précis, cela signifie que la trajectoire en sortie a mal été estimée, puisque la position a bien été générée à partir du modèle en impédance. Toutefois, il est important de souligner qu'un coefficient $R^2$ élevé ne garanti pas l'identification des bons paramètres, et à l'inverse, un mauvais coefficient ne signifie pas systématiquement que les paramètres estimés sont erronnés.
+Ces erreurs sont à comparer à celles de la \cref{fig_identification_window} qui ne dépassent plus \SI{0.5}{\percent} quelques soient les paramètres et modèles au delà de \SI{100}{\milli\second} d'observation. On peut donc constater la sensibilité de la méthode proposée aux erreurs d'estimation sur trajectoire en position. Pour mieux comprendre pourquoi la raideur semble plus laborieuse à approcher pour le premier modèle \cref{item_model_a}, on peut se pencher sur le profil moyenne des erreurs d'estimation de trajectoire virtuelle des splines, pour chacune des fenêtres $f_i$, en \cref{fig_interp_spline_error_profile}.
+
+%\tikzexternaldisable
+\input{latex_figures/fig_interp_spline_error_profile.tex}
+%\tikzexternalenable
+
+On peut alors constater que pour le modèle \cref{item_model_a}, l'amplitude des erreurs moyennes sur une trajectoire de \SI{300}{\milli\second} en fonction de la fenêtre $f_i$ peut atteindre \SI{1}{\centi\meter}, alors que pour le second modèle \cref{item_model_b}, elles ne dépassent jamais l'échelle millimétrique. Ce constat est d'autant plus amplifié que les mouvements induits par les perturbations en force sont plus faibles pour le premier modèle. En effet, pour les modèles avec des raideur et masse plus importantes, l'amplitude de la réponse est plus faible. Ainsi, pour les perturbations utilisées d'une amplitude de \SI{5}{\newton} (\cref{subfig_impedance_simulation_b}), les modèles \cref{item_model_a,item_model_b} donnent lieu à des déplacements maximum de \SIlist{2;7}{\milli\meter} respectivement. On voit donc que les erreurs d'estimtion de trajectoire en position représentent une proportion pouvant dépasser \SI{50}{\percent} de l'amplitude du mouvement provoqué par la perturbation.
+
+On constate donc une des limites des perturbations en force, qui nécessitent un présupposé sur les raideurs qui doivent être identifiées. Si la perturbation est trop élevée par rapport à la raideur, alors, les mouvements provoqués seraient trop importants, et la supposition de linéarité du modèle en impédance humaine ne serait plus valide. Par ailleurs, trop perturber le mouvement pourrait le dénaturer, ou rendre la tâche plus difficile à réaliser, voire impossible. Il n'est donc pas possible de simplement augmenter l'amplitude des perturbations. Pour obtenir un déplacement équivalent à celui du second modèle \cref{item_model_b}, il faudrait injecter des perturbations en force avec un pic d'environ \SI{17}{\newton}, pour le modèle \cref{item_model_a}. Or ces perturbations induiraient un mouvement de plus de \SI{2}{\centi\metre} à l'autre modèle.
+
+%Les erreurs sont à comparer avec celles de la \cref{fig_identification_window} pour une fenêtre d'identification de \SI{200}{\milli\second}, c'est à dire des erreurs de l'ordre de \SI{0.1}{\percent}. On peut donc constater la sensibilité de la méthode proposée aux erreurs d'estimation sur trajectoire en position, puisqu'on observe une augmentation des erreurs à des valeurs comprises entre \SIlist{0.0;218.9}{\percent} pour la raideur, entre \SIlist{0.1;118.5}{\percent} pour l'amortissement et \SIlist{0.2;19.4}{\percent} pour la masse. De plus ces erreurs ne suivent pas exactement les mêmes évolutions selon le modèle mis à l'épreuve. On distingue toutefois la tendance de la raideur à converger vers des erreurs inférieures à \SI{10}{\percent} après \SI{350}{\milli\second}, tandis que celle de l'amortissement semble converger vers \SI{115}{\percent}, après avoir atteint un minimum entre \SIlist{225;260}{\milli\second}. Le choix d'une fenêtre d'interpolation pour les splines n'est donc pas simple. %=INDEX($A:$A;EQUIV(MAX(B:B);B:B;0)) on cvs file
+
+Pour essayer de limiter ces erreurs, on peut notamment s'intéresser aux coefficients de détermination $R^2$ \cref{eq_coef_determination} de la reconstruction de la position à partir des paramètres identifier pour voir si l'identification permet de reproduire les données en sortie. Un faible coefficient de détermination signifie que le modèle utilisé n'est pas en adéquation avec les données en entrée et sortie. Dans ce cas précis, cela signifie que la trajectoire en sortie a mal été estimée, puisque la position a bien été générée à partir du modèle en impédance. Toutefois, il est important de souligner que, dans le cas étudié, un coefficient $R^2$ élevé ne garanti pas l'identification des bons paramètres, et à l'inverse, un mauvais coefficient ne signifie pas systématiquement que les paramètres estimés sont erronnés.
 
 \begin{equation} \label{eq_coef_determination}
 	R^2 = 1 - \frac{\sum_{i=1}^{n_s}(y_i-\hat{y}_i)^2}{\sum_{i=1}^{n_s}(y_i-\mean{y}_i)^2}
 \end{equation}
 
 \input{latex_figures/fig_interp_spline_id_R2.tex}
-\tikzexternaldisable
 
 On peut voir que le $R^2$ commence à des valeurs médianes élevées supérieures à \SI{95}{\percent}, avec un écart interquartile inférieur à \SI{10}{\percent} pour le premier jeu de paramètres et encore de meilleur qualité pour l'autre avec des valeurs médianes de plus de \SI{98}{\percent} jusqu'à \SI{300}{\milli\second}, et un écart interquartile d'environ \SI{5}{\percent} jusqu'à \SI{250}{\milli\second}. Il est intéressant de noter que l'écart interquatile du coefficient augmente drastiquement après \SI{300}{\milli\second} pour les deux jeux de paramètres, avec des valeurs basse en dessous de 0 dès \SI{360}{\milli\second}.
 
 En utilisant le $R^2$ comme un premier filtre pour sortir les données aberrantes on arrive à réduire les erreurs...
+
+%\input{latex_figures/fig_interp_spline_and_id_window_r2.tex}
+\tikzexternaldisable
 
 %TODO: étudier l'influence de la fenêtre d'optimisation sur la force
 %De la même manière, on peut regarder comment les fenêtres utilisées pour résoudre le problème d'optimisation des sinusoïdes influent sur les erreurs d'identification des paramètres.
@@ -612,7 +673,7 @@ En utilisant le $R^2$ comme un premier filtre pour sortir les données aberrante
 %
 %Interprétation concernant la figure, choix des fenêtres d'optimisation.
 
-Si on regarde maintenant avec une position virtuelle connue $\vect{x}_{z0}$, et une trajectoire virtuelle en force estimée $\hat{\vect{f}}_{z0}$
+Si on regarde maintenant avec une position virtuelle connue $\vect{x}_{z0}$, et une trajectoire virtuelle en force estimée $\hat{\vect{f}}_{z0}$, il est possible d'étudier l'effet des fenêtres d'optimisation utilisées avant et après le masque décrit en \cref{chap3_sec_method_sub_virt_traj_6}.
 
 
 L'ajout d'un délais $\delta_t$ est introduit pour prendre en compte la latence induite par le système d'acquisition de la position.

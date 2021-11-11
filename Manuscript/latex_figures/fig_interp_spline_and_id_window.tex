@@ -1,0 +1,118 @@
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (539,44,2.8)$\label{subfig_interp_spline_and_id_window_param_2}}
+		{		
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_K2}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zlabel={\si{\percent}},
+					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					xmax = 299,
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					%width = .3\linewidth,
+					]
+					%
+					%\addplot3 [mesh] table[x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv, col sep=comma] {K_interp_and_id_window.csv};
+					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_B2}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					xmax = 299,
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					%width = .3\linewidth,
+					]
+					%
+					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_M2}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					xmax = 299,
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					%width = .3\linewidth,
+					]
+					%
+					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+				\end{axis}
+			\end{tikzpicture}
+		}
+	}
+	\\
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (280,12,0.6)$\label{subfig_interp_spline_and_id_window_param_1}}
+		{		
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_K1}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zlabel={\si{\percent}},
+					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					xmax = 299,
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					]
+					%
+					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_B1}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					xmax = 299,
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					]
+					%
+					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_M1}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					xmax = 299,
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					]
+					%
+					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
+				\end{axis}
+			\end{tikzpicture}
+		}
+	}
+	\caption{Erreurs relatives des paramètres estimés sur 143 trajectoires, en faisant varier les fenêtres d'interpolation des splines $f_i$ pour estimer la trajectoire virtuelle en force, ainsi que les fenêtres d'observation $f_0$ pour l'identification.}
+	\label{fig_interp_spline_and_id_window}
+\end{figure}

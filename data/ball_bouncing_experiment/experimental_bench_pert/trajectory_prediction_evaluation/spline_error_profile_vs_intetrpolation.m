@@ -28,7 +28,7 @@ view(2)
 mean_error_neg = reshape(mean_error_neg_prof(1:3:300,:),[],1);
 mean_error_pos = reshape(mean_error_pos_prof(1:3:300,:),[],1);
 time = repmat(1:3:300,1,size(mean_error_pos_prof,2))';
-spline_interp_window = reshape(repmat(idx_samples,length(1:3:300),1),[],1);
+spline_interp_window = reshape(repmat(idx_samples',length(1:3:300),1),[],1);
 table_csv = table(time, spline_interp_window, mean_error_neg, mean_error_pos);
 write(table_csv,'spline_error_profile_param_2.csv','Delimiter',',');
 

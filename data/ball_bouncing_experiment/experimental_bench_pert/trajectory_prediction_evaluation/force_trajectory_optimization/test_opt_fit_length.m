@@ -111,9 +111,9 @@ for config_nb = 1:length(M_list)
     for i = idx_lw'
         for j = idx_up'
             tic
-            if ki == 1 && kj == 1
-                continue
-            end
+%             if ki == 1 && kj == 1
+%                 continue
+%             end
             delta_fz{ki,kj} = DIFF_TRAJECT(max(idx_wndw_imp_eval_list), mask_size, ...
                 fz, t, pert_idx, pert_val, idx_delay);
             delta_fz{ki,kj}.computeDiffTraject('VirtTrajMethod', 'sineOptM', ...
@@ -121,7 +121,7 @@ for config_nb = 1:length(M_list)
             timeElapsed(kj,ki) = toc;
             timeElapsed(kj,ki)
             kj = kj + 1;
-        end
+        end        
         ki = ki + 1;
         kj = 1;
     end
@@ -138,7 +138,7 @@ for config_nb = 1:length(M_list)
     ki = 1;
     for i = 1:length(idx_lw)
         for j = 1:length(idx_up)
-            error_force(:,:,ki,kj) = single(diff_for - delta_fz{1,1}.diff_traject);%delta_fz{ki,kj}.diff_traject);
+            error_force(:,:,ki,kj) = single(diff_for - delta_fz{ki,kj}.diff_traject);%delta_fz{ki,kj}.diff_traject);
             kj = kj + 1;
         end
         ki = ki + 1;

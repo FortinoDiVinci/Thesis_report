@@ -1,0 +1,85 @@
+\begin{figure} [h]
+	\centering
+
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	\tikzsetnextfilename{fig_mimo_model_perrault}
+	\begin{tikzpicture} [node distance = 2cm]	
+	
+		\comp[]{ce1}{(0, 0)};
+		
+		\node[block, right of = ce1] (h11) {$h_{11}(t)$};		
+		\node[block, below of = h11, node distance = 1.5cm] (h12) {$h_{12}(t)$};	
+		\node[block, below of = h12, node distance = 1.5cm] (h21) {$h_{21}(t)$};	
+		\node[block, below of = h21, node distance = 1.5cm] (h22) {$h_{22}(t)$};
+		
+		\comp[]{ce2}{($(h22) + (-2,0)$)};
+		\comp[]{cs1}{($(h11) + (2,0)$)};
+		\comp[]{cs2}{($(h22) + (2,0)$)};
+		
+		\node[block, left of = h12, node distance = 3.5cm] (c1) {$c$};	
+		\node[block, left of = h21, node distance = 3.5cm] (c2) {$c$};
+		
+		\fill ($(ce1.center) + (0.5,0)$) circle [radius=1.5pt];
+		\fill ($(ce2.center) + (0.6,0)$) circle [radius=1.5pt];
+		\fill ($(ce1.west) + (-2.5,0)$) circle [radius=1.5pt];
+		\fill ($(ce2.west) + (-2.6,0)$) circle [radius=1.5pt];
+		
+		\draw[-{Latex[length=3mm]}] (c1.east) -| (ce1.south);
+		\draw[-{Latex[length=3mm]}] (c2.east) -| (ce2.north);
+		
+		\draw[-{Latex[length=3mm]}] (ce1.east) -- (h11.west);
+		\draw[-{Latex[length=3mm]}] (ce2.east) -- (h22.west);
+		
+		\draw[-{Latex[length=3mm]}] ($(ce1.center) + (0.5,0)$) |- (h21.west);
+		\draw[-{Latex[length=3mm]}] ($(ce2.center) + (0.6,0)$) |- (h12.west);
+		
+		\draw[-{Latex[length=3mm]}] (h11.east) -- (cs1.west);
+		\draw[-{Latex[length=3mm]}] (h12.east) -| (cs1.south);
+		\draw[-{Latex[length=3mm]}] (h22.east) -- (cs2.west);
+		\draw[-{Latex[length=3mm]}] (h21.east) -| (cs2.north);
+		
+		\draw[-{Latex[length=3mm]}] (cs1.east) --+ (1,0)
+			node[align = center, below, midway] {$\vect{x}$};
+		\draw[-{Latex[length=3mm]}] (cs2.east) --+ (1,0)
+			node[align = center, above, midway] {$\vect{y}$};
+			
+		\draw[{Latex[length=3mm]}-] (ce1.west) --+ (-3,0)
+			node[align = center, above] {$\vect{f}_x$};
+		\draw[{Latex[length=3mm]}-] (ce2.west) --+ (-3,0)
+			node[align = center, below] {$\vect{f}_y$};	
+			
+		\draw[-{Latex[length=3mm]}] ($(ce1.west) + (-2.5,0)$) |- (c2.west);
+		\draw[-{Latex[length=3mm]}] ($(ce2.west) + (-2.6,0)$) |- (c1.west);
+		
+		\draw[{Latex[length=3mm]}-] (cs1.north) --+ (0,.7)
+			node[left] {$n$};	
+		\draw[{Latex[length=3mm]}-] (cs2.south) --+ (0,-.7)
+			node[left] {$n$};	
+		
+	\end{tikzpicture}
+	\caption{Modèle à plusieurs entrées et sorties proposés par \textcite{perreault_multiple-input_1999}.}
+	\label{fig_mimo_model_perrault} % Label 
+\end{figure}

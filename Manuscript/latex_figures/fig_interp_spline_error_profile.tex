@@ -1,0 +1,81 @@
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (539,44,2.8)$\label{subfig_interp_spline_error_profile_param_2}}
+		{		
+			\tikzsetnextfilename{subfig_interp_spline_error_profile_pos_2}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$t$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zlabel={(\si{\centi\meter})},
+					zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					%width = .3\linewidth,
+					]
+					%
+					%\addplot3 [mesh] table[x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv, col sep=comma] {K_interp_and_id_window.csv};
+					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_pos] {misc/identif_and_interp_window/spline_error_profile_param_2.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_error_profile_neg_2}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$t$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					%width = .3\linewidth,
+					]
+					%
+					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_neg] {misc/identif_and_interp_window/spline_error_profile_param_2.csv};
+				\end{axis}
+			\end{tikzpicture}
+		}
+	}
+	\\
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (280,12,0.6)$\label{subfig_interp_spline_error_profile_param_1}}
+		{		
+			\tikzsetnextfilename{subfig_interp_spline_error_profile_pos_1}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$t$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zlabel={(\si{\centi\meter})},
+					zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					]
+					%
+					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_pos] {misc/identif_and_interp_window/spline_error_profile_param_1.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_error_profile_neg_1}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$t$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
+					colormap/viridis,
+					view = {50}{50},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					]
+					%
+					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_neg] {misc/identif_and_interp_window/spline_error_profile_param_1.csv};
+				\end{axis}
+			\end{tikzpicture}
+		}
+	}
+	\caption{Profil moyen des erreurs d'estimation de la trajectoire virtuelle en position en fonction des fenêtres d'interpolation des splines $f_i$. Les perturbations positives (à gauche) et négatives (à droite) ont été séparées, leur profil d'erreurs étant assez complémentaire.}
+	\label{fig_interp_spline_error_profile}
+\end{figure}

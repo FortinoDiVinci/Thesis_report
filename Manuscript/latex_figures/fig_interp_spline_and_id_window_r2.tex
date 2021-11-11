@@ -1,0 +1,92 @@
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (539,44,2.8)$\label{subfig_interp_spline_and_id_window_param_2_r2}}
+		{		
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_r2_K2}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					colormap/viridis,
+					view = {50}{50},
+					%width = .3\linewidth,
+					]
+					%
+					%\addplot3 [mesh] table[x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv, col sep=comma] {K_interp_and_id_window.csv};
+					\addplot3 [surf, mesh/rows=35, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2_r2.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_r2_B2}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					colormap/viridis,
+					view = {50}{50},
+					%width = .3\linewidth,
+					]
+					%
+					\addplot3 [surf, mesh/rows=35, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2_r2.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_r2_M2}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					colormap/viridis,
+					view = {50}{50},
+					%width = .3\linewidth,
+					]
+					%
+					\addplot3 [surf, mesh/rows=35, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2_r2.csv};
+				\end{axis}
+			\end{tikzpicture}
+		}
+	}
+	\\
+	\resizebox{\textwidth}{!}{	
+		\subcaptionbox{$(K,B,M) = (280,12,0.6)$\label{subfig_interp_spline_and_id_window_param_1_r2}}
+		{		
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_r2_K1}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					colormap/viridis,
+					view = {50}{50},
+					]
+					%
+					\addplot3 [surf, mesh/rows=35, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1_r2.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_r2_B1}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					colormap/viridis,
+					view = {50}{50},
+					]
+					%
+					\addplot3 [surf, mesh/rows=35, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1_r2.csv};
+				\end{axis}
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_interp_spline_and_id_window_r2_M1}
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					xlabel={$f_0$ (\si{\milli\second})},
+					ylabel={$f_i$ (\si{\milli\second})},
+					colormap/viridis,
+					view = {50}{50},
+					]
+					%
+					\addplot3 [surf, mesh/rows=35, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1_r2.csv};
+				\end{axis}
+			\end{tikzpicture}
+		}
+	}
+	\caption{Erreurs relatives des paramètres estimés sur 143 trajectoires, en ne gardant que les estimations ayant conduit à des coefficients de détermination supérieurs à \SI{50}{\percent}, en faisant varier les fenêtres d'interpolation des splines $f_i$ pour estimer la trajectoire virtuelle en force, ainsi que les fenêtres d'observation $f_0$ pour l'identification.}
+	\label{fig_interp_spline_and_id_window_r2}
+\end{figure}
