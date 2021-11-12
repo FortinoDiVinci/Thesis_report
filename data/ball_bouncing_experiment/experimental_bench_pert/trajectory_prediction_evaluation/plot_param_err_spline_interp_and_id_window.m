@@ -2,7 +2,7 @@
 % window and the indentification window
 % data computed from test_splines_interp_window_id
 %load('test_spline_interp_window_500ms_k_1')
-load('test_spline_interp_window_500ms_m_2')
+load('test_spline_interp_window_500ms_m_1')
 
 K_prc = prctile(K_all, [25,50,75], 1);
 K_med = squeeze(K_prc(2,:,:));
@@ -93,6 +93,14 @@ idx_id_wdw_csv = repmat(idx_id_wdw,1,red_idx)';
 idx_interp_spl_csv = reshape(repmat(idx_interp_spl(1:red_idx),size(K_med_err,1),1),[],1);
 table_csv = table(idx_id_wdw_csv, idx_interp_spl_csv, K_med_err_csv, B_med_err_csv, M_med_err_csv);
 write(table_csv,'interp_and_id_window_param_2.csv','Delimiter',',');
+
+
+% r2_med_model_b_csv = reshape(r2_med,[],1);
+% r2_med_model_a_csv = reshape(r2_med,[],1);
+% idx_id_wdw_csv = repmat(idx_id_wdw,1,size(K_med_err,2))';
+% idx_interp_spl_csv = reshape(repmat(idx_interp_spl,size(K_med_err,1),1),[],1);
+% table_csv = table(idx_id_wdw_csv, idx_interp_spl_csv, r2_med_model_a_csv, r2_med_model_b_csv);
+% write(table_csv,'r2_mediane_id_interp_windows.csv','Delimiter',',');
 
 return
 
@@ -197,11 +205,11 @@ colorbar
 title('M quartile distribution (R^2>0.5)')
 xlabel('Spline interp window')
 
-K_med_err_csv = reshape(K_med_err_clc(:,1:35),[],1);
-B_med_err_csv = reshape(B_med_err_clc(:,1:35),[],1);
-M_med_err_csv = reshape(M_med_err_clc(:,1:35),[],1);
+K_med_err_csv = reshape(K_med_err_clc(:,1:red_idx),[],1);
+B_med_err_csv = reshape(B_med_err_clc(:,1:red_idx),[],1);
+M_med_err_csv = reshape(M_med_err_clc(:,1:red_idx),[],1);
 table_csv = table(idx_id_wdw_csv, idx_interp_spl_csv, K_med_err_csv, B_med_err_csv, M_med_err_csv);
-%write(table_csv,'interp_and_id_window_param_1_r2.csv','Delimiter',',');
+write(table_csv,'interp_and_id_window_param_2_r2.csv','Delimiter',',');
 
 %%
 % del negative stiffness and r^2 < 0.5

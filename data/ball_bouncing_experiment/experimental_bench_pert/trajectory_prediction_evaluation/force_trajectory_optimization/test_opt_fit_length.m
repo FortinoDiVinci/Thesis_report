@@ -22,9 +22,9 @@ else
     pert_dir = 1;
 end
 
-M_list = [0.6];%[0.6, 2.8];%[2.8];%
-B_list = [12];%[12, 44];%[44];%
-K_list = [280];%[280, 539];%[539];%
+M_list = [2.8];%[0.6];%[0.6, 2.8];%
+B_list = [44];%[12];%[12, 44];%
+K_list = [539];%[280];%[280, 539];%
 
 exp_nb = 7;
 t = t{exp_nb} - t{exp_nb}(1); % t0 = 0s
@@ -155,8 +155,8 @@ for config_nb = 1:length(M_list)
     B_all = zeros(size(K_all),'single');
     M_all = zeros(size(K_all),'single');
     r2_all = zeros(size(K_all),'single');
-    for j = nb_id_wdw:-1:1
-        idx_wndw_imp_eval = idx_wndw_imp_eval_list(j);
+    for k = nb_id_wdw:-1:1
+        idx_wndw_imp_eval = idx_wndw_imp_eval_list(k);
         impedance = IMPEDANCE_DATA(3, length(pert_idx), idx_wndw_imp_eval);
         impedance.init_phi(diff_pos, d_diff_pos, dd_diff_pos);
         tic
@@ -166,96 +166,124 @@ for config_nb = 1:length(M_list)
                     delta_fz{i,j}.diff_traject(1,:));
                 impedance.arx('NulInitialCond');
                 impedance.causalSim(dt,'NulInitialCond'); 
-                K_all(:,j,i) = impedance.xi(1,:);
-                B_all(:,j,i) = impedance.xi(2,:);
-                M_all(:,j,i) = impedance.xi(3,:);
-                r2_all(:,j,i) = impedance.r2_pos;  
+                K_all(:,j,i,k) = impedance.xi(1,:);
+                B_all(:,j,i,k) = impedance.xi(2,:);
+                M_all(:,j,i,k) = impedance.xi(3,:);
+                r2_all(:,j,i,k) = impedance.r2_pos;  
             end
         end        
         timeElapsedImp(j) = toc;
         timeElapsedImp(j)
     end
 
-     save(file_name+".mat", 'delta_fz', 'diff_force', 'diff_pos', 'r2_all', ...
+    save(file_name+".mat", 'delta_fz', 'diff_for', 'diff_pos', 'r2_all', ...
          'idx_wndw_fit_b_min', 'idx_wndw_fit_b_max', 'idx_wndw_fit_a_min', ...
          'idx_wndw_fit_a_max', 'mask_size', 'Mv', 'Bv', 'Kv', 'STEP', ...
          'K_all', 'B_all', 'M_all', 'error_force', '-v7.3');    
      
-%     acc = cellfun(@(x) prctile(real(x.r2_pos), [25,50,75])', impedance, 'UniformOutput', false);
-%     quartiles_r2 = cell2mat(acc);
-%     acc = cellfun(@(x) prctile(abs(real(x.xi(1,:))-Kv)/Kv, [25,50,75])', impedance, 'UniformOutput', false);
-%     k_rel_err = cell2mat(acc);
-%     acc = cellfun(@(x) prctile(abs(real(x.xi(2,:))-Bv)/Bv, [25,50,75])', impedance, 'UniformOutput', false);
-%     b_rel_err = cell2mat(acc);
-%     acc = cellfun(@(x) prctile(abs(real(x.xi(3,:))-Mv)/Mv, [25,50,75])', impedance, 'UniformOutput', false);
-%     m_rel_err = cell2mat(acc);
-%     acc = cellfun(@(x) prctile(real(x.xi(1,:)), [25,50,75])', impedance, 'UniformOutput', false);
-%     quartiles_k = cell2mat(acc);
-%     acc = cellfun(@(x) prctile(real(x.xi(2,:)), [25,50,75])', impedance, 'UniformOutput', false);
-%     quartiles_b = cell2mat(acc);
-%     acc = cellfun(@(x) prctile(real(x.xi(3,:)), [25,50,75])', impedance, 'UniformOutput', false);
-%     quartiles_m = cell2mat(acc);
-% 
-%     colors = lines(3);
-% 
-%     figure
-%     subplot(3,1,1)
-%     plot(idx_samples, quartiles_r2(2,:), 'Color', colors(1,:))
-%     hold on
-%     plot(idx_samples, quartiles_r2(1,:), ':', 'Color', colors(1,:))
-%     plot(idx_samples, quartiles_r2(3,:), ':', 'Color', colors(1,:))
-%     subplot(3,1,2)
-%     plot(idx_samples, k_rel_err(2,:), 'Color', colors(1,:))
-%     hold on
-%     plot(idx_samples, k_rel_err(1,:), ':', 'Color', colors(1,:))
-%     plot(idx_samples, k_rel_err(3,:), ':', 'Color', colors(1,:))
-%     plot(idx_samples, b_rel_err(2,:), 'Color', colors(2,:))
-%     plot(idx_samples, b_rel_err(1,:), ':', 'Color', colors(2,:))
-%     plot(idx_samples, b_rel_err(3,:), ':', 'Color', colors(2,:))
-%     plot(idx_samples, m_rel_err(2,:), 'Color', colors(3,:))
-%     plot(idx_samples, m_rel_err(1,:), ':', 'Color', colors(3,:))
-%     plot(idx_samples, m_rel_err(3,:), ':', 'Color', colors(3,:))
-%     subplot(3,3,7)
-%     plot(idx_samples, quartiles_k(2,:))
-%     hold on
-%     plot([idx_wndw_virt_traj_min,idx_wndw_virt_traj_max], [Kv, Kv])
-%     plot(idx_samples, quartiles_k(1,:), ':', 'Color', lines(1))
-%     plot(idx_samples, quartiles_k(3,:), ':', 'Color', lines(1))
-%     subplot(3,3,8)
-%     plot(idx_samples, quartiles_b(2,:))
-%     hold on
-%     plot([idx_wndw_virt_traj_min,idx_wndw_virt_traj_max], [Bv, Bv])
-%     plot(idx_samples, quartiles_b(1,:), ':', 'Color', lines(1))
-%     plot(idx_samples, quartiles_b(3,:), ':', 'Color', lines(1))
-%     subplot(3,3,9)
-%     plot(idx_samples, quartiles_m(2,:))
-%     hold on
-%     plot([idx_wndw_virt_traj_min,idx_wndw_virt_traj_max], [Mv, Mv])
-%     plot(idx_samples, quartiles_m(1,:), ':', 'Color', lines(1))
-%     plot(idx_samples, quartiles_m(3,:), ':', 'Color', lines(1))
-% 
-% 
-%     tmp = cellfun(@(x) [x.xi(1,:)]', impedance, 'UniformOutput', false);
-%     K_all = cell2mat(tmp);
-% 
-%     med_rel_err_K = abs(quartiles_k(2,:) - Kv)/Kv;
-%     med_rel_err_B = abs(quartiles_b(2,:) - Bv)/Bv;
-%     med_rel_err_M = abs(quartiles_m(2,:) - Mv)/Mv;
-% 
-%     figure
-%     plot(idx_samples, med_rel_err_K)
-%     hold on
-%     plot(idx_samples, med_rel_err_B)
-%     plot(idx_samples, med_rel_err_M)
-% 
-%     Ke = med_rel_err_K';
-%     Be = med_rel_err_B';
-%     Me = med_rel_err_M';
-%     time_window = idx_samples;
-% 
-%     table_rel_err = table(time_window, Ke, Be, Me);
-%     write(table_rel_err,file_name+".csv",'Delimiter',',');
-
+    for i = 1:size(error_force,3)
+        for j = 1:size(error_force,4)
+            tmp = error_force(1:100,:,i,j);
+            rmse_for_100ms(i,j) = rms(tmp(:));
+            tmp = error_force(1:200,:,i,j);
+            rmse_for_200ms(i,j) = rms(tmp(:));
+            tmp = error_force(:,:,i,j);
+            rmse_for_300ms(i,j) = rms(tmp(:));
+        end
+    end
+     
+    figure
+    subplot(1,3,1)
+    surf(idx_up,idx_lw,rmse_for_300ms)
+    colorbar
+    view(2)
+    subplot(1,3,2)
+    surf(idx_up,idx_lw,rmse_for_200ms)
+    colorbar
+    view(2)
+    subplot(1,3,3)
+    surf(idx_up,idx_lw,rmse_for_100ms)
+    colorbar
+    view(2)
+    
+    if SAVE_TRAJ_ERROR_CSV
+        rmse_300ms = reshape(rmse_for_300ms,[],1);
+        rmse_100ms = reshape(rmse_for_100ms,[],1);
+        lower_window = repmat(idx_lw',1,size(rmse_for_300ms,2))';
+        upper_window = reshape(repmat(idx_up',size(rmse_for_300ms,1),1),[],1);
+        table_csv = table(lower_window, upper_window, rmse_100ms, rmse_300ms);
+        write(table_csv,'sine_opt_err_traject.csv','Delimiter',',');
+    end
+    
+    for i = 1:5
+        K_prc = prctile(K_all(:,:,:,i), [25,50,75], 1);
+        K_med = squeeze(K_prc(2,:,:));
+        K_med_err = abs(K_med - Kv)./Kv;
+        K_q_e = squeeze(K_prc(3,:,:) - K_prc(1,:,:));
+         
+        B_prc = prctile(B_all(:,:,:,i), [25,50,75], 1);
+        B_med = squeeze(B_prc(2,:,:));
+        B_med_err = abs(B_med - Bv)./Bv;
+        B_q_e = squeeze(B_prc(3,:,:) - B_prc(1,:,:));
+        
+        M_prc = prctile(M_all(:,:,:,i), [25,50,75], 1);
+        M_med = squeeze(M_prc(2,:,:));
+        M_med_err = abs(M_med - Mv)./Mv;
+        M_q_e = squeeze(M_prc(3,:,:) - M_prc(1,:,:));
+        
+        figure
+        subplot(2,3,1)
+        surf(idx_lw, idx_up, K_med_err)
+        view(2)
+        colorbar
+        title('K median relative error')
+        ylabel('Indentif. window')
+        subplot(2,3,4)
+        surf(idx_lw, idx_up, K_q_e)
+        view(2)
+        colorbar
+        title('K quartile distribution')
+        xlabel('Spline interp window')
+        ylabel('Indentif. window')
+        subplot(2,3,2)
+        surf(idx_lw, idx_up, B_med_err)
+        view(2)
+        colorbar
+        title('B median relative error')
+        ylabel('Indentif. window')
+        subplot(2,3,5)
+        surf(idx_lw, idx_up, B_q_e)
+        view(2)
+        colorbar
+        title('B quartile distribution')
+        xlabel('Spline interp window')
+        ylabel('Indentif. window')
+        subplot(2,3,3)
+        surf(idx_lw, idx_up, M_med_err)
+        view(2)
+        colorbar
+        title('M median relative error')
+        ylabel('Indentif. window')
+        subplot(2,3,6)
+        %surf(idx_interp_spl(1:35), idx_id_wdw, M_q_e(:,1:35))
+        surf(idx_lw, idx_up, M_q_e)
+        view(2)
+        colorbar
+        title('M quartile distribution')
+        xlabel('Spline interp window')
+        ylabel('Indentif. window')  
+    end
+    
+    if SAVE_PARAM_ERROR_CSV
+        K_med_err_csv = reshape(K_med_err,[],1);
+        B_med_err_csv = reshape(B_med_err,[],1);
+        M_med_err_csv = reshape(M_med_err,[],1);
+        lower_window = repmat(idx_lw',1,size(rmse_for_300ms,2))';
+        upper_window = reshape(repmat(idx_up',size(rmse_for_300ms,1),1),[],1);
+        table_csv = table(lower_window, upper_window, K_med_err_csv, B_med_err_csv, M_med_err_csv);
+        write(table_csv,'sine_opt_id_error_200ms_param_1.csv','Delimiter',',');
+    end
+    
 end
 
 
