@@ -12,11 +12,12 @@
 					width=.6\linewidth,
 					height=.25\linewidth,
 					scale only axis,    
-					xlabel={temps (\SI{}{\second})},
-					ylabel={Position (\SI{}{\meter})},
+					xlabel={temps (\si{\second})},
+					ylabel={Force (\si{\newton})},
 					axis x line = bottom,
 					axis y line = left, 
 					xmin=70,xmax=100,
+					ylabel near ticks,
 					]
 					%
 					\addplot [
@@ -39,7 +40,7 @@
 					width=.35\linewidth,
 					height=.35\linewidth,
 					scaled ticks=false,   
-					xlabel={temps (\SI{}{\milli\second})},
+					xlabel={temps (\si{\milli\second})},
 					axis x line = bottom,
 					axis y line = left, 
 					xmin=91,xmax=93,
@@ -75,7 +76,8 @@
 					height=.25\linewidth,
 					scale only axis,    
 					xlabel={cycles},
-					ylabel={Amplitude (\SI{}{\newton})},
+					ylabel={Amplitude (\si{\newton})},
+					ylabel near ticks,
 					axis x line = bottom,
 					axis y line = left, 
 					]

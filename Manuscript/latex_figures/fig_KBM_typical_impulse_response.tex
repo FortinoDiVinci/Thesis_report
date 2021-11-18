@@ -20,10 +20,12 @@
 				width=.95\linewidth,
 				height=.3\linewidth,
 				scale only axis,   
-				xlabel={temps (\SI{}{\second})},
-				ylabel={Position (\SI{}{\meter})},
+				xlabel={temps (\si{\second})},
+				ylabel={Position (\si{\centi\meter})},
+				yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 				axis x line = bottom,
 				axis y line = left, 
+				ylabel near ticks,
 				]
 				%
 				\addplot [

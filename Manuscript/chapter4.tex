@@ -1,1 +1,118 @@
 \chapter{Expérience} \label{chap4}
+\minitoc
+
+\section{Mise en place expérimentale} \label{chap4_sec_exp}
+
+%Pour pouvoir appliquer les contrôles et techniques proposées dans ces travaux, 
+
+\subsection{Matériel} \label{chap4_sec_exp_sub_mat}
+
+Les différents équipements nécessaires pour la mise en place du banc expérimental conçu pour réaliser des expériences d'estimation d'impédance sur des utilisateurs sains pendant une tâche rythmique sont détaillés dans la section suivante.
+
+\subsubsection{Robot} \label{chap4_sec_exp_sub_mat_1}
+
+Pour ces travaux un petit robot articulé, anciennement commercialisé par Kuka\textsuperscript{TM} sous le nom de youBot (\cref{fig_youbot_picture}), est utilisé. Avec ses 5 articulations rotoïdes, le youBot fonctionne avec des moteurs sans balais proposés par Maxon\textsubscript{TM}, d'une puissance comprise en \SIlist{15,50}{\watt}, qui sont pilotés par des cartes électroniques conçues par Trinamic\textsubscript{TM} \parencite{TRINAMIC_manual_2011} et reliés à des engrenages épicycloïdaux pour augmenter les couples. Ce petit robot (\SI{65.5}{\centi\meter} tendu) n'a pas de vocations industrielles, mais est plutôt orienté pour des applications en recherche. En effet, de part ses faibles dimensions et ses flexibilités, le robot est assez peu dangereux, et son interface de programmation (API\footnote{\textit{Application Programming Interface}}) ouverte permet d'accéder à des niveaux de contrôle assez avancés et il peut être manipulé hors tension de manière réversible\footnote{Seul les frottements des moteurs, réducteurs et transmissions gênent pour obtenir une transparence mécanique importante en l'absence de contrôle du robot.}. Le constructeur conseille de ne pas dépasser la charge utile de \SI{500}{\gram}, et indique une répétabilité positionnelle de \SI{0.1}{\milli\meter}. 
+
+\begin{figure}
+	\centering
+	\includegraphics[width=.45\linewidth]{misc/youBot_photos.PNG}
+	%\hspace{5mm}
+	\includegraphics[width=.53\linewidth]{misc/youBot_reach.png}
+	\caption{YouBot}
+	\label{fig_youbot_picture}
+\end{figure}
+
+Le système de pince motorisée a été retiré pour les expériences, et une interface conçue par La Fabrique\footnote{laboratoire de conception de CentraleSupelec}, peut être fixée sur le robot pour offrir une poignée permettant de le manipuler par son extrémité.
+
+L'interface de programmation mise à disposition par Kuka est disponible en C++, et permet d'envoyer des consignes et réglages aux différents pilotes des moteurs. La dernière version de cette API est disponible sur GitHub\footnote{\url{https://github.com/youbot/youbot_driver}} et fonctionne sur un système Linux en connection avec le robot via une liaison Ethernet et le protocole EtherCat. L'ensemble de cette interface programmée en logique objet est détaillée dans la documentation de \textcite{paulus_youbot_2013}.
+
+%\input{latex_figures/fig_youBot_API_architecture}
+
+\subsubsection{Capteurs} \label{chap4_sec_exp_sub_mat_2}
+
+Que ce soit pour réaliser le contrôle en admittance décrit au \cref{chap2}, ou pour effectuer les estimations d'impédance mécanique de personnes manipulant le robot (\cref{chap3}), des capteurs sont nécessaires pour obtenir les forces d'interaction $\vect{f}_e$ entre l'effecteur final du robot et la main de l'utilisateur, et aussi les positions dans l'espace de la poignée du robot, et donc indirectement de la main des manipulateurs. 
+
+\paragraph{Capteur de forces et couples} \label{chap4_sec_exp_sub_mat_2_1}
+
+La marque ATI offre une gamme de capteurs de force six axes pensés pour la robotique. Le Mini45 et ses dimensions compactes, un diamètre de \SI{45}{\milli\meter} pour une hauteur de \SI{15.7}{\milli\meter}, offrent une solution classique en robotique \parencite{ajoudani_tele-impedance:_2011,cherubini_collaborative_2019}. Avec un poids de moins de \SI{100}{\gram}, il peut facilement être équipé sur le youBot. Il fonctionne grâce à des jauges de contraintes en silicone qui permettent d'estimer les efforts sentis par le capteur aussi bien au niveaux linéaires qu'angulaires, fournissant ainsi le vecteur complet de forces et couples avec une fréquence de fonctionnement interne de \SI{3}{\kilo\hertz}.
+
+La documentation technique du capteur indique des résolution de \SI{0.125}{\newton} pour les forces, de \SI{1.3}{\milli\newton\meter} pour le couple le long de l'axe $\vec{z}$, colinéaire au cylindre formé par la capteur, et de \SI{2.7}{\milli\newton\meter} pour les deux autres couples. Les données acquises par le capteur sont transmises dans un boîtier permettant la communication du capteur avec des équipements externes grâce à une liaison Ethernet et le protocole orienté temps réel, Ethercat.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=.3\linewidth]{misc/ati_mini45_picture.jpg}
+	%\hspace{5mm}
+	\includegraphics[width=.3\linewidth]{misc/ati_mini45_drawing.png}
+	\caption{ATI Mini45}
+	\label{fig_ATI_Mini45_picture}
+\end{figure}
+
+Une fois le capteur installé entre l'effecteur final du robot et la poignée, une partie de son poids, ainsi que celui de la poignée sont perçus par le capteur. De plus, chaque axe souffre d'un biais ayant une dépendance à la température, et il s'est avéré que le capteur était aussi sensible à la lumière. Cette dernière problématique a été contrecarrée en plaçant du papier adhésif opaque sur les zones sensibles. La compensation des biais ainsi que du poids perçu en l'absence d'interaction doit être réalisées avant chaque interaction par une phase de calibration qui peut être effectuée dans une position statique connue du robot. La procédure est détaillée en \cref{app_force_sensor_bias}. Les effets dynamiques ont été évalués et sont négligeables, leur compensation n'est donc pas réalisée pour limiter les temps de calculs.
+
+\paragraph{Système de vision} \label{chap4_sec_exp_sub_mat_2_2}
+
+A cause des flexibilités présentées par le robot, notamment lors d'interactions physiques, l'utilisation des données articulaires en position, acquises grâce à des encodeurs au niveau des moteurs, n'est pas suffisemment fiable, pour obtenir la position de l'effecteur final grâce au modèle géométrique du robot (voir \cref{app_direct_kinem} pour le modèle géométrique direct du youBot). Un système de vision externe est donc utilisé.
+
+Le système de trois caméras V120:Trio, commercialisé par Optitrack avec le logiciel Motive, permet de localiser des objets dans l'espace grâce à des marqueurs rétroréfléchissants. En positionnant au moins trois marqueurs, le système permet de donner non seulement la position mais aussi la pose d'un corps rigide. Le système de vision fonctionne en émettant de la lumière infrarouge et en observant la réflection des marqueurs. Par conséquant, toute source de lumière infrarouge, et toutes les surfaces reflétant de l'infrarouge doivent être masquées (soit physiquement avec des occulants, soit au niveau logiciel si les sources sont fixes par rapport à la caméra), pour un fonctionnement nominal de l'équipement. 
+
+Les ingénieurs d'Optitrack recommandent de placer entre 4 et 12 marqueurs de manière assymétrique, sur chaque corps rigide devant être traqué. Cette redondance permet non seulement d'améliorer la précision des algorithmes de triangulation, mais aussi offre de la robustesse à d'éventuels dissimulations des marqueurs. Il est toutefois déconseillé de dépasser plus de 10 marqueurs, à cause de potentiels chevauchement des surfaces réfléchissantes. Le système de trois caméras est fixé à un trépied placé sur un support fixe à une hauteur surélevée par rapport à celle du robot et une distance légèrement supérieure à \SI{1}{\meter}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=.4\linewidth]{misc/v120trioTripod.png}
+	\caption{V120:Trio}
+	\label{fig_optitrack_v120}
+\end{figure}
+
+Le système offre une précision submillimétrique, le logiciel de traquage Motive annonce jusqu'à \SI{0.2}{\milli\meter}, avec une fréquence de fonctionnement de \SI{120}{\hertz} et une latence comprise entre  \SIlist{8.33;10}{\milli\second}, dont il faudra tenir compte par la suite. Un repère composé de trois marqueurs est positionné entre le robot et la caméra, et sert pour le calibrage du plan pour le calcul de la triangulation. Toutefois, ce premier calibrage n'est pas suffisant pour que les données soient dans la même base que le robot.
+
+Pour synchroniser spatialement des données du système de vision avec celles du robot, des mouvements lents rectilignes, symétriques et à vitesses constantes par morceaux sont effectués avant les interactions physiques avec le robot. La transformée entre le robot et les caméras est obtenues en minimisant l'erreur quadratique entre les deux systèmes de coordonnées \parencite{horn_closed-form_1987}, en utilisant les mesures articulaires pour obtenir la référence des coordonnées du robot.
+
+Les données acquises par les caméras sont envoyées à un ordinateur par liaison USB. Le logiciel Motive n'étant développé que pour Windows, un ordinateur est dédié à cet équipement. Les coordonnées des corps rigides identifiés par le logiciel peuvent ensuite être émises par un serveur virtuel VRPN\footnote{\textit{Virtual-Reality Peripheral Network}}, via un protocole de diffusion UDP\footnote{\textit{User Datagram Protocol}} en liaison locale avec un autre ordinateur.
+
+\subsubsection{Tâche vituelle de jonglerie} \label{chap4_sec_exp_sub_mat_3}
+
+Une interface graphique permettant de simuler la physique d'une tâche de jonglerie a été développée par la société Easymov Robotics. La tâche de jonglerie est bien connue en sciences du mouvement humain. Dans cette tâche, des participants doivent faire rebondir la balle pour atteindre une hauteur cible $h$, soit en utilisant leur main comme le ferait un jongleur, soit en utilisant une raquette comme le ferait un pongiste. 
+
+\tikzexternalenable
+\input{latex_figures/fig_ball_bouncing_task}
+\tikzexternaldisable
+
+Entre deux impacts $k$ et $k+1$ aux instants $t_k$ et $t_{k+1}$, le mouvement de la balle est décrit par l'équation balistique \cref{eq_ballistic}, avec $ z(t) $ la position de la balle le long d'un axe vertical $ \vect{z} $, $ \dot{z}_k^+ $ la vitesse de la balle juste après l'impact à $t_k$, $ z_k $ la position de la balle à ce même instant $t_k$, $ t $ le temps qui s'est écoulé depuis le dernier impact $k$ et enfin, $g$ l'accélération gravitationnelle. 
+
+\begin{equation} \label{eq_ballistic}
+	z(t) = -\frac{1}{2}gt^2+\dot{z}_k^+ t+z_k
+\end{equation}
+
+L'impact de la balle sur la raquette est modélisé d'une manière simplifiée par l'équation \cref{eq_ballistic_impact}, avec l'utilisation d'un coefficient de restitution $ \alpha $, décrit notamment dans \textcite{avrin_self-organization_2018}, pour modéliser le transfert d'énergie entre la balle et la raquette. La position de la raquette est notée $ z^p $ et la vitesse de la balle à l'instant juste avant l'impact $ k $ est donnée par $ \dot{z}_{k}^- = \dot{z}^+_{k-1}-gt $.
+
+\begin{equation} \label{eq_ballistic_impact}
+	\dot{z}^+_{k} = \max\left(\dot{z}^p_k, \left((1+\alpha)\dot{z}^p_k-\alpha\dot{z}_{k}^-\right)\right)
+\end{equation}
+
+La simulation haptique des impacts de balle est réalisée en utilisant le système d'injection des perturbations en couples décrit en \cref{chap3_sec_method_sub_pert}. La force de l'impact est estimée en utilisant l'équation \cref{eq_ball_impact}, inspirée par les travaux de \textcite{kawazoe_dynamics_2002}, avec les indices $b$ et $p$ faisant respectivement références à la balle et à la raquette, pour les vitesses $v$ et les masses $m$. $\hat{K}$ correspond à une raideur grossièrement estimée du couplage balle-raquette-robot-bras. 
+
+\begin{equation} \label{eq_ball_impact}
+    f_i(k) = -(v_b(k) - v_p(k)) (1 + \alpha) \frac{\sqrt{m_b \hat{K}}}{\pi \sqrt{1 + m_b/m_p}}
+\end{equation}
+
+L'affichage en temps réel de cette simulation pouvant être gourmand, il est implémenté sur un autre ordinateur, et l'écran est placé derrière le robot, en hauteur, pour être au niveau du regard de la plupart des personnes. 
+
+\subsubsection{Système de synchronisation} \label{chap4_sec_exp_sub_mat_4}
+
+Problématique de synchroniser des équipements fonctionnant sur des systèmes d'exploitation différents. (synchronisation des horloges etc...)
+Utilisation d'un routeur
+
+\paragraph{Robot Operating System (ROS)} \label{chap4_sec_exp_sub_mat_3_1}
+
+Présenter ROS rapidement
+
+\subsection{Protocole} \label{chap4_sec_exp_sub_prot}
+
+\subsubsection{Recrutement de la cohorte} \label{chap4_sec_exp_sub_prot_1}
+
+\subsubsection{Objectifs et hypothèses} \label{chap4_sec_exp_sub_prot_2}
+
+\subsubsection{Déroulement expérimental} \label{chap4_sec_exp_sub_prot_3}
+
+\section{Exploitation des résultats} \label{chap4_sec_res}

@@ -11,10 +11,11 @@
 				width=.70\linewidth,
 				height=.25\linewidth,
 				scale only axis,
-				xlabel={temps (\SI{}{\second})},
-				ylabel={Force (\SI{}{\newton})},
+				xlabel={temps (\si{\second})},
+				ylabel={Force (\si{\newton})},
 				axis x line = bottom,
 				axis y line = left, 
+				ylabel near ticks,
 				]
 				%
 				\addplot [
@@ -28,7 +29,7 @@
 					smooth,
 					]
 				table [col sep=comma, x=time, y=filtered] {misc/force_signal_filtered_chunk.csv};
-				\addlegendentry{mesure};
+				\addlegendentry{mesuré};
 				\addlegendentry{filtré};
 				%
 			\end{axis}		

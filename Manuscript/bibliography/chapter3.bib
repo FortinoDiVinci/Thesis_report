@@ -280,6 +280,19 @@
 	keywords = {Robot sensing systems, Muscles, Estimation, physical human-robot interaction, biomimetics, stability, Robot kinematics, robots, arm muscle activation levels, arm physical interactions, Calibration and identification, estimation theory, experimental modeling, geometric modifications, human arm endpoint stiffness, human arm joint stiffness estimation, human factors and human-in-the-loop, joint stiffness behavior, joint stiffness matrix, kinematic redundancy, Manipulators, matrix algebra, model-based online estimation technique, nullspace stiffness profiles, online model based estimation, quasistatic stability, rank-deficiency, robotics applications, seven-dimensional complete joint stiffness estimation, Symmetric matrices, various arm poses, volume modifications},
 }
 
+@inproceedings{ajoudani_tele-impedance:_2011,
+	title = {Tele-Impedance: Preliminary results on measuring and replicating human arm impedance in tele operated robots},
+	doi = {10.1109/ROBIO.2011.6181288},
+	shorttitle = {Tele-Impedance},
+	abstract = {This work introduces the concept of Tele-Impedance as a method for controlling/teleoperating a robotic arm in contact with the environment. Opposite to bilateral force-reflecting teleoperation control approach, which uses a position/velocity command combined with force feedback from the robot side, Tele-Impedance enriches the command sent to the slave robot by combining the position reference with a stiffness (or full impedance) reference. The desired stiffness profile is directly estimated from the arm of the human operating the remote robotic arm. We preliminarily investigate the effectiveness of this method while teleoperating a slave robotic arm to execute simple tasks. The {KUKA} light weight robotic arm is used as the slave manipulator. The endpoint (wrist) position of the human arm is monitored by an optical tracking system while the stiffness of the human arm is estimated from the electromyography ({EMGs}) signal measurements of four flexor-extensor muscle pairs, in realtime. The performance of Tele-Impedance control method is assessed by comparing the results obtained while executing a peg-in-hole task, with the slave arm under i) constant low stiffness, ii) constant high stiffness or iii) under Tele-Impedance control. The experimental results demonstrate the effectiveness of the Tele-Impedance control method and highlight its potential use to safely execute tasks with uncertain environment constraints which may result in large deviations from the commanded position trajectories.},
+	eventtitle = {2011 {IEEE} International Conference on Robotics and Biomimetics},
+	pages = {216--222},
+	booktitle = {2011 {IEEE} International Conference on Robotics and Biomimetics},
+	author = {Ajoudani, A. and Tsagarakis, N. G. and Bicchi, A.},
+	date = {2011-12},
+	keywords = {Humans, Impedance, Robot sensing systems, electromyography, manipulator dynamics, Muscles, commanded position trajectories, constant stiffness, dexterous manipulators, elasticity, Electromyography, electromyography signal measurement, {EMG} signal, endpoint position monitoring, Estimation, flexor-extensor muscle pairs, force feedback, full impedance reference, human arm impedance measurement, human arm impedance replication, human arm stiffness, {KUKA} light weight robotic arm, mechanical contact, optical tracking, optical tracking system, position reference, remote robotic arm, robotic arm control, robotic arm teleoperation, slave manipulator, slave robotic arm, stiffness reference, tele impedance control, teleoperated robots, telerobotics, uncertain environment constraints}
+}
+
 @inproceedings{castellini_semg-based_2014,
 	title = {{sEMG}-based estimation of human stiffness: Towards impedance-controlled rehabilitation},
 	doi = {10.1109/BIOROB.2014.6913844},
@@ -304,6 +317,23 @@
 	author = {Wang, C. and Jiang, L. and Guo, C. and Huang, Q. and Yang, B. and Liu, H.},
 	date = {2017-12},
 	keywords = {Force, Robot sensing systems, electromyography, medical signal processing, Muscles, Estimation, biomechanics, Mathematical model, Electrodes, surface electromyography, Bayesian Linear Regression, Bayesian linear regression algorithm, biomechantronic system, {BLR} model, electrodes, endpoint force, force estimation, forearm arm, human arm force estimation, muscle contraction, regression analysis, regression model, {sEMG}, support vector machines, Support Vector Regression, support vector regression algorithm, {SVR}, upper arm},
+}
+
+@article{cavallo_nonparametric_2018,
+	title = {Nonparametric Identification of Time-Varying Human Joint Admittance.},
+	volume = {51},
+	issn = {2405-8963},
+	url = {http://www.sciencedirect.com/science/article/pii/S2405896318318810},
+	doi = {10.1016/j.ifacol.2018.09.209},
+	series = {18th {IFAC} Symposium on System Identification {SYSID} 2018},
+	abstract = {In this study, a nonparametric method, developed in Lataire et al. (2012), is applied to the identification of linear time-varying human joint admittance. The aim of the method, denoted Skirt Decomposition method, is to reconstruct the time-varying system function. The main contribution of the paper is to evaluate the possibilities and limitations of the method for the identification of linear time-varying human joint admittance in simulation. The proposed method delivers an estimate of linear time-varying joint admittance from a single experimental trial, provided that a multisine is used as excitation signal. The trade-off between i) the frequency resolution of the dynamics, and ii) the allowable complexity of the time variation is explored.},
+	pages = {533--538},
+	number = {15},
+	journaltitle = {{IFAC}-{PapersOnLine}},
+	author = {Cavallo, G. and Ruit, M. van de and Schouten, A. C. and Wingerden, J. W. van and Lataire, J.},
+	urldate = {2019-01-11},
+	date = {2018-01-01},
+	keywords = {biomechanical system, frequency domain, linear time-varying systems, non-parametric identification, system function}
 }
 
 @article{phan_estimating_2020,
@@ -353,24 +383,6 @@ Publisher: Multidisciplinary Digital Publishing Institute},
 	keywords = {Humans, Impedance, Biomechanics, Frequency, Force measurement, Testing, Atrophy, endpoint stiffness, Man machine systems, Motion measurement, Rehabilitation robotics, stochastic estimation, Stochastic processes, stroke rehabilitation},
 }
 
-@article{gomi_human_1997,
-	title = {Human arm stiffness and equilibrium-point trajectory during multi-joint movement},
-	volume = {76},
-	issn = {1432-0770},
-	url = {https://doi.org/10.1007/s004220050329},
-	doi = {10.1007/s004220050329},
-	abstract = {. By using a newly designed high-performance manipulandum and a new estimation algorithm, we measured human multi-joint arm stiffness parameters during multi-joint point-to-point movements on a horizontal plane. This manipulandum allows us to apply a sufficient perturbation to subject’s arm within a brief period during movement. Arm stiffness parameters were reliably estimated using a new algorithm, in which all unknown structural parameters could be estimated independent of arm posture (i.e., constant values under any arm posture). Arm stiffness during transverse movement was considerably greater than that during corresponding posture, but not during a longitudinal movement. Although the ratios of elbow, shoulder, and double-joint stiffness were varied in time, the orientation of stiffness ellipses during the movement did not change much. Equilibrium-point trajectories that were predicted from measured stiffness parameters and actual trajectories were slightly sinusoidally curved in Cartesian space and their velocity profiles were quite different from the velocity profiles of actual hand trajectories. This result contradicts the hypothesis that the brain does not take the dynamics into account in movement control depending on the neuromuscular servo mechanism; rather, it implies that the brain needs to acquire some internal models of controlled objects.},
-	language = {en},
-	number = {3},
-	urldate = {2018-11-06},
-	journal = {Biological Cybernetics},
-	author = {Gomi, Hiroaki and Kawato, Mitsuo},
-	month = apr,
-	year = {1997},
-	keywords = {Internal Model, Servo Mechanism, Stiffness Parameter, Transverse Movement, Velocity Profile},
-	pages = {163--171},
-}
-
 @article{burdet_method_2000,
 	title = {A method for measuring endpoint stiffness during multi-joint arm movements},
 	volume = {33},
@@ -386,6 +398,50 @@ Publisher: Multidisciplinary Digital Publishing Institute},
 	urldate = {2018-11-04},
 	date = {2000-12-01},
 	keywords = {Human arm, Robotic interface, Stiffness measurement, Voluntary movements}
+}
+
+@article{franklin_adaptation_2003,
+	title = {Adaptation to Stable and Unstable Dynamics Achieved By Combined Impedance Control and Inverse Dynamics Model},
+	volume = {90},
+	issn = {0022-3077, 1522-1598},
+	url = {http://www.physiology.org/doi/10.1152/jn.01112.2002},
+	doi = {10.1152/jn.01112.2002},
+	abstract = {Adaptation to stable and unstable dynamics
+	achieved  by  combined  impedance  control  and  inverse  dynamics
+	model.
+	J Neurophysiol
+	90: 3270 –3282, 2003; 10.1152/jn.01112.2002.
+	This study compared adaptation in novel force fields where trajecto-
+	ries were initially either stable or unstable to elucidate the processes
+	of learning novel skills and adapting to new environments. Subjects
+	learned to move in a null force field ({NF}), which was unexpectedly
+	changed  either  to  a  velocity-dependent  force  field  ({VF}),  which  re-
+	sulted in perturbed but stable hand trajectories, or a position-depen-
+	dent divergent force field ({DF}), which resulted in unstable trajectories.
+	With  practice,  subjects  learned  to  compensate  for  the  perturbations
+	produced  by  both  force  fields.  Adaptation  was  characterized  by  an
+	initial increase in the activation of all muscles followed by a gradual
+	reduction. The time course of the increase in activation was correlated
+	with  a  reduction  in  hand-path  error  for  the  {DF}  but  not  for  the  {VF}.
+	Adaptation to the {VF} could have been achieved solely by formation of
+	an  inverse  dynamics  model  and  adaptation  to  the  {DF}  solely  by
+	impedance control. However, indices of learning, such as hand-path
+	error, joint torque, and electromyographic activation and deactivation
+	suggest that the {CNS} combined these processes during adaptation to
+	both  force  fields.  Our  results  suggest  that  during  the  early  phase  of
+	learning there is an increase in endpoint stiffness that serves to reduce
+	hand-path   error   and   provides   additional   stability,   regardless   of
+	whether  the  dynamics  are  stable  or  unstable.  We  suggest  that  the
+	motor control system utilizes an inverse dynamics model to learn the
+	mean dynamics and an impedance controller to assist in the formation
+	of the inverse dynamics model and to generate needed stability.},
+	pages = {3270--3282},
+	number = {5},
+	journaltitle = {Journal of Neurophysiology},
+	author = {Franklin, David W. and Osu, Rieko and Burdet, Etienne and Kawato, Mitsuo and Milner, Theodore E.},
+	urldate = {2018-10-17},
+	date = {2003-11},
+	langid = {english}
 }
 
 @article{piovesan_measuring_2012,
@@ -488,6 +544,14 @@ Publisher: Multidisciplinary Digital Publishing Institute},
 	urldate = {2018-10-17},
 	date = {2001-11},
 	langid = {english}
+}
+
+@inproceedings{singh_tutorial_2002,
+	title = {Tutorial on input shaping/time delay control of maneuvering flexible structures},
+	abstract = {Precise position control and rapid rest-to-rest mo-tion is the desired objective in a variety of applica-tions. The desire for reducing the maneuver time requires reducing the inertia of the structure which subsequently results in low frequency dynamics. The requirement of precise position control im-plies that the residual vibration of the structure should be zero or near zero. This paper presents techniques to shape the input to the system so as to minimize the residual vibration. A second class of problems which includes design of input profiles for systems with rigid-body modes driven by actuators with finite control authority, is also presented. The common thread which connects all the techniques presented in this paper is related to the design of controllers which are robust to mod-eling uncertainties. The proposed techniques are illustrated by simulations and experiments. 1},
+	booktitle = {In American Control Conference},
+	author = {Singh, Tarunraj and Singhose, William},
+	date = {2002},
 }
 
 @article{borner_estimation_2020,
@@ -736,7 +800,6 @@ Publisher: Multidisciplinary Digital Publishing Institute},
 	abstract = {The standard correction to Akaike’s Information Criterion, {AICc}, assumes the same predictors for training and verification and therefore underestimates prediction error for random predictors. A corrected {AIC} for regression models containing a mix of random and fixed predictors is derived.},
 	pages = {109064},
 	journaltitle = {Statistics \& Probability Letters},
-	shortjournal = {Statistics \& Probability Letters},
 	author = {{DelSole}, Timothy and Tippett, Michael K.},
 	urldate = {2021-10-31},
 	date = {2021-06-01},

@@ -16,7 +16,7 @@
 		\matr{R} \triangleq \frac{\partial \vect{\tau}}{\partial \vect{q}} = \frac{\partial \jacobian{}{}{t} \vect{f}}{\partial \vect{q}} = \jacobian{}{}{t} \frac{\partial \vect{f}}{\partial \vect{q}} + \frac{\partial \jacobian{}{}{t} }{\partial \vect{q}} \vect{f}
 	\end{equation}
 	
-	La raideur cartésienne $ \matr{K} $ se définit respectivement aux coordonnées d'un repère formé par les vecteurs $\vect{x}$, qui peuvent constituer un plan, ou un espace pluri-dimensionel.
+	La raideur cartésienne $ \matr{K} $ se définit respectivement aux coordonnées d'un repère formé par les vecteurs $\vec{x}$, qui peuvent constituer un plan, ou un espace pluri-dimensionel.
 	
 	\begin{equation}
 		\matr{K} \triangleq \frac{\partial \vect{f}}{\partial \vect{x}} = \frac{\partial \vect{f}}{\partial \vect{q}} \frac{\partial \vect{q}}{\partial \vect{x}} =  \frac{\partial \vect{f}}{\partial \vect{q}} \jacobian{}{}{-1}
@@ -28,7 +28,7 @@
 		\matr{K} = (\jacobian{}{}{t})^{-1} \left(\matr{R} - \frac{\partial \jacobian{}{}{t} }{\partial \vect{q}} \vect{f} \right) \jacobian{}{}{-1}
 	\end{equation}
 	
-	Pour que $ \matr{K} $ puisse être considéré comme une raideur pure, l'opérateur rotationnel $ \nabla $, du champ de vecteur de la force doit être nul \parencite{hogan_mechanics_1985, latash_joint_1993}, c'est à dire de nature conservative \cite[Chapter~7]{hooge_bcit_2016}.
+	Pour que $ \matr{K} $ puisse être considéré comme une raideur pure, l'opérateur rotationnel $ \nabla $, du champ de vecteur de la force doit être nul \parencite{hogan_mechanics_1985, latash_joint_1993}, c'est à dire de nature conservative \parencite[Chapitre~7]{hooge_bcit_2016}.
 	
 	\begin{equation}
 		\nabla \times \vect{f} = %
@@ -47,7 +47,7 @@
 	\section{Masse et inertie}
 	
 	\begin{equation}
-		\matr{M} = \left(\jacobian{}{}{t}\right)^{-1} I \jacobian{}{}{-1}
+		\matr{M} = \left(\jacobian{}{}{t}\right)^{-1} A \jacobian{}{}{-1}
 	\end{equation}
 	
 	
@@ -344,9 +344,9 @@
 	%%%%%%%
 	\chapter[LSTM]{Réseaux de neurones récurrents à mémoire court et long terme (LSTM)} \label{app_lstm_rnn}
 	
-	Une cellule LSTM classique se compose de quatre couche neuronale. Chacun de ces niveaux se compose d'une fonction d'activation $f_a$ (sigmoïde ou tangente hyperbolique), d'une matrice de gain $\matr{W}_i$ et d'un vecteur de biais $\vect{b}_i$, sous la forme suivante $f_a(\matr{W}_i \vect{e}_t + \vect{b}_i)$, avec $\vect{e}$ le vecteur du signal d'entrée. Par ailleurs l'une des particularités des cellules LSTM est qu'elles contiennent deux états, celui de la cellule $\vect{c}_t$ et l'état caché $\vect{h}_t$. Ce dernier état est concaténé au vecteur d'entrée du pas suivant $\vect{x}_{t+1}$, autrement dit l'ancien état caché et regroupé avec l'entrée de la cellule $\vect{e}_t = [\vect{h}_{t-1}, \vect{x}_{t}]$.
+	Une cellule LSTM classique se compose de quatre couches neuronales. Chacun de ces niveaux se compose d'une fonction d'activation $f_a$ (sigmoïde ou tangente hyperbolique), d'une matrice de gain $\matr{W}_i$ et d'un vecteur de biais $\vect{b}_i$, sous la forme suivante $f_a(\matr{W}_i \vect{e}_t + \vect{b}_i)$, avec $\vect{e}$ le vecteur du signal d'entrée. Par ailleurs l'une des particularités des cellules LSTM est qu'elles contiennent deux états, celui de la cellule $\vect{c}_t$ et l'état caché $\vect{h}_t$. Ce dernier état est concaténé au vecteur d'entrée du pas suivant $\vect{x}_{t+1}$, autrement dit l'ancien état caché et regroupé avec l'entrée de la cellule $\vect{e}_t = [\vect{h}_{t-1}, \vect{x}_{t}]$.
 	
-	Les couches neuronales peuvent être regroupée sous forme de trois portes. La première appelée porte d'oubli permet de se débarrasser d'anciennes données, à l'aide d'une fonction d'activation sigmoïdique qui fourni un facteur d'oubli compris entre 0 et 1 pour selectionner partiellement des informations du précédent état de la cellule.
+	Les couches neuronales peuvent être regroupée sous forme de trois portes. La première appelée porte d'oubli permet de se débarrasser d'anciennes données, à l'aide d'une fonction d'activation sigmoïdique qui fournit un facteur d'oubli compris entre 0 et 1 pour selectionner partiellement des informations du précédent état de la cellule.
 	
 	\begin{equation} \label{eq_lstm_ft_app}
 		\vect{f}_t = \sigma(\matr{W}_f \vect{e}_t + \vect{b}_f)
@@ -383,6 +383,44 @@
 	\tikzexternaldisable
 	
 	%%%%%%%
+	% APP 7
+	%%%%%%%
+	\chapter{Discrétisation du modèle KBM} \label{app_discretisation}
+	
+	Le modèle du second ordre KBM peut être discrétisé avec une bloqueur d'ordre zéros avec la formule \cref{eq_zoh_discretisation} :
+	
+	\begin{equation} \label{eq_zoh_discretisation}
+		G(z) = (1 - z^{-1}) \mathcal{Z} \left\{ \mathcal{L}^{-1} \frac{G(s)}{s} \right\}
+	\end{equation}
+	
+	Dans le cas d'un modèle du second ordre on obtient alors la relation \cref{eq_inverse_laplace_KBM}, avec la pulsation naturelle $\omega_0=\sqrt{K/M}$, le coefficient d'amortissement $\xi=\frac{B}{2\sqrt{KM}}$, et le gain statique $\alpha=1/K$. La transformée en z de cette relation temporelle est donnée par \cref{eq_z_transform_KMB_zoh}, en notant $\Delta = \sqrt{1 - \xi^2} $ et $A = \sin\left( \omega_0\Delta T - \cos^{-1}(\xi) \right) $.
+	
+	\begin{equation} \label{eq_inverse_laplace_KBM}
+		\begin{split}
+			\mathcal{L}^{-1} \left[ \frac{1}{s\left( K + Bs + Ms^2 \right)} \right] &= \mathcal{L}^{-1} \left[ \frac{\alpha \omega_0^2}{s(\omega_0^2 + 2\xi\omega_0s + s^2)} \right] \\
+			&= \alpha \left( 1 - \frac{e^{-\xi\omega_0t}}{\sqrt{1 - \xi^2}} \sin\left(\omega_0\sqrt{1 - \xi^2}t - \cos^{-1}(\xi)\right) \right)
+		\end{split}
+	\end{equation}
+	
+	\begin{equation} \label{eq_z_transform_KMB_zoh}
+		\begin{split}
+			G(z) &= (1 - z^{-1}) \alpha\left( \frac{z}{z-1} - \frac{1}{\sqrt{1 - \xi^2}} \frac{z^2\sqrt{1 - \xi^2} + ze^{-\xi\omega_0T} \sin\left( \omega_0\sqrt{1 - \xi^2}T - \cos^{-1}(\xi) \right)}{z^2 - 2ze^{-\xi\omega_0T} \cos\left( \omega_0\sqrt{1 - \xi^2}T \right) + e^{-2\xi\omega_0T}} \right) \\
+			&= \frac{\alpha}{\Delta} \frac{z \left( \Delta \left(1 - 2e^{-\xi\omega_0T} \cos\left( \omega_0\Delta T \right) \right) - e^{-\xi\omega_0T} \sin(A)\right) + e^{-\xi\omega_0T} \sin(A) + \Delta e^{-2\xi\omega_0T}} {z^2 - 2ze^{-\xi\omega_0T} \cos\left( \omega_0\Delta T \right) +e^{-2\xi\omega_0T} }
+		\end{split}
+	\end{equation}
+	
+	On reconnait alors la forme \cref{eq_rel_K} avec :
+	
+	\begin{equation}
+		\begin{cases}
+			a_0 &= e^{-2\xi\omega_0T} \\
+			a_1 &= -2e^{-\xi\omega_0T} \cos\left(\omega_0 \Delta T\right) \\
+			b_0 &= \frac{\alpha}{\Delta} e^{-\xi\omega_0T} \sin(A) + \alpha e^{-2\xi\omega_0T} \\
+			b_1 &= \alpha \left( 1 - e^{-\xi\omega_0T} \left( 2\cos(\omega_0\Delta T) + \frac{1}{\Delta} \sin(A) \right) \right)
+		\end{cases}
+	\end{equation}
+	
+	%%%%%%%
 	% APP n
 	%%%%%%%
 	\chapter{Compensation des biais du capteur de force} \label{app_force_sensor_bias}
@@ -391,7 +429,7 @@
 	
 	Ce capteur permet d'obtenir les forces et couples d'interaction $\vect{f}_e^s$ en Newton et Newton-mètre dans son référentiel, toutefois, les forces retournées $\vect{f}_s$ sont sensibles à plusieurs facteurs extérieurs comme la température et la luminosité. Les effets liés à la lumière ont pu être compensés grâce à du papier collant opaque, toutefois la température n'étant pas métrisable dans le laboratoire, il faut régulièrement compenser ses effets.
 	
-	Ainsi, les données du capteur de force sont victimes de biais $\vect{b}_{f/\tau}$ dont la dynamique est toutefois suffisemment lente pour permettre une manipulation du robot sans avoir à les corriger en ligne. Ses biais sont donc compensés à chaque nouvelle manipulation dont la durée n'exècede pas \SI{10}{\minute}. Il faut aussi prendre en compte le poids et les autres effets dynamique provoqués par la poignée $\vect{f}_p$. On peut alors écrire les données retournées par le capteur sous la forme suivante :
+	Ainsi, les données du capteur de force sont victimes de biais $\vect{b}_{f/\tau}$ dont la dynamique est toutefois suffisamment lente pour permettre une manipulation du robot sans avoir à les corriger en ligne. Ses biais sont donc compensés à chaque nouvelle manipulation dont la durée n'exècede pas \SI{10}{\minute}. Il faut aussi prendre en compte le poids et les autres effets dynamiques provoqués par la poignée $\vect{f}_p$. On peut alors écrire les données retournées par le capteur sous la forme suivante :
 	
 	\begin{equation}
 		\vect{f}_s(t) = \vect{f}_e^s(t) + \vect{f}_p(t) + \vect{b}_{f/\tau}

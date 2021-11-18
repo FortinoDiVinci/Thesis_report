@@ -6,7 +6,7 @@
 			\tikzsetnextfilename{subfig_interp_spline_id_windows_R2_param_2}
 			\begin{tikzpicture} 
 				\begin{axis}[%
-					xlabel={$t$ (\si{\milli\second})},
+					xlabel={$f_o$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
 					zlabel={(\si{\percent})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
@@ -27,7 +27,7 @@
 			\tikzsetnextfilename{subfig_interp_spline_id_windows_R2_param_1}
 			\begin{tikzpicture} 
 				\begin{axis}[%
-					xlabel={$t$ (\si{\milli\second})},
+					xlabel={$f_o$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
@@ -43,6 +43,6 @@
 			\end{tikzpicture}
 		}
 	}
-	\caption{Coefficient de détermination $R^2$ de la reconstruction du différentiel de position à partir des paramètres identifiés, en fonction des fenêtres $f_o$ et $f_i$, pour les modèles \cref{item_model_a;item_model_b}.}
+	\caption{Coefficient de détermination $R^2$ de la reconstruction du différentiel de position à partir des paramètres identifiés, en fonction des fenêtres $f_o$ et $f_i$, pour les modèles \cref{item_model_a,item_model_b}.}
 	\label{fig_interp_spline_id_windows_R2}
 \end{figure}

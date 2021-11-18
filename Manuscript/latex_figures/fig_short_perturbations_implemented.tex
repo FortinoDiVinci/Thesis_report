@@ -1,0 +1,54 @@
+\begin{figure} [h]
+	\centering
+	\resizebox{\textwidth}{!}{	
+		\tikzsetnextfilename{fig_short_perturbations_implemented}		
+		\begin{tikzpicture}
+			\centering
+			%
+			\begin{axis}[%
+				name=ax1,
+				width=.48\linewidth,
+				height=.2\linewidth,
+				scale only axis,
+				xlabel={temps (\si{\milli\second})},
+				ylabel={Force (\si{\newton})},
+				axis x line = bottom,
+				axis y line = left,
+				ylabel near ticks,
+				]
+				%
+				\addplot [
+				color=blue,
+				smooth,
+				]
+				table [col sep=comma, x expr=\coordindex, y=force_pert_pos] {misc/short_force_perturbations.csv};
+			\end{axis}
+			%
+			\begin{axis}[%
+				width=.48\linewidth,
+				height=.2\linewidth,
+				scale only axis,
+				xlabel={temps (\SI{}{\milli\second})},
+				%ylabel={Force (\SI{}{\newton})},
+				axis x line = bottom,
+				axis y line = left, 			
+				yticklabel style={
+					%/pgf/number format/precision=3,
+					/pgf/number format/fixed},
+				at={($(ax1.south east)+(6,0)$)},
+				%scaled y ticks=false,
+				]
+				%
+				\addplot+[
+				%color=blue,
+				smooth,
+				mark=none,
+				]
+				table [col sep=comma, x expr=\coordindex, y=force_pert_neg] {misc/short_force_perturbations.csv};
+			\end{axis}
+			
+		\end{tikzpicture}
+	}
+	\caption{Exemples d'une perturbation positive et d'une négative, qui ont pu être extraites en utilisant la méthode décrite en \cref{chap3_sec_method_sub_virt_traj_6}.}
+	\label{fig_short_perturbations_implemented} % Label 
+\end{figure}

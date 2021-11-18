@@ -1,0 +1,29 @@
+\begin{figure}[!ht]
+	\tikzsetnextfilename{fig_youBot_API_architecture}
+	\centering
+	%\resizebox{\textwidth}{!}{
+		\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7] 
+	
+		\begin{tikzpicture} [node distance = 2cm]
+			
+			\node[block, align = center] (youBot) {youBot};
+			\node[block, above youBot, align = center] (youBot) {youBot};
+			
+			\draw[-{Latex[length=3mm]}] (cv.east) -- (rampGen.west);
+			\draw[-{Latex[length=3mm]}] (rampGen.east) -- (velocity.west);
+			\draw[-{Latex[length=3mm]}] (velocity.east) -- (ci.west)
+				node[midway, above]{$i_d$};
+			\draw[-{Latex[length=3mm]}] (ci.east) -- (current.west);
+			\draw[-{Latex[length=3mm]}] (current.east) -- (pwm.west);
+			\draw[-{Latex[length=3mm]}] (pwm.east) -- (motor.west);
+			
+			\draw[-{Latex[length=3mm]}] (currentSensor.west) -| (ci.south);
+			\draw[-{Latex[length=3mm]}] (velocitySensor.west) -| (cv.south);
+			\draw[-{Latex[length=3mm]}] ($(cv.west) + (-1.25,0)$) -- (cv.west)
+				node[midway, above]{$\dot{q}_d$};
+			
+		\end{tikzpicture}
+	%}
+	\caption{Schéma de l'architecture de contrôle proposée par l'API du youBot.}
+	\label{fig_youBot_API_architecture}
+\end{figure}

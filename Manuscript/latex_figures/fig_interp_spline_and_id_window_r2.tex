@@ -8,7 +8,7 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
-					ylabel={(\si{\percent})},
+					zlabel={(\si{\percent})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
@@ -63,7 +63,7 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
-					ylabel={(\si{\percent})},
+					zlabel={(\si{\percent})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
@@ -93,6 +93,8 @@
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
 					colormap/viridis,
 					view = {50}{50},
 					xmax=299,

@@ -1,8 +1,6 @@
 \begin{figure}[!htb] 
 	\centering
 	\resizebox{\textwidth}{!}{
-		\subcaptionbox{\label{subfig_lstm_prediction_a}}
-		{			
 			\tikzsetnextfilename{subfig_lstm_prediction_a}
 			\begin{tikzpicture}
 				\centering
@@ -15,6 +13,7 @@
 					ylabel={Force (\SI{}{\newton})},
 					axis x line = bottom,
 					axis y line = left, 
+					ylabel near ticks,
 					]
 					%
 					\addplot [
@@ -36,15 +35,45 @@
 					\draw [dashed, opacity=.5] (pDw) -- (pUp);
 						\draw[>=latex, <->] (axis cs:1300, 5) -- node [midway,above,align=center,fill=white,xshift=.5cm] {non-masqué} (axis cs:0, 5);
 				\end{axis}		
-			\end{tikzpicture}
-			}
-			\subcaptionbox{\label{subfig_lstm_prediction_b}}
-			{			
-				\tikzsetnextfilename{subfig_lstm_prediction_b}
-				\begin{tikzpicture}
-					\centering
+			\end{tikzpicture}	
+			\tikzsetnextfilename{subfig_lstm_prediction_b}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					width=.33\linewidth,
+					height=.27\linewidth,
+					scale only axis,
+					xlabel={temps (\SI{}{\milli\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					]
 					%
-					\begin{axis}[%
+					\addplot [
+						color=blue,
+						smooth,
+						]
+					table [col sep=comma, x expr=\coordindex, y=y2] {misc/rnn_predictions_exemples.csv};
+					%
+					\addplot [
+						color=red,
+						smooth,
+						]
+					table [col sep=comma, x expr=\coordindex, y=y2_hat] {misc/rnn_predictions_exemples.csv};
+					%
+					\coordinate (pDw) at (axis cs:1300, \pgfkeysvalueof{/pgfplots/ymin});
+					\coordinate (pUp) at (axis cs:1300, \pgfkeysvalueof{/pgfplots/ymax});
+					%
+					\draw [dashed, opacity=.5] (pDw) -- (pUp);
+					\addlegendentry{$\vect{y}$};
+					\addlegendentry{$\hat{\vect{y}}$};
+				\end{axis}		
+			\end{tikzpicture}
+			\tikzsetnextfilename{subfig_lstm_prediction_c}
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
 						width=.33\linewidth,
 						height=.27\linewidth,
 						scale only axis,
@@ -52,63 +81,26 @@
 						axis x line = bottom,
 						axis y line = left, 
 						]
-						%
-						\addplot [
-							color=blue,
-							smooth,
-							]
-						table [col sep=comma, x expr=\coordindex, y=y2] {misc/rnn_predictions_exemples.csv};
-						%
-						\addplot [
-							color=red,
-							smooth,
-							]
-						table [col sep=comma, x expr=\coordindex, y=y2_hat] {misc/rnn_predictions_exemples.csv};
-						%
-						\coordinate (pDw) at (axis cs:1300, \pgfkeysvalueof{/pgfplots/ymin});
-						\coordinate (pUp) at (axis cs:1300, \pgfkeysvalueof{/pgfplots/ymax});
-						%
-						\draw [dashed, opacity=.5] (pDw) -- (pUp);
-						\addlegendentry{$\vect{y}$};
-						\addlegendentry{$\hat{\vect{y}}$};
-					\end{axis}		
-				\end{tikzpicture}
-			}
-			\subcaptionbox{\label{subfig_lstm_prediction_c}}
-			{			
-				\tikzsetnextfilename{subfig_lstm_prediction_c}
-				\begin{tikzpicture}
-					\centering
 					%
-					\begin{axis}[%
-							width=.33\linewidth,
-							height=.27\linewidth,
-							scale only axis,
-							xlabel={temps (\SI{}{\milli\second})},
-							axis x line = bottom,
-							axis y line = left, 
-							]
-						%
-						\addplot [
-							color=blue,
-							smooth,
-							]
-						table [col sep=comma, x expr=\coordindex, y=y3] {misc/rnn_predictions_exemples.csv};
-						%
-						\addplot [
-							color=red,
-							smooth,
-							]
-						table [col sep=comma, x expr=\coordindex, y=y3_hat] {misc/rnn_predictions_exemples.csv};
-						%
-						\coordinate (pDw) at (axis cs:1300, \pgfkeysvalueof{/pgfplots/ymin});
-						\coordinate (pUp) at (axis cs:1300, \pgfkeysvalueof{/pgfplots/ymax});
-						%
-						\draw [dashed, opacity=.5] (pDw) -- (pUp);
-					\end{axis}		
-				\end{tikzpicture}
-			}	
+					\addplot [
+						color=blue,
+						smooth,
+						]
+					table [col sep=comma, x expr=\coordindex, y=y3] {misc/rnn_predictions_exemples.csv};
+					%
+					\addplot [
+						color=red,
+						smooth,
+						]
+					table [col sep=comma, x expr=\coordindex, y=y3_hat] {misc/rnn_predictions_exemples.csv};
+					%
+					\coordinate (pDw) at (axis cs:1300, \pgfkeysvalueof{/pgfplots/ymin});
+					\coordinate (pUp) at (axis cs:1300, \pgfkeysvalueof{/pgfplots/ymax});
+					%
+					\draw [dashed, opacity=.5] (pDw) -- (pUp);
+				\end{axis}		
+			\end{tikzpicture}
 		}	
-	\caption{Exemples de trois prédictions conduites par le réseau LSTM entraîné, sur des trajectoires non connues.}
+	\caption{Exemples de trois prédictions conduites par le réseau LSTM entraîné, sur des trajectoires non connues et perturbées.}
 	\label{fig_lstm_prediction}
 \end{figure}
