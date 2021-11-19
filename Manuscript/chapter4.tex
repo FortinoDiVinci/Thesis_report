@@ -100,14 +100,30 @@ L'affichage en temps réel de cette simulation pouvant être gourmand, il est im
 
 \subsubsection{Système de synchronisation} \label{chap4_sec_exp_sub_mat_4}
 
-Problématique de synchroniser des équipements fonctionnant sur des systèmes d'exploitation différents. (synchronisation des horloges etc...)
-Utilisation d'un routeur
+L'ensemble de ces différents équipements doit être ordonnancé afin qu'ils soient correctement synchronisés. Un routeur local est utilisé pour connecter le robot, le capteur de force, et les trois ordinateurs, tout en limitant au minimum les délais induits par les transmissions des données. Les horloges des deux ordinateurs linux sont harmonisées grâce au protocole de temps réseau NTP\footnote{\textit{Network Time Protocol}}.
 
-\paragraph{Robot Operating System (ROS)} \label{chap4_sec_exp_sub_mat_3_1}
+%\paragraph{Robot Operating System (ROS)} \label{chap4_sec_exp_sub_mat_3_1}
 
-Présenter ROS rapidement
+Pour cadencer l'ensemble des équipements l'intergiciel \textit{Robot Operating System} (ROS) est utilisé. Cet ensemble d'outils libres de droits permet notamment une abstraction élevée du matériel, un contrôle des périphériques, et la transmission de données formatées. De nombreux paquets sont mis à disposition des utilisateurs pour la gestion d'équipements, d'algorithmes, et d'applications.
+
+Le contrôle du robot peut être effectué via une interface ROS développée par les ingénieurs de Kuka (\href{https://github.com/youbot/youbot_driver_ros_interface}{youbot\_driver\_ros\_interface}), qui permet l'envoi de messages pour contrôler youBot à travers son API. L'ensemble des programmes de contrôle ont donc été développés dans des processus ROS, programmé en C++ pour permettre des cadences de l'ordre du kilohertz. Quelques modifications ont été opérés au paquet permettant ld'interfacer l'API et ROS, afin de pouvoir contrôler le robot en courant, de pouvoir modifier les gains des contrôleurs PID du robot, et aussi de connaître les différentes consignes envoyées au robot.
+
+Un paquet était déjà existant pour récupérer les données du capteur de force (\href{https://github.com/UTNuclearRoboticsPublic/netft_utils}{netft\_utils}), un autre paquet permettait la récupération des données du système de capture de mouvements par un client VRPN (\href{https://github.com/ros-drivers/vrpn_client_ros}{vrpn\_client\_ros}).
+
+L'ordinateur contrôlant le robot est considéré comme le maître (\textit{ros master}), les autres équipements comme des esclaves, y compris le second ordinateur Linux, permettant l'affichage de la simulation qui a été développée pour fonctionner avec ROS.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=.4\linewidth]{misc/photo_experiment.jpg}
+	\caption{Banc expérimental au cours d'une expérience.}
+	\label{fig_experimental_bed}
+\end{figure}
 
 \subsection{Protocole} \label{chap4_sec_exp_sub_prot}
+
+Afin de conduire les expériences dans de bonnes conditions, leur déroulement a été essayé, planifié et organisé en amont. Il a fallu dans un premier temps définir un protocole expérimental, qui assurerait le respect des participants, que ce soit dans leur intégrité morale ou physique. 
+
+Plusieurs expériences ont été pensées, parmi lesquelles deux ont été sélectionnées. 
 
 \subsubsection{Recrutement de la cohorte} \label{chap4_sec_exp_sub_prot_1}
 
