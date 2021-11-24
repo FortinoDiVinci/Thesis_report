@@ -35,9 +35,9 @@
 \usepackage[toc,page]{appendix} % for appendices [title]
 \usepackage{rotating} % for sideway table notably
 \usepackage[inline]{enumitem}
-\usepackage[framemethod=default]{mdframed} % for text boxes
-\usepackage[skins]{tcolorbox}
+\usepackage[most,skins]{tcolorbox}
 	\tcbuselibrary{breakable}
+\usepackage[framemethod=default]{mdframed} % for text boxes
 \usepackage[french]{minitoc}
 \usepackage{readarray}
 \usepackage{hyperref}
@@ -143,12 +143,13 @@
 \addbibresource{bibliography/chapter4.bib}
 
 \definecolor{Prune}{RGB}{99,0,60}
+\definecolor{LimedSpruce}{RGB}{49,62,72}
 
 \newtcolorbox{aside}[1]{
 	enhanced,%
 	breakable,%
 	top = 1em,%
-	title = {\textbf{Aparté:~#1}},%
+	title = {\textbf{Aparté~:~#1}},%
 	attach boxed title to top left = {%
 		yshift = -\tcboxedtitleheight/2,%
 		xshift = 1cm,
@@ -160,6 +161,42 @@
 	colframe = Prune,
 	colback = white,
 }
+
+\newtcbtheorem[crefname={hypothèse}{hypothèses}]{hypotheses}{Hypothèse}{%auto counter, 
+	enhanced,%
+	breakable,%
+	top = 1em,%
+	fonttitle=\bfseries,%
+	label separator={},%
+	%title = {\textbf{Hypothèse~\thetcbcounter~:}},%
+	attach boxed title to top left = {%
+		yshift = -\tcboxedtitleheight/2,%
+		xshift = 1cm,
+	},
+	boxed title style = {%
+		size = small,	
+		colback = LimedSpruce,
+	},
+	colframe = LimedSpruce,
+	colback = white,
+}{}
+
+%\newtcolorbox[auto counter, crefname={hypothèse}{hypothèses}]{hypotheses}[1][]{
+%	enhanced,%
+%	breakable,%
+%	top = 1em,%
+%	title = {\textbf{Hypothèse~\thetcbcounter~:}},%
+%	attach boxed title to top left = {%
+%		yshift = -\tcboxedtitleheight/2,%
+%		xshift = 1cm,
+%	},
+%	boxed title style = {%
+%		size = small,
+%		colback = LimedSpruce,
+%	},
+%	colframe = LimedSpruce,
+%	colback = white,
+%}
 
 \tikzexternalize
 \tcbsetforeverylayer{shield externalize}

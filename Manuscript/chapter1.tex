@@ -147,7 +147,7 @@ Les contrôles en admittance et impédance sont complémentaires dans leur appro
 De ce fait, pour optimiser la balance performances - \textit{en terme de transparence ou de précision selon le contrôle} - robustesse, il faudrait s'intéresser à la modélisation des interactions et donc à l'amélioration de la connaissance des environnements étudiés. Dans le cadre d'interactions impliquant l'humain, des modèles permettant de qualifier les interactions physiques humains - robots sont étudiés, ce qui peut aussi permettre à terme de reproduire des performances humaines, dont la versatilité a déjà été évoquée. 
 
 %\newpage%%%
-\section{Modéliser le comportement humain}
+\section{Modéliser le comportement humain} \label{chap_1_sec_modelling_human}
 %%%
 
 %\subsection{Les fondements de la biomécanique du corps humain}
@@ -201,7 +201,7 @@ C'est ainsi que le réflexe ostéotendineux permet d'assurer une continuité dan
 
 La \cref{fig_stretch_reflex_control_loop} résume les actions rétroactives du réflexe ostéotendineux sur un muscle. Ainsi, le réflexe d'extension ou ostéotendineux, très étudié, survient pour le membre supérieur humain entre \SIlist{20;50}{\milli\second} \parencite{lacquaniti_transient_1991, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011} après une perturbation. Pour le membre inférieur, des latences ont été relevées au delà de \SI{50}{\milli\second} \parencite{allum_mechanical_1982, sinkjaer_muscle_1988, toft_mechanical_1989}. L'initiation d'actions volontaires ne peut émerger qu'après \SIrange{100}{120}{\milli\second} \parencite{libet_unconscious_1985, kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011}, or entre ces actions volontaires et le réflexe d'étirement, \parencite{kurtzer_long-latency_2008, lakatos_conditioning_2011, pruszynski_long-latency_2011} observent d'autres comportements réflexes, qualifiés de longs délais ou spinaux, dont les origines ne sont pas uniques \parencite{pruszynski_long-latency_2011}.
 
-\subsection{Modéliser le comportement humain en interaction physique grâce à l'impédance mécanique}
+\subsection{Modéliser le comportement humain en interaction physique grâce à l'impédance mécanique} \label{chap1_sec_modelling_human_sub_2}
 
 \subsubsection{Définition} \label{chap_1_sec_2_subsec_1_impedance_definition}
 
@@ -250,7 +250,7 @@ Ainsi, par analogie avec l'électricité, dans le cas restreint des systèmes li
 
 Comme c'est le cas pour l'électricité, il est possible d'exprimer l'impédance mécanique dans un plan complexe \parencite{hondori_method_2009}, mais cette représentation est assez marginale lorsqu'on parle de l'impédance mécanique chez l'Homme.\\
 
-L'impédance mécanique, \textit{qui sera simplement nommée impédance dans le reste du document}, permet donc de modéliser les relations entre les forces et les mouvements qui sont appliqués sur un système. On trouve ainsi des modèles dynamiques uniarticulaires de membres du corps humain, par exemple du coude \parencite{de_rugy_actively_2003, avrin_particle_2016}, comme montré sur l'équation \cref{eq_impedance_artic_mvt_derugy}. Dans ces cas de mouvements rythmiques, la position d'une articulation du bras $\theta$ est obtenu à partir des couples appliqués par les muscles agonistes $T_i$ (eg. biceps) et antagonistes $T_j$ (eg. triceps). On retrouve ainsi les éléments caractéristiques de la mécanique linéaire, avec la raideur $k$, l'amortissement $\gamma$ et l'inertie $I$.
+L'impédance mécanique, \textit{qui sera simplement nommée impédance dans le reste du document}, permet donc de modéliser les relations entre les forces et les mouvements qui sont appliqués sur un système. On trouve ainsi des modèles dynamiques uniarticulaires de membres du corps humain, par exemple du coude \parencite{de_rugy_actively_2003,avrin_particle_2016}, comme montré sur l'équation \cref{eq_impedance_artic_mvt_derugy}. Dans ces cas de mouvements rythmiques, la position d'une articulation du bras $\theta$ est obtenu à partir des couples appliqués par les muscles agonistes $T_i$ (eg. biceps) et antagonistes $T_j$ (eg. triceps). On retrouve ainsi les éléments caractéristiques de la mécanique linéaire, avec la raideur $k$, l'amortissement $\gamma$ et l'inertie $I$.
 
 Les couples musculaires sont alors considérés comme proportionnels à une commande neurale, générée à l'aide d'un oscillateur non linéaire bio-inspiré, proposé par \textcite{matsuoka_sustained_1985}. C'est l'appoche computationnelle de contrôle en force telle qu'expliquée par \textcite{danion_we_2011}.
 
