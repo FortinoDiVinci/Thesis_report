@@ -1,0 +1,215 @@
+clear all
+
+addpath('../../data/ball_bouncing_experiment/experimental_bench_pert/utils')
+addpath('../../data/utils')
+addpath('../../data/force_torque_sensor')
+
+%% PARAMETERS
+% MACRO
+%FILE_NAMES = ["exp_complement_2021.mat","exp_june_2021_ter.mat"];
+FILE_NAME_BASE = "exp_june_2021_9ms_delay_";
+NB_FILES = 6;
+SAVED_FILE_NAME = 'exp_delta_fz_2021';
+SAVED_FOLDER_NAME = "users_fz/";
+SAVED_FOLDER_NAME_OLD = "users_fz_old/";
+% PARAMS
+% data processing
+low_pass_cutoff_freq = 50; % Input signal are lp filt. before computation
+filter_order = 2;
+% trajectory windows 
+% (the following param consider a sampling frequency of 1kHz)
+wndw_virt_f_traj = 100; % 100ms mask (force) 
+wndw_lw_f_fit    = 50;
+wndw_up_f_fit    = 110;
+wndw_unpert      = wndw_virt_f_traj;
+wndw_imp_eval    = 300;
+f_delay          = 0;
+window = max(wndw_imp_eval, wndw_virt_f_traj);
+%
+
+%% DATA LOADING
+
+for file_nb = 3:NB_FILES
+    %load(FILE_NAMES(file_nb), ...
+    disp("File nb: " + string(file_nb))
+    tic
+    load(FILE_NAME_BASE + string(file_nb) + ".mat", ...
+        "t","q", "ft_sensor", "t_d", "dist_val", "exp_parameters", "dt");
+    
+    %load(FILE_NAME_BASE + string(file_nb) + ".mat", "exp_parameters");
+    
+    if ~exist('dt', 'var')
+        dt = 1e-3;
+    end
+
+    tot_nb_exp = length(t);
+
+    %% DATA PRE-PROCESSING
+
+    fz = {};
+
+    [b,a] = butter(filter_order,low_pass_cutoff_freq/(1/(2*dt)),'low'); 
+
+    % force pre-processing
+    for exp_nb = tot_nb_exp:-1:1
+        if strcmp(exp_parameters(exp_nb).experience, "calib") || strcmp(exp_parameters(exp_nb).experience, "l_phri")
+            fz{exp_nb} = [];
+        else
+            f_tmp = forces_filtering(ft_sensor{exp_nb}(:,1:3)', ft_sensor{exp_nb}(:,4:6)', ...
+                q{exp_nb}', t{exp_nb}); 
+            fz{exp_nb} = -filtfilt(b,a,f_tmp(3,:))'; % f(r->e) = -f(e->r) = -fsens
+        end
+
+    end
+    dist_val_raw = dist_val;
+    clear dist_val q ft_sensor f_tmp;
+    % disturbance timing extractions
+    for exp_nb = tot_nb_exp:-1:1
+        if strcmp(exp_parameters(exp_nb).experience, "calib") || strcmp(exp_parameters(exp_nb).experience, "l_phri")
+            idx_perts{exp_nb} = [];
+            dist_val{exp_nb} = [];
+        else
+            % get only the rising edges of perturbations
+            dist_timings = t_d{exp_nb}(1:2:end);
+            dist_val{exp_nb} = dist_val_raw{exp_nb}(1:2:end);
+            for pert_idx = 1:length(dist_timings)
+                idx_perts{exp_nb}(pert_idx) = find(t{exp_nb} >= ...
+                    dist_timings(pert_idx), 1, 'first');
+            end
+            % if the experiment was interrupted during the last perturbation
+            if (idx_perts{exp_nb}(end) + window) > length(t{exp_nb})
+                % the last perturbation will no be used for impedance estimation
+                idx_perts{exp_nb} = idx_perts{exp_nb}(1:end-1);
+                dist_val{exp_nb} = dist_val{exp_nb}(1:end-1);
+            end
+        end
+    end
+    clear dist_val_raw
+    
+    for i = 1:length(t)
+        t{i} = t{i} - t{i}(1);
+    end
+    toc
+    disp('data loaded')
+    %% DATA PROCESSING 
+    delta_fz = {};
+    % extraction of the delta of position and force
+    [~, user_idx] = sort(string(vertcat(exp_parameters.user)));
+    last_user = exp_parameters(user_idx(1)).user;
+    %last_user = exp_parameters(user_idx(end)).user;
+    old_file_name = strcat(string(SAVED_FILE_NAME), "_" + string(last_user));
+    old = load(strcat(SAVED_FOLDER_NAME_OLD, old_file_name) + ".mat");
+    ii = 1;
+    tic
+    IS_851 = 0;
+    for exp_nb = 1:tot_nb_exp
+        usr_idx = user_idx(exp_nb);
+        if strcmp(exp_parameters(usr_idx).experience, "calib") || strcmp(exp_parameters(usr_idx).experience, "l_phri") || ...
+            strcmp(exp_parameters(usr_idx).experience, "unknown")
+            continue
+        end
+        current_user = exp_parameters(usr_idx).user;
+        if ~strcmp(current_user,"841")
+            if IS_851 == 0
+                continue
+            else
+                IS_851 = 0;
+            end
+        else
+            IS_851 = 1;
+            last_user = current_user;
+        end
+        if ~strcmp(current_user, last_user)
+            str_us = "_" + string(last_user);
+            save_file_name = strcat(string(SAVED_FILE_NAME), str_us);
+            % to avoid unvoluntary data erasing
+            k = 1;
+            while exist(strcat(SAVED_FOLDER_NAME, save_file_name) + ".mat", "file")
+                warning('The file ' + save_file_name + ".mat, already exists.")
+                save_file_name = strcat(save_file_name, "_"+string(k));
+                k = k + 1;
+            end
+            save(strcat(SAVED_FOLDER_NAME, save_file_name + ".mat"), 'delta_fz', ...
+                'wndw_virt_f_traj', 'wndw_lw_f_fit', 'wndw_up_f_fit', ...
+                'wndw_unpert', 'wndw_imp_eval', '-v7.3');
+            ii = 1;
+            delta_fz = {};
+            old_file_name = strcat(string(SAVED_FILE_NAME), "_" + string(last_user));
+            old = load(strcat(SAVED_FOLDER_NAME, old_file_name) + ".mat");
+            toc
+            disp(last_user + " done")
+            disp(string(100*exp_nb/tot_nb_exp) + "%")
+            tic
+            last_user = current_user;
+        end
+        % delta fz
+        header = exp_parameters(usr_idx).experience;
+        delta_fz{ii} = DIFF_TRAJECT(window, wndw_virt_f_traj, fz{usr_idx},...
+            t{usr_idx}, idx_perts{usr_idx}, dist_val{usr_idx}, f_delay, header);
+        % to avoid recomputing the differential trajectory if no changes
+        % have occured
+        if length(old.delta_fz) >= ii
+            if isequal(old.delta_fz{ii}.complete_traject,delta_fz{ii}.complete_traject) && ...
+                    isequal(old.delta_fz{ii}.time,delta_fz{ii}.time) && ...
+                    isequal(old.delta_fz{ii}.pert_ind,delta_fz{ii}.pert_ind)
+                delta_fz{ii} = old.delta_fz{ii};
+            else
+                delta_fz{ii}.computeDiffTraject('VirtTrajMethod', 'sineOptM', ...
+                'OptNbSine', 3, 'OptlinearComp', 0, 'LowerFitLen', wndw_lw_f_fit, ...
+                'UpperFitLen', wndw_up_f_fit); 
+            end    
+        else % old data about this one does not exists
+            delta_fz{ii}.computeDiffTraject('VirtTrajMethod', 'sineOptM', ...
+            'OptNbSine', 3, 'OptlinearComp', 0, 'LowerFitLen', wndw_lw_f_fit, ...
+            'UpperFitLen', wndw_up_f_fit); 
+        end   
+        ii = ii + 1;
+    end
+    
+    str_us = "_" + string(last_user);
+    save_file_name = strcat(string(SAVED_FILE_NAME), str_us);
+    k = 1;
+    while exist(strcat(SAVED_FOLDER_NAME, save_file_name) + ".mat", "file")
+        warning('The file ' + save_file_name + ".mat, already exists.")
+        save_file_name = strcat(save_file_name, "_"+string(k));
+        k = k + 1;
+    end
+    save(strcat(SAVED_FOLDER_NAME, save_file_name + ".mat"), 'delta_fz', ...
+        'wndw_virt_f_traj', 'wndw_lw_f_fit', 'wndw_up_f_fit', ...
+        'wndw_unpert', 'wndw_imp_eval', '-v7.3');
+    toc 
+    disp(last_user + " done (last user from file nb" + string(file_nb))
+    % save file order to be reused for position
+    experiments_list = [vertcat(exp_parameters(user_idx).user), vertcat(exp_parameters(user_idx).experience)];
+    save(strcat(SAVED_FOLDER_NAME, "list_" + string(file_nb) + ".mat"), ...
+        'experiments_list', 'user_idx', '-v7.3');
+    clear t q ft_sensor t_dist dist_val exp_parameters dt delta_fz user_idx ...
+        dist_val idx_perts
+    
+end % file_nb
+
+return
+
+% ref = "922";
+% load(SAVED_FOLDER_NAME + string(SAVED_FILE_NAME) + "_" + ref + ".mat");
+% out = load(SAVED_FOLDER_NAME + string(SAVED_FILE_NAME) + "_"+ref+"_1" + ".mat");
+% delta_fz = [delta_fz,out.delta_fz];
+% save(SAVED_FOLDER_NAME + string(SAVED_FILE_NAME) + "_" + ref + ".mat", "delta_fz", '-append');
+
+% 
+% delta_fz_virt_100ms = copyObj(delta_fz);
+% for exp_nb = tot_nb_exp:-1:1
+%     delta_fz_virt_100ms{exp_nb}.virt_traject(wndw_unpert+1:end,:) = ...
+%         delta_fz_virt_100ms{exp_nb}.traject(wndw_unpert+1:end,:);
+%     delta_fz_virt_100ms{exp_nb}.tmp_diff_traject = ...
+%         delta_fz_virt_100ms{exp_nb}.traject - ...
+%         delta_fz_virt_100ms{exp_nb}.virt_traject; % x - x0
+%     delta_fz_virt_100ms{exp_nb}.diff_traject = ...
+%         delta_fz_virt_100ms{exp_nb}.tmp_diff_traject(3:end-2,:);
+% end
+
+% save(SAVED_FILE_NAME, 'delta_fz', 'wndw_virt_f_traj', 'wndw_lw_f_fit', ...
+%     'wndw_up_f_fit', 'wndw_unpert', 'wndw_imp_eval', '-v7.3');
+
+%experiments_list_1 = [vertcat(exp_parameters(user_idx).user), vertcat(exp_parameters(user_idx).experience)];
+%experiments_list_2 = [vertcat(exp_parameters(user_idx).user), vertcat(exp_parameters(user_idx).experience)];

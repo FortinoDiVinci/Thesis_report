@@ -10,114 +10,141 @@ addpath('../../data/youBot_analysis/Utils')
 %%%%%%%%%%%%%%%%%%
 NB_JOINTS = 5;
 DISPLAY_MOCAP_FIT = 1;
-DISPLAY_BALL_BOUNCING = 0;
+DISPLAY_BALL_BOUNCING = 1;
 SAVE_DATA = 1;
 
 first_exp2_user029 = 0; % to deal with missing topic
 virtual_pos_offset = -0.32;
+mocap_delay = 9e-3; % 9ms delay provided by the datasheet
 if SAVE_DATA
-    saved_data_name = "exp_june_2021";
+    saved_data_name = "exp_june_2021_9ms_delay_";
 end
 
 %% File selection
-files = dir('users/*/*.bag');
-is_calibration = zeros(size(files));
-is_exp = zeros(size(files));
-is_learning_ball_bouncing = zeros(size(files));
-is_learning_phri = zeros(size(files));
-%bagselect = rosbag('vfo10.bag');
-for ii = 1:length(files)
-    if contains(files(ii).name, "calibration")
-        is_calibration(ii) = 1;
-        date_time(ii) = datenum(files(ii).name(13:end-4),'yyyy-mm-dd-HH-MM-SS');
-    elseif contains(files(ii).name, "exp_1")
-        is_exp(ii) = 1;
-        date_time(ii) = datenum(files(ii).name(7:end-4),'yyyy-mm-dd-HH-MM-SS');
-    elseif contains(files(ii).name, "exp_2")
-        is_exp(ii) = 2;
-        date_time(ii) = datenum(files(ii).name(7:end-4),'yyyy-mm-dd-HH-MM-SS');
-    elseif contains(files(ii).name, "l_ball")
-        is_learning_ball_bouncing(ii) = 1;
-        date_time(ii) = datenum(files(ii).name(17:end-4),'yyyy-mm-dd-HH-MM-SS');
-    elseif contains(files(ii).name, "l_phri")
-        is_learning_phri(ii) = 1;
-        date_time(ii) = datenum(files(ii).name(8:end-4),'yyyy-mm-dd-HH-MM-SS');
+allfiles = dir('users/*/*.bag');
+%% only process users that have not been done yet
+% last_read = load('exp_june_2021_ter.mat', 'exp_parameters');
+% user_already_read = unique(vertcat(last_read.exp_parameters.user),'rows');
+% file_path = vertcat(files.folder);
+% file_path = file_path(:,end-2:end);
+% del_idx = zeros(length(file_path),1);
+% for i = 1:length(user_already_read)
+%     del_idx = del_idx | (string(user_already_read(i,:)) == string(file_path));
+% end
+% files(del_idx) = []; % to delete data from june...
+% allfiles = files(del_idx); % tu use only data from june...
+% clear del_idx last_read user_already_read file_path
+
+
+%%
+chunk = [0,59,98,154,205,247,289]; % chosen to start with calibration
+
+is_calibration_raw = zeros(size(allfiles));
+is_exp_raw = zeros(size(allfiles));
+is_learning_ball_bouncing_raw = zeros(size(allfiles));
+is_learning_phri_raw = zeros(size(allfiles));
+for ii = 1:length(allfiles)
+    if contains(allfiles(ii).name, "calibration")
+        is_calibration_raw(ii) = 1;
+        date_time(ii) = datenum(allfiles(ii).name(13:end-4),'yyyy-mm-dd-HH-MM-SS');
+    elseif contains(allfiles(ii).name, "exp_1")
+        is_exp_raw(ii) = 1;
+        date_time(ii) = datenum(allfiles(ii).name(7:end-4),'yyyy-mm-dd-HH-MM-SS');
+    elseif contains(allfiles(ii).name, "exp_2")
+        is_exp_raw(ii) = 2;
+        date_time(ii) = datenum(allfiles(ii).name(7:end-4),'yyyy-mm-dd-HH-MM-SS');
+    elseif contains(allfiles(ii).name, "l_ball")
+        is_learning_ball_bouncing_raw(ii) = 1;
+        date_time(ii) = datenum(allfiles(ii).name(17:end-4),'yyyy-mm-dd-HH-MM-SS');
+    elseif contains(allfiles(ii).name, "l_phri")
+        is_learning_phri_raw(ii) = 1;
+        date_time(ii) = datenum(allfiles(ii).name(8:end-4),'yyyy-mm-dd-HH-MM-SS');
     else
         % otherwise wrong naming ? / peculiar case
-        date_time(ii) = datenum(files(ii).name(end-22:end-4),'yyyy-mm-dd-HH-MM-SS');
+        date_time(ii) = datenum(allfiles(ii).name(end-22:end-4),'yyyy-mm-dd-HH-MM-SS');
     end
 end
 
 [~, chron_order] = sort(date_time);
-files = files(chron_order);
-is_calibration = is_calibration(chron_order);
-is_exp = is_exp(chron_order);
-is_learning_ball_bouncing = is_learning_ball_bouncing(chron_order);
-is_learning_phri = is_learning_phri(chron_order);
-clear chron_order
+%files = files(chron_order);
+allfiles = allfiles(chron_order);
+is_calibration_all = is_calibration_raw(chron_order);
+is_exp_all = is_exp_raw(chron_order);
+is_learning_ball_bouncing_all = is_learning_ball_bouncing_raw(chron_order);
+is_learning_phri_all = is_learning_phri_raw(chron_order);
+clear chron_order is_calibration_raw is_exp_raw is_learning_ball_bouncing_raw ...
+    is_learning_phri_raw
+
+for chunk_nb = 6:length(chunk)
+tic
+files = allfiles(chunk(chunk_nb-1)+1:chunk(chunk_nb));
+is_calibration = is_calibration_all(chunk(chunk_nb-1)+1:chunk(chunk_nb));
+is_exp = is_exp_all(chunk(chunk_nb-1)+1:chunk(chunk_nb));
+is_learning_ball_bouncing = is_learning_ball_bouncing_all(chunk(chunk_nb-1)+1:chunk(chunk_nb));
+is_learning_phri = is_learning_phri_all(chunk(chunk_nb-1)+1:chunk(chunk_nb));
 
 %% Data reading
 for idx = 1:length(files)
     file_path = files(idx).folder + "\" + files(idx).name;
     bagselect = rosbag(file_path);
     %% Topic extraction
-    joint_data = readMessages(select(bagselect,'Topic','/joint_states'),...
-        'DataFormat','struct');
-    ft_sensor_data = readMessages(select(bagselect,'Topic','/netft_data'),...
-        'DataFormat','struct');
-    motion_capture_data = readMessages(select(bagselect,'Topic',...
-        '/vrpn_client_node/robot_marker/pose'),'DataFormat','struct');
-    disturbance_data = readMessages(select(bagselect,'Topic', ...
-        '/arm_1/disturbance_val'),'DataFormat','struct');
-    ball_data = readMessages(select(bagselect,'Topic','/ball_pose'),...
-        'DataFormat','struct');
+%     joint_data = readMessages(select(bagselect,'Topic','/joint_states'),...
+%         'DataFormat','struct');
+%     ft_sensor_data = readMessages(select(bagselect,'Topic','/netft_data'),...
+%         'DataFormat','struct');
+%     motion_capture_data = readMessages(select(bagselect,'Topic',...
+%         '/vrpn_client_node/robot_marker/pose'),'DataFormat','struct');
+%     disturbance_data = readMessages(select(bagselect,'Topic', ...
+%         '/arm_1/disturbance_val'),'DataFormat','struct');
+%     ball_data = readMessages(select(bagselect,'Topic','/ball_pose'),...
+%         'DataFormat','struct');
     parameters_data = readMessages(select(bagselect,'Topic',...
         '/ball_simulator/parameter_updates'),'DataFormat','struct');
-
-    %% Time extraction
-    t_date{idx} = datetime(bagselect.StartTime,'ConvertFrom','epochtime','Format',...
-        'dd-MMM-yyyy HH:mm:ss');
-    t_q{idx} = select(bagselect,'Topic','/joint_states').MessageList.Time;
-    t_ft{idx} = select(bagselect,'Topic','/netft_data').MessageList.Time;
-    t_mc{idx} = select(bagselect,'Topic','/vrpn_client_node/robot_marker/pose').MessageList.Time;
-    t_d{idx} = select(bagselect,'Topic','/arm_1/disturbance_val').MessageList.Time;
-    t_b{idx} = select(bagselect,'Topic','/ball_pose').MessageList.Time;
-
-    clear bagselect
-
-    %% Topic data extraction
-    for ii = 1:NB_JOINTS
-        raw_q{idx}(:,ii) = cellfun(@(x) double(x.Position(ii)), joint_data);
-    end
-    clear joint_data
-    try
-        raw_force{idx}(:,1) = cellfun(@(x) double(x.Wrench.Force.X), ft_sensor_data);
-        raw_force{idx}(:,2) = cellfun(@(x) double(x.Wrench.Force.Y), ft_sensor_data);
-        raw_force{idx}(:,3) = cellfun(@(x) double(x.Wrench.Force.Z), ft_sensor_data);
-        raw_torque{idx}(:,1) = cellfun(@(x) double(x.Wrench.Torque.X), ft_sensor_data);
-        raw_torque{idx}(:,2) = cellfun(@(x) double(x.Wrench.Torque.Y), ft_sensor_data);
-        raw_torque{idx}(:,3) = cellfun(@(x) double(x.Wrench.Torque.Z), ft_sensor_data);
-    catch
-        % no force data
-        raw_force{idx} = [];
-        raw_torque{idx} = [];
-        if ~is_calibration(idx)
-            warning("Missing force torque data for user " + string(files(idx).folder(end-2:end)) + ...
-                ", in file: " + string(files(idx).name));
-        end
-    end
-    clear ft_sensor_data
-
-    raw_mocap{idx}(:,1) = cellfun(@(x) double(x.Pose.Position.X), motion_capture_data);
-    raw_mocap{idx}(:,2) = cellfun(@(x) double(x.Pose.Position.Y), motion_capture_data);
-    raw_mocap{idx}(:,3) = cellfun(@(x) double(x.Pose.Position.Z), motion_capture_data);
-    clear motion_capture_data 
-
-    dist_val{idx} = cellfun(@(x) double(x.Data), disturbance_data);
-    clear disturbance_data
-
-    raw_ball_z{idx} = cellfun(@(x) double(x.Pose.Position.Z), ball_data);
-    clear ball_data
+% 
+%     %% Time extraction
+%     t_date{idx} = datetime(bagselect.StartTime,'ConvertFrom','epochtime','Format',...
+%         'dd-MMM-yyyy HH:mm:ss');
+%     t_q{idx} = select(bagselect,'Topic','/joint_states').MessageList.Time;
+%     t_ft{idx} = select(bagselect,'Topic','/netft_data').MessageList.Time;
+%     t_mc{idx} = select(bagselect,'Topic','/vrpn_client_node/robot_marker/pose').MessageList.Time;
+%     t_d{idx} = select(bagselect,'Topic','/arm_1/disturbance_val').MessageList.Time;
+%     t_b{idx} = select(bagselect,'Topic','/ball_pose').MessageList.Time;
+%     t_mc{idx} = t_mc{idx} - mocap_delay; % to account for data processing delay of Motive
+%     clear bagselect
+% 
+%     %% Topic data extraction
+%     for ii = 1:NB_JOINTS
+%         raw_q{idx}(:,ii) = cellfun(@(x) double(x.Position(ii)), joint_data);
+%     end
+%     clear joint_data
+%     try
+%         raw_force{idx}(:,1) = cellfun(@(x) double(x.Wrench.Force.X), ft_sensor_data);
+%         raw_force{idx}(:,2) = cellfun(@(x) double(x.Wrench.Force.Y), ft_sensor_data);
+%         raw_force{idx}(:,3) = cellfun(@(x) double(x.Wrench.Force.Z), ft_sensor_data);
+%         raw_torque{idx}(:,1) = cellfun(@(x) double(x.Wrench.Torque.X), ft_sensor_data);
+%         raw_torque{idx}(:,2) = cellfun(@(x) double(x.Wrench.Torque.Y), ft_sensor_data);
+%         raw_torque{idx}(:,3) = cellfun(@(x) double(x.Wrench.Torque.Z), ft_sensor_data);
+%     catch
+%         % no force data
+%         raw_force{idx} = [];
+%         raw_torque{idx} = [];
+%         if ~is_calibration(idx)
+%             warning("Missing force torque data for user " + string(files(idx).folder(end-2:end)) + ...
+%                 ", in file: " + string(files(idx).name));
+%         end
+%     end
+%     clear ft_sensor_data
+% 
+%     raw_mocap{idx}(:,1) = cellfun(@(x) double(x.Pose.Position.X), motion_capture_data);
+%     raw_mocap{idx}(:,2) = cellfun(@(x) double(x.Pose.Position.Y), motion_capture_data);
+%     raw_mocap{idx}(:,3) = cellfun(@(x) double(x.Pose.Position.Z), motion_capture_data);
+%     clear motion_capture_data 
+% 
+%     dist_val{idx} = cellfun(@(x) double(x.Data), disturbance_data);
+%     clear disturbance_data
+% 
+%     raw_ball_z{idx} = cellfun(@(x) double(x.Pose.Position.Z), ball_data);
+%     clear ball_data
 
     field_name{1} = 'user';
     field_value{1} = files(idx).folder(end-2:end);
@@ -182,8 +209,14 @@ for idx = 1:length(files)
     clear parameters_data field_value field_name 
 
 end
-clear first_exp2_user029 file_path
+%save(strcat(saved_data_name + string(chunk_nb-1),".mat"), "exp_parameters", '-append');
+%clear exp_parameters 
 
+clear first_exp2_user029 file_path
+toc
+disp('All data loaded')
+
+tic
 %% Synchronisation
 % Time synchronisation
 for idx = 1:length(files)
@@ -197,6 +230,10 @@ for idx = 1:length(files)
     end
     t{idx} = (0:dt:t_end(idx)-t_start(idx))';
     t_d{idx} = t_d{idx} - t_start(idx);
+    t_mc{idx} = t_mc{idx} - t_start(idx);
+    t_q{idx} = t_q{idx} - t_start(idx);
+    t_ft{idx} = t_ft{idx} - t_start(idx);
+    t_b{idx} = t_b{idx} - t_start(idx);
     
     for ii = 1:NB_JOINTS
         q{idx}(:,ii) = interp1(t_q{idx}, raw_q{idx}(:,ii), t{idx});
@@ -218,26 +255,32 @@ for idx = 1:length(files)
 end
 clear t_q t_mc t_ft t_b
 clear raw_q raw_mocap raw_force raw_torque raw_ball_z
-
+toc
+disp('Data interpolated')
+tic
 %% spatial synchronisation
 % between motion capture coordinates and robot coordinates
 for idx = 1:length(files)
-    if idx == 1
-        continue
-    end
-    for i=1:length(t{idx})
-        T = MGD_T0marker(q{idx}(i,1), q{idx}(i,2), q{idx}(i,3), q{idx}(i,4), q{idx}(i,5)); % htf matrix
-        robot_endpoint{idx}(i, :) = T(1:3,4);
+%     if idx == 1
+%         continue
+%     end
+%     for i=length(t{idx}):-1:1
+%         T = MGD_T0marker(q{idx}(i,1), q{idx}(i,2), q{idx}(i,3), q{idx}(i,4), q{idx}(i,5)); % htf matrix
+%         robot_endpoint{idx}(i, :) = T(1:3,4);
+%     end 
+    for i=length(t{idx}):-1:1     
+        Tp = MGD_T0marker_position(q{idx}(i,1), q{idx}(i,2), q{idx}(i,3), q{idx}(i,4)); %
+        robot_endpoint{idx}(i, :) = Tp;
     end 
-
+    
     % redo calibration every time a new calibration is available
     if is_calibration(idx)
         [R2, ~, ~] = absor(mocap{idx}', robot_endpoint{idx}');
         tf_matrix = R2.M;
         clear R2
     end
-
-    for i=1:length(t{idx})
+ 
+    for i=length(t{idx}):-1:1
         temp_t = tf_matrix*[mocap{idx}(i,:), 1]'; % homogenous coordinates
         mocap_robot_endpoint{idx}(i, :) = temp_t(1:3);
     end 
@@ -252,13 +295,16 @@ for idx = 1:length(files)
     end
 end
 clear tf_matrix temp_t T
+toc
+disp('Mocap synchronized')
+tic
 %% ball bouncing error
-for idx = 1:length(files)
+for idx = length(files):-1:1
     if idx == 1
         continue
     end
-    if isempty(z_b{idx}) || is_calibration(idx) || is_learning_phri(idx) || ...
-            is_learning_ball_bouncing(idx) 
+    if isempty(z_b{idx}) || is_calibration(idx) || is_learning_phri(idx) %|| ...
+%            is_learning_ball_bouncing(idx) 
         idx_ball_off_ramp(idx) = NaN;
         idx_apex{idx} = [NaN];
         bounce_err{idx}.data = [NaN];
@@ -289,7 +335,9 @@ for idx = 1:length(files)
     end
     
 end
-
+toc
+disp('Data ball bouncing')
+tic
 clear idx ii i
 
 % to avoid unvoluntary data erasing
@@ -301,4 +349,9 @@ if exist(strcat(saved_data_name,".mat"), "file")
     end
 end
 
-save(strcat(saved_data_name,".mat"), '-v7.3');
+save(strcat(saved_data_name + string(chunk_nb-1),".mat"), '-v7.3');
+toc
+disp('Data saved')
+clear q t bounce_err idx_apex idx_ball_off_ramp z_p mocap_robot_endpoint robot_endpoint ...
+    z_b ft_sensor mocap t_d dist_val t_date exp_parameters t_end t_start 
+end % chunk nb
