@@ -34,12 +34,14 @@ users_list = unique(string(vertcat(exp_parameters.user)));
 nb_users = length(users_list);
 
 DISP = 0;
+DISP_CYCLES = 0; % slows down execution
 USER_REF_NAMES = [];
 NB_PHASES = [];
 dt = 1e-3;
 
 % 50 Hz filter
 [b,a] = butter(2,50/(1/(2*dt)),'low'); 
+cycles = {};
 
 for user_nb = 1:nb_users
     
@@ -53,19 +55,33 @@ for user_nb = 1:nb_users
     %target_height = exp_parameters(idx_exp).target_height;
     exp_parameters_user_i = exp_parameters(idx_exp);
     del_idx = [];
+    %% TODO change code to make the ball bouncing learning usable
     for k = 1:length(exp_names)
-        if ~(strcmp(exp_names(k), "exp_1") || strcmp(exp_names(k), "exp_2")  || strcmp(exp_names(k), "l_bb"))
+        if ~(strcmp(exp_names(k), "exp_1") || strcmp(exp_names(k), "exp_2"))%  || strcmp(exp_names(k), "l_bb"))
             del_idx = [del_idx, k];
         end
     end
-    % delete data not corresponding to experiments 1,2 or to learning
-    % ball bouncing
+    % delete data not corresponding to experiments 1,2
     exp_names(del_idx) = [];
     %target_height(del_idx) = [];
     exp_parameters_user_i(del_idx) = [];
+    del_idx = [];
+    % delete ball bouncing learning from differential, impedance & bb data
+    for exp_nb = 1:length(delta_z)
+        if strcmp(delta_z{exp_nb}.header, "l_bb")
+            del_idx = [del_idx, exp_nb];
+        end
+    end
+    delta_fz(del_idx) = [];
+    delta_z(del_idx) = [];
+    bounce_err(del_idx) = [];
+    idx_ball_off_ramp(del_idx) = [];
+    zb(del_idx) = [];
+    zp(del_idx) = [];
+    idx_apex(del_idx) = [];
+    impedance_data_user(del_idx) = [];
     
     le = length(exp_names);
-    %lth = length(target_height);
     lfz = length(delta_fz);
     lz = length(delta_fz);
     
@@ -80,10 +96,12 @@ for user_nb = 1:nb_users
         dfz = delta_fz{exp_nb};
         idx_p = [dz.pert_ind];
         i_imp = detectBallImpacts(dz.time, zb{exp_nb}, DISP);
+        th = exp_parameters_user_i(exp_nb).target_height;
         
         if DISP
             plot(dz.time, zp{exp_nb}, 'Color', [0.4940,0.1840,0.5560], 'Linewidth', 2)
             plot([dz.time(1), dz.time(end)], [th, th], 'k--', 'Linewidth', 1.5)
+            title("User#" + user_name + ", " + exp_parameters_user_i(exp_nb).experience)
         end
         
         % if the experiment start with a ball on the paddle, the previous 
@@ -95,27 +113,29 @@ for user_nb = 1:nb_users
         first_impact = 4; % no perturbation before the 5th impact
 
         [i_red,idx_i_red] = findRelevantData(dz.time, dz.complete_traject, i_imp, first_impact); 
+        idx_i_red_new = findFailBouncing(zb{exp_nb}, idx_i_red);
         if DISP
             plot(dz.time(idx_p), zp{exp_nb}(idx_p), 'rp', 'MarkerFaceColor', 'r',... 
                 'Markersize',15);
             plot(dz.time(idx_i_red), zb{exp_nb}(idx_i_red), 'o', 'color', ...
                 [0.9290,0.6940,0.1250], 'Markersize', 15, 'Linewidth', 1.5)
+            plot(dz.time(idx_i_red_new(1)), zb{exp_nb}(idx_i_red_new(1)), '^', 'Markersize', 15)
         %legend('ball','impacts','paddle', 'target', 'perturb.')
         end
-        
+
 %         cycles{exp_nb} = cycleExtraction(idx_i_red, dt, dfz, dz, zb{exp_nb}, ...
 %             zp{exp_nb}, exp_parameters_user_i(exp_nb), DISP);
-        cycles{exp_nb} = cycleExtractionImpedance(idx_i_red, dt, dfz, dz, zb{exp_nb}, ...
-            zp{exp_nb}, exp_parameters_user_i(exp_nb), impedance_data_user(exp_nb), DISP);
+        cycles_user_i{exp_nb} = cycleExtractionImpedance(idx_i_red_new, dt, dfz, dz, zb{exp_nb}, ...
+            zp{exp_nb}, exp_parameters_user_i(exp_nb), impedance_data_user(exp_nb), DISP_CYCLES);
         
-%         cycles{exp_nb}.K = [experience_data_user(exp_nb).K];
-%         cycles{exp_nb}.B = [experience_data_user(exp_nb).B];
-%         cycles{exp_nb}.M = [experience_data_user(exp_nb).M];
-%         cycles{exp_nb}.r2 = [experience_data_user(exp_nb).r2];
-        
+        pause(0.01); % to display figures
     end
 
+    cycles = [cycles, cycles_user_i];
+    
 end
+
+return
 
 cycles_norm = cycleNormalisation(cycles, dt);
 [center_ratio, count_ratio, idx_ratio, cycles_class] = sortPerturbations(cycles_norm, max(NB_PHASES), DISP);

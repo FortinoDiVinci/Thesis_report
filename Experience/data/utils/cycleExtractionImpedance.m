@@ -12,7 +12,7 @@ dz_b = Iu_diffcent(z_b, dz.time);
 t1 = dfz.time(ind_i_red(1));
 tend = dfz.time(ind_i_red(end));
 % delete identification outside reduced data
-idxmin = find(impedance_data.ti < t1, 1, 'last');
+idxmin = find(impedance_data.ti > t1, 1, 'first');
 idxmax = find(impedance_data.ti < tend, 1, 'last');
 if isempty(idxmin)
     idxmin = 1;
@@ -25,6 +25,11 @@ impedance_data.B = impedance_data.B(idxmin:idxmax);
 impedance_data.M = impedance_data.M(idxmin:idxmax);
 impedance_data.r2 = impedance_data.r2(idxmin:idxmax);
 impedance_data.ti = impedance_data.ti(idxmin:idxmax);
+
+% merge double impacts into a single cycle
+idx_double_impact = find(diff(ind_i_red) == 1);
+ind_i_red(idx_double_impact - 1) = ind_i_red(idx_double_impact - 1) + 1;
+ind_i_red(idx_double_impact) = [];
 
 for i = 1:length(ind_i_red) - 1
     
@@ -39,6 +44,7 @@ for i = 1:length(ind_i_red) - 1
     
     %--- time and duration processing
     ind_pts_i = [ind_i_red(i):ind_i_red(i+1) - 1]'; % absolute index in cycle
+   
     cycle_i(i).npts = length(ind_pts_i); % nb of pts in cycle
     cycle_i(i).t_red = [0:cycle_i(i).npts-1]'*dt; % cycle time [0:tend]
     cycle_i(i).duration = max(cycle_i(i).t_red); % cycle duration
@@ -62,9 +68,25 @@ for i = 1:length(ind_i_red) - 1
     if cycle_i(i).is_dist
         cycle_i(i).dist_val = dfz.pert_val(IB(1));
         cycle_i(i).ratio_dist = cycle_i(i).ind(1)./cycle_i(i).npts; % normalised perturbation ratio
+        if impedance_data.ti(1) < dfz.time(ind_pts_i(1)) || impedance_data.ti(1) > dfz.time(ind_pts_i(end))
+            warning("Error in dist order ?! User#%s, %s", cycle_i(i).user, cycle_i(i).exp);
+        end
+        cycle_i(i).K = impedance_data.K(1);
+        cycle_i(i).B = impedance_data.B(1);
+        cycle_i(i).M = impedance_data.M(1);
+        cycle_i(i).r2 = impedance_data.r2(1);
+        impedance_data.K(1) = [];
+        impedance_data.B(1) = [];
+        impedance_data.M(1) = [];
+        impedance_data.r2(1) = [];
+        impedance_data.ti(1) = [];
     else
         cycle_i(i).dist_val = 0;
         cycle_i(i).ratio_dist = -1;
+        cycle_i(i).K = NaN;
+        cycle_i(i).B = NaN;
+        cycle_i(i).M = NaN;
+        cycle_i(i).r2 = NaN;
     end
     
     if cycle_i(i).dist_val > 0
@@ -74,7 +96,7 @@ for i = 1:length(ind_i_red) - 1
     else
          cycle_i(i).sign_dist = 0;
     end
-    cycle_i(i).is_ghost_impact = NaN;
+    %cycle_i(i).is_ghost_impact = NaN;
     
     %--- cycle i
     cycle_i(i).t = dfz.time(ind_pts_i); % abs time [t1:t2]
