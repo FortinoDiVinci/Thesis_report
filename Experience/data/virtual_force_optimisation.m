@@ -6,8 +6,8 @@ addpath('../../data/force_torque_sensor')
 
 %% PARAMETERS
 % MACRO
-%FILE_NAMES = ["exp_complement_2021.mat","exp_june_2021_ter.mat"];
 FILE_NAME_BASE = "exp_june_2021_9ms_delay_";
+%FILE_NAME_BASE = "exp_2_573_2021_9ms_delay_";
 NB_FILES = 6;
 SAVED_FILE_NAME = 'exp_delta_fz_2021';
 SAVED_FOLDER_NAME = "users_fz/";
@@ -29,7 +29,7 @@ window = max(wndw_imp_eval, wndw_virt_f_traj);
 
 %% DATA LOADING
 
-for file_nb = 3:NB_FILES
+for file_nb = 1:NB_FILES
     %load(FILE_NAMES(file_nb), ...
     disp("File nb: " + string(file_nb))
     tic
@@ -101,7 +101,7 @@ for file_nb = 3:NB_FILES
     old = load(strcat(SAVED_FOLDER_NAME_OLD, old_file_name) + ".mat");
     ii = 1;
     tic
-    IS_851 = 0;
+    %IS_851 = 0;
     for exp_nb = 1:tot_nb_exp
         usr_idx = user_idx(exp_nb);
         if strcmp(exp_parameters(usr_idx).experience, "calib") || strcmp(exp_parameters(usr_idx).experience, "l_phri") || ...
@@ -109,16 +109,16 @@ for file_nb = 3:NB_FILES
             continue
         end
         current_user = exp_parameters(usr_idx).user;
-        if ~strcmp(current_user,"841")
-            if IS_851 == 0
-                continue
-            else
-                IS_851 = 0;
-            end
-        else
-            IS_851 = 1;
-            last_user = current_user;
-        end
+%         if ~strcmp(current_user,"841")
+%             if IS_851 == 0
+%                 continue
+%             else
+%                 IS_851 = 0;
+%             end
+%         else
+%             IS_851 = 1;
+%             last_user = current_user;
+%         end
         if ~strcmp(current_user, last_user)
             str_us = "_" + string(last_user);
             save_file_name = strcat(string(SAVED_FILE_NAME), str_us);
@@ -190,11 +190,16 @@ end % file_nb
 
 return
 
-% ref = "922";
+% ref = "821";
 % load(SAVED_FOLDER_NAME + string(SAVED_FILE_NAME) + "_" + ref + ".mat");
 % out = load(SAVED_FOLDER_NAME + string(SAVED_FILE_NAME) + "_"+ref+"_1" + ".mat");
-% delta_fz = [delta_fz,out.delta_fz];
+% %delta_fz = [delta_fz,out.delta_fz];
+% delta_fz = [out.delta_fz, delta_fz];
 % save(SAVED_FOLDER_NAME + string(SAVED_FILE_NAME) + "_" + ref + ".mat", "delta_fz", '-append');
+
+% delta_tmp = [delta_fz(1), out.delta_fz];
+% delta_tmp = [delta_tmp, delta_fz(2:end)];
+% delta_fz = delta_tmp;
 
 % 
 % delta_fz_virt_100ms = copyObj(delta_fz);

@@ -38,6 +38,8 @@ allfiles = dir('users/*/*.bag');
 
 %%
 chunk = [0,59,98,154,205,247,289]; % chosen to start with calibration
+%chunk = [74,84];
+%chunk = [0,290];
 
 is_calibration_raw = zeros(size(allfiles));
 is_exp_raw = zeros(size(allfiles));
@@ -75,7 +77,7 @@ is_learning_phri_all = is_learning_phri_raw(chron_order);
 clear chron_order is_calibration_raw is_exp_raw is_learning_ball_bouncing_raw ...
     is_learning_phri_raw
 
-for chunk_nb = 6:length(chunk)
+for chunk_nb = 2:length(chunk)
 tic
 files = allfiles(chunk(chunk_nb-1)+1:chunk(chunk_nb));
 is_calibration = is_calibration_all(chunk(chunk_nb-1)+1:chunk(chunk_nb));
@@ -88,63 +90,63 @@ for idx = 1:length(files)
     file_path = files(idx).folder + "\" + files(idx).name;
     bagselect = rosbag(file_path);
     %% Topic extraction
-%     joint_data = readMessages(select(bagselect,'Topic','/joint_states'),...
-%         'DataFormat','struct');
-%     ft_sensor_data = readMessages(select(bagselect,'Topic','/netft_data'),...
-%         'DataFormat','struct');
-%     motion_capture_data = readMessages(select(bagselect,'Topic',...
-%         '/vrpn_client_node/robot_marker/pose'),'DataFormat','struct');
-%     disturbance_data = readMessages(select(bagselect,'Topic', ...
-%         '/arm_1/disturbance_val'),'DataFormat','struct');
-%     ball_data = readMessages(select(bagselect,'Topic','/ball_pose'),...
-%         'DataFormat','struct');
+    joint_data = readMessages(select(bagselect,'Topic','/joint_states'),...
+        'DataFormat','struct');
+    ft_sensor_data = readMessages(select(bagselect,'Topic','/netft_data'),...
+        'DataFormat','struct');
+    motion_capture_data = readMessages(select(bagselect,'Topic',...
+        '/vrpn_client_node/robot_marker/pose'),'DataFormat','struct');
+    disturbance_data = readMessages(select(bagselect,'Topic', ...
+        '/arm_1/disturbance_val'),'DataFormat','struct');
+    ball_data = readMessages(select(bagselect,'Topic','/ball_pose'),...
+        'DataFormat','struct');
     parameters_data = readMessages(select(bagselect,'Topic',...
         '/ball_simulator/parameter_updates'),'DataFormat','struct');
-% 
-%     %% Time extraction
-%     t_date{idx} = datetime(bagselect.StartTime,'ConvertFrom','epochtime','Format',...
-%         'dd-MMM-yyyy HH:mm:ss');
-%     t_q{idx} = select(bagselect,'Topic','/joint_states').MessageList.Time;
-%     t_ft{idx} = select(bagselect,'Topic','/netft_data').MessageList.Time;
-%     t_mc{idx} = select(bagselect,'Topic','/vrpn_client_node/robot_marker/pose').MessageList.Time;
-%     t_d{idx} = select(bagselect,'Topic','/arm_1/disturbance_val').MessageList.Time;
-%     t_b{idx} = select(bagselect,'Topic','/ball_pose').MessageList.Time;
-%     t_mc{idx} = t_mc{idx} - mocap_delay; % to account for data processing delay of Motive
-%     clear bagselect
-% 
-%     %% Topic data extraction
-%     for ii = 1:NB_JOINTS
-%         raw_q{idx}(:,ii) = cellfun(@(x) double(x.Position(ii)), joint_data);
-%     end
-%     clear joint_data
-%     try
-%         raw_force{idx}(:,1) = cellfun(@(x) double(x.Wrench.Force.X), ft_sensor_data);
-%         raw_force{idx}(:,2) = cellfun(@(x) double(x.Wrench.Force.Y), ft_sensor_data);
-%         raw_force{idx}(:,3) = cellfun(@(x) double(x.Wrench.Force.Z), ft_sensor_data);
-%         raw_torque{idx}(:,1) = cellfun(@(x) double(x.Wrench.Torque.X), ft_sensor_data);
-%         raw_torque{idx}(:,2) = cellfun(@(x) double(x.Wrench.Torque.Y), ft_sensor_data);
-%         raw_torque{idx}(:,3) = cellfun(@(x) double(x.Wrench.Torque.Z), ft_sensor_data);
-%     catch
-%         % no force data
-%         raw_force{idx} = [];
-%         raw_torque{idx} = [];
-%         if ~is_calibration(idx)
-%             warning("Missing force torque data for user " + string(files(idx).folder(end-2:end)) + ...
-%                 ", in file: " + string(files(idx).name));
-%         end
-%     end
-%     clear ft_sensor_data
-% 
-%     raw_mocap{idx}(:,1) = cellfun(@(x) double(x.Pose.Position.X), motion_capture_data);
-%     raw_mocap{idx}(:,2) = cellfun(@(x) double(x.Pose.Position.Y), motion_capture_data);
-%     raw_mocap{idx}(:,3) = cellfun(@(x) double(x.Pose.Position.Z), motion_capture_data);
-%     clear motion_capture_data 
-% 
-%     dist_val{idx} = cellfun(@(x) double(x.Data), disturbance_data);
-%     clear disturbance_data
-% 
-%     raw_ball_z{idx} = cellfun(@(x) double(x.Pose.Position.Z), ball_data);
-%     clear ball_data
+
+    %% Time extraction
+    t_date{idx} = datetime(bagselect.StartTime,'ConvertFrom','epochtime','Format',...
+        'dd-MMM-yyyy HH:mm:ss');
+    t_q{idx} = select(bagselect,'Topic','/joint_states').MessageList.Time;
+    t_ft{idx} = select(bagselect,'Topic','/netft_data').MessageList.Time;
+    t_mc{idx} = select(bagselect,'Topic','/vrpn_client_node/robot_marker/pose').MessageList.Time;
+    t_d{idx} = select(bagselect,'Topic','/arm_1/disturbance_val').MessageList.Time;
+    t_b{idx} = select(bagselect,'Topic','/ball_pose').MessageList.Time;
+    t_mc{idx} = t_mc{idx} - mocap_delay; % to account for data processing delay of Motive
+    clear bagselect
+
+    %% Topic data extraction
+    for ii = 1:NB_JOINTS
+        raw_q{idx}(:,ii) = cellfun(@(x) double(x.Position(ii)), joint_data);
+    end
+    clear joint_data
+    try
+        raw_force{idx}(:,1) = cellfun(@(x) double(x.Wrench.Force.X), ft_sensor_data);
+        raw_force{idx}(:,2) = cellfun(@(x) double(x.Wrench.Force.Y), ft_sensor_data);
+        raw_force{idx}(:,3) = cellfun(@(x) double(x.Wrench.Force.Z), ft_sensor_data);
+        raw_torque{idx}(:,1) = cellfun(@(x) double(x.Wrench.Torque.X), ft_sensor_data);
+        raw_torque{idx}(:,2) = cellfun(@(x) double(x.Wrench.Torque.Y), ft_sensor_data);
+        raw_torque{idx}(:,3) = cellfun(@(x) double(x.Wrench.Torque.Z), ft_sensor_data);
+    catch
+        % no force data
+        raw_force{idx} = [];
+        raw_torque{idx} = [];
+        if ~is_calibration(idx)
+            warning("Missing force torque data for user " + string(files(idx).folder(end-2:end)) + ...
+                ", in file: " + string(files(idx).name));
+        end
+    end
+    clear ft_sensor_data
+
+    raw_mocap{idx}(:,1) = cellfun(@(x) double(x.Pose.Position.X), motion_capture_data);
+    raw_mocap{idx}(:,2) = cellfun(@(x) double(x.Pose.Position.Y), motion_capture_data);
+    raw_mocap{idx}(:,3) = cellfun(@(x) double(x.Pose.Position.Z), motion_capture_data);
+    clear motion_capture_data 
+
+    dist_val{idx} = cellfun(@(x) double(x.Data), disturbance_data);
+    clear disturbance_data
+
+    raw_ball_z{idx} = cellfun(@(x) double(x.Pose.Position.Z), ball_data);
+    clear ball_data
 
     field_name{1} = 'user';
     field_value{1} = files(idx).folder(end-2:end);

@@ -32,6 +32,7 @@ load("users_impedance.mat");
 
 users_list = unique(string(vertcat(exp_parameters.user)));
 nb_users = length(users_list);
+first_impact = 4; % no perturbation before the 5th impact
 
 DISP = 0;
 DISP_CYCLES = 0; % slows down execution
@@ -83,11 +84,13 @@ for user_nb = 1:nb_users
     
     le = length(exp_names);
     lfz = length(delta_fz);
-    lz = length(delta_fz);
+    lz = length(delta_z);
+    li = length(impedance_data_user);
     
-    if ~isequal(le,lfz,lz)
+    if ~isequal(le,lfz,lz,li)
         error("Dimension of data does not match for user " + user_name + ...
-            ", check dimensions of differential trajectories and the parameters of the experiments");
+            ", check dimensions of differential trajectories, the parameters"+ ...
+            " of the experiments and/or the impedance identification.");
     end
     
     for exp_nb = 1:le
@@ -110,7 +113,6 @@ for user_nb = 1:nb_users
             idx_ball_off_ramp(exp_nb) = offRampIdx(zb{exp_nb}, dt);
         end
         i_imp = i_imp(i_imp >= idx_ball_off_ramp(exp_nb));
-        first_impact = 4; % no perturbation before the 5th impact
 
         [i_red,idx_i_red] = findRelevantData(dz.time, dz.complete_traject, i_imp, first_impact); 
         idx_i_red_new = findFailBouncing(zb{exp_nb}, idx_i_red);
@@ -130,24 +132,34 @@ for user_nb = 1:nb_users
         
         pause(0.01); % to display figures
     end
-
     cycles = [cycles, cycles_user_i];
+    clear cycles_user_i
+%     nb = 6;
+%     cycles_user_i{nb}(end).t(end) - cycles_user_i{nb}(1).t(1)
     
 end
 
-return
+clear impedance_data bounce_err cycles_user_i delta_fz delta_z dfz dz exp_names ...
+    exp_parameters exp_parameters_user_i i_imp i_red idx_apex idx_exp idx_i_red ...
+    idx_i_red_new impedance_data_user zb zp
 
-cycles_norm = cycleNormalisation(cycles, dt);
-[center_ratio, count_ratio, idx_ratio, cycles_class] = sortPerturbations(cycles_norm, max(NB_PHASES), DISP);
-
-% regroup users data
-for exp_nb = 1:nb_exp
-    impedance{exp_nb}.init_t(delta_z{exp_nb}.t_traject(3:end-2,:), delta_z{exp_nb}.time(delta_z{exp_nb}.pert_ind));
-end
-cycles_imp = addImpedance(cycles_class, impedance);
-cycles_regr = regroupCycles(cycles_imp);
-% sort outliers according to phase and perturbation direction
-cycles_id = clearOutliers(cycles_regr);
+cycles = cycleNormalisation(cycles, dt);
+[center_ratio, count_ratio, idx_ratio, cycles] = sortPerturbations(cycles, 3, DISP);
+cycles = regroupCycles(cycles);
+cycles = clearOutliers(cycles);
+cycles = regroupCompleteExperiment(cycles);
 
 % bouncing error variations
-plotBouncingError(cycles_id);
+plotBouncingError(cycles, 5); % 5 experiments
+
+return
+
+%[center_ratio, count_ratio, idx_ratio, cycles] = sortPerturbationsBothExp(cycles, DISP);
+
+% % regroup users data
+% for exp_nb = 1:nb_exp
+%     impedance{exp_nb}.init_t(delta_z{exp_nb}.t_traject(3:end-2,:), delta_z{exp_nb}.time(delta_z{exp_nb}.pert_ind));
+% end
+% cycles_imp = addImpedance(cycles_class, impedance);
+% sort outliers according to phase and perturbation direction
+

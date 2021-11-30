@@ -13,6 +13,11 @@ for i = 1:length(ind_i_red) - 1
     
     cycle_i(i).n = i;
     cycle_i(i).user = string(exp_parameters.user);
+    try
+        cycle_i(i).exp = exp_parameters.experience;
+    catch
+        warning("Experience type was not specified");
+    end
     cycle_i(i).target_height = exp_parameters.target_height;
     
     %--- time and duration processing

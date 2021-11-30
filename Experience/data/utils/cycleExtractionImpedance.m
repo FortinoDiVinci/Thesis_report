@@ -40,41 +40,41 @@ for i = 1:length(ind_i_red) - 1
     catch
         warning("Experience type was not specified");
     end
-    cycle_i(i).target_height = exp_parameters.target_height;
+    cycle_i(i).target_height = single(exp_parameters.target_height);
     
     %--- time and duration processing
     ind_pts_i = [ind_i_red(i):ind_i_red(i+1) - 1]'; % absolute index in cycle
    
-    cycle_i(i).npts = length(ind_pts_i); % nb of pts in cycle
-    cycle_i(i).t_red = [0:cycle_i(i).npts-1]'*dt; % cycle time [0:tend]
+    cycle_i(i).npts = uint16(length(ind_pts_i)); % nb of pts in cycle
+    cycle_i(i).t_red = [0:single(cycle_i(i).npts)-1]'*dt; % cycle time [0:tend]
     cycle_i(i).duration = max(cycle_i(i).t_red); % cycle duration
     
     %--- indexes and perturbations processing
     [ind_dist_i,~,IB] = intersect(ind_pts_i, dfz.pert_ind); % abs idx start and end of pert
-    cycle_i(i).ind = ind_dist_i - ind_i_red(i); % relative idx start and end of pert
-    cycle_i(i).glob_ind = ind_dist_i; % global idx
+    cycle_i(i).ind = uint16(ind_dist_i - ind_i_red(i)); % relative idx start and end of pert
+    cycle_i(i).glob_ind = uint32(ind_dist_i); % global idx
     cycle_i(i).is_dist = ~isempty(ind_dist_i); % perturbed cycle ?
     if i > 1
         cycle_i(i).is_post_dist = (cycle_i(i-1).is_dist) == 1; % previous cycle perturbed
     else
-        cycle_i(i).is_post_dist = 0; % i = 1
+        cycle_i(i).is_post_dist = false; % i = 1
     end
     
-    cycle_i(i).impact_vel = d_dz(ind_pts_i(1)); % velocity at impact
-    cycle_i(i).impact_pos = dz.complete_traject(ind_pts_i(1));
-    cycle_i(i).actual_target_height = cycle_i(i).target_height - cycle_i(i).impact_pos;
-    cycle_i(i).target_error = z_b(ind_pts_i(out2(@() max(z_b(ind_pts_i))))) - cycle_i(i).target_height;
+    cycle_i(i).impact_vel = single(d_dz(ind_pts_i(1))); % velocity at impact
+    cycle_i(i).impact_pos = single(dz.complete_traject(ind_pts_i(1)));
+    cycle_i(i).actual_target_height = single(cycle_i(i).target_height - cycle_i(i).impact_pos);
+    cycle_i(i).target_error = single(z_b(ind_pts_i(out2(@() max(z_b(ind_pts_i))))) - cycle_i(i).target_height);
     
     if cycle_i(i).is_dist
-        cycle_i(i).dist_val = dfz.pert_val(IB(1));
-        cycle_i(i).ratio_dist = cycle_i(i).ind(1)./cycle_i(i).npts; % normalised perturbation ratio
+        cycle_i(i).dist_val = single(dfz.pert_val(IB(1)));
+        cycle_i(i).ratio_dist = single(cycle_i(i).ind(1))./single(cycle_i(i).npts); % normalised perturbation ratio
         if impedance_data.ti(1) < dfz.time(ind_pts_i(1)) || impedance_data.ti(1) > dfz.time(ind_pts_i(end))
             warning("Error in dist order ?! User#%s, %s", cycle_i(i).user, cycle_i(i).exp);
         end
         cycle_i(i).K = impedance_data.K(1);
         cycle_i(i).B = impedance_data.B(1);
         cycle_i(i).M = impedance_data.M(1);
-        cycle_i(i).r2 = impedance_data.r2(1);
+        cycle_i(i).R2 = impedance_data.r2(1);
         impedance_data.K(1) = [];
         impedance_data.B(1) = [];
         impedance_data.M(1) = [];
@@ -86,7 +86,7 @@ for i = 1:length(ind_i_red) - 1
         cycle_i(i).K = NaN;
         cycle_i(i).B = NaN;
         cycle_i(i).M = NaN;
-        cycle_i(i).r2 = NaN;
+        cycle_i(i).R2 = NaN;
     end
     
     if cycle_i(i).dist_val > 0
@@ -99,20 +99,20 @@ for i = 1:length(ind_i_red) - 1
     %cycle_i(i).is_ghost_impact = NaN;
     
     %--- cycle i
-    cycle_i(i).t = dfz.time(ind_pts_i); % abs time [t1:t2]
-    cycle_i(i).ui = dz.complete_traject(ind_pts_i); % mocap position
-    cycle_i(i).dui = d_dz(ind_pts_i); % vel    
-    cycle_i(i).yi = dfz.complete_traject(ind_pts_i); % force sensor
-    cycle_i(i).dyi = d_dfz(ind_pts_i); % yank
+    cycle_i(i).t = single(dfz.time(ind_pts_i)); % abs time [t1:t2]
+    cycle_i(i).ui = single(dz.complete_traject(ind_pts_i)); % mocap position
+    cycle_i(i).dui = single(d_dz(ind_pts_i)); % vel    
+    cycle_i(i).yi = single(dfz.complete_traject(ind_pts_i)); % force sensor
+    cycle_i(i).dyi = single(d_dfz(ind_pts_i)); % yank
     
-    cycle_i(i).z_b = z_b(ind_pts_i); % ball position
-    cycle_i(i).z_p = z_p(ind_pts_i); % paddle position
-    cycle_i(i).dzb_k = dz_b(ind_pts_i(2)); % ball velocity after impact
+    cycle_i(i).z_b = single(z_b(ind_pts_i)); % ball position
+    cycle_i(i).z_p = single(z_p(ind_pts_i)); % paddle position
+    cycle_i(i).dzb_k = single(dz_b(ind_pts_i(2))); % ball velocity after impact
     
-    cycle_i(i).ui_max = max(cycle_i(i).ui) - min(cycle_i(i).ui); % max input mag
-    cycle_i(i).yi_max = max(cycle_i(i).yi) - min(cycle_i(i).yi); % max output mag
-    cycle_i(i).dui_max = max(cycle_i(i).dui) - min(cycle_i(i).dui); % max der input mag
-    cycle_i(i).dyi_max = max(cycle_i(i).dyi) - min(cycle_i(i).dyi); % max der output mag
+    cycle_i(i).ui_max = single(max(cycle_i(i).ui) - min(cycle_i(i).ui)); % max input mag
+    cycle_i(i).yi_max = single(max(cycle_i(i).yi) - min(cycle_i(i).yi)); % max output mag
+    cycle_i(i).dui_max = single(max(cycle_i(i).dui) - min(cycle_i(i).dui)); % max der input mag
+    cycle_i(i).dyi_max = single(max(cycle_i(i).dyi) - min(cycle_i(i).dyi)); % max der output mag
     
     %--- display
     if display

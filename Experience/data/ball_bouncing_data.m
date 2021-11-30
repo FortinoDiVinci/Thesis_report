@@ -6,7 +6,6 @@ addpath('../../data/force_torque_sensor')
 
 %% PARAMETERS
 % MACRO
-%FILE_NAMES = ["exp_complement_2021.mat","exp_june_2021_ter.mat"];
 FILE_NAME_BASE = "exp_june_2021_9ms_delay_";
 NB_FILES = 6;
 SAVED_FILE_NAME = 'exp_ball_bouncing_2021';

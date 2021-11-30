@@ -31,7 +31,12 @@ cycles_class = cycles_norm;
 count = 1;
 for trial_id = 1:length(cycles_class)
     for n_cycle = 1:length(cycles_class{trial_id})
-            cycles_class{trial_id}(n_cycle).type_dist = idx_ratio(count);
-            count = count+1;            
+        cycles_class{trial_id}(n_cycle).type_dist = idx_ratio(count);
+%         if idx_ratio(count) ~= 0 
+%             cycles_class{trial_id}(n_cycle).type_dist = C_ratio(idx_ratio(count));
+%         else
+%             cycles_class{trial_id}(n_cycle).type_dist = 0;
+%         end
+        count = count+1;            
     end
 end
