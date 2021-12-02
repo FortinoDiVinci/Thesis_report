@@ -1,0 +1,198 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\begin{figure}[h]
+	\centering
+	\resizebox{\textwidth}{!}{
+		\tikzsetnextfilename{subfig_anova_example}
+		\begin{tikzpicture}	
+			\begin{axis}[%
+				width=0.72\linewidth,
+				height=0.45\linewidth,
+				scale only axis,
+				unbounded coords=jump,
+				xmin=0.5,
+				xmax=2.5,
+				xtick={1,2},
+				xticklabels={{A},{B}},
+				ymin=-0.334761822223663,
+				ymax=0.44806250333786,
+				]
+				\addplot [color=LimedSpruce, dashed, forget plot]
+				  table[row sep=crcr]{%
+					1	0.183116585016251\\
+					1	0.4124795794487\\
+				};
+				\addplot [color=LimedSpruce, dashed, forget plot]
+				  table[row sep=crcr]{%
+					2	0.139234036207199\\
+					2	0.332136064767838\\
+				};
+				\addplot [color=LimedSpruce, dashed, forget plot]
+				  table[row sep=crcr]{%
+					1	-0.299178898334503\\
+					1	-0.0815794914960861\\
+				};
+				\addplot [color=LimedSpruce, dashed, forget plot]
+				  table[row sep=crcr]{%
+					2	-0.270430892705917\\
+					2	-0.0869807749986649\\
+				};
+				\addplot [color=LimedSpruce, forget plot]
+				  table[row sep=crcr]{%
+					0.925	0.4124795794487\\
+					1.075	0.4124795794487\\
+				};
+				\addplot [color=LimedSpruce, forget plot]
+				  table[row sep=crcr]{%
+					1.925	0.332136064767838\\
+					2.075	0.332136064767838\\
+				};
+				\addplot [color=LimedSpruce, forget plot]
+				  table[row sep=crcr]{%
+					0.925	-0.299178898334503\\
+					1.075	-0.299178898334503\\
+				};
+				\addplot [color=LimedSpruce, forget plot]
+				  table[row sep=crcr]{%
+					1.925	-0.270430892705917\\
+					2.075	-0.270430892705917\\
+				};
+				\addplot [color=Orient, forget plot]				 
+			 	 table[row sep=crcr]{%
+					0.925	0.0452481359243393\\
+					0.85	0.0601210689544678\\%0.85	0.0501210689544678\\
+					0.85	0.183116585016251\\
+					1.15	0.183116585016251\\
+					1.15	0.0601210689544678\\%1.15	0.0501210689544678\\
+					1.075	0.0452481359243393\\
+					1.15	0.0303752028942108\\%1.15	0.0403752028942108\\
+					1.15	-0.0815794914960861\\
+					0.85	-0.0815794914960861\\
+					0.85	0.0303752028942108\\%0.85	0.0403752028942108\\
+					0.925	0.0452481359243393\\
+				};
+				\addplot [color=Orient, forget plot]
+		  		 table[row sep=crcr]{%
+					1.925	0.0222344156354666\\
+					1.85	0.0263795927166939\\
+					1.85	0.139234036207199\\
+					2.15	0.139234036207199\\
+					2.15	0.0263795927166939\\
+					2.075	0.0222344156354666\\
+					2.15	0.0180892385542393\\
+					2.15	-0.0869807749986649\\
+					1.85	-0.0869807749986649\\
+					1.85	0.0180892385542393\\
+					1.925	0.0222344156354666\\
+				};
+				\addplot [color=Shiraz, forget plot]
+					  table[row sep=crcr]{%
+					0.925	0.0452481359243393\\
+					1.075	0.0452481359243393\\
+				};
+				\addplot [color=Shiraz, forget plot]
+				  table[row sep=crcr]{%
+					1.925	0.0222344156354666\\
+					2.075	0.0222344156354666\\
+				};
+%				\addplot [color=LimedSpruce, only marks, mark=+, mark options={solid, draw=Shiraz}, forget plot]
+%				  table[row sep=crcr]{%
+%				nan	nan\\
+%				};
+%				\addplot [color=LimedSpruce, only marks, mark=+, mark options={solid, draw=Shiraz}, forget plot]
+%				  table[row sep=crcr]{%
+%				nan	nan\\
+%				};
+				\addplot [color=LimedSpruce, only marks, mark=+, mark options={solid, draw=Shiraz}, forget plot]
+				 table[row sep=crcr]{%
+					2	0.4\\
+					2	-0.3\\
+				};
+				%
+				\coordinate (meanA) at (axis cs:1, 0.0611);%(axis cs:1, 0.0511);
+				\coordinate (meanB) at (axis cs:2, 0.0274);
+				\coordinate (medianA) at (axis cs:1, 0.045);
+				\coordinate (upperANotch) at (axis cs:0.8, 0.07);
+				\coordinate (lowerANotch) at (axis cs:0.8, 0.02);			
+				
+				\coordinate (upperBWhiskers) at (axis cs:1.75, 0.33);
+				\coordinate (lowerBWhiskers) at (axis cs:1.75, -0.27);
+				
+				\coordinate (upperAQuartile) at (axis cs:1.25, 0.18);
+				\coordinate (lowerAQuartile) at (axis cs:1.25, -0.08);
+				\coordinate (upperBQuartile) at (axis cs:2, 0.14);
+				\coordinate (lowerBQuartile) at (axis cs:2, -0.09);
+				\coordinate (outlier) at (axis cs:1.9, 0.4);
+				
+				\node at (meanA) (a) {$*$};
+				\node at (meanB) (b) {$*$};
+				\node[above, fill=white] at (upperBQuartile) (Bq3) {\small{3\textsuperscript{ème} quartile}};
+				\node[below, fill=white] at (lowerBQuartile) (Bq1) {\normalsize{1\textsuperscript{er} quartile}};
+				\node[left, align=right, anchor=east] at (outlier) (otl) {\normalsize{Possible donnée}\\ \normalsize{aberrante}};
+				
+				% notch
+				\draw[decorate,decoration={brace,amplitude=3pt}] (lowerANotch) -- (upperANotch) node [midway,rotate=90, yshift=4mm] {\normalsize{'\textit{Notch}'}};
+				% iqr
+				\draw[decorate,decoration={brace,amplitude=5pt}] (upperAQuartile) -- (lowerAQuartile) node [midway,rotate=-90, yshift=5mm] {\normalsize{Ecart interquartile}};
+				% whiskers
+				\draw[decorate,decoration={brace,amplitude=5pt}] (lowerBWhiskers) -- (upperBWhiskers) node [midway,rotate=90, yshift=5mm] {\normalsize{Moustaches}};
+				%
+				\draw[<-] ($(meanA) + (0.2,11)$) -- (axis cs:1.25,0.3)
+				node[above, at end] {\normalsize{moyenne}};
+				%
+				\draw[<-] ($(medianA) - (1,4)$) -- (axis cs:1.25,-0.2)
+				node[below, at end] {\normalsize{médiane}};
+				%
+				\draw[->] (axis cs:1.9, 0.42) -- (axis cs:1.99, 0.405);
+			\end{axis}	
+		\end{tikzpicture}%
+		\hspace{2mm}
+		\tikzsetnextfilename{subfig_anova_example_mult}
+		\begin{tikzpicture}
+			\begin{axis}[%
+				width=0.22\linewidth,
+				height=0.45\linewidth,
+				scale only axis,
+				unbounded coords=jump,
+				ymin=0.023,
+				ymax=0.055,
+				xmin=0.95,
+				xmax=2.05,
+				xtick={1.25,1.75},
+				xticklabels={{A},{B}},
+				ytick={0.03,0.04,0.05,0.06},
+				scaled ticks=false, 
+				tick label style={/pgf/number format/fixed},
+				]
+				\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+				table[row sep=crcr]{%
+					1.25	0.0511460974812508\\
+				};
+				\addplot [color=Orient, forget plot]
+				table[row sep=crcr]{%
+					1.25	0.0485436916351318\\
+					1.25	0.0537485033273697\\
+				};
+				\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+				table[row sep=crcr]{%
+					1.75	0.0273912660777569\\
+				};
+				\addplot [color=Shiraz, forget plot]
+				table[row sep=crcr]{%
+					1.75	0.024788860231638\\
+					1.75	0.0299936719238758\\
+				};
+				\coordinate (meanA) at (axis cs:1.25, 0.0511);
+				%
+				\draw[<-] ($(meanA) + (5,-1)$) -- (axis cs:1.75,0.045)
+					node[below, at end] {\normalsize{moyenne}};
+			\end{axis}
+		\end{tikzpicture}%
+	}
+	\caption{Représentations graphiques d'une analyse de variance par le diagramme en boîte, et d'une analyse multiple.}
+	\label{fig_anova_example}
+\end{figure}

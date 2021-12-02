@@ -9,7 +9,10 @@ for user_i = 1:length(cycles)
     b_err{user_i} = [cycles{user_i}.target_error];
     % post perturbation ball bouncing error
     b_err_post_dist{user_i} = [cycles{user_i}(circshift([cycles{user_i}(1:end-1).is_dist],1)).target_error];
+    b_err_npost_dist{user_i} = [cycles{user_i}(~circshift([cycles{user_i}(1:end-1).is_dist],1)).target_error];
     % (1:end-1) in case last data was perturbed
+    % frequency
+    duration{user_i} = [cycles{user_i}.duration];
     idx_new_exp{user_i} = find(diff([cycles{user_i}.exp_it]));
     quartiles(:, user_i) = quantile(b_err{user_i},[0.25,0.5,0.75]);
     users = [users, [cycles{user_i}.user]];
@@ -26,23 +29,23 @@ end
 % Are there significant mean differences between the 3 target heights in
 % the bouncing error ?
 % For each users:
-figure
-tiledlayout('flow', 'TileSpacing', 'compact', 'Padding', 'compact');
-for user_i = 1:length(cycles)
-    nexttile
-    hold on
-    %C_th_sorted = sort(C_th(:,user_i));
-    res_th(user_i) = anova1([b_err_th1{user_i}, b_err_th2{user_i}, b_err_th3{user_i}],...
-        [C_th_sorted(1,user_i)*ones(size(b_err_th1{user_i})), ...
-         C_th_sorted(2,user_i)*ones(size(b_err_th2{user_i})), ...
-         C_th_sorted(3,user_i)*ones(size(b_err_th3{user_i}))], 'off');
-    boxplot([b_err_th1{user_i}, b_err_th2{user_i}, b_err_th3{user_i}],...
-        [C_th_sorted(1,user_i)*ones(size(b_err_th1{user_i})), ...
-         C_th_sorted(2,user_i)*ones(size(b_err_th2{user_i})), ...
-         C_th_sorted(3,user_i)*ones(size(b_err_th3{user_i}))],'Notch','on');
-     title("User #" + cycles{user_i}(1).user + ", pval: " + ...
-         string(res_th(user_i)*1e2) + "%")
-end
+% figure
+% tiledlayout('flow', 'TileSpacing', 'compact', 'Padding', 'compact');
+% for user_i = 1:length(cycles)
+%     nexttile
+%     hold on
+%     %C_th_sorted = sort(C_th(:,user_i));
+%     res_th(user_i) = anova1([b_err_th1{user_i}, b_err_th2{user_i}, b_err_th3{user_i}],...
+%         [C_th_sorted(1,user_i)*ones(size(b_err_th1{user_i})), ...
+%          C_th_sorted(2,user_i)*ones(size(b_err_th2{user_i})), ...
+%          C_th_sorted(3,user_i)*ones(size(b_err_th3{user_i}))], 'off');
+%     boxplot([b_err_th1{user_i}, b_err_th2{user_i}, b_err_th3{user_i}],...
+%         [C_th_sorted(1,user_i)*ones(size(b_err_th1{user_i})), ...
+%          C_th_sorted(2,user_i)*ones(size(b_err_th2{user_i})), ...
+%          C_th_sorted(3,user_i)*ones(size(b_err_th3{user_i}))],'Notch','on');
+%      title("User #" + cycles{user_i}(1).user + ", pval: " + ...
+%          string(res_th(user_i)*1e2) + "%")
+% end
 
 % For all users regrouped:
 real_th_all = cell2mat(real_th);
@@ -54,9 +57,13 @@ th2_err_all = real_th_all(idx_th_all == idx_th_all_sorted(2));
 th3_err_all = real_th_all(idx_th_all == idx_th_all_sorted(3));
 
 % Are the induced different target heights significantly different
-anova1([th1_err_all, th2_err_all, th3_err_all], ...
+res = anova1([th1_err_all, th2_err_all, th3_err_all], ...
     [C_th_all(idx_th_all_sorted(1))*ones(size(th1_err_all)), C_th_all(idx_th_all_sorted(2))*ones(size(th2_err_all)), ...
-     C_th_all(idx_th_all_sorted(3))*ones(size(th3_err_all))])
+     C_th_all(idx_th_all_sorted(3))*ones(size(th3_err_all))], 'off')
+figure
+boxplot([th1_err_all, th2_err_all, th3_err_all], ...
+    [C_th_all(idx_th_all_sorted(1))*ones(size(th1_err_all)), C_th_all(idx_th_all_sorted(2))*ones(size(th2_err_all)), ...
+     C_th_all(idx_th_all_sorted(3))*ones(size(th3_err_all))], 'Notch', 'on')
 title("Are the real target heights significantly different ?") % yes
 
 b_err_th1_all = b_err_all(idx_th_all == idx_th_all_sorted(1));
@@ -76,7 +83,7 @@ title("Are the bouncing error significantly different according to the target he
      C_th_all(idx_th_all_sorted(2))*ones(size(th2_err_all)), ...
      C_th_all(idx_th_all_sorted(3))*ones(size(th3_err_all))]);
 title("Are the bouncing error significantly different according to target height?") 
-multcompare(stats); %
+multcompare(stats,'CType','bonferroni'); %
 % absolute errors
 figure
 boxplot(abs([b_err_th1_all, b_err_th2_all, b_err_th3_all]), ...
@@ -89,7 +96,23 @@ title("Are the absolute bouncing errors significantly different according to the
      C_th_all(idx_th_all_sorted(2))*ones(size(th2_err_all)), ...
      C_th_all(idx_th_all_sorted(3))*ones(size(th3_err_all))]);
 %title("Are the absolute bouncing error significantly different according to target height?") 
-multcompare(stats); %
+multcompare(stats,'CType','bonferroni'); %
+
+%%% Are there significant bouncing error differences between post perturbed
+% cycles and others
+[~,~,stats] = anova1([cell2mat(b_err_post_dist), cell2mat(b_err_npost_dist)], ...
+    [repmat("post dist.", 1, length(cell2mat(b_err_post_dist))), ...
+     repmat("others", 1, length(cell2mat(b_err_npost_dist)))]);
+title("Are the bouncing error significantly different when the previous cycle was perturbed?") 
+% absolute errors
+[~,~,stats] = anova1(abs([cell2mat(b_err_post_dist), cell2mat(b_err_npost_dist)]), ...
+    [repmat("post dist.", 1, length(cell2mat(b_err_post_dist))), ...
+     repmat("others", 1, length(cell2mat(b_err_npost_dist)))]);
+title("Are the bouncing error significantly different when the previous cycle was perturbed?") 
+
+%%% Duration VS height (correlation expected)
+% figure
+% plot(cell2mat(duration),cell2mat(b_err), '*')
 
 %%%%%
 figure
@@ -108,7 +131,7 @@ end
 
 % Users' precision
 [res,~,stats] = anova1(abs(cell2mat(b_err)), users);%, 'off');
-multcompare(stats); 
+multcompare(stats,'CType','bonferroni'); 
 figure
 boxplot(abs(cell2mat(b_err)), users, 'PlotStyle','compact');
 title("User's ball bouncing errors")
@@ -170,7 +193,7 @@ title("Are the bouncing error significantly different according to the 3 repeata
 [~,~,stats] = anova1([err_repeat{1}, err_repeat{2}, err_repeat{3}], ...
     [C_rep(1)*ones(size(err_repeat{1})), C_rep(2)*ones(size(err_repeat{2})), ...
     C_rep(3)*ones(size(err_repeat{3}))]);
-multcompare(stats);
+multcompare(stats,'CType','bonferroni');
 % absolute errors
 figure
 boxplot(abs(cell2mat(err_repeat)), ...
@@ -180,7 +203,7 @@ title("Are the absolute bouncing error significantly different according to the 
 [~,~,stats] = anova1(abs(cell2mat(err_repeat)), ...
     [C_rep(1)*ones(size(err_repeat{1})), C_rep(2)*ones(size(err_repeat{2})), ...
     C_rep(3)*ones(size(err_repeat{3}))]);
-multcompare(stats);
+multcompare(stats,'CType','bonferroni');
 % Expertise by precision: are ball bouncing errors significantly different
 figure
 boxplot([err_precis{1}, err_precis{2}, err_precis{3}], ...
@@ -190,7 +213,7 @@ title("Are the bouncing error significantly different according to the 3 precisi
 [~,~,stats] = anova1([err_precis{1}, err_precis{2}, err_precis{3}], ...
     [C_acc(1)*ones(size(err_precis{1})), C_acc(2)*ones(size(err_precis{2})), ...
     C_acc(3)*ones(size(err_precis{3}))]);
-multcompare(stats);
+multcompare(stats,'CType','bonferroni');
 
 % order = out2(@() sort(C_rep));
 % idx_acc_ord = order(1)*(idx_rep == 1) + order(2)*(idx_rep == 2) ...
@@ -216,7 +239,7 @@ title("Are the bouncing error significantly different according to the experimen
 [~,~,stats] = anova1(cell2mat(b_err_per_exp), [ones(size(b_err_per_exp{1})), ...
     2*ones(size(b_err_per_exp{2})), 3*ones(size(b_err_per_exp{3})), ...
     4*ones(size(b_err_per_exp{4})), 5*ones(size(b_err_per_exp{5}))]);
-multcompare(stats);
+multcompare(stats,'CType','bonferroni');
 % absolute errors
 figure
 boxplot(abs(cell2mat(b_err_per_exp)), ...
@@ -227,7 +250,7 @@ title("Are the absolute bouncing error significantly different according to the 
 [~,~,stats] = anova1(abs(cell2mat(b_err_per_exp)), [ones(size(b_err_per_exp{1})), ...
     2*ones(size(b_err_per_exp{2})), 3*ones(size(b_err_per_exp{3})), ...
     4*ones(size(b_err_per_exp{4})), 5*ones(size(b_err_per_exp{5}))]);
-multcompare(stats);
+multcompare(stats,'CType','bonferroni');
 
 
 % exp_duration_all = {};

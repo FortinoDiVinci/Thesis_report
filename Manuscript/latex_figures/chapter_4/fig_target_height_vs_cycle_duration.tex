@@ -1,0 +1,38 @@
+\begin{figure}[!htb] 
+	\centering		
+	\subcaptionbox{\label{subfig_target_height_vs_cycle_duration}}
+	{
+		\tikzsetnextfilename{subfig_target_height_vs_cycle_duration}
+		\begin{tikzpicture}
+			\centering
+			%
+			\begin{axis}[%
+				width=.3\linewidth,
+				height=.3\linewidth,
+				scale only axis,
+				xlabel={Durée de cycle (\si{\second})},
+				ylabel={Hateur effective (\si{\meter})},
+				axis x line = bottom,
+				axis y line = left, 
+				ylabel near ticks,
+				]
+				%
+				\addplot [
+					color=Orient,
+					smooth,
+					]
+				table [col sep=comma, x=d, y=h] {misc/target_height_vs_duration.csv};
+				%	
+				\addplot[
+					color=LimedSpruce,
+					dashed,
+					] 
+					{1.623*x - 1.841};				
+				%\addlegendentry{$\vect{f}_z$};
+				%\addlegendentry{$\tilde{\vect{f}}_z$};
+			\end{axis}		
+		\end{tikzpicture}
+	}		
+	\caption{caption}
+	\label{fig_target_height_vs_cycle_duration}
+\end{figure}
