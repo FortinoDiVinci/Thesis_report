@@ -9,17 +9,21 @@
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
 					zlabel={\si{\percent}},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					xmax = 299,
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
-					%width = .3\linewidth,
+					point meta max=1,
+					point meta min=0.05,
+					clip=false,
 					]
 					%
-					%\addplot3 [mesh] table[x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv, col sep=comma] {K_interp_and_id_window.csv};
-					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+					\addplot3 [mesh, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$K$}};%,sloped like y axis
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_interp_spline_and_id_window_B2}
@@ -27,16 +31,21 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					xmax = 299,
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
-					%width = .3\linewidth,
+					point meta max=0.6,
+					point meta min=0,
+					clip=false,
 					]
 					%
-					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+					\addplot3 [mesh, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$B$}};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_interp_spline_and_id_window_M2}
@@ -44,16 +53,21 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					xmax = 299,
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
-					%width = .3\linewidth,
+					point meta max=0.15,
+					point meta min=0,
+					clip=false,
 					]
 					%
-					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+					\addplot3 [mesh, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$M$}};
 				\end{axis}
 			\end{tikzpicture}
 		}
@@ -68,15 +82,20 @@
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
 					zlabel={\si{\percent}},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					xmax = 299,
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
+					point meta max=1,
+					point meta min=0.05,
+					clip=false,
 					]
 					%
-					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
+					\addplot3 [mesh, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_interp_spline_and_id_window_B1}
@@ -84,15 +103,20 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					xmax = 299,
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
+					point meta max=0.6,
+					point meta min=0,
+					clip=false,
 					]
 					%
-					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
+					\addplot3 [mesh, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_interp_spline_and_id_window_M1}
@@ -100,15 +124,20 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					xmax = 299,
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
+					point meta max=0.15,
+					point meta min=0,
+					clip=false,
 					]
 					%
-					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
+					\addplot3 [mesh, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1.csv};
 				\end{axis}
 			\end{tikzpicture}
 		}

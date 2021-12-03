@@ -8,15 +8,21 @@
 				\begin{axis}[%
 					xlabel={$f_l$ (\si{\milli\second})},
 					ylabel={$f_u$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zlabel={(\si{\percent})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
+					point meta max=0.01,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=K_med_err_csv] {misc/trajectory_estimation_sines/sine_opt_id_error_100ms_param_1.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$K$}};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_sine_opt_err_id_window_100ms_B}
@@ -24,14 +30,20 @@
 				\begin{axis}[%
 					xlabel={$f_l$ (\si{\milli\second})},
 					ylabel={$f_u$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
+					point meta max=0.01,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=B_med_err_csv] {misc/trajectory_estimation_sines/sine_opt_id_error_100ms_param_1.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$B$}};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_sine_opt_err_id_window_100ms_M}
@@ -39,14 +51,20 @@
 				\begin{axis}[%
 					xlabel={$f_l$ (\si{\milli\second})},
 					ylabel={$f_u$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
+					point meta max=0.001,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=M_med_err_csv] {misc/trajectory_estimation_sines/sine_opt_id_error_100ms_param_1.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$M$}};
 				\end{axis}
 			\end{tikzpicture}
 		}
@@ -60,13 +78,17 @@
 				\begin{axis}[%
 					xlabel={$f_l$ (\si{\milli\second})},
 					ylabel={$f_u$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zlabel={(\si{\percent})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
-					%width = .3\linewidth,
+					point meta max=0.01,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=K_med_err_csv] {misc/trajectory_estimation_sines/sine_opt_id_error_200ms_param_1.csv};
@@ -77,12 +99,16 @@
 				\begin{axis}[%
 					xlabel={$f_l$ (\si{\milli\second})},
 					ylabel={$f_u$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
-					%width = .3\linewidth,
+					point meta max=0.01,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=B_med_err_csv] {misc/trajectory_estimation_sines/sine_opt_id_error_200ms_param_1.csv};
@@ -93,12 +119,16 @@
 				\begin{axis}[%
 					xlabel={$f_l$ (\si{\milli\second})},
 					ylabel={$f_u$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
-					%width = .3\linewidth,
+					point meta max=0.001,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=M_med_err_csv] {misc/trajectory_estimation_sines/sine_opt_id_error_200ms_param_1.csv};

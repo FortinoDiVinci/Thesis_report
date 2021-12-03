@@ -128,23 +128,23 @@
 				\coordinate (lowerBQuartile) at (axis cs:2, -0.09);
 				\coordinate (outlier) at (axis cs:1.9, 0.4);
 				
-				\node at (meanA) (a) {$*$};
-				\node at (meanB) (b) {$*$};
+				\node at (meanA) (a) {\large{$*$}};
+				\node at (meanB) (b) {\large{$*$}};
 				\node[above, fill=white] at (upperBQuartile) (Bq3) {\small{3\textsuperscript{ème} quartile}};
 				\node[below, fill=white] at (lowerBQuartile) (Bq1) {\normalsize{1\textsuperscript{er} quartile}};
 				\node[left, align=right, anchor=east] at (outlier) (otl) {\normalsize{Possible donnée}\\ \normalsize{aberrante}};
 				
 				% notch
-				\draw[decorate,decoration={brace,amplitude=3pt}] (lowerANotch) -- (upperANotch) node [midway,rotate=90, yshift=4mm] {\normalsize{'\textit{Notch}'}};
+				\draw[decorate,decoration={brace,amplitude=2pt}] (lowerANotch) -- (upperANotch) node [midway,rotate=90, yshift=4mm] {\normalsize{'\textit{Notch}'}};
 				% iqr
 				\draw[decorate,decoration={brace,amplitude=5pt}] (upperAQuartile) -- (lowerAQuartile) node [midway,rotate=-90, yshift=5mm] {\normalsize{Ecart interquartile}};
 				% whiskers
 				\draw[decorate,decoration={brace,amplitude=5pt}] (lowerBWhiskers) -- (upperBWhiskers) node [midway,rotate=90, yshift=5mm] {\normalsize{Moustaches}};
 				%
-				\draw[<-] ($(meanA) + (0.2,11)$) -- (axis cs:1.25,0.3)
+				\draw[<-] ($(meanA) + (0.2,13)$) -- (axis cs:1.25,0.3)
 				node[above, at end] {\normalsize{moyenne}};
 				%
-				\draw[<-] ($(medianA) - (1,4)$) -- (axis cs:1.25,-0.2)
+				\draw[<-] ($(medianA) - (1,6)$) -- (axis cs:1.25,-0.2)
 				node[below, at end] {\normalsize{médiane}};
 				%
 				\draw[->] (axis cs:1.9, 0.42) -- (axis cs:1.99, 0.405);
@@ -168,6 +168,14 @@
 				scaled ticks=false, 
 				tick label style={/pgf/number format/fixed},
 				]
+				\addplot [color=white!80!black, dotted, forget plot]
+				table[row sep=crcr]{%
+					0.95 	0.024788860231638\\
+					2.05	0.024788860231638\\
+					nan		nan\\
+					0.95	0.0299936719238758\\
+					2.05	0.0299936719238758\\
+				};
 				\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
 				table[row sep=crcr]{%
 					1.25	0.0511460974812508\\
@@ -187,9 +195,13 @@
 					1.75	0.0299936719238758\\
 				};
 				\coordinate (meanA) at (axis cs:1.25, 0.0511);
+				\coordinate (meanBconfidence) at (axis cs:1.5, 0.033);
 				%
 				\draw[<-] ($(meanA) + (5,-1)$) -- (axis cs:1.75,0.045)
 					node[below, at end] {\normalsize{moyenne}};
+				\node[align=center] at (meanBconfidence) (confidenceUp) {Intervalle de \SI{95}{\percent}\\de confiance\\de la moyenne};
+				\draw[<->] (axis cs:1.25,.025) -- (axis cs:1.25,.0296);
+				%
 			\end{axis}
 		\end{tikzpicture}%
 	}

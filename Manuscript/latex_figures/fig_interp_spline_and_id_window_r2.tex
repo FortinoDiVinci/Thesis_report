@@ -8,16 +8,21 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zlabel={(\si{\percent})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					xmax=299,
-					ymin=250,
-					%width = .3\linewidth,
+					%ymin=250,
+					point meta max=1,
+					point meta min=0.05,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2_r2.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$K$}};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_interp_spline_and_id_window_r2_B2}
@@ -25,15 +30,20 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					xmax=299,
-					ymin=250,
-					%width = .3\linewidth,
+					%ymin=250,
+					point meta max=0.6,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2_r2.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$B$}};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_interp_spline_and_id_window_r2_M2}
@@ -41,15 +51,20 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					xmax=299,
-					ymin=250,
-					%width = .3\linewidth,
+					%ymin=250,
+					point meta max=0.15,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_2_r2.csv};
+					\node at (rel axis cs:0,0.5,1) [above] {\Large{$M$}};
 				\end{axis}
 			\end{tikzpicture}
 		}
@@ -63,11 +78,15 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zlabel={(\si{\percent})},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					xmax=299,
+					point meta max=1,
+					point meta min=0.05,
 					]
 					%
 					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1_r2.csv};
@@ -78,10 +97,15 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					xmax=299,
+					point meta max=0.6,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=B_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1_r2.csv};
@@ -92,12 +116,17 @@
 				\begin{axis}[%
 					xlabel={$f_0$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
 					colormap/viridis,
 					view = {50}{50},
 					xmax=299,
+					point meta max=0.15,
+					point meta min=0,
+					clip=false,
 					]
 					%
 					\addplot3 [surf, mesh/rows=41, shader=interp, patch type=bilinear] table[col sep=comma, x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=M_med_err_csv] {misc/identif_and_interp_window/interp_and_id_window_param_1_r2.csv};

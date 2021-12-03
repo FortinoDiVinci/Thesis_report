@@ -8,7 +8,9 @@
 				\begin{axis}[%
 					xlabel={$f_l$ (\si{\milli\second})},
 					ylabel={$f_u$ (\si{\milli\second})},
-					%zlabel={(\si{\centi\meter})},
+					zlabel={(\si{\newton})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					%zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
@@ -17,7 +19,6 @@
 					%width = .3\linewidth,
 					]
 					%
-					%\addplot3 [mesh] table[x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv, col sep=comma] {K_interp_and_id_window.csv};
 					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=rmse_300ms] {misc/trajectory_estimation_sines/sine_opt_err_traject.csv};
 				\end{axis}
 			\end{tikzpicture}
@@ -29,6 +30,8 @@
 				\begin{axis}[%
 					xlabel={$f_l$ (\si{\milli\second})},
 					ylabel={$f_u$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					%zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
@@ -42,6 +45,6 @@
 			\end{tikzpicture}
 		}
 	}
-	\caption{Erreurs RMS sur deux intervalles temporels, en fonction des tailles des fenêtres d'optimisation de sinusoïdes avant et après le masque.}
+	\caption{Somme des erreurs quadratiques sur deux intervalles temporels, en fonction des tailles des fenêtres d'optimisation de sinusoïdes avant et après le masque.}
 	\label{fig_sine_opt_err_opt_window}
 \end{figure}

@@ -619,7 +619,7 @@ La \cref{fig_local_sensitivity_analysis}, réalisée avec des valeurs typiques (
 
 \subsubsection{Validation en simulation} \label{chap3_sec_method_sub_ident_2}
 
-Afin de valider cette méthodologie complète, on se propose de la mettre à l'épreuve d'une simulation utilisant des signaux réels en force. On injecte un signal en force non-perturbé dans un modèle en impédance, et en parallèle on injecte ce même signal additionné avec des perturbations simulées (aux caractéristiques similaires aux perturbations réelles), pour obtenir à la fois une trajectoire perturbée à travers un modèle en impédance et une trajectoire virtuelle. La \cref{fig_impedance_simulation} résume cette simulation.
+Afin de valider cette méthodologie complète, on se propose de la mettre à l'épreuve d'une simulation utilisant des signaux réels en force. En effet, la tentative de mettre en place un banc de calibration avec des raideurs connues s'est avérée plus complexe que prévu au vu des précisions requises. Les vibrations ou torsions du matériel disponible auraient entrainées des erreurs trop importantes. Pour lasimulation, on injecte un signal en force non-perturbé dans un modèle en impédance, et en parallèle on injecte ce même signal additionné avec des perturbations simulées (aux caractéristiques similaires aux perturbations réelles), pour obtenir à la fois une trajectoire perturbée à travers un modèle en impédance et une trajectoire virtuelle. La \cref{fig_impedance_simulation} résume cette simulation.
 
 \input{latex_figures/fig_impedance_simulation.tex}
 
@@ -688,9 +688,9 @@ En utilisant le $R^2$ comme un premier filtre pour sortir les données aberrante
 \input{latex_figures/fig_interp_spline_and_id_window_r2.tex}
 %\tikzexternalenable
 
-\textcolor{red}{J'ai voulu regardé si utiliser les moindres carrés récurssifs pondérés pouvait être pertinent, mais de ce que je comprends ces méthodes se basent sur la vraisamblance du modèle par rapport aux données, alors que je voudrais utiliser la confiance que j'ai dans les données seules. Si je connais un profil d'erreur moyen des splines, je veux donner plus d'importance aux données d'une trajectoire qui sont en moyenne moins erronnées. Je n'ai pas encore trouvé comment réaliser la pondération avec l'apriori sur les données de trajectoires estimées.}
+%\textcolor{red}{J'ai voulu regarder si utiliser les moindres carrés récurssifs pondérés pouvait être pertinent, mais de ce que je comprends ces méthodes se basent sur la vraisamblance du modèle par rapport aux données, alors que je voudrais utiliser la confiance que j'ai dans les données seules. Si je connais un profil d'erreur moyen des splines, je veux donner plus d'importance aux données d'une trajectoire qui sont en moyennes moins erronnées. Je n'ai pas encore trouvé comment réaliser la pondération avec l'apriori sur les données de trajectoires estimées.}
 
-Une autre piste pour améliorer l'identification serait d'utiliser une méthode ARX pondérée. La pondération permet alors de donner plus de poids à certains échantillons, on peut donc estimer la confiance ou vraisemblance des données sur la position virtuelle, et utiliser l'utiliser comme pondération. Pour y arriver, on peut prendre en compte le profil moyen des erreurs d'estimation de trajectoire des splines, dont deux exemples ont été donnés en \cref{fig_interp_spline_error_profile}. Le modèle n'étant pas connu lors de l'estimation de trajectoire, il faut un profil moyen sur les gammes de paramètres attendus. 250 modèles dont les paramètres sont des combinaisons de ceux montrés dans le \cref{tab_impedance_model_param_list} ont donc été simulés. Les trajectoires virtuelles en position ont été évaluées pour 144 perturbations en les séparant selon la direction des perturbations. 
+Une autre piste pour améliorer l'identification serait d'utiliser une méthode ARX pondérée. La pondération permet alors de donner plus de poids à certains échantillons, on peut donc estimer la confiance ou vraisemblance des données sur la position virtuelle, et utiliser l'utiliser comme pondération. Pour y arriver, on peut prendre en compte le profil moyen des erreurs d'estimation de trajectoire des splines, dont deux exemples ont été donnés en \cref{fig_interp_spline_error_profile}. Le modèle n'étant pas connu lors de l'estimation de trajectoire, il faut un profil moyen sur les gammes de paramètres attendus, 250 modèles dont les paramètres sont des combinaisons de ceux montrés dans le \cref{tab_impedance_model_param_list} ont donc été simulés. Les trajectoires virtuelles en position ont été évaluées pour 144 perturbations en prenant la racine de l'erreur quadratique pour limiter les effets liés au signe de la perturbation. 
 
 \begin{table}[htbp] 
 	\begin{center}
@@ -708,17 +708,26 @@ Une autre piste pour améliorer l'identification serait d'utiliser une méthode 
 	\label{tab_impedance_model_param_list}	
 \end{table}
 
-La pondération pour chaque instant compris entre \SIlist{1;300}{\milli\second} de la trajectoire est alors définie par la fonction de coût \cref{eq_arx_weights}, pour chacune des $i$ fenêtres d'interpolation, avec $\vect{\epsilon}_{x_0}^{i+} \in \Re^{300}$, l'erreur moyenne d'estimation des trajectoires de \SI{300}{\milli\second}, pour les plus de 70 trajectoires avec des perturbations positives ($+$), et 250 paramètres simulés. L'exposant $\dagger$ est utilisé pour noter l'inverse des éléments du vecteur.
+La pondération pour chaque instant compris entre \SIlist{1;300}{\milli\second} de la trajectoire est alors définie par la fonction de coût \cref{eq_arx_weights}, pour chacune des $i$ fenêtres d'interpolation. $\vect{\epsilon}_{x_0}^{i} \in \Re^{300}$ est le profil d'erreur moyen sur les trajectoires de \SI{300}{\milli\second}, pour les $n_t=144$ perturbations et $n_m=250$ paramètres simulés. Il est donné en équation \cref{eq_arx_epsilon}, avec $\gamma$ un coefficient compris entre zéro et un, qui défini la valeur minimale de pondération, qui sera attribuée aux points de la trajectoire avec l'erreur $\vect{\epsilon}_{x_0}^{i}$ maximale, alors que les erreurs moyennes nulles se verront attribuées une pondération unitaire.%L'exposant $\dagger$ est utilisé pour noter l'inverse des éléments du vecteur.
+
+%\begin{equation} \label{eq_arx_weights}
+%	\matr{R}^{i} = \text{diag}\left(\frac{\abs{\vect{\epsilon}_{x_0}^{i+}}^\dagger}{\sum_{k=1}^{300}\abs{\vect{\epsilon}_{x_0}^{i+}}} \right)
+%\end{equation}
+\begin{equation} \label{eq_arx_epsilon}
+	\vect{\epsilon}_{x_0}^{i} = \frac{1}{n_m}\sum_{j=1}^{n_m} \frac{1}{n_t}\sum_{k=1}^{n_t} \vect{\epsilon_{j,k,i}}
+\end{equation}
 
 \begin{equation} \label{eq_arx_weights}
-	\matr{R}^{i+} = \text{diag}\left(\frac{\abs{\vect{\epsilon}_{x_0}^{i+}}^\dagger}{\sum_{k=1}^{300}\abs{\vect{\epsilon}_{x_0}^{i+}}} \right)
+	\matr{R}^{i} = \text{diag}\left( 1 - \vect{\epsilon}_{x_0}^{i} (1 - \gamma)\max(\vect{\epsilon}_{x_0}^{i}) \right)
 \end{equation}
 
 La minimisation du critère quadratique par les moindres carrés pondérés de la méthode ARX est alors modifiée pour obtenir la forme générale \cref{eq_weighted_least_squares}, avec $x$ et $y$ respectivement les entrées et sorties du système.
 
 \begin{equation} \label{eq_weighted_least_squares}
-	\vect{\xi} = (\vect{x}^t\vect{x} + \matr{R}^{i\pm})\vect{x}^t\vect{y}
+	\vect{\xi} = (\vect{x}^t\matr{R}^{i}\vect{x})\vect{x}^t\matr{R}^{i}\vect{y}
 \end{equation}
+
+Cette méthode a été testée pour des coefficients $\alpha$ de 0.9, 0.75 et 0.5 avec des résultats similaires à chaque fois. Des pondérations linéaires avec des décréments entre 1 et $\alpha$ ont aussi été essayés. Dans tous les cas, une légère amélioration de la raideur été observées au détriment de dégradation importante pour l'amortissement et la masse. La recherche d'autres fonctions de coût serait nécessaire pour utiliser une méthode avec pondérations, les essais conduits n'étant pas concluants.
 
 Si on regarde maintenant le cas où la position virtuelle est connue $\vect{x}_{z0}$, et la trajectoire en force estimée $\hat{\vect{f}}_{z0}$, il est possible d'étudier l'effet des fenêtres d'optimisation utilisées avant $f_l$ et après $f_u$ le masque décrit en \cref{chap3_sec_method_sub_virt_traj_6}. On s'intéresse donc aux erreurs d'estimation de la trajectoire sur deux fenêtres temporelles de la trajectoire en force, démarrant toutes après l'injection de la perturbation, de \SIlist{100;300}{\milli\second}. La \cref{fig_sine_opt_err_opt_window} présente les erreurs RMS en fonction des fenêtres d'optimisation, pour les deux intervalles de temps. On constate une forte tendance sur \SI{300}{\milli\second} (\cref{subfig_sine_opt_err_opt_window_300RMS}) liée à la durée de la fenêtre après le masque, cette tendance se dessine de manière moins significative sur \SI{100}{\milli\second} (\cref{subfig_sine_opt_err_opt_window_100RMS}), c'est à dire sur le masque uniquement. C'est principalement sur ce dernier intervalle que les erreurs doivent être étudiées. En effet, on pourrait considérer qu'après \SI{100}{\milli\second}, la trajectoire virtuelle en force est de toute manière égale à la trajectoire mesurée, le signal n'étant plus perturbé. Dans tous les cas, il semble que les erreurs soient minimales pour les fenêtres les plus importantes.
 
@@ -731,10 +740,12 @@ De la même manière que cela a été fait pour les splines, on peut regarder co
 
 Ces analyses tendent à indiquer que les erreurs d'identification des paramètres sont principalement dues aux erreurs d'estimation de trajectoires virtuelles en position. C'est donc les critères concernant les splines qui sont les plus discriminants. Étant donnés les éléments décrits dans le \cref{chap1}, la fenêtre d'identification $f_o$ doit être aussi faible que possible. Or cette dernière semble assez peu influencer les erreurs d'identification, comparativement au choix de la fenêtre d'interpolation des splines. L'amortissement $B$ est le paramètre le plus sensible à la fenêtre $f_o$, sur les différents modèles essayés. Une identification conduite entre \SIlist{150;200}{\milli\second} permet un bon compromis.
 
-Selon qu'on cherche à minimiser les erreurs d'identification sur la raideur ou l'amortissement, le choix de la fenêtre d'interpolation ne sera pas le même. En effet, pour minimiser l'erreur de raideur sur les deux modèles la fenêtre d'interpolation $f_i$ doit être supérieure à \SI{300}{\milli\second}. A partir de \SI{350}{\milli\second}, l'erreur relative des médianes de raideur est de l'ordre de \SI{10}{\percent} pour les deux modèles, contre environ \SI{50}{\percent} pour l'amortissement. Pour minorer l'amortissement $B$, $f_i$ doit au contraire être minimale, les plus faibles erreurs étant obtenues pour les fenêtres d'observation $f_o$ autour de \SI{200}{\milli\second}.
+Selon qu'on cherche à minimiser les erreurs d'identification sur la raideur ou l'amortissement, le choix de la fenêtre d'interpolation ne sera pas le même. En effet, pour minimiser l'erreur de raideur sur les deux modèles la fenêtre d'interpolation $f_i$ doit être supérieure à \SI{300}{\milli\second}. A partir de \SI{350}{\milli\second}, l'erreur relative des médianes de raideur est de l'ordre de \SI{10}{\percent} pour les deux modèles, contre environ \SI{50}{\percent} pour l'amortissement. Pour minorer cette dernière, $f_i$ doit au contraire être minimale, les plus faibles erreurs étant obtenues autour de \SI{200}{\milli\second}.
 
-\subsubsection{Validation avec des équipements calibrés} \label{chap3_sec_method_sub_ident_3}
+La focalisation ayant été fixée sur la raideur, le choix s'est porté sur les valeurs de fenêtres $f_i$ et $f_o$ de respectivement \SI{350}{\milli\second} et \SI{150}{\milli\second}.
 
-\textcolor{red}{Est ce pertinent de parler de la tentative sans succès de mise en place d'un système de calibrage du banc expérimental ?}
+%\subsubsection{Validation avec des équipements calibrés} \label{chap3_sec_method_sub_ident_3}
+
+%\textcolor{red}{Est ce pertinent de parler de la tentative sans succès de mise en place d'un système de calibrage du banc expérimental ?}
 
 %L'ajout d'un délais $\delta_t$ est introduit pour prendre en compte la latence induite par le système d'acquisition de la position.

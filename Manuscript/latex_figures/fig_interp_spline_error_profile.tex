@@ -8,13 +8,16 @@
 				\begin{axis}[%
 					xlabel={$t$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
-					zlabel={(\si{\centi\meter})},
+					xlabel style={sloped},
+					ylabel style={sloped},
+					zlabel={(\si{\milli\meter})},
 					zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
-					%width = .3\linewidth,
+					point meta max=1e-3,
+					point meta min=-1e-3,
 					]
 					%
 					%\addplot3 [mesh] table[x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv, col sep=comma] {K_interp_and_id_window.csv};
@@ -26,12 +29,15 @@
 				\begin{axis}[%
 					xlabel={$t$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
-					%width = .3\linewidth,
+					point meta max=1e-3,
+					point meta min=-1e-3,
 					]
 					%
 					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_neg] {misc/identif_and_interp_window/spline_error_profile_param_2.csv};
@@ -48,12 +54,16 @@
 				\begin{axis}[%
 					xlabel={$t$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
-					zlabel={(\si{\centi\meter})},
+					xlabel style={sloped},
+					ylabel style={sloped},
+					zlabel={(\si{\milli\meter})},
 					zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
+					point meta max=1e-3,
+					point meta min=-1e-3,
 					]
 					%
 					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_pos] {misc/identif_and_interp_window/spline_error_profile_param_1.csv};
@@ -64,11 +74,15 @@
 				\begin{axis}[%
 					xlabel={$t$ (\si{\milli\second})},
 					ylabel={$f_i$ (\si{\milli\second})},
+					xlabel style={sloped},
+					ylabel style={sloped},
 					zticklabel={\pgfmathparse{\tick*1000}\pgfmathprintnumber{\pgfmathresult}},
 					colormap/viridis,
 					view = {50}{50},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
+					point meta max=1e-3,
+					point meta min=-1e-3,
 					]
 					%
 					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_neg] {misc/identif_and_interp_window/spline_error_profile_param_1.csv};
