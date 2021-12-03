@@ -1,0 +1,461 @@
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Ordre expérimental et hauteur cible\label{subfig_anovan_target_height_exp_order}}
+		{
+			\tikzsetnextfilename{subfig_anovan_target_height_exp_order}
+			\begin{tikzpicture}		
+				\begin{axis}[%
+					width=.48\linewidth,
+					height=.38\linewidth,
+					scale only axis,
+					unbounded coords=jump,
+					xmin=-4,
+					xmax=14,
+					xlabel=erreur $\epsilon_r$ (\si{\centi\meter}),
+					xlabel near ticks,
+					ymin=1.5,
+					ymax=14.5,
+					ytick={2,3,4,5,6,7,8,9,10,11,12,13,14},
+					yticklabels={{$n_4$,$h_3^*$},{$n_3$,$h_3^*$},{$n_2$,$h_3^*$},{$n_1$,$h_3^*$},{$n_5$,$h_2^*$},{$n_4$,$h_2^*$},{$n_3$,$h_2^*$},{$n_2$,$h_2^*$},{$n_1$,$h_2^*$},{$n_4$,$h_1^*$},{$n_3$,$h_1^*$},{$n_2$,$h_1^*$},{$n_1$,$h_1^*$}},
+					yticklabel style={font=\footnotesize},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					xlabel style={yshift=1mm},
+					]
+%					\addplot [color=white!80!black, dotted, forget plot]
+%					table[row sep=crcr]{%
+%						-2.74898396984837	1.5\\
+%						-2.74898396984837	14.5\\
+%						nan	nan\\
+%						6.11420511295827	1.5\\
+%						6.11420511295827	14.5\\
+%					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						7.15398859277075	14\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						5.93730650421099	14\\
+						8.3706706813305		14\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						5.95217430823679	13\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						4.57277854303478	13\\
+						7.33157007343881	13\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						4.08899320814329	12\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						2.72929272383682	12\\
+						5.44869369244975	12\\
+					};
+					\addplot [color=Prune, only marks, mark=o, mark options={solid, Prune}, forget plot]
+					table[row sep=crcr]{%
+						8.05668999430825	11\\
+					};
+					\addplot [color=Prune, forget plot]
+					table[row sep=crcr]{%
+						6.63572986212946	11\\
+						9.47765012648705	11\\
+					};
+%					\addplot [color=blue, only marks, mark=o, mark options={solid, blue}, forget plot]
+%					table[row sep=crcr]{%
+%						1.68261057155495	11\\
+%					};
+%					\addplot [color=blue, forget plot]
+%					table[row sep=crcr]{%
+%						-2.74898396984837	11\\
+%						6.11420511295827	11\\
+%					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						4.65454291999224	10\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						3.62852094861077	10\\
+						5.68056489137372	10\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						4.11686814556536	9\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						3.0985074307921	9\\
+						5.13522886033862	9\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						7.27607775442509	8\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						6.31729397825273	8\\
+						8.23486153059746	8\\
+					};
+					\addplot [color=Prune, only marks, mark=o, mark options={solid, Prune}, forget plot]
+					table[row sep=crcr]{%
+						5.82306866508544	7\\
+					};
+					\addplot [color=Prune, forget plot]
+					table[row sep=crcr]{%
+						4.80409519798205	7\\
+						6.84204213218883	7\\
+					};
+					\addplot [color=white!80!black, only marks, mark=o, mark options={solid, white!80!black}, forget plot]
+					table[row sep=crcr]{%
+						4.51499247367382	6\\
+					};
+					\addplot [color=white!80!black, forget plot]
+					table[row sep=crcr]{%
+						3.639696545646	6\\
+						5.39028840170165	6\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						2.0586971862086	5\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						0.576644360304244	5\\
+						3.54075001211296	5\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						2.38501591119534	4\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						1.08405834789602	4\\
+						3.68597347449466	4\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						10.3845200691844	3\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						8.68729303639537	3\\
+						12.0817471019735	3\\
+					};
+					\addplot [color=Prune, only marks, mark=o, mark options={solid, Prune}, forget plot]
+					table[row sep=crcr]{%
+						-1.7422498913571	2\\
+					};
+					\addplot [color=Prune, forget plot]
+					table[row sep=crcr]{%
+						-3.16269554383727	2\\
+						-0.321804238876938	2\\
+					};
+%					\addplot [color=white!80!black, only marks, mark=o, mark options={solid, white!80!black}, forget plot]
+%					table[row sep=crcr]{%
+%						8.63802178818585	1\\
+%					};
+%					\addplot [color=white!80!black, forget plot]
+%					table[row sep=crcr]{%
+%						3.70052984647649	1\\
+%						13.5755137298952	1\\
+%					};
+				\end{axis}
+			\end{tikzpicture}%
+		}
+		\subcaptionbox{Hauteur cible et expertise\label{subfig_anovan_target_height_skill}}
+		{
+			\tikzsetnextfilename{subfig_anovan_target_height_skill}
+			\begin{tikzpicture}
+				\begin{axis}[%
+					width=.48\linewidth,
+					height=.38\linewidth,
+					scale only axis,
+					unbounded coords=jump,
+					xmin=0,
+					xmax=10,
+					xlabel=erreur $\epsilon_r$ (\si{\centi\meter}),
+					xlabel near ticks,
+					ymin=0.5,
+					ymax=9.5,
+					ytick={1,2,3,4,5,6,7,8,9},
+					yticklabels={{$h_3^*$,$e_1$},{$h_2^*$,$e_1$},{$h_1^*$,$e_1$},{$h_3^*$,$e_2$},{$h_2^*$,$e_2$},{$h_1^*$,$e_2$},{$h_3^*$,$e_3$},{$h_2^*$,$e_3$},{$h_1^*$,$e_3$}},
+					yticklabel style={font=\footnotesize},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					xlabel style={yshift=1mm},
+					]
+					\addplot [color=white!80!black, dotted, forget plot]
+					table[row sep=crcr]{%
+						3.52800698460459	0.5\\
+						3.52800698460459	9.5\\
+						nan	nan\\
+						5.72969446330275	0.5\\
+						5.72969446330275	9.5\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						3.31615222301169	9\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						1.65522390230603	9\\
+						4.97708054371735	9\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						4.82547799297707	8\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						3.93656958868561	8\\
+						5.71438639726854	8\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						2.80955720829927	7\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						1.2532848634364	7\\
+						4.36582955316214	7\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						4.62885072395367	6\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						3.52800698460459	6\\
+						5.72969446330275	6\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						3.36627943871037	5\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						2.69049237126068	5\\
+						4.04206650616006	5\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						2.08622819207153	4\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						0.840579719740331	4\\
+						3.33187666440273	4\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						8.21567105804305	3\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						7.24541728000065	3\\
+						9.18592483608546	3\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						7.63957254355773	2\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						6.97113268690335	2\\
+						8.3080124002121	2\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						8.13861763767948	1\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						6.84604999057069	1\\
+						9.43118528478827	1\\
+					};
+				\end{axis}
+			\end{tikzpicture}%
+		}
+	}
+	\\	
+	\vspace{1mm}
+	\resizebox{.5\textwidth}{!}{
+		\centering
+		\subcaptionbox{\vspace{-1mm}Ordre expérimental et expertise\label{subfig_anovan_exp_order_skill}}
+		{
+			\tikzsetnextfilename{subfig_anovan_exp_order_skill}
+			\begin{tikzpicture}
+				\begin{axis}[%
+					width=.48\linewidth,
+					height=.38\linewidth,
+					scale only axis,
+					unbounded coords=jump,
+					xmin=0,
+					xmax=14,
+					xlabel=erreur $\epsilon_r$ (\si{\centi\meter}),
+					ymin=0.5,
+					ymax=15.5,
+					ytick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
+					yticklabels={{$n_5$,$e_1$},{$n_4$,$e_1$},{$n_3$,$e_1$},{$n_2$,$e_1$},{$n_1$,$e_1$},{$n_5$,$e_2$},{$n_4$,$e_2$},{$n_3$,$e_2$},{$n_2$,$e_2$},{$n_1$,$e_2$},{$n_5$,$e_3$},{$n_4$,$e_3$},{$n_3$,$e_3$},{$n_2$,$e_3$},{$n_1$,$e_3$}},
+					yticklabel style={font=\footnotesize},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					xlabel style={yshift=1mm},
+					]
+					\addplot [color=white!80!black, dotted, forget plot]
+					table[row sep=crcr]{%
+						3.89286907610758	0.5\\
+						3.89286907610758	15.5\\
+						nan	nan\\
+						6.11371980690727	0.5\\
+						6.11371980690727	15.5\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						2.23093687462925	15\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						0.505106474011863	15\\
+						3.95676727524663	15\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						3.40195980232077	14\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						1.69300731922486	14\\
+						5.11091228541669	14\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						4.97423856538075	13\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						3.35771378807266	13\\
+						6.59076334268884	13\\
+					};
+					\addplot [color=Prune, only marks, mark=o, mark options={solid, Prune}, forget plot]
+					table[row sep=crcr]{%
+						2.81066762697215	12\\
+					};
+					\addplot [color=Prune, forget plot]
+					table[row sep=crcr]{%
+						1.1342332296591	12\\
+						4.48710202428521	12\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						4.83417617117713	11\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						2.62565164396602	11\\
+						7.04270069838824	11\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						3.1044925338807	10\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						2.02657840311857	10\\
+						4.18240666464282	10\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						2.45119491149556	9\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						1.39261423856325	9\\
+						3.50977558442787	9\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						5.00329444150742	8\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						3.89286907610758	8\\
+						6.11371980690727	8\\
+					};
+					\addplot [color=Prune, only marks, mark=o, mark options={solid, Prune}, forget plot]
+					table[row sep=crcr]{%
+						3.00977863964905	7\\
+					};
+					\addplot [color=Prune, forget plot]
+					table[row sep=crcr]{%
+						1.91462734355285	7\\
+						4.10492993574524	7\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						3.23350339802657	6\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						0.95445464045617	6\\
+						5.51255215559696	6\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						8.53179929046165	5\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						7.46713271129055	5\\
+						9.59646586963275	5\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						6.60090365118116	4\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						5.51630939881374	4\\
+						7.68549790354858	4\\
+					};
+					\addplot [color=Pear, only marks, mark=o, mark options={solid, Pear}, forget plot]
+					table[row sep=crcr]{%
+						11.7720580248646	3\\
+					};
+					\addplot [color=Pear, forget plot]
+					table[row sep=crcr]{%
+						10.5658278979053	3\\
+						12.978288151824	3\\
+					};
+					\addplot [color=Prune, only marks, mark=o, mark options={solid, Prune}, forget plot]
+					table[row sep=crcr]{%
+						6.31706250141539	2\\
+					};
+					\addplot [color=Prune, forget plot]
+					table[row sep=crcr]{%
+						5.1605839449046	2\\
+						7.47354105792618	2\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						6.76794526421093	1\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						4.75631239584074	1\\
+						8.77957813258111	1\\
+					};
+				\end{axis}
+			\end{tikzpicture}%
+		}
+	}	
+	\caption{Analyses des interactions multifactorielles}
+	\label{fig_anova_3_factors_mult}
+\end{figure}

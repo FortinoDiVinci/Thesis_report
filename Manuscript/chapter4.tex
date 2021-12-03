@@ -203,7 +203,7 @@ Dans un premier temps, l'expertise des participants pour la réalisation de la t
 
 Dans les études qui suivent, des analyses de variance (ANOVA) ont été conduites avec des seuils de significativité fixés à \SI{5}{\percent}. Les ANOVA permettent d'infirmer ou valider l'hypothèse dites nulle, c'est à dire, la probabilité que plusieurs jeux de données soient issues d'une même population, notamment en comparant la moyenne des groupes fournis, ainsi que la distribution des données. Ces analyses peuvent être conduites classiquement en s'intéressant à un seul ou deux facteurs contrôlés, et de manière plus marginale, à plus de deux critères. Lorsqu'elles sont conduites sur plus de deux groupes ou jeux de données, les ANOVA ne révèlent que l'existance d'au moins un groupe significativement différent des autres.
 
-Pour compléter les ANOVA, et savoir quels groupes sont à l'orgine du rejet de l'hypothèse nulle, d'autres analyses doivent être conduites. Des tests t \parencite{student_probable_1908} multiples peuvent alors être conduits par pair. Toutefois, la multiplication des tests augmente la probabilité de rejeter l'hypothèse nulle, une correction doit donc être effectuée. Pour ne pas fausser l'analyse, on pourra par exemple utiliser les tests étendus de Tukey \parencite{tukey_comparing_1949} ou la correction de Bonferroni \parencite{dunn_multiple_1961} qui permettent de palier cette problématique. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.
+Pour compléter les ANOVA, et savoir quels groupes sont à l'orgine du rejet de l'hypothèse nulle, d'autres analyses doivent être conduites. Des tests t \parencite{student_probable_1908} multiples peuvent alors être conduits par pair. Toutefois, la multiplication des tests augmente la probabilité de rejeter l'hypothèse nulle, une correction doit donc être effectuée, on parle de tests \textit{post-hoc} ou de comparaisons multiples. Pour ne pas fausser l'analyse, on pourra par exemple utiliser les tests étendus de Tukey \parencite{tukey_comparing_1949} ou la correction de Bonferroni \parencite{dunn_multiple_1961} qui permettent de palier cette problématique. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.
 
 \subsection{Qualification de la réalisation de la tâche} \label{chap4_sec_res_sub_task}
 
@@ -240,16 +240,96 @@ La différence significative plus faible entre les deux derniers groupes entre-e
 
 \subsubsection{Effets des perturbations} \label{chap4_sec_res_sub_task_3}
 
-Bien que les perturbations introduites l'ont été pour être aussi peu perceptible que possible, et minimiser l'influence sur la tâche, il est important de s'intéresser aux effets des cycles consécutifs à des perturbations. En effet, suites aux questions posées aux participants, \SI{55}{\percent} affirment avoir perçus des perturbations dans au moins l'une des expériences, et \SI{15}{\percent} pendant l'ensemble des essais. Une éventuelle de dégradation des performances dûes aux perturbations ne peut toutefois pas être écartée, même si la majorité des participants n'a pas ressenti les perturbations pendant au moins l'une des sessions.
+Bien que les perturbations ont été introduites pour être aussi peu perceptibles que possible, et minimiser l'influence sur la tâche, il est important de s'intéresser aux effets des cycles consécutifs à des perturbations. En effet, suites aux questions posées aux participants, \SI{55}{\percent} affirment avoir perçus des perturbations dans au moins l'une des expériences, et \SI{15}{\percent} pendant l'ensemble des essais. Une éventuelle de dégradation des performances dûes aux perturbations ne peut toutefois pas être écartée, même si la majorité des participants n'a pas ressenti les perturbations pendant au moins l'une des sessions.
 
-L'analyse de variance conduites entre les cycles perturbés ou non a été réalisée en séparant les expériences selon leur ordre pour supprimer ce potentiel facteur de confusion, l'ordre ayant démontré des effets significatifs sur les erreurs de rebonds. La \cref{fig_exp_order_perturbations_bouncing_error_significance} montre les analyses de variance et multiples sur les erreurs $\epsilon_r$ et $\abs{\epsilon_r}$. Les études statistiques sur les erreurs signées ne révèlent pas de différences significatives à l'intérieur des groupes d'expériences. Les intervalles plus importants des cycles perturbés s'expliquent par leur quantité très inférieure, comparativement aux cycles non-perturbés qui sont \SI{5.5}{} fois plus nombreux. Toutefois, on peut noter que les moyennes et médianes des erreurs $\epsilon_r$ des cycles perturbés sont systématiquement plus importantes. Ce dernier point pourrait indiquer qu'un effet existe, mais que la quantité de données receuillies n'est pas suffisante pour le confirmer, car l'effet est faible.
+L'analyse de variance conduites entre les cycles perturbés ou non a été réalisée en séparant les expériences selon leur ordre pour supprimer ce potentiel facteur de confusion, l'ordre ayant démontré des effets significatifs sur les erreurs de rebonds. La \cref{fig_exp_order_perturbations_bouncing_error_significance} montre les analyses de variance et multiples sur les erreurs $\epsilon_r$ et $\abs{\epsilon_r}$. Les études statistiques sur les erreurs signées ne révèlent pas de différences significatives à l'intérieur des groupes d'expériences. Les intervalles de confiance plus importants des cycles perturbés peuvent s'expliquer par leur quantité très inférieure aux cycles non-perturbés, qui sont \SI{5.5}{} fois plus nombreux. Toutefois, on peut noter que les moyennes et médianes des erreurs $\epsilon_r$ des cycles perturbés sont systématiquement plus importantes. Ce dernier point pourrait indiquer qu'un effet existe bien, mais que la quantité de données receuillies n'est pas suffisante pour le confirmer, car l'effet est faible.
 
 \input{latex_figures/chapter_4/fig_exp_order_and_perturbations_bouncing_error_significance}
 \tikzexternaldisable
 
-L'analyse multiple des erreurs absolues révèle que pour la troisième expérience, une différence significative existe entre les cycles perturbés et non perturbés, avec une différence d'environ \SI{2}{\centi\meter} entre leur moyenne respective. Cet écart et à mettre en parallèle de ceux observés à cause des autres facteurs. Ainsi, même s'il reste légèrement inférieur à ceux observés pour les différentes hauteurs cibles ($>$\SI{2}{\centi\meter}) ou pour les ordres expérimentaux, cet effet reste du même ordre. L'effet des perturbations semble donc exister bien qu'il soit plus faible que ceux entrainés par les deux autres facteurs précedemment présentés.
+L'analyse multiple des erreurs absolues $\abs{\epsilon_r}$ en \cref{subfig_exp_order_perturbations_abs_bouncing_error_significance_mult} révèle que pour la troisième expérience, une différence significative existe entre les cycles perturbés et non-perturbés, avec un écart d'environ \SI{2}{\centi\meter} entre leur moyenne respective. Cet écart et à mettre en parallèle de ceux provoqués par les autres facteurs identifiés. Ainsi, même s'il reste légèrement inférieur à ceux constatés pour les différentes hauteurs cibles ($>$\SI{2}{\centi\meter}) ou pour les ordres expérimentaux, cet effet reste du même ordre. L'effet des perturbations semble donc exister, bien qu'il soit plus faible que ceux entrainés par les deux autres facteurs précedemment présentés.
 
 \subsubsection{Performances individuelles ou expertise} \label{chap4_sec_res_sub_task_4}
+
+Le dernier facteur identifié pouvant influencer les performances des utilisateurs provient des participants eux-mêmes. Pour qualifier la qualité d'une jonglerie, deux indicateurs sont définis, la répétabilité, et la précision. La répétabilité est définie comme l'intervalle interquartile des erreurs de jonglerie, et la précision comme la médiane des erreurs absolues. 
+
+En supposant qu'il existe trois niveaux d'expertise pour les participants, qu'on définit comme novice, intermédiaire et avancé, les groupes sont définis en définissant un problème d'optimisation combinatoire des k-moyennes. Les groupes ainsi identifiés en fonction des critères de précision et de répétabilité sont ensuites comparés à l'aide d'analyse de variance pour vérifier si ces groupes génèrent des performances significativement différentes. L'un des participants ayant eu des niveaux de qualification largement en deça des autres, il a été écarté pour le partionnement des données, afin d'éviter d'obtenir un groupe ne contenant qu'une seule personne. Il a ensuite été regroupé avec les novices.
+
+\input{latex_figures/chapter_4/fig_kmeans_expertise}
+
+La \cref{fig_kmeans_expertise} montre la répartition des groupes en fonction des deux critères. Celui de répétabilité place respectivement \SIlist{5;13;13}{} pour les groupes avancés $e_3$, intermédiaires $e_2$ et novices $e_1$ contre respectivement \SIlist{3;14;14}{} pour le critère de précision. Le chevauchement entre les deux critères n'est donc pas parfait, toutefois seul trois participants ont vu leur qualification retrogradée entre les critères de répétabilité et de précision, donc pour plus de \SI{90}{\percent}, ces critères définissent les mêmes niveaux d'expertise. Le critère de répétabilité fournissant des regroupements plus équilibrés, c'est ce dernier qui est conservé.
+
+Afin de savoir si les différences entre les groupes définis sont significatives, une ANOVA à trois facteurs est réalisée, en prenant en compte l'ordre expérimental $n_i$ , la hauteur cible $h_i^*$ ainsi que le niveau d'expertise défini $e_i$. L'analyse ayant cette fois plus d'un critère, il faut aussi se pencher sur les interactions avant de pouvoir interpréter les résultats des facteurs fixes. Les \cref{tab_anova_3_factors_sign,tab_anova_3_factors_abs} dévoilent ainsi que les interactions entre les trois facteurs sont toutes significatives, aussi bien pour les erreurs signées que absolues. Les comparaisons multiples pour chaque interaction sont montrées en \cref{fig_anova_3_factors_mult} pour $\epsilon_r$ et en ... pour $\abs{\epsilon_r}$.
+%
+%  Source   Sum Sq.   d.f.    Mean Sq.     F      Prob>F
+%-------------------------------------------------------
+%n           3.98       4   0.99412     15.82   0     
+%th          0.29       2   0.14669      2.33   0.0969
+%exp        14.95       2   7.47701    118.99   0     
+%n*th       13.82       8   1.72717     27.49   0     
+%n*exp       2.3        8   0.28763      4.58   0     
+%th*exp      1.1        4   0.27587      4.39   0.0015
+%Error    2707.28   43085   0.06284                   
+%Total    2756.98   43113                             
+
+\begin{table}
+	\centering
+	\begin{tabular}{ l | c  c  c  c  c } 
+		Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+		$n_i$ & 3.98 & 4 & 0.99412 & 15.82 & 0\\
+		$h_i^*$ & 0.29 & 2 & 0.14669 & 2.33 & 9.69\\
+		$e_i$ & 14.95 & 2 & 7.47701 & 118.99 & 0\\
+		$n\times h$ & 13.82 & 8 & 1.72717 & 27.49 & 0\\
+		$n\times e$ & 2.3 & 8 & 0.28763 & 4.58 & 0\\
+		$h\times e$ & 1.1 & 4 & 0.27587 & 4.39 & 0.15\\
+		Error & 2707.28 & 43085 & 0.06284 & & \\
+		Total & 2756.98 & 43113 & & & 
+		%\hline
+	\end{tabular} % expertise factor
+	\caption{ANOVA à 3 facteurs, $n$, l'ordre expérimental, $h$ la hauteur cible et $e$ l'expertise pour $\epsilon_r$.}
+	\label{tab_anova_3_factors_sign}
+\end{table}                            
+
+%  Source   Sum Sq.   d.f.    Mean Sq.     F      Prob>F
+%-------------------------------------------------------
+%n           3.25       4    0.8124     28.85    0    
+%th          3.96       2    1.9786     70.26    0    
+%exp        25.33       2   12.664     449.72    0    
+%n*th        1.85       8    0.2308      8.2     0    
+%n*exp       2.12       8    0.2648      9.4     0    
+%th*exp      0.3        4    0.0754      2.68    0.03 
+%Error    1213.27   43085    0.0282                   
+%Total    1268.43   43113                             
+
+\begin{table}
+	\centering
+	\begin{tabular}{ l | c  c  c  c  c } 
+		Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+		$n_i$ & 3.25 & 4 & 0.8124 & 28.85 & 0\\
+		$h_i^*$ & 3.96 & 2 & 1.9786 & 70.26 & 0\\
+		$e_i$ & 25.33 & 2 & 12.664 & 449.72 & 0\\
+		$n\times h$ & 1.85 & 8 & 0.2308 & 8.2 & 0\\
+		$n\times e$ & 2.12 & 8 & 0.2648 & 9.4 & 0\\
+		$h\times e$ & 0.3 & 4 & 0.0754 & 2.68 & 3\\
+		Error & 1213.27 & 43085 & 0.0282 & & \\
+		Total & 1268.43 & 43113 & & & 
+		%\hline
+	\end{tabular} % expertise factor
+	\caption{ANOVA à 3 facteurs, pour $\abs{\epsilon_r}$.}
+	\label{tab_anova_3_factors_abs}
+\end{table}   
+
+\input{latex_figures/chapter_4/fig_anovan_3_factors}
+
+\textcolor{red}{dans le couplage hauteur cible et numéro d'expérience, la tendance pour la troisième expérience est inversée par rapport aux autres... Comment interpréter cette information ??}
+
+\textcolor{red}{dans le couplage hauteur cible et expertise, seul le groupe (h3,e2) est significativement différent d'autres groupe dans e1 et e2. Sinon aucune différence significative n'est observée entre les deux niveaux d'expertise, et seul le groupe novice est significativement différent... Comment interpréter cette information ??}
+
+Aucune différence significative n'est observée pour les erreurs $\epsilon_r$ entre les groupes de niveau intermédaires et avancés. Les seuls différences significatives détectées proviennent du groupe des novices par rapport aux deux autres groupes, pour lequel le seul critère non significatif semble l'ordre expérimental pour la cinquième expérience. Cette constation pourrait ammener à penser que les participants novices ont progressé et se sont améliorés, toutefois, le groupe formé par le couple de facteur $(e_1,n_5)$ ne montre une différence de moyenne significative que par rapport à la troisième expérience, qui a aussi l'erreur moyenne la plus élevée pour les deux autres niveaux de qualification.
+
+
+
+Le critère d'expertise choisi semble donc principalement pertinent pour distinguer les novices des autres utilisateurs.
 
 \subsection{Résultats des identifications d'impédance} \label{chap4_sec_res_sub_impedance}
 
