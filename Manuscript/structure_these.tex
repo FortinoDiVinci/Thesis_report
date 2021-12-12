@@ -1,6 +1,7 @@
 %% structure
 
 \usepackage{shellesc}
+\usepackage{textgreek}
 \usepackage{polyglossia}
 	\setmainlanguage{french}
 \usepackage{tikz} 
@@ -13,11 +14,16 @@
 	\usetikzlibrary{backgrounds}
 	\usetikzlibrary{external}
 	\usetikzlibrary{fit} %positioning, 
+	\usetikzlibrary{positioning}
+	\usetikzlibrary{intersections}
 \usepackage{circuitikz}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
 	\usetikzlibrary{pgfplots.fillbetween}
 	\usetikzlibrary{pgfplots.groupplots}
 	\usetikzlibrary{pgfplots.patchplots} %usepgfplotslibrary
+	\usepgfplotslibrary{statistics}
+\usepackage{pgfplotstable}
 \usepackage{subcaption}
 \usepackage{capt-of} % for caption of fig type outside of figure env
 %\DeclareCaptionSubType[roman]{figure}
@@ -30,8 +36,10 @@
 \usepackage{amssymb} % for delta equality notably
 \usepackage{mathtools}
 \usepackage{algorithm,algpseudocode}
+\usepackage{bodegraph}
 %\usepackage[square]{natbib}
 \usepackage{xifthen} %for conditional test
+\usepackage{etoolbox}
 \usepackage[toc,page]{appendix} % for appendices [title]
 \usepackage{rotating} % for sideway table notably
 \usepackage[inline]{enumitem}
@@ -202,6 +210,68 @@
 %	colframe = LimedSpruce,
 %	colback = white,
 %}
+\makeatletter
+\pgfplotsset{
+%	box style/.style n args={1}{
+%		draw=#1,
+%	},
+%	box style/.default={Orient},
+	boxplot/lower notch/.initial=\pgfutil@empty,
+	boxplot/upper notch/.initial=\pgfutil@empty,
+%	boxplot/mean/.initial=\pgfutil@empty,
+	boxplot/notch width/.initial=0.6,
+	%	boxplot/draw/box/.code n args={1}{%
+	boxplot/draw/box/.code={%
+		\draw[/pgfplots/boxplot/every box/.try, color=Orient]
+		(boxplot box cs:\pgfplotsboxplotvalue{lower quartile},0)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{lower notch},0)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{median},0.5-\pgfplotsboxplotvalue{notch width}/2)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{upper notch},0)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{upper quartile},0)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{upper quartile},1)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{upper notch},1)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{median},0.5+\pgfplotsboxplotvalue{notch width}/2)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{lower notch},1)
+		-- (boxplot box cs:\pgfplotsboxplotvalue{lower quartile},1)
+		-- cycle
+		;
+	},%
+	boxplot/draw/median/.code={%
+		\draw[/pgfplots/boxplot/every median/.try, color=Shiraz]
+		(boxplot box cs:\pgfplotsboxplotvalue{median},0.5-\pgfplotsboxplotvalue{notch width}/2)
+		--
+		(boxplot box cs:\pgfplotsboxplotvalue{median},0.5+\pgfplotsboxplotvalue{notch width}/2)
+		;
+	},%
+%	boxplot/draw/mean/.code={%
+%		\draw[/pgfplots/boxplot/every mean/.try] node at (boxplot box cs:\pgfplotsboxplotvalue{mean},0) {*};
+%	},%
+	boxplot prepared from table/.code={
+		\def\tikz@plot@handler{\pgfplotsplothandlerboxplotprepared}%
+		\pgfplotsset{
+			/pgfplots/boxplot prepared from table/.cd,
+			#1,
+		}
+	},
+	/pgfplots/boxplot prepared from table/.cd,
+	table/.code={\pgfplotstablecopy{#1}\to\boxplot@datatable},
+	row/.initial=0,
+	make style readable from table/.style={
+		#1/.code={
+			\pgfplotstablegetelem{\pgfkeysvalueof{/pgfplots/boxplot prepared from table/row}}{##1}\of\boxplot@datatable
+			\pgfplotsset{boxplot/#1/.expand once={\pgfplotsretval}}
+		}
+	},
+	make style readable from table=lower whisker,
+	make style readable from table=upper whisker,
+	make style readable from table=lower quartile,
+	make style readable from table=upper quartile,
+	make style readable from table=median,
+	make style readable from table=average,
+	make style readable from table=lower notch,
+	make style readable from table=upper notch,
+}
+\makeatother
 
 \tikzexternalize
 \tcbsetforeverylayer{shield externalize}

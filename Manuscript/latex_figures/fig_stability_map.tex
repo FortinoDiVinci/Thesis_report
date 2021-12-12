@@ -28,7 +28,22 @@
 						ymax = 0.3,
 						ymin = 0,
 						%x tick scale label style={yshift=0.8em, xshift=0.5em},
-						legend style={nodes={scale=0.75, transform shape}},
+						%legend style={nodes={scale=0.75, transform shape}},
+						legend columns = 2,
+						legend style   = {%
+							legend cell align = left,
+							align              = left,
+							at                = {(.98, .98)},
+							anchor            = north east,
+							draw              = white!15!black,
+							nodes={scale=0.75, transform shape},
+						},
+						legend entries = {%
+							(i)\\
+							(ii)\\
+							(iii)\\
+							(iv)\\
+						}
 						]
 						\draw[draw=white,line width=1pt,preaction={clip, postaction={pattern=north west lines, pattern color=blueishGreen}}] 
 						(rel axis cs:0.0,0.0) -- (rel axis cs:0.0,0.63) -- (rel axis cs:0.67,0.67) -- (rel axis cs:0.67,0.55) -- (rel axis cs:0.75,0.32) -- (rel axis cs:0.88,0.23) -- (rel axis cs:0.92,0.0) -- cycle;
@@ -42,15 +57,6 @@
 						table [y=ki, x=kp, col sep=comma]
 						{misc/stability_mapping_stiff_unstable.csv};
 						\label{plot:i}
-						\addplot[
-							only marks, 
-							mark size =1.2mm,
-							mark options={fill opacity=0.75},
-							blueishGreen, 
-						] 
-						table [y=ki, x=kp, col sep=comma]
-						{misc/stability_mapping_stiff_stable.csv};
-						\label{plot:iv}
 						\addplot[
 							only marks,
 							orange, 
@@ -71,6 +77,15 @@
 						table [y=ki, x=kp, col sep=comma]
 						{misc/stability_mapping_stiff_uncomf.csv};
 						\label{plot:iii}
+						\addplot[
+						only marks, 
+						mark size =1.2mm,
+						mark options={fill opacity=0.75},
+						blueishGreen, 
+						] 
+						table [y=ki, x=kp, col sep=comma]
+						{misc/stability_mapping_stiff_stable.csv};
+						\label{plot:iv}
 						\addplot [
 							only marks,
 							color=black,
@@ -78,27 +93,30 @@
 							mark size = 1.2mm,
 						]
 						table[row sep=crcr]{0.015	0.08\\} ;
-						%\addlegendimage{/pgfplots/refstyle=plot:i}  \addlegendentry{(i)}
-				        %\addlegendimage{/pgfplots/refstyle=plot:ii}  \addlegendentry{(ii)}
-				        %\addlegendimage{/pgfplots/refstyle=plot:iii}  \addlegendentry{(iii)}
-				        %\addlegendimage{/pgfplots/refstyle=plot:iv}  \addlegendentry{(iv)}
+						\addlegendimage{/pgfplots/refstyle=plot:i} % \addlegendentry{(i)}
+				        \addlegendimage{/pgfplots/refstyle=plot:ii} % \addlegendentry{(ii)}
+				        \addlegendimage{/pgfplots/refstyle=plot:iii} % \addlegendentry{(iii)}
+				        \addlegendimage{/pgfplots/refstyle=plot:iv} % \addlegendentry{(iv)}
+				        \node[align=center] at (axis cs:.004,.23) (cond2) {zone stable\\2\textsuperscript{ème} condition};
+				        \draw[-{Latex[length=2.5mm]}] (cond2.south) -- (axis cs:.005,.18);
+				        
 					\end{axis}
-					\matrix [
-			             matrix of nodes,
-			             nodes={anchor=west},
-			             anchor=north east,
-			             at={([shift={(-3pt,-3pt)}]stab_eg.north east)},
-			             fill=white,
-			             draw,
-			             inner sep=2pt,
-			             row sep=1pt,
-			             scale=0.75,
-			            ] {
-		           \ref{plot:i} \footnotesize{(i)}
-		           \ref{plot:iii} \footnotesize{(iii)} \\
-		           \ref{plot:ii} \footnotesize{(ii)} 
-		           \ref{plot:iv} \footnotesize{(iv)} \\
-		           };
+%					\matrix [
+%			             matrix of nodes,
+%			             nodes={anchor=west},
+%			             anchor=north east,
+%			             at={([shift={(-3pt,-3pt)}]stab_eg.north east)},
+%			             fill=white,
+%			             draw,
+%			             inner sep=2pt,
+%			             row sep=1pt,
+%			             scale=0.75,
+%			            ] {
+%		           \ref{plot:i} \footnotesize{(i)}
+%		           \ref{plot:iii} \footnotesize{(iii)} \\
+%		           \ref{plot:ii} \footnotesize{(ii)} 
+%		           \ref{plot:iv} \footnotesize{(iv)} \\
+%		           };
 				\end{tikzpicture}
 			}
 		\end{minipage}
