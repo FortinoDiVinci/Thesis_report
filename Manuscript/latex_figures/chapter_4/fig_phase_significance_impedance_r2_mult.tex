@@ -1,0 +1,259 @@
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{
+		\centering
+		\subcaptionbox{Raideur (Bonferroni)\label{subfig_phase_significance_impedance_r2_K_mult}}
+		{
+			\hspace{1mm}%
+			\tikzsetnextfilename{subfig_phase_significance_impedance_r2_K_mult}
+			\begin{tikzpicture}		
+			\begin{axis}[%
+			width=0.48\linewidth,
+			height=0.25\linewidth,
+			%height=.38\linewidth,
+			scale only axis,
+			unbounded coords=jump,
+			%ymin=3.5,
+			%ymax=8,
+			ylabel=$K$ (\si{\newton\per\meter}),
+			ylabel near ticks,
+			xmin=0.5,
+			xmax=3.5,
+			%ylabel style={font=\color{white!15!black}},
+			%xlabel={4 groups have means significantly different from Group 1},
+			xtick={1,2,3},
+			xticklabels={$\phi_1$, $\phi_2$, $\phi_3$},
+			xlabel near ticks,
+			%	ylabel style={yshift=-4mm},
+			scaled ticks=false, 
+			tick label style={/pgf/number format/fixed},
+			]
+			\addplot [color=white!70!Shiraz, dotted, forget plot]
+			table[row sep=crcr]{%
+				0.50	141.734\\
+				3.50	141.734\\
+				nan	nan\\
+				0.50	178.25\\
+				3.50	178.25\\
+			};
+			\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+			table[row sep=crcr]{%
+				1	108.943\\
+			};
+			\addplot [color=Orient, forget plot]
+			table[row sep=crcr]{%
+				1	90.685\\
+				1	127.201\\
+			};
+			\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+			table[row sep=crcr]{%
+				2	159.992\\
+			};
+			\addplot [color=Shiraz, forget plot]
+			table[row sep=crcr]{%
+				2	141.734\\
+				2	178.25\\
+			};
+			\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+			table[row sep=crcr]{%
+				3	191.444\\
+			};
+			\addplot [color=Shiraz, forget plot]
+			table[row sep=crcr]{%
+				3	173.186\\
+				3	209.702\\
+			};
+			\end{axis}
+			\end{tikzpicture}%
+		}
+		\subcaptionbox{Amortissement (Bonferroni)\label{subfig_phase_significance_impedance_r2_B_mult}}
+		{
+			\tikzsetnextfilename{subfig_phase_significance_impedance_r2_B_mult}
+			\begin{tikzpicture}
+			\begin{axis}[%
+			width=0.48\linewidth,
+			height=0.25\linewidth,
+			%height=.38\linewidth,
+			scale only axis,
+			unbounded coords=jump,
+%			ymin=16.5,
+%			ymax=21,
+			ylabel=$B$ (\si{\newton\second\per\meter}),
+			%xlabel style={font=\color{white!15!black}},
+			xmin=0.5,
+			xmax=3.5,
+			xtick={1,2,3},
+			xticklabels={$\phi_1$, $\phi_2$, $\phi_3$},
+			xlabel near ticks,
+			tick label style={/pgf/number format/fixed},
+			]
+			\addplot [color=white!70!Shiraz, dotted, forget plot]
+			table[row sep=crcr]{%
+				0.50	11.025\\
+				3.50	11.025\\
+				nan	nan\\
+				0.50	12.433\\
+				3.50	12.433\\
+			};
+			\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+			table[row sep=crcr]{%
+				1	9.944\\
+			};
+			\addplot [color=Orient, forget plot]
+			table[row sep=crcr]{%
+				1	9.241\\
+				1	10.648\\
+			};
+			\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+			table[row sep=crcr]{%
+				2	11.729\\
+			};
+			\addplot [color=Shiraz, forget plot]
+			table[row sep=crcr]{%
+				2	11.025\\
+				2	12.433\\
+			};
+			\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+			table[row sep=crcr]{%
+				3	9.829\\
+			};
+			\addplot [color=Orient, forget plot]
+			table[row sep=crcr]{%
+				3	9.125\\
+				3	10.533\\
+			};
+			\end{axis}
+			\end{tikzpicture}%
+		}
+	}	
+	\\
+	\vspace{3mm}
+	\resizebox{\textwidth}{!}{
+		\centering
+		\subcaptionbox{Masse (Bonferroni)\label{subfig_phase_significance_impedance_r2_M_mult}}
+		{
+			\hspace{1mm}%
+			\tikzsetnextfilename{subfig_phase_significance_impedance_r2_M_mult}
+			\begin{tikzpicture}		
+			\begin{axis}[%
+			width=0.48\linewidth,
+			height=0.25\linewidth,
+			%height=.38\linewidth,
+			scale only axis,
+			unbounded coords=jump,
+			%ymin=3.5,
+			%ymax=8,
+			ylabel=$M$ (\si{\kilogram}),
+			ylabel near ticks,
+			xmin=0.5,
+			xmax=3.5,
+			%ylabel style={font=\color{white!15!black}},
+			%xlabel={4 groups have means significantly different from Group 1},
+			xtick={1,2,3},
+			xticklabels={$\phi_1$, $\phi_2$, $\phi_3$},
+			xlabel near ticks,
+			%	ylabel style={yshift=-4mm},
+			scaled ticks=false, 
+			tick label style={/pgf/number format/fixed},
+			]
+			\addplot [color=white!70!Shiraz, dotted, forget plot]
+			table[row sep=crcr]{%
+				0.50	0.349\\
+				3.50	0.349\\
+				nan	nan\\
+				0.50	0.416\\
+				3.50	0.416\\
+			};
+			\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+			table[row sep=crcr]{%
+				1	0.447\\
+			};
+			\addplot [color=Orient, forget plot]
+			table[row sep=crcr]{%
+				1	0.413\\
+				1	0.480\\
+			};
+			\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+			table[row sep=crcr]{%
+				2	0.382\\
+			};
+			\addplot [color=Shiraz, forget plot]
+			table[row sep=crcr]{%
+				2	0.349\\
+				2	0.416\\
+			};
+			\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+			table[row sep=crcr]{%
+				3	0.453\\
+			};
+			\addplot [color=Orient, forget plot]
+			table[row sep=crcr]{%
+				3	0.419\\
+				3	0.486\\
+			};
+			\end{axis}
+			\end{tikzpicture}%
+		}
+		\subcaptionbox{$R^2$ (Bonferroni)\label{subfig_phase_significance_impedance_r2_R2_mult}}
+		{
+			\tikzsetnextfilename{subfig_phase_significance_impedance_r2_R2_mult}
+			\begin{tikzpicture}
+			\begin{axis}[%
+			width=0.48\linewidth,
+			height=0.25\linewidth,
+			%height=.38\linewidth,
+			scale only axis,
+			unbounded coords=jump,
+			%			ymin=16.5,
+			%			ymax=21,
+			ylabel=$R^2$ (\si{\percent}),
+			%xlabel style={font=\color{white!15!black}},
+			xmin=0.5,
+			xmax=3.5,
+			xtick={1,2,3},
+			xticklabels={$\phi_1$, $\phi_2$, $\phi_3$},
+			xlabel near ticks,
+			tick label style={/pgf/number format/fixed},
+			]
+			\addplot [color=white!70!Shiraz, dotted, forget plot]
+			table[row sep=crcr]{%
+				0.50	95.6\\
+				3.50	95.6\\
+				nan	nan\\
+				0.50	96.6\\
+				3.50	96.6\\
+			};
+			\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+			table[row sep=crcr]{%
+				1	93.8\\
+			};
+			\addplot [color=Orient, forget plot]
+			table[row sep=crcr]{%
+				1	93.3\\
+				1	94.3\\
+			};
+			\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+			table[row sep=crcr]{%
+				2	96.8\\
+			};
+			\addplot [color=Shiraz, forget plot]
+			table[row sep=crcr]{%
+				2	96.3\\
+				2	97.3\\
+			};
+			\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+			table[row sep=crcr]{%
+				3	96.1\\
+			};
+			\addplot [color=Shiraz, forget plot]
+			table[row sep=crcr]{%
+				3	95.6\\
+				3	96.6\\
+			};
+			\end{axis}
+			\end{tikzpicture}%
+		}
+	}
+	\caption{Analyses multiples pour les paramètres apparents identifiés en fonction des phases $\phi$.}
+	\label{fig_phase_significance_impedance_r2_mult}
+\end{figure}

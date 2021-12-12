@@ -1,0 +1,177 @@
+\begin{figure}	
+	\centering
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Raideur apparente $(F=15.47)$\label{subfig_all_user_per_phase_r2_K}}
+		{
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/phase_variation_all_users_r2_K.csv}\datatable
+			\pgfplotstablegetrowsof{misc/chap_4_impedance/phase_variation_all_users_r2_K.csv}
+			\pgfmathsetmacro{\nbRows}{\pgfplotsretval-1}
+			%
+			\tikzsetnextfilename{subfig_all_user_per_phase_r2_K}
+			\begin{tikzpicture}
+				\begin{axis}
+					[
+					xtick={1,2,3},
+					xticklabels={$\phi_1$, $\phi_2$, $\phi_3$},
+					ylabel near ticks,
+					ylabel = $K$ (\si{\newton\per\meter}),
+					boxplot/draw direction=y, 
+					width=0.45\linewidth,
+					height=0.30\linewidth,
+					]
+					%\foreach \i in {0,..,\nbRows}{%
+					\expandafter\pgfplotsinvokeforeach\expandafter{0,...,\nbRows}{%..,\nbRows}{%
+						\addplot [
+						boxplot prepared from table={
+							%\edef\temp{\noexpand row={\i}}
+							%\temp,
+							row=#1,
+							table=\datatable,
+							lower whisker=lw,
+							upper whisker=uw,
+							lower quartile=lq,
+							upper quartile=uq,
+							lower notch=ln,
+							upper notch=un,
+							median=med,
+							average=avg,
+							%every median/.style={color=Shiraz},
+							%sample size=100,
+						}, boxplot prepared={
+								every average/.style={/tikz/mark=asterisk},
+							}
+						] coordinates {};
+		%				node at	(boxplot box cs: \boxplotvalue{median},#1) {\pgfmathprintnumber{\boxplotvalue{median}}};
+					}%
+				\end{axis}	
+			\end{tikzpicture}
+		}
+		\subcaptionbox{Amortissement apparent $(F=6.82)$\label{subfig_all_user_per_phase_r2_B}}
+		{
+			\pgfplotstableread[col sep=comma]{misc/chap_4_impedance/phase_variation_all_users_r2_B.csv}\datatable
+			\pgfplotstablegetrowsof{misc/chap_4_impedance/phase_variation_all_users_r2_B.csv}
+			\pgfmathsetmacro{\nbRows}{\pgfplotsretval-1}
+			%
+			\tikzsetnextfilename{subfig_all_user_per_phase_r2_B}
+			\begin{tikzpicture}
+				\begin{axis}[
+					xtick={1,2,3},
+					xticklabels={$\phi_1$, $\phi_2$, $\phi_3$},
+					ylabel near ticks,
+					ylabel = $B$ (\si{\newton\second\per\meter}),
+					boxplot/draw direction=y, 
+					width=0.45\linewidth,
+					height=0.30\linewidth,
+					]
+					\expandafter\pgfplotsinvokeforeach\expandafter{0,...,\nbRows}{
+						\addplot [
+						boxplot prepared from table={
+							row=#1,
+							table=\datatable,
+							lower whisker=lw,
+							upper whisker=uw,
+							lower quartile=lq,
+							upper quartile=uq,
+							lower notch=ln,
+							upper notch=un,
+							median=med,
+							average=avg,
+						}, boxplot prepared={
+								every average/.style={/tikz/mark=asterisk},
+							}
+						] coordinates {};
+					}%
+				\end{axis}	
+			\end{tikzpicture}
+		}
+	}
+	\\
+	\vspace{3mm}
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Masse apparente $(F=4.06)$\label{subfig_all_user_per_phase_r2_M}}
+		{
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/phase_variation_all_users_r2_M.csv}\datatable
+			\pgfplotstablegetrowsof{misc/chap_4_impedance/phase_variation_all_users_r2_M.csv}
+			\pgfmathsetmacro{\nbRows}{\pgfplotsretval-1}
+			%
+			\tikzsetnextfilename{subfig_all_user_per_phase_r2_M}
+			\begin{tikzpicture}
+			\begin{axis}
+			[
+			xtick={1,2,3},
+			xticklabels={$\phi_1$, $\phi_2$, $\phi_3$},
+			ylabel near ticks,
+			ylabel = $M$ (\si{\kilogram}),
+			boxplot/draw direction=y, 
+			width=0.45\linewidth,
+			height=0.30\linewidth,
+			]
+			%\foreach \i in {0,..,\nbRows}{%
+			\expandafter\pgfplotsinvokeforeach\expandafter{0,...,\nbRows}{%..,\nbRows}{%
+				\addplot [
+				boxplot prepared from table={
+					%\edef\temp{\noexpand row={\i}}
+					%\temp,
+					row=#1,
+					table=\datatable,
+					lower whisker=lw,
+					upper whisker=uw,
+					lower quartile=lq,
+					upper quartile=uq,
+					lower notch=ln,
+					upper notch=un,
+					median=med,
+					average=avg,
+					%every median/.style={color=Shiraz},
+					%sample size=100,
+				}, boxplot prepared={
+						every average/.style={/tikz/mark=asterisk},
+					}
+				] coordinates {};
+				%				node at	(boxplot box cs: \boxplotvalue{median},#1) {\pgfmathprintnumber{\boxplotvalue{median}}};
+			}%
+			\end{axis}	
+			\end{tikzpicture}
+		}
+		\subcaptionbox{Coefficient de détermination $(F=15.47)$\label{subfig_all_user_per_phase_r2_R2}}
+		{
+			\pgfplotstableread[col sep=comma]{misc/chap_4_impedance/phase_variation_all_users_r2_R2.csv}\datatable
+			\pgfplotstablegetrowsof{misc/chap_4_impedance/phase_variation_all_users_r2_R2.csv}
+			\pgfmathsetmacro{\nbRows}{\pgfplotsretval-1}
+			%
+			\tikzsetnextfilename{subfig_all_user_per_phase_r2_R2}
+			\begin{tikzpicture}
+			\begin{axis}[
+			xtick={1,2,3},
+			xticklabels={$\phi_1$, $\phi_2$, $\phi_3$},
+			ylabel near ticks,
+			ylabel = $R^2$,
+			boxplot/draw direction=y, 
+			width=0.45\linewidth,
+			height=0.30\linewidth,
+			]
+			\expandafter\pgfplotsinvokeforeach\expandafter{0,...,\nbRows}{
+				\addplot [
+				boxplot prepared from table={
+					row=#1,
+					table=\datatable,
+					lower whisker=lw,
+					upper whisker=uw,
+					lower quartile=lq,
+					upper quartile=uq,
+					lower notch=ln,
+					upper notch=un,
+					median=med,
+					average=avg,
+				}, boxplot prepared={
+						every average/.style={/tikz/mark=asterisk},
+					}
+				] coordinates {};
+			}%
+			\end{axis}	
+			\end{tikzpicture}
+		}
+	}
+	\caption{Paramètres apparents identifiés pour tous les utilisateurs en fonction des phases $\phi$.}
+	\label{fig_phase_significance_impedance_r2}
+\end{figure}

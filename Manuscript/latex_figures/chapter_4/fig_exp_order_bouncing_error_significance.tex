@@ -15,6 +15,7 @@
 				
 				\begin{axis}[%
 					width=0.48\linewidth,
+					height=0.35\linewidth,
 					scale only axis,
 					xmin=0.7,
 					xmax=5.3,
@@ -25,7 +26,7 @@
 					ylabel = erreurs (\si{\meter}),
 					ylabel near ticks,
 					ylabel style={yshift=-4mm},
-					xlabel=ordre expérimental,
+					xlabel=Ordre expérimental,
 					xlabel near ticks,
 					]
 					\addplot [color=LimedSpruce, dashed, forget plot]
@@ -1299,6 +1300,7 @@
 				
 				\begin{axis}[%
 					width=0.48\linewidth,
+					height=0.35\linewidth,
 					scale only axis,
 					xmin=0.7,
 					xmax=5.3,
@@ -1306,7 +1308,7 @@
 					xticklabels={$n_1$,$n_2$,$n_3$,$n_4$,$n_5$},
 					ymin=-0.01,
 					ymax=0.65,
-					xlabel=ordre expérimental,
+					xlabel=Ordre expérimental,
 					xlabel near ticks,
 					]
 					\addplot [color=LimedSpruce, dashed, forget plot]
@@ -2148,7 +2150,8 @@
 			\begin{tikzpicture}		
 				\begin{axis}[%
 					width=0.48\linewidth,
-					height=.38\linewidth,
+					height=0.3\linewidth,
+					%height=.38\linewidth,
 					scale only axis,
 					unbounded coords=jump,
 					ymin=3.5,
@@ -2161,20 +2164,20 @@
 					xmax=5.5,
 					xtick={1,2,3,4,5},
 					xticklabels={$n_1$,$n_2$,$n_3$,$n_4$,$n_5$},
-					xlabel=ordre expérimental,
+					xlabel=Ordre expérimental,
 					xlabel near ticks,
 				%	ylabel style={yshift=-4mm},
 					scaled ticks=false, 
 					tick label style={/pgf/number format/fixed},
 					]
-					%\addplot [color=white!80!black, dotted, forget plot]
-					%  table[row sep=crcr]{%
-					%0.0511922091245651	0.5\\
-					%0.0511922091245651	5.5\\
-					%nan	nan\\
-					%0.0619545727968216	0.5\\
-					%0.0619545727968216	5.5\\
-					%};
+					\addplot [color=white!70!Orient, dotted, forget plot]
+					  table[row sep=crcr]{%
+						0.50	5.11922091245651\\
+						5.50	5.11922091245651\\
+						nan	nan\\
+						0.50	6.19545727968216\\
+						5.50	6.19545727968216\\
+					};
 					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
 					table[row sep=crcr]{%
 						1	5.65733909606934\\
@@ -2229,7 +2232,8 @@
 			\begin{tikzpicture}
 				\begin{axis}[%
 					width=0.48\linewidth,
-					height=.38\linewidth,
+					height=0.3\linewidth,
+					%height=.38\linewidth,
 					scale only axis,
 					unbounded coords=jump,
 					ymin=16.5,
@@ -2240,18 +2244,18 @@
 					xmax=5.5,
 					xtick={1,2,3,4,5},
 					xticklabels={$n_1$,$n_2$,$n_3$,$n_4$,$n_5$},
-					xlabel=ordre expérimental,
+					xlabel=Ordre expérimental,
 					xlabel near ticks,
 					tick label style={/pgf/number format/fixed},
 					]
-					%\addplot [color=white!80!black, dotted, forget plot]
-					%  table[row sep=crcr]{%
-					%0.201401516795158	0.5\\
-					%0.201401516795158	5.5\\
-					%nan	nan\\
-					%0.208684906363487	0.5\\
-					%0.208684906363487	5.5\\
-					%};
+					\addplot [color=white!70!Shiraz, dotted, forget plot]
+					table[row sep=crcr]{%
+						0.50	17.75385737419131\\
+						5.50	17.7538573741913\\
+						nan	nan\\
+						0.50	18.4861272573471\\
+						5.50	18.4861272573471\\
+					};
 					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
 					table[row sep=crcr]{%
 						1	20.5043211579323\\

@@ -1,0 +1,106 @@
+\begin{figure}
+	\centering
+%	\begin{tikzpicture}[
+%	gnuplot def/.append style={prefix={}},
+%	]
+%		 \tikzset{
+%			semilog lines/.style={black},
+%			semilog lines 2/.style={gray!50},
+%			semilog half lines/.style={gray!50, dotted},
+%			semilog label x/.style={below,font=\small},
+%			semilog label y/.style={above,font=\small} 
+%		\begin{scope}[yscale=3/40]
+%			\UnitedB
+%			\OrdBode{40}
+%			\semilog{-2}{2}{-90}{-35}
+%			\BodeGraph{-2:2}{\SOAmp{1e-2}{78.26}{14.91}}
+%		\end{scope}
+%		\begin{scope}[yshift=-2.5cm,yscale=3/90]
+%			\UniteDegre
+%			\semilog{-2}{2}{-180}{0}
+%			\BodeGraph{-2:2}{\SOArg{1e-2}{78.26}{14.91}}
+%		\end{scope}
+%	\end{tikzpicture}
+
+
+%	\begin{tikzpicture}[
+%		gnuplot def/.append style={prefix={}},
+%		]		
+%		\tikzset{
+%			semilog lines/.style={black},
+%			semilog lines 2/.style={gray!50},
+%			semilog half lines/.style={gray!50, dotted},
+%			semilog label x/.style={below,font=\small},
+%			semilog label y/.style={above,font=\small} }		
+%		\begin{scope}[xscale=10/5,yscale=5/200]		
+%			% y axis step
+%			\OrdBode{50}			
+%			% Semilog grid
+%			\semilog*{-2}{3}{-100}{100}			
+%			% Plot asymptotic lines
+%			%\draw[blue!80,dashed,line width=1.2] (-2,-90 ) -| (-1,0 ) -| (1,90) -|(2,0) -- (3,0);			
+%			% Phase plot of the transfer function
+%			%\BodeGraph[red!80]{-2:3}{\IntArg{1}+\POArg{1}{0.01}-\POArg{1}{10}-\POArg{1}{0.1}}		
+%			\BodeGraph{-2:3}{20*log10(abs(3/sqrt(1+(0.3*10**t)**2)))}	
+%			% Text node
+%			\node[fill=white] at (-1,50){Phase ($^{\circ}$)};
+%		\end{scope}	
+%	\end{tikzpicture}
+	\tikzsetnextfilename{fig_impedance_bode_diagram_phase_variations}
+    \begin{tikzpicture}
+	    \pgfmathsetmacro{\wnA}{2.372543}
+	    \pgfmathsetmacro{\wnB}{3.16209}
+	    \pgfmathsetmacro{\wnC}{3.35528}
+		\begin{semilogxaxis}[
+			name=ax1,
+			width=.7\linewidth, 
+			height=.35\linewidth, 
+			%xlabel={Fréquence (\si{\hertz})},%\si{\radian\per\second}
+			ylabel={Amplitude (\si{\decibel})},
+			grid=both,
+			xmin=0.1,
+			xmax=100,
+			xticklabels=\empty,
+			%ymax=10,
+			]
+			\addplot[domain=0.01:100,color=Orient,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.45 + 100)^2 + (x*2*pi*10.5)^2 ) )};
+			\addplot[domain=0.01:100,color=Shiraz,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.38 + 150)^2 + (x*2*pi*12)^2 ) )};
+			\addplot[domain=0.01:100,color=Lavender,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.45 + 200)^2 + (x*2*pi*10.5)^2 ) )};
+			\draw[dashed, color=Orient] (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymax});
+			\draw[dashed, color=Lavender] (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymax});
+			\draw[dashed, color=Shiraz] (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymax}) node[near start, fill=white, text=black, yshift=-3mm, xshift=.5mm] {$\omega_{n}^{\phi_2}$};
+		\end{semilogxaxis}
+	%\end{tikzpicture}
+	%\\
+	%\begin{tikzpicture}s
+		\begin{semilogxaxis}[
+			yshift=-.25\linewidth,
+			width=.7\linewidth, 
+			height=.35\linewidth, 
+			xlabel={Fréquence (\si{\hertz})},%\si{\radian\per\second}
+			ylabel={Phase (\si{\degree})},
+			grid=both,
+			xmin=0.1,
+			xmax=100,
+			ytick={0,-90,-180},
+			%ymax=10,
+			%use fpu=false,
+			]
+			\addplot[domain=0.01:100,color=Orient,smooth,thick] {-atan2( (x*2*pi*10.5), (100 - x*2*pi*x*2*pi*0.45) )};
+			\addlegendentry{$H_{\phi_1}$}; 
+			\addplot[domain=0.01:100,color=Shiraz,smooth,thick] {-atan2( (x*2*pi*12), (150 - x*2*pi*x*2*pi*0.38) )};
+			\addlegendentry{$H_{\phi_2}$}; 
+			\addplot[domain=0.01:100,color=Lavender,smooth,thick] {-atan2( (x*2*pi*10.5), (200 - x*2*pi*x*2*pi*0.45) )};
+			\addlegendentry{$H_{\phi_3}$}; 
+			%{-atan( (x*2*pi*12)/(100 - x*2*pi*x*2*pi*0.45) )};
+			
+			\draw[dashed, color=Shiraz] (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymax});
+			\draw[dashed, color=Orient] (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymax}) node[near start, fill=white, text=black, yshift=-3mm, xshift=-1mm] {$\omega_{n}^{\phi_1}$};
+			\draw[dashed, color=Lavender] (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymax}) node[near end, fill=white, text=black, yshift=3mm, xshift=1mm] {$\omega_{n}^{\phi_3}$};
+			 
+		\end{semilogxaxis}
+		
+	\end{tikzpicture}
+	\caption{Diagramme de Bode du comportement en admittance $H(s)=\frac{1}{K+Bs+Ms^2}$}
+	\label{fig_impedance_bode_diagram_phase_variations}
+\end{figure}

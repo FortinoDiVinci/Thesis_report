@@ -6,7 +6,7 @@
 %
 \begin{figure} [h]
 	\centering
-	\subcaptionbox{ANOVA des différences des distances réelles entre les impacts de balles et les consignes de hauteurs (\si{\meter}) $h_1^*=1.5$, $h_2^*=1.75$ et $h_3^*=2$ ($F=990.10^3$)\label{subfig_target_height_significance}}
+	\subcaptionbox{ANOVA des différences des distances réelles entre les impacts de balles et les consignes de hauteur (\si{\meter}) $h_1^*=1.5$, $h_2^*=1.75$ et $h_3^*=2$ ($F=990.10^3$)\label{subfig_target_height_significance}}
 	{
 		\tikzsetnextfilename{subfig_target_height_significance}
 		\begin{tikzpicture}
@@ -253,7 +253,7 @@
 		\end{tikzpicture}%
 	}
 	\hspace{5mm}
-	\subcaptionbox{Hauteur effective $h$ en fonction de la durée des cycles\label{subfig_target_height_vs_cycle_duration}}
+	\subcaptionbox{Erreurs de rebonds $\epsilon_r$ en fonction de la durée des cycles\label{subfig_target_height_vs_cycle_duration}}
 	{
 		\tikzsetnextfilename{subfig_target_height_vs_cycle_duration}
 		\begin{tikzpicture}
@@ -264,7 +264,7 @@
 				height=.3\linewidth,
 				scale only axis,
 				xlabel={Durée de cycle (\si{\second})},
-				ylabel={Hauteur effective (\si{\meter})},
+				ylabel={Erreurs de rebonds (\si{\meter})},
 				axis x line = bottom,
 				axis y line = left, 
 				ylabel near ticks,
@@ -288,7 +288,10 @@
 					color=Shiraz,
 					dashed,
 					] {2.8*x - 3.2};
-							
+				
+%				\draw[dashed] (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, 1.24) -- (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, 1.24);		
+%				\draw[dashed] (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, 1.48) -- (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, 1.48);	
+%				\draw[dashed] (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, 1.73) -- (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, 1.73);	
 				%\addlegendentry{$\vect{f}_z$};
 				%\addlegendentry{$\tilde{\vect{f}}_z$};
 			\end{axis}		

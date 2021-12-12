@@ -11,7 +11,7 @@ Les différents équipements nécessaires pour la mise en place du banc expérim
 
 \subsubsection{Robot} \label{chap4_sec_exp_sub_mat_1}
 
-Pour ces travaux un petit robot articulé, anciennement commercialisé par Kuka\textsuperscript{TM} sous le nom de youBot arm (\cref{fig_youbot_picture}), est utilisé. Avec ses 5 articulations rotoïdes, le youBot fonctionne avec des moteurs sans balais proposés par Maxon\textsubscript{TM}, d'une puissance comprise en \SIlist{15,50}{\watt}, qui sont pilotés par des cartes électroniques conçues par Trinamic\textsubscript{TM} \parencite{TRINAMIC_manual_2011} et reliés à des engrenages épicycloïdaux pour augmenter les couples. Ce robot articulé (\SI{65.5}{\centi\meter} tendu) n'a pas de vocations industrielles, mais est plutôt orienté pour des applications en recherche. En effet, de part ses faibles dimensions et ses flexibilités, le robot est assez peu dangereux, et son interface de programmation (API\footnote{\textit{Application Programming Interface}}) ouverte permet d'accéder à des niveaux de contrôle assez avancés. De plus, il peut être manipulé hors tension de manière réversible\footnote{Seul les frottements des moteurs, réducteurs et transmissions gênent pour obtenir une transparence mécanique importante en l'absence de contrôle du robot.}. Le constructeur conseille de ne pas dépasser la charge utile de \SI{500}{\gram}, et indique une répétabilité positionnelle de \SI{0.1}{\milli\meter}. 
+Pour ces travaux un petit robot articulé, anciennement commercialisé par Kuka\textsuperscript{TM} sous le nom de youBot arm (\cref{fig_youbot_picture}), est utilisé. Avec ses 5 articulations rotoïdes, le youBot fonctionne avec des moteurs sans balais proposés par Maxon\textsubscript{TM}, d'une puissance comprise en \SIlist{15,50}{\watt}, qui sont pilotés par des cartes électroniques conçues par Trinamic\textsubscript{TM} \parencite{TRINAMIC_manual_2011} et reliés à des engrenages épicycloïdaux pour augmenter les couples. Ce robot articulé (\SI{65.5}{\centi\meter} tendu) n'a pas de vocations industrielles, mais est plutôt orienté pour des applications en recherche. En effet, de part ses faibles dimensions et ses flexibilités, le robot est assez peu dangereux, et son interface de programmation (API\footnote{\textit{Application Programming Interface}}) ouverte permet d'accéder à des niveaux de contrôle assez avancés. De plus, il peut être manipulé hors tension de manière réversible\footnote{Seuls les frottements des moteurs, réducteurs et transmissions gênent pour obtenir une transparence mécanique importante en l'absence de contrôle du robot.}. Le constructeur conseille de ne pas dépasser la charge utile de \SI{500}{\gram}, et indique une répétabilité positionnelle de \SI{0.1}{\milli\meter}. 
 
 \begin{figure}
 	\centering
@@ -24,7 +24,7 @@ Pour ces travaux un petit robot articulé, anciennement commercialisé par Kuka\
 
 Le système de pince motorisée a été retiré pour les expériences, et une interface conçue par La Fabrique\footnote{laboratoire de conception de CentraleSupelec}, peut être fixée sur le robot pour offrir une poignée permettant de le manipuler par son extrémité.
 
-L'interface de programmation mise à disposition par Kuka est disponible en C++, et permet d'envoyer des consignes et réglages aux différents pilotes des moteurs. La dernière version de cette API est disponible sur GitHub\footnote{\url{https://github.com/youbot/youbot_driver}} et fonctionne sur un système Linux en connection avec le robot via une liaison Ethernet et le protocole EtherCat. L'ensemble de cette interface programmée en logique objet est détaillée dans la documentation de \textcite{paulus_youbot_2013}.
+L'interface de programmation mise à disposition par Kuka est disponible en C++, et permet d'envoyer des consignes et réglages aux différents pilotes des moteurs. La dernière version de cette API est disponible sur GitHub\footnote{\url{https://github.com/youbot/youbot_driver}} et fonctionne sur un système Linux en connection avec le robot via une liaison Ethernet et le protocole EtherCat. L'ensemble de cette interface programmée en logique objet est détaillé dans la documentation de \textcite{paulus_youbot_2013}.
 
 %\input{latex_figures/fig_youBot_API_architecture}
 
@@ -34,9 +34,9 @@ Que ce soit pour réaliser le contrôle en admittance décrit au \cref{chap2}, o
 
 \paragraph{Capteur de forces et couples} \label{chap4_sec_exp_sub_mat_2_1}
 
-La marque ATI offre une gamme de capteurs de force six axes pensés pour la robotique. Le Mini45 et ses dimensions compactes, un diamètre de \SI{45}{\milli\meter} pour une hauteur de \SI{15.7}{\milli\meter}, offrent une solution classique en robotique \parencite{ajoudani_tele-impedance:_2011,cherubini_collaborative_2019}. Avec un poids de moins de \SI{100}{\gram}, il peut facilement être équipé sur le youBot. Il fonctionne grâce à des jauges de contraintes en silicone qui permettent d'estimer les efforts sentis par le capteur aussi bien au niveaux linéaires qu'angulaires, fournissant ainsi le vecteur complet de forces et couples avec une fréquence de fonctionnement interne de \SI{3}{\kilo\hertz}.
+La marque ATI offre une gamme de capteurs de force six axes pensés pour la robotique. Le Mini45 et ses dimensions compactes, un diamètre de \SI{45}{\milli\meter} pour une hauteur de \SI{15.7}{\milli\meter}, offrent une solution classique en robotique \parencite{ajoudani_tele-impedance:_2011,cherubini_collaborative_2019}. Avec un poids de moins de \SI{100}{\gram}, il peut facilement être équipé sur le youBot. Il fonctionne grâce à des jauges de contraintes en silicone qui permettent d'estimer les efforts sentis par le capteur aussi bien aux niveaux linéaires qu'angulaires, fournissant ainsi le vecteur complet de forces et couples avec une fréquence de fonctionnement interne de \SI{3}{\kilo\hertz}.
 
-La documentation technique du capteur indique des résolution de \SI{0.125}{\newton} pour les forces, de \SI{1.3}{\milli\newton\meter} pour le couple le long de l'axe $\vec{z}$, colinéaire au cylindre formé par la capteur, et de \SI{2.7}{\milli\newton\meter} pour les deux autres couples. Les données acquises par le capteur sont transmises dans un boîtier permettant la communication du capteur avec des équipements externes grâce à une liaison Ethernet et le protocole orienté temps réel, Ethercat.
+La documentation technique du capteur indique des résolutions de \SI{0.125}{\newton} pour les forces, de \SI{1.3}{\milli\newton\meter} pour le couple le long de l'axe $\vec{z}$, colinéaire au cylindre formé par le capteur, et de \SI{2.7}{\milli\newton\meter} pour les deux autres couples. Les données acquises par le capteur sont transmises dans un boîtier permettant la communication du capteur avec des équipements externes grâce à une liaison Ethernet et le protocole orienté temps réel, Ethercat.
 
 \begin{figure}
 	\centering
@@ -47,15 +47,15 @@ La documentation technique du capteur indique des résolution de \SI{0.125}{\new
 	\label{fig_ATI_Mini45_picture}
 \end{figure}
 
-Une fois le capteur installé entre l'effecteur final du robot et la poignée, une partie de son poids, ainsi que celui de la poignée sont perçus par le capteur. De plus, chaque axe souffre d'un biais ayant une dépendance à la température, et il s'est avéré que le capteur était aussi sensible à la lumière. Cette dernière problématique a été contrecarrée en plaçant du papier adhésif opaque sur les zones sensibles. La compensation des biais ainsi que du poids perçu en l'absence d'interaction doit être réalisées avant chaque interaction par une phase de calibration qui peut être effectuée dans une position statique connue du robot. La procédure est détaillée en \cref{app_force_sensor_bias}. Les effets dynamiques ont été évalués et sont négligeables, leur compensation n'est donc pas réalisée pour limiter les temps de calculs.
+Une fois le capteur installé entre l'effecteur final du robot et la poignée, une partie de son poids, ainsi que celui de la poignée sont perçus par le capteur. De plus, chaque axe souffre d'un biais ayant une dépendance à la température, et il s'est avéré que le capteur était aussi sensible à la lumière. Cette dernière problématique a été contrecarrée en plaçant du papier adhésif opaque sur les zones sensibles. La compensation des biais ainsi que du poids perçu en l'absence d'interaction doit être réalisée avant chaque interaction par une phase de calibration qui peut être effectuée dans une position statique connue du robot. La procédure est détaillée en \cref{app_force_sensor_bias}. Les effets dynamiques ont été évalués et sont négligeables, leur compensation n'est donc pas réalisée pour limiter les temps de calculs.
 
 \paragraph{Système de vision} \label{chap4_sec_exp_sub_mat_2_2}
 
-A cause des flexibilités présentées par le robot, notamment lors d'interactions physiques, l'utilisation des données articulaires en position, acquises grâce à des encodeurs au niveau des moteurs, n'est pas suffisemment fiable, pour obtenir la position de l'effecteur final grâce au modèle géométrique du robot (voir \cref{app_direct_kinem} pour le modèle géométrique direct du youBot). Un système de vision externe est donc utilisé.
+A cause des flexibilités présentées par le robot, notamment lors d'interactions physiques, l'utilisation des données articulaires en position, acquises grâce à des encodeurs au niveau des moteurs, n'est pas suffisamment fiable, pour obtenir la position de l'effecteur final grâce au modèle géométrique du robot (voir \cref{app_direct_kinem} pour le modèle géométrique direct du youBot). Un système de vision externe est donc utilisé.
 
-Le système de trois caméras V120:Trio, commercialisé par Optitrack avec le logiciel Motive, permet de localiser des objets dans l'espace grâce à des marqueurs rétroréfléchissants. En positionnant au moins trois marqueurs, le système permet de donner non seulement la position mais aussi la pose d'un corps rigide. Le système de vision fonctionne en émettant de la lumière infrarouge et en observant la réflection des marqueurs. Par conséquant, toute source de lumière infrarouge, et toutes les surfaces reflétant de l'infrarouge doivent être masquées (soit physiquement avec des occulants, soit au niveau logiciel si les sources sont fixes par rapport à la caméra), pour un fonctionnement nominal de l'équipement. 
+Le système de trois caméras V120:Trio, commercialisé par Optitrack avec le logiciel Motive, permet de localiser des objets dans l'espace grâce à des marqueurs rétroréfléchissants. En positionnant au moins trois marqueurs, le système permet de donner non seulement la position mais aussi la pose d'un corps rigide. Le système de vision fonctionne en émettant de la lumière infrarouge et en observant la réflection des marqueurs. Par conséquent, toute source de lumière infrarouge, et toutes les surfaces reflétant de l'infrarouge doivent être masquées (soit physiquement avec des occulants, soit au niveau logiciel si les sources sont fixes par rapport à la caméra), pour un fonctionnement nominal de l'équipement. 
 
-Les ingénieurs d'Optitrack recommandent de placer entre 4 et 12 marqueurs de manière assymétrique, sur chaque corps rigide devant être traqué. Cette redondance permet non seulement d'améliorer la précision des algorithmes de triangulation, mais aussi offre de la robustesse à d'éventuels dissimulations des marqueurs. Il est toutefois déconseillé de dépasser plus de 10 marqueurs, à cause de potentiels chevauchement des surfaces réfléchissantes. Le système de trois caméras est fixé à un trépied placé sur un support fixe à une hauteur surélevée par rapport à celle du robot et une distance légèrement supérieure à \SI{1}{\meter}.
+Les ingénieurs d'Optitrack recommandent de placer entre 4 et 12 marqueurs de manière assymétrique, sur chaque corps rigide devant être traqué. Cette redondance permet non seulement d'améliorer la précision des algorithmes de triangulation, mais aussi offre de la robustesse à d'éventuels dissimulations des marqueurs. Il est toutefois déconseillé de dépasser plus de 10 marqueurs, à cause de potentiels chevauchements des surfaces réfléchissantes. Le système de trois caméras est fixé à un trépied placé sur un support fixe à une hauteur surélevée par rapport à celle du robot et une distance légèrement supérieure à \SI{1}{\meter}.
 
 \begin{figure}
 	\centering
@@ -66,11 +66,11 @@ Les ingénieurs d'Optitrack recommandent de placer entre 4 et 12 marqueurs de ma
 
 Le système offre une précision submillimétrique, le logiciel de traquage Motive annonce jusqu'à \SI{0.2}{\milli\meter}, avec une fréquence de fonctionnement de \SI{120}{\hertz} et une latence comprise entre  \SIlist{8.33;10}{\milli\second}, dont il faudra tenir compte par la suite. Un repère composé de trois marqueurs est positionné entre le robot et la caméra, et sert pour le calibrage du plan pour le calcul de la triangulation. Toutefois, ce premier calibrage n'est pas suffisant pour que les données soient dans la même base que le robot.
 
-Pour synchroniser spatialement des données du système de vision avec celles du robot, des mouvements lents rectilignes, symétriques et à vitesses constantes par morceaux sont effectués avant les interactions physiques avec le robot. La transformée entre le robot et les caméras est obtenues en minimisant l'erreur quadratique entre les deux systèmes de coordonnées \parencite{horn_closed-form_1987}, en utilisant les mesures articulaires pour obtenir la référence des coordonnées du robot.
+Pour synchroniser spatialement des données du système de vision avec celles du robot, des mouvements lents rectilignes, symétriques et à vitesses constantes par morceaux sont effectués avant les interactions physiques avec le robot. La transformée entre le robot et les caméras est obtenue en minimisant l'erreur quadratique entre les deux systèmes de coordonnées \parencite{horn_closed-form_1987}, en utilisant les mesures articulaires pour obtenir la référence des coordonnées du robot.
 
 Les données acquises par les caméras sont envoyées à un ordinateur par liaison USB. Le logiciel Motive n'étant développé que pour Windows, un ordinateur est dédié à cet équipement. Les coordonnées des corps rigides identifiés par le logiciel peuvent ensuite être émises par un serveur virtuel VRPN\footnote{\textit{Virtual-Reality Peripheral Network}}, via un protocole de diffusion UDP\footnote{\textit{User Datagram Protocol}} en liaison locale avec un autre ordinateur.
 
-\subsubsection{Tâche vituelle de jonglerie} \label{chap4_sec_exp_sub_mat_3}
+\subsubsection{Tâche virtuelle de jonglerie} \label{chap4_sec_exp_sub_mat_3}
 
 Une interface graphique permettant de simuler la physique d'une tâche de jonglerie a été développée par la société Easymov Robotics. La tâche de jonglerie est bien connue en sciences du mouvement humain. Dans cette tâche, des participants doivent faire rebondir la balle pour atteindre une hauteur cible $h$, soit en utilisant leur main comme le ferait un jongleur, soit en utilisant une raquette comme le ferait un pongiste. 
 
@@ -90,7 +90,7 @@ L'impact cinématique de la balle sur la raquette est modélisé d'une manière 
 	\dot{z}^+_{k} = \max\left(\dot{z}^p_k, \left((1+\alpha)\dot{z}^p_k-\alpha\dot{z}_{k}^-\right)\right)
 \end{equation}
 
-La simulation haptique des impacts de balle est réalisée en utilisant le système d'injection des perturbations en couples décrit en \cref{chap3_sec_method_sub_pert}. La force de l'impact est estimée en utilisant l'équation \cref{eq_ball_impact}, inspirée par les travaux de \textcite{kawazoe_dynamics_2002}, avec les indices $b$ et $p$ faisant respectivement références à la balle et à la raquette, pour les vitesses $v$ et les masses $m$. $\hat{K}$ correspond à une raideur grossièrement estimée du couplage balle-raquette-robot-bras.
+La simulation haptique des impacts de balle est réalisée en utilisant le système d'injection des perturbations en couples décrit en \cref{chap3_sec_method_sub_pert}. La force de l'impact est estimée en utilisant l'équation \cref{eq_ball_impact}, inspirée par les travaux de \textcite{kawazoe_dynamics_2002}, avec les indices $b$ et $p$ faisant respectivement référence à la balle et à la raquette, pour les vitesses $v$ et les masses $m$. $\hat{K}$ correspond à une raideur grossièrement estimée du couplage balle-raquette-robot-bras.
 
 \begin{equation} \label{eq_ball_impact}
     f_i(k) = -(v_b(k) - v_p(k)) (1 + \alpha) \frac{\sqrt{m_b \hat{K}}}{\pi \sqrt{1 + m_b/m_p}}
@@ -106,7 +106,7 @@ L'ensemble de ces différents équipements doit être ordonnancé afin qu'ils so
 
 Pour cadencer l'ensemble des équipements l'intergiciel \textit{Robot Operating System} (ROS) est utilisé. Cet ensemble d'outils libres de droits permet notamment une abstraction élevée du matériel, un contrôle des périphériques, et la transmission de données formatées. De nombreux paquets sont mis à disposition des utilisateurs pour la gestion d'équipements, d'algorithmes, et d'applications.
 
-Le contrôle du robot peut être effectué via une interface ROS développée par les ingénieurs de Kuka (\href{https://github.com/youbot/youbot_driver_ros_interface}{youbot\_driver\_ros\_interface}), qui permet l'envoi de messages pour contrôler youBot à travers son API. L'ensemble des programmes de contrôle ont donc été développés dans des processus ROS, programmé en C++ pour permettre des cadences de l'ordre du kilohertz. Quelques modifications ont été opérés au paquet permettant ld'interfacer l'API et ROS, afin de pouvoir contrôler le robot en courant, de pouvoir modifier les gains des contrôleurs PID du robot, et aussi de connaître les différentes consignes envoyées au robot.
+Le contrôle du robot peut être effectué via une interface ROS développée par les ingénieurs de Kuka (\href{https://github.com/youbot/youbot_driver_ros_interface}{youbot\_driver\_ros\_interface}), qui permet l'envoi de messages pour contrôler youBot à travers son API. L'ensemble des programmes de contrôle a donc été développé dans des processus ROS, programmés en C++ pour permettre des cadences de l'ordre du kilohertz. Quelques modifications ont été opérées au paquet permettant d'interfacer l'API et ROS, afin de pouvoir contrôler le robot en courant, de pouvoir modifier les gains des contrôleurs PID du robot, et aussi de connaître les différentes consignes envoyées au robot.
 
 Un paquet était déjà existant pour récupérer les données du capteur de force (\href{https://github.com/UTNuclearRoboticsPublic/netft_utils}{netft\_utils}), un autre paquet permettait la récupération des données du système de capture de mouvements par un client VRPN (\href{https://github.com/ros-drivers/vrpn_client_ros}{vrpn\_client\_ros}).
 
@@ -125,35 +125,35 @@ Afin de conduire les expériences dans de bonnes conditions, leur déroulement a
 
 Plusieurs expériences ont été pensées, parmi lesquelles deux ont été sélectionnées. La première expérience consiste à perturber le bras à différentes phases du cycle de la tâche de jonglerie étudiée, tandis que l'autre expérience fait uniquement varier la hauteur cible de la tâche.
 
-Les conditions expérimentales de la tâche de jonglerie - qui permet aux participants de générer un mouvement rythmique -, ont été calibrées pour qu'un maximum de personnes puissent atteindre un comportement stable. Le succès des expériences étant conditionné par la capacité des participants à atteindre un mouvement rythmique régulier, une tâche trop complexe aurait nécessité des phases d'entraînement laborieuses pour que les participants atteignent un niveau d'expertise suffisant. Les paramètres de la simulation ont donc été réglés pour simplifier la tâche, et se rapprocher de fréquences facilement atteignables lors des interactions avec le robot. La phase de recrutement, ainsi que la cohorte en découlant sont détaillés en \cref{chap4_sec_exp_sub_prot_1}.
+Les conditions expérimentales de la tâche de jonglerie - qui permet aux participants de générer un mouvement rythmique -, ont été calibrées pour qu'un maximum de personnes puissent atteindre un comportement stable. Le succès des expériences étant conditionné par la capacité des participants à atteindre un mouvement rythmique régulier, une tâche trop complexe aurait nécessité des phases d'entraînement laborieuses pour que les participants atteignent un niveau d'expertise suffisant. Les paramètres de la simulation ont donc été réglés pour simplifier la tâche, et se rapprocher de fréquences facilement atteignables lors des interactions avec le robot. La phase de recrutement, ainsi que la cohorte en découlant sont détaillées en \cref{chap4_sec_exp_sub_prot_1}.
 
-Par ailleurs, pour obtenir suffisemment de données et limiter les effets de variance induits par les erreurs d'estimation de trajectoire (voir \cref{chap3_sec_method_sub_ident_2_2}), des interactions relativement longues doivent être réalisées. Pour borner les phénomènes de fatigue, les expériences devront être découpées comme détaillé dans la \cref{chap4_sec_exp_sub_prot_2}.
+Par ailleurs, pour obtenir suffisamment de données et limiter les effets de variance induits par les erreurs d'estimation de trajectoire (voir \cref{chap3_sec_method_sub_ident_2_2}), des interactions relativement longues doivent être réalisées. Pour borner les phénomènes de fatigue, les expériences devront être découpées comme détaillé dans la \cref{chap4_sec_exp_sub_prot_2}.
 
 \subsubsection{Recrutement de la cohorte} \label{chap4_sec_exp_sub_prot_1}
 
-Le recrutement de la cohorte s'est principalement fait au sein du laboratoire des signaux et systèmes (L2S), avec l'amable participation de doctorants, post-doctorants et chercheurs, via la diffusion de messages par mail (voir \cref{app_enrolment_mail}), et sur les canaux de communications usuels du laboratoire. Le recrutement a aussi été diffusé à des étudiants de l'université. Sur le total des 31 participants, environ \SI{85}{\percent} travaillaient au L2S et seuls deux ne faisaient pas parti du complexe offert par l'Université Paris-Saclay. La cohorte ne reflète donc pas la population globale, ou même regionale, mais plutôt une population universitaire sud-parisienne. Les critères de sélection étaient assez larges, puisque seules les personnes ayant des pathologies motrices étaient exclues du recrutement.
+Le recrutement de la cohorte s'est principalement fait au sein du laboratoire des signaux et systèmes (L2S), avec l'aimable participation de doctorants, post-doctorants et chercheurs, via la diffusion de messages par mail (voir \cref{app_enrolment_mail}), et sur les canaux de communications usuels du laboratoire. Le recrutement a aussi été diffusé à des étudiants de l'université. Sur le total des 31 participants, environ \SI{85}{\percent} travaillaient au L2S et seuls deux ne faisaient pas partie du complexe offert par l'Université Paris-Saclay. La cohorte ne reflète donc pas la population globale, ou même régionale, mais plutôt une population universitaire sud-parisienne. Les critères de sélection étaient assez larges, puisque seules les personnes ayant des pathologies motrices étaient exclues du recrutement.
 
-Sur la cohorte ayant participé aux expériences, \SI{25}{\percent} était des femmes, et \SI{90}{\percent} était droitier. Presque \SI{60}{\percent} des participants ont déclaré n'avoir jamais manipulé un banc expérimental similaire antérieurement aux expériences, et \SI{30}{percent} ont déclaré manipuler un robot pour la première fois, et seuls deux ont dit avoir un niveau de pratique habituel de robots. \SI{23}{\percent} ont déclaré avoir un niveau de pratique, tout sport de raquette confondu, nul, \SI{42}{\percent} un niveau novice, \SI{32}{\percent} un niveau intermédiaire et un seul participant a annoncé avoir un niveau avancé. 
+Sur la cohorte ayant participé aux expériences, \SI{25}{\percent} étaient des femmes, et \SI{90}{\percent} étaient droitiers. Presque \SI{60}{\percent} des participants ont déclaré n'avoir jamais manipulé un banc expérimental similaire antérieurement aux expériences, et \SI{30}{\percent} ont déclaré manipuler un robot pour la première fois, et seuls deux ont dit avoir un niveau de pratique habituel de robots. \SI{23}{\percent} ont déclaré avoir un niveau de pratique, tout sport de raquette confondu, nul, \SI{42}{\percent} un niveau novice, \SI{32}{\percent} un niveau intermédiaire et un seul participant a annoncé avoir un niveau avancé. 
 
-Les participants avaient en moyenne 30 ans, mais la médiane des âges se situait à 27, l'âge le plus représenté au moment des expériences, avec 8 individus. \SI{50}{\percent} des participants avaient ainsi entre 26 et 30 ans, ce qui correspond grossièrement aux personnes en thèse de doctorat. La distribution de la taille et du poids des intervenants était presque gaussienne, avec des moyennes respectives de \SI{71.3}{\kilogram} ($\pm$ \SI{12.7}{\kilogram}) et \SI{176.2}{\centi\meter} ($\pm$ \SI{9.3}{\centi\meter}) - \textit{les écarts types sont indiqués entre parenthèses}. Il est imporant de signifier ici, que le banc expérimental n'était pas réglable en fonction de la taille des participants, or quatre personnes faisaient moins \SI{1.65}{\meter} et trois plus de \SI{1.85}{\meter}. Avec une amplitude de plus de \SI{40}{\centi\meter}) sur l'ensemble de l'échantillon, l'ergonomie de l'expérience n'était pas garantie à l'ensemble des utilisateurs.
+Les participants avaient en moyenne 30 ans, mais la médiane des âges se situait à 27, l'âge le plus représenté au moment des expériences, avec 8 individus. \SI{50}{\percent} des participants avaient ainsi entre 26 et 30 ans, ce qui correspond grossièrement aux personnes en thèse de doctorat. La distribution de la taille et du poids des intervenants était presque gaussienne, avec des moyennes respectives de \SI{71.3}{\kilogram} ($\pm$ \SI{12.7}{\kilogram}) et \SI{176.2}{\centi\meter} ($\pm$ \SI{9.3}{\centi\meter}) - \textit{les écarts types sont indiqués entre parenthèses}. Il est important de signifier ici, que le banc expérimental n'était pas réglable en fonction de la taille des participants, or quatre personnes faisaient moins \SI{1.65}{\meter} et trois plus de \SI{1.85}{\meter}. Avec une amplitude de plus de \SI{40}{\centi\meter}) sur l'ensemble de l'échantillon, l'ergonomie de l'expérience n'était pas garantie à l'ensemble des utilisateurs.
 
-Les données de poids et de taille permettent de calcul l'indice de masse corporelle (IMC), qui est communément utilisé pour évaluer les risques sanitaires liés à l'obésité ou à la maigreur. Bien que cet indice soit imparfait, il n'est pas exemple pas adpaté aux athlètes \parencite{provencher_body_2018}, il reste fortement corrélé à certaines pathologies comme des risques cardiovaculaires \parencite{steinberger_comparison_2005} et à des excès de mortalité \parencite{flegal_estimates_2009}, il reste donc utile, notamment lorsqu'il est combiné à d'autres mesures venant combler ses lacunes. Le calcul de l'IMC n'a indiqué aucune personne en obésité sévère ou état de maigreur dans l'échantillon, avec une médiane à \SI{22.3}{\kilogram\per\meter\squared} et 27 des participants avec un indice compris entre \SIlist{18.5;25}{\kilogram\per\meter\squared}.
+Les données de poids et de taille permettent de calculer l'indice de masse corporelle (IMC), qui est communément utilisé pour évaluer les risques sanitaires liés à l'obésité ou à la maigreur. Bien que cet indice soit imparfait, il n'est par exemple pas adpaté aux athlètes \parencite{provencher_body_2018}, il reste fortement corrélé à certaines pathologies comme des risques cardiovaculaires \parencite{steinberger_comparison_2005} et à des excès de mortalité \parencite{flegal_estimates_2009}, il reste donc utile, notamment lorsqu'il est combiné à d'autres mesures venant combler ses lacunes. Le calcul de l'IMC n'a indiqué aucune personne en obésité sévère ou état de maigreur dans l'échantillon, avec une médiane à \SI{22.3}{\kilogram\per\meter\squared} et 27 des participants avec un indice compris entre \SIlist{18.5;25}{\kilogram\per\meter\squared}.
 
 \subsubsection{Objectifs et hypothèses} \label{chap4_sec_exp_sub_prot_2}
 
-Comme vu en \cref{chap1_sec_modelling_human_sub_2}, les propriétés viscoélastiques des membres humains peuvent varier en fonction de nombreux facteurs, dont les tâches réalisées et les environnements dans lesquelles elles interviennent. Or, lors de contrôles collaboratifs, la connaissance de ces caractéristiques permet d'orienter le choix du ou des contrôleurs mais aussi d'améliorer leurs réglages pour un meilleur ressenti des utilisateurs, comme c'est le cas pour les contrôles en admittance (voir \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2}). Au cours de tâches en mouvement, ces propriétés varient aussi en fonction du temps. On peut donc s'attendre à des variations cycliques de ces propriétés pendant des mouvements rythmiques.
+Comme vu en \cref{chap1_sec_modelling_human_sub_2}, les propriétés viscoélastiques des membres humains peuvent varier en fonction de nombreux facteurs, dont les tâches réalisées et les environnements dans lesquels elles interviennent. Or, lors de contrôles collaboratifs, la connaissance de ces caractéristiques permet d'orienter le choix du ou des contrôleurs mais aussi d'améliorer leurs réglages pour un meilleur ressenti des utilisateurs, comme c'est le cas pour les contrôles en admittance (voir \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2}). Au cours de tâches en mouvement, ces propriétés varient aussi en fonction du temps. On peut donc s'attendre à des variations cycliques de ces propriétés pendant des mouvements rythmiques.
 
-On souhaite donc vérifier si, au cours d'une tâche cyclique, classiquement utilisée dans en sciences du mouvement humain, nécessitant un contrôle actif pour maintenir un objectif -\textit{ dans le cas étudié, la hauteur cible }-, un contrôle passif ou subconscient des propriétés viscoélastiques intervient pour améliorer la robustesse et les performances de la tâche, d'où la formulation des \cref{hyp_perf_rhyth,hyp_robus_rhyth}.
+On souhaite donc vérifier si, au cours d'une tâche cyclique, classiquement utilisée en sciences du mouvement humain, nécessitant un contrôle actif pour maintenir un objectif -\textit{ dans le cas étudié, la hauteur cible }-, un contrôle passif ou subconscient des propriétés viscoélastiques intervient pour améliorer la robustesse et les performances de la tâche, d'où la formulation des \cref{hyp_perf_rhyth,hyp_robus_rhyth}.
 
 \begin{hypotheses}{}{hyp_perf_rhyth}
-	Les performances à la tâche de jonglerie sont corrélées au moins partiellement à la raideur et l'amortissement cartésiens du bras.
+	Les performances à la tâche de jonglerie sont corrélées à la raideur et l'amortissement cartésiens du bras.
 \end{hypotheses}
 
 \begin{hypotheses}{}{hyp_robus_rhyth}
 	Les variations d'impédance observées permettent d'améliorer les marges de stabilité, et donc la robustesse lors d'interactions physiques avec un environnement.
 \end{hypotheses}
 
-De plus, lors de tâches cycliques, les variables cinématiques varient aussi en ryhtmes et sont contrôlées par des structures spinales, comme les réseaux locomoteurs ou CPG\footnote{\textit{Central Pattern Generators}} étudiés pour la tâche de jonglerie par \textcite{de_rugy_actively_2003,avrin_self-organization_2018}. On pourrait alors s'attendre à ce que les propriétés dynamiques et donc notamment d'impédance varient aussi en rythme et soient contrôlées par des structures proches. Ces travaux ne se sont pas intéressés en détails aux CPGs, l'origine soupçonnée de telles variations n'a donc pas été étudiée, toutefois, l'\cref{hyp_stiff_rhyth} peut quand même être formulée sans la notion de CPG et au niveau cartésien.
+De plus, lors de tâches cycliques, les variables cinématiques varient aussi en rythmes et sont contrôlées par des structures spinales, comme les réseaux locomoteurs ou CPG\footnote{\textit{Central Pattern Generators}} étudiés pour la tâche de jonglerie par \textcite{de_rugy_actively_2003,avrin_self-organization_2018}. On pourrait alors s'attendre à ce que les propriétés dynamiques et donc notamment d'impédance varient aussi en rythme et soient contrôlées par des structures proches. Ces travaux ne se sont pas intéressés en détails aux CPGs, l'origine soupçonnée de telles variations n'a donc pas été étudiée, toutefois, l'\cref{hyp_stiff_rhyth} peut quand même être formulée sans la notion de CPG et au niveau cartésien.
 
 \begin{hypotheses}{}{hyp_stiff_rhyth}%[label={hyp_stiff_rhyth}]
 	La raideur apparente cartésienne du bras humain varie de manière cyclique en régime stable de la tâche de jonglerie.
@@ -168,42 +168,42 @@ Afin de pouvoir valider ou infirmer ces hypothèses, il faut
 
 \subsubsection{Déroulement expérimental} \label{chap4_sec_exp_sub_prot_3}
 
-Pour essayer de répondre aux hypothèses formulées, une cible minimale d'une vingtaine de participants était visée pour réaliser les deux expériences choisies pour une durée totale ne dépassant par l'heure. Afin de limiter les variations dues à la fatigue, les expériences ont été découpées en deux sessions d'une trentaine de minutes chacune. Toutefois pour aussi limiter les variations d'état des participants pouvant dépendre d'autres conditions externes, ces deux sessions étaient dans la mesure du possible réalisées la même journée, avec une pause minimale de \SI{45}{\minute}. Seuls deux participants ont vu leurs deux sessions se dérouler sur des journées différentes avec un espacement inférieur à cinq jour.
+Pour essayer de répondre aux hypothèses formulées, une cible minimale d'une vingtaine de participants était visée pour réaliser les deux expériences choisies pour une durée totale ne dépassant par l'heure. Afin de limiter les variations dues à la fatigue, les expériences ont été découpées en deux sessions d'une trentaine de minutes chacune. Toutefois pour aussi limiter les variations d'état des participants pouvant dépendre d'autres conditions externes, ces deux sessions étaient dans la mesure du possible réalisées la même journée, avec une pause minimale de \SI{45}{\minute}. Seuls trois participants ont vu leurs deux sessions se dérouler sur des journées différentes avec un espacement inférieur à cinq jours.
 
-Lors du premier contact avec les participants par mail ou suite à une prise de contact de leur propore initiative, les objectifs très larges de l'expérience et le formulaire de consentement éclairé, dont la version française est donnée en \cref{app_consent_notice}, leurs étaient communiqués. Une vidéo présentant le banc expérimental était aussi diffusée. De cette manière, les participants pouvaient déjà avoir un aperçu de l'expérience, de ce qui était attendu d'eux et de leurs droits avant même le premier rendez-vous. Pour s'assurer de la lecture de la fiche de consentement, le document leur était fourni le jour des expériences, et il leur était demandé de lire complètement le document et de le signer s'ils étaient en accord avec. Puis, il leur était demandé de remplir la fiche de renseignement où ils pouvaient déclarer de manière anonyme les informations anthropométriques comme le poids, la taille et l'âge.
+Lors du premier contact avec les participants par mail ou suite à une prise de contact de leur propre initiative, les objectifs très larges de l'expérience et le formulaire de consentement éclairé, dont la version française est donnée en \cref{app_consent_notice}, leurs étaient communiqués. Une vidéo présentant le banc expérimental était aussi diffusée. De cette manière, les participants pouvaient déjà avoir un aperçu de l'expérience, de ce qui était attendu d'eux et de leurs droits avant même le premier rendez-vous. Pour s'assurer de la lecture de la fiche de consentement, le document leur était fourni le jour des expériences, et il leur était demandé de lire complètement le document et de le signer s'ils étaient en accord avec. Puis, il leur était demandé de remplir la fiche de renseignements où ils pouvaient déclarer de manière anonyme les informations anthropométriques comme le poids, la taille et l'âge.
 
-Ce petit interval de temps a très souvent permis de préparer la calibration du robot, ainsi que la réalisation d'autres procédures ne nécessitant pas l'intervention des participants. Un numéro aléatoire à trois chiffres leur était aussi attribué, dont les participants restaient les seuls détenteurs, permettant d'anonymiser les données de la fiche de renseignement tout en pouvant la lier à une expérience, ce numéro étant alors utilisé comme nom de dossier pour les données enregistrées au cours des expériences.
+Ce petit intervalle de temps a très souvent permis de préparer la calibration du robot, ainsi que la réalisation d'autres procédures ne nécessitant pas l'intervention des participants. Un numéro aléatoire à trois chiffres leur était aussi attribué, dont les participants restaient les seuls détenteurs, permettant d'anonymiser les données de la fiche de renseignements tout en pouvant la lier à une expérience, ce numéro étant alors utilisé comme nom de dossier pour les données enregistrées au cours des expériences.
 
-Une fois les préparatifs terminés et les documents remplis correctement, les participants réalisaient deux courtes manipulations pour les familiariser avec le robot. Dans un premier temps, il devait manoeuvrer le robot en réalisant des mouvements d'amplitude libre, avec une fréquence imposée par un métronome numérique. De cette manière, les propriétés dynamiques de l'interaction pouvaient être ressenties avant même d'avoir à réaliser la tâche et cette expérience permettait de familiariser et éventuellement rassurer les personnes n'ayant jamais manipulées de robot articulé. Pendant qu'ils réalisaient cette manipulation, l'environnement simulé leur était dévoilé, sans que la balle ne soit lâchée, les limites expérimentales, ainsi que les différentes sécurités étaient aussi présentées à ce moment. 
+Une fois les préparatifs terminés et les documents remplis correctement, les participants réalisaient deux courtes manipulations pour les familiariser avec le robot. Dans un premier temps, ils devaient manoeuvrer le robot en réalisant des mouvements d'amplitude libre, avec une fréquence imposée par un métronome numérique. De cette manière, les propriétés dynamiques de l'interaction pouvaient être ressenties avant même d'avoir à réaliser la tâche et cette expérience permettait de familiariser et éventuellement rassurer les personnes n'ayant jamais manipulé de robot articulé. Pendant qu'ils réalisaient cette manipulation, l'environnement simulé leur était dévoilé, sans que la balle ne soit lâchée, les limites expérimentales, ainsi que les différentes sécurités étaient aussi présentées à ce moment. 
 
-Dans un second temps, une fois les personnes se sentant confiantes, une session de jonglerie avec le robot était déclenchée dans les conditions de l'expérience 1, avec notamment des perturbations. Le but de cette session était de permettre aux participants de s'entrainer à réaliser la tâche, jusqu'à ce qu'ils soient capable de maintenir un régime stable pendant plus d'une dizaine de jongles. Cette phase d'entrainement peut aussi fournir des informations sur des variations d'impédance liées à un éventuel apprentissage.
+Dans un second temps, une fois les personnes se sentant confiantes, une session de jonglerie avec le robot était déclenchée dans les conditions de l'expérience 1, avec notamment des perturbations. Le but de cette session était de permettre aux participants de s'entrainer à réaliser la tâche, jusqu'à ce qu'ils soient capables de maintenir un régime stable pendant plus d'une dizaine de jongles. Cette phase d'entrainement peut aussi fournir des informations sur des variations d'impédance liées à un éventuel apprentissage.
 
-Enfin, une fois les candidats formés, une des deux expériences était tiré au hasard pour savoir avec laquelle ils commenceraient. Deux manipulations d'environ \SI{5}{\minute} étaient alors réalisées, séparées d'une courte pause pour que les participants n'accumule pas une fatigue importante. La première session se terminait alors, et au second rendez-vous les trois manipulations restantes étaient effectuées. L'expérimentateur posait alors quelques questions concernant le ressenti des participants, notamment sur leur perception de la difficulté des expériences et des perturbations.
+Enfin, une fois les candidats formés, une des deux expériences était tirée au hasard pour savoir avec laquelle ils commenceraient. Deux manipulations d'environ \SI{5}{\minute} étaient alors réalisées, séparées d'une courte pause pour que les participants n'accumulent pas une fatigue importante. La première session se terminait alors, et au second rendez-vous les trois manipulations restantes étaient effectuées. L'expérimentateur posait alors quelques questions concernant le ressenti des participants, notamment sur leur perception de la difficulté des expériences et des perturbations.
 
-\paragraph{Expérience 1} Dans cette première expérience la hauteur cible, signifiée par une ligne rouge dans l'environnement simulé, est fixée à $h_1^*=$\SI{1.75}{\meter}. Il est important de remarquer que cette hauteur ne reflète pas les dimensions réellement affichées, mais est seulement pertinente pour le calcul du temps de chute de la balle - \textit{facilement déduit des équations balistiques}. Après un compte à rebours annoncé oralement, les participants peuvent commencer à jongler en essayant d'envoyer la balle au plus proche de la cible. Pour les aider dans cette tâche, et aussi pour rendre l'activité plus ludique, un score correspondant à la distance entre les centres de la balle et de la cible est affiché au dessus de la cible de manière lisible.
+\paragraph{Expérience 1} Dans cette première expérience la hauteur cible, signifiée par une ligne rouge dans l'environnement simulé, est fixée à $h_2^*=$\SI{1.75}{\meter}. Il est important de remarquer que cette hauteur ne reflète pas les dimensions réellement affichées, mais est seulement pertinente pour le calcul du temps de chute de la balle - \textit{facilement déduit des équations balistiques}. Après un compte à rebours annoncé oralement, les participants peuvent commencer à jongler en essayant d'envoyer la balle au plus proche de la cible. Pour les aider dans cette tâche, et aussi pour rendre l'activité plus ludique, un score correspondant à la distance entre les centres de la balle et de la cible est affiché au dessus de la cible de manière lisible. Il s'agit de l'erreur de rebonds $\epsilon_r$.
 
-Lors de chaque impact de balle, un retour haptique est simulé par le robot (equation \cref{eq_ball_impact}), et la fréquence de frappe moyenne est estimée sur une fenêtre glissante de 5 impacts. Dès le déclenchement de la tâche un minuteur dont la durée est déterminée de manière pseudo-aléatoire se déclenche pour déterminer le temps sans perturbation. Ce temps est borné entre \SIlist{2;5}{\second}. Une fois cette durée écoulée, dès le prochain impact de balle détecté, un nouveau minuteur se déclenche pour permettre en fonction de la fréquence moyenne estimée d'injecter une perturbation à l'une des trois phases du cycle de jonglerie définie à \SIlist{25;50;75}{\percent} du cycle. Ces phases correspondent approximativement à
-\begin{enumerate*}[label=\roman*)]
-	\item\label{item_pert1} l'instant après l'impact de la balle, 
-	\item\label{item_pert2} la phase descendante de la position de la raquette,
-	\item\label{item_pert3} l'instant avant l'impact de la balle, au minimum de vitesse de la phase descendante,
+Lors de chaque impact de balle, un retour haptique est simulé par le robot (équation \cref{eq_ball_impact}), et la fréquence de frappe moyenne est estimée sur une fenêtre glissante de 5 impacts. Dès le déclenchement de la tâche un minuteur dont la durée est déterminée de manière pseudo-aléatoire se déclenche pour déterminer le temps sans perturbation. Ce temps est borné entre \SIlist{2;5}{\second}. Une fois cette durée écoulée, dès le prochain impact de balle détecté, un nouveau minuteur se déclenche pour permettre en fonction de la fréquence moyenne estimée d'injecter une perturbation à l'une des trois phases du cycle de jonglerie définies à \SIlist{25;50;75}{\percent} du cycle. Ces phases correspondent approximativement à
+\begin{enumerate*}[label=\textphi\textsubscript{\arabic*}]
+	\item)\label{item_pert1} l'instant après l'impact de la balle, 
+	\item)\label{item_pert2} la phase descendante de la position de la raquette,
+	\item)\label{item_pert3} l'instant avant l'impact de la balle, au minimum de vitesse de la phase descendante,
 \end{enumerate*} et sont choisies aléatoirement tout comme la direction des perturbations.
 
 Cette expérience est découpée en trois manipulations. Lorsque les participants ont commençé avec celle ci, la troisième manipulation avait lieu à la session suivante, après les deux manipulations de l'expérience 2.
 
-\paragraph{Expérience 2} Dans cette expérience, seules les perturbations de la phase \cref{item_pert1} sont injectées, toujours en respectant des temps de pauses identiques à l'expérience 1. La hauteur cible varie quant à elle entre \SIlist{1.5;2.0}{\meter} ($h_1^*$ et $h_3^*$), pour offrir deux nouvelles hauteurs cibles équidistantes de celle de l'expérience 1. Cette expérience se compose donc de deux manipulations, avec chacune l'une des deux hauteurs cibles fixée. L'ordre d'exécution de ces hauteurs est aussi déterminé de manière pseudo-aléatoire.
+\paragraph{Expérience 2} Dans cette expérience, seules les perturbations de la phase \cref{item_pert1} sont injectées, toujours en respectant des temps de pauses identiques à l'expérience 1. La hauteur cible varie quant à elle entre \SIlist{1.5;2.0}{\meter} ($h_1^*$ et $h_3^*$), pour offrir deux nouvelles hauteurs cibles équidistantes de celle de l'expérience 1. Cette expérience se compose donc de deux manipulations, avec chacune ayant l'une des deux hauteurs cibles fixée. L'ordre d'exécution de ces hauteurs est aussi déterminé de manière pseudo-aléatoire.
 
 Pour éviter que les participants ne compensent ces changement de hauteur en déplacement la zone d'impact de la balle verticalement, il leur était demandé d'essayer de maintenir la même zone d'impact. La hauteur la plus basse contraignait ainsi une fréquence de frappe plus élevée, mais nécessitait une vitesse de frappe plus faible et inversement la hauteur la plus élevée nécessitait d'augmenter la vitesse de frappe tout en permettant une réduction de la fréquence. Le compromis entre la fréquence et la vitesse de frappe est assez contradictoire puisque lorsque la vitesse d'impact doit être augmentée, la vitesse moyenne du mouvement doit être réduite, ou alors son amplitude doit être augmentée.
 
 \section{Exploitation des résultats} \label{chap4_sec_res}
 
-Les expériences ont pu se dérouler dans l'immense majorité sans rencontrer d'incidents. Dans deux uniques cas, lors de l'arrêt de manipulation, après que le participant ait lâché le robot, la séquence de remise en position initiale a échouée entrainant une collision entre l'effecteur final et le support, malgré l'enclenchement de arrêt d'urgence. Ces deux incidents, ont nécessité de replacer certains marqueurs et donc de refaire la calibration du système de vision, toutefois, il ne semble pas qu'ils aient eu d'autres conséquences.
+Les expériences ont pu se dérouler dans l'immense majorité sans rencontrer d'incidents. Dans deux uniques cas, lors de l'arrêt de manipulation, après que le participant ait lâché le robot, la séquence de remise en position initiale a échouée entrainant une collision entre l'effecteur final et le support, malgré l'enclenchement de l'arrêt d'urgence. Ces deux incidents, ont nécessité de replacer certains marqueurs et donc de refaire la calibration du système de vision, toutefois, il ne semble pas qu'ils aient eu d'autres conséquences.
 
-Dans un premier temps, l'expertise des participants pour la réalisation de la tâche, ou plutôt leur qualification est évaluée par rapport aux erreurs de rebonds $\epsilon_r$ entre la hauteur cible et les apex de la balle. Dans un second temps, les identifications des paramètres d'impédance sont réalisées en fonction de la qualification des participants et des phases cycliques perturbées.
+Dans un premier temps, l'expertise des participants pour la réalisation de la tâche, ou plutôt leur qualification est évaluée par rapport aux erreurs de rebonds $\epsilon_r$ entre la hauteur cible et les apex de la balle. Dans un second temps, les identifications des paramètres d'impédance sont réalisées en fonction de la qualification des participants et des phases cycliques perturbées. Le découpage des cycles est défini par les impacts de la balle.
 
-Dans les études qui suivent, des analyses de variance (ANOVA) ont été conduites avec des seuils de significativité fixés à \SI{5}{\percent}. Les ANOVA permettent d'infirmer ou valider l'hypothèse dites nulle, c'est à dire, la probabilité que plusieurs jeux de données soient issues d'une même population, notamment en comparant la moyenne des groupes fournis, ainsi que la distribution des données. Ces analyses peuvent être conduites classiquement en s'intéressant à un seul ou deux facteurs contrôlés, et de manière plus marginale, à plus de deux critères. Lorsqu'elles sont conduites sur plus de deux groupes ou jeux de données, les ANOVA ne révèlent que l'existance d'au moins un groupe significativement différent des autres.
+Dans les études qui suivent, des analyses de variance (ANOVA) ont été conduites avec des seuils de significativité fixés à \SI{5}{\percent}. Les ANOVA permettent d'infirmer ou valider l'hypothèse dite nulle, c'est à dire, la probabilité que plusieurs jeux de données soient issus d'une même population, notamment en comparant la moyenne des groupes fournis, ainsi que la distribution des données. Ces analyses peuvent être conduites classiquement en s'intéressant à un seul ou deux facteurs contrôlés, et de manière plus marginale, à plus de deux critères. Lorsqu'elles sont conduites sur plus de deux groupes ou jeux de données, les ANOVA ne révèlent que l'existence d'au moins un groupe significativement différent des autres.
 
-Pour compléter les ANOVA, et savoir quels groupes sont à l'orgine du rejet de l'hypothèse nulle, d'autres analyses doivent être conduites. Des tests t \parencite{student_probable_1908} multiples peuvent alors être conduits par pair. Toutefois, la multiplication des tests augmente la probabilité de rejeter l'hypothèse nulle, une correction doit donc être effectuée, on parle de tests \textit{post-hoc} ou de comparaisons multiples. Pour ne pas fausser l'analyse, on pourra par exemple utiliser les tests étendus de Tukey \parencite{tukey_comparing_1949} ou la correction de Bonferroni \parencite{dunn_multiple_1961} qui permettent de palier cette problématique. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.
+Pour compléter les ANOVA, et savoir quels groupes sont à l'orgine du rejet de l'hypothèse nulle, d'autres analyses doivent être conduites. Des tests t \parencite{student_probable_1908} multiples peuvent alors être conduits par paires. Toutefois, la multiplication des tests augmente la probabilité de rejeter l'hypothèse nulle, une correction doit donc être effectuée, on parle de tests \textit{post-hoc} ou de comparaisons multiples. Pour ne pas fausser l'analyse, on pourra par exemple utiliser les tests étendus de Tukey \parencite{tukey_comparing_1949} ou la correction de Bonferroni \parencite{dunn_multiple_1961} qui permettent de palier cette problématique. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.
 
 \subsection{Qualification de la réalisation de la tâche} \label{chap4_sec_res_sub_task}
 
@@ -211,55 +211,54 @@ Pour compléter les ANOVA, et savoir quels groupes sont à l'orgine du rejet de 
 
 En premier lieu, il faut remarquer que même si les consignes données aux participants étaient d'essayer de maintenir la hauteur d'impact de la balle constante, il faut vérifier que cette consigne a globablement été respectée. En effet, si cette dernière n'a pas été observée, les participants peuvent avoir maintenu une hauteur réelle entre la raquette au moment de l'impact et la hauteur cible peu variable.
 
-Les hauteurs réelles $h_1\text{, }h_2\text{ et }h_3$ induites par les experiences sont donc regroupées pour l'ensemble des participants et analysés comme montré sur la \cref{subfig_target_height_significance}. Comme on peut le constater, les hauteurs réelles sont différentes de celles indiquées des les consignes expérimentales (\SIlist{1.5;1.75;2.0}{\meter}), car la hauteur d'impact avec la balle est rarement nulle. Quoiqu'il en soit, les différences de hauteur engendrées sont bien significatives avec des médianes approximativement inférieures de \SI{0.3}{\meter} dans l'environnement simulé. 
+Les hauteurs réelles $h_1\text{, }h_2\text{ et }h_3$ induites par les expériences sont donc regroupées pour l'ensemble des participants et analysées comme montré sur la \cref{subfig_target_height_significance}. Comme on peut le constater, les hauteurs réelles sont différentes de celles indiquées des les consignes expérimentales (\SIlist{1.5;1.75;2.0}{\meter}), car la hauteur d'impact avec la balle est rarement nulle. Quoiqu'il en soit, les différences de hauteur engendrées sont bien significatives avec des médianes approximativement inférieures de \SI{0.3}{\meter} dans l'environnement simulé. 
 
 \tikzexternalenable
 \input{latex_figures/chapter_4/fig_target_height_significance}
 
-Maintenant que l'existance des différences de hauteur est bien confirmée, on peut s'intéresser aux effets induits par ces hauteurs. On va donc se concentrer sur les erreurs de rebonds entre le centre de la balle au moment de l'apex, et le centre de la hauteur cible. La \cref{fig_target_height_bouncing_error_significance} dévoile les ANOVA conduites sur les erreurs de rebond. La première (\cref{subfig_target_height_bouncing_error_significance}) révèle des différences significatives de moyenne pour au moins un des trois groupes. De manière contre-intuitives, les erreurs médianes semblent avoir tendance à diminuer lorsque la hauteur cible est plus élevée. Toutefois, l'analyse complémentaire de variances des erreurs absolues révèle qu'en réalité, ces dernières augmentent de manière significative avec la hauteur. La difficulté augmente donc bien avec la distance pour les gammes implémentées. La première ANOVA montre donc que les participants ont tendance à viser plus haut que la cible, même si cette dynamique semble s'atténuer avec l'augmentation de la hauteur cible.
+Maintenant que l'existence des différences de hauteur est bien confirmée, on peut s'intéresser aux effets induits par ces hauteurs. On va donc se concentrer sur les erreurs de rebonds entre le centre de la balle au moment de l'apex, et le centre de la hauteur cible. La \cref{fig_target_height_bouncing_error_significance} dévoile les ANOVA conduites sur les erreurs de rebonds. La première (\cref{subfig_target_height_bouncing_error_significance}) révèle des différences significatives de moyenne pour au moins un des trois groupes. De manière contre-intuitive, les erreurs médianes semblent avoir tendance à diminuer lorsque la hauteur cible est plus élevée. Toutefois, l'analyse complémentaire de variances des erreurs absolues révèle qu'en réalité, ces dernières augmentent de manière significative avec la hauteur. La difficulté augmente donc bien avec la distance pour les gammes implémentées. La première ANOVA montre donc que les participants ont tendance à viser plus haut que la cible, même si cette dynamique semble s'atténuer avec l'augmentation de la hauteur cible.
 
 \input{latex_figures/chapter_4/fig_target_height_bouncing_error_significance}
 
-L'application de la correction de Bonferroni lors des tests de Students multiples, confirme bien que chacun des trois groupes est significativement différents des deux autres, aussi bien pour les erreurs absolues ou non.
+L'application de la correction de Bonferroni lors des tests de Students multiples, confirme bien que chacun des trois groupes est significativement différent des deux autres, aussi bien pour les erreurs absolues que non.
 
 Il est intéressant de noter que seuls \SI{13}{\percent} des participants ont trouvé que la hauteur la plus faible représentait l'expérience la plus complexe à réaliser pour minimiser l'erreur de rebond, alors que respectivement \SI{38}{\percent} et \SI{5}{\percent} ont ressenti plus de difficulté pour les hauteurs la plus élevée et médiane - les autres n'ont soit pas observé de différence, soit n'ont pas su départager une seule hauteur.
 
-\subsubsection{Effets de l'ordre des expériences} \label{chap4_sec_res_sub_task_2}
+\subsubsection{Effets temporels de l'ordre des expériences} \label{chap4_sec_res_sub_task_2}
 
-Une autre source probable pouvant faire varier les performances des participants vient de l'ordre dans lequel les expériences sont effectuées. Plusieurs phénomènes aux conséquences différentes peuvent jouer sur les performances des participants. On pourra par exemple citer la fatigue entrainée par l'exécution d'expériences successives ou à l'inverse, les phénomènes d'apprentissage.
+Une autre source probable pouvant faire varier les performances des participants vient de l'ordre dans lequel les expériences sont effectuées. Plusieurs phénomènes aux conséquences différentes peuvent jouer sur les performances des participants. On pourra par exemple citer la fatigue entrainée par l'exécution d'expériences successives ou à l'inverse, les phénomènes d'apprentissage, mais aussi le fait que certaines expériences peuvent s'avérer plus complexes que d'autres.
 
-Une analyse de variance a donc été conduite sur l'ensemble des participants en séparant les groupes en fonction de l'ordre d'éxécution des expériences. Lorsqu'un participant a échoué à achever une expérience complète, la ou les expériences complémentaires conduites sont regroupées avec l'expérience incomplète, pour assurer cinq groupes d'expérience.
+Une analyse de variance a donc été conduite sur l'ensemble des participants en séparant les groupes en fonction de la temporalité d'éxécution des expériences. Lorsqu'un participant a échoué à achever une expérience complète, la ou les expériences complémentaires conduites sont regroupées avec l'expérience incomplète, pour assurer cinq groupes d'expériences.
 
-Ainsi les \cref{subfig_exp_order_abs_bouncing_error_significance,subfig_exp_order_bouncing_error_significance} montrent les résultats des analyses de variance pour les erreurs absolues ou non, dans les deux cas, il existe des différences significatives parmi au moins un des groupes. Les analyses multiples avec la correction de Bonferroni, montrées dans les \cref{subfig_exp_order_abs_bouncing_error_significance_mult,subfig_exp_order_bouncing_error_significance_mult} indiquent dans le cas des erreurs signées que trois regroupements se dégagent. Ils ne sont toutefois les mêmes en fonction de si les erreurs sont analysées signées ou absolues. Pour les erreurs signées, les groupes 2, 4 et 5 ne présentent pas de différences significatives entre eux, et sont significativement plus faibles que les deux autres groupes, avec des moyennes toutes inférieures à \SI{5}{\centi\meter}. Pour les erreurs absolues, ce sont les trois premiers groupes qui ne sont pas significativement différents, avec des erreurs moyennes supérieures à \SI{2}{\centi\meter}.
+Ainsi les \cref{subfig_exp_order_abs_bouncing_error_significance,subfig_exp_order_bouncing_error_significance} montrent les résultats des analyses de variance pour les erreurs absolues ou non, dans les deux cas, il existe des différences significatives parmi au moins un des groupes. Les analyses multiples avec la correction de Bonferroni, montrées dans les \cref{subfig_exp_order_abs_bouncing_error_significance_mult,subfig_exp_order_bouncing_error_significance_mult} indiquent dans le cas des erreurs signées, que trois regroupements se dégagent. Trois regroupements différents sont obtenus pour les erreurs absolues. Pour les erreurs signées, les groupes 2, 4 et 5 ne présentent pas de différences significatives entre eux, et sont significativement plus faibles que les deux autres groupes, avec des moyennes toutes inférieures à \SI{5}{\centi\meter}. Pour les erreurs absolues, ce sont les trois premiers groupes qui ne sont pas significativement différents, avec des erreurs moyennes supérieures à \SI{2}{\centi\meter}.
 
 \input{latex_figures/chapter_4/fig_exp_order_bouncing_error_significance}
 
-En se rappelant que les sessions expérimentales sont découpées en deux, l'analyse multiple en \cref{subfig_exp_order_bouncing_error_significance_mult} indique qu'à chaque nouvelle session, les participants ont tendance jongler plus haut que pour les autres sessions. On retrouve l'idée d'un apprentissage ou d'une amélioration des performances sur l'autre analyse multiple en \cref{subfig_exp_order_abs_bouncing_error_significance_mult} qui révèlent des différences significatives pour les deux dernières expériences avec une amélioration des moyennes des erreurs absolues de plus de \SI{2}{\centi\meter}. Les effets de la fatigue ne semblent donc pas avoir d'effet significatif comparativement à l'adaptation et l'apprentissage à l'expérience, alors que \SI{48}{\percent} ont déclaré avoir ressenti une fatigue musculaire, ou du à la concentration. Pour \SI{23}{\percent} des personnes ayant perçu des effets de la fatigue au cours ou à la suite des expériences, ces effets représentaient un effort inhabituel.
+En se rappelant que les sessions expérimentales sont découpées en deux, l'analyse multiple en \cref{subfig_exp_order_bouncing_error_significance_mult} indique qu'à chaque nouvelle session, les participants ont tendance à jongler plus haut que pour les autres sessions. On retrouve l'idée d'un apprentissage ou d'une amélioration des performances sur l'autre analyse multiple en \cref{subfig_exp_order_abs_bouncing_error_significance_mult} qui révèlent des différences significatives pour les deux dernières expériences avec une amélioration des moyennes des erreurs absolues de plus de \SI{2}{\centi\meter}. Les effets de la fatigue ne semblent donc pas avoir d'effet significatif comparativement à l'adaptation et l'apprentissage à l'expérience, alors que \SI{48}{\percent} ont déclaré avoir ressenti une fatigue musculaire, ou due à la concentration. Pour \SI{23}{\percent} des personnes ayant perçu des effets de la fatigue au cours ou à la suite des expériences, ces effets représentaient un effort inhabituel.
 
-La différence significative plus faible entre les deux derniers groupes entre-eux, peut être induites par un autre facteur. En effet, la cinquième expérience est forcément une expérience 1, alors que la quatrième peut être n'importe laquelle, or on a montré précedemment des effets significatifs de la hauteur sur les erreurs de jonglerie (voir \cref{chap4_sec_res_sub_task_1}).
+La différence significative plus faible entre les deux derniers groupes entre-eux, peut être induite par un autre facteur. En effet, la cinquième expérience est forcément une expérience 1, alors que la quatrième peut être n'importe laquelle, or on a montré précedemment des effets significatifs de la hauteur sur les erreurs de jonglerie (voir \cref{chap4_sec_res_sub_task_1}).
 
 \subsubsection{Effets des perturbations} \label{chap4_sec_res_sub_task_3}
 
-Bien que les perturbations ont été introduites pour être aussi peu perceptibles que possible, et minimiser l'influence sur la tâche, il est important de s'intéresser aux effets des cycles consécutifs à des perturbations. En effet, suites aux questions posées aux participants, \SI{55}{\percent} affirment avoir perçus des perturbations dans au moins l'une des expériences, et \SI{15}{\percent} pendant l'ensemble des essais. Une éventuelle de dégradation des performances dûes aux perturbations ne peut toutefois pas être écartée, même si la majorité des participants n'a pas ressenti les perturbations pendant au moins l'une des sessions.
+Bien que les perturbations aient été introduites pour être aussi peu perceptibles que possible, et minimiser l'influence sur la tâche, il est important de s'intéresser aux effets des cycles consécutifs à des perturbations. En effet, suite aux questions posées aux participants, \SI{55}{\percent} affirment avoir perçu des perturbations dans au moins l'une des expériences, et \SI{15}{\percent} pendant l'ensemble des essais. Une éventuelle dégradation des performances dûe aux perturbations ne peut toutefois pas être écartée, même si la majorité des participants n'a pas ressenti les perturbations pendant au moins l'une des sessions.
 
-L'analyse de variance conduites entre les cycles perturbés ou non a été réalisée en séparant les expériences selon leur ordre pour supprimer ce potentiel facteur de confusion, l'ordre ayant démontré des effets significatifs sur les erreurs de rebonds. La \cref{fig_exp_order_perturbations_bouncing_error_significance} montre les analyses de variance et multiples sur les erreurs $\epsilon_r$ et $\abs{\epsilon_r}$. Les études statistiques sur les erreurs signées ne révèlent pas de différences significatives à l'intérieur des groupes d'expériences. Les intervalles de confiance plus importants des cycles perturbés peuvent s'expliquer par leur quantité très inférieure aux cycles non-perturbés, qui sont \SI{5.5}{} fois plus nombreux. Toutefois, on peut noter que les moyennes et médianes des erreurs $\epsilon_r$ des cycles perturbés sont systématiquement plus importantes. Ce dernier point pourrait indiquer qu'un effet existe bien, mais que la quantité de données receuillies n'est pas suffisante pour le confirmer, car l'effet est faible.
+L'analyse de variance conduite entre les cycles perturbés ou non a été réalisée en séparant les expériences selon leur ordre pour supprimer ce potentiel facteur de confusion, l'ordre ayant démontré des effets significatifs sur les erreurs de rebonds. La \cref{fig_exp_order_perturbations_bouncing_error_significance} montre les analyses de variance et multiples sur les erreurs $\epsilon_r$ et $\abs{\epsilon_r}$. Les études statistiques sur les erreurs signées ne révèlent pas de différences significatives à l'intérieur des groupes d'expériences. Les intervalles de confiance plus importants des cycles perturbés peuvent s'expliquer par leur quantité très inférieure aux cycles non-perturbés, qui sont \SI{5.5}{} fois plus nombreux. Toutefois, on peut noter que les moyennes et médianes des erreurs $\epsilon_r$ des cycles perturbés sont systématiquement plus importantes. Ce dernier point pourrait indiquer qu'un effet existe bien, mais que la quantité de données recueillies n'est pas suffisante pour le confirmer, car l'effet est faible.
 
 \input{latex_figures/chapter_4/fig_exp_order_and_perturbations_bouncing_error_significance}
-\tikzexternaldisable
 
-L'analyse multiple des erreurs absolues $\abs{\epsilon_r}$ en \cref{subfig_exp_order_perturbations_abs_bouncing_error_significance_mult} révèle que pour la troisième expérience, une différence significative existe entre les cycles perturbés et non-perturbés, avec un écart d'environ \SI{2}{\centi\meter} entre leur moyenne respective. Cet écart et à mettre en parallèle de ceux provoqués par les autres facteurs identifiés. Ainsi, même s'il reste légèrement inférieur à ceux constatés pour les différentes hauteurs cibles ($>$\SI{2}{\centi\meter}) ou pour les ordres expérimentaux, cet effet reste du même ordre. L'effet des perturbations semble donc exister, bien qu'il soit plus faible que ceux entrainés par les deux autres facteurs précedemment présentés.
+L'analyse multiple des erreurs absolues $\abs{\epsilon_r}$ en \cref{subfig_exp_order_perturbations_abs_bouncing_error_significance_mult} révèle que pour la troisième expérience, une différence significative existe entre les cycles perturbés et non-perturbés, avec un écart d'environ \SI{2}{\centi\meter} entre leur moyenne respective. Cet écart est à mettre en parallèle de ceux provoqués par les autres facteurs identifiés. Ainsi, même s'il reste légèrement inférieur à ceux constatés pour les différentes hauteurs cibles ($>$\SI{2}{\centi\meter}) ou pour les ordres expérimentaux, cet effet reste du même ordre. L'effet des perturbations semble donc exister, bien qu'il soit plus faible que ceux entrainés par les deux autres facteurs précedemment présentés.
 
 \subsubsection{Performances individuelles ou expertise} \label{chap4_sec_res_sub_task_4}
 
 Le dernier facteur identifié pouvant influencer les performances des utilisateurs provient des participants eux-mêmes. Pour qualifier la qualité d'une jonglerie, deux indicateurs sont définis, la répétabilité, et la précision. La répétabilité est définie comme l'intervalle interquartile des erreurs de jonglerie, et la précision comme la médiane des erreurs absolues. 
 
-En supposant qu'il existe trois niveaux d'expertise pour les participants, qu'on définit comme novice, intermédiaire et avancé, les groupes sont définis en définissant un problème d'optimisation combinatoire des k-moyennes. Les groupes ainsi identifiés en fonction des critères de précision et de répétabilité sont ensuites comparés à l'aide d'analyse de variance pour vérifier si ces groupes génèrent des performances significativement différentes. L'un des participants ayant eu des niveaux de qualification largement en deça des autres, il a été écarté pour le partionnement des données, afin d'éviter d'obtenir un groupe ne contenant qu'une seule personne. Il a ensuite été regroupé avec les novices.
+En supposant qu'il existe trois niveaux d'expertise pour les participants, qu'on définit comme novice, intermédiaire et avancé, les groupes sont définis en définissant un problème d'optimisation combinatoire des k-moyennes. Les groupes ainsi identifiés en fonction des critères de précision et de répétabilité sont ensuites comparés à l'aide d'analyse de variance pour vérifier si ces groupes génèrent des performances significativement différentes. L'un des participants ayant eu des niveaux de qualification largement en deça des autres, il a été écarté pour le partitionnement des données, afin d'éviter d'obtenir un groupe ne contenant qu'une seule personne. Il a ensuite été regroupé avec les novices.
 
 \input{latex_figures/chapter_4/fig_kmeans_expertise}
 
-La \cref{fig_kmeans_expertise} montre la répartition des groupes en fonction des deux critères. Celui de répétabilité place respectivement \SIlist{5;13;13}{} pour les groupes avancés $e_3$, intermédiaires $e_2$ et novices $e_1$ contre respectivement \SIlist{3;14;14}{} pour le critère de précision. Le chevauchement entre les deux critères n'est donc pas parfait, toutefois seul trois participants ont vu leur qualification retrogradée entre les critères de répétabilité et de précision, donc pour plus de \SI{90}{\percent}, ces critères définissent les mêmes niveaux d'expertise. Le critère de répétabilité fournissant des regroupements plus équilibrés, c'est ce dernier qui est conservé.
+La \cref{fig_kmeans_expertise} montre la répartition des groupes en fonction des deux critères. Celui de répétabilité place respectivement \SIlist{5;13;13}{} pour les groupes avancés $e_3$, intermédiaires $e_2$ et novices $e_1$ contre respectivement \SIlist{3;14;14}{} pour le critère de précision. Le chevauchement entre les deux critères n'est donc pas parfait, toutefois seuls trois participants ont vu leur qualification retrogradée entre les critères de répétabilité et de précision, donc pour plus de \SI{90}{\percent}, ces critères définissent les mêmes niveaux d'expertise. Le critère de répétabilité fournissant des regroupements plus équilibrés, c'est ce dernier qui est conservé.
 
-Afin de savoir si les différences entre les groupes définis sont significatives, une ANOVA à trois facteurs est réalisée, en prenant en compte l'ordre expérimental $n_i$ , la hauteur cible $h_i^*$ ainsi que le niveau d'expertise défini $e_i$. L'analyse ayant cette fois plus d'un critère, il faut aussi se pencher sur les interactions avant de pouvoir interpréter les résultats des facteurs fixes. Les \cref{tab_anova_3_factors_sign,tab_anova_3_factors_abs} dévoilent ainsi que les interactions entre les trois facteurs sont toutes significatives, aussi bien pour les erreurs signées que absolues. Les comparaisons multiples pour chaque interaction sont montrées en \cref{fig_anova_3_factors_mult} pour $\epsilon_r$ et en ... pour $\abs{\epsilon_r}$.
+Afin de savoir si les différences entre les groupes définis sont significatives, une ANOVA à trois facteurs est réalisée, en prenant en compte l'ordre expérimental $n_i$ , la hauteur cible $h_i^*$ ainsi que le niveau d'expertise ou qualification $e_i$. L'analyse ayant cette fois plus d'un critère, il faut aussi se pencher sur les interactions avant de pouvoir interpréter les résultats des facteurs fixes. Les \cref{tab_anova_3_factors_sign,tab_anova_3_factors_abs} dévoilent ainsi que les interactions entre les trois facteurs sont toutes significatives, aussi bien pour les erreurs signées qu'absolues. Les comparaisons multiples pour chaque interaction sont montrées en \cref{fig_anova_3_factors_mult} pour $\epsilon_r$ et en \cref{fig_anova_abs_3_factors_mult} pour $\abs{\epsilon_r}$.
 %
 %  Source   Sum Sq.   d.f.    Mean Sq.     F      Prob>F
 %-------------------------------------------------------
@@ -279,10 +278,10 @@ Afin de savoir si les différences entre les groupes définis sont significative
 		$n_i$ & 3.98 & 4 & 0.99412 & 15.82 & 0\\
 		$h_i^*$ & 0.29 & 2 & 0.14669 & 2.33 & 9.69\\
 		$e_i$ & 14.95 & 2 & 7.47701 & 118.99 & 0\\
-		$n\times h$ & 13.82 & 8 & 1.72717 & 27.49 & 0\\
-		$n\times e$ & 2.3 & 8 & 0.28763 & 4.58 & 0\\
-		$h\times e$ & 1.1 & 4 & 0.27587 & 4.39 & 0.15\\
-		Error & 2707.28 & 43085 & 0.06284 & & \\
+		$n_i\times h_i^*$ & 13.82 & 8 & 1.72717 & 27.49 & 0\\
+		$n_i\times e_i$ & 2.3 & 8 & 0.28763 & 4.58 & 0\\
+		$h_i^*\times e_i$ & 1.1 & 4 & 0.27587 & 4.39 & 0.15\\
+		Erreur & 2707.28 & 43085 & 0.06284 & & \\
 		Total & 2756.98 & 43113 & & & 
 		%\hline
 	\end{tabular} % expertise factor
@@ -308,10 +307,10 @@ Afin de savoir si les différences entre les groupes définis sont significative
 		$n_i$ & 3.25 & 4 & 0.8124 & 28.85 & 0\\
 		$h_i^*$ & 3.96 & 2 & 1.9786 & 70.26 & 0\\
 		$e_i$ & 25.33 & 2 & 12.664 & 449.72 & 0\\
-		$n\times h$ & 1.85 & 8 & 0.2308 & 8.2 & 0\\
-		$n\times e$ & 2.12 & 8 & 0.2648 & 9.4 & 0\\
-		$h\times e$ & 0.3 & 4 & 0.0754 & 2.68 & 3\\
-		Error & 1213.27 & 43085 & 0.0282 & & \\
+		$n_i\times h_i^*$ & 1.85 & 8 & 0.2308 & 8.2 & 0\\
+		$n_i\times e_i$ & 2.12 & 8 & 0.2648 & 9.4 & 0\\
+		$h_i^*\times e_i$ & 0.3 & 4 & 0.0754 & 2.68 & 3\\
+		Erreur & 1213.27 & 43085 & 0.0282 & & \\
 		Total & 1268.43 & 43113 & & & 
 		%\hline
 	\end{tabular} % expertise factor
@@ -319,18 +318,241 @@ Afin de savoir si les différences entre les groupes définis sont significative
 	\label{tab_anova_3_factors_abs}
 \end{table}   
 
+%\tikzexternaldisable
 \input{latex_figures/chapter_4/fig_anovan_3_factors}
+%\tikzexternalenable
+\input{latex_figures/chapter_4/fig_anovan_3_factors_abs}
 
-\textcolor{red}{dans le couplage hauteur cible et numéro d'expérience, la tendance pour la troisième expérience est inversée par rapport aux autres... Comment interpréter cette information ??}
+%\textcolor{red}{dans le couplage hauteur cible et numéro d'expérience, la tendance pour la troisième expérience est inversée par rapport aux autres... Comment interpréter cette information ??}
 
-\textcolor{red}{dans le couplage hauteur cible et expertise, seul le groupe (h3,e2) est significativement différent d'autres groupe dans e1 et e2. Sinon aucune différence significative n'est observée entre les deux niveaux d'expertise, et seul le groupe novice est significativement différent... Comment interpréter cette information ??}
+%\textcolor{red}{dans le couplage hauteur cible et expertise, seul le groupe (h3,e2) est significativement différent d'autres groupe dans e1 et e2. Sinon aucune différence significative n'est observée entre les deux niveaux d'expertise, et seul le groupe novice est significativement différent... Comment interpréter cette information ??}
 
-Aucune différence significative n'est observée pour les erreurs $\epsilon_r$ entre les groupes de niveau intermédaires et avancés. Les seuls différences significatives détectées proviennent du groupe des novices par rapport aux deux autres groupes, pour lequel le seul critère non significatif semble l'ordre expérimental pour la cinquième expérience. Cette constation pourrait ammener à penser que les participants novices ont progressé et se sont améliorés, toutefois, le groupe formé par le couple de facteur $(e_1,n_5)$ ne montre une différence de moyenne significative que par rapport à la troisième expérience, qui a aussi l'erreur moyenne la plus élevée pour les deux autres niveaux de qualification.
+Aucune différence significative n'est observée pour les erreurs $\epsilon_r$ entre les groupes de niveau intermédaire et avancé. Les seuls différences significatives détectées proviennent du groupe des novices par rapport aux deux autres groupes, pour lequel le seul critère non significatif semble l'ordre expérimental pour la cinquième expérience. Cette constatation pourrait ammener à penser que les participants novices ont progressé et se sont améliorés, toutefois, le groupe formé par le couple de facteur $(e_1,n_5)$ ne montre une différence de moyenne significative que par rapport à la troisième expérience, qui a aussi l'erreur moyenne la plus élevée pour les deux autres niveaux de qualification.
 
+Si l'on s'intéresse aux erreurs absolues $\abs{\epsilon_r}$, les résultats semblent plus clairs. Toutes les interactions et facteurs primaires sont significatifs selon les résultats de l'ANOVA à 3 facteurs montrée dans le \cref{tab_anova_3_factors_abs}. La première interaction entre la hauteur cible et l'ordre expérimental, en \cref{subfig_anovan_abs_target_height_exp_order}, révèle que pour chaque hauteur, il existe des différences significatives à la baisse des erreurs absolues de rebonds entre les deux premiers essais et le quatrième et cinquième et en corroboration de la \cref{fig_target_height_bouncing_error_significance}, les erreurs augmentent aussi significativement avec la hauteur cible (sauf pour les couples $(n_2,h_2^*)$ et $(n_4,h_3^*)$, où les écarts ne sont pas significatifs). 
 
+La deuxième interaction entre $h_i^*$ et $e_i$ montre des différences significatives des erreurs $\abs{\epsilon_r}$ qui diminuent avec le niveau d'expertise pour une hauteur cible donnée. De plus, à part pour les utilisateurs avancés $e_3$, les erreurs $\abs{\epsilon_r}$ augmentent significativement avec les hauteurs entre chaque niveau de qualification. On pourra tout de même remarquer que pour $e_3$ il existe tout de même des différences significatives entre $h_1^*$ et les deux autres hauteurs cibles, et que les moyennes des erreurs augmentent avec la hauteur.
 
-Le critère d'expertise choisi semble donc principalement pertinent pour distinguer les novices des autres utilisateurs.
+La dernière interaction entre $n_i$ et $e_i$ montre des différences significatives entre les niveaux d'expertise pour des index d'expérience équivalents, sauf pour le groupe $(n_5,e_1)$ qui n'est pas significativement différent du groupe $(n_5,e_2)$. Il est intriguant de noter que la troisième expérience (première de la deuxième session expérimentale), a la moyenne $\abs{\epsilon_r}$ la plus élevée pour tous les groupes, sauf les utilisateurs avancés $e_3$. Les erreurs semblent diminuer progressivement lors des itérations expérimentales, toutefois, la cinquième itération n'est pas significativement différentes des autres pour les utilisateurs intermédaires $e_2$ et avancés $e_3$.
+
+Le critère d'expertise choisi semble donc pertinent, puisqu'il permet de démarquer des différences significatives pour les erreurs de rebonds entre les trois niveaux définis. Il reste à savoir si ces différences au niveau de la tâche se discernent aussi pour les propriétés biomécaniques identifiées.
 
 \subsection{Résultats des identifications d'impédance} \label{chap4_sec_res_sub_impedance}
 
+Les données des expériences sont sélectionnées en fonction de deux paramètres, les hauteurs cibles et les phases de cycle perturbées. Il est important de noter que toutes les configurations n'ont pas été générées. En effet, les variations de cycle n'ont été injectées que lors des expériences à la hauteur cible $h_2^*$. Les deux autres hauteurs ne sont donc, en théorie, perturbées qu'à la phase \cref{item_pert1}. La \cref{fig_normalized_trajectories} montre les trajectoires moyennes cycliques des participants en fonction de leur groupe de qualification $e_i$, avec un écart type et trois écarts types représentés, ainsi que la moyenne cyclique des trois phases perturbées.
 
+\input{latex_figures/chapter_4/fig_normalized_trajectories}
+
+Les analyses statistiques conduites dans cette partie sont focalisées sur les médianes des paramètres identifiés. En effet, comme expliqué dans les simulations de la \cref{chap3_sec_method_sub_ident_2_2}, la médiane des paramètres identifiés est plus robuste que la moyenne. Afin de limiter les facteurs de confusion, les analyses sont conduites en isolant les facteurs concernant la phase et la hauteur cible.
+
+\subsubsection{Effets des hauteurs cibles} \label{chap4_sec_res_sub_impedance_1}
+
+Comme observé dans la \cref{chap4_sec_res_sub_task_1}, la hauteur cible a une influence significative sur les performances de la tâche, avec les erreurs $\abs{\epsilon_r}$ qui augmentaient en moyenne de \SI{3.5}{\centi\meter} entre les hauteurs cibles extrêmes $h_1^*$ et $h_3^*$. Pour savoir si ces changements de conditions expérimentales ont aussi induits des modifications des propriétés biomécaniques chez les participants, on ne s'intéresse qu'aux données ayant été perturbées à la phase \cref{item_pert1}.
+
+Chaque participant se voit donc attribuer des triplets pour chacun des paramètres identifiés qui correspondent aux médianes des trois hauteurs cibles. Il est important de noter que la deuxième hauteur $h_2^*$ est plus représentée que les deux autres. Du fait du protocole expérimental proposé, plus d'expériences ont eu lieu avec cette hauteur cible. Les données sont récapitulées dans l'\cref{app_param_against_target_height}.
+
+La \cref{fig_height_significance_impedance} montre les diagrammes en boîte des médianes des paramètres des utilisateurs comparés en fonction de leur hauteur cible. Aucun effet significatif n'est distingué, pour la suite des analyses, la hauteur n'est donc pas considérée comme un facteur significatif. Il est toutefois important de noter, qu'en l'absence de tri des données ayant un coefficient de détermination inférieur à \SI{50}{\percent}, certaines données aberrantes pourraient modifier la médiane. On vérifie donc la sensibilité des estimations à ce tri.
+
+\input{latex_figures/chapter_4/fig_height_significance_impedance}
+
+Si on s'intéresse donc à l'ANOVA des données triées en fonction de leur coefficient de détermination, montré en \cref{fig_height_significance_impedance_r2}, on peut voir un net changement sur les médianes et moustaches des $R^2$. Les médianes des coefficients de détermination des trois hauteurs cibles passent ainsi respectivement de \SIlist{85.5;86.0;84.7}{\percent} à \SIlist{94.5;93.4;93.8}{\percent}, soit une augmentation de presque \SI{10}{\percent} sur ce critère. Si on s'intéresse aux changements induits sur les identifications de raideur, on n'observe pas de changement de médiane en dehors des intervalles de confiance à \SI{95}{\percent}, avec des variations ne dépassant pas \SI{20}{\newton\per\meter}. Un constat équivalent peut être fait pour la masse, mais pas pour l'amortissement.
+
+\input{latex_figures/chapter_4/fig_height_significance_impedance_r2}
+
+Pour la suite des analyses, seules les données triées avec le coefficient de détermination sont utilisées.
+
+\subsubsection{Effets temporels des expériences} \label{chap4_sec_res_sub_impedance_2}
+
+En se penchant sur les effets temporels des différentes expériences et sessions, de la même manière que pour les hauteurs cibles, aucun effet significatif ne peut être observé sur l'ensemble des paramètres, comme révélé par la \cref{fig_time_significance_impedance_r2}. Les effets d'un possible apprentissage corroboré par les observations de la \cref{chap4_sec_res_sub_task_2}, ne sont pas constatés sur les paramètres apparents d'impédance. Pour la suite, aucune différenciation ne sera donc effectuée en fonction de la temporalité d'éxécution des expériences.
+
+\input{latex_figures/chapter_4/fig_time_significance_impedance_r2}
+
+\subsubsection{Effets des phases perturbées} \label{chap4_sec_res_sub_impedance_3}
+
+L'\cref{hyp_stiff_rhyth} suppose que les paramètres identifiés varient de manière temporelle sur un cycle. Seuls trois instants \cref{item_pert1,item_pert2,item_pert3} du cycle sont perturbés, une observation continue de l'impédance n'est pas possible avec la méthode d'identification proposée (voir \cref{chap3_sec_method}), toutefois, si des variations significatives sont observées en fonction de la phase, les résultats seront alors cohérents avec l'hypothèse. 
+
+La \cref{fig_phase_significance_impedance_r2} révèle que l'ensemble des paramètres - \textit{y compris $R^2$} - ont des différences significatives entre au moins deux des phases. La distribution normale des médianes des paramètres identifiés pour chaque participant à chaucune des trois phases étant discutable, il est possible de conduire une analyse de variance non paramètrique comme celle proposée par \textcite{kruskal_use_1952}. Les résultats apportés par ce dernier type d'ANOVA sont similaires à ceux obtenus par l'analyse de variance classique, avec des probabilités $p$ inférieures pour l'ensemble des paramètres en impédance, qui confirment la significativité des différences.
+
+\input{latex_figures/chapter_4/fig_phase_significance_impedance_r2}
+
+La \cref{fig_phase_significance_impedance_r2_mult} montre les analyses répétées avec la correction de Bonferroni. On peut voir que la moyenne des médianes des raideurs des participants pour la phase \cref{item_pert1} est significativement inférieure à celles des deux autres phases. On peut d'ailleurs constater que la moyenne des raideurs médaines apparentes semble augmenter avec la phase cyclique. L'amortissement et la masse apparente moyenne des phases \cref{item_pert1,item_pert3} sont, par contre, non seulement pas significativement différentes mais en plus très proches. En effet, les amortissements et masses identifiés pour ces phases ne se distinguent que de \SI{1}{\percent}, avec des intervalles de confiance à \SI{95}{\percent} des moyennes de l'ordre de \SI{15}{\percent} de leur valeur.
+
+\input{latex_figures/chapter_4/fig_phase_significance_impedance_r2_mult}
+
+Il faut remarquer en dernier lieu que la qualité de reconstruction des trajectoires est significativement moins bonne pour la phase \cref{item_pert1}, avec une différence de moyenne d'environ 2 points du coefficient de détermination, qui reste toutefois supérieur à \SI{90}{\percent}. Ce dernier élément est à garder à l'esprit, car même si l'effet peu sembler faible, il pourrait indiquer que la méthode d'identification proposée est influencée par l'instant du cycle où l'estimation de trajectoire virtuelle a lieu.
+
+\subsubsection{Effets des performances individuelles} \label{chap4_sec_res_sub_impedance_4}
+
+Le dernier facteur qu'on souhaite évaluer concerne les performances par rapport aux niveaux de qualification définis en \cref{chap4_sec_res_sub_task_4}, et qui se sont révélés significatifs entre les trois groupes $e_1$, $e_2$ et $e_3$, par rapport aux erreurs absolues de rebonds $\abs{\epsilon_r}$. On souhaite mettre à l'épreuve l'\cref{hyp_perf_rhyth} qui suppute une corrélation entre les performances et les paramètres apparents. Encore une fois, pour limiter les effets des autres facteurs significatifs, une ANOVA à deux critères est conduite par rapport aux performances et aux phases. Les résultats des ANOVAs sont présentés dans les \cref{tab_anova_2_factors_K,tab_anova_2_factors_B,tab_anova_2_factors_M}. On peut y voir que les interactions entre les phases et performances ne sont pas significatives.
+
+% K
+%  Source   Sum Sq.    d.f.   Mean Sq.     F     Prob>F
+%------------------------------------------------------
+%phi       92123       2    46061.5    12.88   0     
+%e          6911.4     2     3455.7     0.97   0.3847
+%phi*e      5237.3     4     1309.3     0.37   0.8321
+%Error    300402.1    84     3576.2                  
+%Total    420033      92                             
+
+% B
+%  Source   Sum Sq.   d.f.   Mean Sq.    F     Prob>F
+%----------------------------------------------------
+%phi       73.191     2    36.5954    7.69   0.0009
+%e         57.862     2    28.9309    6.08   0.0034
+%phi*e      7.03      4     1.7574    0.37   0.8298
+%Error    399.6      84     4.7571                 
+%Total    534.845    92        
+
+% M
+%  Source   Sum Sq.   d.f.   Mean Sq.    F     Prob>F
+%----------------------------------------------------
+%phi      0.07254     2    0.03627    3      0.0549
+%e        0.02957     2    0.01478    1.22   0.2991
+%phi*e    0.00745     4    0.00186    0.15   0.9606
+%Error    1.01402    84    0.01207                 
+%Total    1.14584    92          
+
+\begin{table}
+	%\caption*{ANOVAs} \label{tab_erden_anova}
+	%\resizebox{\textwidth}{!}{
+		\centering
+		\begin{minipage}{.48\linewidth}%\parbox{.48\linewidth}{
+			\resizebox{0.87\linewidth}{!}{
+				\parbox{\linewidth}{
+					\centering
+					\caption{Raideur (\si{\newton\per\meter})}\label{tab_anova_2_factors_K}
+					\begin{tabular}{ l | c  c  c  c  c } 
+						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+						$\phi_i$ & 92123 & 2 & 46061.5 & 12.88 & 0\\
+						$e_i$ & 6911.4 & 2 & 3455.7 & 0.97 & 38.5\\
+						$\phi_i\times e_i$ & 5237.3 & 4 & 1309.3  & 0.37 & 83.2\\
+						Erreur & 300402.1 & 84 & 3576.2 & & \\
+						Total & 420033 & 92 & & & 
+						%\hline
+					\end{tabular} 
+				}
+			}
+		\end{minipage}%}
+		\hfill	
+		\begin{minipage}{.48\linewidth}
+			\resizebox{0.87\linewidth}{!}{
+				\parbox{\linewidth}{
+					\caption{Amortissement (\si{\newton\second\per\meter})} \label{tab_anova_2_factors_B}
+					\centering
+					\begin{tabular}{ l | c  c  c  c  c } 
+						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+						$\phi_i$ & 73.19 & 2 & 36.60 & 7.69 & 0.09\\
+						$e_i$ & 57.86 & 2 & 12.664 & 28.93 & 0.34\\
+						$\phi_i\times e_i$ & 7.03 & 4 & 1.76  & 0.37 & 82.98\\
+						Erreur & 399.6 & 84 & 4.7571 & & \\
+						Total & 534.8 & 92 & & & 
+						%\hline
+					\end{tabular} 
+				}
+			}
+		\end{minipage}
+	%}
+	\\
+	\vspace{5mm}
+	%\resizebox{.5\textwidth}{!}{
+		\centering
+		\begin{minipage}{.48\linewidth}%\parbox{.48\linewidth}{
+			\resizebox{0.87\linewidth}{!}{
+				\parbox{\linewidth}{
+					\caption{Masse (\si{\kilogram})} \label{tab_anova_2_factors_M}
+					\centering
+					\begin{tabular}{ l | c  c  c  c  c } 
+						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+						$\phi_i$ & 0.073 & 2 & 0.036 & 3 & 5.5\\
+						$e_i$ & 0.030 & 2 & 0.015 & 1.22 & 29.9\\
+						$\phi_i\times e_i$ & 0.007 & 4 & 0.002 & 0.15 & 96.1\\
+						Erreur & 1.014 & 84 & 0.012 & & \\
+						Total & 1.146 & 92 & & & 
+						%\hline
+					\end{tabular} 
+				}
+			}
+		\end{minipage}%}
+	%}
+	\caption*{ANOVA à 2 facteurs, pour les paramètres apparents identifiés.}
+\end{table}                    
+
+On retrouve l'allure des résultats présentée en \cref{fig_phase_significance_impedance_r2_mult} dans l'analyse multiple prenant en compte les effets des performances montrées en \cref{fig_phase_expertise_significance_impedance_r2_mult}. En effet, la moyenne des raideurs augmente de la phase \cref{item_pert1} à \cref{item_pert3}, toutefois, cette augmentation n'est significative que pour le groupe des novices. Les différences entre niveau de performances pour une même phase ne sont toutefois pas significatives, comme indiqué dans le \cref{tab_anova_2_factors_K}. Il semble donc que les performances ne soient pas expliquées par des changements de raideur, même s'il est important de rappeler que le groupe avec les meilleurs performances $e_3$ n'est pas autant représenté que les autres groupes, ce qui explique en partie les intervalles de confiance plus larges.
+
+\input{latex_files/chapter_4/fig_phase_expertise_significance_impedance_r2_mult}       
+
+En se penchant sur l'amortissement, les variations des moyennes à l'intérieur des groupes d'expertise suivent encore une fois la tendance montrée en \cref{fig_phase_significance_impedance_r2_mult}, sans que les différences observées ne puissent être considérées comme significatives. De la même manière, aucune différence significative n'est constatée entre les niveaux de performance pour une même phase. On peut donc seulement voir des différences significatives entre des niveaux de performance et des phases différentes, comme par exemple entre les couples $(\phi_2,e_1)$ et $(\phi_1,e_2)$, ce qui pourrait indiquer des effets pas suffisamment importants pour pouvoir être observés.
+
+Il semble donc compliqué de conclure en ce qui concerne des différences significatives des paramètres en impédance apparente, en fonction des performances.
+
+\subsection{Discussions} \label{chap4_sec_res_sub_discussion}
+
+Les observations faites sur 31 participants indiquent des effets significatifs des phases et des niveaux de performances, sur les propriétés d'impédance apparente observées. 
+
+\subsubsection{Significativité des variations} \label{chap4_sec_res_sub_discussion_1}
+
+L'effet le plus important concerne la phase. On peut tracer les diagrammes de Bode (voir \cref{fig_impedance_bode_diagram_phase_variations}) du comportement en admittance du bras humain, c'est à dire, le comportement cinématique vis à vis de perturbations en force, pour les trois gammes de paramètres moyens observés en \cref{fig_phase_significance_impedance_r2_mult}. 
+
+\input{latex_figures/chapter_4/fig_bode_diagram_impedance_model}
+\tikzexternaldisable
+
+Comme on peut s'y attendre, une augmentation de la raideur, entraine une chute du gain statique, dont la valeur est inversement proportionnelle à cette dernière, c'est à dire qu'il faut une force plus importante pour produire un même mouvement avec une perturbation en force. On peut donc supposer que les participants augmentent progressivement leur raideur sur la durée d'un cycle pour se préparer à l'impact de la balle et améliorer le rejet de la perturbation prévisible qu'est l'impact, comme observé par \textcite{tsuji_bio-mimetic_2008}. Ainsi, un échelon unitaire de force produira un déplacement de \SI{1}{\centi\meter} pour les paramètres moyens identifiés à la phase \cref{item_pert1}, contre un déplacement de \SI{0.5}{\centi\meter} pour ceux de la phase \cref{item_pert3}.
+
+Par ailleur, la pulsation propre $\omega_n$ d'un système masse-ressort-amortissment dépend à la fois de la raideur et de la masse, comme rappelé en équation \cref{eq_impedance_model_natural_pulse}. Une augmentation de la raideur, entraine donc aussi une hausse de la fréquence des oscillations de la réponse. Toutefois, si on s'intéresse au temps d'établissement du comportement en rejet de perturbation des systèmes en impédance en boucle fermée, c'est les paramètres moyens identifiés de la phase \cref{item_pert2} qui ont la réponse la plus rapide, avec \SI{0.2}{\second}, contre \SIlist{0.3;0.4}{\second} pour les phases \cref{item_pert3,item_pert1} respectivement.
+
+\begin{equation} \label{eq_impedance_model_natural_pulse}
+	\omega_n = \sqrt{\frac{K}{M}}
+\end{equation}
+
+Comme noté dans la fin de la \cref{chap4_sec_res_sub_impedance_3}, des différences significatives ont aussi été observées pour le coefficient de détermination de la phase \cref{item_pert1}, comparativement aux deux autres. La méthode proposée semble donc sensible à la phase, ce qui pourrait avoir une influence sur les identifications. Il est toutefois pertinent de souligner que même avant le tri des données avec le coefficient de détermination, la médiane de cet indicateur se situe autour de \SI{85}{\percent}, ce qui montre bien l'adéquation du modèle en impédance proposé. 
+
+Il faut rappeler que le modèle très simpliste proposé n'a pas l'ambition d'expliquer une réalité biologique, mais plutôt de reproduire un comportement global, dont l'émergence est le fruit de plusieurs phénomènes, dont on pourra citer la viscoélasticité des muscles, les réflexes etc. En effet, lorsqu'un robot interagit avec un humain, il perçoit le comportement global de ce dernier, et non pas les différentes origines physiologiques qui s'amalgament. De la même manière, lorsqu'un robot essaie d'agir sur un environnement anthropisé en imitant le comportement humain, son principal besoin est de reproduire une allure générale et stable. Il est donc fort de noter qu'un modèle aussi simple du second ordre permette d'obtenir des coefficients de détermination médians supérieurs à \SI{80}{\percent} dans le cadre d'une expérience aussi peu maîtrisée.
+
+En effet, lors des expériences, les participants n'étaient pas contraints dans leurs mouvements, les seuls instructions données étaient de n'utiliser qu'une seule main pour l'ensemble des manipulations, et d'essayer de maintenir la même posture durant les expériences. Les rotations de l'épaule et du poignet n'étaient ainsi pas contraintes, comme c'est souvent le cas dans le cadre des expériences d'estimation d'impédance polyarticulaires \parencite{mussa-ivaldi_neural_1985,gomi_task-dependent_1998}. De plus, les participants n'étant pas assis, ils pouvaient utiliser l'ensemble de leur corps pour réaliser la tâche. Bien que les mouvements des membres inférieurs n'étaient pas mesurés, ils ont pu être observés dans certains cas.
+
+L'utilisation d'un modèle complet aurait requis de prendre en compte l'ensemble des dégrés de liberté ou de contraindre la tâche pour la simplifier. La première solution rend le modèle très complexe, et nécessite l'observation de l'ensemble des articulations, ce qui rend l'identification des paramètres plus difficiles. La seconde solution modifie l'écologie de la tâche, par exemple en entrainant des phénomènes de compensation qui n'auraient pas lieu hors du contexte expérimental. Comme l'ont fait \textcite{erden_hand_2015} dans le cadre d'une tâche réaliste de soudure, il semble plus écologique que les contraintes d'interaction soient imposées par la tâche elle même. Bien que la tâche de jonglerie semble proche d'un jeu, les trajectoires cycliques générées peuvent être rapprochées de celles d'autres mouvements rythmiques, comme le poinçonnage ou le martelage dans des contextes industriels ou la compensation de mouvements biologiques dans des environnements médicaux. 
+
+\subsubsection{Comparaison des résultats} \label{chap4_sec_res_sub_discussion_2}
+
+Les paramètes en impédance estimés sur plusieurs répétitions en utilisant la médiane varient entre \SIlist{44.9;445.1}{\newton\per\meter} pour la raideur, \SIlist{2.21;17.51}{\newton\second\per\meter} pour l'amortissement, et \SIlist{227;893}{\gram} pour la masse (voir \cref{app_param_against_target_height,app_param_against_phase}). La variabilité de raideur est donc plus restreinte que celle observée par \textcite{burdet_central_2001}, mais plus importante que celles des expériences les plus similaires, décrites par \textcite{tsuji_bio-mimetic_2008,erden_hand_2015}. Toutefois, en combinant les plages des paramètres estimés par ces deux derniers auteurs, toutes les identifications se retrouvent dans un intervalle déjà étudié.
+
+Si on s'arrête sur la phase \cref{item_pert3}, au plus proche de l'impact, un peu plus de \SI{50}{\percent} des participants ont une raideur médiane identifiée qui se situe dans la plage des raideurs estimées par \textcite{tsuji_bio-mimetic_2008} lors de la phase de préparation à un impact avec une balle. On pourra toutefois noter que leur expérience ne comprenait que 4 participants, ce qui a pour effet de réduire la variabilité des paramètres identifiés, et pourrait expliquer la plus large plage observée dans l'étude conduite ici. 
+
+Au contraire, les travaux de \textcite{erden_hand_2015} ont été réalisés avec un échantillon de 24 personnes réparties en deux groupes en fonction de leur expertise dans la tâche de soudure. Or seuls 5 participants, c'est à dire à peine \SI{15}{\percent} ont obtenu une raideur dans une plage similaire lors d'au moins une des phases $\phi_i$. Cette différence pourrait s'expliquer par les tâches choisies. En réalité, la tâche de soudure repose bien plus sur la précision du mouvement, avec des vitesses plutôt lentes, là où la jonglerie repose sur la synchronisation avec la balle, avec des vitesses plus importantes. Comme expliqué en \cref{chap_1_sec_2_subsec_2_visco_elast_char}, les cocontractions augmentent lorsqu'un humain cherche à améliorer sa précision, ce qui pourrait expliquer à la fois les raideurs et amortissements apparents plus faibles dans le cadre d'un mouvement rythmique.
+
+On peut par ailleurs remarquer, d'après les résultats d'\textcite{abe_modulation_2003}, que lors de mouvements rythmiques uniarticulaires, la raideur minimale est observée autour de \SI{1}{\hertz}. Les mouvements générés lors de la tâche de jonglerie virtuelle se situent proche de cette fréquence, comme l'atteste la \cref{subfig_target_height_vs_cycle_duration}, où l'on peut constater que la majeure partie des cycles ont des fréquences comprises entre \SIlist{0.65;1.35}{\hertz}. On pourra de plus noter, qu'\textcite{abe_modulation_2003} n'ont pas observés de différences significatives sur cette gamme de fréquence, comme c'est le cas ici, puisque les variations de la hauteur cible n'ont pas entraîné de changements significatifs sur les moyennes des paramètres des participants. En prenant le temps de chute libre de la balle, les trois hauteurs moyennes observées $h_1$, $h_2$ et $h_3$ devraient entraîner des fréquences moyennes respectives de \SIlist{1.02;0.93;0.86}{\hertz}, soient des variations de l'ordre de \SIlist{0.1}{\hertz} autour de \SI{0.95}{\hertz}.
+
+En se penchant sur les amortissements apparents, 18 participants obtiennent au moins lors d'une des phases cycliques, des valeurs dans les plages observées par \textcite{erden_hand_2015}, toutefois ces valeurs se placent toutes proches de la borne inférieure, la plus haute estimation étant de \SI{17.51}{\newton\second\per\meter}. On pourrait donc penser que le comportement amortissant apparent est moins prononcé lors de mouvements rythmiques, toutefois, d'autres sources peuvent expliquer ces distinctions. 
+
+Les différences d'estimation peuvent, en effet, trouver leurs sources dans la méthode d'identification proposée. Il est important de souligner que pour minimiser les effets des actions volontaires, seuls \SI{150}{\milli\second} ont été utilisés pour les identifications décrites dans cette étude contre respectivement \SIlist{250;450}{\milli\second} chez \textcite{erden_hand_2015,tsuji_bio-mimetic_2008}. Avec ces dernières durées, des comportements volontaires peuvent devenir dominant, comportements qui ont été détectés seulement lorsque des valeurs négatives des paramètres étaient obtenues \parencite{erden_hand_2015}.
+
+Un dernier point qu'il est important de souligner confirme une prédiction de l'analyse de sensibilité locale faite en \cref{chap3_sec_method_sub_ident_1}, et d'abord valider dans les analyses des simulations. En effet, si on regarde les intervalles de confiance des médianes des paramètres, qui sont obtenues à partir de la formule \cref{eq_notch}, la variabilité plus importante des estimations de raideur est bien confirmée, comme montré sur le \cref{tab_impedance_param_avarage_notch}. L'intervalle de confiance moyen des raideurs apparentes identifiées est ainsi de l'ordre de \SI{40}{\percent} des valeurs obtenues, contre \SIlist{20;10}{\percent} respectivement pour l'amortissement et la masse. 
+
+\begin{table}
+	\centering
+	\begin{tabular}{| l | c  c  c |} 
+		\hline
+		& $\phi_1$ & $\phi_2$ & $\phi_3$\\ \hline
+		$K$ (\si{\newton\per\meter}) & 47.07 &  52.19 & 78.38\\
+		$B$ (\si{\newton\second\per\meter}) & 1.65 &  2.25 & 2.84\\
+		$M$ (\si{\gram}) & 31 &  32 & 55\\\hline
+		
+		%\hline
+	\end{tabular} % expertise factor
+	\caption{Intervalles de confiance moyens des médianes des paramètres}
+	\label{tab_impedance_param_avarage_notch}
+\end{table}
+
+Ainsi, une amélioration de la fiabilité des identifications semble nécessaire pour observer des variations moins importantes sans avoir à recourir à des cohortes plus peuplées, l'étude réalisée ici constituant déjà la cohorte la plus importante à notre connaissance, pour des expériences en estimation d'impédance du membre supérieur. Les variations liées aux performances qui sont quant à elles trop faibles pour que leurs effets puissent être correctement interprétés, pourraient peut-être ainsi être mieux observées.
+
+%Les variations liées aux performances sont quant à elles trop faibles pour que leurs effets puissent être correctement interprétés.
+
+% comparer les résultats par rapport aux autres résultats de la littérature 
+
+%Enfin, comme estimé dans la \cref{chap3_sec_method_sub_ident_2_2}, en simulation, pour des trajectoires en force réelle, en l'absence d'erreurs de modélisation, les paramètres identifiés pour les 
+
+%\input{latex_figures/chapter_4/fig_height_significance_impedance_per_expertise_r2}
+
+%\input{latex_figures/chapter_4/fig_phase_significance_impedance_per_expertise_r2}
+
+%\input{latex_figures/chapter_4/test_boxplot}
