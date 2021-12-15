@@ -5,7 +5,7 @@
 		\begin{tikzpicture}
 			\centering
 			%
-			\begin{axis}[%
+			\begin{semilogxaxis}[%
 				width=.95\linewidth,
 				height=.3\linewidth,
 				scale only axis,
@@ -13,8 +13,8 @@
 				ylabel={Atténuation (\SI{}{\decibel})},
 				axis x line = bottom,
 				axis y line = left, 
-				xmode=log,
-				log basis x=10,
+				%xmode=log,
+				%log basis x=10,
 				xtick = {5, 6, 7, 8, 8.5, 9, 10, 11, 12, 13, 14, 15},
 				xticklabels = {5, 6, 7, 8, 8.5, 9, 10, 11, 12, 13, 14, 15},
 				%xmin=31.4159,
@@ -23,7 +23,7 @@
 				]
 				%
 				\addplot [
-					color=blue,
+					color=Orient,
 					solid,
 					]
 				table [col sep=comma, x=freq, y=magnitude] {misc/filter_bode_magnitude.csv};
@@ -38,7 +38,7 @@
 				\draw [dashed, opacity=.5] (fpDw) -- (fpUp);
 				\draw [dashed, opacity=.5] (fcDw) -- (fcUp);
 				\draw [dashed, opacity=.5] (atLeft) -- (atRight);
-			\end{axis}		
+			\end{semilogxaxis}		
 		\end{tikzpicture}
 	}	
 	\caption{Réponse en amplitude du filtre passe bas d'ordre 2997.}

@@ -27,25 +27,29 @@
 					height=.3\linewidth,
 					]
 				\addplot [
-					color=blue!50,
+					color=Orient,
 					smooth,
-					thick
+					thin,
 					]
 				table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv}; 
+				\addlegendentry{$y_{f50Hz}$}
 				%
 				\addplot [
-					color=blue!50!red,
+					color=Pear,
 					smooth,
+					thin,
 					]
 				table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv};  
+				\addlegendentry{$y_{f+a}$} 
 				%
 				\addplot [
-					color=red,
+					color=Shiraz,
 					dashed,
-					thick,
+					semithick,
 					smooth,
 					]
-				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv};
+				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_1.csv}; 
+				\addlegendentry{$y_{f}$} 
 				%
 				\addplot [
 					black,
@@ -65,22 +69,23 @@
 				]
 				%%
 				\addplot [
-					color=blue!50,
+					color=Orient,
 					smooth,
-					thick
+					thin,
 					]
 				table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv}; 
 				%
 				\addplot [
-					color=blue!60!red,
-					smooth
+					color=Pear,
+					smooth,
+					thin,
 					]
 				table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv};   
 				%
 				\addplot [					
-					color=red,
+					color=Shiraz,
 					dashed,
-					thick,
+					semithick,
 					smooth,
 					]
 				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_2.csv};
@@ -102,22 +107,23 @@
 					]
 				%%
 				\addplot [
-					color=blue!50,
+					color=Orient,
 					smooth,
-					thick
+					thin,
 					]
 				table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv}; 
 				%
 				\addplot [
-					color=blue!60!red,
+					color=Pear,
 					smooth,
+					thin,
 					]
 				table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv}; 
 				%
 				\addplot [
-					color=red,
+					color=Shiraz,
 					dashed,
-					thick,
+					semithick,
 					smooth,
 					]
 				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_3.csv};  
@@ -140,22 +146,23 @@
 					]
 				%%
 				\addplot [
-					color=blue!50,
+					color=Orient,
 					smooth,
-					thick
+					thin,
 					]
 				table [col sep=comma, x=time, y=BW50hz] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv}; 
 				%
 				\addplot [
-					color=blue!60!red,
+					color=Pear,
 					smooth,
+					thin,
 					]
 				table [col sep=comma, x=time, y=algorithm] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv}; 
 				%
 				\addplot [
-					color=red,
+					color=Shiraz,
 					dashed,
-					thick,
+					semithick,
 					smooth,
 					]
 				table [col sep=comma, x=time, y=filtered] {misc/trajectory_estimation_filter/filtering_force_algorithm_4.csv};    
@@ -170,6 +177,6 @@
 			\end{groupplot}
 		\end{tikzpicture}
 	}	
-\caption{Exemples des quatre trajectoires en force, le signal filtré à \SI{50}{\hertz} est donné en bleu pâle, le filtrage passe-bas décrit en \cref{chap3_sec_method_sub_virt_traj_4} est représenté en tirets rouges, comparativement à l'\cref{algo_pert_filtering} en violet. L'instant d'introduction des perturbations en couple est indiqué par une croix noire.}
+\caption{Exemples des quatre trajectoires en force avec, le signal filtré à \SI{50}{\hertz} $y_{f50Hz}$, le filtrage passe-bas décrit en \cref{chap3_sec_method_sub_virt_traj_4} $y_{f}$, comparativement à l'\cref{algo_pert_filtering}  $y_{f+a}$. L'instant d'introduction des perturbations en couple est indiqué par une croix noire.}
 \label{fig_force_filtering_algorithm}
 \end{figure}

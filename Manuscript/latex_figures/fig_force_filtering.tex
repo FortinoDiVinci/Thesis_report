@@ -19,13 +19,13 @@
 				]
 				%
 				\addplot [
-					color=blue,
+					color=Orient,
 					solid,
 				]
 				table [col sep=comma, x=time, y=force] {misc/force_signal_filtered_chunk.csv};
 				%
 				\addplot [
-					color=red,
+					color=Shiraz,
 					smooth,
 					]
 				table [col sep=comma, x=time, y=filtered] {misc/force_signal_filtered_chunk.csv};
@@ -51,14 +51,14 @@
 					]
 					%
 					\addplot [
-						color=blue,
+						color=Orient,
 						solid,
 						forget plot,
 						]
 					table [col sep=comma, x=time, y=force] {misc/force_signal_perturbed_filtered_chunk.csv};
 					%
 					\addplot [
-						color=red,
+						color=Shiraz,
 						smooth,
 						forget plot,
 						]

@@ -23,9 +23,9 @@
 				]
 				%
 				\addplot [
-				color=blue,
+				color=Orient,
 				solid,
-				line width=1.5pt
+				%semithick,
 				]
 				table[row sep=crcr]{
 					111.875077696000	0.0723433427224003\\ 
@@ -214,9 +214,9 @@
 				};
 				%
 				\addplot [
-				color=red,
+				color=Shiraz,
 				dotted,
-				line width=1.5pt
+				thick,
 				]
 				table[row sep=crcr]{
 					111.875077696000	0.119375540827887\\ 
@@ -398,12 +398,12 @@
 					114.256077696000	0.578688579265590\\ 
 				};
 				%
-				\begin{scope}[line width=1.5pt]
+				\begin{scope}%[line width=1.5pt]
 					% ball
 					\node (ball) at (rel axis cs:0.985, 0.53) {};
-					\fill (ball) circle (4pt);
+					\fill (ball) circle (3pt);
 					% target
-					\draw[dashed, line width=1mm] (rel axis cs:0.1,0.95) 
+					\draw[dashed] (rel axis cs:0.1,0.95) 
 					-- node[fill=white, near start, font=\large]  {$h$} 
 					(rel axis cs:1, 0.95);
 					%
@@ -432,7 +432,7 @@
 				\end{scope}
 			\end{axis}
 			%
-			\draw [line width=1.25mm] (rel axis cs:0.94,0.22) 
+			\draw [line width=1mm] (rel axis cs:0.94,0.22) 
 			-- node[centered, above]{raquette} (rel axis cs:1,0.22);%(7.5,1.5);
 			%
 			\node[centered] at (rel axis cs:0.91, 0.52){balle};

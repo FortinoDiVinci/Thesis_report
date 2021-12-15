@@ -19,14 +19,14 @@
 				]
 				%
 				\addplot [
-					color=blue,
+					color=Orient,
 					solid,
 					]
 				table [col sep=comma, x=time_window, y=perc50] {misc/spline_rmse_evaluation_tot.csv};
 				\addlegendentry{médiane};
 				%
 				\addplot+ [
-					color=blue,
+					color=Orient,
 					dashed,
 					opacity=0.5,
 					name path=A,
@@ -34,7 +34,7 @@
 					] 
 				table [domain=101:500, col sep=comma, x=time_window, y=perc25] {misc/spline_rmse_evaluation_tot.csv};
 				\addplot+ [
-					color=blue,
+					color=Orient,
 					dashed,
 					opacity=0.5,
 					name path=B,
@@ -43,7 +43,7 @@
 				table [domain=101:500, col sep=comma, x=time_window, y=perc75] {misc/spline_rmse_evaluation_tot.csv};		
 				%
 				\addplot+ [
-					color=blue,
+					color=Orient,
 					dotted,
 					opacity=0.3,
 					name path=C,
@@ -51,7 +51,7 @@
 					] 
 				table [domain=101:500, col sep=comma, x=time_window, y=perc10] {misc/spline_rmse_evaluation_tot.csv};
 				\addplot+ [
-					color=blue,
+					color=Orient,
 					dotted,
 					opacity=0.3,
 					name path=D,
@@ -60,13 +60,13 @@
 				table [domain=101:500, col sep=comma, x=time_window, y=perc90] {misc/spline_rmse_evaluation_tot.csv};
 				%
 				\addplot [
-					fill=blue!5,
+					fill=Orient!5,
 					]
 				fill between [of=C and D];			
 				\addlegendentry{\SI{90}{\percent}};	
 				%
 				\addplot [
-				fill=blue!15,
+				fill=Orient!15,
 				]
 				fill between [of=A and B];		
 				\addlegendentry{écart interquartile};	

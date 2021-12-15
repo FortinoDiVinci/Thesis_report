@@ -1,34 +1,34 @@
 %\begin{figure}[h]
-	\tikzsetnextfilename{fig_ellipse_impedance}
-	\centering
-	\begin{tikzpicture}
-		\coordinate (O) at (0,0);
-		\coordinate (A) at ({1.25*cos(90+60)}, {1.25*sin(90+60)});
+\tikzsetnextfilename{fig_ellipse_impedance}
+\centering
+\begin{tikzpicture}
+	\coordinate (O) at (0,0);
+	\coordinate (A) at ({1.25*cos(90+60)}, {1.25*sin(90+60)});
+	
+	\draw (0,-1.75) -- (0,2) 
+		node[right, yshift=1.5]{$y$};
+	
+	\draw[Orient] (O) circle [x radius=1.25cm, y radius=1.25cm];
+	\draw[rotate around={-50:(O)}, Shiraz] (O) circle [x radius=1.25cm, y radius=2.5cm];
+	
+	\draw (-2.25,0) -- (2.25,0) 
+		node[below right]{$x$};
+	\draw[dashed, >=latex, <->, rotate around={-50:(O)}] (O) --+ (0,2.5) 
+		node[midway, fill=white, inner sep=0.1pt] {\footnotesize$\lambda_{max}$};
+	\draw[dashed, >=latex, <->, rotate around={-130:(O)}] (O) --+ (0,1.25) 
+		node[midway, fill=white, inner sep=0.1pt] {\footnotesize$\lambda_{min}$};
+	
+	\draw[-{Latex[length=2mm]}] (0,0) + (0:2cm) arc (0:40:2cm) 
+		node[midway, xshift=-2mm]{$\phi$};
 		
-		\draw (0,-1.75) -- (0,2) 
-			node[right, yshift=1.5]{$y$};
-		
-		\draw[blue!80] (O) circle [x radius=1.25cm, y radius=1.25cm];
-		\draw[rotate around={-50:(O)}, red!80] (O) circle [x radius=1.25cm, y radius=2.5cm];
-		
-		\draw (-2.25,0) -- (2.25,0) 
-			node[below right]{$x$};
-		\draw[dashed, >=latex, <->, rotate around={-50:(O)}] (O) --+ (0,2.5) 
-			node[midway, fill=white, inner sep=0.1pt] {\footnotesize$\lambda_{max}$};
-		\draw[dashed, >=latex, <->, rotate around={-130:(O)}] (O) --+ (0,1.25) 
-			node[midway, fill=white, inner sep=0.1pt] {\footnotesize$\lambda_{min}$};
-		
-		\draw[-{Latex[length=2mm]}] (0,0) + (0:2cm) arc (0:40:2cm) 
-			node[midway, xshift=-2mm]{$\phi$};
-			
-		%\draw[>=latex, ->, rotate around={60:(O)}] (O) --+ (0,1.25);
-		\draw[>=latex, ->, blue] (O) -- (A)
-			node[midway, above]{$\delta_x$};
-		\draw[dashed, gray, rotate around={-50:(A)}] (A) --+ (0,2);
-		\draw[>=latex, ->, red] ($(A) + ({1.25*cos(90-50)},{1.25*sin(90-50)})$) -- (O)
-			node[midway, right]{$\delta_f$};
-	\end{tikzpicture}
-	\vspace{1mm}
-	\captionof{figure}{Exemple d'ellipse avec un déplacement $\delta_x$ (bleu) sur le cercle unitaire, et la force de restitution (rouge) non-colinéaire induite, que l'on obtient grâce à l'intersection de la droite parallèle à l'axe principal passant par $\delta_x$ et l'ellipse.}
-	\label{fig_ellipse_dolan}
+	%\draw[>=latex, ->, rotate around={60:(O)}] (O) --+ (0,1.25);
+	\draw[>=latex, ->, Orient] (O) -- (A)
+		node[midway, above]{$\delta_x$};
+	\draw[dashed, Lavender, rotate around={-50:(A)}] (A) --+ (0,2);
+	\draw[>=latex, ->, Shiraz] ($(A) + ({1.25*cos(90-50)},{1.25*sin(90-50)})$) -- (O)
+		node[midway, right]{$\delta_f$};
+\end{tikzpicture}
+\vspace{1mm}
+\captionof{figure}{Exemple d'ellipse avec un déplacement $\delta_x$ (bleu) sur le cercle unitaire, et la force de restitution (rouge) non-colinéaire induite, que l'on obtient grâce à l'intersection de la droite parallèle à l'axe principal passant par $\delta_x$ et l'ellipse.}
+\label{fig_ellipse_dolan}
 %\end{figure}

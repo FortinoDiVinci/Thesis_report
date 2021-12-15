@@ -17,13 +17,13 @@
 					]
 					%
 					\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						]
 					table [col sep=comma, x expr=\coordindex, y=y1] {misc/rnn_predictions_exemples.csv};
 					%
 					\addplot [
-						color=red,
+						color=Shiraz,
 						smooth,
 						]
 					table [col sep=comma, x expr=\coordindex, y=y1_hat] {misc/rnn_predictions_exemples.csv};
@@ -33,7 +33,7 @@
 					%
 					\draw [dashed, opacity=.5] (axis cs:1300, 5) -- (axis cs:0, 5);
 					\draw [dashed, opacity=.5] (pDw) -- (pUp);
-						\draw[>=latex, <->] (axis cs:1300, 5) -- node [midway,above,align=center,fill=white,xshift=.5cm] {non-masqué} (axis cs:0, 5);
+						\draw[>=latex, <->] (axis cs:1300, 5) -- node [midway,above,align=center,fill=white,xshift=.6cm] {non-masqué} (axis cs:0, 5);
 				\end{axis}		
 			\end{tikzpicture}	
 			\tikzsetnextfilename{subfig_lstm_prediction_b}
@@ -50,13 +50,13 @@
 					]
 					%
 					\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						]
 					table [col sep=comma, x expr=\coordindex, y=y2] {misc/rnn_predictions_exemples.csv};
 					%
 					\addplot [
-						color=red,
+						color=Shiraz,
 						smooth,
 						]
 					table [col sep=comma, x expr=\coordindex, y=y2_hat] {misc/rnn_predictions_exemples.csv};
@@ -83,13 +83,13 @@
 						]
 					%
 					\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						]
 					table [col sep=comma, x expr=\coordindex, y=y3] {misc/rnn_predictions_exemples.csv};
 					%
 					\addplot [
-						color=red,
+						color=Shiraz,
 						smooth,
 						]
 					table [col sep=comma, x expr=\coordindex, y=y3_hat] {misc/rnn_predictions_exemples.csv};

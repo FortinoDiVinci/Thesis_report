@@ -20,7 +20,7 @@
 					]
 					%
 					\addplot [
-						color=blue,
+						color=Orient,
 						%solid,
 						smooth,
 						]
@@ -49,7 +49,7 @@
 				]
 				%
 				\addplot [
-				color=blue,
+				color=Orient,
 				smooth,
 				%line width=1.pt,
 				]
@@ -77,14 +77,14 @@
 					height=.3\linewidth,
 					scale only axis,    
 					xlabel={cycles},
-					ylabel={\textcolor{blue}{Amplitude (\SI{}{\meter})}},
+					ylabel={\textcolor{Orient}{Amplitude (\SI{}{\meter})}},
 					axis x line = bottom,
 					axis y line = left, 
 					ylabel near ticks,
 					]
 					%
 					\addplot [
-						color=blue,
+						color=Orient,
 						solid,
 						]
 					table [col sep=comma, x expr=\coordindex,  y=mag_var] {misc/unperturbed_position_signal_properties.csv};
@@ -102,14 +102,14 @@
 					height=.2\linewidth,
 					scale only axis,    
 					%xlabel={cycles},
-					ylabel={\textcolor{red}{Fréquence (\SI{}{\hertz})}},
+					ylabel={\textcolor{Shiraz}{Fréquence (\SI{}{\hertz})}},
 					axis x line = bottom,
 					axis y line = right, 
 					xticklabels=\empty,
 					]
 					%
 					\addplot [
-						color=red,
+						color=Shiraz,
 						solid,
 						]
 					table [col sep=comma, x expr=\coordindex,  y=freq_var] {misc/unperturbed_position_signal_properties.csv};

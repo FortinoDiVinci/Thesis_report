@@ -4,7 +4,7 @@
 		\resizebox{\textwidth}{!}{
 			\subcaptionbox{Estimation satisfaisante (cycle 16 de la \cref{fig_unp_position_test_trajectory}). A la fin de la fenêtre temporelle de \SI{200}{\milli\second}, l'erreur est submillimétrique (\SI{0.5}{\milli\meter}) pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative inférieure à \SI{1}{\percent}.\label{subfig_fig_test_burdet_2000_success}}
 			{
-				\tikzsetnextfilename{fig_test_burdet_trajectory_prediction_a}
+				\tikzsetnextfilename{fig_test_burdet_trajectory_pShiraziction_a}
 				\begin{tikzpicture}
 				\centering
 				%
@@ -23,7 +23,7 @@
 					% first 15 candidates
 					\foreach \i in {2,3,...,16} {			
 						\addplot [
-							color=blue,
+							color=Orient,
 							solid,
 							opacity=0.3,
 							]
@@ -32,7 +32,7 @@
 					%
 					\foreach \i in {50,51,...,65} {			
 						\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						opacity=0.3,
 						]
@@ -41,7 +41,7 @@
 					%
 					\foreach \i in {150,151,...,165} {			
 					\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						opacity=0.3,
 						]
@@ -57,7 +57,7 @@
 					table [col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test1_burdet/best_candidates.csv};
 					%
 					\addplot [
-						color=red,
+						color=Shiraz,
 						dashed,
 						line width=1.pt
 						]
@@ -107,7 +107,7 @@
 					\addlegendentry{Mesures};
 	%				%
 					\addplot [
-						color=red,
+						color=Shiraz,
 						dashed,
 						line width=1.pt,
 						]
@@ -132,7 +132,7 @@
 		\resizebox{\textwidth}{!}{
 			\subcaptionbox{Estimation peu satisfaisante (cycle 25 de la \cref{fig_unp_position_test_trajectory}). A la fin de la fenêtre temporelle de \SI{200}{\milli\second}, l'erreur est de \SI{5.9}{\milli\meter} pour une amplitude de mouvement supérieure à \SI{8}{\centi\meter}, ce qui correspond à une erreur relative d'environ \SI{7}{\percent}.\label{subfig_fig_test_burdet_2000_failure}}
 			{
-				\tikzsetnextfilename{fig_test_burdet_trajectory_prediction_b}
+				\tikzsetnextfilename{fig_test_burdet_trajectory_pShiraziction_b}
 				\begin{tikzpicture}
 				\centering
 				%
@@ -154,7 +154,7 @@
 					% first 15 candidates
 					\foreach \i in {2,3,...,16} {			
 						\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						opacity=0.3,
 						]
@@ -163,7 +163,7 @@
 					%
 					\foreach \i in {50,51,...,65} {			
 						\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						opacity=0.3,
 						]
@@ -172,7 +172,7 @@
 					%
 					\foreach \i in {150,151,...,165} {			
 						\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						opacity=0.3,
 						]
@@ -187,7 +187,7 @@
 					table [col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test2_burdet/best_candidates.csv};
 					%
 					\addplot [
-					color=red,
+					color=Shiraz,
 					dashed,
 					line width=1.pt
 					]
@@ -237,7 +237,7 @@
 					table [domain=400:650, col sep=comma, x expr=\coordindex, y=actual_trajectory] {misc/test2_burdet/best_candidates.csv};
 					%				%
 					\addplot [
-					color=red,
+					color=Shiraz,
 					dashed,
 					line width=1.pt,
 					]

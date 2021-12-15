@@ -142,7 +142,11 @@ Dans le cas du contrôle en admittance articulaire d'abord décrit par \parencit
  
 \input{latex_figures/fig_ctrl_scheme_lamy}
 
-Le schéma décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ la matrice jacobienne du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, représentés par la matrice diagonale $ \matr{K}_v \in \Re^n $,  permettent de compenser les effets dûs aux frottements secs \parencite{newman_stable_1994}. La matrice diagonale $ \matr{K}_i \in \Re^n $ contient les gains des correcteurs en admittance de la boucle en couples d'interaction, permettant de réduire l'inertie apparente du robot \parencite[Chapitre~3]{lamy_conception_2011}.
+Le schéma décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ la matrice jacobienne du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. \textcolor{orange}{On peut passer des forces aux couples articlaires en utilisant la matrice jacobienne \parencite{khalil_modeling_2002}, comme montré en équation \cref{eq_torque_to_force_jacobian}.} En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, représentés par la matrice diagonale $ \matr{K}_v \in \Re^n $,  permettent de compenser les effets dûs aux frottements secs \parencite{newman_stable_1994}. La matrice diagonale $ \matr{K}_i \in \Re^n $ contient les gains des correcteurs en admittance de la boucle en couples d'interaction, permettant de réduire l'inertie apparente du robot \parencite[Chapitre~3]{lamy_conception_2011}.
+
+\begin{equation} \label{eq_torque_to_force_jacobian}
+	\vect{\tau}_e = \jacobian{\vect{q}}{}{t} \vect{f}_e
+\end{equation}
 
 Ainsi pour le cas uni-articulaire, \textcite[Chapitre~3]{lamy_conception_2011} trouve une relation directe entre l'inertie apparente du robot en basse fréquence $J_r$ et les gains des correcteur intégral $k_i$ et proportionnel $k_v$, avec $b_m$ l'amortissement côté moteur du modèle viscoélastique entre moteur et capteur d'effort \parencite[Chapitre~2]{lamy_conception_2011} :
 
@@ -425,7 +429,7 @@ Il reste alors le réglage des gains des différents correcteurs.
 
 \subsection{Réglage des correcteurs} \label{sec_robot_sub_task_ctrl_tunning}
 
-\subsubsection{Correcteur en admittance}
+\subsubsection{Correcteur en admittance} \label{sec_robot_sub_task_ctrl_tunning_1}
 
 Les gains du correcteur $ C_z $ en admittance sont soumis au compromis transparence-stabilité. Ainsi, pour améliorer la transparence réduisant les dynamiques apparentes du robot, des gains de contrôle élevés sont souhaitables. Toutefois, la robustesse du robot doit permettre de maintenir une stabilité lors d'interactions physiques avec de larges gammes de raideurs, de manière à supporter les possibles co-contractions des participants. Pour assurer cette robustesse, les gains devront donc être limités. Comme rappelé au \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2_1}, l'inertie d'un robot ne peut pas être parfaitement compensée, dès lors qu'il existe des flexibilités dans les articulations, et sa réduction est limitée par la stabilité. Le robot ne devant interargir qu'avec des humains, le réglage utilisé par \textcite[Chapitre~3]{lamy_conception_2011}, où la passivité assure notamment des interactions stables avec des environnements ayant des raideurs presque infinies (marbre), est conservateur et ne permet pas une transparence maximale. 
 
@@ -453,9 +457,9 @@ La transparence étant difficilement qualifiable, puisqu'elle repose en partie s
 %
 %Une ébauche de l'analyse théorique des dynamiques apparentes du robot est donnée en \cref{app_apparent_dyn_robot}.
 
-\subsubsection{Autres correcteurs}
+\subsubsection{Autres correcteurs} \label{sec_robot_sub_task_ctrl_tunning_2}
 
-\paragraph{Boucles internes}
+\paragraph{Boucles internes} \label{sec_robot_sub_task_ctrl_tunning_2_1}
 
 Ces boucles ont été les premières à être corrigées, depuis les plus rapides (boucles de courant/couple) au plus lentes (boucles de vitesse angulaire). La correction a été réalisée en observant la comportement critique des différentes articulations en boucle fermée, avec une méthode inspirée par les réglages proposés initialement par \textcite{ziegler_optimum_1942}. 
 

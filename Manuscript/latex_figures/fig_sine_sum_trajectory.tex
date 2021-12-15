@@ -19,13 +19,13 @@
 					]
 					%
 					\addplot [
-						color=blue,
+						color=Orient,
 						smooth,
 						]
 					table [col sep=comma, x=time, y=force] {misc/trajectory_estimation_sines/sine_optimisation_trajectory_1.csv};
 					%
 					\addplot [
-						color=red,
+						color=Shiraz,
 						smooth,
 						]
 					table [col sep=comma, x=time, y=virtual] {misc/trajectory_estimation_sines/sine_optimisation_trajectory_1.csv};
@@ -34,9 +34,9 @@
 					\coordinate (pDw) at (axis cs:147.7275, \pgfkeysvalueof{/pgfplots/ymin});
 					\coordinate (maskUp) at (axis cs:147.8275, \pgfkeysvalueof{/pgfplots/ymax});
 					\coordinate (fitRightDw) at (axis cs:147.9775, \pgfkeysvalueof{/pgfplots/ymin});
-					\path[pattern=north west lines, pattern color=pink] (pDw) rectangle (fitLeftUp);
-					\path[pattern=north west lines, pattern color=gray] (pDw) rectangle (maskUp);
-					\path[pattern=north west lines, pattern color=pink] (maskUp) rectangle (fitRightDw);
+					\path[pattern=north west lines, pattern color=Lavender] (pDw) rectangle (fitLeftUp);
+					\path[pattern=north west lines, pattern color=Prune] (pDw) rectangle (maskUp);
+					\path[pattern=north west lines, pattern color=Lavender] (maskUp) rectangle (fitRightDw);
 					%					
 					\addlegendentry{$\vect{f}_z$};
 					\addlegendentry{$\tilde{\vect{f}}_z$};
@@ -62,14 +62,14 @@
 						]
 						%
 						\addplot [
-							color=blue,
+							color=Orient,
 							smooth,
 							forget plot,
 							]
 						table [col sep=comma, x=time, y=force] {misc/trajectory_estimation_sines/sine_optimisation_trajectory_2.csv};
 						%
 						\addplot [
-							color=red,
+							color=Shiraz,
 							smooth,
 							forget plot,
 							]
@@ -82,7 +82,7 @@
 						\addplot[
 							draw=none, 
 							pattern=north west lines, 
-							pattern color=pink, 
+							pattern color=Lavender, 
 							area legend, 
 							%legend image post style={draw opacity=0},% remove the border 
 							] 
@@ -95,7 +95,7 @@
 						\addplot[
 							draw=none, 
 							pattern=north west lines, 
-							pattern color=gray, 
+							pattern color=Prune, 
 							area legend, 
 							%legend image post style={draw opacity=0},% remove the border 
 							] 
@@ -108,7 +108,7 @@
 						\addplot[
 							draw=none, 
 							pattern=north west lines, 
-							pattern color=pink, 
+							pattern color=Lavender, 
 							area legend, 
 							%legend image post style={draw opacity=0},% remove the border 
 							] 
