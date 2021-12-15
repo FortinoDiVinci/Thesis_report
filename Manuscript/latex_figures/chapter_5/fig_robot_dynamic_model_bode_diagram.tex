@@ -1,0 +1,75 @@
+\begin{figure}[!htb] 
+	\tikzsetnextfilename{fig_robot_dynamic_model_bode_diagram}
+	\centering
+	%\resizebox{\textwidth}{!}{
+		\begin{tikzpicture}
+			\centering
+			%
+			\begin{semilogxaxis}[%
+				width=.85\linewidth, 
+				height=.35\linewidth, 
+				%xlabel={Fréquence (\si{\hertz})},%\si{\radian\per\second}
+				ylabel={Amplitude (\si{\decibel})},
+				grid=both,
+				xmin=3e-2,
+				xmax=1e4,
+				xticklabels=\empty,
+				%ymax=10,
+				%xmode=log,
+				%log basis x=10,
+				%xtick = {5, 6, 7, 8, 8.5, 9, 10, 11, 12, 13, 14, 15},
+				%xticklabels = {5, 6, 7, 8, 8.5, 9, 10, 11, 12, 13, 14, 15},
+				%xmin=31.4159,
+				%ymax=3, ymin=-60,
+				%xmax = 16,
+				]
+				%
+				\draw[gray] (axis cs:3e-2, 0) -- (axis cs:1e4, 0);
+				\addplot [
+					color=Orient,
+					solid,
+					]
+				table [col sep=comma, x=w, y=mag] {misc/bode_robot_dynamic_model.csv};
+				%
+%				\coordinate (fpDw) at (axis cs:8, \pgfkeysvalueof{/pgfplots/ymin});
+%				\coordinate (fpUp) at (axis cs:8, \pgfkeysvalueof{/pgfplots/ymax});
+%				\coordinate (fcDw) at (axis cs:8.5, \pgfkeysvalueof{/pgfplots/ymin});
+%				\coordinate (fcUp) at (axis cs:8.5, \pgfkeysvalueof{/pgfplots/ymax});
+%				\coordinate (atLeft) at (axis cs:5, -20);
+%				\coordinate (atRight) at (axis cs:16, -20);
+%				%
+%				\draw [dashed, opacity=.5] (fpDw) -- (fpUp);
+%				\draw [dashed, opacity=.5] (fcDw) -- (fcUp);
+				\draw [dashed, gray] (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymax}) node[fill=white,near start, text=black] {$\omega_c$};
+				\draw [dashed, gray] (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymax});
+				\draw[->, Shiraz] (axis cs: 1.1e3, 0) -- (axis cs: 1.1e3, -39) node[midway,xshift=4mm,yshift=1mm] {$m_G$};	
+				%
+			\end{semilogxaxis}
+			\begin{semilogxaxis}[
+				yshift=-.25\linewidth,
+				width=.85\linewidth, 
+				height=.35\linewidth, 
+				xlabel={Pulsation (\si{\radian\per\second})},%\si{\radian\per\second}
+				ylabel={Phase (\si{\degree})},
+				grid=both,
+				xmin=3e-2,
+				xmax=1e4,
+				ytick={0,-90,-180,-270},
+				%ymax=10,
+				%use fpu=false,
+				]
+				\draw [gray] (axis cs:3e-2, -180) -- (axis cs:1e4, -180);
+				\addplot [
+					color=Orient,
+					solid,
+					]
+				table [col sep=comma, x=w, y=phase] {misc/bode_robot_dynamic_model.csv};	
+				\draw [dashed, gray] (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymax});
+				\draw [dashed, gray] (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymax});	
+				\draw[->, Shiraz] (axis cs: 0.075, -180) -- (axis cs: 0.075, -90) node[midway,xshift=4mm] {$m_\phi$};	
+			\end{semilogxaxis}		
+		\end{tikzpicture}
+	%}	
+	\caption{Modèle linéarisé du robot contrôlé en admittance cartésienne, pour une entrée en force $f_z$ et une sortie en vitesse $\dot{z}$.}
+	\label{fig_robot_dynamic_model_bode_diagram}
+\end{figure}

@@ -1,1 +1,212 @@
 \chapter{Analyse de stabilité} \label{chap5}
+\minitoc
+
+Un système est qualifié de stable au sens de Lyapunov lorsqu'il retourne à ses positions d'équilibre quant il en est éloigné faiblement. On parle plus généralement de la stabilité d'un point d'équilibre, un système pouvant à la fois avoir des points d'équilibres stables et instables, comme c'est le cas pour le pendule par exemple.
+
+\section{Outils de l'étude de stabilité}
+
+La difficulté principale de l'étude de stabilité des robots en interaction avec leur environnement provient de la modélisation de l'environnement. En effet, comment assurer la stabilité d'une interaction lorsqu'on interagit physiquement avec un objet non modélisé ou un humain ? L'une des premières pistes est d'assurer que le robot ait un comportement passif.
+
+\subsection{Passivité}
+
+Un système causal est dit passif, au sens thermodynamique\footnote{Dès lorsque toutes les interactions d'un systèmes avec son environnement sont prises en compte, tout système est passif ; sinon le premier principe de la thermodynamique ne serait pas respecté.}, lorsqu’il ne peut pas restituer plus d’énergie qu’il n'en reçoit, on pourra aussi parler d'un système dissipatif. L’énergie interne emmaganisée dans le système à l’instant $t$ est notée $E_s(t)$. La condition de passivité du mécanisme est alors vérifiée si l'équation \cref{eq_passivity_energy} tient sur l'intervalle de temps $[t_1,t_2]$, où $\matrCal{P} = \vect{y}^t \vect{u}$ est la puissance instantanée du système qui prend en entrée $\vect{u} \in \Re^n$ et produit en sortie $\vect{y} \in \Re^n$.
+
+\begin{equation} \label{eq_passivity_energy}
+	\int_{t_1}^{t_2} \matrCal{P}(\tau) d\tau \geq E_s(t_2) - E_s(t_1) \geq -E_s(t_1)
+\end{equation}
+
+Pour des systèmes linéaires invariants dans le temps, la passivité implique la stabilité du système au sens de Lyapunov (source). De plus, lorsque deux systèmes passifs sont connectés, alors l'ensemble formé par ces deux systèmes est stable (source).
+
+\textcite[Chapitre~2, p.~52,53]{colgate_control_1988}
+
+L'humain est considéré comme passif (source), il suffit donc de montrer que le robot a un comportement passif, pour que le couplage du robot et de l'humain puisse être considéré comme passif et donc stable.
+
+\subsection{Autres méthodes ? analyses robustes, etc ?}
+
+\section{Modelisation du robot et de l'interaction humaine}
+
+\subsection{Modèle dynamique du robot}
+
+\subsubsection{Modèle de Lagrange}
+
+Le modèle dynamique général d'un robot en contact avec un environnement physique peut-être obtenu à partir des équations de Lagrange, comme explicité par \textcite[Chapitre~9]{w_khalil_modeling_2002}. On obtient alors le modèle \cref{eq_dyn_model_robot}, avec $ \matr{A} $ la matrice d'inertie du robot, $ \vect{h} $ le vecteur regroupant les phénomènes liées à la position et à la vitesse - \textit{e.g., couples centrifuges, de Coriolis, gravitationnels}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur sur le robot.
+
+\begin{equation} \label{eq_dyn_model_robot}
+	\matr{A}(\vect{q})\ddot{\vect{q}} + \vect{h}(\dot{\vect{q}}, \vect{q}) = \vect{\tau}_r + \vect{\tau}_{e}
+\end{equation}
+
+En renseignant les termes regroupés par $ \vect{h} $, on peut écrire l'expression \cref{eq_dyn_model_robot_complete} qui sépare les effets inertiels, comme les couples centrifuges et de Coriolis regroupés dans le terme $ \matr{C}(\dot{\vect{q}}, \vect{q}) $, de ceux liés à la gravité $ \vect{g}(\vect{q}) $, auxquels s'ajoutent les phénomènes de frottements visqueux, représenté par une matrice diagonale notée $ \matr{f}_v $. On retrouve alors le modèle décrit par \textcite{hogan_impedance_1985b} en équation \cref{eq_modele_bras_hogan_1985}, avec les frottements secs $\matr{F}_s$ et les couples de décalage $\vect{\tau}_0$ en plus. 
+
+\begin{equation} \label{eq_dyn_model_robot_complete}
+	\matr{A}(\vect{q})\ddot{\vect{q}}  + \matr{F}_v \dot{\vect{q}} + \matr{F}_s \sign(\dot{\vect{q}}) + \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} + \vect{g}(\vect{q}) = \vect{\tau}_r + \vect{\tau}_e - \vect{\tau}_0
+\end{equation}
+
+Les couples articulaires de l'environnement sur le robot peuvent être exprimés en considérant les forces exercées par l'environnement sur le robot $\vect{f}_{e}$, en utilisant la relation \cref{eq_torque_to_force_jacobian}, ce qui permet alors d'exprimer le modèle \cref{eq_dyn_model_robot_complete_2}. La transmission des couples n'étant pas parfaite, on ajoute la matrice diagonale des coefficients de transmission $\matr{\nu}$.
+
+\begin{equation} \label{eq_dyn_model_robot_complete_2}
+	\ddot{\vect{q}} = \matr{A}(\vect{q})^{-1} \left( \vect{\tau}_r + \matr{\nu}\jacobian{\vect{q}}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{F}_s \sign(\dot{\vect{q}}) - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) - \vect{\tau}_0 \right)
+\end{equation}
+
+\subsubsection{Intégration du contrôle en admittance}
+
+Les courants moteurs consignes $ \vect{i}_d $ sont donnés par le contrôle en vitesses articulaires, dont le réglage est décrit en \cref{sec_robot_sub_task_ctrl_tunning_2_1}. On note $ \matr{C}_v \in \mathrm{diag} \left( \Re^{3\times3} \right) $ le correcteur de la boucle interne en vitesses. %$ \matr{C}_v $ est diagonal. 
+Les dynamiques des boucles de courant sont négligées, on considère donc que les courants réels $ \vect{i}_r $ sont égaux aux consignes $ \vect{i}_d $.
+Pour obtenir les couples articulaires à partir des courants moteurs, il faut d'une part considérer les constantes de couples $ \matr{T}_m $ pour obtenir les couples moteurs, puis  les trains épicycloïdaux (réducteurs planétaires) $ \matr{R} $, pour enfin obtenir les couples articulaires $ \vect{\tau}_r $. %Ces constantes sont considérées comme étant intégrées aux gains des correcteurs, pour ne pas alourdir les équations.
+Afin de simplifier la modélisation du contrôle, les boucles secondaires décrites en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_2,chap2_sec_ctrl_vfo_subsec_cartesian_3}, qui ne devraient pas avoir d'effet sur la transparence du robot, ne sont pas considérés pour la suite. On obtient donc la relation \cref{torque_cmd_ctrl_loop}, en notant que le produit matriciel des constantes moteurs et réducteurs a été intégré aux gains du correcteur pour ne pas alourdir les équations.
+
+\begin{equation} \label{torque_cmd_ctrl_loop}
+	\vect{\tau}_r = \matr{R} \matr{T}_m \vect{i}_r \approx \matr{R} \matr{T}_m \vect{i}_d =  \matr{C}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) = \matr{K}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) + \matr{K}_{vi} \int \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) \mathrm{d}t
+\end{equation}
+
+Les vitesses articulaires de consigne $ \dot{\vect{q}}_d $ sont obtenues à partir du passage dans le plan articulaire des consignes cartésiennes du contrôleur en admittance $ \matr{C}_z $ détaillé en \cref{velocity_cmd_ctrl_loop}.
+%
+\begin{equation} \label{velocity_cmd_ctrl_loop}
+	\dot{\vect{q}}_d = \jacobianHat{\vect{q}}{}{-1} \begin{pmatrix} 0 & c_z (f_z) & 0 \end{pmatrix}^{t} = \jacobianHat{\vect{q}}{}{-1} \matr{C}_z (\vect{f}_e) = \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right)
+\end{equation}
+
+Le modèle du robot décrit en \cref{eq_dyn_model_robot_complete}, peut alors être complété en y intégrant les équations de la loi de commande \cref{torque_cmd_ctrl_loop,velocity_cmd_ctrl_loop}.
+
+%On peut écrire de nouveau \cref{eq_dyn_model_robot_complete} pour y intégrer les contrôleurs.
+%
+%\begin{equation} \label{eq_dyn_model_robot_complete_ctrl}
+%	\ddot{\vect{q}} = \matr{A}(\vect{q})^{-1} \left( \matr{K}_v (\dot{\vect{q}}_d - \dot{\vect{q}}) + \matr{K}_{vi} (\vect{q}_d - \vect{q}) + \jacobian{\vect{q}
+%	}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) \right) \text{,}
+%\end{equation}
+%
+%avec :
+%
+%\begin{equation} \label{integral_velocity_cmd_ctrl_loop}
+%	\vect{q}_d = \int \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right) \; \mathrm{d}t
+%\end{equation}
+
+\subsubsection{Validation du modèle en simulation ?}
+
+
+
+\subsection{Linéarisation du modèle du robot}
+
+Pour la linéarisation du modèle dynamique du robot, les couples générés par les frottements statiques ne sont pas pris en compte à cause de leur comportement non linéaire provoqué par la fonction signe $\sign$. On peut alors écrire le système \cref{eq_sys_robot_dynamic_model} augmenté de deux états $\vect{e}_v$ et $\vect{e}_f$, qui pourra être linéarisé.
+
+
+\begin{equation} \label{eq_sys_robot_dynamic_model}	
+\resizebox{\textwidth}{!}{$
+	\vect{f}_s(\vect{\phi})=	
+	\begin{cases}	
+		\dot{\vect{q}} = d\vect{q}/dt\\
+			\ddot{\vect{q}} = \matr{A}(\vect{q})^{-1} \left( \matr{K}_v \left( \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \vect{e}_f \right) - \dot{\vect{q}} \right) + \matr{K}_{vi} \vect{e}_v + \matr{\nu}\jacobian{\vect{q}}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) - \vect{\tau}_0 \right)\\
+		\dot{\vect{e}}_v =  \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \vect{e}_f \right) - \dot{\vect{q}}\\
+		\dot{\vect{e}}_f = \vect{f}_e
+	\end{cases}	
+$}
+\end{equation}
+
+
+En considérant le vecteur d'état $\vect{\phi} = \begin{pmatrix}\vect{q} & \dot{\vect{q}} & \vect{e}_v & \vect{e}_f \end{pmatrix}^t \in \Re^{12}$ du système, ainsi que son entrée $\vect{f}_e \in \Re^3$, on peut exprimer le système \cref{eq_sys_robot_dynamic_model} sous la forme d'une représentation d'états \cref{eq_general_state_system} :
+
+\begin{equation} \label{eq_general_state_system}
+	\begin{cases}
+		\dot{\vect{\phi}} = \matr{A}_s\vect{\phi} + \matr{B}_s\vect{f}_e\\
+		\dot{\vect{x}} = \matr{C}_s\vect{\phi} \text{,}
+	\end{cases}
+\end{equation}
+%
+avec les matrices d'état $\matr{A}_s \in\Re^{12\times12}$ et de commande $\matr{B}_s\in\Re^{12\times3}$ respectivement obtenues à partir des dérivations partielles du système \cref{eq_sys_robot_dynamic_model} par le vecteur d'état $\vect{\phi}$ et le signal d'entrée $\vect{f}_e$, en prenant le vecteur d'équilibre $\vect{\phi}_0 = \begin{pmatrix}\vect{q}_0 & \textbf{0}\end{pmatrix}^t$. La matrice d'observation $\matr{C}_s\in\Re^{3\times12}$ est définie pour obtenir les vitesses cartésiennes $\dot{\vect{x}}$ en sortie, et la matrice d'action directe est considérée nulle.
+
+\begin{equation} \label{eq_dynamic_ss_A}
+	\matr{A}_s = \frac{\partial \vect{f}_s}{\partial \left(\vect{q}, \dot{\vect{q}}, \vect{e}_v, \vect{e}_f \right)}
+\end{equation}
+
+\begin{equation} \label{eq_dynamic_ss_B}
+	\matr{B}_s = \frac{\partial \vect{f}_s}{\partial \vect{f}_e}
+\end{equation}
+
+\begin{equation} \label{eq_dynamic_ss_C}
+	\matr{C}_s = %
+	\begin{pmatrix}
+		\matr{0}_{3\times 3} & \jacobian{\vect{q}_0}{}{} & \matr{0}_{3\times 3} & \matr{0}_{3\times 3}
+	\end{pmatrix}
+\end{equation}
+
+La représentation généralisée \cref{eq_general_state_system} à plusieurs entrées et sorties peut être réduite pour ne considérer que les forces et mouvements en $\vec{z}$. Le diagramme de Bode de ce système SISO est donné en \cref{fig_robot_dynamic_model_bode_diagram}. On peut y voir que le comportement du robot pour une entrée en force et une sortie en position suit celui d'un double intégrateur pur en basse fréquence, jusqu'à environ \SI{1}{\radian\per\second}, c'est à dire \SI{0.16}{\hertz}.
+
+\input{latex_figures/chapter_5/fig_robot_dynamic_model_bode_diagram}
+\input{latex_figures/chapter_5/fig_robot_dynamic_model_position_output_bode_diagram}
+
+Le modèle dynamique linéarisé du robot seul est stable, avec une marge de phase de plus de \SI{90}{\degree} et une marge de gain de presque \SI{-40}{\decibel}. Il reste maintenant à étudier le comportement du robot en booucle fermé, lorsqu'il est en contact physique avec un environnement.
+
+%\begin{equation} \label{eq_state_system_C}
+%	\dot{\vect{\phi}} = \matr{A}\vect{\phi} + \matr{B}\vect{f}_e \text{,}
+%\end{equation}
+
+\subsection{Couplage avec un modèle en impédance}
+
+L'environnement physique en contact avec le robot peut être considéré comme un modèle viscoélastique du second ordre, couplé avec le robot. Ainsi, les mouvements $\dot{\vect{x}}(2)=\dot{z}$ du robot en contact physique avec l'environnement $\mu_z$ entraînent des forces d'interaction $f_z$. Si on sépare le contrôle en admittance $C_z$ du modèle du robot, on peut représenter cette interaction comme indiquée sur la \cref{fig_bloc_diagram_robot_environment}, où le modèle dynamique du robot $\matr{\Sigma}$ est séparé en fonction des deux entrées $\begin{pmatrix}\dot{z}_d & f_z\end{pmatrix}$ pour le cas unidimensionnel, et $\begin{pmatrix}\dot{\vect{x}}_d & \vect{f}_e\end{pmatrix}$ dans le cas multidimensionnel.
+
+\begin{equation}\label{eq_impedance_environment}
+	\mu_z(s) = \frac{F_z(s)}{Z(s)} = k_z + b_z s + m_z s^2
+\end{equation}
+
+\input{latex_files/chapter_5/fig_bloc_diagram_robot_environment}
+
+De manière similaire à ce qui a été fait pour décrire la dynamique complète du robot avec son contrôle en admittance, on peut facilement définir la dynamique séparée avec le système \cref{eq_sys_robot_dynamic_model_no_ctrl}, pour ensuite en déduire une représentation d'état avec le vecteur d'état $\vect{\phi}_\Sigma=\begin{pmatrix}\vect{q} & \dot{\vect{q}} & \vect{e}_v \end{pmatrix}^t \in \Re^{9}$.
+
+\begin{equation} \label{eq_sys_robot_dynamic_model_no_ctrl}	
+	\resizebox{\textwidth}{!}{$
+		\vect{f}_\Sigma(\vect{\phi}_\Sigma)=	
+		\begin{cases}	
+			\dot{\vect{q}} = d\vect{q}/dt\\
+			\ddot{\vect{q}} = \matr{A}(\vect{q})^{-1} \left( \matr{K}_v \left( \jacobianHat{\vect{q}}{}{-1}\dot{\vect{x}}_d - \dot{\vect{q}} \right) + \matr{K}_{vi} \vect{e}_v + \matr{\nu}\jacobian{\vect{q}}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) - \vect{\tau}_0 \right)\\
+			\dot{\vect{e}}_v =  \jacobianHat{\vect{q}}{}{-1}\dot{\vect{x}}_d - \dot{\vect{q}}
+		\end{cases}	
+	$}
+\end{equation}
+
+La représentation d'état de $\matr{\Sigma}_f$ peut facilement être écrite en \cref{eq_sys_robot_dynamic_model_no_ctrl_sigma_f}. Pour n'injecter qu'une entrée $f_z$, et non l'ensemble du vecteur de forces d'interaction, il suffit d'extraire la deuxième colonne de matrice de commande - \textit{idem} pour $\dot{\vect{x}}_d$. L'état augmenté $\vect{e}_v$ n'a pas été indiqué, car il n'intervient pas dans cette partie du système, il faut toutefois le prendre en compte pour la représentation d'état de $\matr{\Sigma}_v$, comme on peut le voir sur le système \cref{eq_sys_robot_dynamic_model_no_ctrl_sigma_v}.
+
+\begin{equation}\label{eq_sys_robot_dynamic_model_no_ctrl_sigma_f}
+	\begin{pmatrix}
+		\dot{\vect{q}} \\ \ddot{\vect{q}}
+	\end{pmatrix} = %
+	\begin{pmatrix}
+		\matr{0}_{3\times 3} & \matr{I}_{3\times 3} \\
+		\frac{\partial \matr{A}(\vect{q})^{-1}\matr{\nu}\jacobian{\vect{q}}{}{t}}{\partial \vect{q}} & \matr{0}_{3\times 3}
+	\end{pmatrix} %
+	\begin{pmatrix}
+		\vect{q} \\ \dot{\vect{q}}
+	\end{pmatrix} + 
+	\begin{pmatrix}
+		\matr{0}_{3\times 3} \\ \matr{A}(\vect{q})^{-1}\matr{\nu}\jacobian{\vect{q}}{}{t}
+	\end{pmatrix}
+	\vect{f}_e
+\end{equation}
+
+%\begin{equation}\label{eq_sys_robot_dynamic_model_no_ctrl_sigma_v}
+\begin{multline}\label{eq_sys_robot_dynamic_model_no_ctrl_sigma_v}
+	\begin{pmatrix}
+		\dot{\vect{q}} \\ \ddot{\vect{q}} \\ \dot{\vect{e}}_v
+	\end{pmatrix} = %
+	\begin{pmatrix}
+		\matr{0}_{3\times 3} & \matr{I}_{3\times 3} & \matr{0}_{3\times 3} \\
+		-\frac{\partial \matr{A}(\vect{q})^{-1}(\vect{g}(\vect{q})+\vect{\tau}_0)}{\partial \vect{q}} & -\matr{A}(\vect{q}_0)^{-1}\left(\matr{K}_v + \matr{F}_v + \frac{\partial \matr{C(\vect{q}_0, \dot{\vect{q}})}\dot{\vect{q}}}{\partial \dot{\vect{q}}}\right) & \matr{A}(\vect{q}_0)^{-1} \matr{K}_{vi} \\
+		? & -\matr{I}_{3\times 3} & \matr{0}_{3\times 3}
+	\end{pmatrix} %
+	\begin{pmatrix}
+		\vect{q} \\ \dot{\vect{q}} \\ \vect{e}_v
+	\end{pmatrix}\\ +%
+	\begin{pmatrix}
+		\matr{0}_{3\times 3} \\ 
+		\matr{A}(\vect{q}_0)^{-1} \matr{K}_v \jacobianHat{\vect{q}_0}{}{-1} \\
+		\jacobianHat{\vect{q}_0}{}{-1}
+	\end{pmatrix}
+	\dot{\vect{x}}_d	
+\end{multline}
+%\end{equation}
+
+Il est important de souligner que puisque les boucles secondaires sont négligées, le signal de commande en vitesse cartésienne $\vect{x}_d$ a ses composantes en $\vec{x}$ et $\vec{\theta}$ nulles, puisque la loi de commande en admittance décrite en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_1} n'est réalisée que le long de l'axe $\vec{z}$. Par conséquent la consigne, ou référence en force peut s'exprimer ainsi $\vect{f}_{e0} = \begin{pmatrix}0 & f_{z0} & 0\end{pmatrix}^t$. Il faut aussi se rappeler que lorsqu'on souhaite un contrôle n'opposant aucune force, alors $f_{z0}$ est nul.
+
+Cette représentation séparant le contrôleur en admittance du reste de la dynamique du robot permet de plus facilement étudier la stabilité du robot en fonction du choix des lois de commande et de l'environnement.
+
+
+
+\section{Etude de la stabilité}
+

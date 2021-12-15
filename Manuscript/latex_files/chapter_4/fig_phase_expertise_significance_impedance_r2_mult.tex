@@ -1,0 +1,253 @@
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{\label{subfig_anovan_phase_skill_impedance_r2_K}}
+		{
+			\tikzsetnextfilename{subfig_anovan_phase_skill_impedance_r2_K}
+			\begin{tikzpicture}
+				\begin{axis}[%
+					width=.48\linewidth,
+					height=.38\linewidth,
+					scale only axis,
+					unbounded coords=jump,
+					%xmin=0,
+					%xmax=10,
+					xlabel=$K$ (\si{\newton\per\meter}),
+					xlabel near ticks,
+					ymin=0.5,
+					ymax=9.5,
+					ytick={1,2,3,4,5,6,7,8,9},
+					yticklabels={{$\phi_3$,$e_3$},{$\phi_2$,$e_3$},{$\phi_1$,$e_3$},{$\phi_3$,$e_2$},{$\phi_2$,$e_2$},{$\phi_1$,$e_2$},{$\phi_3$,$e_1$},{$\phi_2$,$e_1$},{$\phi_1$,$e_1$}},
+					yticklabel style={font=\small},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					xlabel style={yshift=1mm},
+					]
+					%
+					\addplot [color=white!70!Orient, dotted, forget plot]
+					table[row sep=crcr]{%
+						73.48	0.5\\
+						73.48	9.5\\
+						nan	nan\\
+						151.64	0.5\\
+						151.64	9.5\\
+					};
+					\addplot [color=white!40!Lavender, dotted, forget plot]
+					table[row sep=crcr]{%
+						135.35	0.5\\
+						135.35	9.5\\
+						nan	nan\\
+						213.51	0.5\\
+						213.51	9.5\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						100.90	9\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						61.82	9\\
+						139.98	9\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						158.76	8\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						119.68	8\\
+						197.84	8\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						201.10	7\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						162.02	7\\
+						240.18	7\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						112.56	6\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						73.48	6\\
+						151.64	6\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						152.07	5\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						112.99	5\\
+						191.15	5\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						174.43	4\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						135.35	4\\
+						213.51	4\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						120.47	3\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						56.45	3\\
+						184.48	3\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						183.78	2\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						119.77		2\\
+						247.79		2\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						210.58	1\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						146.57	1\\
+						274.59	1\\
+					};
+				\end{axis}
+			\end{tikzpicture}%
+		}
+		\subcaptionbox{\label{subfig_anovan_phase_skill_impedance_r2_B}}
+		{
+			\tikzsetnextfilename{subfig_anovan_phase_skill_impedance_r2_B}
+			\begin{tikzpicture}
+				\begin{axis}[%
+					width=.48\linewidth,
+					height=.38\linewidth,
+					scale only axis,
+					unbounded coords=jump,
+					%xmin=0,
+					%xmax=10,
+					xlabel=$B$ (\si{\newton\second\per\meter}),
+					xlabel near ticks,
+					ymin=0.5,
+					ymax=9.5,
+					ytick={1,2,3,4,5,6,7,8,9},
+					yticklabels={{$\phi_3$,$e_3$},{$\phi_2$,$e_3$},{$\phi_1$,$e_3$},{$\phi_3$,$e_2$},{$\phi_2$,$e_2$},{$\phi_1$,$e_2$},{$\phi_3$,$e_1$},{$\phi_2$,$e_1$},{$\phi_1$,$e_1$}},
+					yticklabel style={font=\small},
+					scaled ticks=false, 
+					tick label style={/pgf/number format/fixed},
+					xlabel style={yshift=1mm},
+					]
+					%
+					\addplot [color=white!70!Shiraz, dotted, forget plot]
+					table[row sep=crcr]{%
+						10.639	0.5\\
+						10.639	9.5\\
+						nan	nan\\
+						13.489	0.5\\
+						13.489	9.5\\
+					};
+%					\addplot [color=white!40!Lavender, dotted, forget plot]
+%					table[row sep=crcr]{%
+%						135.35	0.5\\
+%						135.35	9.5\\
+%						nan	nan\\
+%						213.51	0.5\\
+%						213.51	9.5\\
+%					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						10.437	9\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						9.011	9\\
+						11.862	9\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						12.064	8\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						10.639	8\\
+						13.489	8\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						10.150	7\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						8.724	7\\
+						11.575	7\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						9.011	6\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						7.585	6\\
+						10.436	6\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						10.633	5\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						9.208	5\\
+						12.058	5\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						9.275	4\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						7.850	4\\
+						10.701	4\\
+					};
+					\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+					table[row sep=crcr]{%
+						11.093	3\\
+					};
+					\addplot [color=Orient, forget plot]
+					table[row sep=crcr]{%
+						8.758	3\\
+						13.427	3\\
+					};
+					\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+					table[row sep=crcr]{%
+						13.708	2\\
+					};
+					\addplot [color=Shiraz, forget plot]
+					table[row sep=crcr]{%
+						11.373		2\\
+						16.042		2\\
+					};
+					\addplot [color=Lavender, only marks, mark=o, mark options={solid, Lavender}, forget plot]
+					table[row sep=crcr]{%
+						10.4358	1\\
+					};
+					\addplot [color=Lavender, forget plot]
+					table[row sep=crcr]{%
+						8.100	1\\
+						12.770	1\\
+					};
+				\end{axis}
+			\end{tikzpicture}%
+		}
+	}	
+	\caption{Analyses multifactorielles (performances et phases) des paramètres biomécaniques apparents avec des différences significatives, avec la correction de Bonferroni.}
+	\label{fig_phase_expertise_significance_impedance_r2_mult}
+\end{figure}

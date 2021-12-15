@@ -1,0 +1,67 @@
+\begin{figure} [h]
+	\tikzsetnextfilename{fig_bloc_diagram_robot_environment}
+	\centering
+	%, line width=0.7
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 3cm, minimum height = 2.5cm]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	%\resizebox{\textwidth}{!}{
+	\begin{tikzpicture} [node distance = 2cm]
+	
+		\node[big_block, dashed, xshift=-.85cm] (sigma) {\Large{$\matr{\Sigma}$}};
+	
+		\comp{c1}{(0, 0)};
+		
+		\node[block, above left of = c1, node distance = 1cm, minimum height = 0.7cm, xshift=-0.5cm] (sig_fe) {$\matr{\Sigma}_f$};
+		
+		\node[block, below left of = c1, node distance = 1cm, minimum height = 0.7cm, xshift=-0.5cm] (sig_xd) {$\matr{\Sigma}_v$};
+		
+		\node[block, above of = sig_fe, minimum width = 2cm, node distance = 1.75cm] (env) {$-\matr{\mu}$};
+		
+		\comp{c2}{($(env.center) - (2.5,0)$)};
+		
+		\node[block, left of = c2, node distance = 1.5cm] (ctrl) {$\matr{C}_z$};
+		
+		\node (b) at ($(c2)!0.37!(env)$) {\pgfuseplotmark{*}};
+		\node[left of = ctrl, node distance = 1.25cm] (c) {};
+		\node[right of = env, node distance = 2.5cm] (d) {};
+		
+		\draw[-{Latex[length=3mm]}] (sig_fe.east) -| (c1.north);
+		\draw[-{Latex[length=3mm]}] (sig_xd.east) -| (c1.south);
+		
+		\draw[-{Latex[length=3mm]}] (env.west) -- (c2.east) node[above, midway] {$\vect{f}_e$};
+		\draw[-{Latex[length=3mm]}] (c2.west) -- (ctrl.east);
+		\draw[{Latex[length=3mm]}-] (c2.south) --+ (0,-1.5) --+ (-0.75,-1.5) node[above, near end] {$\vect{f}_{e0}$};
+		
+		\draw[-{Latex[length=3mm]}] (b.center) |- (sig_fe.west);
+		
+		\draw[-{Latex[length=3mm]}] (ctrl.west) -- (c.east) |- (sig_xd.west) node[above, near end, xshift=1cm] {$\dot{\vect{x}}_d$};
+		
+		\draw[{Latex[length=3mm]}-] (env.east) -- node[above, near end] {$\dot{\vect{x}}$} (d.west) |- (c1.east);
+	
+	\end{tikzpicture}
+	%}
+	\caption{Schéma bloc du couplage du robot contrôlé en admittance avec un environnement, dans le cas multidimensionnel.} %
+	\label{fig_bloc_diagram_robot_environment} % Label 
+\end{figure}
