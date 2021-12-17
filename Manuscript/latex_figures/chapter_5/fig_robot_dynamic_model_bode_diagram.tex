@@ -31,18 +31,13 @@
 					]
 				table [col sep=comma, x=w, y=mag] {misc/bode_robot_dynamic_model.csv};
 				%
-%				\coordinate (fpDw) at (axis cs:8, \pgfkeysvalueof{/pgfplots/ymin});
-%				\coordinate (fpUp) at (axis cs:8, \pgfkeysvalueof{/pgfplots/ymax});
-%				\coordinate (fcDw) at (axis cs:8.5, \pgfkeysvalueof{/pgfplots/ymin});
-%				\coordinate (fcUp) at (axis cs:8.5, \pgfkeysvalueof{/pgfplots/ymax});
-%				\coordinate (atLeft) at (axis cs:5, -20);
-%				\coordinate (atRight) at (axis cs:16, -20);
-%				%
-%				\draw [dashed, opacity=.5] (fpDw) -- (fpUp);
-%				\draw [dashed, opacity=.5] (fcDw) -- (fcUp);
+				\coordinate (a) at (axis cs:3.1415, \pgfkeysvalueof{/pgfplots/ymax});
+				\coordinate (b) at (axis cs:12.5664, \pgfkeysvalueof{/pgfplots/ymin});
+				\path[pattern=north west lines, pattern color=Lavender] (a) rectangle (b);
+				%
 				\draw [dashed, gray] (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymax}) node[fill=white,near start, text=black] {$\omega_c$};
-				\draw [dashed, gray] (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymax});
-				\draw[->, Shiraz] (axis cs: 1.1e3, 0) -- (axis cs: 1.1e3, -39) node[midway,xshift=4mm,yshift=1mm] {$m_G$};	
+				%\draw [dashed, gray] (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymax});
+				%\draw[->, Shiraz] (axis cs: 1.1e3, 0) -- (axis cs: 1.1e3, -39) node[midway,xshift=4mm,yshift=1mm] {$m_G$};	
 				%
 			\end{semilogxaxis}
 			\begin{semilogxaxis}[
@@ -55,7 +50,8 @@
 				xmin=3e-2,
 				xmax=1e4,
 				ytick={0,-90,-180,-270},
-				%ymax=10,
+				ymax=0,
+				ymin=-270,
 				%use fpu=false,
 				]
 				\draw [gray] (axis cs:3e-2, -180) -- (axis cs:1e4, -180);
@@ -64,12 +60,25 @@
 					solid,
 					]
 				table [col sep=comma, x=w, y=phase] {misc/bode_robot_dynamic_model.csv};	
+				%
+				\addplot[
+					draw=none, 
+					pattern=north west lines, 
+					pattern color=Lavender, 
+					area legend, 
+					] 
+				coordinates {
+					(3.1415, 0) %7.68
+					(3.1415, -270)
+					(12.5664, -270)
+					(12.5664, 0)
+				};
 				\draw [dashed, gray] (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymax});
-				\draw [dashed, gray] (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymax});	
-				\draw[->, Shiraz] (axis cs: 0.075, -180) -- (axis cs: 0.075, -90) node[midway,xshift=4mm] {$m_\phi$};	
+				%\draw [dashed, gray] (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymax});	
+				%\draw[->, Shiraz] (axis cs: 0.075, -180) -- (axis cs: 0.075, -90) node[midway,xshift=4mm] {$m_\phi$};	
 			\end{semilogxaxis}		
 		\end{tikzpicture}
 	%}	
-	\caption{Modèle linéarisé du robot contrôlé en admittance cartésienne, pour une entrée en force $f_z$ et une sortie en vitesse $\dot{z}$.}
+	\caption{Modèle linéarisé du robot contrôlé en admittance cartésienne, pour une entrée en force $f_z$ et une sortie en vitesse $\dot{z}$. Les fréquences typiques de la tâche de jonglerie, entre \SIlist{0.5;2}{\hertz} sont signifiées par la zone hachirée.}
 	\label{fig_robot_dynamic_model_bode_diagram}
 \end{figure}

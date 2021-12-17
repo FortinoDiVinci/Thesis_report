@@ -31,18 +31,13 @@
 					]
 				table [col sep=comma, x=w, y=mag] {misc/bode_robot_dynamic_model_position_output.csv};
 				%
-%				\coordinate (fpDw) at (axis cs:8, \pgfkeysvalueof{/pgfplots/ymin});
-%				\coordinate (fpUp) at (axis cs:8, \pgfkeysvalueof{/pgfplots/ymax});
-%				\coordinate (fcDw) at (axis cs:8.5, \pgfkeysvalueof{/pgfplots/ymin});
-%				\coordinate (fcUp) at (axis cs:8.5, \pgfkeysvalueof{/pgfplots/ymax});
-%				\coordinate (atLeft) at (axis cs:5, -20);
-%				\coordinate (atRight) at (axis cs:16, -20);
-%				%
-%				\draw [dashed, opacity=.5] (fpDw) -- (fpUp);
-%				\draw [dashed, opacity=.5] (fcDw) -- (fcUp);
+				\coordinate (a) at (axis cs:3.1415, \pgfkeysvalueof{/pgfplots/ymax});
+				\coordinate (b) at (axis cs:12.5664, \pgfkeysvalueof{/pgfplots/ymin});
+				\path[pattern=north west lines, pattern color=Lavender] (a) rectangle (b);
+				%
 				\draw [dashed, gray] (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymax}) node[fill=white,near start, text=black] {$\omega_c$};
-				\draw [dashed, gray] (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymax});
-				\draw[->, Shiraz] (axis cs: 2.17e2, 0) -- (axis cs: 2.17e2, -83) node[midway,xshift=4mm,yshift=1mm] {$m_G$};	
+				%\draw [dashed, gray] (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymax});
+				%\draw[->, Shiraz] (axis cs: 2.17e2, 0) -- (axis cs: 2.17e2, -83) node[midway,xshift=4mm,yshift=1mm] {$m_G$};	
 				%
 			\end{semilogxaxis}
 			\begin{semilogxaxis}[
@@ -54,7 +49,7 @@
 				grid=both,
 				xmin=1e-1,
 				xmax=1e5,
-				ytick={0,-90,-180,-270},
+				ytick={0,-90,-180,-270,-360},
 				%ymax=10,
 				%use fpu=false,
 				]
@@ -64,8 +59,13 @@
 					solid,
 					]
 				table [col sep=comma, x=w, y=phase] {misc/bode_robot_dynamic_model_position_output.csv};	
+				%
+				\coordinate (a) at (axis cs:3.1415, \pgfkeysvalueof{/pgfplots/ymax});
+				\coordinate (b) at (axis cs:12.5664, \pgfkeysvalueof{/pgfplots/ymin});
+				\path[pattern=north west lines, pattern color=Lavender] (a) rectangle (b);
+				%
 				\draw [dashed, gray] (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymax});
-				\draw [dashed, gray] (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymax});	
+				%\draw [dashed, gray] (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymax});	
 				%\draw[->, Shiraz] (axis cs: 0.075, -180) -- (axis cs: 0.075, -90) node[midway,xshift=4mm] {$m_\phi$};	
 			\end{semilogxaxis}		
 		\end{tikzpicture}

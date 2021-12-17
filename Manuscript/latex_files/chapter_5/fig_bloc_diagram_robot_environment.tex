@@ -37,22 +37,26 @@
 		
 		\node[block, below left of = c1, node distance = 1cm, minimum height = 0.7cm, xshift=-0.5cm] (sig_xd) {$\matr{\Sigma}_v$};
 		
-		\node[block, above of = sig_fe, minimum width = 2cm, node distance = 1.75cm] (env) {$-\matr{\mu}$};
+		\node[block, above of = sig_fe, minimum width = 2cm, node distance = 1.75cm, xshift=1.5cm] (env) {$-\matr{\mu}$};
 		
-		\comp{c2}{($(env.center) - (2.5,0)$)};
+		\comp{c2}{($(env.center) - (2.0,0)$)};
 		
-		\node[block, left of = c2, node distance = 1.5cm] (ctrl) {$\matr{C}_z$};
+		\comp{c3}{($(c2.center) - (2.0,0)$)};
 		
-		\node (b) at ($(c2)!0.37!(env)$) {\pgfuseplotmark{*}};
+		\node[block, left of = c3, node distance = 1.5cm] (ctrl) {$\matr{C}_z$};
+		
+		\node (b) at ($(c2)!0.4!(c3)$) {\pgfuseplotmark{*}};
 		\node[left of = ctrl, node distance = 1.25cm] (c) {};
-		\node[right of = env, node distance = 2.5cm] (d) {};
+		\node[right of = env, node distance = 2.25cm] (d) {};
 		
 		\draw[-{Latex[length=3mm]}] (sig_fe.east) -| (c1.north);
 		\draw[-{Latex[length=3mm]}] (sig_xd.east) -| (c1.south);
 		
-		\draw[-{Latex[length=3mm]}] (env.west) -- (c2.east) node[above, midway] {$\vect{f}_e$};
-		\draw[-{Latex[length=3mm]}] (c2.west) -- (ctrl.east);
-		\draw[{Latex[length=3mm]}-] (c2.south) --+ (0,-1.5) --+ (-0.75,-1.5) node[above, near end] {$\vect{f}_{e0}$};
+		\draw[{Latex[length=3mm]}-] (c2.north) --+ (0,.75) node[left] {$\vect{f}_{in}$};
+		\draw[-{Latex[length=3mm]}] (env.west) -- (c2.east);
+		\draw[-{Latex[length=3mm]}] (c2.west) -- (c3.east) node[above, midway] {$\vect{f}_e$};
+		\draw[-{Latex[length=3mm]}] (c3.west) -- (ctrl.east);
+		\draw[{Latex[length=3mm]}-] (c3.south) --+ (0,-1.5) --+ (-0.75,-1.5) node[above, near end] {$\vect{f}_{e}^*$};
 		
 		\draw[-{Latex[length=3mm]}] (b.center) |- (sig_fe.west);
 		
