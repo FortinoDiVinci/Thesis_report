@@ -3,11 +3,11 @@
 
 Un système est qualifié de stable au sens de Lyapunov lorsqu'il retourne à ses positions d'équilibre quant il en est éloigné faiblement. On parle plus généralement de la stabilité d'un point d'équilibre, un système pouvant à la fois avoir des points d'équilibres stables et instables, comme c'est le cas pour le pendule par exemple.
 
-\section{Outils de l'étude de stabilité}
+\section{Outils de l'étude de stabilité} \label{chap5_sec_litterature}
 
 La difficulté principale de l'étude de stabilité des robots en interaction avec leur environnement provient de la modélisation de l'environnement. En effet, comment assurer la stabilité d'une interaction lorsqu'on interagit physiquement avec un objet non modélisé ou un humain ? L'une des premières pistes est d'assurer que le robot ait un comportement passif.
 
-\subsection{Passivité}
+\subsection{Passivité} \label{chap5_sec_litterature_sub_passivity}
 
 Un système causal est dit passif, au sens thermodynamique\footnote{Dès lorsque toutes les interactions d'un systèmes avec son environnement sont prises en compte, tout système est passif ; sinon le premier principe de la thermodynamique ne serait pas respecté.}, lorsqu’il ne peut pas restituer plus d’énergie qu’il n'en reçoit, on pourra aussi parler d'un système dissipatif. L’énergie interne emmaganisée dans le système à l’instant $t$ est notée $E_s(t)$. La condition de passivité du mécanisme est alors vérifiée si l'équation \cref{eq_passivity_energy} tient sur l'intervalle de temps $[t_1,t_2]$, où $\matrCal{P} = \vect{y}^t \vect{u}$ est la puissance instantanée du système qui prend en entrée $\vect{u} \in \Re^n$ et produit en sortie $\vect{y} \in \Re^n$.
 
@@ -15,26 +15,31 @@ Un système causal est dit passif, au sens thermodynamique\footnote{Dès lorsque
 	\int_{t_1}^{t_2} \matrCal{P}(\tau) d\tau \geq E_s(t_2) - E_s(t_1) \geq -E_s(t_1)
 \end{equation}
 
-Pour des systèmes linéaires invariants dans le temps, la passivité implique la stabilité du système au sens de Lyapunov (source). De plus, lorsque deux systèmes passifs sont connectés, alors l'ensemble formé par ces deux systèmes est stable (source).
+Pour des systèmes linéaires invariants dans le temps, la passivité implique la stabilité du système au sens de Lyapunov (source). De plus, comme montré par \textcite{colgate_robust_1988} lorsque deux systèmes stables avec des ports passifs sont connectés physiquement, alors l'ensemble formé par ces deux systèmes est stable. 
 
 \textcite[Chapitre~2, p.~52,53]{colgate_control_1988}
 
 L'humain est considéré comme passif (source), il suffit donc de montrer que le robot a un comportement passif, pour que le couplage du robot et de l'humain puisse être considéré comme passif et donc stable.
 
-\subsection{Approche robuste}
+Limite passivité
+Several studies showed that passivity may be too conservative and should be relaxed to increase performance during physical collaboration \parencite{buerger_relaxing_2006,duchaine_investigation_2008}.
 
-théorème du petit gain ?
+\subsection{Approche robuste} \label{chap5_sec_litterature_sub_robust}
 
-\subsection{Approche paramétrique}
+\textcite{buerger_complementary_2007} introduced the concept of “complementary stability”, which transforms the stability problem into a robust stability problem: by making the hypothesis that the human arm dynamics is unknown but reasonably bounded, the goal is to find the optimal tuning for a parameterized controller that is stable for the range of different environment dynamics.
+
+théorème du petit gain : \parencite{buerger_relaxing_2006}
+
+\subsection{Approche paramétrique} \label{chap5_sec_litterature_sub_paramatric}
 
 
-\section{Modelisation du robot et de l'interaction humaine}
+\section{Modelisation du robot et de l'interaction humaine} \label{chap5_sec_model}
 
-\subsection{Modèle dynamique du robot}
+\subsection{Modèle dynamique du robot} \label{chap5_sec_model_sub_robot_dynamic}
 
-\subsubsection{Modèle de Lagrange}
+\subsubsection{Modèle de Lagrange} \label{chap5_sec_model_sub_robot_dynamic_1}
 
-Le modèle dynamique général d'un robot en contact avec un environnement physique peut-être obtenu à partir des équations de Lagrange, comme explicité par \textcite[Chapitre~9]{w_khalil_modeling_2002}. On obtient alors le modèle \cref{eq_dyn_model_robot}, avec $ \matr{A} $ la matrice d'inertie du robot, $ \vect{h} $ le vecteur regroupant les phénomènes liées à la position et à la vitesse - \textit{e.g., couples centrifuges, de Coriolis, gravitationnels}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur sur le robot.
+Le modèle dynamique général d'un robot en contact avec un environnement physique peut-être obtenu à partir des équations de Lagrange, comme explicité par \textcite[Chapitre~9]{khalil_modeling_2002}. On obtient alors le modèle \cref{eq_dyn_model_robot}, avec $ \matr{A} $ la matrice d'inertie du robot, $ \vect{h} $ le vecteur regroupant les phénomènes liées à la position et à la vitesse - \textit{e.g., couples centrifuges, de Coriolis, gravitationnels}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur sur le robot.
 
 \begin{equation} \label{eq_dyn_model_robot}
 	\matr{A}(\vect{q})\ddot{\vect{q}} + \vect{h}(\dot{\vect{q}}, \vect{q}) = \vect{\tau}_r + \vect{\tau}_{e}
@@ -53,7 +58,7 @@ Les couples articulaires de l'environnement sur le robot peuvent être exprimés
 	\ddot{\vect{q}} = \matr{A}(\vect{q})^{-1} \left( \vect{\tau}_r + \matr{\nu}\jacobian{\vect{q}}{}{t} \vect{f}_{e} - \matr{F}_v \dot{\vect{q}} - \matr{F}_s \sign(\dot{\vect{q}}) - \matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \vect{g}(\vect{q}) - \vect{\tau}_0 \right)
 \end{equation}
 
-\subsubsection{Intégration du contrôle en admittance}
+\subsubsection{Intégration du contrôle en admittance} \label{chap5_sec_model_sub_robot_dynamic_2}
 
 Les courants moteurs consignes $ \vect{i}_d $ sont donnés par le contrôle en vitesses articulaires, dont le réglage est décrit en \cref{sec_robot_sub_task_ctrl_tunning_2_1}. On note $ \matr{C}_v \in \mathrm{diag} \left( \Re^{3\times3} \right) $ le correcteur de la boucle interne en vitesses. %$ \matr{C}_v $ est diagonal. 
 Les dynamiques des boucles de courant sont négligées, on considère donc que les courants réels $ \vect{i}_r $ sont égaux aux consignes $ \vect{i}_d $.
@@ -85,11 +90,11 @@ Le modèle du robot décrit en \cref{eq_dyn_model_robot_complete}, peut alors ê
 %	\vect{q}_d = \int \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right) \; \mathrm{d}t
 %\end{equation}
 
-\subsubsection{Validation du modèle en simulation ?}
+\subsubsection{Validation du modèle en simulation ?} \label{chap5_sec_model_sub_robot_dynamic_3}
 
 
 
-\subsection{Linéarisation du modèle du robot}
+\subsection{Linéarisation du modèle du robot} \label{chap5_sec_model_sub_robot_linear}
 
 Pour la linéarisation du modèle dynamique du robot, les couples générés par les frottements statiques ne sont pas pris en compte à cause de leur comportement non linéaire provoqué par la fonction signe $\sign$. On peut alors écrire le système \cref{eq_sys_robot_dynamic_model} augmenté de deux états $\vect{e}_v$ et $\vect{e}_f$, qui pourra être linéarisé.
 
@@ -146,21 +151,21 @@ La représentation généralisée \cref{eq_general_state_system} à plusieurs en
 
 Il reste maintenant à étudier le comportement du robot en boucle fermé, lorsqu'il est en contact physique avec un environnement.
 
-\subsection{Couplage avec un modèle en impédance}
+\subsection{Couplage avec un modèle en impédance} \label{chap5_sec_model_sub_env}
 
 L'environnement physique en contact avec le robot peut être considéré comme un modèle viscoélastique du second ordre, couplé avec le robot. Ainsi, les mouvements $\dot{\vect{x}}(2)=\dot{z}$ du robot en contact physique avec l'environnement $\mu_z$ entraînent des forces d'interaction $f_z$. Si on sépare le contrôle en admittance $C_z$ du modèle du robot, on peut représenter cette interaction comme indiquée sur la \cref{fig_bloc_diagram_robot_environment}, où le modèle dynamique du robot $\matr{\Sigma}$ est séparé en fonction des deux entrées $\dot{z}_d$ et $f_z$ pour le cas unidimensionnel, et $\dot{\vect{x}}_d$ et $\vect{f}_e$ dans le cas multidimensionnel. La consigne du contrôle en admittance est notée $\vect{f}_e^*$. De plus dans le cadre d'une interaction avec un humain en mouvement, la force $\vect{f}_{in}$ représente la force nécessaire à la génération de la trajectoire souhaitée.
 
 L'environnement représente ici le comportement en rejet de perturbation du bras humain qui a été modélisé par une impédance du second ordre pour les études conduites dans le \cref{chap4}. Lorsque les variables cinématiques sont utilisées comme entrée du modèle, comme c'est le cas lorsque le robot est contrôlé en admittance (voir \cref{fig_physical_interaction_robot}), le modèle doit être filtré pour maintenir une fonction de transfert propre et ne pas avoir une action dérivée infinie en haute fréquence. En effet, la réponse biomécanique du bras humain a une bande passante limitée comme tout système physique. Pour représenté ce phénomène, le modèle en impédance est filtré par un second ordre, avec la constante de temps double $\tau_m$.
 
 \begin{equation}\label{eq_impedance_environment}
-	\mu_z(s) = \frac{F_z(s)}{V_z(s)} = \frac{k_z s^{-1} + b_z  + m_z s}{(1+\tau_ms)^2}
+	\mu_z(s) = \frac{F_z(s)}{V_z(s)} = \frac{k_z + b_z s  + m_z s^2}{s(1+\tau_ms)^2}
 \end{equation}
 
 En première approximation, $\tau_m$ a été estimé pour que la fréquence de coupure se situe à une decade la moyenne de la tâche de jonglerie, autour de \SI{10}{\hertz}, ce qui est plutôt cohérent avec les ordres de grandeur observés dans la littérature pour le bras humain \parencite{zawadzki_maximal_2010,adewusi_natural_2014}. On a donc la constante de temps $\tau_m$ qui vaut \SI{16}{\milli\second}.
 
-\input{latex_files/chapter_5/fig_bloc_diagram_robot_environment}
+\input{latex_figures/chapter_5/fig_bloc_diagram_robot_environment}
 
-De manière similaire à ce qui a été fait pour décrire la dynamique complète du robot avec son contrôle en admittance, on peut facilement définir la dynamique séparée avec le système \cref{eq_sys_robot_dynamic_model_no_ctrl}, pour ensuite en déduire une représentation d'état avec le vecteur d'état $\vect{\phi}_\Sigma=\begin{pmatrix}\vect{q} & \dot{\vect{q}} & \vect{e}_v \end{pmatrix}^t \in \Re^{9}$.
+De manière similaire à ce qui a été fait pour décrire la dynamique complète du robot avec son contrôle en admittance, on peut facilement définir le comportement du robot seul, séparé de la loi de commande cartésienne en admittance, avec le système \cref{eq_sys_robot_dynamic_model_no_ctrl}, pour ensuite en déduire une représentation d'état avec le vecteur d'état $\vect{\phi}_\Sigma=\begin{pmatrix}\vect{q} & \dot{\vect{q}} & \vect{e}_v \end{pmatrix}^t \in \Re^{9}$.
 
 \begin{equation} \label{eq_sys_robot_dynamic_model_no_ctrl}	
 	\resizebox{\textwidth}{!}{$
@@ -215,22 +220,87 @@ La représentation d'état de $\matr{\Sigma}_f$ peut facilement être écrite en
 % \frac{\partial \matr{C(\vect{q}_0, \dot{\vect{q}})}\dot{\vect{q}}}{\partial \dot{\vect{q}}} is null
 %\end{equation}
 
-Il est important de souligner que puisque les boucles secondaires sont négligées, le signal de commande en vitesse cartésienne $\dot{\vect{x}}_d$ a ses composantes en $\vec{x}$ et $\vec{\theta}$ nulles, puisque la loi de commande en admittance décrite en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_1} n'est réalisée que le long de l'axe $\vec{z}$. Par conséquent la consigne, ou référence en force peut s'exprimer ainsi $\vect{f}_{e}^* = \begin{pmatrix}0 & f_{z0} & 0\end{pmatrix}^t$. Il faut aussi se rappeler que lorsqu'on souhaite un contrôle en admittance n'opposant aucune force statique, alors $f_{z0}$ est nul.
+Il est important de souligner que puisque les boucles secondaires sont négligées, le signal de commande en vitesse cartésienne $\dot{\vect{x}}_d$ a ses composantes en $\vec{x}$ et $\vec{\theta}$ nulles, puisque la loi de commande en admittance décrite en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_1} n'est réalisée que le long de l'axe $\vec{z}$. Pour les mêmes raisons, la consigne ou référence en force peut s'exprimer ainsi $\vect{f}_{e}^* = \begin{pmatrix}0 & f_{z0} & 0\end{pmatrix}^t$. Il faut aussi se rappeler que lorsqu'on souhaite un contrôle en admittance n'opposant aucune force statique, alors $f_{z0}$ est nul.
 
-Ainsi on peut écrire la boucle fermée de l'interaction du robot et d'un environnement, où $\vect{V}_e(s) = \Laplace(\dot{\vect{x}}_d)$ et avec une consigne $f_{z0}$ nulle pour la commande en admittance : 
+Ainsi on peut écrire la boucle fermée $\matr{H}_{BF}$ de l'interaction du robot et d'un environnement, où $\vect{V}_e(s) = \Laplace(\dot{\vect{x}}_d)$ et avec une consigne $f_{z0}$ nulle pour la commande en admittance. 
 
 %\begin{equation}
 %	\matr{H}_{BF} = \frac{\vect{V}_e(s)}{\vect{F}_e^*(s)} = \left( \left(\matr{\Sigma}_v \matr{C}_z + \matr{\Sigma}_f\right)\matr{\mu} + \matr{I} \right)^{-1} \matr{\Sigma}_v \matr{C}_z
 %\end{equation}
 \begin{equation}
-	\matr{H}_{BF} = \left(\matr{I} + \matr{\mu(s)}( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) )\right)^{-1}( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) )
+	\matr{H}_{BF} = \left(\matr{I} + \matr{\mu}(s)( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) )\right)^{-1}( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) )
 \end{equation}
 
 Cette représentation séparant le contrôleur en admittance du reste de la dynamique du robot permet de plus facilement étudier la stabilité du robot en fonction du choix des lois de commande et des environnements.
 
-\section{Etude de la stabilité}
+\section{Etude de la stabilité} \label{chap5_sec_stability_study}
 
-Au vu de la modélisation de l'interaction entre le robot contrôlé en admittance cartésienne et un environnement qui sera considéré pour la suite comme l'impédance mécanique d'un humain, plusieurs facteurs peuvent avoir une incidence sur la stabilité du couplage montré en \cref{fig_bloc_diagram_robot_environment}. Dans un premier temps, on s'intéressera à l'influence du filtrage choisi pour le modèle d'impédance, puis des paramètres de ce modèle et enfin des gains de la loi de commande en admittance.
+Au vu de la modélisation de l'interaction entre le robot contrôlé en admittance cartésienne et un environnement qui est considéré comme l'impédance mécanique d'un humain, plusieurs facteurs peuvent avoir une incidence sur la stabilité du couplage montré en \cref{fig_bloc_diagram_robot_environment}. Dans un premier temps, on s'intéressera à l'influence de l'environnement puis des gains de la loi de commande en admittance.
 
+\subsection{Effets de l'environnement}
 
+Comme expliqué en \cref{chap5_sec_model_sub_env}, il n'est pas réaliste de prendre le modèle en impédance sans le filtrer. Le choix des constantes de temps a été défini pour minimiser l'incidence sur les fréquences typiques de la tâche de jonglerie, tout en restant cohérent par rapport aux résultats donnés dans la littérature. Toutefois, on se propose de questionner le choix fait en observant l'incidence de ce filtrage sur la stabilité pour dans un second temps observer celle des paramètres du modèle en impédance. 
 
+\subsubsection{Effets du filtrage du modèle en impédance}
+
+On peut étudier l'influence de l'environnement sur la stabilité de l'interaction pour des valeurs typiques des paramètres d'impédance identifiés au cours des expériences. Les estimations effectuées sur le sujet 851 pour la phase \cref{item_pert3} sont utilisées pour cette analyse et sont rappelées dans le \cref{tab_impedance_param_user_851}. Le choix s'est porté sur ces données pour la raideur $K$ élevée ainsi que le faible amortissement $B$ qui ont été identifiés.
+%Ce sont les estimations effectuées pour le sujet 000 qui sont utilisés (\cref{tab_impedance_param_user_000}), puisque c'est ce dernier qui a permis de réaliser la cartographie faite en \cref{fig_exp_stability_map}.
+
+%\begin{table}
+%	\centering
+%	\begin{tabular}{ c | c | c }
+%		%\hline%
+%		$K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
+%		163.3 & 10.15 & 0.413\\%
+%		%\hline
+%	\end{tabular}
+%	\caption{Paramètres typiques utilisés pour le modèle en impédance}
+%	\label{tab_impedance_param_user_000}
+%\end{table}
+
+\begin{table}
+	\centering
+	\begin{tabular}{ c | c | c }
+		%\hline%
+		$K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
+		362.7 & 9.90 & 0.567\\%
+		%\hline
+	\end{tabular}
+	\caption{Paramètres typiques utilisés pour le modèle en impédance}
+	\label{tab_impedance_param_user_851}
+\end{table}
+
+La \cref{subfig_bode_diagram_impedance_environment} montre le diagramme de Bode de l'environnement seul, avant et après le filtrage avec une fréquence de coupure $f_c$ de \SI{10}{\hertz}. Bien que stable, le modèle en impédance filtré n'est pas passif, comme le révèle le plan de Nyquist en \cref{subfig_bode_nyquist_impedance_environment}, où l'on peut voir que l'ensemble des fréquences n'est pas contenu sur les réels positifs.
+%\textcolor{red}{Le gain du système est supérieur à 1 jusqu'à une fréquence de \SI{259}{\hertz}, et donc que dans ces fréquences même avec le filtrage, l'environnement modélisé n'est pas passif. [ce n'est pas vrai, faire une analyse de la passivité...]}
+
+\input{latex_figures/chapter_5/fig_environment_bode_diagram}
+
+Pour étudier l'influence de la constante de temps $\tau_m$ sur la stabilité de l'interaction, on peut étudier son influence sur les marges de stabilité obtenues à partir de l'étude de la boucle ouverte $\matr{H}_{BO}$.
+
+\begin{equation}
+	\matr{H}_{BO} = \matr{\mu}(s)\left( \matr{\Sigma}_f(s) + \matr{\Sigma}_v(s) \matr{C}_z(s) \right)
+\end{equation}
+
+Une manière très visuelle d'observer les marges de stabilité est de tracer le digramme de Black-Nichols dévoilé en \cref{fig_nichols_environment_filter_2}. On peut y voir la réduction de la marge de gain avec l'augmentation de la fréquence de coupure, jusqu'à atteindre le point de criticité à \SI{54.66}{\hertz}. Le comportement de la marge de phase semble plus complexe, puisqu'il augmente d'abord avec la fréquence de coupure, jusqu'à atteindre un maximum de \SI{72}{\degree} pour une fréquence de \SI{43.1}{\hertz}, et ensuite décroite rapidement.
+%On y voit clairement la réduction des marges de phase et de gain avec l'augmentation de la fréquence de coupure, jusqu'à obtenir l'instabilité à \SI{50}{\hertz}, avec une marge de gain de \SI{-1.33}{\decibel} et une marge de phase de \SI{-20.1}{\degree}. Le point critique de la marge de gain est atteint à \SI{42.29}{\hertz}, et celui de la marge de phase à \SI{42.38}{\hertz}.
+
+%\input{latex_figures/chapter_5/fig_nichols_environment_filter}
+\input{latex_figures/chapter_5/fig_nichols_environment_filter_2}
+
+Il est donc intéressant de noter, que des fréquences de coupure trop faible du filtre peuvent aussi induire des instabilités.%, comme on peut l'observer pour la courbe en tiret ($f_c=$\SI{5}{\hertz}) sur la \cref{fig_nichols_environment_filter}. 
+Ainsi, la plage de fréquence de coupure sur laquelle l'interaction est stable se définit sur l'intervalle \SIrange{1.38}{54.66}{\hertz}.%, avec une marge de phase maximale obtenue à \SI{9.70}{\hertz}. Le choix d'un filtrage avec une double fréquence de coupure à \SI{10}{\hertz} place donc l'analyse proche de la marge de phase maximale. 
+Il reste maintenant à vérifier qu'avec une fréquence de coupure $f_c$ définie à \SI{10}{\hertz}, toutes les gammes de paramètres identifiés sont bien stables, conformément aux observations expérimentales.
+
+\subsubsection{Effets des paramètres du modèle en impédance}
+
+Comme rappelé par \textcite{ott_unified_2010}, contrairement au contrôle en impédance, un robot piloté avec une loi de commande en admittance voit ses performances en terme de stabilité se dégrader avec l'augmentation de la raideur de l'environnement avec lequel il interagit. La stabilité de l'interaction ayant été validée avec la raideur la plus élevée des identifications, l'ensemble des caractéristiques observées devraient être stables. Toutefois, le critère de stabilité ne donne pas d'information concernant la sensation de l'interaction.
+
+Ainsi, si le comportement est stable mais demande des efforts très importants pour réaliser des déplacements, le critère de transparence du robot est faible et risque de compromettre la réalisation de la tâche. Inversemement, si le système a un comportement oscillant bien que stable, il peut se révéler désagréable et peu intuitif pour l'utilisateur. C'est le compromis stabilité-transparence décrit en \cref{sec_robot_sub_task_ctrl_tunning_1}, qui a été traité expérimentalement dans cette même section.
+
+Dans un premier temps, on s'intéresse au comportement en boucle fermé du couplage pour une entrée $\vect{f}_{in}$ sinusoïdale uniquement sur l'axe $\vec{z}$. Les caractéristiques du signal injecté sont choisies pour se rapprocher des observations. Une amplitude de \SI{5}{\newton}, et une fréquence de \SI{0.9}{\hertz} sont donc utilisées.
+
+\input{latex_figures/chapter_5/fig_stability_transparency_against_stiffness}
+
+\subsection{Effets de la loi de commande en admittance}
+
+Compromis stabilité - transparence \parencite{ajoudani_progress_2018}

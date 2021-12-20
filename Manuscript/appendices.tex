@@ -390,7 +390,7 @@
 	Le modèle du second ordre KBM peut être discrétisé avec une bloqueur d'ordre zéros avec la formule \cref{eq_zoh_discretisation} :
 	
 	\begin{equation} \label{eq_zoh_discretisation}
-		G(z) = (1 - z^{-1}) \mathcal{Z} \left\{ \mathcal{L}^{-1} \frac{G(s)}{s} \right\}
+		G(z) = (1 - z^{-1}) \mathcal{Z} \left\{ \Laplace^{-1} \frac{G(s)}{s} \right\}
 	\end{equation}
 	
 	Dans le cas d'un modèle du second ordre on obtient alors la relation \cref{eq_inverse_laplace_KBM}, avec la pulsation naturelle $\omega_0=\sqrt{K/M}$, le coefficient d'amortissement $\xi=\frac{B}{2\sqrt{KM}}$, et le gain statique $\alpha=1/K$. La transformée en z de cette relation temporelle est donnée par \cref{eq_z_transform_KMB_zoh}, en notant $\Delta = \sqrt{1 - \xi^2} $ et $A = \sin\left( \omega_0\Delta T - \cos^{-1}(\xi) \right) $.
@@ -823,4 +823,10 @@
 	\end{tabular}
 
 
+	%%%%%%%
+	% APP 13
+	%%%%%%%
+	\chapter{Représentation d'état du modèle dynamique du robot} \label{app_state_space_representation}
+	
+	
 \end{appendices}

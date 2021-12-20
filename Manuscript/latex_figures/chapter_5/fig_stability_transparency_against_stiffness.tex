@@ -1,0 +1,74 @@
+% environment_stiffness_influence.csv
+% figure
+\definecolor{mycolor1}{rgb}{0.00000,0.30588,0.49020}%
+\definecolor{mycolor2}{rgb}{0.14510,0.38353,0.56078}%
+\definecolor{mycolor3}{rgb}{0.29020,0.46118,0.63137}%
+\definecolor{mycolor4}{rgb}{0.43529,0.53882,0.70196}%
+\definecolor{mycolor5}{rgb}{0.58039,0.61647,0.77255}%
+\definecolor{mycolor6}{rgb}{0.72549,0.69412,0.84314}%
+\definecolor{mycolor7}{rgb}{0.74248,0.47712,0.65359}%
+\definecolor{mycolor8}{rgb}{0.75948,0.26013,0.46405}%
+\definecolor{mycolor9}{rgb}{0.77647,0.04314,0.27451}%
+
+\pgfplotscreateplotcyclelist{fycle}{%  %<------
+	{mycolor1},%
+	{mycolor2},%
+	{mycolor3},%
+	{mycolor4},%
+	{mycolor5},%
+	{mycolor6},%
+	{mycolor7},%
+	{mycolor8},%
+	{mycolor9},%
+}%
+ 
+\begin{figure}[!htb] 
+	\centering
+	\tikzsetnextfilename{fig_stability_transparency_against_stiffness}
+	\begin{tikzpicture}	
+		\begin{axis}[%
+			%name=ax1,
+			width=0.85\linewidth,
+			height=.3\linewidth,
+			scale only axis,   
+			xlabel={temps (\si{\second})},
+			ylabel={Position (\si{\centi\meter})},
+			ylabel near ticks,
+			axis x line* = bottom,
+			axis y line = left, 
+			xmin=0,
+			xmax=4,
+			cycle list name = fycle,
+			]
+			%
+			\pgfplotsinvokeforeach{2,3,...,10}{
+				\addplot+[
+					smooth,
+					]
+				table [col sep=comma, x=t, y index=#1] {misc/chap_5/environment_stiffness_influence.csv};
+			}							
+		\end{axis}
+		\begin{axis}[%
+			axis y line={right,dashed},
+			width=0.85\linewidth,
+			height=.3\linewidth,
+			scale only axis,  
+			axis x line = none,
+			ylabel={Force (\si{\newton})},
+			xmin=0,
+			xmax=4,
+			]
+			\addplot[
+				color=Prune,
+				dashed,
+				smooth,
+				]
+			table [col sep=comma, x=t, y=u_in] {misc/chap_5/environment_stiffness_influence.csv};
+		\end{axis}
+		%
+		\end{tikzpicture}	
+	\caption{Réponse du système en boucle fermée pour une entrée en force sinusoïdale (en tirets), en fonction de la raideur de l'environnement.}
+	\label{fig_stability_transparency_against_stiffness}
+\end{figure}
+%%
+%
