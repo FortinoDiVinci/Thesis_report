@@ -1,0 +1,55 @@
+\begin{figure} [h]
+	\tikzsetnextfilename{fig_block_diagram_phri_with_uncertainties}
+	\centering
+	%, line width=0.7
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 3cm, minimum height = 2.5cm]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	%\resizebox{\textwidth}{!}{
+	\begin{tikzpicture} [node distance = 2cm]
+		
+		\node[block, node distance = 2.1cm] (Z) {\Large{$Z$}};
+		\node[block, below of = Z, node distance = 2.1cm] (Y) {\Large{$Y_n$}};
+		\node[rectangle, draw, minimum width = .8cm, minimum height = .8cm] at ($(Z)!0.5!(Y) + (2,0)$) (minus) {$-1$};
+		\node[rectangle, draw, minimum width = .8cm, minimum height = .8cm, below left of=Y, xshift=5mm] (delta) {$\Delta_r$};
+		\node[rectangle, draw, minimum width = .8cm, minimum height = .8cm, below right of=Y, xshift=-5mm] (W) {$W$};
+		\comp{c1}{($(Y) + (-2, 0)$)};
+		
+		\node (b) at ($(Y) + (2,0)$) {\pgfuseplotmark{*}};
+		
+		\draw[-{Latex[length=3mm]}] (Z.east) -| (minus.north);
+		\draw[-{Latex[length=3mm]}] (minus.south) |- (Y.east);
+		\draw[-{Latex[length=3mm]}] (Y.west) -- (c1.east);
+		
+		\draw[-{Latex[length=3mm]}] (b.center) |- (W.east);
+		\draw[-{Latex[length=3mm]}] (W.west) -- (delta.east);
+		\draw[-{Latex[length=3mm]}] (delta.west) -| (c1.south);
+		
+		\draw[-{Latex[length=3mm]}] (c1.west) --+ (-0.25,0) |- (Z.west);
+		
+	\end{tikzpicture}
+	%}
+	\caption{Schéma bloc d'un robot en interaction avec un environnement incertain \parencite{buerger_relaxing_2006}.} %
+	\label{fig_block_diagram_phri_with_uncertainties} % Label 
+\end{figure}
