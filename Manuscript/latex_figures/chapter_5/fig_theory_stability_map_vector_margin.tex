@@ -1,0 +1,72 @@
+\begin{figure}
+	\resizebox{\textwidth}{!}{
+		\centering
+		\subcaptionbox{Marges de module pour une raideur nominale\label{subfig_theory_stability_map_nominal_stiffness_vector_margin}}
+		{
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					width=.5\linewidth,
+					xlabel={$Ki$},
+					ylabel={$Kp$},
+					xlabel style={sloped},
+					ylabel style={sloped},
+					zlabel={$\Delta_G$},
+					colormap name=ShirazToOrient,
+					scale only axis,  
+					view = {50}{50},
+					%xmax=299,
+					%ymin=250,
+					point meta max=1,
+					point meta min=0,
+					ztick={0,0.25,0.5,0.75,1},
+					clip=false,
+					]
+					%
+					\addplot3 [%
+						surf, 
+						mesh/rows=40, 
+						shader=interp, 
+						patch type=bilinear,
+						] 
+						table[col sep=comma, x=ki, y=kp, z=DG] {misc/chap_5/vector_margin_map_nominal_theory.csv};
+					%\node at (axis cs:0.08,0.015,65) {\pgfuseplotmark{*}};
+				\end{axis}
+			\end{tikzpicture}
+		}
+		\subcaptionbox{Marges de module pour une raideur multipliée par 3 \label{subfig_theory_stability_map_high_stiffness_vector_margin}}
+		{
+			\begin{tikzpicture} 
+				\begin{axis}[%
+					width=.5\linewidth,
+					xlabel={$Ki$},
+					ylabel={$Kp$},
+					xlabel style={sloped},
+					ylabel style={sloped},
+					zlabel={$\Delta_G$},
+					colormap name=ShirazToOrient,
+					scale only axis,  
+					view = {50}{50},
+					%xmax=299,
+					%ymin=250,
+					point meta max=1,
+					point meta min=0,
+					ztick={0,0.25,0.5,0.75,1},
+					clip=false,
+					]
+					%
+					\addplot3 [%
+						surf, 
+						mesh/rows=40, 
+						shader=interp, 
+						patch type=bilinear,
+						] 
+						table[col sep=comma, x=ki, y=kp, z=DG] {misc/chap_5/vector_margin_map_stiff_theory.csv};
+					%\node at (axis cs:0.08,0.015,60) {\pgfuseplotmark{*}};
+					%\node at (rel axis cs:0,0.5,1) [above] {\Large{$K$}};
+				\end{axis}
+			\end{tikzpicture}
+		}
+	}
+	\caption{Tentative de reproduction de la cartographie expérimentale, en utilisant les paramètres du participant 000 de la phase \cref{item_pert2}, en fonction des gains du correcteur cartésien en admittance.}
+	\label{fig_theory_stability_map_vector_margin}
+\end{figure}

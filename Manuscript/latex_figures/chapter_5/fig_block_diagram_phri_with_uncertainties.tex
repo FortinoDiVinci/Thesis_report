@@ -1,10 +1,8 @@
 \begin{figure} [h]
-	\tikzsetnextfilename{fig_block_diagram_phri_with_uncertainties}
 	\centering
 	%, line width=0.7
 	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm] % comparator style
 	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm]  % bloc style
-	\tikzstyle{big_block} = [rectangle, draw, minimum width = 3cm, minimum height = 2.5cm]  % bloc style
 	
 	\newcommand{\comp}[3][]{ % comparator command
 		\node[comp] (#2) at #3 {};
@@ -27,6 +25,7 @@
 		}
 	}
 	%\resizebox{\textwidth}{!}{
+	\tikzsetnextfilename{fig_block_diagram_phri_with_uncertainties}
 	\begin{tikzpicture} [node distance = 2cm]
 		
 		\node[block, node distance = 2.1cm] (Z) {\Large{$Z$}};

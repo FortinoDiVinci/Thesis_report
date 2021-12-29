@@ -624,21 +624,32 @@ Par ailleurs, pour limiter les effets non linéaires les perturbations doivent e
 Finalement, à moins de se placer dans des configurations isométriques, ou de contraindre la trajectoire de référence, la \emph{trajectoire virtuelle} n'est pas mesurable et doit être estimée. Ainsi dans une situation transposable à un contexte industriel, il faut être capable de reconstruire les trajectoires en force et en position sur un intervalle suffisant - \textit{en fonction du comportement perturbé }-, et avec une précision importante du fait des difficultés précedemment evoquées.
 
 \begin{description}[font=$\bullet$,labelindent=.5cm]
-	\item Un \emph{banc expérimental}, avec des équipements compatibles avec un environnement industriel réaliste, a été conçu et mis en place et utilisé pour conduire des estimations d'impédance du membre supérieur humain lors d'interactions physiques avec un robot. Le banc expérimental qui comprend un robot polyarticulé, un capteur de force 6 axe et un système de capture de mouvement par caméra est décrit dans le \cref{chap4} et le contrôle du robot dans le \cref{chap2}, \cref{chap2_sec_ctrl_vfo_subsec_cartesian}.
+	\item Un \emph{banc expérimental}, avec des équipements compatibles avec un environnement industriel réaliste, a été conçu et mis en place et utilisé pour conduire des estimations d'impédance du membre supérieur humain lors d'interactions physiques avec un robot. Le banc expérimental qui comprend un robot polyarticulé, un capteur de force 6 axes et un système de capture de mouvements par caméra est décrit dans le \cref{chap4} et le contrôle du robot dans le \cref{chap2}, \cref{chap2_sec_ctrl_vfo_subsec_cartesian}.
 	%
 	\item Deux méthodes de reconstruction disctinctes des \emph{trajectoires virtuelles} en position et force sont proposées pour permettre l'estimation des paramètres d'impédance du bras humain. Ces méthodes présentés dans le \cref{chap3} ont été validées sur des trajectoires non perturbées et en simulation.
 	%
-	\item Méthode d'identifications robustes ? (ARX basique... est-ce une vraie contribution ?)
+	\item Les erreurs sur les paramètres induites par la méthode d'identification ainsi que les erreurs dans les estimations de trajectoires sont aussi étudiées dans le \cref{chap3}.
 \end{description}
 
 \subsection{Influence de l'impédance sur une tâche hybride}
 
-\begin{enumerate}[labelindent=1cm]
-	\item[$\bullet$] Variations d’impédance
-	\item[$\bullet$] Expertise / apprentissage ?
-	\item[$\bullet$] Résultats de l’étude d’impédance
-\end{enumerate}
+Une fois la méthode d'estimation d'impédance proposée, et un banc expérimental adapté mis en place, il reste à réaliser des estimations sur une quantité importante de participants, avec un nombre de mesures aussi significatives afin de limiter les effets de la variabilité des estimations. Dans la littérature, il est rare de voir des études impliquant plus d'une dizaine de participants, car les expériences nécessitent souvent d'être répétés et peuvent s'avérer longues, ce qui complexifie l'organisation de ces dernières.
+
+Dans ces travaux, les expériences ont été conduites sur trentaine de participants, dont plus d'une dizaine avait déjà pu s'entrainer au court de sessions préliminaires afin d'améliorer leur dextérité dans la tâche choisie pour les expériences. L'environnement virtuel de la tâche a été affinée antérieurement aux expériences afin que l'ensemble des participants, y compris les plus novices ou moins habiles, soient, après quelques minutes, capables d'achever les objectifs définis. Tous les participants ont finalement été capables d'arriver aux termes des expériences.
+
+Deux variations du contexte ont été par ailleurs proposées pour modifier la difficulté et la fréquence de la tâche rythmique de jonglerie détaillée en \cref{chap4}, ce qui a permi d'étudier les influences exétieures sur les performances et sur l'impédance mécaniques du membre supérieur chez l'humain. 
+
+%\begin{enumerate}[labelindent=1cm]
+%	\item[$\bullet$] Des variations significatives ont pu être observées sur trois phases du cycle de la tâche, ce qui tendrait à indiquer que les variations d'impédance décrivent aussi une tendance rythmique.
+%	\item[$\bullet$] Des différences de performances significatives ont pu être observées parmi les participants, ce qui a permis de les répartir en plusieurs groupes de niveau, sans que cette répartition ne permette de tirer des conclusions en terme de variations d'impédance toutefois.
+%\end{enumerate}
+\begin{description}[font=$\bullet$,labelindent=.5cm]
+	\item Des variations significatives ont pu être observées sur trois phases du cycle de la tâche, ce qui tendrait à indiquer que les variations d'impédance décrivent aussi une tendance rythmique.
+	\item Des différences de performances significatives ont pu être observées parmi les participants, ce qui a permis de les répartir en plusieurs groupes de niveau, sans que cette répartition ne permette de tirer des conclusions en terme de variations d'impédance toutefois.
+\end{description}
 
 \subsection{Stabilité des interactions physiques humain-robot}
 
--	Résultats de l’étude de stabilité
+Lors d'interactions physiques entre des humains et robots, c'est classiquement le critère de passivité détaillé dans le \cref{chap5}, qui est est utilisé pour assurer la stabilité du couplage. Toutefois, cette limitation est conservative, et ne permet pas d'optimiser le contrôle robotisé pour des tâches dynamiques. 
+
+En utilisant les gammes de paramètres observés dans le \cref{chap4}, la passivité est relâchée et une analyse moins contraignante est conduite, en s'inspirant de ce qui est fait en étude de robustesse. Le compromis entre stabilité et transparence est étudié en théorie en cherchant a retrouver les cartographies expérimentales conduites lors du réglage de contrôle en admittance dans le \cref{chap2}.

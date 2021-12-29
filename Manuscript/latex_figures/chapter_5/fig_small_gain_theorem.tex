@@ -1,0 +1,46 @@
+%
+\tikzsetnextfilename{fig_small_gain_theorem}
+\centering
+%, line width=0.7
+\tikzstyle{comp} = [circle, draw, minimum size = 0.4cm] % comparator style
+\tikzstyle{block} = [rectangle, draw, minimum width = 0.6cm, minimum height = 0.6cm]  % bloc style
+
+\newcommand{\comp}[3][]{ % comparator command
+	\node[comp] (#2) at #3 {};
+	\draw (#2) -- + (45:0.2) -- + (45:-0.2);
+	\draw (#2) -- + (-45:0.2) -- + (-45:-0.2);
+	\ifthenelse{
+		\isempty{#1}{}
+	}{}
+	{
+		\ifthenelse{
+			\equal{#1}{a}
+		}{
+			\node[above right] at (#2) {$-$\phantom{p}};
+		}{}
+		\ifthenelse{
+			\equal{#1}{b}
+		}{
+			\node[below right] at (#2) {$-$\phantom{l}};
+		}{}
+	}
+}
+\begin{tikzpicture} [node distance = 1cm]
+	
+	\node[block] (M) {$M$};
+	\node[block, below of = Z] (D) {$\Delta$};
+	
+	\comp{c1}{($(M) + (-1.5, 0)$)};
+	\comp{c2}{($(D) + (1.5, 0)$)};
+	
+	\draw[-{Latex[length=3mm]}] (c1.east) -- (M.west);
+	\draw[-{Latex[length=3mm]}] (M.east) -| (c2.north);
+	\draw[-{Latex[length=3mm]}] (c2.west) -- (D.east);
+	\draw[-{Latex[length=3mm]}] (D.west) -| (c1.south);
+	
+	\draw[{Latex[length=3mm]}-] (c1.west) --+ (-.75,0) node[near end, above] {$w_1$};
+	\draw[{Latex[length=3mm]}-] (c2.east) --+ (.75,0) node[near end, above] {$w_2$};
+	
+\end{tikzpicture}
+\captionof{figure}{Théorème du petit gain \parencite{zhou_robust_1995}.}
+\label{fig_small_gain_theorem}
