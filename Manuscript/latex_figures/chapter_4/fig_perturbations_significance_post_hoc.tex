@@ -1,0 +1,33 @@
+\begin{figure} [h]
+	\centering
+	\pgfplotstableread[col sep=semicolon] {misc/chap_4_ball_bouncing/perturbations_significance_post_hoc.csv}\datatable
+	\tikzsetnextfilename{perturbations_significance_post_hoc}
+	\begin{tikzpicture}
+		
+		\begin{axis}[%
+			height=0.3\linewidth,
+			scale only axis,
+			%xmin=0.65,
+			%xmax=2.35,
+			%xtick={1,1.5,2},
+			xtick={0,1,2,3},
+			xticklabels={{$c_{pre}$},{$c_{post}^1$},{$c_{post}^2$},{$c_{post}^3$}},
+			%ymin=1.06276752948761,
+			%ymax=1.78985784053802,
+			ylabel=$\mean{\epsilon_r}$ (\si{\centi\meter}),%$\sigma(\epsilon_r)$
+			ylabel near ticks,
+			yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}}, % conversion from m to cm
+			scaled ticks=false, 
+			tick label style={/pgf/number format/fixed},
+			ylabel style={yshift=-1mm},
+			%boxplot/draw direction=y, 
+			]
+			\addplot [color=Orient] table[x=source, y=mean_avg]{\datatable};
+			\addplot [color=Orient, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}]
+			plot [error bars/.cd, y dir = both, y explicit]
+			table[x=source, y=mean_avg, y error=SEM_avg]{\datatable};		
+		\end{axis}		
+	\end{tikzpicture}%
+	\caption{Effets des perturbations sur $\mean{\epsilon_r}$, les erreurs types sont utilisées comme intervalle de confiance.}
+	\label{fig_perturbations_significance_post_hoc}
+\end{figure} 

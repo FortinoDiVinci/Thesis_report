@@ -1,92 +1,118 @@
-% This file was created by matlab2tikz.
-%
-%The latest updates can be retrieved from
-%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
-%where you can also make suggestions and rate matlab2tikz.
-%
 \begin{figure} [h]
 	\centering
-	\subcaptionbox{ANOVA des différences des distances réelles entre les impacts de balles et les consignes de hauteur (\si{\meter}) $h_1^*=1.5$, $h_2^*=1.75$ et $h_3^*=2$ ($F=990.10^3$)\label{subfig_target_height_significance}}
+	\subcaptionbox{Moyennes des distances réelles entre les impacts de balles et les consignes de hauteur (\si{\meter}) $h_1^*=1.5$, $h_2^*=1.75$ et $h_3^*=2$ avec les écarts types indiqués en intervalles de confiance \label{subfig_target_height_significance}}
 	{
+		\pgfplotstableread[col sep=semicolon] {misc/chap_4_ball_bouncing/real_target_height_comparison.csv}\datatable
 		\tikzsetnextfilename{subfig_target_height_significance}
 		\begin{tikzpicture}
 		
 			\begin{axis}[%
 				height=0.3\linewidth,
 				scale only axis,
-				xmin=0.65,
-				xmax=2.35,
-				xtick={1,1.5,2},
+				%xmin=0.65,
+				%xmax=2.35,
+				%xtick={1,1.5,2},
+				xtick={1.5,1.75,2},
 				xticklabels={{$h_1^*$},{$h_2^*$},{$h_3^*$}},
-				ymin=1.06276752948761,
-				ymax=1.78985784053802,
+				%ymin=1.06276752948761,
+				%ymax=1.78985784053802,
 				ylabel=$h$ (\si{\meter}),
 				ylabel near ticks,
 				ylabel style={yshift=-1mm},
 				xlabel={Hauteurs consignes},
+				%boxplot/draw direction=y, 
 				]
-				\addplot [color=LimedSpruce, dashed, forget plot]
-				  table[row sep=crcr]{%
+				\addplot [color=Orient] table[x=height, y=mean]{\datatable};
+				\addplot [color=Orient, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}]
+				plot [error bars/.cd, y dir = both, y explicit]
+				table[x=height, y=mean, y error=SD]{\datatable};		
+			\end{axis}		
+		\end{tikzpicture}%
+	}
+	\hspace{5mm}
+	\subcaptionbox{Diagramme en boîte de la distribution des hauteurs réelles\label{subfig_target_height_boxplot}}
+	{
+		\tikzsetnextfilename{subfig_target_height_boxplot}
+		\begin{tikzpicture}
+			
+			\begin{axis}[%
+				height=0.3\linewidth,
+				scale only axis,
+				xmin=0.65,
+				xmax=2.35,
+				%xtick={1,1.5,2},
+				xtick={1,1.5,2},
+				xticklabels={{$h_1^*$},{$h_2^*$},{$h_3^*$}},
+				%ymin=1.06276752948761,
+				%ymax=1.78985784053802,
+				ylabel=$h$ (\si{\meter}),
+				ylabel near ticks,
+				ylabel style={yshift=-1mm},
+				xlabel={Hauteurs consignes},
+				%boxplot/draw direction=y, 
+				]	
+				\addplot [color=LimedSpruce, dashed, forget plot] 
+				table[row sep=crcr]{%
 				1	1.19144856929779\\
 				1	1.24061059951782\\
 				};
 				\addplot [color=LimedSpruce, dashed, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.5	1.43329870700836\\
 				1.5	1.48309528827667\\
 				};
 				\addplot [color=LimedSpruce, dashed, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				2	1.68550109863281\\
 				2	1.73239326477051\\
 				};
 				\addplot [color=LimedSpruce, dashed, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1	1.10844147205353\\
 				1	1.15780258178711\\
 				};
 				\addplot [color=LimedSpruce, dashed, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.5	1.35055065155029\\
 				1.5	1.4000825881958\\
 				};
 				\addplot [color=LimedSpruce, dashed, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				2	1.60709524154663\\
 				2	1.65411472320557\\
 				};
 				\addplot [color=LimedSpruce, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				0.8875	1.24061059951782\\
 				1.1125	1.24061059951782\\
 				};
 				\addplot [color=LimedSpruce, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.3875	1.48309528827667\\
 				1.6125	1.48309528827667\\
 				};
 				\addplot [color=LimedSpruce, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.8875	1.73239326477051\\
 				2.1125	1.73239326477051\\
 				};
 				\addplot [color=LimedSpruce, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				0.8875	1.10844147205353\\
 				1.1125	1.10844147205353\\
 				};
 				\addplot [color=LimedSpruce, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.3875	1.35055065155029\\
 				1.6125	1.35055065155029\\
 				};
 				\addplot [color=LimedSpruce, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.8875	1.60709524154663\\
 				2.1125	1.60709524154663\\
 				};
 				\addplot [color=Orient, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				0.8875	1.17491745948792\\
 				0.775	1.17546570301056\\
 				0.775	1.19144856929779\\
@@ -100,7 +126,7 @@
 				0.8875	1.17491745948792\\
 				};
 				\addplot [color=Orient, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.3875	1.41714870929718\\
 				1.275	1.4174736738205\\
 				1.275	1.43329870700836\\
@@ -114,7 +140,7 @@
 				1.3875	1.41714870929718\\
 				};
 				\addplot [color=Orient, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.8875	1.66913771629333\\
 				1.775	1.6696857213974\\
 				1.775	1.68550109863281\\
@@ -128,29 +154,29 @@
 				1.8875	1.66913771629333\\
 				};
 				\addplot [color=Shiraz, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				0.8875	1.17491745948792\\
 				1.1125	1.17491745948792\\
 				};
 				\addplot [color=Shiraz, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.3875	1.41714870929718\\
 				1.6125	1.41714870929718\\
 				};
 				\addplot [color=Shiraz, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.8875	1.66913771629333\\
 				2.1125	1.66913771629333\\
 				};
 				\addplot [color=LimedSpruce, only marks, mark=+, mark options={solid, draw=Shiraz}, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1	1.09581708908081\\
 				1	1.10348260402679\\
 				1	1.10424602031708\\
 				1	1.10683274269104\\
 				};
 				\addplot [color=LimedSpruce, only marks, mark=+, mark options={solid, draw=Shiraz}, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				1.5	1.33619487285614\\
 				1.5	1.34137272834778\\
 				1.5	1.34203231334686\\
@@ -208,7 +234,7 @@
 				1.5	1.50865602493286\\
 				};
 				\addplot [color=LimedSpruce, only marks, mark=+, mark options={solid, draw=Shiraz}, forget plot]
-				  table[row sep=crcr]{%
+				table[row sep=crcr]{%
 				2	1.59384846687317\\
 				2	1.59429955482483\\
 				2	1.59594082832336\\
@@ -252,51 +278,38 @@
 			\end{axis}		
 		\end{tikzpicture}%
 	}
-	\hspace{5mm}
-	\subcaptionbox{Erreurs de rebonds $\epsilon_r$ en fonction de la durée des cycles\label{subfig_target_height_vs_cycle_duration}}
-	{
-		\tikzsetnextfilename{subfig_target_height_vs_cycle_duration}
-		\begin{tikzpicture}
-			\centering
-			%
-			\begin{axis}[%
-				width=.3\linewidth,
-				height=.3\linewidth,
-				scale only axis,
-				xlabel={Durée de cycle (\si{\second})},
-				ylabel={Erreurs de rebonds (\si{\meter})},
-				axis x line = bottom,
-				axis y line = left, 
-				ylabel near ticks,
-				ylabel style={yshift=-4mm},
-				xmin=0.4,
-				xmax=2.4,
-				ymin=-2,
-				ymax=4.6,
-				clip mode=individual,
-				]
-				%
-				\addplot [
-					color=Orient,
-					mark=*,
-					only marks,
-					fill opacity=0.2,
-					] table [col sep=comma, x=d, y=h] {misc/target_height_vs_duration.csv};	
-				%	
-				\addplot[
-					thick,
-					color=Shiraz,
-					dashed,
-					] {2.8*x - 3.2};
-				
-%				\draw[dashed] (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, 1.24) -- (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, 1.24);		
-%				\draw[dashed] (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, 1.48) -- (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, 1.48);	
-%				\draw[dashed] (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, 1.73) -- (axis cs: \pgfkeysvalueof{/pgfplots/xmax}, 1.73);	
-				%\addlegendentry{$\vect{f}_z$};
-				%\addlegendentry{$\tilde{\vect{f}}_z$};
-			\end{axis}		
-		\end{tikzpicture}
-	}
+%	\subcaptionbox{Erreurs de rebonds $\epsilon_r$ en fonction de la durée des cycles\label{subfig_target_height_vs_cycle_duration}}
+%	{
+%		\tikzsetnextfilename{subfig_target_height_vs_cycle_duration}
+%		\begin{tikzpicture}
+%			\centering
+%			%
+%			\begin{axis}[%
+%				width=.3\linewidth,
+%				height=.3\linewidth,
+%				scale only axis,
+%				xlabel={Durée de cycle (\si{\second})},
+%				ylabel={Erreurs de rebonds (\si{\meter})},
+%				axis x line = bottom,
+%				axis y line = left, 
+%				ylabel near ticks,
+%				ylabel style={yshift=-4mm},
+%				xmin=0.4,
+%				xmax=2.4,
+%				ymin=-2,
+%				ymax=4.6,
+%				clip mode=individual,
+%				]
+%				%
+%				\addplot [
+%					color=Orient,
+%					mark=*,
+%					only marks,
+%					fill opacity=0.2,
+%					] table [col sep=comma, x=d, y=eps] {misc/target_height_vs_duration.csv};	
+%			\end{axis}		
+%		\end{tikzpicture}
+%	}
 	\caption{Effets des variations de hauteur de la cible.}
 	\label{fig_target_height_significance}
 \end{figure} 

@@ -131,11 +131,13 @@ Par ailleurs, pour obtenir suffisamment de données et limiter les effets de var
 
 \subsubsection{Recrutement de la cohorte} \label{chap4_sec_exp_sub_prot_1}
 
-Le recrutement de la cohorte s'est principalement fait au sein du laboratoire des signaux et systèmes (L2S), avec l'aimable participation de doctorants, post-doctorants et chercheurs, via la diffusion de messages par mail (voir \cref{app_enrolment_mail}), et sur les canaux de communications usuels du laboratoire. Le recrutement a aussi été diffusé à des étudiants de l'université. Sur le total des 31 participants, environ \SI{85}{\percent} travaillaient au L2S et seuls deux ne faisaient pas partie du complexe offert par l'Université Paris-Saclay. La cohorte ne reflète donc pas la population globale, ou même régionale, mais plutôt une population universitaire sud-parisienne. Les critères de sélection étaient assez larges, puisque seules les personnes ayant des pathologies motrices étaient exclues du recrutement.
+Le recrutement de la cohorte s'est principalement fait au sein du laboratoire des signaux et systèmes (L2S), avec l'aimable participation de doctorants, post-doctorants et chercheurs, via la diffusion de messages par mail (voir \cref{app_enrolment_mail}), et sur les canaux de communications usuels du laboratoire. Le recrutement a aussi été diffusé à des étudiants de l'université. Sur le total des 31 participants, environ \SI{85}{\percent} travaillaient au L2S. %et seuls deux ne faisaient pas partie du complexe offert par l'Université Paris-Saclay. %La cohorte ne reflète donc pas la population globale, ou même régionale, mais plutôt une population universitaire sud-parisienne. Les critères de sélection étaient assez larges, puisque 
+Seules les personnes ayant des pathologies motrices étaient exclues du recrutement.
 
 Sur la cohorte ayant participé aux expériences, \SI{25}{\percent} étaient des femmes, et \SI{90}{\percent} étaient droitiers. Presque \SI{60}{\percent} des participants ont déclaré n'avoir jamais manipulé un banc expérimental similaire antérieurement aux expériences, et \SI{30}{\percent} ont déclaré manipuler un robot pour la première fois, et seuls deux ont dit avoir un niveau de pratique habituel de robots. \SI{23}{\percent} ont déclaré avoir un niveau de pratique, tout sport de raquette confondu, nul, \SI{42}{\percent} un niveau novice, \SI{32}{\percent} un niveau intermédiaire et un seul participant a annoncé avoir un niveau avancé. 
 
-Les participants avaient en moyenne 30 ans, mais la médiane des âges se situait à 27, l'âge le plus représenté au moment des expériences, avec 8 individus. \SI{50}{\percent} des participants avaient ainsi entre 26 et 30 ans, ce qui correspond grossièrement aux personnes en thèse de doctorat. La distribution de la taille et du poids des intervenants était presque gaussienne, avec des moyennes respectives de \SI{71.3}{\kilogram} ($\pm$ \SI{12.7}{\kilogram}) et \SI{176.2}{\centi\meter} ($\pm$ \SI{9.3}{\centi\meter}) - \textit{les écarts types sont indiqués entre parenthèses}. Il est important de signifier ici, que le banc expérimental n'était pas réglable en fonction de la taille des participants, or quatre personnes faisaient moins \SI{1.65}{\meter} et trois plus de \SI{1.85}{\meter}. Avec une amplitude de plus de \SI{40}{\centi\meter}) sur l'ensemble de l'échantillon, l'ergonomie de l'expérience n'était pas garantie à l'ensemble des utilisateurs.
+Les participants avaient en moyenne 30 ans, mais la médiane des âges se situait à 27, l'âge le plus représenté au moment des expériences, avec 8 individus. \SI{50}{\percent} des participants avaient ainsi entre 26 et 30 ans. %, ce qui correspond grossièrement aux personnes en thèse de doctorat. 
+La distribution de la taille et du poids des intervenants \textcolor{red}{était presque gaussienne}, avec des moyennes respectives de \SI{71.3}{\kilogram} ($\pm$ \SI{12.7}{\kilogram}) et \SI{176.2}{\centi\meter} ($\pm$ \SI{9.3}{\centi\meter}) - \textit{les écarts types sont indiqués entre parenthèses}. Il est important de signifier ici, que le banc expérimental n'était pas réglable en fonction de la taille des participants, or quatre personnes faisaient moins \SI{1.65}{\meter} et trois plus de \SI{1.85}{\meter}. Avec une amplitude de plus de \SI{40}{\centi\meter}) sur l'ensemble de l'échantillon, l'ergonomie de l'expérience n'était pas garantie à l'ensemble des utilisateurs.
 
 Les données de poids et de taille permettent de calculer l'indice de masse corporelle (IMC), qui est communément utilisé pour évaluer les risques sanitaires liés à l'obésité ou à la maigreur. Bien que cet indice soit imparfait, il n'est par exemple pas adpaté aux athlètes \parencite{provencher_body_2018}, il reste fortement corrélé à certaines pathologies comme des risques cardiovaculaires \parencite{steinberger_comparison_2005} et à des excès de mortalité \parencite{flegal_estimates_2009}, il reste donc utile, notamment lorsqu'il est combiné à d'autres mesures venant combler ses lacunes. Le calcul de l'IMC n'a indiqué aucune personne en obésité sévère ou état de maigreur dans l'échantillon, avec une médiane à \SI{22.3}{\kilogram\per\meter\squared} et 27 des participants avec un indice compris entre \SIlist{18.5;25}{\kilogram\per\meter\squared}.
 
@@ -201,65 +203,250 @@ Les expériences ont pu se dérouler dans l'immense majorité sans rencontrer d'
 
 Dans un premier temps, l'expertise des participants pour la réalisation de la tâche, ou plutôt leur qualification est évaluée par rapport aux erreurs de rebonds $\epsilon_r$ entre la hauteur cible et les apex de la balle. Dans un second temps, les identifications des paramètres d'impédance sont réalisées en fonction de la qualification des participants et des phases cycliques perturbées. Le découpage des cycles est défini par les impacts de la balle.
 
-Dans les études qui suivent, des analyses de variance (ANOVA) ont été conduites avec des seuils de significativité fixés à \SI{5}{\percent}. Les ANOVA permettent d'infirmer ou valider l'hypothèse dite nulle, c'est à dire, la probabilité que plusieurs jeux de données soient issus d'une même population, notamment en comparant la moyenne des groupes fournis, ainsi que la distribution des données. Ces analyses peuvent être conduites classiquement en s'intéressant à un seul ou deux facteurs contrôlés, et de manière plus marginale, à plus de deux critères. Lorsqu'elles sont conduites sur plus de deux groupes ou jeux de données, les ANOVA ne révèlent que l'existence d'au moins un groupe significativement différent des autres.
+Dans les études qui suivent, des analyses de variance (ANOVA) ont été conduites avec des seuils de significativité fixés à \SI{5}{\percent}. Lorsqu'une ANOVA permet d'infirmer l'hypothèse nulle, elle est complétée par des tests \textit{post-hoc}, qui correspondent à des tests t \parencite{student_probable_1908} multiples avec des corrections \parencite{tukey_comparing_1949,dunn_multiple_1961}. C'est la correction de Bonferroni qui est utilisée pour ces analyses. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.
+%Les ANOVA permettent d'infirmer ou valider l'hypothèse dite nulle, c'est à dire, la probabilité que plusieurs jeux de données soient issus d'une même population, notamment en comparant la moyenne des groupes fournis, ainsi que la distribution des données. Ces analyses peuvent être conduites classiquement en s'intéressant à un seul ou deux facteurs contrôlés, et de manière plus marginale, à plus de deux critères. Lorsqu'elles sont conduites sur plus de deux groupes ou jeux de données, les ANOVA ne révèlent que l'existence d'au moins un groupe significativement différent des autres.
 
-Pour compléter les ANOVA, et savoir quels groupes sont à l'orgine du rejet de l'hypothèse nulle, d'autres analyses doivent être conduites. Des tests t \parencite{student_probable_1908} multiples peuvent alors être conduits par paires. Toutefois, la multiplication des tests augmente la probabilité de rejeter l'hypothèse nulle, une correction doit donc être effectuée, on parle de tests \textit{post-hoc} ou de comparaisons multiples. Pour ne pas fausser l'analyse, on pourra par exemple utiliser les tests étendus de Tukey \parencite{tukey_comparing_1949} ou la correction de Bonferroni \parencite{dunn_multiple_1961} qui permettent de palier cette problématique. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.
+%Pour compléter les ANOVA, et savoir quels groupes sont à l'orgine du rejet de l'hypothèse nulle, d'autres analyses doivent être conduites. Des tests t \parencite{student_probable_1908} multiples peuvent alors être conduits par paires. Toutefois, la multiplication des tests augmente la probabilité de rejeter l'hypothèse nulle, une correction doit donc être effectuée, on parle de tests \textit{post-hoc} ou de comparaisons multiples. Pour ne pas fausser l'analyse, on pourra par exemple utiliser les tests étendus de Tukey \parencite{tukey_comparing_1949} ou la correction de Bonferroni \parencite{dunn_multiple_1961} qui permettent de palier cette problématique. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.
 
 \subsection{Qualification de la réalisation de la tâche} \label{chap4_sec_res_sub_task}
 
-\subsubsection{Effets des hauteurs cibles} \label{chap4_sec_res_sub_task_1}
+Il faut rappeler que l'expérience par laquelle les participants ont commencé a été défini de manière pseudo aléatoire. Ainsi, 14 participants ont commencé par la première expérience, 17 par la seconde.
 
-En premier lieu, il faut remarquer que même si les consignes données aux participants étaient d'essayer de maintenir la hauteur d'impact de la balle constante, il faut vérifier que cette consigne a globablement été respectée. En effet, si cette dernière n'a pas été observée, les participants peuvent avoir maintenu une hauteur réelle entre la raquette au moment de l'impact et la hauteur cible peu variable.
+\subsubsection{Effets des perturbations} \label{chap4_sec_res_sub_task_1}
 
-Les hauteurs réelles $h_1\text{, }h_2\text{ et }h_3$ induites par les expériences sont donc regroupées pour l'ensemble des participants et analysées comme montré sur la \cref{subfig_target_height_significance}. Comme on peut le constater, les hauteurs réelles sont différentes de celles indiquées des les consignes expérimentales (\SIlist{1.5;1.75;2.0}{\meter}), car la hauteur d'impact avec la balle est rarement nulle. Quoiqu'il en soit, les différences de hauteur engendrées sont bien significatives avec des médianes approximativement inférieures de \SI{0.3}{\meter} dans l'environnement simulé. 
+Bien que les perturbations aient été introduites pour être aussi peu perceptibles que possible, et minimiser l'influence sur la tâche, il est important de s'intéresser aux effets des cycles consécutifs à des perturbations. En effet, suite aux questions posées\footnote{Mettre un avertissement sur ce questionnement.} aux participants, \SI{55}{\percent} affirment avoir perçu des perturbations dans au moins l'une des expériences, et \SI{15}{\percent} pendant l'ensemble des essais. Une éventuelle dégradation des performances dûe aux perturbations ne peut toutefois pas être écartée.%, même si la majorité des participants n'a pas ressenti les perturbations pendant au moins l'une des sessions.
+
+\textcolor{orange}{Une partie des cycles sont extraits, en fonction qu'ils soient avant une perturbation $c_{pre}$, suivant une perturbation $c_{post}^1$ ou deux ou trois cycles après une perturbation $c_{post}^2\text{ et }c_{post}^3$. Pour chaque participant, la moyenne $\mean{\epsilon_r}$ et l'écart type $\sigma(\epsilon_r)$ des erreurs de rebonds des quatre conditions sont receuillis en fonction de l'expérience, les perturbations étant différentes lors des deux expériences, ce qui ajoute un facteur entre les participants.}
+
+\textcolor{orange}{L'ANOVA conduite sur $\mean{\epsilon_r}$ pour les 4 conditions de cycle et le facteur expérimental révèle un effet significatif du critère principal $F(3, 180) = 6.8$, $p<0.001$,  $\eta^2 = 0.026$, aucun effet d'interaction n'est par contre observé $F(3, 180) = 0.8$, $p=0.476$,  $\eta^2 = 0.003$. L'analyse \textit{post-hoc} par paire dévoile que c'est la condition $c_{post}^1$ qui est significativement différente de l'ensemble des autres conditions, comme on peut le voir sur la \cref{fig_perturbations_significance_post_hoc}. Seul les cycle qui suivent directement une perturbation obtiennent donc des erreurs de rebonds moyennes significativement différentes, avec un effet toutefois faible en moyenne de \SI{2}{\centi\meter}.}
+
+\textcolor{orange}{L'ANOVA conduite sur $\sigma(\epsilon_r)$ pour les 4 conditions de cycle et le facteur expérimental a du être corrigée, puisque l'hypothèse de sphéricité n'était pas vérifiée par le test de \textcite{mauchly_significance_1940}. Après l'application de la correction de \textcite{huynh_estimation_1976}, aucun effet principal des conditions n'est observé $F(2.6, 158) = 1.5$, $p=0.23$,  $\eta^2 = 0.005$, et aucune interaction n'est non plus observée par rapport aux expériences $F(2.6, 158) = 1.6$, $p=0.20$,  $\eta^2 = 0.006$. Le répétabilité de la tâche ne semble donc pas significativement modifiée par la présence de perturbations.} %d'homoscédasticité 
+	
+\input{latex_figures/chapter_4/fig_perturbations_significance_post_hoc}
+
+\textcolor{orange}{On peut remarquer en plus des résultats précédents que le choix d'expérience n'a, pour aucun des critères étudiés, entraîné d'interactions significatives. De plus un test d'homoscédasticité \parencite[Chapitre~25, par H. Levene]{olkin_contributions_1960} permet de conclure à l'homogénéïté des variances entre les deux expériences, quelques soient la condition. On peut donc en conclure que les effets des perturbations sont similaires sur les deux expériences.}
+
+%induites par les expériences sont donc regroupées pour l'ensemble des participants et analysées comme montré sur la \cref{subfig_target_height_significance}. Pour chaque participant, la moyenne des hauteurs réelles en fonction des cibles est utilisée. L'ANOVA conduite sur les trois conditions de positions verticales révèle un effet significatif du critère $F(2, 60) = 6.4\times10^3$, $p<0.001$,  $\eta^2 = 0.995$. L'analyse post-hoc par paire, révèle que les différences sont significatives pour entre chaque groupe ($p_{bonf} < 0.001$).}
+
+%L'analyse de variance conduite entre les cycles perturbés ou non a été réalisée en séparant les expériences selon leur ordre pour supprimer ce potentiel facteur de confusion, l'ordre ayant démontré des effets significatifs sur les erreurs de rebonds. La \cref{fig_exp_order_perturbations_bouncing_error_significance} montre les analyses de variance et multiples sur les erreurs $\epsilon_r$ et $\abs{\epsilon_r}$. Les études statistiques sur les erreurs signées ne révèlent pas de différences significatives à l'intérieur des groupes d'expériences. Les intervalles de confiance plus importants des cycles perturbés peuvent s'expliquer par leur quantité très inférieure aux cycles non-perturbés, qui sont \SI{5.5}{} fois plus nombreux. Toutefois, on peut noter que les moyennes et médianes des erreurs $\epsilon_r$ des cycles perturbés sont systématiquement plus importantes. Ce dernier point pourrait indiquer qu'un effet existe bien, mais que la quantité de données recueillies n'est pas suffisante pour le confirmer, car l'effet est faible.
+
+%\input{latex_figures/chapter_4/fig_exp_order_and_perturbations_bouncing_error_significance}
+
+%L'analyse multiple des erreurs absolues $\abs{\epsilon_r}$ en \cref{subfig_exp_order_perturbations_abs_bouncing_error_significance_mult} révèle que pour la troisième expérience, une différence significative existe entre les cycles perturbés et non-perturbés, avec un écart d'environ \SI{2}{\centi\meter} entre leur moyenne respective. Cet écart est à mettre en parallèle de ceux provoqués par les autres facteurs identifiés. Ainsi, même s'il reste légèrement inférieur à ceux constatés pour les différentes hauteurs cibles ($>$\SI{2}{\centi\meter}) ou pour les ordres expérimentaux, cet effet reste du même ordre. L'effet des perturbations semble donc exister, bien qu'il soit plus faible que ceux entrainés par les deux autres facteurs précedemment présentés.
+
+\subsubsection{Expérience 2 : hauteurs cibles} \label{chap4_sec_res_sub_task_2}
+%\subsubsection{Effets des hauteurs cibles} \label{chap4_sec_res_sub_task_1}
+
+En premier lieu, il faut remarquer que même si les consignes données aux participants étaient d'essayer de maintenir la hauteur d'impact de la balle constante, il faut vérifier que cette consigne a globablement été respectée. En effet, si cette dernière n'a pas été observée, les participants peuvent avoir maintenu une distance verticale réelle entre la raquette au moment de l'impact et la hauteur cible peu variable. Or la deuxième expérience s'est intéressé à la variation du critère de position verticale.
+
+\textcolor{orange}{Les hauteurs réelles $h_1\text{, }h_2\text{ et }h_3$ induites par les expériences sont donc regroupées pour l'ensemble des participants et analysées comme montré sur la \cref{subfig_target_height_significance}. Pour chaque participant, la moyenne des hauteurs réelles en fonction des cibles est utilisée. L'ANOVA conduite sur les trois conditions de positions verticales révèle un effet significatif du critère $F(2, 60) = 6.4\times10^3$, $p<0.001$,  $\eta^2 = 0.995$. L'analyse post-hoc par paire, révèle que les différences sont significatives pour entre chaque groupe ($p_{bonf} < 0.001$).}
 
 \tikzexternalenable
 \input{latex_figures/chapter_4/fig_target_height_significance}
+%\tikzexternalenable
 
-Maintenant que l'existence des différences de hauteur est bien confirmée, on peut s'intéresser aux effets induits par ces hauteurs. On va donc se concentrer sur les erreurs de rebonds entre le centre de la balle au moment de l'apex, et le centre de la hauteur cible. La \cref{fig_target_height_bouncing_error_significance} dévoile les ANOVA conduites sur les erreurs de rebonds. La première (\cref{subfig_target_height_bouncing_error_significance}) révèle des différences significatives de moyenne pour au moins un des trois groupes. De manière contre-intuitive, les erreurs médianes semblent avoir tendance à diminuer lorsque la hauteur cible est plus élevée. Toutefois, l'analyse complémentaire de variances des erreurs absolues révèle qu'en réalité, ces dernières augmentent de manière significative avec la hauteur. La difficulté augmente donc bien avec la distance pour les gammes implémentées. %La première ANOVA montre donc que les participants ont tendance à viser plus haut que la cible, même si cette dynamique semble s'atténuer avec l'augmentation de la hauteur cible.
-La \cref{subfig_target_height_bouncing_error_significance} montre donc que les participants ont tendance à viser plus haut que la cible, en cohérence avec des résultats précédents \parencite{siegler_passive_2010}, même si cette dynamique semble s'atténuer avec l'augmentation de la hauteur cible.
+\textcolor{orange}{Comme on peut le constater, les moyennes des hauteurs réelles sont différentes de celles indiquées des les consignes expérimentales (\SIlist{1.5;1.75;2.0}{\meter}), car la position verticale d'impact avec la balle n'est pas nulle. %Quoiqu'il en soit, les différences de hauteur engendrées sont bien significatives avec des médianes approximativement inférieures de \SI{0.3}{\meter} dans l'environnement simulé. 
+Cette analyse confirme donc bien que les changements de position verticale des cibles induisent des variations de la distance entre l'impact de la balle et la cible. Les participants n'ont pas compensé les changements de cible.}
 
-\input{latex_figures/chapter_4/fig_target_height_bouncing_error_significance}
+\textcolor{orange}{Maintenant que l'existence de différences significatives de position verticale est bien confirmée, on peut s'intéresser aux effets induits par ces différentes références. On va donc se concentrer sur les moyennes et écarts types des erreurs de rebonds $\epsilon_r$ entre le centre de la balle au moment de l'apex, et le centre de la cible, pour chaque participant. La moyenne informe sur la précision et la faisabilité de la tâche, tandis que l'écart type permet de qualifier la répétabilité.}
 
-L'application de la correction de Bonferroni lors des tests de Students multiples, confirme bien que chacun des trois groupes est significativement différent des deux autres, aussi bien pour les erreurs absolues que non.
+\textcolor{orange}{Une première analyse de variance est conduite sur les moyennes des erreurs de rebonds $\mean{\epsilon_r}$, et une seconde sur les écarts types $\sigma(\epsilon_r)$, avec trois conditions. La position verticale $h_2^*$ ayant été conduite sur trois essais alors que chacune des autres ne l'a été que sur des essais uniques, seul le premier essai de la première expérience est considéré. Même si l'ordre d'exécution des expériences a été randomisé, deux facteurs sont ajoutés pour signifier si les participants ont commencé par la première ou la seconde expérience ($exp_1$), puis si lors de la deuxième ils ont commencé avec la position verticale $h_1^*$ ou $h_3^*$ ($h^1$).}
 
-Il est intéressant de noter que seuls \SI{13}{\percent} des participants ont trouvé que la hauteur la plus faible représentait l'expérience la plus complexe à réaliser pour minimiser l'erreur de rebond, alors que respectivement \SI{38}{\percent} et \SI{5}{\percent} ont ressenti plus de difficulté pour les hauteurs la plus élevée et médiane - les autres n'ont soit pas observé de différence, soit n'ont pas su départager une seule hauteur.
+\textcolor{orange}{Les résultats des deux ANOVA sont récapitulés dans les \cref{tab_anova_avg_bouncing_error_target_height,tab_anova_std_bouncing_error_target_height}. Aucun effet significatif, ni aucune interaction ne sont observés pour $\mean{\epsilon_r}$. Toutefois, un effet significatif de la condition est confirmé pour $\sigma(\epsilon_r)$, sans qu'aucune des interactions ne se révèle significative. Les tests \textit{post-hoc} montrent des différences significatives entre les paires $(h_1,h_2)$ ($p_{bonf} = 0.006$) et $(h_1,h_3)$ ($p_{bonf} < 0.001$), comme on peut l'observer sur la \cref{fig_target_height_significance_post_hoc}, où l'erreur type est utilisée comme intervalle de confiance.}
 
-\subsubsection{Effets temporels de l'ordre des expériences} \label{chap4_sec_res_sub_task_2}
+\begin{table}[h]
+	\centering
+	\caption{Effets intra participants des moyennes $\mean{\epsilon_r}$}
+	\label{tab_anova_avg_bouncing_error_target_height}
+	{
+		\begin{tabular}{lcccccc}
+			\toprule
+			Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta$$^{2}$  \\
+			\cmidrule[0.4pt]{1-7}
+			$h$ & $0.022$ & $2$ & $0.011$ & $2.054$ & $13.8$ & $0.048$  \\
+			$h \times exp_1$ & $0.010$ & $2$ & $0.005$ & $0.967$ & $38.7$ & $0.023$  \\
+			$h \times h^1$ & $0.017$ & $2$ & $0.009$ & $1.611$ & $20.9$ & $0.038$  \\
+			$h \times exp_1 \times h^1$ & $0.007$ & $2$ & $0.004$ & $0.681$ & $51.0$ & $0.016$  \\
+			Résidus & $0.290$ & $54$ & $0.005$ & $$ & $ $ & $$  \\
+			\bottomrule
+			% \addlinespace[1ex]
+			% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+		\end{tabular}
+	}
+\end{table}
 
-Une autre source probable pouvant faire varier les performances des participants vient de l'ordre dans lequel les expériences sont effectuées. Plusieurs phénomènes aux conséquences différentes peuvent jouer sur les performances des participants. On pourra par exemple citer la fatigue entrainée par l'exécution d'expériences successives ou à l'inverse, les phénomènes d'apprentissage, mais aussi le fait que certaines expériences peuvent s'avérer plus complexes que d'autres.
+%\resizebox{\linewidth}{!}
+%{	
+%	\begin{minipage}{.6\linewidth}
+%		\begin{adjustbox}{max width=\linewidth}
+%			\centering
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta$$^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$h$ & $0.049$ & $2$ & $0.024$ & $11.995$ & $< 0.1$ & $0.173$  \\
+%				$h \times exp_1$ & $0.002$ & $2$ & $8.536e-4$ & $0.421$ & $65.9$ & $0.006$  \\
+%				$h \times h^1$ & $0.009$ & $2$ & $0.004$ & $2.197$ & $12.1$ & $0.032$  \\
+%				$h \times exp_1 \times h^1$  & $0.004$ & $2$ & $0.002$ & $0.985$ & $38.0$ & $0.014$  \\
+%				Résidus & $0.109$ & $54$ & $0.002$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%			\captionof{table}{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
+%			\label{tab_anova_std_bouncing_error_target_height}
+%		\end{adjustbox}
+%	\end{minipage}
+%	\hfill
+%	\begin{minipage}{.4\linewidth}
+%		\centering
+%		\input{latex_figures/chapter_4/fig_target_height_significance_post_hoc}
+%	\end{minipage}
+%}
+%\vspace{3mm}
 
-Une analyse de variance a donc été conduite sur l'ensemble des participants en séparant les groupes en fonction de la temporalité d'éxécution des expériences. Lorsqu'un participant a échoué à achever une expérience complète, la ou les expériences complémentaires conduites sont regroupées avec l'expérience incomplète, pour assurer cinq groupes d'expériences.
+\begin{table}[h]
+	\centering
+	{
+		\caption{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
+		\label{tab_anova_std_bouncing_error_target_height}
+		\begin{tabular}{lcccccc}
+			\toprule
+			Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+			\cmidrule[0.4pt]{1-7}
+			$h$ & $0.049$ & $2$ & $0.024$ & $11.995$ & $< 0.1$ & $0.173$  \\
+			$h \times exp_1$ & $0.002$ & $2$ & $8.536e-4$ & $0.421$ & $65.9$ & $0.006$  \\
+			$h \times h^1$ & $0.009$ & $2$ & $0.004$ & $2.197$ & $12.1$ & $0.032$  \\
+			$h \times exp_1 \times h^1$  & $0.004$ & $2$ & $0.002$ & $0.985$ & $38.0$ & $0.014$  \\
+			Résidus & $0.109$ & $54$ & $0.002$ & $$ & $ $ & $$  \\
+			\bottomrule
+			% \addlinespace[1ex]
+			% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+		\end{tabular}
+	}
+\end{table}
 
-Ainsi les \cref{subfig_exp_order_abs_bouncing_error_significance,subfig_exp_order_bouncing_error_significance} montrent les résultats des analyses de variance pour les erreurs absolues ou non, dans les deux cas, il existe des différences significatives parmi au moins un des groupes. Les analyses multiples avec la correction de Bonferroni, montrées dans les \cref{subfig_exp_order_abs_bouncing_error_significance_mult,subfig_exp_order_bouncing_error_significance_mult} indiquent dans le cas des erreurs signées, que trois regroupements se dégagent. Trois regroupements différents sont obtenus pour les erreurs absolues. Pour les erreurs signées, les groupes 2, 4 et 5 ne présentent pas de différences significatives entre eux, et sont significativement plus faibles que les deux autres groupes, avec des moyennes toutes inférieures à \SI{5}{\centi\meter}. Pour les erreurs absolues, ce sont les trois premiers groupes qui ne sont pas significativement différents, avec des erreurs moyennes supérieures à \SI{2}{\centi\meter}.
+\begin{figure}
+	\input{latex_figures/chapter_4/fig_target_height_significance_post_hoc}
+\end{figure}
 
-\input{latex_figures/chapter_4/fig_exp_order_bouncing_error_significance}
+\textcolor{orange}{Comme on peut le voir sur la \cref{fig_target_height_significance_post_hoc}, l'écart type $\sigma(\epsilon_r)$ moyen des participants augmente avec l'altitude, et donc plus la répétabilité de ces derniers est dégradée. De plus, en accord avec des résultats précédents \parencite{siegler_passive_2010}, on observe que les participants jongle en moyenne au dessus de la cible (\SI{5(7)}{\centi\meter}). L'erreur moyenne est toutefois plus de deux fois supérieure à celle constaté par \textcite{siegler_passive_2010}, ce qui peut être expliqué par le diamètre supérieur de la balle simulée, \SI{10}{\centi\meter} ici, contre \SI{4}{\centi\meter} dans leurs travaux, ainsi que d'autres conditions expérimentales plus contraignantes dont on peut citer la manipulation d'un robot, et les positions verticales de référence deux à quatre fois plus élevées.} 
 
-En se rappelant que les sessions expérimentales sont découpées en deux, l'analyse multiple en \cref{subfig_exp_order_bouncing_error_significance_mult} indique qu'à chaque nouvelle session, les participants ont tendance à jongler plus haut que pour les autres sessions. On retrouve l'idée d'un apprentissage ou d'une amélioration des performances sur l'autre analyse multiple en \cref{subfig_exp_order_abs_bouncing_error_significance_mult} qui révèlent des différences significatives pour les deux dernières expériences avec une amélioration des moyennes des erreurs absolues de plus de \SI{2}{\centi\meter}. Les effets de la fatigue ne semblent donc pas avoir d'effet significatif comparativement à l'adaptation et l'apprentissage à l'expérience, alors que \SI{48}{\percent} ont déclaré avoir ressenti une fatigue musculaire, ou due à la concentration. Pour \SI{23}{\percent} des personnes ayant perçu des effets de la fatigue au cours ou à la suite des expériences, ces effets représentaient un effort inhabituel.
+%La \cref{fig_target_height_bouncing_error_significance} dévoile les ANOVA conduites sur les erreurs de rebonds. La première (\cref{subfig_target_height_bouncing_error_significance}) révèle des différences significatives de moyenne pour au moins un des trois groupes. De manière contre-intuitive, les erreurs médianes semblent avoir tendance à diminuer lorsque la hauteur cible est plus élevée. Toutefois, l'analyse complémentaire de variances des erreurs absolues révèle qu'en réalité, ces dernières augmentent de manière significative avec la hauteur. La difficulté augmente donc bien avec la distance pour les gammes implémentées. %La première ANOVA montre donc que les participants ont tendance à viser plus haut que la cible, même si cette dynamique semble s'atténuer avec l'augmentation de la hauteur cible.
+%La \cref{subfig_target_height_bouncing_error_significance} montre donc que les participants ont tendance à viser plus haut que la cible, en cohérence avec des résultats précédents \parencite{siegler_passive_2010}, même si cette dynamique semble s'atténuer avec l'augmentation de la hauteur cible.
+%
+%\input{latex_figures/chapter_4/fig_target_height_bouncing_error_significance}
+%
+%L'application de la correction de Bonferroni lors des tests de Students multiples, confirme bien que chacun des trois groupes est significativement différent des deux autres, aussi bien pour les erreurs absolues que non.
 
-La différence significative plus faible entre les deux derniers groupes entre-eux, peut être induite par un autre facteur. En effet, la cinquième expérience est forcément une expérience 1, alors que la quatrième peut être n'importe laquelle, or on a montré précedemment des effets significatifs de la hauteur sur les erreurs de jonglerie (voir \cref{chap4_sec_res_sub_task_1}).
+Il est intéressant de noter que seuls \SI{13}{\percent} des participants ont trouvé que la position verticale la plus faible représentait l'expérience la plus complexe à réaliser pour minimiser l'erreur de rebond, alors que respectivement \SI{38}{\percent} et \SI{5}{\percent} ont ressenti plus de difficulté pour les hauteurs la plus élevée et médiane - les autres n'ont soit pas observé de différence, soit n'ont pas su en départager une seule. 
 
-\subsubsection{Effets des perturbations} \label{chap4_sec_res_sub_task_3}
+\textcolor{orange}{Il est important de souligner que si les variations de condition de position verticale entrainent des changements significatifs sur la répétabilité, les effets sont assez faibles ($\eta^{2}=0.17$), avec une variation moyenne maximale de \SI{5.5}{\centi\meter} entre les deux altitudes extrêmes.}
 
-Bien que les perturbations aient été introduites pour être aussi peu perceptibles que possible, et minimiser l'influence sur la tâche, il est important de s'intéresser aux effets des cycles consécutifs à des perturbations. En effet, suite aux questions posées aux participants, \SI{55}{\percent} affirment avoir perçu des perturbations dans au moins l'une des expériences, et \SI{15}{\percent} pendant l'ensemble des essais. Une éventuelle dégradation des performances dûe aux perturbations ne peut toutefois pas être écartée, même si la majorité des participants n'a pas ressenti les perturbations pendant au moins l'une des sessions.
+\textcolor{red}{Ajouter sur un paragraphe sur la comparaison des erreurs relativement à la hauteur cible ? L'erreur est peut-être simplement proportionnelle à la hauteur tout autres paramètres identiques.}
 
-L'analyse de variance conduite entre les cycles perturbés ou non a été réalisée en séparant les expériences selon leur ordre pour supprimer ce potentiel facteur de confusion, l'ordre ayant démontré des effets significatifs sur les erreurs de rebonds. La \cref{fig_exp_order_perturbations_bouncing_error_significance} montre les analyses de variance et multiples sur les erreurs $\epsilon_r$ et $\abs{\epsilon_r}$. Les études statistiques sur les erreurs signées ne révèlent pas de différences significatives à l'intérieur des groupes d'expériences. Les intervalles de confiance plus importants des cycles perturbés peuvent s'expliquer par leur quantité très inférieure aux cycles non-perturbés, qui sont \SI{5.5}{} fois plus nombreux. Toutefois, on peut noter que les moyennes et médianes des erreurs $\epsilon_r$ des cycles perturbés sont systématiquement plus importantes. Ce dernier point pourrait indiquer qu'un effet existe bien, mais que la quantité de données recueillies n'est pas suffisante pour le confirmer, car l'effet est faible.
+\subsubsection{Expérience 1 : performances individuelles et apprentissage} \label{chap4_sec_res_sub_task_3}
 
-\input{latex_figures/chapter_4/fig_exp_order_and_perturbations_bouncing_error_significance}
+\textcolor{orange}{Contrairement à la seconde expérience, l'expérience 1 n'a pas de variation entre ses différents essais, les différentes phases perturbées étant réparties sur l'ensemble des tois essais. La même expérience est donc répétée sur deux sessions différentes, ce qui pourrait permettre de révéler un apprentissage de la tâche par une amélioration des performances.}
 
-L'analyse multiple des erreurs absolues $\abs{\epsilon_r}$ en \cref{subfig_exp_order_perturbations_abs_bouncing_error_significance_mult} révèle que pour la troisième expérience, une différence significative existe entre les cycles perturbés et non-perturbés, avec un écart d'environ \SI{2}{\centi\meter} entre leur moyenne respective. Cet écart est à mettre en parallèle de ceux provoqués par les autres facteurs identifiés. Ainsi, même s'il reste légèrement inférieur à ceux constatés pour les différentes hauteurs cibles ($>$\SI{2}{\centi\meter}) ou pour les ordres expérimentaux, cet effet reste du même ordre. L'effet des perturbations semble donc exister, bien qu'il soit plus faible que ceux entrainés par les deux autres facteurs précedemment présentés.
+\textcolor{orange}{Par ailleurs, l'ensemble des participants n'avait pas la même expérience sur le banc, comme présenté en \cref{chap4_sec_exp_sub_prot_1}, \SI{40}{\percent} des participants étaient déjà familier avec le banc expérimental, et parmi les autres \SI{50}{\percent} n'avaient jamais manipulé de robots articulés. Ces éléments pourraient laisser penser à des différences de performance individuelle non négligeable entre participants.}
 
-\subsubsection{Performances individuelles ou expertise} \label{chap4_sec_res_sub_task_4}
+\textcolor{orange}{Pour qualifier les performances des participants, deux indicateurs sont calculés à partir des erreurs absolues de rebonds $\abs{\epsilon_r}$ qui permettent de qualifier : %
+\begin{enumerate*}
+	\item la répétabilité, avec l'intervalle interquartile, et
+	\item la précision, avec la médiane.
+\end{enumerate*}
+Après observation des données, il est supposé que trois niveaux de performance ou d'expertise $e_i$ émergent, toutefois, une analyse plus complète serait nécessaire pour juger du nombre de groupement qualifiant mieux ce critère.}
 
-Le dernier facteur identifié pouvant influencer les performances des utilisateurs provient des participants eux-mêmes. Pour qualifier la qualité d'une jonglerie, deux indicateurs sont définis, la répétabilité, et la précision. La répétabilité est définie comme l'intervalle interquartile des erreurs de jonglerie, et la précision comme la médiane des erreurs absolues. 
-
-En supposant qu'il existe trois niveaux d'expertise pour les participants, qu'on définit comme novice, intermédiaire et avancé, les groupes sont définis en définissant un problème d'optimisation combinatoire des k-moyennes. Les groupes ainsi identifiés en fonction des critères de précision et de répétabilité sont ensuites comparés à l'aide d'analyse de variance pour vérifier si ces groupes génèrent des performances significativement différentes. L'un des participants ayant eu des niveaux de qualification largement en deça des autres, il a été écarté pour le partitionnement des données, afin d'éviter d'obtenir un groupe ne contenant qu'une seule personne. Il a ensuite été regroupé avec les novices.
+\textcolor{orange}{Les groupes novice $e_1$, intermédaires $e_2$ et avancés $e_3$ sont définis grâce à un problème d'optimisation combinatoire des k-moyennes, comme on peut le voir pour les deux indicateurs en \cref{fig_kmeans_expertise}.} L'un des participants ayant eu des niveaux de qualification largement en deça des autres, il a été écarté pour le partitionnement des données, afin d'éviter d'obtenir un groupement ne contenant qu'une seule personne. Il a ensuite été classé avec les novices.
 
 \input{latex_figures/chapter_4/fig_kmeans_expertise}
 
-La \cref{fig_kmeans_expertise} montre la répartition des groupes en fonction des deux critères. Celui de répétabilité place respectivement \SIlist{5;13;13}{} pour les groupes avancés $e_3$, intermédiaires $e_2$ et novices $e_1$ contre respectivement \SIlist{3;14;14}{} pour le critère de précision. Le chevauchement entre les deux critères n'est donc pas parfait, toutefois seuls trois participants ont vu leur qualification retrogradée entre les critères de répétabilité et de précision, donc pour plus de \SI{90}{\percent}, ces critères définissent les mêmes niveaux d'expertise. Le critère de répétabilité fournissant des regroupements plus équilibrés, c'est ce dernier qui est conservé.
+La critère de de répétabilité place respectivement \SIlist{5;13;13}{} personnes pour les groupes $e_3$, $e_2$ et $e_1$ contre respectivement \SIlist{3;14;14}{} pour le critère de précision. Le chevauchement entre les deux critères n'est donc pas parfait, toutefois seuls trois participants ont vu leur qualification retrogradée entre les critères de répétabilité et de précision, donc pour plus de \SI{90}{\percent}, ces critères définissent les mêmes niveaux de performances. Le critère de répétabilité fournissant des regroupements plus équilibrés, c'est ce dernier qui est conservé.
 
-Afin de savoir si les différences entre les groupes définis sont significatives, une ANOVA à trois facteurs est réalisée, en prenant en compte l'ordre expérimental $n_i$ , la hauteur cible $h_i^*$ ainsi que le niveau d'expertise ou qualification $e_i$. L'analyse ayant cette fois plus d'un critère, il faut aussi se pencher sur les interactions avant de pouvoir interpréter les résultats des facteurs fixes. Les \cref{tab_anova_3_factors_sign,tab_anova_3_factors_abs} dévoilent ainsi que les interactions entre les trois facteurs sont toutes significatives, aussi bien pour les erreurs signées qu'absolues. Les comparaisons multiples pour chaque interaction sont montrées en \cref{fig_anova_3_factors_mult} pour $\epsilon_r$ et en \cref{fig_anova_abs_3_factors_mult} pour $\abs{\epsilon_r}$.
+\textcolor{orange}{Ainsi, il est intéressant de noter que parmi les utilisateurs qualifiés d'avancé, 4 sur 5 avaient déjà eu au moins une utilisation antérieure du banc expérimental, notamment lors de sessions préliminaires, et le seul n'ayant pas déjà manipulé ce banc expérimental avait déjà eu des interactions avec des robots. Il est par ailleurs intéressessant de remarquer que parmi les 13 novices, seuls 2 avaient déjà été familiarisés avec la manipulation (c'est à dire \SI{15}{\percent}, contre \SI{40}{\percent} sur l'ensemble de l'échantillon), et 5 avaient déjà manipulé un autre robot (c'est à dire \SI{38}{\percent}, contre \SI{58}{\percent} sur l'ensemble de l'échantillon). Ce qui revient aussi à dire que plus de \SI{62}{\percent} des personnes n'ayant jamais manipulées un robot se sont retouvées dans le groupe $e_1$, et le reste dans le groupe $e_2$.}
+
+\textcolor{orange}{Deux ANOVA à trois facteurs sont donc conduites pour $\mean{\epsilon_r}$ et $\sigma(\epsilon_r)$, en considérant d'une part l'ordre d'exécution des essais de l'expérience 1 $n_i$ , les trois groupes de performance $e_i$ d'autre part et enfin en regardant par quelle expérience avaient commencés les participants $s_i$ ($3 essais \times 3 niveaux \times 2 sessions$).}
+
+\textcolor{orange}{Le \cref{tab_anova_avg_bouncing_error_trials_and_expertises} présente les résultats de l'ANOVA sur les moyennes des erreurs de rebond pour les effets intra participants. Aucun effet significatif, ni aucune interaction ne sont observés. De plus, aucun effet signficatif, ni aucune interaction ne sont non plus observés pour les effets entre participants $F(2,25) = 1.4$, $p=0.266$ pour les niveaux et $F(1,25) = 0.2$, $p=0.684$ pour l'ordre d'exécution des expériences (et donc les sessions).}
+
+\begin{table}[h]
+	\centering
+	\caption{Effets intra participants des moyennes $\mean{\epsilon_r}$}
+	\label{tab_anova_avg_bouncing_error_trials_and_expertises}
+	{
+		\begin{tabular}{lcccccc}
+			\toprule
+			Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+			\cmidrule[0.4pt]{1-7}
+			$n_i$ & $0.003$ & $2$ & $0.002$ & $1.052$ & $35.7$ & $0.010$  \\
+			$n_i \times e_i$ & $0.004$ & $4$ & $9.695e-4$ & $0.658$ & $62.4$ & $0.013$  \\
+			$n_i \times s_i$ & $7.607e-4$ & $2$ & $3.803e-4$ & $0.258$ & $77.3$ & $0.003$  \\
+			$n_i \times e_i \times s_i$ & $0.002$ & $4$ & $5.843e-4$ & $0.397$ & $81.0$ & $0.008$  \\
+			Résidus & $0.074$ & $50$ & $0.001$ & $$ & $ $ & $$  \\
+			\bottomrule
+			% \addlinespace[1ex]
+			% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+		\end{tabular}
+	}
+\end{table}
+
+\textcolor{orange}{Le \cref{tab_anova_std_bouncing_error_trials_and_expertises} présente les résultats de l'ANOVA sur les moyennes des erreurs de rebond pour les effets intra participants. Un effet significatif est relevé ($^p<0.001$) pour les essais $n_i$, ainsi qu'une interaction significative ($^p=0.04$) entre les essais $n_i$ et le niveau de qualification des participants $e_i$. De plus, un effet significatif des performances est observé pour les critères entre les participants $F(2,25) = 18.1$, $p < 0.001$, $\eta^2=0.37$, l'ordre d'exécution n'est toutefois pas un effet significatif $F(1,25) = 1.5$, $p < 0.227$, $\eta^2=0.016$, et l'interaction entre ces deux effets n'est pas non plus significatif $F(2,25) = 0.4$, $p = 0.671$, $\eta^2=0.008$.}
+
+\begin{table}[h]
+	\centering
+	\caption{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
+	\label{tab_anova_std_bouncing_error_trials_and_expertises}
+	{
+		\begin{tabular}{lcccccc}
+			\toprule
+		Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+			\cmidrule[0.4pt]{1-7}
+			$n_i$ & $0.018$ & $2$ & $0.009$ & $8.745$ & $<0.1$ & $0.076$  \\
+			$n_i \times e_i$ & $0.011$ & $4$ & $0.003$ & $2.722$ & $4.0$ & $0.048$  \\
+			$n_i \times s_i$ & $6.786e-5$ & $2$ & $3.393e-5$ & $0.032$ & $96.8$ & $2.836e-4$  \\
+			$n_i \times e_i \times s_i$ & $0.002$ & $4$ & $4.905e-4$ & $0.470$ & $75.8$ & $0.008$  \\
+			Résidus & $0.052$ & $50$ & $0.001$ & $$ & $ $ & $$  \\
+			\bottomrule
+			% \addlinespace[1ex]
+			% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+		\end{tabular}
+	}
+\end{table}
+
+\input{latex_figures/chapter_4/fig_performances_significance_post_hoc}
+
+\textcolor{orange}{Paragraphe descriptif de l'analyse post hoc + courte explication des résultats.}
+
+Le critère d'expertise choisi semble donc pertinent, puisqu'il permet de démarquer des différences significatives pour les erreurs de rebonds entre les trois niveaux définis. Il reste à savoir si ces différences au niveau de la tâche se discernent aussi pour les propriétés biomécaniques identifiées.
+
+\textcolor{red}{Est-il pertinent de préciser qu'à l'intérieur des essais, les variations observées sur des tranches de 1 minute de sont pas significatives ??}
+
+%\subsubsection{Effets temporels de l'ordre des expériences} 
+
+%Une autre source probable pouvant faire varier les performances des participants vient de l'ordre dans lequel les expériences sont effectuées. Plusieurs phénomènes aux conséquences différentes peuvent jouer sur les performances des participants. On pourra par exemple citer la fatigue entrainée par l'exécution d'expériences successives ou à l'inverse, les phénomènes d'apprentissage, mais aussi le fait que certaines expériences peuvent s'avérer plus complexes que d'autres.
+%
+%Une analyse de variance a donc été conduite sur l'ensemble des participants en séparant les groupes en fonction de la temporalité d'éxécution des expériences. Lorsqu'un participant a échoué à achever une expérience complète, la ou les expériences complémentaires conduites sont regroupées avec l'expérience incomplète, pour assurer cinq groupes d'expériences.
+
+%Ainsi les \cref{subfig_exp_order_abs_bouncing_error_significance,subfig_exp_order_bouncing_error_significance} montrent les résultats des analyses de variance pour les erreurs absolues ou non, dans les deux cas, il existe des différences significatives parmi au moins un des groupes. Les analyses multiples avec la correction de Bonferroni, montrées dans les \cref{subfig_exp_order_abs_bouncing_error_significance_mult,subfig_exp_order_bouncing_error_significance_mult} indiquent dans le cas des erreurs signées, que trois regroupements se dégagent. Trois regroupements différents sont obtenus pour les erreurs absolues. Pour les erreurs signées, les groupes 2, 4 et 5 ne présentent pas de différences significatives entre eux, et sont significativement plus faibles que les deux autres groupes, avec des moyennes toutes inférieures à \SI{5}{\centi\meter}. Pour les erreurs absolues, ce sont les trois premiers groupes qui ne sont pas significativement différents, avec des erreurs moyennes supérieures à \SI{2}{\centi\meter}.
+%
+%\input{latex_figures/chapter_4/fig_exp_order_bouncing_error_significance}
+%
+%En se rappelant que les sessions expérimentales sont découpées en deux, l'analyse multiple en \cref{subfig_exp_order_bouncing_error_significance_mult} indique qu'à chaque nouvelle session, les participants ont tendance à jongler plus haut que pour les autres sessions. On retrouve l'idée d'un apprentissage ou d'une amélioration des performances sur l'autre analyse multiple en \cref{subfig_exp_order_abs_bouncing_error_significance_mult} qui révèlent des différences significatives pour les deux dernières expériences avec une amélioration des moyennes des erreurs absolues de plus de \SI{2}{\centi\meter}. Les effets de la fatigue ne semblent donc pas avoir d'effet significatif comparativement à l'adaptation et l'apprentissage à l'expérience, alors que \SI{48}{\percent} ont déclaré avoir ressenti une fatigue musculaire, ou due à la concentration. Pour \SI{23}{\percent} des personnes ayant perçu des effets de la fatigue au cours ou à la suite des expériences, ces effets représentaient un effort inhabituel.
+%
+%La différence significative plus faible entre les deux derniers groupes entre-eux, peut être induite par un autre facteur. En effet, la cinquième expérience est forcément une expérience 1, alors que la quatrième peut être n'importe laquelle, or on a montré précedemment des effets significatifs de la hauteur sur les erreurs de jonglerie (voir \cref{chap4_sec_res_sub_task_1}).
+
+%\subsubsection{Performances individuelles ou expertise} \label{chap4_sec_res_sub_task_4}
+%
+%Le dernier facteur identifié pouvant influencer les performances des utilisateurs provient des participants eux-mêmes. Pour qualifier la qualité d'une jonglerie, deux indicateurs sont définis, la répétabilité, et la précision. La répétabilité est définie comme l'intervalle interquartile des erreurs de jonglerie, et la précision comme la médiane des erreurs absolues. 
+%
+%En supposant qu'il existe trois niveaux d'expertise pour les participants, qu'on définit comme novice, intermédiaire et avancé, les groupes sont définis en définissant un problème d'optimisation combinatoire des k-moyennes. Les groupes ainsi identifiés en fonction des critères de précision et de répétabilité sont ensuites comparés à l'aide d'analyse de variance pour vérifier si ces groupes génèrent des performances significativement différentes. L'un des participants ayant eu des niveaux de qualification largement en deça des autres, il a été écarté pour le partitionnement des données, afin d'éviter d'obtenir un groupe ne contenant qu'une seule personne. Il a ensuite été regroupé avec les novices.
+%
+%\input{latex_figures/chapter_4/fig_kmeans_expertise}
+%
+%La \cref{fig_kmeans_expertise} montre la répartition des groupes en fonction des deux critères. Celui de répétabilité place respectivement \SIlist{5;13;13}{} pour les groupes avancés $e_3$, intermédiaires $e_2$ et novices $e_1$ contre respectivement \SIlist{3;14;14}{} pour le critère de précision. Le chevauchement entre les deux critères n'est donc pas parfait, toutefois seuls trois participants ont vu leur qualification retrogradée entre les critères de répétabilité et de précision, donc pour plus de \SI{90}{\percent}, ces critères définissent les mêmes niveaux d'expertise. Le critère de répétabilité fournissant des regroupements plus équilibrés, c'est ce dernier qui est conservé.
+
+%Afin de savoir si les différences entre les groupes définis sont significatives, une ANOVA à trois facteurs est réalisée, en prenant en compte l'ordre expérimental $n_i$ , la hauteur cible $h_i^*$ ainsi que le niveau d'expertise ou qualification $e_i$. L'analyse ayant cette fois plus d'un critère, il faut aussi se pencher sur les interactions avant de pouvoir interpréter les résultats des facteurs fixes. Les \cref{tab_anova_3_factors_sign,tab_anova_3_factors_abs} dévoilent ainsi que les interactions entre les trois facteurs sont toutes significatives, aussi bien pour les erreurs signées qu'absolues. Les comparaisons multiples pour chaque interaction sont montrées en \cref{fig_anova_3_factors_mult} pour $\epsilon_r$ et en \cref{fig_anova_abs_3_factors_mult} pour $\abs{\epsilon_r}$.
 %
 %  Source   Sum Sq.   d.f.    Mean Sq.     F      Prob>F
 %-------------------------------------------------------
@@ -272,71 +459,69 @@ Afin de savoir si les différences entre les groupes définis sont significative
 %Error    2707.28   43085   0.06284                   
 %Total    2756.98   43113                             
 
-\begin{table}
-	\centering
-	\begin{tabular}{ l | c  c  c  c  c } 
-		Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
-		$n_i$ & 3.98 & 4 & 0.99412 & 15.82 & 0\\
-		$h_i^*$ & 0.29 & 2 & 0.14669 & 2.33 & 9.69\\
-		$e_i$ & 14.95 & 2 & 7.47701 & 118.99 & 0\\
-		$n_i\times h_i^*$ & 13.82 & 8 & 1.72717 & 27.49 & 0\\
-		$n_i\times e_i$ & 2.3 & 8 & 0.28763 & 4.58 & 0\\
-		$h_i^*\times e_i$ & 1.1 & 4 & 0.27587 & 4.39 & 0.15\\
-		Erreur & 2707.28 & 43085 & 0.06284 & & \\
-		Total & 2756.98 & 43113 & & & 
-		%\hline
-	\end{tabular} % expertise factor
-	\caption{ANOVA à 3 facteurs, $n$, l'ordre expérimental, $h$ la hauteur cible et $e$ l'expertise pour $\epsilon_r$.}
-	\label{tab_anova_3_factors_sign}
-\end{table}                            
-
-%  Source   Sum Sq.   d.f.    Mean Sq.     F      Prob>F
-%-------------------------------------------------------
-%n           3.25       4    0.8124     28.85    0    
-%th          3.96       2    1.9786     70.26    0    
-%exp        25.33       2   12.664     449.72    0    
-%n*th        1.85       8    0.2308      8.2     0    
-%n*exp       2.12       8    0.2648      9.4     0    
-%th*exp      0.3        4    0.0754      2.68    0.03 
-%Error    1213.27   43085    0.0282                   
-%Total    1268.43   43113                             
-
-\begin{table}
-	\centering
-	\begin{tabular}{ l | c  c  c  c  c } 
-		Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
-		$n_i$ & 3.25 & 4 & 0.8124 & 28.85 & 0\\
-		$h_i^*$ & 3.96 & 2 & 1.9786 & 70.26 & 0\\
-		$e_i$ & 25.33 & 2 & 12.664 & 449.72 & 0\\
-		$n_i\times h_i^*$ & 1.85 & 8 & 0.2308 & 8.2 & 0\\
-		$n_i\times e_i$ & 2.12 & 8 & 0.2648 & 9.4 & 0\\
-		$h_i^*\times e_i$ & 0.3 & 4 & 0.0754 & 2.68 & 3\\
-		Erreur & 1213.27 & 43085 & 0.0282 & & \\
-		Total & 1268.43 & 43113 & & & 
-		%\hline
-	\end{tabular} % expertise factor
-	\caption{ANOVA à 3 facteurs, pour $\abs{\epsilon_r}$.}
-	\label{tab_anova_3_factors_abs}
-\end{table}   
-
-%\tikzexternaldisable
-\input{latex_figures/chapter_4/fig_anovan_3_factors}
-%\tikzexternalenable
-\input{latex_figures/chapter_4/fig_anovan_3_factors_abs}
+%\begin{table}
+%	\centering
+%	\begin{tabular}{ l | c  c  c  c  c } 
+%		Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+%		$n_i$ & 3.98 & 4 & 0.99412 & 15.82 & 0\\
+%		$h_i^*$ & 0.29 & 2 & 0.14669 & 2.33 & 9.69\\
+%		$e_i$ & 14.95 & 2 & 7.47701 & 118.99 & 0\\
+%		$n_i\times h_i^*$ & 13.82 & 8 & 1.72717 & 27.49 & 0\\
+%		$n_i\times e_i$ & 2.3 & 8 & 0.28763 & 4.58 & 0\\
+%		$h_i^*\times e_i$ & 1.1 & 4 & 0.27587 & 4.39 & 0.15\\
+%		Erreur & 2707.28 & 43085 & 0.06284 & & \\
+%		Total & 2756.98 & 43113 & & & 
+%		%\hline
+%	\end{tabular} % expertise factor
+%	\caption{ANOVA à 3 facteurs, $n$, l'ordre expérimental, $h$ la hauteur cible et $e$ l'expertise pour $\epsilon_r$.}
+%	\label{tab_anova_3_factors_sign}
+%\end{table}                            
+%
+%%  Source   Sum Sq.   d.f.    Mean Sq.     F      Prob>F
+%%-------------------------------------------------------
+%%n           3.25       4    0.8124     28.85    0    
+%%th          3.96       2    1.9786     70.26    0    
+%%exp        25.33       2   12.664     449.72    0    
+%%n*th        1.85       8    0.2308      8.2     0    
+%%n*exp       2.12       8    0.2648      9.4     0    
+%%th*exp      0.3        4    0.0754      2.68    0.03 
+%%Error    1213.27   43085    0.0282                   
+%%Total    1268.43   43113                             
+%
+%\begin{table}
+%	\centering
+%	\begin{tabular}{ l | c  c  c  c  c } 
+%		Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+%		$n_i$ & 3.25 & 4 & 0.8124 & 28.85 & 0\\
+%		$h_i^*$ & 3.96 & 2 & 1.9786 & 70.26 & 0\\
+%		$e_i$ & 25.33 & 2 & 12.664 & 449.72 & 0\\
+%		$n_i\times h_i^*$ & 1.85 & 8 & 0.2308 & 8.2 & 0\\
+%		$n_i\times e_i$ & 2.12 & 8 & 0.2648 & 9.4 & 0\\
+%		$h_i^*\times e_i$ & 0.3 & 4 & 0.0754 & 2.68 & 3\\
+%		Erreur & 1213.27 & 43085 & 0.0282 & & \\
+%		Total & 1268.43 & 43113 & & & 
+%		%\hline
+%	\end{tabular} % expertise factor
+%	\caption{ANOVA à 3 facteurs, pour $\abs{\epsilon_r}$.}
+%	\label{tab_anova_3_factors_abs}
+%\end{table}   
+%
+%%\tikzexternaldisable
+%\input{latex_figures/chapter_4/fig_anovan_3_factors}
+%%\tikzexternalenable
+%\input{latex_figures/chapter_4/fig_anovan_3_factors_abs}
 
 %\textcolor{red}{dans le couplage hauteur cible et numéro d'expérience, la tendance pour la troisième expérience est inversée par rapport aux autres... Comment interpréter cette information ??}
 
 %\textcolor{red}{dans le couplage hauteur cible et expertise, seul le groupe (h3,e2) est significativement différent d'autres groupe dans e1 et e2. Sinon aucune différence significative n'est observée entre les deux niveaux d'expertise, et seul le groupe novice est significativement différent... Comment interpréter cette information ??}
 
-Aucune différence significative n'est observée pour les erreurs $\epsilon_r$ entre les groupes de niveau intermédaire et avancé. Les seuls différences significatives détectées proviennent du groupe des novices par rapport aux deux autres groupes, pour lequel le seul critère non significatif semble l'ordre expérimental pour la cinquième expérience. Cette constatation pourrait ammener à penser que les participants novices ont progressé et se sont améliorés, toutefois, le groupe formé par le couple de facteur $(e_1,n_5)$ ne montre une différence de moyenne significative que par rapport à la troisième expérience, qui a aussi l'erreur moyenne la plus élevée pour les deux autres niveaux de qualification.
-
-Si l'on s'intéresse aux erreurs absolues $\abs{\epsilon_r}$, les résultats semblent plus clairs. Toutes les interactions et facteurs primaires sont significatifs selon les résultats de l'ANOVA à 3 facteurs montrée dans le \cref{tab_anova_3_factors_abs}. La première interaction entre la hauteur cible et l'ordre expérimental, en \cref{subfig_anovan_abs_target_height_exp_order}, révèle que pour chaque hauteur, il existe des différences significatives à la baisse des erreurs absolues de rebonds entre les deux premiers essais et le quatrième et cinquième et en corroboration de la \cref{fig_target_height_bouncing_error_significance}, les erreurs augmentent aussi significativement avec la hauteur cible (sauf pour les couples $(n_2,h_2^*)$ et $(n_4,h_3^*)$, où les écarts ne sont pas significatifs). 
-
-La deuxième interaction entre $h_i^*$ et $e_i$ montre des différences significatives des erreurs $\abs{\epsilon_r}$ qui diminuent avec le niveau d'expertise pour une hauteur cible donnée. De plus, à part pour les utilisateurs avancés $e_3$, les erreurs $\abs{\epsilon_r}$ augmentent significativement avec les hauteurs entre chaque niveau de qualification. On pourra tout de même remarquer que pour $e_3$ il existe tout de même des différences significatives entre $h_1^*$ et les deux autres hauteurs cibles, et que les moyennes des erreurs augmentent avec la hauteur.
-
-La dernière interaction entre $n_i$ et $e_i$ montre des différences significatives entre les niveaux d'expertise pour des index d'expérience équivalents, sauf pour le groupe $(n_5,e_1)$ qui n'est pas significativement différent du groupe $(n_5,e_2)$. Il est intriguant de noter que la troisième expérience (première de la deuxième session expérimentale), a la moyenne $\abs{\epsilon_r}$ la plus élevée pour tous les groupes, sauf les utilisateurs avancés $e_3$. Les erreurs semblent diminuer progressivement lors des itérations expérimentales, toutefois, la cinquième itération n'est pas significativement différentes des autres pour les utilisateurs intermédaires $e_2$ et avancés $e_3$.
-
-Le critère d'expertise choisi semble donc pertinent, puisqu'il permet de démarquer des différences significatives pour les erreurs de rebonds entre les trois niveaux définis. Il reste à savoir si ces différences au niveau de la tâche se discernent aussi pour les propriétés biomécaniques identifiées.
+%Aucune différence significative n'est observée pour les erreurs $\epsilon_r$ entre les groupes de niveau intermédaire et avancé. Les seuls différences significatives détectées proviennent du groupe des novices par rapport aux deux autres groupes, pour lequel le seul critère non significatif semble l'ordre expérimental pour la cinquième expérience. Cette constatation pourrait ammener à penser que les participants novices ont progressé et se sont améliorés, toutefois, le groupe formé par le couple de facteur $(e_1,n_5)$ ne montre une différence de moyenne significative que par rapport à la troisième expérience, qui a aussi l'erreur moyenne la plus élevée pour les deux autres niveaux de qualification.
+%
+%Si l'on s'intéresse aux erreurs absolues $\abs{\epsilon_r}$, les résultats semblent plus clairs. Toutes les interactions et facteurs primaires sont significatifs selon les résultats de l'ANOVA à 3 facteurs montrée dans le \cref{tab_anova_3_factors_abs}. La première interaction entre la hauteur cible et l'ordre expérimental, en \cref{subfig_anovan_abs_target_height_exp_order}, révèle que pour chaque hauteur, il existe des différences significatives à la baisse des erreurs absolues de rebonds entre les deux premiers essais et le quatrième et cinquième et en corroboration de la \cref{fig_target_height_bouncing_error_significance}, les erreurs augmentent aussi significativement avec la hauteur cible (sauf pour les couples $(n_2,h_2^*)$ et $(n_4,h_3^*)$, où les écarts ne sont pas significatifs). 
+%
+%La deuxième interaction entre $h_i^*$ et $e_i$ montre des différences significatives des erreurs $\abs{\epsilon_r}$ qui diminuent avec le niveau d'expertise pour une hauteur cible donnée. De plus, à part pour les utilisateurs avancés $e_3$, les erreurs $\abs{\epsilon_r}$ augmentent significativement avec les hauteurs entre chaque niveau de qualification. On pourra tout de même remarquer que pour $e_3$ il existe tout de même des différences significatives entre $h_1^*$ et les deux autres hauteurs cibles, et que les moyennes des erreurs augmentent avec la hauteur.
+%
+%La dernière interaction entre $n_i$ et $e_i$ montre des différences significatives entre les niveaux d'expertise pour des index d'expérience équivalents, sauf pour le groupe $(n_5,e_1)$ qui n'est pas significativement différent du groupe $(n_5,e_2)$. Il est intriguant de noter que la troisième expérience (première de la deuxième session expérimentale), a la moyenne $\abs{\epsilon_r}$ la plus élevée pour tous les groupes, sauf les utilisateurs avancés $e_3$. Les erreurs semblent diminuer progressivement lors des itérations expérimentales, toutefois, la cinquième itération n'est pas significativement différentes des autres pour les utilisateurs intermédaires $e_2$ et avancés $e_3$.
 
 \subsection{Résultats des identifications d'impédance} \label{chap4_sec_res_sub_impedance}
 
