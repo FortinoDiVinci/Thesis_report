@@ -31,8 +31,8 @@
 		\comp[]{ce1}{(0, 0)};
 		
 		\node[block, right of = ce1] (h11) {$h_{11}(t)$};		
-		\node[block, below of = h11, node distance = 1.5cm] (h12) {$h_{12}(t)$};	
-		\node[block, below of = h12, node distance = 1.5cm] (h21) {$h_{21}(t)$};	
+		\node[block, below of = h11, node distance = 1.5cm] (h12) {$h_{21}(t)$};	
+		\node[block, below of = h12, node distance = 1.5cm] (h21) {$h_{12}(t)$};	
 		\node[block, below of = h21, node distance = 1.5cm] (h22) {$h_{22}(t)$};
 		
 		\comp[]{ce2}{($(h22) + (-2,0)$)};
@@ -62,14 +62,14 @@
 		\draw[-{Latex[length=3mm]}] (h21.east) -| (cs2.north);
 		
 		\draw[-{Latex[length=3mm]}] (cs1.east) --+ (1,0)
-			node[align = center, below, midway] {$\vect{x}$};
+			node[align = center, below, midway] {$\vect{y}_1$};
 		\draw[-{Latex[length=3mm]}] (cs2.east) --+ (1,0)
-			node[align = center, above, midway] {$\vect{y}$};
+			node[align = center, above, midway] {$\vect{y}_2$};
 			
 		\draw[{Latex[length=3mm]}-] (ce1.west) --+ (-3,0)
-			node[align = center, above] {$\vect{f}_x$};
+			node[align = center, above] {$\vect{x}_1$};
 		\draw[{Latex[length=3mm]}-] (ce2.west) --+ (-3,0)
-			node[align = center, below] {$\vect{f}_y$};	
+			node[align = center, below] {$\vect{x}_2$};	
 			
 		\draw[-{Latex[length=3mm]}] ($(ce1.west) + (-2.5,0)$) |- (c2.west);
 		\draw[-{Latex[length=3mm]}] ($(ce2.west) + (-2.6,0)$) |- (c1.west);
@@ -80,6 +80,6 @@
 			node[left] {$n$};	
 		
 	\end{tikzpicture}
-	\caption{Modèle à plusieurs entrées et sorties proposé par \textcite{perreault_multiple-input_1999}.}
+	\caption{Modèle à plusieurs entrées et sorties proposé par \textcite{perreault_multiple-input_1999}, avec $h_{ij}$ la fonction de transfert liant l'entrée $i$ à la sortie $j$.}
 	\label{fig_mimo_model_perrault} % Label 
 \end{figure}
