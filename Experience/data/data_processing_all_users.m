@@ -10,8 +10,7 @@ addpath('../../data/ball_bouncing_experiment/experimental_bench_pert/utils/')
 %% final experiment
 %load('SB2021_new_data_impedance_v2.mat')
 load('users_fz/experiments_list.mat') % for the link between the experiments and users
-% FILE_NAME_BASE = "exp_june_2021_9ms_delay_";
-% NB_FILES = 6;
+SPLINE_INTERP_WINDOW = 350;% 215; % 
 
 FORCE_FILE_NAME = 'exp_delta_fz_2021_';
 FORCE_FOLDER_NAME = "users_fz/";
@@ -27,8 +26,14 @@ BALLB_FOLDER_NAME = "users_bb/";
 %     out = load(raw_data_file_list(nb_raw_file), 'exp_parameters');
 %     exp_parameters = [exp_parameters; out.exp_parameters];
 % end
-
-load("users_impedance.mat");
+if SPLINE_INTERP_WINDOW == 350
+    load("users_impedance.mat"); % 350 spline interp window
+elseif SPLINE_INTERP_WINDOW == 215
+    load("users_impedance_p215.mat"); % 215 spline interp window
+    POSIT_FOLDER_NAME = "users_pz_215/";
+else
+    error('Uncomputed spline interpolation window')
+end
 
 users_list = unique(string(vertcat(exp_parameters.user)));
 nb_users = length(users_list);
@@ -147,12 +152,33 @@ cycles = cycleNormalisation(cycles, dt);
 [center_ratio, count_ratio, idx_ratio, cycles] = sortPerturbations(cycles, 3, DISP);
 cycles = regroupCycles(cycles);
 cycles = clearOutliers(cycles);
-cycles = regroupCompleteExperiment(cycles);
+cycles = regroupCompleteExperiment(cycles); % for the case when users needed 
+% more than a single trial to achieve one experiment (regroup those
+% multiple trials)
+
+% save("cycles_data_all_users_p215.mat", "cycles", '-v7.3')
 
 % bouncing error variations
+%%
+%load('cycles_data_all_users_p215')
+load('cycles_data_all_users')
 plotBouncingError(cycles, 5); % 5 experiments
+expertise_list = [3,2,1,3,1,2,1,2,1,2,1,2,1,2,3,2,2,1,2,1,3,2,3,1,2,2,2,1,1,1,1];
+% phaseDiagram(cycles, expertise_list);
+% imp_results = plotImpedanceStats(cycles, expertise_list); % 5 experiments
+path = "impedance_results/";
+% saveImpedanceStats(cycles, expertise_list, path);
+% plotImpedanceStatsKrustalWallis(cycles, expertise_list);
+impedanceStats(cycles, expertise_list);
+impedanceStats2(cycles, expertise_list);
+names = ["e3","e2","e1","e3","e1","e2","e1","e2","e1","e2","e1","e2","e1",...
+    "e2","e3","e2","e2","e1","e2","e1","e3","e2","e3","e1","e2","e2","e2","e1","e1","e1","e1"];
+disp_temporal_norm_multp_cond(cycles, names')
 
 return
+
+% cycles_000_350ms = cycles{1};
+% test = [cycles_000.K] - [cycles_000_350ms.K];
 
 %[center_ratio, count_ratio, idx_ratio, cycles] = sortPerturbationsBothExp(cycles, DISP);
 
