@@ -1,7 +1,7 @@
 function impedanceStats2(cycles, exp_list)
 
 users = [];
-folder = "ball_bouncing_statistics/";
+folder = "impedance_statistics/";
 nb_trials = 5;
 
 for user_i = 1:length(cycles)    
@@ -83,6 +83,37 @@ for i = 1:size(R2_th_it, 2)
 end
 tab = table(users', R2_th_med, R2_th_notch);
 % write(tab,folder+"R2_per_target_height.csv",'Delimiter',',');
+%%%
+% same work but with R2 sorting (>0.5)
+for user_i = 1:size(K_th_it, 1)
+    for i = 1:2
+        K_th_it_r2{user_i, i} = K_th_it{user_i, i}(R2_th_it{user_i, i} > 0.5);
+        B_th_it_r2{user_i, i} = B_th_it{user_i, i}(R2_th_it{user_i, i} > 0.5);
+        M_th_it_r2{user_i, i} = M_th_it{user_i, i}(R2_th_it{user_i, i} > 0.5);
+        R2_th_it_r2{user_i, i} = R2_th_it{user_i, i}(R2_th_it{user_i, i} > 0.5);
+    end
+end
+%
+for i = 1:size(K_th_it_r2, 2)
+    % K
+    q = cell2mat(cellfun(@(x) quantile(x,3), K_th_it_r2(:,i), 'UniformOutput', 0));
+    K_th_r2_med(:,i) = q(:,2);
+    K_th_r2_notch(:,i) = 1.57*(q(:,3)-q(:,1))/sqrt(31);
+    % K
+    q = cell2mat(cellfun(@(x) quantile(x,3), B_th_it_r2(:,i), 'UniformOutput', 0));
+    B_th_r2_med(:,i) = q(:,2);
+    B_th_r2_notch(:,i) = 1.57*(q(:,3)-q(:,1))/sqrt(31);
+    % K
+    q = cell2mat(cellfun(@(x) quantile(x,3), M_th_it_r2(:,i), 'UniformOutput', 0));
+    M_th_r2_med(:,i) = q(:,2);
+    M_th_r2_notch(:,i) = 1.57*(q(:,3)-q(:,1))/sqrt(31);
+    % K
+    q = cell2mat(cellfun(@(x) quantile(x,3), R2_th_it_r2(:,i), 'UniformOutput', 0));
+    R2_th_r2_med(:,i) = q(:,2);
+    R2_th_r2_notch(:,i) = 1.57*(q(:,3)-q(:,1))/sqrt(31);
+end
+tab = table(users', K_th_r2_med, K_th_r2_notch);
+write(tab,folder+"K_per_target_height_r2.csv",'Delimiter',',');
 
 %%%%%%
 % EXP 1: PHASE
@@ -109,11 +140,18 @@ for user_i = 1:length(ph_u)
     q_ph1(user_i,:) = quantile(K_th2{user_i}(ph_th2{user_i} == srt_ph(1)),3);
     q_ph2(user_i,:) = quantile(K_th2{user_i}(ph_th2{user_i} == srt_ph(2)),3);
     q_ph3(user_i,:) = quantile(K_th2{user_i}(ph_th2{user_i} == srt_ph(3)),3);
+    q_ph1_r2(user_i,:) = quantile(K_th2{user_i}(ph_th2{user_i} == srt_ph(1) & R2_th2{user_i} > 0.5),3);
+    q_ph2_r2(user_i,:) = quantile(K_th2{user_i}(ph_th2{user_i} == srt_ph(2) & R2_th2{user_i} > 0.5),3);
+    q_ph3_r2(user_i,:) = quantile(K_th2{user_i}(ph_th2{user_i} == srt_ph(3) & R2_th2{user_i} > 0.5),3);  
 end
 K_ph_med = [q_ph1(:,2), q_ph2(:,2), q_ph1(:,3)];
 K_ph_notch = [q_ph1(:,3)-q_ph1(:,1),q_ph2(:,3)-q_ph2(:,1),q_ph3(:,3)-q_ph3(:,1)].*(1.57/sqrt(31));
+K_ph_r2_med = [q_ph1_r2(:,2), q_ph2_r2(:,2), q_ph1_r2(:,3)];
+K_ph_r2_notch = [q_ph1_r2(:,3)-q_ph1_r2(:,1),q_ph2_r2(:,3)-q_ph2_r2(:,1),q_ph3_r2(:,3)-q_ph3_r2(:,1)].*(1.57/sqrt(31));
 tab = table(users', K_ph_med, K_ph_notch);
-write(tab,folder+"K_per_phase.csv",'Delimiter',',');
+% write(tab,folder+"K_per_phase.csv",'Delimiter',',');
+tab = table(users', K_ph_r2_med, K_ph_r2_notch);
+write(tab,folder+"K_per_phase_r2.csv",'Delimiter',',');
 % B
 for user_i = 1:length(ph_u) 
     q_ph1(user_i,:) = quantile(B_th2{user_i}(ph_th2{user_i} == srt_ph(1)),3);
@@ -123,7 +161,7 @@ end
 B_ph_med = [q_ph1(:,2), q_ph2(:,2), q_ph1(:,3)];
 B_ph_notch = [q_ph1(:,3)-q_ph1(:,1),q_ph2(:,3)-q_ph2(:,1),q_ph3(:,3)-q_ph3(:,1)].*(1.57/sqrt(31));
 tab = table(users', B_ph_med, B_ph_notch);
-write(tab,folder+"B_per_phase.csv",'Delimiter',',');
+% write(tab,folder+"B_per_phase.csv",'Delimiter',',');
 % M
 for user_i = 1:length(ph_u) 
     q_ph1(user_i,:) = quantile(M_th2{user_i}(ph_th2{user_i} == srt_ph(1)),3);
@@ -133,8 +171,8 @@ end
 M_ph_med = [q_ph1(:,2), q_ph2(:,2), q_ph1(:,3)];
 M_ph_notch = [q_ph1(:,3)-q_ph1(:,1),q_ph2(:,3)-q_ph2(:,1),q_ph3(:,3)-q_ph3(:,1)].*(1.57/sqrt(31));
 tab = table(users', M_ph_med, M_ph_notch);
-write(tab,folder+"M_per_phase.csv",'Delimiter',',');
-% K
+% write(tab,folder+"M_per_phase.csv",'Delimiter',',');
+% R2
 for user_i = 1:length(ph_u) 
     q_ph1(user_i,:) = quantile(R2_th2{user_i}(ph_th2{user_i} == srt_ph(1)),3);
     q_ph2(user_i,:) = quantile(R2_th2{user_i}(ph_th2{user_i} == srt_ph(2)),3);
@@ -143,6 +181,6 @@ end
 R2_ph_med = [q_ph1(:,2), q_ph2(:,2), q_ph1(:,3)];
 R2_ph_notch = [q_ph1(:,3)-q_ph1(:,1),q_ph2(:,3)-q_ph2(:,1),q_ph3(:,3)-q_ph3(:,1)].*(1.57/sqrt(31));
 tab = table(users', R2_ph_med, R2_ph_notch);
-write(tab,folder+"R2_per_phase.csv",'Delimiter',',');
+% write(tab,folder+"R2_per_phase.csv",'Delimiter',',');
 
 end
