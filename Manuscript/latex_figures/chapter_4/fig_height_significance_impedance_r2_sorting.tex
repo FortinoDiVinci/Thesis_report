@@ -1,0 +1,267 @@
+\begin{figure}[h]
+	\centering
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Raideur apparente\label{subfig_all_user_per_target_height_K}}
+		{
+			%\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/height_variation_all_users_r2_K.csv}\datatable
+			%\pgfplotstablegetrowsof{misc/chap_4_impedance/height_variation_all_users_r2_K.csv}
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/new/impedance_per_target_height_boxplot.csv}\datatable
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/new/impedance_per_target_height_r2_boxplot.csv}\datatableR
+			%
+			\tikzsetnextfilename{subfig_all_user_per_target_height_K}
+			\begin{tikzpicture}
+			\begin{axis}
+			[%
+			xtick={0.5,1.5},
+			%xticklabels={$h_1^*$, $h_1^*$, $h_3^*$, $h_3^*$},
+			xticklabels={$h_1^*$, $h_3^*$},
+			ylabel near ticks,
+			xlabel near ticks,
+			ylabel = $K$ (\si{\newton\per\meter}),
+			boxplot/draw direction=y, 
+			width=0.45\linewidth,
+			height=0.29\linewidth,
+			]
+			%\foreach \i in {0,..,\nbRows}{%
+			\expandafter\pgfplotsinvokeforeach\expandafter{0,1}{%..,\nbRows}{%
+				\addplot [
+					boxplot prepared from table={
+						row=#1,
+						table=\datatable,
+						lower whisker=lw,
+						upper whisker=uw,
+						lower quartile=lq,
+						upper quartile=uq,
+						lower notch=ln,
+						upper notch=un,
+						median=med,
+						average=avg,
+						%every median/.style={color=Shiraz},
+						%sample size=100,
+					}, boxplot prepared={
+						every average/.style={/tikz/mark=asterisk},
+						draw position={1/3 + floor(\plotnumofactualtype/2) + 1/3*mod(\plotnumofactualtype,2)},
+						box extend=0.3,
+					}
+					] coordinates {};
+				\addplot [
+					fill,
+					fill opacity=0.15,
+					boxplot prepared from table={
+						row=#1,
+						table=\datatableR,
+						lower whisker=lw,
+						upper whisker=uw,
+						lower quartile=lq,
+						upper quartile=uq,
+						lower notch=ln,
+						upper notch=un,
+						median=med,
+						average=avg,
+						%every median/.style={color=Shiraz},
+						%sample size=100,
+					}, boxplot prepared={
+						every average/.style={/tikz/mark=asterisk},
+						draw position={1/3 + floor(\plotnumofactualtype/2) + 1/3*mod(\plotnumofactualtype,2)},
+						box extend=0.3,
+						%every box/.style={draw=Prune},
+					}
+					] coordinates {};
+				%				node at	(boxplot box cs: \boxplotvalue{median},#1) {\pgfmathprintnumber{\boxplotvalue{median}}};
+			}%
+			\end{axis}	
+			\end{tikzpicture}
+		}
+		\subcaptionbox{Amortissement apparent\label{subfig_all_user_per_target_height_B}}
+		{
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/new/impedance_per_target_height_boxplot.csv}\datatable
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/new/impedance_per_target_height_r2_boxplot.csv}\datatableR
+			%
+			\tikzsetnextfilename{subfig_all_user_per_target_height_B}
+			\begin{tikzpicture}
+			\begin{axis}[
+			xtick={0.5,1.5},
+			xticklabels={$h_1^*$, $h_3^*$},
+			ylabel near ticks,
+			xlabel near ticks,
+			ylabel = $B$ (\si{\newton\second\per\meter}),
+			boxplot/draw direction=y, 
+			width=0.45\linewidth,
+			height=0.29\linewidth,
+			]
+			\expandafter\pgfplotsinvokeforeach\expandafter{2,3}{
+				\addplot [
+				boxplot prepared from table={
+					row=#1,
+					table=\datatable,
+					lower whisker=lw,
+					upper whisker=uw,
+					lower quartile=lq,
+					upper quartile=uq,
+					lower notch=ln,
+					upper notch=un,
+					median=med,
+					average=avg,
+				}, boxplot prepared={
+					every average/.style={/tikz/mark=asterisk},
+					draw position={1/3 + floor(\plotnumofactualtype/2) + 1/3*mod(\plotnumofactualtype,2)},
+					box extend=0.3,
+				}
+				] coordinates {};
+				\addplot [
+				fill,
+				fill opacity=0.15,
+				boxplot prepared from table={
+					row=#1,
+					table=\datatableR,
+					lower whisker=lw,
+					upper whisker=uw,
+					lower quartile=lq,
+					upper quartile=uq,
+					lower notch=ln,
+					upper notch=un,
+					median=med,
+					average=avg,
+				}, boxplot prepared={
+					every average/.style={/tikz/mark=asterisk},
+					draw position={1/3 + floor(\plotnumofactualtype/2) + 1/3*mod(\plotnumofactualtype,2)},
+					box extend=0.3,
+					%every box/.style={draw=Prune},
+				}
+				] coordinates {};
+			}%
+			\end{axis}	
+			\end{tikzpicture}
+		}
+	}
+	\\
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Masse apparente\label{subfig_all_user_per_target_height_M}}
+		{
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/new/impedance_per_target_height_boxplot.csv}\datatable
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/new/impedance_per_target_height_r2_boxplot.csv}\datatableR
+			%
+			\tikzsetnextfilename{subfig_all_user_per_target_height_M}
+			\begin{tikzpicture}
+			\begin{axis}
+			[
+			xtick={0.5,1.5},
+			xticklabels={$h_1^*$, $h_3^*$},
+			ylabel near ticks,
+			xlabel near ticks,
+			ylabel = $M$ (\si{\kilogram}),
+			boxplot/draw direction=y, 
+			width=0.45\linewidth,
+			height=0.29\linewidth,
+			]
+			%\foreach \i in {0,..,\nbRows}{%
+			\expandafter\pgfplotsinvokeforeach\expandafter{4,5}{%..,\nbRows}{%
+				\addplot [
+				boxplot prepared from table={
+					row=#1,
+					table=\datatable,
+					lower whisker=lw,
+					upper whisker=uw,
+					lower quartile=lq,
+					upper quartile=uq,
+					lower notch=ln,
+					upper notch=un,
+					median=med,
+					average=avg,
+				}, boxplot prepared={
+					every average/.style={/tikz/mark=asterisk},
+					draw position={1/3 + floor(\plotnumofactualtype/2) + 1/3*mod(\plotnumofactualtype,2)},
+					box extend=0.3,
+				}
+				] coordinates {};
+				\addplot [
+				fill,
+				fill opacity=0.15,
+				boxplot prepared from table={
+					row=#1,
+					table=\datatableR,
+					lower whisker=lw,
+					upper whisker=uw,
+					lower quartile=lq,
+					upper quartile=uq,
+					lower notch=ln,
+					upper notch=un,
+					median=med,
+					average=avg,
+				}, boxplot prepared={
+					every average/.style={/tikz/mark=asterisk},
+					draw position={1/3 + floor(\plotnumofactualtype/2) + 1/3*mod(\plotnumofactualtype,2)},
+					box extend=0.3,
+					%every box/.style={draw=Prune},
+				}
+				] coordinates {};
+			}%
+			\end{axis}	
+			\end{tikzpicture}
+		}
+		\subcaptionbox{Coefficient de détermination\label{subfig_all_user_per_target_height_R2}}
+		{
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/new/impedance_per_target_height_boxplot.csv}\datatable
+			\pgfplotstableread[col sep=comma] {misc/chap_4_impedance/new/impedance_per_target_height_r2_boxplot.csv}\datatableR
+			%
+			\tikzsetnextfilename{subfig_all_user_per_target_height_R2}
+			\begin{tikzpicture}
+			\begin{axis}[
+			xtick={0.5,1.5},
+			xticklabels={$h_1^*$, $h_3^*$},
+			ylabel near ticks,
+			xlabel near ticks,
+			ylabel = $R^2$,
+			boxplot/draw direction=y, 
+			width=0.45\linewidth,
+			height=0.29\linewidth,
+			]
+			\expandafter\pgfplotsinvokeforeach\expandafter{6,7}{
+				\addplot [
+				boxplot prepared from table={
+					row=#1,
+					table=\datatable,
+					lower whisker=lw,
+					upper whisker=uw,
+					lower quartile=lq,
+					upper quartile=uq,
+					lower notch=ln,
+					upper notch=un,
+					median=med,
+					average=avg,
+				}, boxplot prepared={
+					every average/.style={/tikz/mark=asterisk},
+					draw position={1/3 + floor(\plotnumofactualtype/2) + 1/3*mod(\plotnumofactualtype,2)},
+					box extend=0.3,
+				}
+				] coordinates {};
+				\addplot [
+				fill,
+				fill opacity=0.15,
+				boxplot prepared from table={
+					row=#1,
+					table=\datatableR,
+					lower whisker=lw,
+					upper whisker=uw,
+					lower quartile=lq,
+					upper quartile=uq,
+					lower notch=ln,
+					upper notch=un,
+					median=med,
+					average=avg,
+				}, boxplot prepared={
+					every average/.style={/tikz/mark=asterisk},
+					draw position={1/3 + floor(\plotnumofactualtype/2) + 1/3*mod(\plotnumofactualtype,2)},
+					box extend=0.3,
+					%every box/.style={draw=Prune},
+				}
+				] coordinates {};
+			}%
+			\end{axis}	
+			\end{tikzpicture}
+		}
+	}
+	%\caption{Paramètres apparents identifiés pour l'ensemble des utilisateurs lors de la phase \cref{item_pert1} en fonction des hauteurs cibles $h_i^*$, après un trie sur $R^2$.}
+	\caption{Paramètres apparents identifiés pour l'ensemble des utilisateurs lors des essais de l'expérience 2, en fonction des hauteurs cibles $h_i^*$. Les diagrammes en boîtes colorés réprésentent les données des utilisateurs après le trie utilisant le coefficient de détermination $(R>0.5)$.}
+	\label{fig_height_significance_impedance}
+\end{figure}

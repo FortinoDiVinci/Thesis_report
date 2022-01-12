@@ -180,7 +180,7 @@ Trente et une personnes ont participé à deux sessions expérimentales d’une 
 
 Lors du premier contact avec les participants, éventuellement par mail, les éléments suivants étaient transmis : un descriptif des objectifs généraux, le formulaire de consentement éclairé, et une vidéo de présentation du banc expérimental. Le jour de l’expérience, les participants devaient signer le formulaire et fournir des renseignements (poids, taille, âge...), dans le respect de l’anonymat.
 
-L'environnement virtuel simulé était ensuite présenté avec les consignes de sécurité lors d'une phase de familiarisation. Un essai était effectué dans un premier temps sans avoir à réaliser la tâche de jonglerie, simplement en déplaçant le robot de manière rythmique à une fréquence imposée. Puis dans un second temps, un essai avec la tâche de jonglerie était lancé, en présence de retours haptiques et perturbations, jusqu'à ce que le participant soit capable de maintenir un comportement stable de la tâche.
+L'environnement virtuel simulé était ensuite présenté avec les consignes de sécurité lors d'une phase de familiarisation. Un essai était effectué dans un premier temps sans avoir à réaliser la tâche de jonglerie, simplement en déplaçant le robot de manière rythmique à une fréquence imposée. Puis dans un second temps, un essai avec la tâche de jonglerie était lancé, en présence de retours haptiques et perturbations, jusqu'à ce que le participant soit capable de maintenir un comportement stable de la tâche. Les participants étaient préalablement informés de la présence de retours haptiques et de possibles perturbations.
 
 %Pour essayer de répondre aux hypothèses formulées, une cible minimale d'une vingtaine de participants était visée pour réaliser les deux expériences choisies pour une durée totale ne dépassant par l'heure. Afin de limiter les variations dues à la fatigue, les expériences ont été découpées en deux sessions d'une trentaine de minutes chacune. Toutefois pour aussi limiter les variations d'état des participants pouvant dépendre d'autres conditions externes, ces deux sessions étaient dans la mesure du possible réalisées la même journée, avec une pause minimale de \SI{45}{\minute}. Seuls trois participants ont vu leurs deux sessions se dérouler sur des journées différentes avec un espacement inférieur à cinq jours.
 
@@ -218,39 +218,19 @@ Pour éviter que les participants ne compensent ces changement de hauteur en dé
 
 \subsubsection{Traitement des données} \label{chap4_sec_exp_sub_prot_4}
 
-\textcolor{orange}{Les données brutes des positions verticales de la raquette $z_p$ et de la balle $z_b$ en fonction du temps sont générées et acquises à \SI{500}{\hertz}, puis interpolées sur le même vecteur temps que l'ensemble des données acquise avec le robot et système de vision. Ce vecteur temps est défini avec une période d'échantillonnage constante de \SI{1}{\milli\second}. Les données de position de la balle ne sont pas filtrées, les autres données de position le sont à \SI{25}{\hertz}, et celles de force à \SI{50}{\hertz}, avec des filtres de Butterworth d'ordre 2 sans distortion de phase.}
+\textcolor{orange}{Au total, avec les 31 participants, 155 essais ont été conduits pour les deux expériences sur un total de 62 sessions expérimentales ce qui représente plus de \SI{14}{\hour} d'enregistrement, sans compter les phases de familiarisation.}
 
-\textcolor{orange}{Les performances des participants pour la réalisation de la tâche, analysées dans la \cref{chap4_sec_res_sub_task}, sont évaluées par rapport aux erreurs de rebond $\epsilon_r$ entre la hauteur cible $h^*$ et les apex de la balle, comme montré sur la \cref{fig_ball_bouncing_task}. La précision des participants est évaluée pour chaque essai à partir de la moyenne des erreurs de rebond $\mean{\epsilon_r}$, et leur répétabilité l'est aussi en utilisant les écarts types des erreurs de rebond $\sigma(\epsilon_r)$ de chaque essai. Ainsi, tous les participants se voient attribuer 10 scores pour les deux expériences.}
+\textcolor{orange}{Les données brutes des positions verticales de la raquette $z_p$ et de la balle $z_b$ en fonction du temps sont générées et acquises à \SI{500}{\hertz}, puis interpolées sur le même vecteur temps que l'ensemble des données acquise avec le robot et système de vision. Ce vecteur temps est défini avec une période d'échantillonnage constante de \SI{1}{\milli\second}. Les données de position de la balle ne sont pas filtrées, les autres données de position le sont à \SI{25}{\hertz}, et celles de force à \SI{50}{\hertz}, avec des filtres de Butterworth d'ordre 2 sans distorsion de phase.}
 
-\textcolor{orange}{Les cycles de la tâche de jonglerie sont définis par les impacts de la balle et de la raquette. Chaque cycle se voit ainsi attribué une erreur $\epsilon_r$, une position verticale cible $h_i^*$ invariante durant les essais, une amplitude de rebond $z_a$, ainsi que les données temporelles relatives à la raquette et la balle virtuelle. Des booléens informent aussi si les cycles ont été perturbés, où suivent un cycle perturbé. Si le cycle a été perturbé, le sens, l'instant et la phase $\phi_i$ de la perturbation sont indiqués, ainsi que les données des paramètres en impédance estimés ($K$, $B$, $M$ et $R^2$).}
+\textcolor{orange}{Les cycles de la tâche de jonglerie sont définis par les impacts de la balle et de la raquette. Chaque cycle se voit ainsi attribué un score pour qualifier la tâche $\epsilon_r$ (voir \cref{fig_ball_bouncing_task}), une position verticale cible $h_i^*$ invariante durant les essais, une amplitude de rebond $z_a$, ainsi que les données temporelles relatives à la raquette et la balle virtuelle. Des booléens informent aussi si les cycles ont été perturbés, ou suivent un cycle perturbé. Si le cycle a été perturbé, le sens, l'instant et la phase $\phi_i$ de la perturbation sont indiqués, ainsi que les paramètres en impédance identifiés ($K$, $B$, $M$ et $R^2$).}
 %Dans un second temps, les identifications des paramètres d'impédance sont réalisées en fonction de la qualification des participants et des phases cycliques perturbées. 
 
-paragraphe sur les données biomécaniques.
+\textcolor{orange}{Les performances des participants pour la réalisation de la tâche, analysées dans la \cref{chap4_sec_res_sub_task}, sont évaluées par rapport aux erreurs de rebond $\epsilon_r$ entre la hauteur cible $h^*$ et les apex de la balle, comme montré sur la \cref{fig_ball_bouncing_task}. La précision de chaque participant est évaluée selon les essais à partir de la moyenne des erreurs de rebond $\mean{\epsilon_r}$, et leur répétabilité l'est aussi en utilisant les écarts types des erreurs de rebond $\sigma(\epsilon_r)$ de chaque essai. Ainsi, tous les participants se voient attribuer un total de dix scores pour les deux expériences.}
+
+\textcolor{orange}{Comme détaillé dans le \cref{chap3}, les identifications des paramètres en impédance du bras humain sont plus précises, avec la méthodologie proposée, lorsque la médiane est utilisée sur un panel d'estimations plutôt que la moyenne, notamment pour la raideur dont l'identification est plus sensible aux erreurs. Ainsi, deux ensembles d'estimations des paramètres sont utilisés pour les deux expériences. Pour la première expérience, les trois essais sont regroupés et les estimations sont séparées en fonction des phases perturbées pour chaque participant. Pour la seconde, seuls les deux essais réalisés avec les positions verticales cibles $h_1^*$ et $h_3^*$ sont utilisés et répartis en deux.}
+%Les analyses statistiques conduites dans cette partie sont focalisées sur les médianes des paramètres identifiés. En effet, comme expliqué dans les simulations de la \cref{chap3_sec_method_sub_ident_2_2}, la médiane des paramètres identifiés est plus robuste que la moyenne. 
 
 \textcolor{orange}{Dans les études qui suivent, des analyses de variance (ANOVA) ont été conduites avec des seuils de significativité fixés à \SI{5}{\percent}. Lorsqu'une ANOVA permet d'infirmer l'hypothèse nulle, elle est complétée par des tests \textit{post-hoc}, qui correspondent à des tests t \parencite{student_probable_1908} multiples avec des corrections \parencite{tukey_comparing_1949,dunn_multiple_1961}. C'est la correction de Bonferroni qui est utilisée pour ces analyses. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.}
-
-%The raw data of racket position were filtered with a second-
-%order Butterworth filter using a cut-off frequency of 12 Hz. Fil-
-%tered position was then differentiated to yield racket velocity, and
-%differentiated again to yield racket acceleration. Dependent vari-
-%ables were selected to measure task performance, racket oscillation, and ball/racket impact. Performance was characterized by the
-%error in bouncing to the target (ε) defined as the difference be-
-%tween the midpoint of the ball at its peak position and target height,
-%and by the racket velocity at impact (vr). Racket oscillation was
-%characterized by the cycle period (Tr), defined as the time between
-%two successive peak racket positions, and racket cycle amplitude
-%(Ar), defined as the difference between successive valley and peak
-%racket positions (Sternad et al., 2001; De Rugy, et al., 2003).
-%Ball/racket impact was characterized by the phase in the racket
-%cycle at impact (r), calculated as the ratio between the time of
-%impact in the racket cycle and the cycle period, and the racket
-%acceleration at impact (ar).
-%A racket cycle (Ci) was defined by two successive maximum
-%racket positions (see Figure 1). For convenience, racket cycles
-%were numbered from a discrete event such as a transition or an
-%impact, where C0 refers to the cycle that immediately follows the
-%key event, C1 refers to the preceding cycle, and C1, C2 . . . , refer
-%to the subsequent cycles (Figure 1).
 
 \section{Résultats} \label{chap4_sec_res}
 
@@ -262,17 +242,17 @@ Dans un premier temps, les performances des participants sont analysés dans la 
 
 %Pour compléter les ANOVA, et savoir quels groupes sont à l'orgine du rejet de l'hypothèse nulle, d'autres analyses doivent être conduites. Des tests t \parencite{student_probable_1908} multiples peuvent alors être conduits par paires. Toutefois, la multiplication des tests augmente la probabilité de rejeter l'hypothèse nulle, une correction doit donc être effectuée, on parle de tests \textit{post-hoc} ou de comparaisons multiples. Pour ne pas fausser l'analyse, on pourra par exemple utiliser les tests étendus de Tukey \parencite{tukey_comparing_1949} ou la correction de Bonferroni \parencite{dunn_multiple_1961} qui permettent de palier cette problématique. L'\cref{app_anovas} détaille la représentation graphique de ces analyses.
 
-\subsection{Etude des performances} \label{chap4_sec_res_sub_task}
+\subsection{Étude des performances} \label{chap4_sec_res_sub_task}
 
 Il faut rappeler que l'expérience par laquelle les participants ont commencé a été défini de manière pseudo aléatoire. Ainsi, 14 participants ont commencé par la première expérience, 17 par la seconde. 
 
-Par soucis de lisibilité et de brieveté, les détails des ANOVA conduites dans les \cref{chap4_sec_res_sub_task_1,chap4_sec_res_sub_task_2,chap4_sec_res_sub_task_3} sont donnés en \cref{app_anovas_perf}.
+Par soucis de lisibilité et de brièveté, les détails des ANOVA conduites dans les \cref{chap4_sec_res_sub_task_1,chap4_sec_res_sub_task_2,chap4_sec_res_sub_task_3} sont donnés en \cref{app_anovas_perf}.
 
 \subsubsection{Effets des perturbations} \label{chap4_sec_res_sub_task_1}
 
 Bien que les perturbations aient été introduites pour être aussi peu perceptibles que possible, et minimiser l'influence sur la tâche, il est important de s'intéresser aux effets des cycles consécutifs à des perturbations. En effet, suite aux questions posées\footnote{Une étude poussée des perceptions et du ressenti des participants seraient nécessaires pour appuyer les données recueillies.} aux participants, \SI{55}{\percent} affirment avoir perçu des perturbations dans au moins l'une des expériences, et \SI{15}{\percent} pendant l'ensemble des essais. Une éventuelle dégradation des performances due aux perturbations ne peut toutefois pas être écartée.%, même si la majorité des participants n'a pas ressenti les perturbations pendant au moins l'une des sessions.
 
-\textcolor{orange}{Une partie des cycles sont extraits, selon qu'ils sont avant une perturbation $c_{pre}$, suivant une perturbation $c_{post}^1$ ou deux ou trois cycles après une perturbation $c_{post}^2\text{ et }c_{post}^3$. Pour chaque participant, les critères $\mean{\epsilon_r}$ et $\sigma(\epsilon_r)$ des quatre conditions sont receuillis en fonction de l'expérience, les perturbations étant différentes lors des deux expériences. Pour les données de l'expérience 1, seuls les deux premiers essais sont utilisés. Un facteur entre les sujets est donc ajouté, en plus du facteur principal.}
+\textcolor{orange}{Une partie des cycles sont extraits, selon qu'ils sont avant une perturbation $c_{pre}$, suivant une perturbation $c_{post}^1$ ou deux ou trois cycles après une perturbation $c_{post}^2\text{ et }c_{post}^3$. Pour chaque participant, les critères $\mean{\epsilon_r}$ et $\sigma(\epsilon_r)$ des quatre conditions sont recueillis en fonction de l'expérience, les perturbations étant différentes lors des deux expériences. Pour les données de l'expérience 1, seuls les deux premiers essais sont utilisés. Un facteur entre les sujets est donc ajouté, en plus du facteur principal.}
 
 \textcolor{orange}{L'ANOVA mixte conduite sur $\mean{\epsilon_r}$ pour les 4 conditions de cycle et le facteur expérimental révèle un effet significatif du facteur principal $F(3, 180) = 6.8$, $p<0.001$,  $\eta^2 = 0.026$, aucun effet d'interaction n'est par contre observé. %$F(3, 180) = 0.8$, $p=0.476$,  $\eta^2 = 0.003$. 
 L'analyse \textit{post-hoc} dévoile que c'est la condition $c_{post}^1$ qui est significativement différente de l'ensemble des autres conditions, comme on peut le voir sur la \cref{fig_perturbations_significance_post_hoc}. Seuls les cycle qui suivent directement une perturbation obtiennent donc des erreurs de rebonds moyennes significativement différentes, avec un effet moyen toutefois faible de \SI{2}{\centi\meter}.}
@@ -282,7 +262,7 @@ La répétabilité de la tâche ne semble donc pas significativement modifiée p
 	
 \input{latex_figures/chapter_4/fig_perturbations_significance_post_hoc}
 
-\textcolor{orange}{On peut remarquer en plus des résultats précédents que le choix d'expérience n'a, pour aucun des critères étudiés, entraîné d'interactions significatives. Par ailleurs, un test d'homoscédasticité \parencite[Chapitre~25, par H. Levene]{olkin_contributions_1960} permet de conclure à l'homogénéïté des variances entre les deux expériences, quelle que soit la condition. On peut donc en conclure que les effets des perturbations sont similaires sur les deux expériences.}
+\textcolor{orange}{On peut remarquer en plus des résultats précédents que le choix d'expérience n'a, pour aucun des critères étudiés, entraîné d'interactions significatives. Par ailleurs, un test d'homoscédasticité \parencite[Chapitre~25, par H. Levene]{olkin_contributions_1960} permet de conclure à l'homogénéité des variances entre les deux expériences, quelle que soit la condition. On peut donc en conclure que les effets des perturbations sont similaires sur les deux expériences.}
 
 %induites par les expériences sont donc regroupées pour l'ensemble des participants et analysées comme montré sur la \cref{subfig_target_height_significance}. Pour chaque participant, la moyenne des hauteurs réelles en fonction des cibles est utilisée. L'ANOVA conduite sur les trois conditions de positions verticales révèle un effet significatif du critère $F(2, 60) = 6.4\times10^3$, $p<0.001$,  $\eta^2 = 0.995$. L'analyse post-hoc par paire, révèle que les différences sont significatives pour entre chaque groupe ($p_{bonf} < 0.001$).}
 
@@ -298,7 +278,7 @@ La répétabilité de la tâche ne semble donc pas significativement modifiée p
 %En premier lieu, il faut remarquer que même si les consignes données aux participants étaient d'essayer de maintenir la position verticale d'impact de la balle constante, il faut vérifier que cette consigne a globablement été respectée. En effet, si cette dernière n'a pas été observée, les participants peuvent avoir maintenu une distance verticale réelle entre la raquette au moment de l'impact et la hauteur cible peu variable. Or la deuxième expérience s'est intéressé à la variation du critère de position verticale.
 En premier lieu, il faut remarquer que les modifications des hauteurs cibles $h^*_i$ visaient à générer des amplitudes de rebonds $z_a$ différentes. Pour que les trois hauteurs cibles choisies entraînent des variations significatives de  $z_a$, les consignes données aux participants étaient d'essayer de maintenir la position verticale d'impact de la balle constante. On se propose donc de vérifier que les trois hauteurs cibles ont donnés lieu à trois amplitudes $z_a$ distinctes.
 
-\textcolor{orange}{Les hauteurs réelles $h_1\text{, }h_2\text{ et }h_3$ induites par les expériences sont donc regroupées pour l'ensemble des participants et analysées comme montré sur la \cref{subfig_target_height_significance}. Pour chaque participant, la moyenne des hauteurs réelles en fonction des cibles est utilisée. L'ANOVA à mesures répétées conduite sur les trois conditions de positions verticales révèle un effet significatif du facteur $F(2, 60) = 6.4\times10^3$, $p<0.001$,  $\eta^2 = 0.995$. L'analyse post-hoc par paire, révèle que les différences sont significatives pour entre chaque groupe ($p_{bonf} < 0.001$).}
+\textcolor{orange}{Les hauteurs réelles $h_1\text{, }h_2\text{ et }h_3$ induites par les expériences sont donc regroupées pour l'ensemble des participants et analysées comme montré sur la \cref{subfig_target_height_significance}. Pour chaque participant, la moyenne des hauteurs réelles en fonction des cibles est utilisée. L'ANOVA à mesures répétées conduite sur les trois conditions de positions verticales révèle un effet significatif du facteur $F(2, 60) = 6.4\times10^3$, $p<0.001$,  $\eta^2 = 0.995$. L'analyse \textit{post-hoc} par paire, révèle que les différences sont significatives pour entre chaque groupe ($p_{bonf} < 0.001$).}
 
 \tikzexternalenable
 \input{latex_figures/chapter_4/fig_target_height_significance}
@@ -393,7 +373,7 @@ Cette analyse confirme bien que les changements de position verticale des cibles
 	\input{latex_figures/chapter_4/fig_target_height_significance_post_hoc}
 \end{figure}
 
-\textcolor{orange}{Comme on peut le voir sur la \cref{fig_target_height_significance_post_hoc}, l'écart type $\sigma(\epsilon_r)$ moyen des participants augmente avec $h^*$, indiquant une dégradation de la répétabilité. De plus, en accord avec des résultats précédents \parencite{siegler_passive_2010}, on observe que les participants jonglent en moyenne au dessus de la cible (\SI{5(7)}{\centi\meter}). L'erreur moyenne de rebond de l'ensemble des participants est par contre plus de deux fois supérieure à celle constatée par \textcite{siegler_passive_2010}, ce qui peut être expliqué par le diamètre supérieur de la balle simulée, \SI{10}{\centi\meter} ici, contre \SI{4}{\centi\meter} dans leurs travaux, ainsi que d'autres conditions expérimentales plus contraignantes dont on peut citer la manipulation d'un robot, et les positions verticales de référence deux à quatre fois plus élevées.} 
+\textcolor{orange}{Comme on peut le voir sur la \cref{fig_target_height_significance_post_hoc}, l'écart type $\sigma(\epsilon_r)$ moyen des participants augmente avec $h^*$, indiquant une dégradation de la répétabilité.} 
 
 %La \cref{fig_target_height_bouncing_error_significance} dévoile les ANOVA conduites sur les erreurs de rebonds. La première (\cref{subfig_target_height_bouncing_error_significance}) révèle des différences significatives de moyenne pour au moins un des trois groupes. De manière contre-intuitive, les erreurs médianes semblent avoir tendance à diminuer lorsque la hauteur cible est plus élevée. Toutefois, l'analyse complémentaire de variances des erreurs absolues révèle qu'en réalité, ces dernières augmentent de manière significative avec la hauteur. La difficulté augmente donc bien avec la distance pour les gammes implémentées. %La première ANOVA montre donc que les participants ont tendance à viser plus haut que la cible, même si cette dynamique semble s'atténuer avec l'augmentation de la hauteur cible.
 %La \cref{subfig_target_height_bouncing_error_significance} montre donc que les participants ont tendance à viser plus haut que la cible, en cohérence avec des résultats précédents \parencite{siegler_passive_2010}, même si cette dynamique semble s'atténuer avec l'augmentation de la hauteur cible.
@@ -406,7 +386,7 @@ Il est intéressant de noter que seuls \SI{13}{\percent} des participants ont tr
 
 \textcolor{orange}{Il est important de souligner que si les variations de condition de position verticale entrainent des changements significatifs sur la répétabilité, les effets sont assez faibles ($\eta^{2}=0.17$), avec une variation moyenne maximale de \SI{5.5}{\centi\meter} entre les deux positions verticales extrêmes.}
 
-\textcolor{red}{Ajouter sur un paragraphe sur la comparaison des erreurs relativement à la hauteur cible ? L'erreur est peut-être simplement proportionnelle à la hauteur tout autre paramètre identique.}
+%\textcolor{red}{Ajouter sur un paragraphe sur la comparaison des erreurs relativement à la hauteur cible ? L'erreur est peut-être simplement proportionnelle à la hauteur tout autre paramètre identique.}
 
 \subsubsection{Performances individuelles et apprentissage} \label{chap4_sec_res_sub_task_3}
 
@@ -416,19 +396,19 @@ Il est intéressant de noter que seuls \SI{13}{\percent} des participants ont tr
 
 \textcolor{orange}{Pour qualifier les performances des participants, deux variantes des indicateurs définis en \cref{chap4_sec_exp_sub_prot_4} sont calculés à partir des erreurs absolues de rebonds $\abs{\epsilon_r}$ qui permettent de qualifier : %
 \begin{enumerate*}[label=\arabic*)]
-	\item la répétabilité, avec l'intervalle interquartile, et
+	\item la répétabilité, avec l'intervalle inter-quartile, et
 	\item la précision, avec la médiane.
 \end{enumerate*}
 Après observation des données, il est supposé que trois niveaux de performance ou d'expertise $e_i$ émergent; toutefois, une analyse plus complète serait nécessaire pour juger du nombre de regroupements qualifiant au mieux les critères choisis.}
 
-\textcolor{orange}{Les groupes novices $e_1$, intermédaires $e_2$ et avancés $e_3$ sont définis grâce à un problème d'optimisation combinatoire des k-moyennes, comme on peut le voir pour les deux indicateurs en \cref{fig_kmeans_expertise}.} L'un des participants ayant eu des niveaux de qualification largement en deça des autres, il a été écarté pour le partitionnement des données %, afin d'éviter d'obtenir un groupement ne contenant qu'une seule personne. 
+\textcolor{orange}{Les groupes novices $e_1$, intermédiaires $e_2$ et avancés $e_3$ sont définis grâce à un problème d'optimisation combinatoire des k-moyennes, comme on peut le voir pour les deux indicateurs en \cref{fig_kmeans_expertise}.} L'un des participants ayant eu des niveaux de qualification largement en deçà des autres, il a été écarté pour le partitionnement des données %, afin d'éviter d'obtenir un groupement ne contenant qu'une seule personne. 
 et a ensuite été classé avec les novices.
 
 \input{latex_figures/chapter_4/fig_kmeans_expertise}
 
 La critère de de répétabilité place respectivement \SIlist{5;13;13}{} personnes pour les groupes $e_3$, $e_2$ et $e_1$ contre respectivement \SIlist{3;14;14}{} pour le critère de précision. Le chevauchement entre les deux critères n'est donc pas parfait, toutefois seuls trois participants ont vu leur qualification rétrogradée entre les critères de répétabilité et de précision, donc pour plus de \SI{90}{\percent}, ces critères définissent les mêmes niveaux de performances. Le critère de répétabilité fournissant des regroupements plus équilibrés, c'est ce dernier qui est conservé.
 
-\textcolor{orange}{Ainsi, il est intéressant de noter que parmi les utilisateurs qualifiés d'avancés, 4 sur 5 avaient déjà eu au moins une utilisation antérieure du banc expérimental, notamment lors de sessions préliminaires, et le seul n'ayant pas déjà manipulé ce banc expérimental avait déjà eu des interactions physiques avec des robots. Il est par ailleurs intéressessant de remarquer que parmi les 13 novices, seuls 2 avaient déjà été familiarisés avec la manipulation (c'est à dire \SI{15}{\percent}, contre \SI{40}{\percent} sur l'ensemble de l'échantillon), et 5 avaient déjà manipulé un autre robot (c'est à dire \SI{38}{\percent}, contre \SI{58}{\percent} sur l'ensemble de l'échantillon). Ce qui revient aussi à dire que plus de \SI{62}{\percent} des personnes n'ayant jamais manipulées un robot se sont retouvées dans le groupe $e_1$, et le reste dans le groupe $e_2$.}
+\textcolor{orange}{Ainsi, il est intéressant de noter que parmi les utilisateurs qualifiés d'avancés, 4 sur 5 avaient déjà eu au moins une utilisation antérieure du banc expérimental, notamment lors de sessions préliminaires, et le seul n'ayant pas déjà manipulé ce banc expérimental avait déjà eu des interactions physiques avec des robots. Il est par ailleurs intéressant de remarquer que parmi les 13 novices, seuls 2 avaient déjà été familiarisés avec la manipulation (c'est à dire \SI{15}{\percent}, contre \SI{40}{\percent} sur l'ensemble de l'échantillon), et 5 avaient déjà manipulé un autre robot (c'est à dire \SI{38}{\percent}, contre \SI{58}{\percent} sur l'ensemble de l'échantillon). Ce qui revient aussi à dire que plus de \SI{62}{\percent} des personnes n'ayant jamais manipulées un robot se sont retrouvées dans le groupe $e_1$, et le reste dans le groupe $e_2$.}
 
 \textcolor{orange}{Deux ANOVA mixtes à trois facteurs sont donc conduites pour $\mean{\epsilon_r}$ et $\sigma(\epsilon_r)$, en considérant d'une part l'ordre d'exécution des essais $n_i$ de l'expérience 1, les trois groupes de performance $e_i$ d'autre part, et enfin en regardant par quelle expérience avaient commencé les participants $s_i$ ($3\text{ essais } \times 3\text{ niveaux }\times 2\text{ sessions}$).}
 
@@ -592,211 +572,288 @@ Le critère d'expertise choisi semble donc pertinent, puisqu'il permet de démar
 
 \subsection{Résultats des identifications d'impédance} \label{chap4_sec_res_sub_impedance}
 
-Les données des expériences sont sélectionnées en fonction de deux paramètres, les positions verticales cibles $h^*_i$ et les phases de cycle perturbées $\phi_i$. Il est important de noter que toutes les configurations n'ont pas été générées. En effet, les variations de cycle n'ont été injectées que lors des expériences à la hauteur cible $h_2^*$. Les deux autres hauteurs ne sont donc, en théorie, perturbées qu'à la phase \cref{item_pert1}. La \cref{fig_normalized_trajectories} montre les trajectoires moyennes cycliques des participants en fonction de leur groupe de qualification $e_i$, avec une fois et trois fois les écarts types représentés, ainsi que la moyenne cyclique des trois phases perturbées.
+Les données des expériences sont sélectionnées en fonction de deux paramètres, les positions verticales cibles $h^*_i$ et les phases de cycle perturbées $\phi_i$. Il est important de noter que toutes les configurations n'ont pas été générées. En effet, les variations de cycle n'ont été injectées que lors des expériences à la hauteur cible $h_2^*$. Les deux autres hauteurs ne sont donc %, en théorie, 
+perturbées qu'à la phase \cref{item_pert1}. La \cref{fig_normalized_trajectories} montre les trajectoires moyennes cycliques des participants en fonction de leur groupe de performance $e_i$, avec un et trois écarts types représentés, ainsi que la moyenne cyclique des trois phases perturbées (marqueurs).
 
 \input{latex_figures/chapter_4/fig_normalized_trajectories}
 
-Les analyses statistiques conduites dans cette partie sont focalisées sur les médianes des paramètres identifiés. En effet, comme expliqué dans les simulations de la \cref{chap3_sec_method_sub_ident_2_2}, la médiane des paramètres identifiés est plus robuste que la moyenne. Afin de limiter les facteurs de confusion, les analyses sont conduites en isolant les facteurs concernant la phase et la hauteur cible.
+Par soucis de lisibilité et de brièveté, les détails des ANOVA conduites dans les \cref{chap4_sec_res_sub_impedance_1,chap4_sec_res_sub_impedance_2} sont donnés en \cref{app_anovas_impe}.
+
+%Afin de limiter les facteurs de confusion, les analyses sont conduites en isolant les facteurs concernant la phase et la hauteur cible.
 
 \subsubsection{Effets des hauteurs cibles} \label{chap4_sec_res_sub_impedance_1}
 
-Comme observé dans la \cref{chap4_sec_res_sub_task_1}, la hauteur cible a une influence significative sur les performances de la tâche, avec les erreurs $\abs{\epsilon_r}$ qui augmentaient en moyenne de \SI{3.5}{\centi\meter} entre les hauteurs cibles extrêmes $h_1^*$ et $h_3^*$. Pour savoir si ces changements de conditions expérimentales ont aussi induits des modifications des propriétés biomécaniques chez les participants, on ne s'intéresse qu'aux données ayant été perturbées à la phase \cref{item_pert1}.
+Comme observé dans la \cref{chap4_sec_res_sub_task_1}, la hauteur cible a une influence significative sur les performances de la tâche. %, avec les erreurs $\abs{\epsilon_r}$ qui augmentaient en moyenne de \SI{3.5}{\centi\meter} entre les hauteurs cibles extrêmes $h_1^*$ et $h_3^*$. 
+Pour savoir si ces changements de conditions expérimentales ont aussi induits des modifications des propriétés biomécaniques chez les participants, on s'intéresse aux données acquises pendant l'expérience 2, comme expliqué en \cref{chap4_sec_exp_sub_prot_4}.
 
-Chaque participant se voit donc attribuer des triplets pour chacun des paramètres identifiés qui correspondent aux médianes des trois hauteurs cibles. Il est important de noter que la deuxième hauteur $h_2^*$ est plus représentée que les deux autres. Du fait du protocole expérimental proposé, plus d'expériences ont eu lieu avec cette hauteur cible. Les données sont récapitulées dans l'\cref{app_param_against_target_height}.
+%Chaque participant se voit donc attribuer des triplets pour chacun des paramètres identifiés qui correspondent aux médianes des trois hauteurs cibles. Il est important de noter que la deuxième hauteur $h_2^*$ est plus représentée que les deux autres. Du fait du protocole expérimental proposé, plus d'expériences ont eu lieu avec cette hauteur cible. Les données sont récapitulées dans l'\cref{app_param_against_target_height}.
 
-La \cref{fig_height_significance_impedance} montre les diagrammes en boîte des médianes des paramètres des utilisateurs comparés en fonction de leur hauteur cible. Aucun effet significatif n'est distingué, pour la suite des analyses, la hauteur n'est donc pas considérée comme un facteur significatif. Il est toutefois important de noter, qu'en l'absence de tri des données ayant un coefficient de détermination inférieur à \SI{50}{\percent}, certaines données aberrantes pourraient modifier la médiane. On vérifie donc la sensibilité des estimations à ce tri.
+\textcolor{orange}{La \cref{fig_height_significance_impedance} montre les diagrammes en boîte des des paramètres estimés pour tous les participants en fonction de $h^*$, en comparant les données avec ou sans triage par le coefficient de détermination $R^2$ avant d'appliquer les médianes. Comme peut le voir, après le trie la distribution des $R^2$ est fortement réduite, avec par exemple, les moustaches inférieures de $h_1^*$ qui passent de \SIrange{65}{91}{\percent}. Les modifications entraînent principalement la réduction des espaces inter-quartiles (notamment pour les amortissements apparents). Les données triées sont utilisées pour la suite.}
+%Aucun effet significatif n'est distingué, pour la suite des analyses, la hauteur n'est donc pas considérée comme un facteur significatif. Il est toutefois important de noter, qu'en l'absence de tri des données ayant un coefficient de détermination inférieur à \SI{50}{\percent}, certaines données aberrantes pourraient modifier la médiane. On vérifie donc la sensibilité des estimations à ce tri.
 
-\input{latex_figures/chapter_4/fig_height_significance_impedance}
+%\input{latex_figures/chapter_4/fig_height_significance_impedance}
+\input{latex_figures/chapter_4/fig_height_significance_impedance_r2_sorting}
 
-Si on s'intéresse donc à l'ANOVA des données triées en fonction de leur coefficient de détermination, montré en \cref{fig_height_significance_impedance_r2}, on peut voir un net changement sur les médianes et moustaches des $R^2$. Les médianes des coefficients de détermination des trois hauteurs cibles passent ainsi respectivement de \SIlist{85.5;86.0;84.7}{\percent} à \SIlist{94.5;93.4;93.8}{\percent}, soit une augmentation de presque \SI{10}{\percent} sur ce critère. Si on s'intéresse aux changements induits sur les identifications de raideur, on n'observe pas de changement de médiane en dehors des intervalles de confiance à \SI{95}{\percent}, avec des variations ne dépassant pas \SI{20}{\newton\per\meter}. Un constat équivalent peut être fait pour la masse, mais pas pour l'amortissement.
+\textcolor{orange}{Trois ANOVA mixtes sont réalisées sur les paramètres en impédance $\hat{K}$, $\hat{B}$ et $\hat{M}$ des participants estimés en fonction de la position verticale cible $h^*_i$ et avec le facteur de performance $e_i$ entre participants. Aucun effet principal ni aucune interaction ne se sont révélés significatifs. Les différences de performance ou de condition de la tâche n'ont donc pas d'effet significatif ou des effets trop faibles sur les paramètres en impédance, contrairement à ce qui a pu être observé par \textcite{erden_end-point_2015}.}
 
-\input{latex_figures/chapter_4/fig_height_significance_impedance_r2}
+\textcolor{orange}{L'ANOVA mixte conduite sur $R^2$ ($2 h^*_i \times 3 e_i$) indique un effet significatif des performances $F(2, 28) = 3.9$, $p=0.033$,  $\eta^2 = 0.090$ et aussi une interaction significative entre les deux facteurs $F(2, 28) = 3.6$, $p=0.042$,  $\eta^2 = 0.118$. L'analyse \textit{post-hoc} des interactions n'indiquent aucune paire d'interaction significative après correction, par contre les tests \textit{post-hoc} sur les performances indiquent une différence significative pour la paire $(e_1, e_2)$ ($p_{bonf}=0.037$), avec un écart de \SI{1.9}{\percent} entre les moyennes des deux groupes.}
 
-Pour la suite des analyses, seules les données triées avec le coefficient de détermination sont utilisées.
+%Si on s'intéresse donc à l'ANOVA des données triées en fonction de leur coefficient de détermination, montré en \cref{fig_height_significance_impedance_r2}, on peut voir un net changement sur les médianes et moustaches des $R^2$. Les médianes des coefficients de détermination des trois hauteurs cibles passent ainsi respectivement de \SIlist{85.5;86.0;84.7}{\percent} à \SIlist{94.5;93.4;93.8}{\percent}, soit une augmentation de presque \SI{10}{\percent} sur ce critère. Si on s'intéresse aux changements induits sur les identifications de raideur, on n'observe pas de changement de médiane en dehors des intervalles de confiance à \SI{95}{\percent}, avec des variations ne dépassant pas \SI{20}{\newton\per\meter}. Un constat équivalent peut être fait pour la masse, mais pas pour l'amortissement.
 
-\subsubsection{Effets temporels des expériences} \label{chap4_sec_res_sub_impedance_2}
+%\input{latex_figures/chapter_4/fig_height_significance_impedance_r2}
 
-En se penchant sur les effets temporels des différentes expériences et sessions, de la même manière que pour les hauteurs cibles, aucun effet significatif ne peut être observé sur l'ensemble des paramètres, comme révélé par la \cref{fig_time_significance_impedance_r2}. Les effets d'un possible apprentissage corroboré par les observations de la \cref{chap4_sec_res_sub_task_2}, ne sont pas constatés sur les paramètres apparents d'impédance. Pour la suite, aucune différenciation ne sera donc effectuée en fonction de la temporalité d'éxécution des expériences.
+%Pour la suite des analyses, seules les données triées avec le coefficient de détermination sont utilisées.
 
-\input{latex_figures/chapter_4/fig_time_significance_impedance_r2}
+\subsubsection{Effets des phases perturbées} \label{chap4_sec_res_sub_impedance_2}
 
-\subsubsection{Effets des phases perturbées} \label{chap4_sec_res_sub_impedance_3}
+L'\cref{hyp_stiff_rhyth} suppose que les paramètres identifiés varient ce manière cyclique. Seuls trois instants \cref{item_pert1,item_pert2,item_pert3} du cycle sont perturbés, une observation continue de l'impédance n'étant pas possible avec la méthode d'identification proposée (voir \cref{chap3_sec_method}). Toutefois, si des variations significatives sont observées en fonction de la phase, les résultats permettront de corroborer l'hypothèse.
 
-L'\cref{hyp_stiff_rhyth} suppose que les paramètres identifiés varient de manière temporelle sur un cycle. Seuls trois instants \cref{item_pert1,item_pert2,item_pert3} du cycle sont perturbés, une observation continue de l'impédance n'est pas possible avec la méthode d'identification proposée (voir \cref{chap3_sec_method}), toutefois, si des variations significatives sont observées en fonction de la phase, les résultats seront alors cohérents avec l'hypothèse. 
+\textcolor{orange}{Des ANOVA mixtes sont donc conduites sur les paramètres en impédance estimés en fonction de la phase ($3 \phi_i \times 3 e_i$). Comme expliqué en \cref{chap4_sec_exp_sub_prot_4}, seules les données de l'expérience 1 (3 essais), à la hauteur cible $h^*_2$ sont utilisées, même si aucun effet de $h^*_i$ n'a été observé précédemment. Pour l'ensemble des estimations des paramètres en impédance, l'hypothèse de sphéricité \parencite{mauchly_significance_1940} n'est pas vérifiée. La correction de \textcite{huynh_estimation_1976} a donc été appliquée.}
 
-La \cref{fig_phase_significance_impedance_r2} révèle que l'ensemble des paramètres - \textit{y compris $R^2$} - ont des différences significatives entre au moins deux des phases. La distribution normale des médianes des paramètres identifiés pour chaque participant à chaucune des trois phases étant discutable, il est possible de conduire une analyse de variance non paramètrique comme celle proposée par \textcite{kruskal_use_1952}. Les résultats apportés par ce dernier type d'ANOVA sont similaires à ceux obtenus par l'analyse de variance classique, avec des probabilités $p$ inférieures pour l'ensemble des paramètres en impédance, qui confirment la significativité des différences.
+\textcolor{orange}{Pour $\hat{K}$, l'ANOVA mixte ($3 \phi_i \times 3 e_i$) corrigée \parencite{huynh_estimation_1976}, signale un effet significatif de $\phi$ $F(1.38, 38.74) = 35.2$, $p<0.001$,  $\eta^2 = 0.412$. Par contre, aucune effet des performances ($e_i$), ni aucune interaction ($e_i\times\phi_i$) ne sont observés. Il est intéressant de noter qu'une ANOVA à mesures répétées non-paramétrique \parencite{kruskal_use_1952} ($3 \phi_i$) indique aussi un effet significatif de la phase $\chi^2(2)=44.4$, $p<0.001$.}
 
-\input{latex_figures/chapter_4/fig_phase_significance_impedance_r2}
+\textcolor{orange}{Les tests \textit{post-hoc} de l'ANOVA mixte indiquent des différences significatives pour les paires ($\phi_1,\phi_3$) ($p_{bonf}<0.001$) avec un écart des moyennes de raideur de \SI{199}{\newton\per\meter} et ($\phi_2,\phi_3$) ($p_{bonf}<0.001$) avec un écart de \SI{152}{\newton\per\meter}, comme on peut le voir sur la \cref{subfig_phase_significance_K_post_hoc}.}
 
-La \cref{fig_phase_significance_impedance_r2_mult} montre les analyses répétées avec la correction de Bonferroni. On peut voir que la moyenne des médianes des raideurs des participants pour la phase \cref{item_pert1} est significativement inférieure à celles des deux autres phases. On peut d'ailleurs constater que la moyenne des raideurs médaines apparentes semble augmenter avec la phase cyclique. L'amortissement et la masse apparente moyenne des phases \cref{item_pert1,item_pert3} sont, par contre, non seulement pas significativement différentes mais en plus très proches. En effet, les amortissements et masses identifiés pour ces phases ne se distinguent que de \SI{1}{\percent}, avec des intervalles de confiance à \SI{95}{\percent} des moyennes de l'ordre de \SI{15}{\percent} de leur valeur.
+\textcolor{orange}{Pour $\hat{B}$, l'ANOVA mixte ($3 \phi_i \times 3 e_i$) corrigée \parencite{huynh_estimation_1976}, rapporte un effet significatif de $\phi$ $F(1.46, 40.87) = 54.7$, $p<0.001$,  $\eta^2 = 0.397$. Par contre, aucune effet des performances ($e_i$), ni aucune interaction ($e_i\times\phi_i$) ne sont observés. L'ANOVA à mesures répétées non-paramétrique \parencite{kruskal_use_1952} ($3 \phi_i$) indique aussi un effet significatif de la phase $\chi^2(2)=42.6$, $p<0.001$.}
 
-\input{latex_figures/chapter_4/fig_phase_significance_impedance_r2_mult}
+\textcolor{orange}{Les tests \textit{post-hoc} de l'ANOVA mixte indiquent des différences significatives pour l'ensemble des paires ($\phi_1,\phi_2$) ($p_{bonf}=0.05$,$p_{holm}=0.017$) avec un écart des moyennes d'amortissement de \SI{1.13}{\newton\second\per\meter}, ($\phi_1,\phi_3$) ($p_{bonf}<0.001$) avec un écart de \SI{4.60}{\newton\second\per\meter} et ($\phi_2,\phi_3$) ($p_{bonf}<0.001$) avec un écart de \SI{3.47}{\newton\second\per\meter}, comme on peut le voir sur la \cref{subfig_phase_significance_B_post_hoc}.}
 
-Il faut remarquer en dernier lieu que la qualité de reconstruction des trajectoires est significativement moins bonne pour la phase \cref{item_pert1}, avec une différence de moyenne d'environ 2 points du coefficient de détermination, qui reste toutefois supérieur à \SI{90}{\percent}. Ce dernier élément est à garder à l'esprit, car même si l'effet peu sembler faible, il pourrait indiquer que la méthode d'identification proposée est influencée par l'instant du cycle où l'estimation de trajectoire virtuelle a lieu.
+\textcolor{orange}{Pour $\hat{M}$, l'ANOVA mixte ($3 \phi_i \times 3 e_i$) corrigée \parencite{huynh_estimation_1976}, rapporte un effet significatif de $\phi$ $F(1.73, 48.39) = 108.6$, $p<0.001$,  $\eta^2 = 0.396$. Par contre, aucune effet des performances ($e_i$), ni aucune interaction ($e_i\times\phi_i$) ne sont observés. L'ANOVA à mesures répétées non-paramétrique \parencite{kruskal_use_1952} ($3 \phi_i$) indique aussi un effet significatif de la phase $\chi^2(2)=56.6$, $p<0.001$.}
 
-\subsubsection{Effets des performances individuelles} \label{chap4_sec_res_sub_impedance_4}
+\textcolor{orange}{Les tests \textit{post-hoc} de l'ANOVA mixte indiquent des différences significatives pour l'ensemble des paires ($\phi_1,\phi_2$) ($p_{bonf}<0.001$) avec un écart des moyennes de masse de \SI{0.06}{\kilogram}, ($\phi_1,\phi_3$) ($p_{bonf}<0.001$) avec un écart de \SI{0.13}{\kilogram} et ($\phi_2,\phi_3$) ($p_{bonf}<0.001$) avec un écart de \SI{0.19}{\kilogram}, comme on peut le voir sur la \cref{subfig_phase_significance_M_post_hoc}.}
 
-Le dernier facteur qu'on souhaite évaluer concerne les performances par rapport aux niveaux de qualification définis en \cref{chap4_sec_res_sub_task_4}, et qui se sont révélés significatifs entre les trois groupes $e_1$, $e_2$ et $e_3$, par rapport aux erreurs absolues de rebonds $\abs{\epsilon_r}$. On souhaite mettre à l'épreuve l'\cref{hyp_perf_rhyth} qui suppute une corrélation entre les performances et les paramètres apparents. Encore une fois, pour limiter les effets des autres facteurs significatifs, une ANOVA à deux critères est conduite par rapport aux performances et aux phases. Les résultats des ANOVAs sont présentés dans les \cref{tab_anova_2_factors_K,tab_anova_2_factors_B,tab_anova_2_factors_M}. On peut y voir que les interactions entre les phases et performances ne sont pas significatives.
+%\tikzexternaldisable
+\input{latex_figures/chapter_4/fig_phase_significance_impedance_post_hoc}
+%\tikzexternalenable
 
-% K
-%  Source   Sum Sq.    d.f.   Mean Sq.     F     Prob>F
-%------------------------------------------------------
-%phi       92123       2    46061.5    12.88   0     
-%e          6911.4     2     3455.7     0.97   0.3847
-%phi*e      5237.3     4     1309.3     0.37   0.8321
-%Error    300402.1    84     3576.2                  
-%Total    420033      92                             
+%\subsubsection{Effets temporels des expériences} \label{chap4_sec_res_sub_impedance_2}
+%
+%En se penchant sur les effets temporels des différentes expériences et sessions, de la même manière que pour les hauteurs cibles, aucun effet significatif ne peut être observé sur l'ensemble des paramètres, comme révélé par la \cref{fig_time_significance_impedance_r2}. Les effets d'un possible apprentissage corroboré par les observations de la \cref{chap4_sec_res_sub_task_2}, ne sont pas constatés sur les paramètres apparents d'impédance. Pour la suite, aucune différenciation ne sera donc effectuée en fonction de la temporalité d'éxécution des expériences.
+%
+%\input{latex_figures/chapter_4/fig_time_significance_impedance_r2}
+%
+%\subsubsection{Effets des phases perturbées} \label{chap4_sec_res_sub_impedance_3}
+%
+%L'\cref{hyp_stiff_rhyth} suppose que les paramètres identifiés varient de manière temporelle sur un cycle. Seuls trois instants \cref{item_pert1,item_pert2,item_pert3} du cycle sont perturbés, une observation continue de l'impédance n'est pas possible avec la méthode d'identification proposée (voir \cref{chap3_sec_method}), toutefois, si des variations significatives sont observées en fonction de la phase, les résultats seront alors cohérents avec l'hypothèse. 
+%
+%La \cref{fig_phase_significance_impedance_r2} révèle que l'ensemble des paramètres - \textit{y compris $R^2$} - ont des différences significatives entre au moins deux des phases. La distribution normale des médianes des paramètres identifiés pour chaque participant à chaucune des trois phases étant discutable, il est possible de conduire une analyse de variance non paramètrique comme celle proposée par \textcite{kruskal_use_1952}. Les résultats apportés par ce dernier type d'ANOVA sont similaires à ceux obtenus par l'analyse de variance classique, avec des probabilités $p$ inférieures pour l'ensemble des paramètres en impédance, qui confirment la significativité des différences.
+%
+%\input{latex_figures/chapter_4/fig_phase_significance_impedance_r2}
+%
+%La \cref{fig_phase_significance_impedance_r2_mult} montre les analyses répétées avec la correction de Bonferroni. On peut voir que la moyenne des médianes des raideurs des participants pour la phase \cref{item_pert1} est significativement inférieure à celles des deux autres phases. On peut d'ailleurs constater que la moyenne des raideurs médaines apparentes semble augmenter avec la phase cyclique. L'amortissement et la masse apparente moyenne des phases \cref{item_pert1,item_pert3} sont, par contre, non seulement pas significativement différentes mais en plus très proches. En effet, les amortissements et masses identifiés pour ces phases ne se distinguent que de \SI{1}{\percent}, avec des intervalles de confiance à \SI{95}{\percent} des moyennes de l'ordre de \SI{15}{\percent} de leur valeur.
+%
+%\input{latex_figures/chapter_4/fig_phase_significance_impedance_r2_mult}
+%
+%Il faut remarquer en dernier lieu que la qualité de reconstruction des trajectoires est significativement moins bonne pour la phase \cref{item_pert1}, avec une différence de moyenne d'environ 2 points du coefficient de détermination, qui reste toutefois supérieur à \SI{90}{\percent}. Ce dernier élément est à garder à l'esprit, car même si l'effet peu sembler faible, il pourrait indiquer que la méthode d'identification proposée est influencée par l'instant du cycle où l'estimation de trajectoire virtuelle a lieu.
+%
+%\subsubsection{Effets des performances individuelles} \label{chap4_sec_res_sub_impedance_4}
+%
+%Le dernier facteur qu'on souhaite évaluer concerne les performances par rapport aux niveaux de qualification définis en \cref{chap4_sec_res_sub_task_4}, et qui se sont révélés significatifs entre les trois groupes $e_1$, $e_2$ et $e_3$, par rapport aux erreurs absolues de rebonds $\abs{\epsilon_r}$. On souhaite mettre à l'épreuve l'\cref{hyp_perf_rhyth} qui suppute une corrélation entre les performances et les paramètres apparents. Encore une fois, pour limiter les effets des autres facteurs significatifs, une ANOVA à deux critères est conduite par rapport aux performances et aux phases. Les résultats des ANOVAs sont présentés dans les \cref{tab_anova_2_factors_K,tab_anova_2_factors_B,tab_anova_2_factors_M}. On peut y voir que les interactions entre les phases et performances ne sont pas significatives.
+%
+%% K
+%%  Source   Sum Sq.    d.f.   Mean Sq.     F     Prob>F
+%%------------------------------------------------------
+%%phi       92123       2    46061.5    12.88   0     
+%%e          6911.4     2     3455.7     0.97   0.3847
+%%phi*e      5237.3     4     1309.3     0.37   0.8321
+%%Error    300402.1    84     3576.2                  
+%%Total    420033      92                             
+%
+%% B
+%%  Source   Sum Sq.   d.f.   Mean Sq.    F     Prob>F
+%%----------------------------------------------------
+%%phi       73.191     2    36.5954    7.69   0.0009
+%%e         57.862     2    28.9309    6.08   0.0034
+%%phi*e      7.03      4     1.7574    0.37   0.8298
+%%Error    399.6      84     4.7571                 
+%%Total    534.845    92        
+%
+%% M
+%%  Source   Sum Sq.   d.f.   Mean Sq.    F     Prob>F
+%%----------------------------------------------------
+%%phi      0.07254     2    0.03627    3      0.0549
+%%e        0.02957     2    0.01478    1.22   0.2991
+%%phi*e    0.00745     4    0.00186    0.15   0.9606
+%%Error    1.01402    84    0.01207                 
+%%Total    1.14584    92          
+%
+%\begin{table}
+%	%\caption*{ANOVAs} \label{tab_erden_anova}
+%	%\resizebox{\textwidth}{!}{
+%		\centering
+%		\begin{minipage}{.48\linewidth}%\parbox{.48\linewidth}{
+%			\resizebox{0.87\linewidth}{!}{
+%				\parbox{\linewidth}{
+%					\centering
+%					\caption{Raideur (\si{\newton\per\meter})}\label{tab_anova_2_factors_K}
+%					\begin{tabular}{ l | c  c  c  c  c } 
+%						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+%						$\phi_i$ & 92123 & 2 & 46061.5 & 12.88 & 0\\
+%						$e_i$ & 6911.4 & 2 & 3455.7 & 0.97 & 38.5\\
+%						$\phi_i\times e_i$ & 5237.3 & 4 & 1309.3  & 0.37 & 83.2\\
+%						Erreur & 300402.1 & 84 & 3576.2 & & \\
+%						Total & 420033 & 92 & & & 
+%						%\hline
+%					\end{tabular} 
+%				}
+%			}
+%		\end{minipage}%}
+%		\hfill	
+%		\begin{minipage}{.48\linewidth}
+%			\resizebox{0.87\linewidth}{!}{
+%				\parbox{\linewidth}{
+%					\caption{Amortissement (\si{\newton\second\per\meter})} \label{tab_anova_2_factors_B}
+%					\centering
+%					\begin{tabular}{ l | c  c  c  c  c } 
+%						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+%						$\phi_i$ & 73.19 & 2 & 36.60 & 7.69 & 0.09\\
+%						$e_i$ & 57.86 & 2 & 12.664 & 28.93 & 0.34\\
+%						$\phi_i\times e_i$ & 7.03 & 4 & 1.76  & 0.37 & 82.98\\
+%						Erreur & 399.6 & 84 & 4.7571 & & \\
+%						Total & 534.8 & 92 & & & 
+%						%\hline
+%					\end{tabular} 
+%				}
+%			}
+%		\end{minipage}
+%	%}
+%	\\
+%	\vspace{5mm}
+%	%\resizebox{.5\textwidth}{!}{
+%		\centering
+%		\begin{minipage}{.48\linewidth}%\parbox{.48\linewidth}{
+%			\resizebox{0.87\linewidth}{!}{
+%				\parbox{\linewidth}{
+%					\caption{Masse (\si{\kilogram})} \label{tab_anova_2_factors_M}
+%					\centering
+%					\begin{tabular}{ l | c  c  c  c  c } 
+%						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
+%						$\phi_i$ & 0.073 & 2 & 0.036 & 3 & 5.5\\
+%						$e_i$ & 0.030 & 2 & 0.015 & 1.22 & 29.9\\
+%						$\phi_i\times e_i$ & 0.007 & 4 & 0.002 & 0.15 & 96.1\\
+%						Erreur & 1.014 & 84 & 0.012 & & \\
+%						Total & 1.146 & 92 & & & 
+%						%\hline
+%					\end{tabular} 
+%				}
+%			}
+%		\end{minipage}%}
+%	%}
+%	\caption*{ANOVA à 2 facteurs, pour les paramètres apparents identifiés.}
+%\end{table}                    
+%
+%On retrouve l'allure des résultats présentée en \cref{fig_phase_significance_impedance_r2_mult} dans l'analyse multiple prenant en compte les effets des performances montrées en \cref{fig_phase_expertise_significance_impedance_r2_mult}. En effet, la moyenne des raideurs augmente de la phase \cref{item_pert1} à \cref{item_pert3}, toutefois, cette augmentation n'est significative que pour le groupe des novices. Les différences entre niveau de performances pour une même phase ne sont toutefois pas significatives, comme indiqué dans le \cref{tab_anova_2_factors_K}. Il semble donc que les performances ne soient pas expliquées par des changements de raideur, même s'il est important de rappeler que le groupe avec les meilleurs performances $e_3$ n'est pas autant représenté que les autres groupes, ce qui explique en partie les intervalles de confiance plus larges.
+%
+%\input{latex_figures/chapter_4/fig_phase_expertise_significance_impedance_r2_mult}       
+%
+%En se penchant sur l'amortissement, les variations des moyennes à l'intérieur des groupes d'expertise suivent encore une fois la tendance montrée en \cref{fig_phase_significance_impedance_r2_mult}, sans que les différences observées ne puissent être considérées comme significatives. De la même manière, aucune différence significative n'est constatée entre les niveaux de performance pour une même phase. On peut donc seulement voir des différences significatives entre des niveaux de performance et des phases différentes, comme par exemple entre les couples $(\phi_2,e_1)$ et $(\phi_1,e_2)$, ce qui pourrait indiquer des effets pas suffisamment importants pour pouvoir être observés.
+%
+%Il semble donc compliqué de conclure en ce qui concerne des différences significatives des paramètres en impédance apparente, en fonction des performances.
 
-% B
-%  Source   Sum Sq.   d.f.   Mean Sq.    F     Prob>F
-%----------------------------------------------------
-%phi       73.191     2    36.5954    7.69   0.0009
-%e         57.862     2    28.9309    6.08   0.0034
-%phi*e      7.03      4     1.7574    0.37   0.8298
-%Error    399.6      84     4.7571                 
-%Total    534.845    92        
+\section{Discussions} \label{chap4_sec_discussion}
 
-% M
-%  Source   Sum Sq.   d.f.   Mean Sq.    F     Prob>F
-%----------------------------------------------------
-%phi      0.07254     2    0.03627    3      0.0549
-%e        0.02957     2    0.01478    1.22   0.2991
-%phi*e    0.00745     4    0.00186    0.15   0.9606
-%Error    1.01402    84    0.01207                 
-%Total    1.14584    92          
+\textcolor{orange}{Dans ces expériences, les participants ont été observés pendant qu'ils réalisaient une tâche de jonglerie dans un environnement virtuel. Leurs performances lors des différents essais ont été mesurées et ont été présentées en \cref{chap4_sec_res_sub_task} puis les propriétés biomécaniques en impédance cartésienne apparente ont été estimées grâce à la méthodologie décrite au \cref{chap3} et présentées en \cref{chap4_sec_res_sub_impedance}.}
+
+\textcolor{orange}{La focalisation a été faite sur les variations des propriétés biomécaniques, en les observant en fonction des performances et des phases cycliques.}
+
+\subsection{Performances à la tâche de jonglerie}
+
+\textcolor{orange}{L'ensemble des participants a été capable de réaliser la tâche de jonglerie dans les différentes conditions expérimentales proposées, en présence de faibles perturbations, bien que plus de la moitié de la cohorte soit complètement naïve vis à vis de l'expérience ou d'expériences similaires. On peut aussi remarquer que les fréquences imposées par les conditions expérimentales (\SI{0.87\pm0.09}{\hertz}) sont moindres que celles de la littérature \parencite{morice_learning_2007,siegler_passive_2010}, car les accélérations étaient limitées par les dynamiques du robot.}
+
+\textcolor{red}{Analyse de l'accélération à l'impact et de la phase d'impact ? contrôle passif/actif \parencite{morice_learning_2007}}
+
+\subsubsection{Les perturbations sont-elles nuisibles à la tâche ?}
+
+\textcolor{orange}{Les effets des perturbations sur les performances des cycles les entourant ont été exposées en \cref{chap4_sec_res_sub_task_1}. Aucun différence significative n'a été observée sur les moyennes des erreurs de rebond $\mean{\epsilon_r}$ des cycles éloignés temporellement de plus d'une seconde (équivalent à un cycle) d'une perturbation. Seuls les cycles directement consécutifs à une perturbation étaient plus élevés en moyenne de \SI{2}{\centi\meter} que les autres cycles, ce qui indiquent que les participants visaient légèrement plus haut, possiblement pour compenser les effets de la perturbation, ou suite à des actions réflexes raidissant le bras.}
+
+\textcolor{orange}{Les écarts types des erreurs de rebond $\sigma(\epsilon_r)$ des cycles étudiés n'ont pas révélé de différences significatives. La distribution moyenne de $\sigma(\epsilon_r)$ autour de \SI{25}{\centi\meter}, fait relativiser l'écart significatif de moyenne de $\mean{\epsilon_r}$ des cycles suivants une perturbation, qui est plus de 10 fois inférieurs. Ces éléments permettent ainsi d'affirmer que la méthodologie de perturbation proposée se rapproche très fortement de son objectif de transparence totale. Une étude plus complète sur la perception des participants permettrait de mieux comprendre l'impact des perturbations sur le ressenti des participants.}
+
+\textcolor{orange}{Avec les éléments disponibles on peut toutefois affirmer que les perturbations introduites n'empêches non seulement pas de réaliser la tâche, mais qu'elle n'entraine qu'une dégradation très mineure de la précision, sans troubler la répétabilité du mouvement.}
+
+\subsubsection{Les changements de l'amplitude de rebond ont-ils un effet sur les performances ?}
+
+\textcolor{orange}{En accord avec des résultats précédents \parencite{siegler_passive_2010}, on observe que les participants jonglent en moyenne au dessus de la cible (\SI{5(7)}{\centi\meter}). L'erreur moyenne de rebond de l'ensemble des participants est par contre plus de deux fois supérieure à celle constatée par \textcite{siegler_passive_2010}, ce qui peut être expliqué par le diamètre supérieur de la balle simulée, \SI{10}{\centi\meter} ici, contre \SI{4}{\centi\meter} dans leurs travaux, ainsi que d'autres conditions expérimentales plus contraignantes dont on peut citer la manipulation d'un robot, et les positions verticales de référence deux à quatre fois plus élevées.}
+
+\textcolor{orange}{En effet, comme le montre les résultats de la \cref{chap4_sec_res_sub_task_2}, la précision des participants n'est pas modifiée significativement par l'augmentation de l'amplitude de rebond $z_a$, par contre leur répétabilité l'est. Toutefois ces résultats absolus peuvent être relativisés par rapport à l'amplitude de rebond moyenne. Dans ce cas, c'est le phénomène inverse qui est observé, l'écart type $\sigma(\epsilon_r)$ divisé par l'amplitude de rebond moyenne des participants diminue avec l'incrément de $z_a$.}
+
+\textcolor{orange}{Dans tous les cas, l'effet observé reste faible ($\eta^2=0.173$). Ainsi, pour le cas absolu, l'augmentation de l'amplitude de rebond moyenne pour les deux positions cibles de l'expérience 2, de \SIrange{1.176}{1.670}{\meter}, qui représente un augmentation de \SI{42.1}{\percent}, entraine un accroissement des écarts types de \SI{25.3}{\percent}. Dit autrement, la pente de la droite reliant les deux points extrêmes de la \cref{fig_target_height_significance_post_hoc} est de 0.11, ce qui confirme bien que l'effet est faible.}
+
+\textcolor{orange}{Assurément, cet effet est inférieur aux autres facteurs étudiés avec les données de l'expérience 1, comme les performances individuelles, ou l'apprentissage au fur et à mesure des essais. Comme l'a révélé l'ANOVA mixte conduite en \cref{chap4_sec_res_sub_task_3} sur $\sigma(\epsilon_r)$, qu'on peut observer en \cref{fig_performances_significance_post_hoc}, la différence moyenne de $\sigma(\epsilon_r)$ du premier essai $n_1$ entre les utilisateurs novices $e_1$ et avancés $e_3$ atteint la dizaine de centimètres.}
+
+\textcolor{orange}{Par ailleurs, l'interaction $e_i\times n_i$ mise en évidence par cette même ANOVA, indique justement que ce sont les utilisateurs novices qui marquent la progression la plus significative et la plus importante entre les essais $n_1$ et $n_3$ (\SI{6}{\centi\meter}), là où les utilisateurs les plus avancés ne démontrent aucun effet significatif assimilable à de l'apprentissage. Ainsi, lors du dernier essai de l'expérience 1, plus aucune différence significative n'est observée entre les paires formées par trois groupes de performance ($p_{bonf}=1$). La répétabilité des participants tend donc à se rapprocher pour ne plus être significativement différentiable après plus de \SI{11}{\minute} de pratique.}
+
+\subsection{Comportement en impédance cartésienne}
+
+Les observations faites sur 31 participants indiquent des effets significatifs des phases sur les propriétés d'impédance apparente observées, mais pas des performances. 
+
+Contrairement à ce qui a été observé par \textcite{morice_learning_2007}, pour les deux expériences proposées, les participants avaient en moyenne des accélérations négatives lors de l'impact avec la balle (\SI{-0.05(0.28)}{\meter\per\second\squared}).
+\textcolor{red}{parler du contrôle passif/actif \parencite{morice_learning_2007} ?}
+
+\subsubsection{Comparaison des résultats} \label{chap4_sec_res_sub_discussion_1}
+
+Les paramètres en impédance estimés sur plusieurs répétitions en utilisant la médiane varient entre \SIlist{41;708}{\newton\per\meter} pour la raideur, \SIlist{2.2;19.9}{\newton\second\per\meter} pour l'amortissement, et \SIlist{0.28;0.89}{\kilogram} pour la masse (voir \cref{app_param_against_target_height,app_param_against_phase}). La variabilité de raideur est donc comparable à celle observée par \textcite{burdet_central_2001}, mais plus importante que celles des expériences les plus similaires, décrites par \textcite{tsuji_bio-mimetic_2008,erden_hand_2015}. Toutefois, en combinant les plages des paramètres estimés par ces deux derniers auteurs, toutes les identifications de raideur sauf une se retrouvent dans un intervalle déjà étudié.
+
+Si on s'arrête sur la phase \cref{item_pert1}, juste après l'impact, un peu plus de \SI{87}{\percent} des participants ont une raideur médiane identifiée qui se situe dans la plage des raideurs estimées par \textcite{tsuji_bio-mimetic_2008}, ce ratio chute à \SI{74}{\percent} pour \cref{item_pert2} et à \SI{16}{\percent} pour \cref{item_pert3}. On pourra toutefois noter que leur expérience ne comprenait que 4 participants, ce qui réduit la variabilité des paramètres identifiés, et pourrait expliquer la plus large plage observée dans l'étude conduite ici. 
+
+Au contraire, les travaux de \textcite{erden_hand_2015} ont été réalisés avec un échantillon de 24 personnes réparties en deux groupes en fonction de leur expertise dans la tâche de soudure. Or seuls 2 participants, c'est à dire à peine \SI{6}{\percent}, ont obtenu une raideur dans une plage similaire lors des deux premières phases, ratio qui monte à \SI{45}{\percent} pour \cref{item_pert3}. Cette différence pourrait s'expliquer par les différentes tâches choisies. En réalité, la tâche de soudure repose bien plus sur la précision du mouvement, avec des vitesses plutôt lentes, là où la jonglerie repose sur la synchronisation avec la balle, avec des vitesses plus importantes. Comme expliqué en \cref{chap_1_sec_2_subsec_2_visco_elast_char}, les co-contractions augmentent lorsqu'un humain cherche à améliorer sa précision, ce qui pourrait expliquer à la fois les raideurs et amortissements apparents plus faibles dans le cadre d'un mouvement rythmique.
+
+On peut par ailleurs remarquer, d'après les résultats d'\textcite{abe_modulation_2003}, que lors de mouvements rythmiques uni-articulaires, la raideur minimale est observée autour de \SI{1}{\hertz}. Les mouvements générés lors de la tâche de jonglerie virtuelle avec les paramètres expérimentaux proposés se situent proche de cette fréquence. %comme l'atteste la \cref{subfig_target_height_vs_cycle_duration}, où l'on peut constater que 
+%La majeure partie des cycles ont des fréquences comprises entre \SIlist{0.65;1.35}{\hertz}. 
+En mesurant le temps de chute libre moyen de la balle pour les trois positions verticales cibles $h_1^*$, $h_2^*$ et $h_3^*$, des fréquences moyennes respectives de \SIlist{0.91;0.86;0.80}{\hertz} sont obtenues, soient des variations de l'ordre de \SIlist{0.05}{\hertz} autour de \SI{0.85}{\hertz}. On pourra alors noter, qu'\textcite{abe_modulation_2003} n'ont pas observés de différences significatives sur cette gamme de fréquence, comme c'est le cas ici.%, puisque les variations de la hauteur cible n'ont pas entraîné de changements significatifs sur les moyennes des paramètres des participants. 
+
+En se penchant sur les amortissements apparents, 27 participants obtiennent au moins lors d'une des phases cycliques, des valeurs dans les plages observées par \textcite{erden_hand_2015}, toutefois ces valeurs se placent toutes proches de la borne inférieure, la plus haute estimation étant de \SI{19.9}{\newton\second\per\meter}. On pourrait donc penser que le comportement amortissant apparent est moins prononcé lors de mouvements rythmiques, toutefois, d'autres sources peuvent expliquer ces distinctions. 
+
+Les différences d'estimation peuvent, en effet, trouver leurs sources dans la méthode d'identification proposée. Il est important de souligner que pour minimiser les effets des actions volontaires, seuls \SI{150}{\milli\second} ont été utilisés pour les identifications décrites dans cette étude contre respectivement \SIlist{250;450}{\milli\second} chez \textcite{erden_hand_2015,tsuji_bio-mimetic_2008}. Avec ces dernières durées, des comportements volontaires peuvent devenir dominant, comportements qui ont été détectés seulement lorsque des valeurs négatives des paramètres étaient obtenues \parencite{erden_hand_2015}.
+
+Un dernier point qu'il est important de souligner confirme une prédiction de l'analyse de sensibilité locale faite en \cref{chap3_sec_method_sub_ident_1}, et d'abord validée dans les analyses des simulations. En effet, si on regarde les intervalles de confiance des médianes des paramètres, qui sont obtenues à partir de la formule \cref{eq_notch}, la variabilité plus importante des estimations de raideur est bien confirmée, comme montré sur le \cref{tab_impedance_param_average_notch}. L'intervalle de confiance moyen des raideurs apparentes identifiées est ainsi de l'ordre de \SI{43}{\percent} des valeurs obtenues, contre \SIlist{22;13}{\percent} respectivement pour l'amortissement et la masse. 
 
 \begin{table}
-	%\caption*{ANOVAs} \label{tab_erden_anova}
-	%\resizebox{\textwidth}{!}{
-		\centering
-		\begin{minipage}{.48\linewidth}%\parbox{.48\linewidth}{
-			\resizebox{0.87\linewidth}{!}{
-				\parbox{\linewidth}{
-					\centering
-					\caption{Raideur (\si{\newton\per\meter})}\label{tab_anova_2_factors_K}
-					\begin{tabular}{ l | c  c  c  c  c } 
-						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
-						$\phi_i$ & 92123 & 2 & 46061.5 & 12.88 & 0\\
-						$e_i$ & 6911.4 & 2 & 3455.7 & 0.97 & 38.5\\
-						$\phi_i\times e_i$ & 5237.3 & 4 & 1309.3  & 0.37 & 83.2\\
-						Erreur & 300402.1 & 84 & 3576.2 & & \\
-						Total & 420033 & 92 & & & 
-						%\hline
-					\end{tabular} 
-				}
-			}
-		\end{minipage}%}
-		\hfill	
-		\begin{minipage}{.48\linewidth}
-			\resizebox{0.87\linewidth}{!}{
-				\parbox{\linewidth}{
-					\caption{Amortissement (\si{\newton\second\per\meter})} \label{tab_anova_2_factors_B}
-					\centering
-					\begin{tabular}{ l | c  c  c  c  c } 
-						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
-						$\phi_i$ & 73.19 & 2 & 36.60 & 7.69 & 0.09\\
-						$e_i$ & 57.86 & 2 & 12.664 & 28.93 & 0.34\\
-						$\phi_i\times e_i$ & 7.03 & 4 & 1.76  & 0.37 & 82.98\\
-						Erreur & 399.6 & 84 & 4.7571 & & \\
-						Total & 534.8 & 92 & & & 
-						%\hline
-					\end{tabular} 
-				}
-			}
-		\end{minipage}
-	%}
-	\\
-	\vspace{5mm}
-	%\resizebox{.5\textwidth}{!}{
-		\centering
-		\begin{minipage}{.48\linewidth}%\parbox{.48\linewidth}{
-			\resizebox{0.87\linewidth}{!}{
-				\parbox{\linewidth}{
-					\caption{Masse (\si{\kilogram})} \label{tab_anova_2_factors_M}
-					\centering
-					\begin{tabular}{ l | c  c  c  c  c } 
-						Source & $\sum \epsilon^2$ & DLL & $\mean{\epsilon^2}$ & $F$ & pval (\si{\percent})\\ \hline
-						$\phi_i$ & 0.073 & 2 & 0.036 & 3 & 5.5\\
-						$e_i$ & 0.030 & 2 & 0.015 & 1.22 & 29.9\\
-						$\phi_i\times e_i$ & 0.007 & 4 & 0.002 & 0.15 & 96.1\\
-						Erreur & 1.014 & 84 & 0.012 & & \\
-						Total & 1.146 & 92 & & & 
-						%\hline
-					\end{tabular} 
-				}
-			}
-		\end{minipage}%}
-	%}
-	\caption*{ANOVA à 2 facteurs, pour les paramètres apparents identifiés.}
-\end{table}                    
+	\centering
+	\begin{tabular}{| l | c  c  c |} 
+		%		\hline
+		%		& $\phi_1$ & $\phi_2$ & $\phi_3$\\ \hline
+		%		$K$ (\si{\newton\per\meter}) & 47.07 &  52.19 & 78.38\\
+		%		$B$ (\si{\newton\second\per\meter}) & 1.65 &  2.25 & 2.84\\
+		%		$M$ (\si{\gram}) & 31 &  32 & 55\\\hline
+		\hline
+		& $\phi_1$ & $\phi_2$ & $\phi_3$\\ \hline
+		$K$ (\si{\newton\per\meter}) & 80 &  54 & 85\\
+		$B$ (\si{\newton\second\per\meter}) & 2.7 &  2.2 & 2.9\\
+		$M$ (\si{\gram}) & 66 &  46 & 68\\\hline
+		%\hline
+	\end{tabular} % expertise factor
+	\caption{Intervalles de confiance ($m_{95\%}$) moyens des médianes des paramètres}
+	\label{tab_impedance_param_average_notch}
+\end{table}
 
-On retrouve l'allure des résultats présentée en \cref{fig_phase_significance_impedance_r2_mult} dans l'analyse multiple prenant en compte les effets des performances montrées en \cref{fig_phase_expertise_significance_impedance_r2_mult}. En effet, la moyenne des raideurs augmente de la phase \cref{item_pert1} à \cref{item_pert3}, toutefois, cette augmentation n'est significative que pour le groupe des novices. Les différences entre niveau de performances pour une même phase ne sont toutefois pas significatives, comme indiqué dans le \cref{tab_anova_2_factors_K}. Il semble donc que les performances ne soient pas expliquées par des changements de raideur, même s'il est important de rappeler que le groupe avec les meilleurs performances $e_3$ n'est pas autant représenté que les autres groupes, ce qui explique en partie les intervalles de confiance plus larges.
+Ainsi, une amélioration de la fiabilité des identifications semble nécessaire pour observer des variations moins importantes sans avoir à recourir à des cohortes plus peuplées, l'étude réalisée ici constituant déjà la cohorte la plus importante à notre connaissance, pour des expériences en estimation d'impédance du membre supérieur. Les variations liées aux performances qui sont quant à elles trop faibles pour que leurs effets, - \textit{observés par d'autres auteurs \parencite{erden_hand_2015}} -, puissent être correctement interprétés, pourraient peut-être ainsi être mieux observées.
 
-\input{latex_figures/chapter_4/fig_phase_expertise_significance_impedance_r2_mult}       
+\subsubsection{Analyse des variations de phase} \label{chap4_sec_res_sub_discussion_2}
 
-En se penchant sur l'amortissement, les variations des moyennes à l'intérieur des groupes d'expertise suivent encore une fois la tendance montrée en \cref{fig_phase_significance_impedance_r2_mult}, sans que les différences observées ne puissent être considérées comme significatives. De la même manière, aucune différence significative n'est constatée entre les niveaux de performance pour une même phase. On peut donc seulement voir des différences significatives entre des niveaux de performance et des phases différentes, comme par exemple entre les couples $(\phi_2,e_1)$ et $(\phi_1,e_2)$, ce qui pourrait indiquer des effets pas suffisamment importants pour pouvoir être observés.
-
-Il semble donc compliqué de conclure en ce qui concerne des différences significatives des paramètres en impédance apparente, en fonction des performances.
-
-\subsection{Discussions} \label{chap4_sec_res_sub_discussion}
-
-Les observations faites sur 31 participants indiquent des effets significatifs des phases et des niveaux de performances, sur les propriétés d'impédance apparente observées. 
-
-\subsubsection{Significativité des variations} \label{chap4_sec_res_sub_discussion_1}
-
-L'effet le plus important concerne la phase. On peut tracer les diagrammes de Bode (voir \cref{fig_impedance_bode_diagram_phase_variations}) du comportement en admittance du bras humain, c'est à dire, le comportement cinématique vis à vis de perturbations en force, pour les trois gammes de paramètres moyens observés en \cref{fig_phase_significance_impedance_r2_mult}. 
+%L'effet le plus important concerne la phase. 
+On peut tracer les diagrammes de Bode (voir \cref{fig_impedance_bode_diagram_phase_variations}) du comportement en admittance du bras humain, c'est à dire, le comportement cinématique vis à vis de perturbations en force, pour les trois gammes de paramètres moyens observés en \cref{fig_phase_significance_impedance_post_hoc}. 
 
 \input{latex_figures/chapter_4/fig_bode_diagram_impedance_model}
 \tikzexternaldisable
 
-Comme on peut s'y attendre, une augmentation de la raideur, entraine une chute du gain statique, dont la valeur est inversement proportionnelle à cette dernière, c'est à dire qu'il faut une force plus importante pour produire un même mouvement avec une perturbation en force. On peut donc supposer que les participants augmentent progressivement leur raideur sur la durée d'un cycle pour se préparer à l'impact de la balle et améliorer le rejet de la perturbation prévisible qu'est l'impact, comme observé par \textcite{tsuji_bio-mimetic_2008}. Ainsi, un échelon unitaire de force produira un déplacement de \SI{1}{\centi\meter} pour les paramètres moyens identifiés à la phase \cref{item_pert1}, contre un déplacement de \SI{0.5}{\centi\meter} pour ceux de la phase \cref{item_pert3}.
+Comme on peut s'y attendre, une augmentation de la raideur, entraine une chute du gain statique, dont la valeur est inversement proportionnelle à cette dernière, c'est à dire qu'il faut une force plus importante pour produire un même mouvement avec une perturbation en force. On peut donc supposer que les participants augmentent leur raideur apparente sur la durée d'un cycle pour se préparer à l'impact de la balle et améliorer le rejet de la perturbation prévisible qu'est l'impact, comme observé par \textcite{tsuji_bio-mimetic_2008}. Ainsi, un échelon unitaire de force produira un déplacement de \SI{0.8}{\centi\meter} pour les paramètres moyens identifiés à la phase \cref{item_pert1}, contre un déplacement de \SI{0.3}{\centi\meter} pour ceux de la phase \cref{item_pert3}.
 
-Par ailleur, la pulsation propre $\omega_n$ d'un système masse-ressort-amortissment dépend à la fois de la raideur et de la masse, comme rappelé en équation \cref{eq_impedance_model_natural_pulse}. Une augmentation de la raideur, entraine donc aussi une hausse de la fréquence des oscillations de la réponse. Toutefois, si on s'intéresse au temps d'établissement du comportement en rejet de perturbation des systèmes en impédance en boucle fermée, c'est les paramètres moyens identifiés de la phase \cref{item_pert2} qui ont la réponse la plus rapide, avec \SI{0.2}{\second}, contre \SIlist{0.3;0.4}{\second} pour les phases \cref{item_pert3,item_pert1} respectivement.
+Par ailleurs, la pulsation propre $\omega_n$ d'un système masse-ressort-amortissement dépend à la fois de la raideur et de la masse, comme rappelé en équation \cref{eq_impedance_model_natural_pulse}. Une augmentation de la raideur, entraine donc aussi une hausse de la fréquence des oscillations de la réponse. De plus, si on s'intéresse au temps d'établissement du comportement en rejet de perturbation des systèmes en impédance en boucle fermée, c'est les paramètres moyens identifiés de la phase \cref{item_pert3} qui ont la réponse la plus rapide, avec \SI{0.25}{\second}, contre \SIlist{0.28;0.36}{\second} pour les phases \cref{item_pert2,item_pert1} respectivement. Ce qui est aussi cohérent avec la préparation d'un impact, qui sera rejeté plus rapidement avec les paramètres moyens identifiés pour \cref{item_pert3}.
 
 \begin{equation} \label{eq_impedance_model_natural_pulse}
 	\omega_n = \sqrt{\frac{K}{M}}
 \end{equation}
 
-Comme noté dans la fin de la \cref{chap4_sec_res_sub_impedance_3}, des différences significatives ont aussi été observées pour le coefficient de détermination de la phase \cref{item_pert1}, comparativement aux deux autres. La méthode proposée semble donc sensible à la phase, ce qui pourrait avoir une influence sur les identifications. Il est toutefois pertinent de souligner que même avant le tri des données avec le coefficient de détermination, la médiane de cet indicateur se situe autour de \SI{85}{\percent}, ce qui montre bien l'adéquation du modèle en impédance proposé. 
+%Comme noté dans la fin de la \cref{chap4_sec_res_sub_impedance_3}, des différences significatives ont aussi été observées pour le coefficient de détermination de la phase \cref{item_pert1}, comparativement aux deux autres. La méthode proposée semble donc sensible à la phase, ce qui pourrait avoir une influence sur les identifications. Il est toutefois pertinent de souligner que même avant le tri des données avec le coefficient de détermination, la médiane de cet indicateur se situe autour de \SI{85}{\percent}, ce qui montre bien l'adéquation du modèle en impédance proposé.
+Il est toutefois important de souligner que des différences significatives ont aussi été observées pour le coefficient de détermination $R^2$ moyen de la phase \cref{item_pert1}, comparativement aux deux autres ($p_{bonf}<0.001$). La méthode proposée semble donc sensible à la phase, ce qui pourrait avoir une influence sur les identifications. Il est toutefois pertinent de souligner que même avant le tri des données avec le coefficient de détermination, la médiane de cet indicateur se situe autour de \SI{87}{\percent} pour \cref{item_pert1} et \SI{96}{\percent} pour \cref{item_pert2,item_pert3}, ce qui confirme l'adéquation du modèle en impédance proposé. 
 
-Il faut rappeler que le modèle très simpliste proposé n'a pas l'ambition d'expliquer une réalité biologique, mais plutôt de reproduire un comportement global, dont l'émergence est le fruit de plusieurs phénomènes, dont on pourra citer la viscoélasticité des muscles, les réflexes etc. En effet, lorsqu'un robot interagit avec un humain, il perçoit le comportement global de ce dernier, et non pas les différentes origines physiologiques qui s'amalgament. De la même manière, lorsqu'un robot essaie d'agir sur un environnement anthropisé en imitant le comportement humain, son principal besoin est de reproduire une allure générale et stable. Il est donc fort de noter qu'un modèle aussi simple du second ordre permette d'obtenir des coefficients de détermination médians supérieurs à \SI{80}{\percent} dans le cadre d'une expérience aussi peu maîtrisée.
+\subsubsection{Conclusion}
 
-En effet, lors des expériences, les participants n'étaient pas contraints dans leurs mouvements, les seuls instructions données étaient de n'utiliser qu'une seule main pour l'ensemble des manipulations, et d'essayer de maintenir la même posture durant les expériences. Les rotations de l'épaule et du poignet n'étaient ainsi pas contraintes, comme c'est souvent le cas dans le cadre des expériences d'estimation d'impédance polyarticulaires \parencite{mussa-ivaldi_neural_1985,gomi_task-dependent_1998}. De plus, les participants n'étant pas assis, ils pouvaient utiliser l'ensemble de leur corps pour réaliser la tâche. Bien que les mouvements des membres inférieurs n'étaient pas mesurés, ils ont pu être observés dans certains cas.
+Il faut rappeler que le modèle très simpliste proposé n'a pas l'ambition d'expliquer une réalité biologique, mais plutôt de reproduire un comportement global, dont l'émergence est le fruit de plusieurs phénomènes, dont on pourra citer la visco-élasticité des muscles, les réflexes etc. En effet, lorsqu'un robot interagit avec un humain, il perçoit le comportement global de ce dernier, et non pas les différentes origines physiologiques qui s'amalgament. De la même manière, lorsqu'un robot essaie d'agir sur un environnement anthropisé en imitant le comportement humain, son principal besoin est de reproduire une allure générale et stable. Il est donc fort de noter qu'un modèle aussi simple du second ordre permette d'obtenir des coefficients de détermination médians supérieurs à \SI{85}{\percent} dans le cadre d'une expérience aussi peu maîtrisée.
 
-L'utilisation d'un modèle complet aurait requis de prendre en compte l'ensemble des dégrés de liberté ou de contraindre la tâche pour la simplifier. La première solution rend le modèle très complexe, et nécessite l'observation de l'ensemble des articulations, ce qui rend l'identification des paramètres plus difficiles. La seconde solution modifie l'écologie de la tâche, par exemple en entrainant des phénomènes de compensation qui n'auraient pas lieu hors du contexte expérimental. Comme l'ont fait \textcite{erden_hand_2015} dans le cadre d'une tâche réaliste de soudure, il semble plus écologique que les contraintes d'interaction soient imposées par la tâche elle même. Bien que la tâche de jonglerie semble proche d'un jeu, les trajectoires cycliques générées peuvent être rapprochées de celles d'autres mouvements rythmiques, comme le poinçonnage ou le martelage dans des contextes industriels ou la compensation de mouvements biologiques dans des environnements médicaux. 
+En effet, lors des expériences exécutées pour ces travaux, les participants n'étaient pas contraints dans leurs mouvements, les seuls instructions données étaient de n'utiliser qu'une seule main pour l'ensemble des manipulations, et d'essayer de maintenir la même posture durant les expériences. Les rotations de l'épaule et du poignet n'étaient ainsi pas contraintes, comme c'est souvent le cas dans le cadre des expériences d'estimation d'impédance poly-articulaires \parencite{mussa-ivaldi_neural_1985,gomi_task-dependent_1998}. De plus, les participants n'étant pas assis, ils pouvaient utiliser l'ensemble de leur corps pour réaliser la tâche. Bien que les mouvements des membres inférieurs n'étaient pas mesurés, ils ont pu être observés dans certains cas.
 
-\subsubsection{Comparaison des résultats} \label{chap4_sec_res_sub_discussion_2}
-
-Les paramètes en impédance estimés sur plusieurs répétitions en utilisant la médiane varient entre \SIlist{44.9;445.1}{\newton\per\meter} pour la raideur, \SIlist{2.21;17.51}{\newton\second\per\meter} pour l'amortissement, et \SIlist{227;893}{\gram} pour la masse (voir \cref{app_param_against_target_height,app_param_against_phase}). La variabilité de raideur est donc plus restreinte que celle observée par \textcite{burdet_central_2001}, mais plus importante que celles des expériences les plus similaires, décrites par \textcite{tsuji_bio-mimetic_2008,erden_hand_2015}. Toutefois, en combinant les plages des paramètres estimés par ces deux derniers auteurs, toutes les identifications se retrouvent dans un intervalle déjà étudié.
-
-Si on s'arrête sur la phase \cref{item_pert3}, au plus proche de l'impact, un peu plus de \SI{50}{\percent} des participants ont une raideur médiane identifiée qui se situe dans la plage des raideurs estimées par \textcite{tsuji_bio-mimetic_2008} lors de la phase de préparation à un impact avec une balle. On pourra toutefois noter que leur expérience ne comprenait que 4 participants, ce qui a pour effet de réduire la variabilité des paramètres identifiés, et pourrait expliquer la plus large plage observée dans l'étude conduite ici. 
-
-Au contraire, les travaux de \textcite{erden_hand_2015} ont été réalisés avec un échantillon de 24 personnes réparties en deux groupes en fonction de leur expertise dans la tâche de soudure. Or seuls 5 participants, c'est à dire à peine \SI{15}{\percent} ont obtenu une raideur dans une plage similaire lors d'au moins une des phases $\phi_i$. Cette différence pourrait s'expliquer par les tâches choisies. En réalité, la tâche de soudure repose bien plus sur la précision du mouvement, avec des vitesses plutôt lentes, là où la jonglerie repose sur la synchronisation avec la balle, avec des vitesses plus importantes. Comme expliqué en \cref{chap_1_sec_2_subsec_2_visco_elast_char}, les cocontractions augmentent lorsqu'un humain cherche à améliorer sa précision, ce qui pourrait expliquer à la fois les raideurs et amortissements apparents plus faibles dans le cadre d'un mouvement rythmique.
-
-On peut par ailleurs remarquer, d'après les résultats d'\textcite{abe_modulation_2003}, que lors de mouvements rythmiques uniarticulaires, la raideur minimale est observée autour de \SI{1}{\hertz}. Les mouvements générés lors de la tâche de jonglerie virtuelle se situent proche de cette fréquence, comme l'atteste la \cref{subfig_target_height_vs_cycle_duration}, où l'on peut constater que la majeure partie des cycles ont des fréquences comprises entre \SIlist{0.65;1.35}{\hertz}. On pourra de plus noter, qu'\textcite{abe_modulation_2003} n'ont pas observés de différences significatives sur cette gamme de fréquence, comme c'est le cas ici, puisque les variations de la hauteur cible n'ont pas entraîné de changements significatifs sur les moyennes des paramètres des participants. En prenant le temps de chute libre de la balle, les trois hauteurs moyennes observées $h_1$, $h_2$ et $h_3$ devraient entraîner des fréquences moyennes respectives de \SIlist{1.02;0.93;0.86}{\hertz}, soient des variations de l'ordre de \SIlist{0.1}{\hertz} autour de \SI{0.95}{\hertz}.
-
-En se penchant sur les amortissements apparents, 18 participants obtiennent au moins lors d'une des phases cycliques, des valeurs dans les plages observées par \textcite{erden_hand_2015}, toutefois ces valeurs se placent toutes proches de la borne inférieure, la plus haute estimation étant de \SI{17.51}{\newton\second\per\meter}. On pourrait donc penser que le comportement amortissant apparent est moins prononcé lors de mouvements rythmiques, toutefois, d'autres sources peuvent expliquer ces distinctions. 
-
-Les différences d'estimation peuvent, en effet, trouver leurs sources dans la méthode d'identification proposée. Il est important de souligner que pour minimiser les effets des actions volontaires, seuls \SI{150}{\milli\second} ont été utilisés pour les identifications décrites dans cette étude contre respectivement \SIlist{250;450}{\milli\second} chez \textcite{erden_hand_2015,tsuji_bio-mimetic_2008}. Avec ces dernières durées, des comportements volontaires peuvent devenir dominant, comportements qui ont été détectés seulement lorsque des valeurs négatives des paramètres étaient obtenues \parencite{erden_hand_2015}.
-
-Un dernier point qu'il est important de souligner confirme une prédiction de l'analyse de sensibilité locale faite en \cref{chap3_sec_method_sub_ident_1}, et d'abord valider dans les analyses des simulations. En effet, si on regarde les intervalles de confiance des médianes des paramètres, qui sont obtenues à partir de la formule \cref{eq_notch}, la variabilité plus importante des estimations de raideur est bien confirmée, comme montré sur le \cref{tab_impedance_param_avarage_notch}. L'intervalle de confiance moyen des raideurs apparentes identifiées est ainsi de l'ordre de \SI{40}{\percent} des valeurs obtenues, contre \SIlist{20;10}{\percent} respectivement pour l'amortissement et la masse. 
-
-\begin{table}
-	\centering
-	\begin{tabular}{| l | c  c  c |} 
-		\hline
-		& $\phi_1$ & $\phi_2$ & $\phi_3$\\ \hline
-		$K$ (\si{\newton\per\meter}) & 47.07 &  52.19 & 78.38\\
-		$B$ (\si{\newton\second\per\meter}) & 1.65 &  2.25 & 2.84\\
-		$M$ (\si{\gram}) & 31 &  32 & 55\\\hline
-		
-		%\hline
-	\end{tabular} % expertise factor
-	\caption{Intervalles de confiance moyens des médianes des paramètres}
-	\label{tab_impedance_param_avarage_notch}
-\end{table}
-
-Ainsi, une amélioration de la fiabilité des identifications semble nécessaire pour observer des variations moins importantes sans avoir à recourir à des cohortes plus peuplées, l'étude réalisée ici constituant déjà la cohorte la plus importante à notre connaissance, pour des expériences en estimation d'impédance du membre supérieur. Les variations liées aux performances qui sont quant à elles trop faibles pour que leurs effets puissent être correctement interprétés, pourraient peut-être ainsi être mieux observées.
+L'utilisation d'un modèle complet aurait requis de prendre en compte l'ensemble des degrés de liberté ou de contraindre la tâche pour la simplifier. La première solution rend le modèle très complexe, et nécessite l'observation de l'ensemble des articulations, ce qui rend l'identification des paramètres plus difficiles. La seconde solution modifie l'écologie de la tâche, par exemple en entrainant des phénomènes de compensation qui n'auraient pas lieu hors du contexte expérimental. Comme l'ont fait \textcite{erden_hand_2015} dans le cadre d'une tâche réaliste de soudure, il semble plus écologique que les contraintes d'interaction soient imposées par la tâche elle même. Bien que la tâche de jonglerie semble proche d'un jeu, les trajectoires cycliques générées peuvent être rapprochées de celles d'autres mouvements rythmiques, comme le poinçonnage ou le martelage dans des contextes industriels ou la compensation de mouvements biologiques dans des environnements médicaux. 
 
 %Les variations liées aux performances sont quant à elles trop faibles pour que leurs effets puissent être correctement interprétés.
 
