@@ -1,37 +1,37 @@
 \begin{figure} [h]
 	\centering
-	\subcaptionbox{Moyennes des distances réelles entre les impacts de balles et les consignes de hauteur (\si{\meter}) $h_1^*=1.5$, $h_2^*=1.75$ et $h_3^*=2$ avec les écarts types indiqués en intervalles de confiance \label{subfig_target_height_significance}}
-	{
-		\pgfplotstableread[col sep=semicolon] {misc/chap_4_ball_bouncing/real_target_height_comparison.csv}\datatable
-		\tikzsetnextfilename{subfig_target_height_significance}
-		\begin{tikzpicture}
-		
-			\begin{axis}[%
-				height=0.3\linewidth,
-				scale only axis,
-				%xmin=0.65,
-				%xmax=2.35,
-				%xtick={1,1.5,2},
-				xtick={1.5,1.75,2},
-				xticklabels={{$h_1^*$},{$h_2^*$},{$h_3^*$}},
-				%ymin=1.06276752948761,
-				%ymax=1.78985784053802,
-				ylabel=$h$ (\si{\meter}),
-				ylabel near ticks,
-				ylabel style={yshift=-1mm},
-				xlabel={Hauteurs consignes},
-				%boxplot/draw direction=y, 
-				]
-				\addplot [color=Orient] table[x=height, y=mean]{\datatable};
-				\addplot [color=Orient, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}]
-				plot [error bars/.cd, y dir = both, y explicit]
-				table[x=height, y=mean, y error=SD]{\datatable};		
-			\end{axis}		
-		\end{tikzpicture}%
-	}
-	\hspace{5mm}
-	\subcaptionbox{Diagramme en boîte de la distribution des hauteurs réelles\label{subfig_target_height_boxplot}}
-	{
+%	\subcaptionbox{Moyennes des distances réelles entre les impacts de balles et les consignes de hauteur (\si{\meter}) $h_1^*=1.5$, $h_2^*=1.75$ et $h_3^*=2$ avec les écarts types indiqués en intervalles de confiance \label{subfig_target_height_significance}}
+%	{
+%		\pgfplotstableread[col sep=semicolon] {misc/chap_4_ball_bouncing/real_target_height_comparison.csv}\datatable
+%		\tikzsetnextfilename{subfig_target_height_significance}
+%		\begin{tikzpicture}
+%		
+%			\begin{axis}[%
+%				height=0.3\linewidth,
+%				scale only axis,
+%				%xmin=0.65,
+%				%xmax=2.35,
+%				%xtick={1,1.5,2},
+%				xtick={1.5,1.75,2},
+%				xticklabels={{$h_1^*$},{$h_2^*$},{$h_3^*$}},
+%				%ymin=1.06276752948761,
+%				%ymax=1.78985784053802,
+%				ylabel=$h$ (\si{\meter}),
+%				ylabel near ticks,
+%				ylabel style={yshift=-1mm},
+%				xlabel={Hauteurs consignes},
+%				%boxplot/draw direction=y, 
+%				]
+%				\addplot [color=Orient] table[x=height, y=mean]{\datatable};
+%				\addplot [color=Orient, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}]
+%				plot [error bars/.cd, y dir = both, y explicit]
+%				table[x=height, y=mean, y error=SD]{\datatable};		
+%			\end{axis}		
+%		\end{tikzpicture}%
+%	}
+%	\hspace{5mm}
+%	\subcaptionbox{Diagramme en boîte de la distribution des amplitudes de rebond en fonction des positions verticales cibles \label{subfig_target_height_boxplot}}
+%	{
 		\tikzsetnextfilename{subfig_target_height_boxplot}
 		\begin{tikzpicture}
 			
@@ -40,12 +40,14 @@
 				scale only axis,
 				xmin=0.65,
 				xmax=2.35,
+				ymin=1.075,
+				ymax=1.78,
 				%xtick={1,1.5,2},
 				xtick={1,1.5,2},
 				xticklabels={{$h_1^*$},{$h_2^*$},{$h_3^*$}},
 				%ymin=1.06276752948761,
 				%ymax=1.78985784053802,
-				ylabel=$h$ (\si{\meter}),
+				ylabel=$z_a$ (\si{\meter}),
 				ylabel near ticks,
 				ylabel style={yshift=-1mm},
 				xlabel={Hauteurs consignes},
@@ -277,7 +279,8 @@
 				\node at (mean3) (c) {$*$};
 			\end{axis}		
 		\end{tikzpicture}%
-	}
+%	}
+
 %	\subcaptionbox{Erreurs de rebonds $\epsilon_r$ en fonction de la durée des cycles\label{subfig_target_height_vs_cycle_duration}}
 %	{
 %		\tikzsetnextfilename{subfig_target_height_vs_cycle_duration}
@@ -310,6 +313,7 @@
 %			\end{axis}		
 %		\end{tikzpicture}
 %	}
-	\caption{Effets des variations de hauteur de la cible.}
+	%\caption{Effets des variations de hauteur de la cible.}
+	\caption{Diagramme en boîte de la distribution des amplitudes de rebond en fonction des positions verticales cibles.}
 	\label{fig_target_height_significance}
 \end{figure} 

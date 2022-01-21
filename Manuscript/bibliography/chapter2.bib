@@ -188,6 +188,23 @@
 	pages = {1642--1656},
 }
 
+@article{laghi_unifying_2020,
+	title = {Unifying bilateral teleoperation and tele-impedance for enhanced user experience},
+	volume = {39},
+	issn = {0278-3649},
+	url = {https://doi.org/10.1177/0278364919891773},
+	doi = {10.1177/0278364919891773},
+	abstract = {Usability is one of the most important aspects of teleoperation. Ideally, the operator’s experience should be one of complete command over the remote environment, but also be as close as possible to what they would have if physically present at the remote end, i.e., transparency in terms of both action and perception. These two aspects may coincide in favorable conditions, where classic approaches such as the four-channel architecture ensures transparency of the control framework. In the presence of substantial delays between the user and the slave, however, the stability–performance trade-off inherent to bilateral teleoperation deteriorates not only transparency, but also command. An alternative, unilateral approach is given by tele-impedance, which controls the slave–environment interaction by measuring and remotely replicating the user’s limb endpoint position and impedance. Not including force feedback to the operator, tele-impedance is absolutely robust to delays, whereas it completely lacks transparency. This article introduces a novel control framework that integrates a new, fully transparent, two-channel bilateral architecture with the tele-impedance paradigm. The result is a unified solution that mitigates problems of classical approaches, and provides the user with additional tools to modulate the slave robot’s physical interaction behavior, resulting in a better operator experience in spite of time inconsistencies. The validity and effectiveness of the proposed solution is demonstrated in terms of performance in the interaction tasks, of user fatigue and overall experience.},
+	pages = {514--539},
+	number = {4},
+	journaltitle = {The International Journal of Robotics Research},
+	shortjournal = {The International Journal of Robotics Research},
+	author = {Laghi, Marco and Ajoudani, Arash and Catalano, Manuel G. and Bicchi, Antonio},
+	urldate = {2022-01-18},
+	date = {2020-03-01},
+	langid = {english},
+	keywords = {bilateral, stability, Teleoperation, transparency, usability}
+}
 
 @inproceedings{ficuciello_cartesian_2014,
 	title = {Cartesian impedance control of redundant manipulators for human-robot co-manipulation},
@@ -202,7 +219,64 @@
 	pages = {2120--2125},
 }
 
-@misc{al-shuka_active_2018,
+
+@article{ficuciello_variable_2015,
+	title = {Variable Impedance Control of Redundant Manipulators for Intuitive Human–Robot Physical Interaction},
+	volume = {31},
+	doi = {10.1109/TRO.2015.2430053},
+	abstract = {This paper presents an experimental study on human-robot comanipulation in the presence of kinematic redundancy. The objective of the work is to enhance the performance during human-robot physical interaction by combining Cartesian impedance modulation and redundancy resolution. Cartesian impedance control is employed to achieve a compliant behavior of the robot's end effector in response to forces exerted by the human operator. Different impedance modulation strategies, which take into account the human's behavior during the interaction, are selected with the support of a simulation study and then experimentally tested on a 7-degree-of-freedom {KUKA} {LWR}4. A comparative study to establish the most effective redundancy resolution strategy has been made by evaluating different solutions compatible with the considered task. The experiments have shown that the redundancy, when used to ensure a decoupled apparent inertia at the end effector, allows enlarging the stability region in the impedance parameters space and improving the performance. On the other hand, the variable impedance with a suitable modulation strategy for parameters' tuning outperforms the constant impedance, in the sense that it enhances the comfort perceived by humans during manual guidance and allows reaching a favorable compromise between accuracy and execution time.},
+	pages = {850--863},
+	journaltitle = {{IEEE} Transactions on Robotics},
+	author = {Ficuciello, Fanny and Villani, Luigi and Siciliano, Bruno},
+	date = {2015},
+}
+
+@inproceedings{gopinathan_user_2017,
+	title = {A user study on personalized adaptive stiffness control modes for human-robot interaction},
+	doi = {10.1109/ROMAN.2017.8172399},
+	abstract = {This paper introduces a Personalized Adaptive Stiffness controller for physical Human-Robot Interaction and validates its performance in an extensive user study with 49 participants. The controller is calibrated to the user's force profile to account for inter-user variance and individual differences. The user study compares the new scheme to conventional fixed stiffness or gravitation compensation controllers on the 7-{DOF} {KUKA} {LWR} {IVb} by employing two typical joint-manipulation tasks. Somewhat surprisingly, the experiments suggest that for simpler tasks a standard fixed controller may perform sufficiently well and that respective task dependency strongly prevails over individual differences. In the more complex task, quantitative and qualitative results clearly show differences between the different control modes and a both a performance gains and a user preference for the Personalized Adaptive Stiffness controller.},
+	eventtitle = {2017 26th {IEEE} International Symposium on Robot and Human Interactive Communication ({RO}-{MAN})},
+	pages = {831--837},
+	booktitle = {2017 26th {IEEE} International Symposium on Robot and Human Interactive Communication ({RO}-{MAN})},
+	author = {Gopinathan, Sugeeth and Otting, Sonja and Steil, Jochen},
+	date = {2017-08},
+}
+
+@article{roveda_model-based_2020,
+	title = {Model-Based Reinforcement Learning Variable Impedance Control for Human-Robot Collaboration},
+	volume = {100},
+	issn = {1573-0409},
+	url = {https://doi.org/10.1007/s10846-020-01183-3},
+	doi = {10.1007/s10846-020-01183-3},
+	abstract = {Industry 4.0 is taking human-robot collaboration at the center of the production environment. Collaborative robots enhance productivity and flexibility while reducing human’s fatigue and the risk of injuries, exploiting advanced control methodologies. However, there is a lack of real-time model-based controllers accounting for the complex human-robot interaction dynamics. With this aim, this paper proposes a Model-Based Reinforcement Learning ({MBRL}) variable impedance controller to assist human operators in collaborative tasks. More in details, an ensemble of Artificial Neural Networks ({ANNs}) is used to learn a human-robot interaction dynamic model, capturing uncertainties. Such a learned model is kept updated during collaborative tasks execution. In addition, the learned model is used by a Model Predictive Controller ({MPC}) with Cross-Entropy Method ({CEM}). The aim of the {MPC}+{CEM} is to online optimize the stiffness and damping impedance control parameters minimizing the human effort (i.e, minimizing the human-robot interaction forces). The proposed approach has been validated through an experimental procedure. A lifting task has been considered as the reference validation application (weight of the manipulated part: 10 kg unknown to the robot controller). A {KUKA} {LBR} iiwa 14 R820 has been used as a test platform. Qualitative performance (i.e, questionnaire on perceived collaboration) have been evaluated. Achieved results have been compared with previous developed offline model-free optimized controllers and with the robot manual guidance controller. The proposed {MBRL} variable impedance controller shows improved human-robot collaboration. The proposed controller is capable to actively assist the human in the target task, compensating for the unknown part weight. The human-robot interaction dynamic model has been trained with a few initial experiments (30 initial experiments). In addition, the possibility to keep the learning of the human-robot interaction dynamics active allows accounting for the adaptation of human motor system.},
+	pages = {417--433},
+	number = {2},
+	journaltitle = {Journal of Intelligent \& Robotic Systems},
+	shortjournal = {J Intell Robot Syst},
+	author = {Roveda, Loris and Maskani, Jeyhoon and Franceschi, Paolo and Abdi, Arash and Braghin, Francesco and Molinari Tosatti, Lorenzo and Pedrocchi, Nicola},
+	urldate = {2022-01-19},
+	date = {2020-11-01},
+	langid = {english}
+}
+
+@article{peternel_robot_2018,
+	title = {Robot adaptation to human physical fatigue in human–robot co-manipulation},
+	volume = {42},
+	issn = {1573-7527},
+	url = {https://doi.org/10.1007/s10514-017-9678-1},
+	doi = {10.1007/s10514-017-9678-1},
+	abstract = {In this paper, we propose a novel method for human–robot collaboration, where the robot physical behaviour is adapted online to the human motor fatigue. The robot starts as a follower and imitates the human. As the collaborative task is performed under the human lead, the robot gradually learns the parameters and trajectories related to the task execution. In the meantime, the robot monitors the human fatigue during the task production. When a predefined level of fatigue is indicated, the robot uses the learnt skill to take over physically demanding aspects of the task and lets the human recover some of the strength. The human remains present to perform aspects of collaborative task that the robot cannot fully take over and maintains the overall supervision. The robot adaptation system is based on the Dynamical Movement Primitives, Locally Weighted Regression and Adaptive Frequency Oscillators. The estimation of the human motor fatigue is carried out using a proposed online model, which is based on the human muscle activity measured by the electromyography. We demonstrate the proposed approach with experiments on real-world co-manipulation tasks: material sawing and surface polishing.},
+	pages = {1011--1021},
+	number = {5},
+	journaltitle = {Autonomous Robots},
+	shortjournal = {Auton Robot},
+	author = {Peternel, Luka and Tsagarakis, Nikos and Caldwell, Darwin and Ajoudani, Arash},
+	urldate = {2022-01-19},
+	date = {2018-06-01},
+	langid = {english}
+}
+
+@article{al-shuka_active_2018,
 	type = {Research article},
 	title = {Active {Impedance} {Control} of {Bioinspired} {Motion} {Robotic} {Manipulators}: {An} {Overview}},
 	shorttitle = {Active {Impedance} {Control} of {Bioinspired} {Motion} {Robotic} {Manipulators}},
@@ -243,7 +317,7 @@
 	language = {eng},
 	urldate = {2021-09-29},
 	school = {Massachusetts Institute of Technology},
-	author = {Williamson, Matthew M. (Matthew Murray)},
+	author = {Williamson, Matthew Murray},
 	year = {1999},
 }
 

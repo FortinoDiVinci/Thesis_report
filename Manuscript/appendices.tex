@@ -301,7 +301,32 @@
 	%%%%%%%
 	\chapter{Détails du calcul des effets de couplages} \label{app_coupling_effect_details}
 	
-	Le détail de la multiplication matricielle \cref{eq_coupling_effect_jacobian} est donné ci-dessous :
+	\section{Effets de couplage} \label{app_coupling_effect_details_sec_coupling}
+	
+	La tâche étant unidimensionnelle, seuls des mouvements sur l'axe vertical $\vec{z}$ sont souhaités. Or des phénomènes de couplage entre les différents axes peuvent être mis en évidence. c'est-à-dire que des forces le long de l'axe $\vec{z}$ entraînent des mouvements sur l'ensemble des degrés de liberté. Considérons le cas simplifié où les actions intégrales $\matr{K}_i$ (\cref{fig_lamy_control}) sont nulles :
+	
+	\begin{equation} \label{eq_vel_setpoint}
+		\dot{\vect{q}}_d = \matr{K}_p \jacobian{\vect{q}}{}{t} \vect{F}_e \text{\, ,}
+	\end{equation}
+	%
+	or :
+	%
+	\begin{equation} \label{eq_link_joint_endpoint_velocity}
+		\dot{\vect{X}} = \jacobian{\vect{q}}{}{} \dot{\vect{\vect{q}}} \text{\, ,}
+	\end{equation}
+	%
+	en associant les équations \cref{eq_vel_setpoint} et \cref{eq_link_joint_endpoint_velocity}, et en notant la pseudo inverse par l'exposant $^*$ :
+	\begin{equation} \label{eq_coupling_effects}
+		\begin{split}
+			\jacobian{q_d}{}{*} \dot{\vect{X}}_d = \matr{K}_p \jacobian{\vect{q}}{}{t} \vect{F}_e \\	
+			\dot{\vect{X}}_d = \jacobian{\vect{q}_d}{}{} \matr{K}_p \jacobian{\vect{q}}{}{t} \vect{F}_e
+		\end{split}
+	\end{equation}
+	
+	Pour qu'aucun effet de couplage n'ait lieu, il faudrait que $ \jacobian{\vect{q}_d}{}{} \jacobian{\vect{q}}{}{t} $ soit diagonale si $\matr{K}_p = k_p \matr{I}$ ou que la matrice jacobienne soit diagonale pour les valeurs articulaires $\vect{q}$ et $\vect{q}_d$. Or il ne s'agit pas de propriétés du jacobien en robotique, il n'y a donc aucune garantie sur ces diagonalités. Le robot utilisé pour les expériences, le youBot possède 5 articulations, pour le contrôle décrit (\cref{chap2_sec_ctrl_vfo_subsec_cartesian}) deux articulations sont maintenues en position fixe, le robot a donc trois degrés de liberté $(\vec{x}, \vec{z}, \vec{\theta})$, montrés en \cref{fig_youBot_3joints} et trois articulations actionnées, d'où $\jacobian{}{}{} \in \Re^{3\times3}$. Le calcul du jacobien est donné en \cref{app_jacobian_sub_3joints}, la dernière ligne du jacobien rend la diagonalité impossible, quelles que soient les valeurs articulaires.
+	
+	Dans le cas où les gains $\vect{k}_p$ seraient tous identiques ($\matr{K}_p = K_p\matr{I}$), on peut vérifier les effets de couplage résultant des termes hors de la diagonale de $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $. On considère la matrice jacobienne décrite en \cref{app_jacobian_sub_3joints}. On signifie par les indices $ a $, $ b $ et $ c $, les consignes articulaires $ \dot{\vect{q}}_d $, et $ 1 $, $ 2 $ et $ 3 $, les mesures articulaires $ \dot{\vect{q}} $. Pour améliorer la lisibilité, on pose les éléments fournis par le système d'équations \cref{eq_elem_coupling}, on obtient alors le système d'équations \cref{eq_coupling_effect_jacobian}, dont le détail est donné en %\cref{app_coupling_effect_details}. 
+	équation \cref{eq_elem_coupling}.
 	
 	\begin{equation} \label{eq_elem_coupling}
 		\begin{split}
@@ -319,6 +344,70 @@
 			L_\mathcal{J} &=  2 l_2 \cos(q_1 + q_2) + l_1 \cos(q_1) \\
 		\end{split}
 	\end{equation}
+
+	{\footnotesize
+		\begin{align} \label{eq_coupling_effect_jacobian}
+			\MoveEqLeft\jacobian{q_d}{}{} \jacobian{q}{}{t}\nonumber\\
+			& =	\begin{pmatrix}
+				-l_1 s_a - l_2 s_{ab} - l_3 s_{abc} & -l_2 s_{ab} - l_3 s_{abc}  & -l_3 s_{abc} \\
+				l_1 c_a + l_2 c_{ab} + l_3 c_{abc} & l_2 c_{ab} + l_3 c_{abc}  & l_3 c_{abc} \\
+				1 & 1 & 1
+			\end{pmatrix}
+			\begin{pmatrix}
+				-l_1 s_1 - l_2 s_{12} - l_3 s_{123} & l_1 c_1 + l_2 c_{12} + l_3 c_{123} & 1 \\
+				-l_2 s_{12} - l_3 s_{123} & l_2 c_{12} + l_3 c_{123}  & 1 \\
+				-l_3 s_{123} & l_3 c_{123} & 1
+			\end{pmatrix}\nonumber\\
+			%\resizebox{\linewidth}{!}{%
+			&  = \begin{pmatrix}
+				A_\mathcal{J} B_\mathcal{J} + C_\mathcal{J} D_\mathcal{J} + l_3^2 s_{abc} I_\mathcal{J} &
+				-E_\mathcal{J} A_\mathcal{J} - C_\mathcal{J} F_\mathcal{J} + l_3^2 s_{abc} J_\mathcal{J} &
+				-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc} \\
+				-G_\mathcal{J} B_\mathcal{J} - D_\mathcal{J} H_\mathcal{J} - l_3^2 c_{abc} I_\mathcal{J} &
+				G_\mathcal{J} E_\mathcal{J} + H_\mathcal{J} F_\mathcal{J} + l_3^2 c_{abc} J_\mathcal{J} &
+				2 l_2 c_{ab} + l_1 c_{a} + 3 l_3 c_{abc} \\
+				K_\mathcal{J} - 3 l_3 I_\mathcal{J} &
+				L_\mathcal{J} + 3 l_3 J_\mathcal{J} &
+				3
+			\end{pmatrix}
+			%}
+		\end{align}
+	}
+	%}
+	Un système à 6 équations et 6 variables se pose alors pour vérifier la diagonalité de la matrice $\jacobian{q_d}{}{} \jacobian{q}{}{t}$. Si l'on prend les valeurs des longueurs données par KUKA (en mètre), c'est-à-dire : $ l_1 = 0.155$, $ l_2 = 0.135 $ et $ l_3 = 0.113 $, alors le problème n'admet aucune solution. Il n'existe donc aucune configuration pour laquelle $ \jacobian{q_d}{}{} \jacobian{q}{}{t} $ est diagonale. Si l'on compare les éléments de la diagonale et hors de la diagonale de l'équation \cref{eq_coupling_effect_jacobian}, qui ont un effet sur x, on peut étudier l'amplitude des phénomènes de couplages comparativement aux effets de transmission souhaités, dans l'équation \cref{eq_coupling_effects}. On pose alors l'équation unidimensionnelle \cref{jacobian_coupling_effect_x}.
+	
+	
+	\begin{multline}  \label{jacobian_coupling_effect_x}
+		x_d = K_p \big(
+		(A_\mathcal{J} B_\mathcal{J} + C_\mathcal{J} D_\mathcal{J} + l_3^2 s_{abc} I_\mathcal{J}) f_x +
+		(-E_\mathcal{J} A_\mathcal{J} - C_\mathcal{J} F_\mathcal{J} + l_3^2 s_{abc} J_\mathcal{J}) f_z\\
+		+ (-2 l_2 s_{ab} - l_1 s_{a} - 3 l_3 s_{abc}) \tau_\theta \big)
+	\end{multline}
+	
+	
+	En faisant la supposition que l'erreur de trainage entre $ q_d $ et $ q $ est négligeable, on peut écrire \cref{jacobian_coupling_effect_x} sous une nouvelle forme, en notant $ x_d^t $ et $ x_d^c $, respectivement les effets souhaités et les effets de couplages sur la consignes en $ x $.
+	
+	\begin{align} \label{eq_coupling_effect_x_2}
+		x_d^t &= K_p (A_\mathcal{J}^2 + C_\mathcal{J}^2 + (l_3 s_{abc})^2) f_x \\
+		x_d^c & = \begin{multlined}[t]
+			-K_p \left( l_1^2 \frac{s_{2a}}{2} + l_2^2 s_{2(ab)} + 3 l_3^2  \frac{s_{2(abc)}}{2} + l_1 l_2 s_{2ab} + l_1 l_3 s_{2abc} + 2 l_2 l_3 s_{2(ab)c} \right) f_z \\
+			- K_p \left(2 l_2 s_{ab} + l_1 s_{a} + 3 l_3 s_{abc} \right) \tau_\theta
+		\end{multlined}\label{eq_coupling_effect_x_2_b}
+	\end{align}
+	
+	La \cref{subfig_coupling_effect_b} montre la variation du terme non linéaire entre $ K_p $ et $ f_z $ en \cref{eq_coupling_effect_x_2_b} en fonction des valeurs articulaires. La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans la \cref{chap2_sec_ctrl_vfo_subsec_cartesian_3}, et les valeurs des deux autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{subfig_coupling_effect_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend en compte ni l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associé aux couples $ \tau_\theta $. 
+	
+	\tikzexternalenable
+	\input{latex_figures/fig_coupling_effect_joint_ctrl}
+	
+	La mise en place expérimentale de la stratégie de contrôle articulaire décrite par \textcite{lamy_achieving_2009} est venue valider cette analyse. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre". Les mouvements sur l'axe $\vec{x}$ doivent donc être restreints.
+	
+	\section{Guide virtuel} \label{app_coupling_effect_details_sec_virtual_guide}
+	
+	Une solution envisageable pour limiter les mouvements à l'axe vertical $\vec{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \textcite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\vec{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{fig_virtual_guide_control} a permis d'observer une dégradation de la transparence.
+	
+	\input{latex_figures/fig_ctrl_scheme_virt_guide}
+	\tikzexternaldisable
 	
 	%%%%%%%
 	% APP 5
@@ -338,6 +427,68 @@
 	\begin{equation} \label{eq_following_err_x}
 		\dot{x}_\epsilon = -(l_1 s_1 + l_2 s_{12} + l_3 s_{123} + l_2 s_{12} + l_3 s_{123} + l_3 s_{123}) \dot{q}_\epsilon
 	\end{equation}
+
+	%%%%%%%
+	% APP 5b
+	%%%%%%%
+	\chapter{Réglage des boucles de contrôles internes du robot} \label{app_inner_loop_tunning}
+
+	%\paragraph{Boucles internes} \label{sec_robot_sub_task_ctrl_tunning_2_1}
+	
+	Ces boucles ont été les premières à être corrigées, depuis les plus rapides (boucles de courant/couple) au plus lentes (boucles de vitesse angulaire). La correction a été réalisée en observant la comportement critique des différentes articulations en boucle fermée, avec une méthode inspirée par les réglages proposés initialement par \textcite{ziegler_optimum_1942}. 
+	
+	\input{latex_figures/fig_ctrl_inner_loop.tex}
+	
+	Les boucles de courant sont soumises à des bruits importants, aussi, le choix de correcteurs sans action dérivée a été fait, pour obtenir une correction proportionnelle-intégrale \cref{eq_PI}. Le cahier des charges a été défini tel que la réponse à un échelon de consigne soit la plus rapide possible ($t<$\SI{1}{\milli\second}), sans erreur statique et avec un dépassement inférieur à \SI{10}{\percent}. Conformément à la méthode de \textcite{ziegler_optimum_1942}, le gain proportionnel est réglé seul dans un premier temps jusqu'à obtenir un régime critique, et donc oscillatoire dont on relève la période $T_c$. Le gain proportionnel $K_{pc}$ est alors divisé par deux et le paramètre $T_{ic}$ de l'action intégrale est estimé à partir de $T_c$. La réponse a ensuite été ajustée par essais-erreurs pour essayer d'améliorer les performances, tout en essayant d'éviter les saturations de courant. Les valeurs de gains des correcteurs obtenues sont exposées dans le \cref{tab_joint_ctrl_gains}.
+	
+	\begin{equation} \label{eq_PI}
+		C_{PI}(s) = K_{pc}\left(1 + \frac{1}{T_{ic} s}\right) = K_{c} + \frac{K_{ci}}{\delta t_{PIc}}s^{-1} %K_{c}\frac{1 + T_{ic} s}{T_{ic} s} \approxcal
+	\end{equation}
+	
+	Comme on peut le constater sur la documentation des pilotes moteurs \parencite[Chapitre~12.3]{TRINAMIC_manual_2011}, la période d'échantillonnage des régulateurs de courant $\delta t_{PIc}$ est par défaut de \SI{100}{\micro\second} et les gains saisis sont divisés par des coefficients tel que $K_{c} = P_{PARAMi}/2^{8}$ et $K_{ci} = I_{PARAMi}/2^{18}$, pour une correction discrète montrée en \cref{fig_current_response_tunning} définie par la fonction de transfert discrète \cref{eq_PI_discrete}.
+	
+	\input{latex_figures/fig_joint_torque_response}
+	
+	\begin{equation} \label{eq_PI_discrete}
+		C_{PI}(z) = K_{c} + K_{ci} \frac{z}{z - 1}
+	\end{equation} 
+	
+	Le réglage de la correction des vitesses articulaires a suivi un processus équivalent (voir \cref{fig_velocity_response_tunning}) en suivant les recommandations faites par \textcite{newman_stability_1992,lamy_conception_2011}. Il est important de noter, qu'en plus du correcteur proportionnel proposé par \textcite{lamy_conception_2011}, une action intégrale a été ajoutée. En effet, dans un second temps, après la mise en place d'un contrôle en admittance, des dérives ont été constatées lorsque le robot était laissé libre de ses mouvements, sans forces d'interaction. L'ajout de l'action intégrale sur la boucle interne en vitesse a permis de réduire ces comportements sans constat d'impacts négatifs lors des interactions physiques.
+	
+	\input{latex_figures/fig_joint_velocity_response}
+	\tikzexternaldisable
+	
+	La période d'échantillonnage des régulateurs de vitesse articulaire $\delta t_{PIv}$ est par défaut de \SI{1}{\milli\second} et les gains saisis sont divisés par des coefficients tel que $K_{v} = P_{PARAMv}/2^{8}$ et $K_{vi} = I_{PARAMv}/2^{16}$. De plus, pour simplifier le contrôle ainsi que sa modélisation, le générateur de rampe proposé par \textcite{TRINAMIC_manual_2011} a été désactivé. Cette limitation proposée par le constructeur permet de limiter les variations de vitesses, notamment lorsque le robot est contrôlé en position, pour permettre des trajectoires plus lissées.
+	%Le système propose une limitation dans l'incrément de la consigne de  pour éviter des dynamiques rapides, mais cette limitation a été désactivée pour simplifier le contrôle ainsi que sa modélisation.
+	
+	\begin{table}
+		\centering
+		\begin{tabular}{| l | c  c  c | } 
+			\hline
+			Articulations & J$^{\circ}$2 & J$^{\circ}$3 & J$^{\circ}$4 \\ \hline
+			$P_{PARAMi}$ & 1500 & 1450 & 950 \\ \hline
+			$I_{PARAMi}$ & 10000 & 34000 & 12288 \\ \hline
+			$P_{PARAMv}$ & 2500 & 2000 & 500 \\ \hline
+			$I_{PARAMv}$ & 3000 & 3000 & 256 \\ 
+			\hline
+		\end{tabular} % expertise factor
+		\caption{Valeurs implémentées dans les pilotes moteurs à travers le paquet ROS dédié au youBot.}
+		\label{tab_joint_ctrl_gains}
+	\end{table}
+	%\begin{table}
+	%	\centering
+	%	\begin{tabular}{| l | c  c  c | } 
+	%		\hline
+	%		Articulations & J$^{\circ}$2 & J$^{\circ}$3 & J$^{\circ}$4 \\ \hline
+	%		$K_c$ \si{\volt\per\ampere} & 1500 & 1450 & 950 \\ \hline
+	%		$T_{ic}$ \si{\second} & 10000 & 34000 & 12288 \\ \hline
+	%		$K_v$ & 2500 & 2000 & 500 \\ \hline
+	%		$T_{iv}$ \si{\second} & 3000 & 3000 & 256 \\ 
+	%		\hline
+	%	\end{tabular} % expertise factor
+	%	\caption{Valeurs implémentées dans les pilotes moteurs à travers le paquet ROS dédié au youBot.}
+	%	\label{tab_joint_ctrl_gains}
+	%\end{table}
 
 	%%%%%%%
 	% APP 6

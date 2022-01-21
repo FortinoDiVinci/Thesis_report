@@ -1,7 +1,7 @@
 \begin{figure}[!htb] 
 	\centering
 		\resizebox{\textwidth}{!}{
-			\subcaptionbox{Morceau de \SI{30}{\second} de la trajectoire en position (affichage sous-échantillonné à \SI{100}{\hertz}, pour la première session) \label{subfig_unp_position_test_trajectory_a}}
+			\subcaptionbox{Portion de \SI{30}{\second} de la trajectoire en position (affichage sous-échantillonné à \SI{100}{\hertz}, pour la première session) \label{subfig_unp_position_test_trajectory_a}}
 			{
 				\tikzsetnextfilename{subfig_unp_position_test_trajectory_a}
 				\begin{tikzpicture}
@@ -36,25 +36,25 @@
 				\end{axis}
 				%
 				\begin{axis}[%
-				name=ax2,
-				width=.35\linewidth,
-				height=.35\linewidth,
-				scaled ticks=false,   
-				xlabel={temps (\SI{}{\milli\second})},
-				axis x line = bottom,
-				axis y line = left, 
-				xmin=91,xmax=93,
-				%ymin=.025,ymax=0.25,
-				at={($(ax1.south east)+(1cm,0)$)},
-				]
-				%
-				\addplot [
-				color=Orient,
-				smooth,
-				%line width=1.pt,
-				]
-				table [domain=91:93, col sep=comma, x=time, y=position] {misc/unperturbed_position_signal.csv};
-				%					
+					name=ax2,
+					width=.35\linewidth,
+					height=.35\linewidth,
+					scaled ticks=false,   
+					xlabel={temps (\SI{}{\milli\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					xmin=91,xmax=93,
+					%ymin=.025,ymax=0.25,
+					at={($(ax1.south east)+(1cm,0)$)},
+					]
+					%
+					\addplot [
+					color=Orient,
+					smooth,
+					%line width=1.pt,
+					]
+					table [domain=91:93, col sep=comma, x=time, y=position] {misc/unperturbed_position_signal.csv};
+					%					
 				\end{axis}
 				% draw dashed lines from rectangle in first axis to corners of second
 				\draw [dashed] (r4) -- (ax2.south west);
@@ -86,6 +86,7 @@
 					\addplot [
 						color=Orient,
 						solid,
+						mark=asterisk,
 						]
 					table [col sep=comma, x expr=\coordindex,  y=mag_var] {misc/unperturbed_position_signal_properties.csv};
 					%	
@@ -111,6 +112,7 @@
 					\addplot [
 						color=Shiraz,
 						solid,
+						mark=asterisk,
 						]
 					table [col sep=comma, x expr=\coordindex,  y=freq_var] {misc/unperturbed_position_signal_properties.csv};
 				%

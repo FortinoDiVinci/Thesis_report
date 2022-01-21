@@ -1,0 +1,87 @@
+\begin{figure} [h]
+	\centering
+	\pgfplotstableread[col sep=semicolon] {misc/chap_4_impedance/new/phase_significance_post_hoc.csv}\datatable
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Moyenne des raideurs estimées\label{subfig_phase_significance_K_post_hoc}}
+		{
+			\tikzsetnextfilename{subfig_phase_significance_K_post_hoc}
+			\begin{tikzpicture}		
+				\begin{axis}[%
+					height=0.25\linewidth,
+					scale only axis,
+					%xmin=0.65,
+					%xmax=2.35,
+					%xtick={1,1.5,2},
+					xtick={1,2,3},
+					xticklabels={{$\phi_1$},{$\phi_2$},{$\phi_3$}},
+					%ymin=1.06276752948761,
+					%ymax=1.78985784053802,
+					ylabel=$\mean{\hat{K}}$ (\si{\newton\per\meter}),
+					ylabel near ticks,
+					ylabel style={yshift=-1mm},
+					%boxplot/draw direction=y, 
+					]
+					\addplot [color=Orient, forget plot] table[x=phase,y=K_med_AVG]{\datatable};
+					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+					plot [error bars/.cd, y dir = both, y explicit]
+					table[x=phase, y=K_med_AVG, y error=K_med_SEM]{\datatable};		
+				\end{axis}		
+			\end{tikzpicture}%
+		}
+		\subcaptionbox{Moyenne des amortissements estimées\label{subfig_phase_significance_B_post_hoc}}
+		{
+			\tikzsetnextfilename{subfig_phase_significance_B_post_hoc}
+			\begin{tikzpicture}		
+			\begin{axis}[%
+			height=0.25\linewidth,
+			scale only axis,
+			%xmin=0.65,
+			%xmax=2.35,
+			%xtick={1,1.5,2},
+			xtick={1,2,3},
+			xticklabels={{$\phi_1$},{$\phi_2$},{$\phi_3$}},
+			%ymin=1.06276752948761,
+			%ymax=1.78985784053802,
+			ylabel=$\mean{\hat{B}}$ (\si{\newton\second\per\meter}),
+			ylabel near ticks,
+			ylabel style={yshift=-1mm},
+			%boxplot/draw direction=y, 
+			]
+			\addplot [color=Orient, forget plot] table[x=phase,y=B_med_AVG]{\datatable};
+			\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+			plot [error bars/.cd, y dir = both, y explicit]
+			table[x=phase, y=B_med_AVG, y error=B_med_SEM]{\datatable};		
+			\end{axis}		
+			\end{tikzpicture}%
+		}
+		\subcaptionbox{Moyenne des masses estimées\label{subfig_phase_significance_M_post_hoc}}
+		{
+			\tikzsetnextfilename{subfig_phase_significance_M_post_hoc}
+			\begin{tikzpicture}		
+			\begin{axis}[%
+			height=0.25\linewidth,
+			scale only axis,
+			%xmin=0.65,
+			%xmax=2.35,
+			%xtick={1,1.5,2},
+			xtick={1,2,3},
+			xticklabels={{$\phi_1$},{$\phi_2$},{$\phi_3$}},
+			%ymin=1.06276752948761,
+			%ymax=1.78985784053802,
+			ylabel=$\mean{\hat{M}}$ (\si{\kilogram}),
+			ylabel near ticks,
+			ylabel style={yshift=-1mm},
+			%boxplot/draw direction=y, 
+			]
+			\addplot [color=Orient, forget plot] table[x=phase,y=M_med_AVG]{\datatable};
+			\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+			plot [error bars/.cd, y dir = both, y explicit]
+			table[x=phase, y=M_med_AVG, y error=M_med_SEM]{\datatable};		
+			\end{axis}		
+			\end{tikzpicture}%
+		}
+	}
+	%\caption{Effets des variations de hauteur de la cible sur $\sigma(\epsilon_r)$, l'erreur type est utilisée comme intervalle de confiance.}
+	\caption{Effets de la phase sur les paramètres en impédance cartésienne apparente.}
+	\label{fig_phase_significance_impedance_post_hoc}
+\end{figure} 

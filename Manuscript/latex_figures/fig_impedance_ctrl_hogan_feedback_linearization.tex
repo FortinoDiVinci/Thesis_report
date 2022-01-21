@@ -47,7 +47,7 @@
 			
 			\comp[b]{c4}{($(I) + (1.5,0)$)};
 			
-			\node[bloc, right of = c4, node distance = 1.75cm] (bras) {$Bras$}; % \includegraphics[width=.08\textwidth]{joints_arm_drawing.jpg}
+			\node[bloc, right of = c4, node distance = 1.75cm] (bras) {$Robot$}; % \includegraphics[width=.08\textwidth]{joints_arm_drawing.jpg}
 			\node[right of = bras, label={$\vect{F}_{ext}$}] (bras_env) {};
 			\node[bloc, right of = bras_env, node distance = 1.25cm] (env) {$Env.$};
 			\draw[-{Latex[length=2mm]}] ($(env.south west) + (-0.1, -0.1)$) -- ($(env.north east) + (0.2, 0.15)$);
@@ -99,6 +99,7 @@
 		\end{tikzpicture}
 	}
 	
-	\caption{Schéma de la linéarisation par bouclage}
+	\caption{Schéma de la %linéarisation par bouclage}
+		commande en impédance proposée par \textcite{hogan_impedance_1985b}}
 	\label{bloc_feedback_linearization}
 \end{figure}

@@ -33,7 +33,7 @@
 	
 	\node[block, left of = c1, node distance = 1.55cm] (jac_virtual_guide) {$\jacobian{q}{}{t}$};
 	
-	\comp[a]{c2}{($(tau_r) + (-1.55,0)$)};
+	\comp[a]{c2}{($(jac_virtual_guide) + (-1.55,0)$)};
 	
 	\node[block, left of = c2, node distance = 1.55cm] (K) {$K$};
 	
@@ -70,7 +70,7 @@
 	node[midway, align = center, above] {$\vect{\tau}_r$};
 
 	\draw[dashed, rounded corners=5pt] ($ (B) + (-3.15, 1) $) 
-	node [right = 6.2cm, below = 0.2cm] {\footnotesize guide virtuel}
+	node [right = 6.2cm, below = 0.2cm, xshift=5.5cm] {\small guide virtuel}
 	rectangle ($ (c1) + (-0.25, -1.25) $);
 
 	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);

@@ -6,8 +6,8 @@
 	\tikzsetnextfilename{fig_interaction_port}
 	\begin{tikzpicture} [node distance = 2cm]
 		\node (O) at (0,0) {};
-		\node[block, left of = O, align=center] (robot) {Sys. 1};
-		\node[block, right of = O, align=center] (env) {Sys. 2};
+		\node[block, left of = O, align=center] (robot) {Système 1};
+		\node[block, right of = O, align=center] (env) {Système 2};
 		%
 		\draw[>=Latex, <->] ($(robot.east) + (0,0.5)$) -- ($(env.west) + (0,0.5)$)
 			node[midway, above] {$\vect{f}$};
@@ -15,6 +15,6 @@
 		node[midway, above] {$\vect{v}$};
 		%
 	\end{tikzpicture}
-	\caption{Exemple de port d'intéractions entre 2 systèmes physiques}
+	\caption{Exemple de ports d'interaction entre deux systèmes physiques}
 	\label{fig_physical_interaction}
 \end{figure}
