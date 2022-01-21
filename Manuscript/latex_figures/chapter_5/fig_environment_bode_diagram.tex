@@ -5,12 +5,12 @@
 		{
 			\tikzsetnextfilename{subfig_bode_diagram_impedance_environment}
 		    \begin{tikzpicture}
-			    \pgfmathsetmacro{\wnA}{2.372543}
-			    \pgfmathsetmacro{\wnB}{3.16209}
-			    \pgfmathsetmacro{\wnC}{3.35528}
-			    \pgfmathsetmacro{\K}{163.6}
-			    \pgfmathsetmacro{\B}{10.15}
-			    \pgfmathsetmacro{\M}{0.413}
+%			    \pgfmathsetmacro{\K}{163.6}
+%			    \pgfmathsetmacro{\B}{10.15}
+%			    \pgfmathsetmacro{\M}{0.413}
+				\pgfmathsetmacro{\K}{479}
+				\pgfmathsetmacro{\B}{11.5}
+				\pgfmathsetmacro{\M}{0.626}
 			    \pgfmathsetmacro{\tauM}{0.016}
 				\begin{semilogxaxis}[
 					name=ax1,
@@ -25,8 +25,8 @@
 					xticklabels=\empty,
 					%ymax=10,
 					]
-					\addplot[domain=0.01:100,color=Orient,smooth] {10 * log10( (-\K/(x*2*pi) + x*2*pi*\M)^2 + \B^2 )};
-					\addplot[domain=0.01:100,color=Shiraz,smooth,dashed,semithick] {10 *( log10( (-\K/(x*2*pi) + x*2*pi*\M)^2 + \B^2 ) - log10( (1 - x*2*pi*x*2*pi*\tauM*\tauM)^2 + (2*x*2*pi*\tauM)^2) )};
+					\addplot[domain=0.01:100,color=Shiraz,smooth] {10 *( log10( (-\K/(x*2*pi) + x*2*pi*\M)^2 + \B^2 ) - log10( (1 - x*2*pi*x*2*pi*\tauM*\tauM)^2 + (2*x*2*pi*\tauM)^2) )};
+					\addplot[domain=0.01:100,color=Orient,smooth,dashed,semithick] {10 * log10( (-\K/(x*2*pi) + x*2*pi*\M)^2 + \B^2 )};
 					%
 					\draw[dashed, color=gray] (axis cs:10, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:10, \pgfkeysvalueof{/pgfplots/ymax}) node[near start, yshift=-1mm, xshift=1.75mm, text=black] {$f_c$};
 				\end{semilogxaxis}
@@ -49,11 +49,11 @@
 					%ylabel shift = 1 pt,
 					%ymax=10,
 					%use fpu=false,
-					]
-					\addplot[domain=0.01:100,color=Orient,smooth] {atan2( (-\K/(x*2*pi) + x*2*pi*\M), \B )};
-					\addlegendentry{$\mu_{nf}$}; 
-					\addplot[domain=0.01:100,color=Shiraz,smooth,dashed,semithick] {atan2( (-\K/(x*2*pi) + x*2*pi*\M), \B ) - atan2( 2*x*2*pi*\tauM, (1 - x*2*pi*x*2*pi*\tauM*\tauM))};
+					] 
+					\addplot[domain=0.01:100,color=Shiraz,smooth] {atan2( (-\K/(x*2*pi) + x*2*pi*\M), \B ) - atan2( 2*x*2*pi*\tauM, (1 - x*2*pi*x*2*pi*\tauM*\tauM))};
+					\addplot[domain=0.01:100,color=Orient,smooth,dashed,semithick] {atan2( (-\K/(x*2*pi) + x*2*pi*\M), \B )};
 					\addlegendentry{$\mu$}; 
+					\addlegendentry{$\mu_{nf}$};
 					%
 					\draw[dashed] (axis cs:10, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:10, \pgfkeysvalueof{/pgfplots/ymax});
 					 
@@ -259,6 +259,6 @@
 			\end{tikzpicture}%
 		}
 	}
-	\caption{Comportement en impédance, avec ou sans filtrage $\mu_{nf}=K/s+B+Ms$}
+	\caption{Comportement en impédance (vitesse/force), avec ou sans filtrage $\mu_{nf}(s)=K/s+B+Ms$}
 	\label{fig_bode_diagram_impedance_environment}
 \end{figure}

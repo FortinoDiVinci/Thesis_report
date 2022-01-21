@@ -9,7 +9,7 @@ La difficulté principale de l'étude de stabilité des robots en interaction av
 
 \subsection{Passivité} \label{chap5_sec_litterature_sub_passivity}
 
-Un système causal est dit passif, au sens thermodynamique\footnote{Dès lorsque toutes les interactions d'un systèmes avec son environnement sont prises en compte, tout système est passif ; sinon le premier principe de la thermodynamique ne serait pas respecté.}, lorsqu’il ne peut pas restituer plus d’énergie qu’il n'en reçoit, on pourra aussi parler d'un système dissipatif. L’énergie interne emmaganisée dans le système à l’instant $t$ est notée $E_s(t)$. La condition de passivité du mécanisme est alors vérifiée si l'équation \cref{eq_passivity_energy} tient sur l'intervalle de temps $[t_1,t_2]$, où $\matrCal{P} = \vect{y}^t \vect{u}$ est la puissance instantanée du système qui prend en entrée $\vect{u} \in \Re^n$ et produit en sortie $\vect{y} \in \Re^n$.
+Un système causal est dit passif, au sens thermodynamique\footnote{Dès lorsque toutes les interactions d'un systèmes avec son environnement sont prises en compte, tout système est passif ; sinon le premier principe de la thermodynamique ne serait pas respecté.}, lorsqu’il ne peut pas restituer plus d’énergie qu’il n'en reçoit, on pourra aussi parler d'un système dissipatif. L’énergie interne emmagasinée dans le système à l’instant $t$ est notée $E_s(t)$. La condition de passivité du mécanisme est alors vérifiée si l'équation \cref{eq_passivity_energy} tient sur l'intervalle de temps $[t_1,t_2]$, où $\matrCal{P} = \vect{y}^t \vect{u}$ est la puissance instantanée du système qui prend en entrée $\vect{u} \in \Re^n$ et produit en sortie $\vect{y} \in \Re^n$.
 
 \begin{equation} \label{eq_passivity_energy}
 	\underbrace{\int_{t_1}^{t_2} \matrCal{P}(\tau) d\tau}_\text{Energie fournie} \geq \overbrace{E_s(t_2) - E_s(t_1)}^\text{Energie emmaganisée} \geq 0 %-E_s(t_1)
@@ -17,7 +17,7 @@ Un système causal est dit passif, au sens thermodynamique\footnote{Dès lorsque
 
 Pour des systèmes linéaires invariants dans le temps, la passivité est une condition suffisante mais non nécessaire à la stabilité au sens de Lyapunov \parencite{niemeyer_telerobotics_2008}. De plus, comme montré par \textcite{colgate_robust_1988} lorsque deux systèmes stables avec des ports passifs sont connectés physiquement, alors l'ensemble formé par ces deux systèmes est stable. Or, comme les membres humains peuvent être considérés passifs \parencite{lamy_conception_2011,hogan_controlling_1989}, il suffit de montrer que le robot a un comportement passif, pour que le couplage du robot et de l'humain puisse être considéré comme passif et donc stable.
 
-Ainsi, des ses travaux de thèse, \textcite[Chapitre~2, p.~52,53]{colgate_control_1988} pose les conditions nécessaires et suffisantes \cref{eq_passivity_conditions} pour qu'un système linéaire $Z$ invariant dans le temps avec un seul port soit passif\footnote{Voir la page 53 de la thèse de \textcite{colgate_control_1988} pour le cas multi-port.}. Comme expliqué par \textcite{colgate_control_1988}, ces conditions sont principalement issues de l'application du principe du module maximum pour un contour entourant la région pour laquelle $\omega \geq 0$.
+Ainsi, des ses travaux de thèse, \textcite[Chapitre~2, p.~52,53]{colgate_control_1988} pose les conditions nécessaires et suffisantes \cref{eq_passivity_conditions} pour qu'un système linéaire $Z$ invariant dans le temps avec un seul port soit passif\footnote{Voir la page 53 de la thèse de \textcite{colgate_control_1988} pour le cas multi-port.}. Comme expliqué par \textcite{colgate_control_1988}, ces conditions sont principalement issues de l'application du principe du module maximum pour un contour entourant la région pour laquelle $\omega \geq 0$. [\textcolor{red}{"These results are essentially the result of the application of the principle of maximum modulus [85] to a contour which encloses the region over which $\sigma>0$, that is the right half s plane"}]
 
 \begin{equation}\label{eq_passivity_conditions}
 	\begin{cases}
@@ -32,7 +32,7 @@ Ainsi, des ses travaux de thèse, \textcite[Chapitre~2, p.~52,53]{colgate_contro
 
 \subsection{Approche robuste} \label{chap5_sec_litterature_sub_robust}
 
-En effet, dans son approche \textcite{lamy_conception_2011} a travaillé avec la passivité pour assurer la stabilité de l'interaction avec tout type d'environnement, y compris un marbre, dont la raideur peut-être considérée comme infinie. Or, dans le cadre de manipulation collaborative, le robot doit surtout interargir avec les membres supérieurs d'humains, dont les caractéristiques en impédance sont bornées. C'est avec cette idée que \textcite{buerger_complementary_2007} ont introduit le concept de stabilité complémentaire.
+En effet, dans son approche \textcite{lamy_conception_2011} a travaillé avec la passivité pour assurer la stabilité de l'interaction avec tout type d'environnement, y compris un marbre, dont la raideur peut-être considérée comme infinie. Or, dans le cadre de manipulation collaborative, le robot doit surtout interagir avec les membres supérieurs d'humains, dont les caractéristiques en impédance sont bornées. C'est avec cette idée que \textcite{buerger_complementary_2007} ont introduit le concept de stabilité complémentaire.
 
 La question de stabilité est redéfinie en un problème de robustesse, avec l'objectif de trouver les réglages optimaux d'un contrôleur qui soient stables dans les limites des dynamiques connues de l'environnement, dans ce cas, le bras humain. Dans leur exemple, le robot agit comme une impédance, et donc l'environnement comme une admittance. L'admittance nominale d'un environnement $Y_n$, une déviation $\Delta_r$ possible, ainsi qu'une pondération $W$ qui façonne les déviations possibles avec la fréquence, peuvent alors être définies \cref{eq_env_admittance_robust}.
 
@@ -45,7 +45,7 @@ La question de stabilité est redéfinie en un problème de robustesse, avec l'o
 \tikzexternalenable
 \input{latex_figures/chapter_5/fig_block_diagram_phri_with_uncertainties}
 
-Si on considère $M$ une matrice de transfert propre et réelle rationnelle stable ($\Re\mathcal{H}_\infty$), le théorème du petit gain permet d'affirmer que l'interconnexion montrée en \cref{fig_small_gain_theorem} est stable pour tout $\Delta \in \Re\mathcal{H}_\infty$ tel que :
+Si l'on considère $M$ une matrice de transfert propre et réelle rationnelle stable ($\Re\mathcal{H}_\infty$), le théorème du petit gain permet d'affirmer que l'interconnexion montrée en \cref{fig_small_gain_theorem} est stable pour tout $\Delta \in \Re\mathcal{H}_\infty$ tel que :
 
 \begin{minipage}{.4\linewidth}
 	\centering
@@ -71,13 +71,13 @@ Le théorème du petit gain permet ainsi d'assurer la stabilité d'une interconn
 
 \subsubsection{Modèle de Lagrange} \label{chap5_sec_model_sub_robot_dynamic_1}
 
-Le modèle dynamique général d'un robot en contact avec un environnement physique peut être obtenu à partir des équations de Lagrange, comme explicité par \textcite[Chapitre~9]{khalil_modeling_2002}. On obtient alors le modèle \cref{eq_dyn_model_robot}, avec $ \matr{A} $ la matrice d'inertie du robot, $ \vect{h} $ le vecteur regroupant les phénomènes liés à la position et à la vitesse - \textit{e.g., couples centrifuges, de Coriolis, gravitationnels}, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur sur le robot.
+Le modèle dynamique général d'un robot en contact avec un environnement physique peut être obtenu à partir des équations de Lagrange, comme explicité par \textcite[Chapitre~9]{khalil_modeling_2002}. On obtient alors le modèle \cref{eq_dyn_model_robot}, avec $ \matr{A} $ la matrice d'inertie du robot, $ \vect{h} $ le vecteur regroupant les phénomènes liés à la position et à la vitesse - \textit{e.g.}, couples centrifuges, de Coriolis, gravitationnels, et frottements -, et $ \vect{\tau}_r $ et $ \vect{\tau}_{e} $ les couples articulaires respectivement générés par les actionneurs du robot et par l'environnement extérieur sur le robot.
 
 \begin{equation} \label{eq_dyn_model_robot}
 	\matr{A}(\vect{q})\ddot{\vect{q}} + \vect{h}(\dot{\vect{q}}, \vect{q}) = \vect{\tau}_r + \vect{\tau}_{e}
 \end{equation}
 
-En renseignant les termes regroupés par $ \vect{h} $, on peut écrire l'expression \cref{eq_dyn_model_robot_complete} qui sépare les effets inertiels, comme les couples centrifuges et de Coriolis regroupés dans le terme $ \matr{C}(\dot{\vect{q}}, \vect{q}) $, de ceux liés à la gravité $ \vect{g}(\vect{q}) $, auxquels s'ajoutent les phénomènes de frottements visqueux, représenté par une matrice diagonale notée $ \matr{f}_v $. On retrouve alors le modèle décrit par \textcite{hogan_impedance_1985b} en équation \cref{eq_modele_bras_hogan_1985}, avec les frottements secs $\matr{F}_s$ %et les couples de décalage $\vect{\tau}_0$ 
+En détaillant les termes regroupés par $ \vect{h} $, on peut écrire l'expression \cref{eq_dyn_model_robot_complete} qui sépare les effets inertiels, comme les couples centrifuges et de Coriolis regroupés dans le terme $ \matr{C}(\dot{\vect{q}}, \vect{q}) $, de ceux liés à la gravité $ \vect{g}(\vect{q}) $, auxquels s'ajoutent les phénomènes de frottements visqueux, représenté par une matrice diagonale notée $ \matr{f}_v $. On retrouve alors le modèle décrit par \textcite{hogan_impedance_1985b} en équation \cref{eq_modele_bras_hogan_1985}, avec les frottements secs $\matr{F}_s$ %et les couples de décalage $\vect{\tau}_0$ 
 en plus. 
 
 \begin{equation} \label{eq_dyn_model_robot_complete}
@@ -92,19 +92,19 @@ Les couples articulaires de l'environnement sur le robot peuvent être exprimés
 
 \subsubsection{Intégration du contrôle en admittance} \label{chap5_sec_model_sub_robot_dynamic_2}
 
-Les courants moteurs consignes $ \vect{i}_d $ sont donnés par le contrôle en vitesses articulaires, dont le réglage est décrit en \cref{sec_robot_sub_task_ctrl_tunning_2_1}. On note $ \matr{C}_v \in \mathrm{diag} \left( \Re^{3\times3} \right) $ le correcteur de la boucle interne en vitesses. %$ \matr{C}_v $ est diagonal. 
+Les courants moteurs consignes $ \vect{i}_d $ sont donnés par le contrôle en vitesses articulaires, dont le réglage est décrit en \cref{app_inner_loop_tunning}. On note $ \matr{C}_v \in \mathrm{diag} \left( \Re^{3\times3} \right) $ le correcteur proportionnel-intégral de la boucle interne en vitesses. %$ \matr{C}_v $ est diagonal. 
 Les dynamiques des boucles de courant sont négligées, on considère donc que les courants réels $ \vect{i}_r $ sont égaux aux consignes $ \vect{i}_d $.
-Pour obtenir les couples articulaires à partir des courants moteurs, il faut d'une part considérer les constantes de couples $ \matr{T}_m $ pour obtenir les couples moteurs, puis d'autre part les trains épicycloïdaux (réducteurs planétaires) $ \matr{R} $ et leur rendement $ \matr{\nu_g} $, pour enfin obtenir les couples articulaires $ \vect{\tau}_r $. Les rendements n'ont pas pu être identifiés en l'absence de capteurs de couple ou d'une documentation précise des ensembles moto-réducteurs. %Ces constantes sont considérées comme étant intégrées aux gains des correcteurs, pour ne pas alourdir les équations.
-Afin de simplifier la modélisation du contrôle, les boucles secondaires décrites en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_2,chap2_sec_ctrl_vfo_subsec_cartesian_3}, qui ne devraient pas avoir d'effet sur la transparence du robot le long de l'axe $\vec{z}$, ne sont pas considérés pour la suite. On obtient donc la relation \cref{torque_cmd_ctrl_loop}, en notant que le produit matriciel des constantes moteurs et réducteurs a été intégré aux gains du correcteur pour ne pas alourdir les équations.
+Pour obtenir les couples articulaires à partir des courants moteurs, il faut d'une part considérer les constantes de couples $ \matr{T}_m $ pour obtenir les couples moteurs, puis d'autre part les rapports de réduction $ \matr{R} $ et leur rendement $ \matr{\nu_g} $, pour enfin obtenir les couples articulaires $ \vect{\tau}_r $. Les rendements n'ont pas pu être identifiés en l'absence de capteurs de couple ou d'une documentation précise des ensembles moto-réducteurs, et ont été considérés unitaires. %Ces constantes sont considérées comme étant intégrées aux gains des correcteurs, pour ne pas alourdir les équations.
+Afin de simplifier la modélisation du contrôle, les boucles secondaires décrites en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_2,chap2_sec_ctrl_vfo_subsec_cartesian_3}, qui ne devraient pas avoir d'effet sur la transparence du robot le long de l'axe $\vec{z}$, ne sont pas considérés pour la suite. On obtient donc la relation \cref{torque_cmd_ctrl_loop}, en notant que le produit matriciel des constantes moteurs et réducteurs a été intégré aux gains $\matr{K}_v$ et $\matr{K}_{vi}$ du correcteur pour ne pas alourdir les équations.
 
 \begin{equation} \label{torque_cmd_ctrl_loop}
-	\vect{\tau}_r = \matr{R} \matr{T}_m \vect{i}_r \approx \matr{R} \matr{T}_m \vect{i}_d =  \matr{C}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) = \matr{K}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) + \matr{K}_{vi} \int \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) \mathrm{d}t
+	\vect{\tau}_r = \matr{R} \matr{T}_m \vect{i}_r \approx \matr{R} \matr{T}_m \vect{i}_d =  \matr{K}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) + \matr{K}_{vi} \int \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) \mathrm{d}t % \matr{C}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) = 
 \end{equation}
 
 Les vitesses articulaires de consigne $ \dot{\vect{q}}_d $ sont obtenues à partir du passage dans le plan articulaire des consignes cartésiennes du contrôleur en admittance $ \matr{C}_z $ détaillé en \cref{velocity_cmd_ctrl_loop}.
 %
 \begin{equation} \label{velocity_cmd_ctrl_loop}
-	\dot{\vect{q}}_d = \jacobianHat{\vect{q}}{}{-1} \begin{pmatrix} 0 & c_z (f_z) & 0 \end{pmatrix}^{t} = \jacobianHat{\vect{q}}{}{-1} \matr{C}_z (\vect{f}_e) = \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right)
+	\dot{\vect{q}}_d = \jacobianHat{\vect{q}}{}{-1} \begin{pmatrix} 0 & c_z (f_z) & 0 \end{pmatrix}^{t} = \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right) % = \jacobianHat{\vect{q}}{}{-1} \matr{C}_z (\vect{f}_e)
 \end{equation}
 
 Le modèle du robot décrit en \cref{eq_dyn_model_robot_complete}, peut alors être complété en y intégrant les équations de la loi de commande \cref{torque_cmd_ctrl_loop,velocity_cmd_ctrl_loop}.
@@ -122,14 +122,11 @@ Le modèle du robot décrit en \cref{eq_dyn_model_robot_complete}, peut alors ê
 %	\vect{q}_d = \int \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right) \; \mathrm{d}t
 %\end{equation}
 
-\subsubsection{Validation du modèle en simulation ?} \label{chap5_sec_model_sub_robot_dynamic_3}
-
-
+%\subsubsection{Validation du modèle en simulation ?} \label{chap5_sec_model_sub_robot_dynamic_3}
 
 \subsection{Linéarisation du modèle du robot} \label{chap5_sec_model_sub_robot_linear}
 
 Pour la linéarisation du modèle dynamique du robot, les couples générés par les frottements statiques ne sont pas pris en compte à cause de leur comportement non linéaire provoqué par la fonction signe $\sign$. On peut alors écrire le système \cref{eq_sys_robot_dynamic_model} augmenté de deux états $\vect{e}_v$ et $\vect{e}_f$, qui pourra être linéarisé.
-
 
 \begin{equation} \label{eq_sys_robot_dynamic_model}	
 \resizebox{\textwidth}{!}{$
@@ -142,7 +139,6 @@ Pour la linéarisation du modèle dynamique du robot, les couples générés par
 	\end{cases}	
 $}
 \end{equation}
-
 
 En considérant le vecteur d'état $\vect{\phi} = \begin{pmatrix}\vect{q} & \dot{\vect{q}} & \vect{e}_v & \vect{e}_f \end{pmatrix}^t \in \Re^{12}$ du système, ainsi que son entrée $\vect{f}_e \in \Re^3$, on peut exprimer le système \cref{eq_sys_robot_dynamic_model} sous la forme d'une représentation d'états \cref{eq_general_state_system} :
 
@@ -185,17 +181,19 @@ Il reste maintenant à étudier le comportement du robot en boucle fermée, lors
 
 \subsection{Couplage avec un modèle en impédance} \label{chap5_sec_model_sub_env}
 
-L'environnement physique en contact avec le robot peut être considéré comme un modèle viscoélastique du second ordre, couplé avec le robot. Ainsi, les mouvements $\dot{\vect{x}}(2)=\dot{z}$ du robot en contact physique avec l'environnement $\mu_z$ entraînent des forces d'interaction $f_z$. Si on sépare le contrôle en admittance $C_z$ du modèle du robot, on peut représenter cette interaction comme indiquée sur la \cref{fig_bloc_diagram_robot_environment}, où le modèle dynamique du robot $\matr{\Sigma}$ est séparé en fonction des deux entrées $\dot{z}_d$ et $f_z$ pour le cas unidimensionnel, et $\dot{\vect{x}}_d$ et $\vect{f}_e$ dans le cas multidimensionnel. La consigne du contrôle en admittance est notée $\vect{f}_e^*$. De plus dans le cadre d'une interaction avec un humain en mouvement, la force $\vect{f}_{in}$ représente la force nécessaire à la génération de la trajectoire souhaitée.
+L'environnement physique en contact avec le robot peut être considéré comme un modèle viscoélastique du second ordre, couplé avec le robot. Ainsi, les mouvements $\dot{\vect{x}}(2)=\dot{z}$ du robot en contact physique avec l'environnement $\mu_z$ entraînent des forces d'interaction $f_z$. Si l'on sépare le contrôle en admittance $C_z$ du modèle du robot, on peut représenter cette interaction comme indiqué sur la \cref{fig_bloc_diagram_robot_environment}, où le modèle dynamique du robot $\matr{\Sigma}$ est séparé en fonction des deux entrées $\dot{z}_d$ et $f_z$ pour le cas unidimensionnel, et $\dot{\vect{x}}_d$ et $\vect{f}_e$ dans le cas multidimensionnel. La consigne du contrôle en admittance est notée $\vect{f}_e^*$. De plus dans le cadre d'une interaction avec un humain en mouvement, la force $\vect{f}_{in}$ représente la force nécessaire à la génération de la trajectoire souhaitée.
 
 L'environnement représente ici le comportement en rejet de perturbation du bras humain qui a été modélisé par une impédance du second ordre pour les études conduites dans le \cref{chap4}. Lorsque les variables cinématiques sont utilisées comme entrée du modèle, comme c'est le cas lorsque le robot est contrôlé en admittance (voir \cref{fig_physical_interaction_robot}), le modèle doit être filtré pour maintenir une fonction de transfert propre et ne pas avoir une action dérivée infinie en haute fréquence. En effet, la réponse biomécanique du bras humain a une bande passante limitée comme tout système physique. Pour représenter ce phénomène, le modèle en impédance est filtré par un second ordre, avec la constante de temps double $\tau_m$.
 
 \begin{equation}\label{eq_impedance_environment}
-	\mu_z(s) = \frac{F_z(s)}{V_z(s)} = \frac{k_z + b_z s  + m_z s^2}{s(1+\tau_ms)^2}
+	\mu_z(s) = \frac{F_z(s)}{V_z(s)} = \frac{K_z + B_z s  + M_z s^2}{s(1+\tau_ms)^2}
 \end{equation}
 
 En première approximation, $\tau_m$ a été estimé pour que la fréquence de coupure se situe à une décade de la moyenne de la tâche de jonglerie, autour de \SI{10}{\hertz}, ce qui est plutôt cohérent avec les ordres de grandeur observés dans la littérature pour le bras humain \parencite{zawadzki_maximal_2010,adewusi_natural_2014}. On a donc la constante de temps $\tau_m$ qui vaut \SI{16}{\milli\second}.
 
+\tikzexternaldisable
 \input{latex_figures/chapter_5/fig_bloc_diagram_robot_environment}
+\tikzexternalenable
 
 De manière similaire à ce qui a été fait pour décrire la dynamique complète du robot avec son contrôle en admittance, on peut facilement définir le comportement du robot seul, séparé de la loi de commande cartésienne en admittance, avec le système \cref{eq_sys_robot_dynamic_model_no_ctrl}, pour ensuite en déduire une représentation d'état avec le vecteur d'état $\vect{\phi}_\Sigma=\begin{pmatrix}\vect{q} & \dot{\vect{q}} & \vect{e}_v \end{pmatrix}^t \in \Re^{9}$.
 
@@ -254,88 +252,146 @@ La représentation d'état de $\matr{\Sigma}_f$ peut facilement être écrite en
 
 Il est important de souligner que puisque les boucles secondaires sont négligées, le signal de commande en vitesse cartésienne $\dot{\vect{x}}_d$ a ses composantes en $\vec{x}$ et $\vec{\theta}$ nulles, puisque la loi de commande en admittance décrite en \cref{chap2_sec_ctrl_vfo_subsec_cartesian_1} n'est réalisée que le long de l'axe $\vec{z}$. Pour les mêmes raisons, la consigne ou référence en force peut s'exprimer ainsi $\vect{f}_{e}^* = \begin{pmatrix}0 & f_{z0} & 0\end{pmatrix}^t$. Il faut aussi se rappeler que lorsqu'on souhaite un contrôle en admittance n'opposant aucune force statique, alors $f_{z0}$ est nul.
 
-Ainsi on peut écrire la boucle fermée $\matr{H}_{BF}$ de l'interaction du robot et d'un environnement, où $\vect{V}_e(s) = \Laplace(\dot{\vect{x}}_d)$ et avec une consigne $f_{z0}$ nulle pour la commande en admittance. 
+Ainsi on peut écrire la boucle fermée $\matr{H}_{BF}$ de l'interaction du robot et d'un environnement montrée en \cref{fig_bloc_diagram_robot_environment}, où $\vect{V}_e(s) = \Laplace(\dot{\vect{x}})$ et avec une consigne $f_{e}^0$ nulle pour la commande en admittance. 
 
 %\begin{equation}
 %	\matr{H}_{BF} = \frac{\vect{V}_e(s)}{\vect{F}_e^*(s)} = \left( \left(\matr{\Sigma}_v \matr{C}_z + \matr{\Sigma}_f\right)\matr{\mu} + \matr{I} \right)^{-1} \matr{\Sigma}_v \matr{C}_z
 %\end{equation}
-\begin{equation}
-	\matr{H}_{BF} = \left(\matr{I} + \matr{\mu}(s)( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) )\right)^{-1}( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) )
+\begin{equation} \label{eq_close_loop_system}
+	\matr{H}_{BF}(s) = \frac{\vect{V}_e(s)}{\vect{f}_{in}(s)} = \big(\matr{I} + ( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) )\textcolor{orange}{\matr{\mu}(s)}\big)^{-1}\big( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) \big)
 \end{equation}
 
 Cette représentation séparant le contrôleur en admittance du reste de la dynamique du robot permet de plus facilement étudier la stabilité du robot en fonction du choix des lois de commande et des environnements.
 
-\section{Etude de la stabilité} \label{chap5_sec_stability_study}
+\section{Étude de la stabilité} \label{chap5_sec_stability_study}
 
 Au vu de la modélisation de l'interaction entre le robot contrôlé en admittance cartésienne et un environnement qui est considéré comme l'impédance mécanique d'un humain, plusieurs facteurs peuvent avoir une incidence sur la stabilité du couplage montré en \cref{fig_bloc_diagram_robot_environment}. Dans un premier temps, on s'intéressera à l'influence de l'environnement puis aux gains de la loi de commande en admittance.
 
 \subsection{Effets de l'environnement} \label{chap5_sec_stability_study_sub_env}
 
-Comme expliqué en \cref{chap5_sec_model_sub_env}, il n'est pas réaliste de prendre le modèle en impédance sans le filtrer. Le choix des constantes de temps a été défini pour minimiser l'incidence sur les fréquences typiques de la tâche de jonglerie, tout en restant cohérent par rapport aux résultats donnés dans la littérature. Toutefois, on se propose de questionner le choix fait en observant l'incidence de ce filtrage sur la stabilité pour dans un second temps observer celle des paramètres du modèle en impédance. 
+Comme expliqué en \cref{chap5_sec_model_sub_env}, il n'est pas réaliste de considérer le modèle en impédance sans le filtrer. Le choix des constantes de temps a été défini pour minimiser l'incidence sur les fréquences typiques de la tâche de jonglerie, tout en restant cohérent par rapport aux résultats donnés dans la littérature. Toutefois, on se propose de questionner le choix fait en observant l'incidence de ce filtrage sur la stabilité pour dans un second temps observer celle des paramètres du modèle en impédance. 
 
 \subsubsection{Effets du filtrage du modèle en impédance} \label{chap5_sec_stability_study_sub_env_1}
 
-On peut étudier l'influence de l'environnement sur la stabilité de l'interaction pour des valeurs typiques des paramètres d'impédance identifiés au cours des expériences. Les estimations effectuées sur le sujet 851 pour la phase \cref{item_pert3} sont utilisées pour cette analyse et sont rappelées dans le \cref{tab_impedance_param_user_851}. Le choix s'est porté sur ces données pour la raideur $K$ élevée ainsi que le faible amortissement $B$ qui ont été identifiés.
+%On peut étudier l'influence de l'environnement sur la stabilité de l'interaction pour des valeurs typiques des paramètres d'impédance identifiés au cours des expériences. Les estimations effectuées sur le sujet 851 pour la phase \cref{item_pert3} sont utilisées pour cette analyse et sont rappelées dans le \cref{tab_impedance_param_user_851}. Le choix s'est porté sur ces données pour la raideur $K$ élevée ainsi que le faible amortissement $B$ qui ont été identifiés.
+On peut étudier l'influence de l'environnement sur la stabilité de l'interaction pour des valeurs typiques des paramètres d'impédance identifiés au cours des expériences. Les estimations effectuées sur le sujet \textcolor{orange}{573 pour la phase \cref{item_pert3} sont utilisées pour cette analyse et sont rappelées dans le \cref{tab_impedance_param_user_573}. Le choix s'est porté sur ces données pour la raideur $K$ élevée ainsi que le faible amortissement $B$ qui ont été identifiés avec un coefficient de détermination médian de \SI{97.7}{\percent}.}
 %Ce sont les estimations effectuées pour le sujet 000 qui sont utilisés (\cref{tab_impedance_param_user_000}), puisque c'est ce dernier qui a permis de réaliser la cartographie faite en \cref{fig_exp_stability_map}.
 
+%\begin{table}
+%	\centering
+%	\begin{tabular}{ c | c | c }
+%		%\hline%
+%		$K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
+%		362.7 & 9.90 & 0.567\\%
+%		%\hline
+%	\end{tabular}
+%	\caption{Paramètres typiques utilisés pour le modèle en impédance}
+%	\label{tab_impedance_param_user_851}
+%\end{table}
 \begin{table}
 	\centering
-	\begin{tabular}{ c | c | c }
+	\begin{tabular}{l | c | c | c }
 		%\hline%
-		$K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
-		362.7 & 9.90 & 0.567\\%
+		Paramètres & $K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
+		Valeurs moyennes identifiées & 479 & 11.5 & 0.626\\%
 		%\hline
 	\end{tabular}
 	\caption{Paramètres typiques utilisés pour le modèle en impédance}
-	\label{tab_impedance_param_user_851}
+	\label{tab_impedance_param_user_573}
 \end{table}
 
-La \cref{subfig_bode_diagram_impedance_environment} montre le diagramme de Bode de l'environnement seul, avant et après le filtrage avec une fréquence de coupure $f_c$ de \SI{10}{\hertz}. Bien que stable, le modèle en impédance filtré n'est pas passif, comme le révèle le plan de Nyquist en \cref{subfig_bode_nyquist_impedance_environment}, où l'on peut voir que l'ensemble des fréquences n'est pas contenu sur les réels positifs.
+La \cref{subfig_bode_diagram_impedance_environment} montre le diagramme de Bode de l'environnement seul, avant et après le filtrage avec une fréquence de brisure $f_c$ de \SI{10}{\hertz}. Bien que stable, le modèle en impédance filtré n'est pas passif, comme le révèle le plan de Nyquist en \cref{subfig_bode_nyquist_impedance_environment}, où l'on peut voir que l'ensemble des fréquences n'est pas contenu sur les réels positifs.
 %\textcolor{red}{Le gain du système est supérieur à 1 jusqu'à une fréquence de \SI{259}{\hertz}, et donc que dans ces fréquences même avec le filtrage, l'environnement modélisé n'est pas passif. [ce n'est pas vrai, faire une analyse de la passivité...]}
 
 \input{latex_figures/chapter_5/fig_environment_bode_diagram}
 
 Pour étudier l'influence de la constante de temps $\tau_m$ sur la stabilité de l'interaction, on peut étudier son influence sur les marges de stabilité obtenues à partir de l'étude de la boucle ouverte $\matr{H}_{BO}$.
 
-\begin{equation}
-	\matr{H}_{BO} = \matr{\mu}(s)\left( \matr{\Sigma}_f(s) + \matr{\Sigma}_v(s) \matr{C}_z(s) \right)
+\begin{equation} \label{eq_open_loop_system}
+	\matr{H}_{BO}(s) = \frac{\vect{f}_\mu(s)}{\vect{f}_{in}(s)} = \matr{\mu}(s)\left( \matr{\Sigma}_f(s) + \matr{\Sigma}_v(s) \matr{C}_z(s) \right)
 \end{equation}
 
-Une manière très visuelle d'observer les marges de stabilité est de tracer le diagramme de Black-Nichols dévoilé en \cref{fig_nichols_environment_filter_2}. On peut y voir la réduction de la marge de gain avec l'augmentation de la fréquence de coupure, jusqu'à atteindre le point de criticité à \SI{54.66}{\hertz}. Le comportement de la marge de phase semble plus complexe, puisqu'il augmente d'abord avec la fréquence de coupure, jusqu'à atteindre un maximum de \SI{72}{\degree} pour une fréquence de \SI{43.1}{\hertz}, et ensuite décroitre rapidement.
+Une manière très visuelle d'observer les marges de stabilité est de tracer le diagramme de Black-Nichols dévoilé en \cref{fig_nichols_environment_filter_2}. On peut y voir la réduction de la marge de gain avec l'augmentation de la fréquence de brisure du filtre, jusqu'à atteindre le point critique à \SI{54.66}{\hertz}. Le comportement de la marge de phase semble plus complexe, puisqu'il augmente d'abord avec la fréquence de brisure, jusqu'à atteindre un maximum de \SI{72}{\degree} pour une fréquence de \SI{43.1}{\hertz}, et ensuite décroitre rapidement.
 %On y voit clairement la réduction des marges de phase et de gain avec l'augmentation de la fréquence de coupure, jusqu'à obtenir l'instabilité à \SI{50}{\hertz}, avec une marge de gain de \SI{-1.33}{\decibel} et une marge de phase de \SI{-20.1}{\degree}. Le point critique de la marge de gain est atteint à \SI{42.29}{\hertz}, et celui de la marge de phase à \SI{42.38}{\hertz}.
 
 %\input{latex_figures/chapter_5/fig_nichols_environment_filter}
 \input{latex_figures/chapter_5/fig_nichols_environment_filter_2}
 
-Il est donc intéressant de noter, que des fréquences de coupure trop faibles du filtre peuvent aussi induire des instabilités. %, comme on peut l'observer pour la courbe en tiret ($f_c=$\SI{5}{\hertz}) sur la \cref{fig_nichols_environment_filter}. 
-Ainsi, la plage de fréquence de coupure sur laquelle l'interaction est stable se définit sur l'intervalle \SIrange{1.38}{54.66}{\hertz}. %, avec une marge de phase maximale obtenue à \SI{9.70}{\hertz}. Le choix d'un filtrage avec une double fréquence de coupure à \SI{10}{\hertz} place donc l'analyse proche de la marge de phase maximale. 
+Il est donc intéressant de noter que des fréquences de coupure trop faibles du filtre peuvent aussi induire des instabilités. %, comme on peut l'observer pour la courbe en tiret ($f_c=$\SI{5}{\hertz}) sur la \cref{fig_nichols_environment_filter}. 
+Ainsi, la plage de fréquence de brisure sur laquelle l'interaction est stable se définit sur l'intervalle \SIrange{1.38}{54.66}{\hertz}. %, avec une marge de phase maximale obtenue à \SI{9.70}{\hertz}. Le choix d'un filtrage avec une double fréquence de coupure à \SI{10}{\hertz} place donc l'analyse proche de la marge de phase maximale. 
 Il reste maintenant à vérifier qu'avec une fréquence de coupure $f_c$ définie à \SI{10}{\hertz}, toutes les gammes de paramètres identifiés sont bien stables, conformément aux observations expérimentales.
 
 \subsubsection{Effets des paramètres du modèle en impédance} \label{chap5_sec_stability_study_sub_env_2}
 
 Comme rappelé par \textcite{ott_unified_2010}, contrairement au contrôle en impédance, un robot piloté avec une loi de commande en admittance voit ses performances en terme de stabilité se dégrader avec l'augmentation de la raideur de l'environnement avec lequel il interagit. La stabilité de l'interaction ayant été validée avec la raideur la plus élevée des identifications, l'ensemble des caractéristiques observées devraient être stables, ce qui a pu être vérifié avec une cartographie. Toutefois, le critère de stabilité ne donne pas d'information concernant la sensation de l'interaction.
 
-Ainsi, si le comportement est stable mais demande des efforts très importants pour réaliser des déplacements, le critère de transparence du robot est faible et risque de compromettre la réalisation de la tâche. Inversemement, si le système a un comportement oscillant bien que stable, il peut se révéler désagréable et peu intuitif pour l'utilisateur. C'est le compromis stabilité-transparence décrit en \cref{sec_robot_sub_task_ctrl_tunning_1}, qui a été traité expérimentalement dans cette même section.
+Ainsi, si le comportement est stable mais demande des efforts très importants pour réaliser des déplacements, le critère de transparence du robot est faible et risque de compromettre la réalisation de la tâche. Inversement, si le système a un comportement oscillant bien que stable, il peut se révéler désagréable et peu intuitif pour l'utilisateur. C'est le compromis stabilité-transparence décrit en \cref{sec_robot_sub_task_ctrl_tunning_1}, qui a été traité expérimentalement dans cette même section.
 
-Dans un premier temps, on s'intéresse au comportement en boucle fermée du couplage pour une entrée $\vect{f}_{in}$ sinusoïdale uniquement sur l'axe $\vec{z}$. Les caractéristiques du signal injecté sont choisies pour se rapprocher des observations. Une amplitude de \SI{5}{\newton}, et une fréquence de \SI{0.9}{\hertz} sont donc utilisées, comme on peut l'observer en \cref{fig_stability_transparency_against_stiffness}.
+%Dans un premier temps, on s'intéresse au comportement en boucle fermée du couplage pour une entrée $\vect{f}_{in}$ sinusoïdale uniquement sur l'axe $\vec{z}$. Les caractéristiques du signal injecté sont choisies pour se rapprocher des observations. Une amplitude de \SI{5}{\newton}, et une fréquence de \SI{0.9}{\hertz} sont donc utilisées, comme on peut l'observer en \cref{fig_stability_transparency_against_stiffness}.
+\textcolor{orange}{Dans un premier temps, on peut s'intéresser au diagramme de Bode du système en boucle ouverte (\cref{fig_stability_transparency_against_stiffness}) pour analyser la stabilité du système. On y confirme bien que l'augmentation de la raideur réduit les marges de stabilité. Une tendance monotonique décroissante de la marge de module est par ailleurs observée en \cref{subfig_stability_margin_against_stiffness}, après un maximum local de $\Delta_M=0.92$ atteint sur un plateau allant de \SIrange{121}{484}{\newton\per\meter} (ce qui correspond à plus de \SI{63}{\percent} des raideurs estimées pour les 3 phases cycliques étudiées), et une instabilité constatée après \SI{3.7}{\kilo\newton\per\meter}. On peut aussi noter, qu'une marge de module inférieur à 0.5 est constatée après \SI{1.6}{\kilo\newton\per\meter}.}
 
+%\tikzexternaldisable
 \input{latex_figures/chapter_5/fig_stability_transparency_against_stiffness}
 
-Sur la plage des raideurs étudiées, aucune forme d'instabilité ni comportements oscillatoires ne sont observables. L'augmentation de la raideur se traduit par deux phénomènes qui sont antagonistes pour qualifier la transparence. On voit effectivement que l'amplitude du mouvement diminue avec la raideur, ce qui est directement provoqué par la réduction du gain de la boucle ouverte, qui est inversement proportionnel à la raideur. Il faut donc une force plus importante pour générer un même mouvement. Toutefois, en parallèle de ce phénomène, le déphasage du signal diminue avec la raideur, ce qui indique un temps de réponse plus court, et donc une meilleur réactivité du contrôle avec l'accentuation de la raideur.
+\textcolor{orange}{Dans un second temps, le diagramme de Bode du système en boucle fermé pour une sortie en position (\cref{fig_stability_transparency_against_stiffness_close_loop}) permet d'étudier la transparence. En effet, pour les gammes de fréquence de la tâche autour de \SI{1}{\hertz}, on peut voir que l'augmentation de la raideur se traduit par deux phénomènes qui sont antagonistes pour qualifier la transparence.} %
+%
+On voit effectivement que l'amplitude du mouvement sera amenée à diminuer avec la raideur, ce qui est directement provoqué par la réduction du gain de la boucle ouverte, qui est inversement proportionnel à la raideur. Il faut donc une force plus importante pour générer un même mouvement. %
+%
+\textcolor{orange}{Si l'on se penche sur les performances nécessaires à la réalisation de la tâche de jonglerie, en utilisant la vitesse de la raquette virtuelle à l'instant de l'impact avec la balle $\dot{z}_p(t_k)$ comme indicateur, on constate que la moyenne de $\dot{z}_p(t_k)$ est de \SI{1.44(0.68)}{\meter\per\second} (trois écarts types). Pour atteindre cette vitesse, on peut alors regarder la force $\vect{f}_{in}$ nécessaire au mouvement. Le \cref{tab_gain_attenuation_velocity} montre ainsi que pour une raideur de \SI{1.4}{\kilo\newton\per\meter}, la force nécessaire atteint presque un équivalent masse de \SI{5}{\kilogram}, contre seulement \SI{1}{\kilogram} pour les raideurs comprises entre \SIlist{25;500}{\newton\per\meter}. Pour une meilleur transparence, cette force doit évidemment être minimale.}
+	
+%Ainsi, pour une raideur de \SI{200}{\newton\per\meter}, l'atténuation est de \SI{17}{\decibel}, il faut alors }
 
-Ces phénomènes se traduisent en terme de stabilité par une tendance monotonique décroissante de la marge de phase après un maximum local atteint à \SI{387}{\newton\per\meter}, pour devenir instable avec une marge de phase négative autour de \SI{3.9}{\kilo\newton\per\meter}, comme on peut l'observer en \cref{subfig_stability_margin_against_stiffness}. La \cref{subfig_damping_ratio_against_stiffness} permet de comprendre comment se traduit la réduction de la marge de phase. On y distingue deux fréquences naturelles avec des taux d'amortissement pouvant être fortement inférieurs à 1, c'est à dire décrivant des comportements oscillants pseudo-amortis. Le premier pôle considéré $p_1$ avec des fréquences comprises entre \SIlist{0.3;1}{\hertz} est mieux amorti lorsque la raideur augmente, à l'inverse, le second pôle $p_2$ dont la plage fréquentielle est plus sensible à la raideur (entre \SIlist{2;6}{\hertz}) décrit le comportement inverse.
+\begin{table}
+	\centering
+	\begin{tabular}{| c | c | c |}
+		\hline%
+		$K$ (\si{\newton\per\meter}) & $\left.g_a\right|_{\omega=2\pi}$ (\si{\decibel})& $\vect{f}_{in}$ (\si{\newton})\\\hline%
+		25 & -19 & 13\\
+		50 & -18.5 & 12\\
+		100 & -18 & 11\\
+		200 & -17 & 10\\
+		400 & -18.5 & 12\\
+		800 & -24 & 23\\
+		1400 & -30 & 46\\
+		2200 & -34 & 72\\
+		3500 & -38 & 114\\
+		4700 & -41 & 162\\
+		\hline
+	\end{tabular}
+	\caption{Force minimale nécessaire pour atteindre $\dot{z}_p(t_k)=1.44$, en fonction de la raideur du comportement en impédance $\mu$, et de l'atténuation de $\matr{H}_{BF}$, $g_a$ à \SI{1}{\hertz}}
+	\label{tab_gain_attenuation_velocity}
+\end{table}
 
-Il semble toutefois que ce soit bien le second pôle étudié qui soit à l'origine des comportements déstabilisants. Dans le cas étudié, ce pôle ne décrit un comportement oscillant qu'avec des raideurs supérieures à \SI{425}{\newton\per\meter}.
+Toutefois, en parallèle de ce phénomène, le déphasage du signal diminue avec la raideur, ce qui indique un temps de réponse plus court, et donc une meilleur réactivité du contrôle avec l'accentuation de la raideur. %
+%
+\textcolor{orange}{Le déphasage passe ainsi de \SI{110}{\degree} pour \SI{25}{\newton\per\meter}, à \SIlist{44;2}{\degree} respectivement pour \SIlist{400;1400}{\newton\per\meter}. Il est important de noter que lors de tâches cycliques, il est plus pertinent de s'intéresser au retard relativement à la fréquence de la tâche, plutôt qu'à un retard absolu \parencite{langenberg_sinusoidal_1998}. Ainsi, pour la tâche de jonglerie, \textcite{morice_learning_2007} ont montré qu'après des phases d'apprentissage, les participants étaient capables de s'adapter à des déphasages important compris entre \SIlist{45;180}{\degree}. La durée d'apprentissage nécessaire pourrait être proportionnelle à la latence engendrée par le délai \parencite{foulkes_adaptation_2000}. Même si ce phénomène n'a pas été retrouvé par \textcite{morice_learning_2007}, on pourrait considérer le déphasage comme une source de dégradation de la transparence.}
+
+\input{latex_figures/chapter_5/fig_stability_transparency_against_stiffness_close_loop}
+%\tikzexternalenable
+
+%Sur la plage des raideurs étudiées, aucune forme d'instabilité ni comportements oscillatoires ne sont observables. L'augmentation de la raideur se traduit par deux phénomènes qui sont antagonistes pour qualifier la transparence. 
+
+%Ces phénomènes se traduisent en terme de stabilité par une tendance monotonique décroissante de la marge de phase après un maximum local atteint à \SI{387}{\newton\per\meter}, pour devenir instable avec une marge de phase négative autour de \SI{3.9}{\kilo\newton\per\meter}, comme on peut l'observer en \cref{subfig_stability_margin_against_stiffness}. La \cref{subfig_damping_ratio_against_stiffness} permet de comprendre comment se traduit la réduction de la marge de phase. On y distingue deux fréquences naturelles avec des taux d'amortissement pouvant être fortement inférieurs à 1, c'est à dire décrivant des comportements oscillants pseudo-amortis. Le premier pôle considéré $p_1$ avec des fréquences comprises entre \SIlist{0.3;1}{\hertz} est mieux amorti lorsque la raideur augmente, à l'inverse, le second pôle $p_2$ dont la plage fréquentielle est plus sensible à la raideur (entre \SIlist{2;6}{\hertz}) décrit le comportement inverse.
+
+L'étude de la carte des pôles et zéros montrée en \cref{subfig_damping_ratio_against_stiffness} permet aussi de comprendre comment se traduisent les variations de raideur. %
+% 
+\textcolor{orange}{On peut y observer que la raideur influe notamment sur 3 pôles ($p_1$, $p_2$ et $p_3$) qui peuvent donner lieu à des comportements oscillants, avec des coefficients d'amortissement inférieur à 1. Ainsi le pôle $p_1$ voit son comportement oscillatoire augmenter dans un premier temps, jusqu'à des raideurs de \SI{20}{\newton\per\meter} ($\zeta=0.8$), pour ensuite s'atténuer. L'évolution du pôle $p_3$ n'entraine que très peu de variation du coefficient d'amortissement $\zeta\approx0.9$, mais entraine des changements de fréquence du pôle entre \SIlist{5;20}{\hertz}.}
+
+\textcolor{orange}{Les variations les plus significatives sont liées au pôle $p_2$ qui peut être à l'origine d'instabilités lorsque la raideur dépasse \SI{3.8}{\kilo\newton\per\meter}. De plus, avant d'atteindre cette instabilité, l'augmentation de la raideur entre \SIlist{500;4000}{\newton\per\meter} entraine une réduction de $\zeta$, jusqu'à ce qu'il devienne nul pour des fréquences d'oscillations autour de \SI{2}{\hertz}.}
+
+%Il semble toutefois que ce soit bien le second pôle étudié qui soit à l'origine des comportements déstabilisants. Dans le cas étudié, ce pôle ne décrit un comportement oscillant qu'avec des raideurs supérieures à \SI{425}{\newton\per\meter}.
 %Pour les raideurs comprises entre \SIlist{50;375}{\newton\per\meter}, la marge de phase augmente.
 
 %fig_stability_margin_against_stiffness
+\tikzexternaldisable
 \input{latex_figures/chapter_5/fig_stability_margin_against_stiffness}
+\tikzexternalenable
 
-Si on s'intéresse aux effets individuels de la masse $M$ et de l'amortissement $B$, on constate que l'augmentation de la masse modifie plus significativement les fréquences des pôles mal amortis, notamment le deuxième et troisième ($p_2$ et $p_3$) qui atteignent respectivement \SIlist{0.9;59}{\hertz} pour une masse de \SI{10}{\kilogram}. De son côté l'augmentation de l'amortissmement contrecarre l'effet de la raideur sur $p_2$, mais réduit le taux d'amortissement de $p_3$ en tendant vers une fréquence proche de \SI{15}{\hertz}.
+Si l'on s'intéresse aux effets individuels de la masse $M$ et de l'amortissement $B$, on constate que l'augmentation de la masse modifie plus significativement les fréquences des pôles mal amortis, notamment le deuxième et troisième ($p_2$ et $p_3$) qui atteignent respectivement \SIlist{0.9;59}{\hertz} pour une masse de \SI{10}{\kilogram}. De son côté l'augmentation de l'amortissement contrecarre l'effet de la raideur sur $p_2$.
 
 En accord avec la littérature, on peut voir que l'environnement peut déstabiliser le robot contrôlé en admittance, notamment lorsque la raideur est trop importante, d'où l'importance d'adapter les gains du contrôleur en fonction d'attentes concernant les paramètres d'impédance de l'environnement.
 
-\textcolor{red}{Conclusion par rapport à l'hypothèse 2 ??}
+%\textcolor{red}{Conclusion par rapport à l'hypothèse 2 ??}
 
 \subsection{Effets de la loi de commande en admittance}
 
@@ -343,28 +399,41 @@ Pour les gammes de paramètres estimés dans le \cref{chap4}, les gains du corre
 
 Dans un premier temps, la cartographie expérimentale de la \cref{fig_exp_stability_map} peut être reproduite à partir du modèle et des paramètres estimés de l'utilisateur ayant permis ce réglage. Ces valeurs sont mentionnées dans le \cref{tab_impedance_param_user_000}, avec les intervalles de confiance à \SI{95}{\percent} de la médiane, pour chacune des phases.
 
+%\begin{table}
+%	\centering
+%	\begin{tabular}{ l | c | c | c }
+%		%\hline%
+%		$\phi$ & $K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
+%		\cref{item_pert1} & 151.0 $\pm$ 19.0 & 15.72 $\pm$ 0.9 & 351 $\pm$ 12\\%
+%		\cref{item_pert2} & 194.3 $\pm$ 29.9 & 12.86 $\pm$ 1.9 & 374 $\pm$ 21\\%
+%		\cref{item_pert3} & 163.6 $\pm$ 52.0 & 10.15 $\pm$ 2.14 & 413 $\pm$ 35\\%
+%		%\hline
+%	\end{tabular}
+%	\caption{Paramètres estimés pour l'utilisateur ayant réalisé la cartographie de stabilité du contrôle en admittance.}
+%	\label{tab_impedance_param_user_000}
+%\end{table}
 \begin{table}
 	\centering
 	\begin{tabular}{ l | c | c | c }
 		%\hline%
 		$\phi$ & $K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
-		\cref{item_pert1} & 151.0 $\pm$ 19.0 & 15.72 $\pm$ 0.9 & 351 $\pm$ 12\\%
-		\cref{item_pert2} & 194.3 $\pm$ 29.9 & 12.86 $\pm$ 1.9 & 374 $\pm$ 21\\%
-		\cref{item_pert3} & 163.6 $\pm$ 52.0 & 10.15 $\pm$ 2.14 & 413 $\pm$ 35\\%
+		\cref{item_pert1} & 167 $\pm$ 42 & 15.0 $\pm$ 2.8 & 0.402 $\pm$ 0.043\\%
+		\cref{item_pert2} & 196 $\pm$ 51 & 12.9 $\pm$ 2.9 & 0.370 $\pm$ 0.043\\%
+		\cref{item_pert3} & 252 $\pm$ 63 & 19.8 $\pm$ 2.4 & 0.529 $\pm$ 0.048\\%
 		%\hline
 	\end{tabular}
-	\caption{Paramètres estimés pour l'utilisateur ayant réalisé la cartographie de stabilité du contrôle en admittance.}
+	\caption{Paramètres estimés pour l'utilisateur ayant réalisé la cartographie de stabilité du contrôle en admittance (\cref{fig_exp_stability_map}).}
 	\label{tab_impedance_param_user_000}
 \end{table}
 
-Il est important de rappeler que pour garder des marges significatives, la cartographie de la \cref{fig_exp_stability_map} a été réalisée dans des conditions expérimentales où l'utilisateur devait maintenir des cocontractions importantes, de manière à se placer dans la pire configuration possible lors d'une interaction avec un humain, et aussi dans une configuration nominale. Or, comme expliqué en \cref{chap_1_sec_2_subsec_2_visco_elast_char}, les cocontractions entrainent une augmentation de la raideur. \textcite{shabani_simulating_2018} ont ainsi pu montrer qu'une élévation de l'activité musculaire au niveau du genou de \SIrange{0}{20}{\percent}, pouvait engendrer une multiplication de la raideur articulaire par 2 ou 3.
+Il est important de rappeler que pour garder des marges significatives, la cartographie de la \cref{fig_exp_stability_map} a été réalisée dans des conditions expérimentales où l'utilisateur devait maintenir des co-contractions importantes, de manière à se placer dans la pire configuration possible lors d'une interaction avec un humain, et aussi dans une configuration nominale. Or, comme expliqué en \cref{chap_1_sec_2_subsec_2_visco_elast_char}, les co-contractions entrainent une augmentation de la raideur. \textcite{shabani_simulating_2018} ont ainsi pu montrer qu'une élévation de l'activité musculaire au niveau du genou de \SIrange{0}{20}{\percent}, pouvait engendrer une multiplication de la raideur articulaire par 2 ou 3.
 
 \input{latex_figures/chapter_5/fig_theory_stability_map}
 \input{latex_figures/chapter_5/fig_theory_stability_map_vector_margin} % marge de module
 
 On peut voir que la \cref{fig_theory_stability_map} ne montre pas d'instabilité sur l'intervalle des gains testés expérimentalement en \cref{fig_exp_stability_map}. Toutefois, comme sur la cartographie expérimentale, c'est la progression du gain $K_p$ qui semble la plus déstabilisante. 
 
-Les premières marques d'instabilités sont seulement observées à partir de gain $K_p$ supérieur à 0.25, dans la configuration la plus rigide. Cette différence pourrait indiquer que le choix du filtrage de l'impédance mécanique de l'environnement détaillé précédemment en \cref{chap5_sec_stability_study_sub_env_1} a été placé à une fréquence trop basse, - \textit{ce qui peut augmenter artificiellement la stabilité de l'interaction }-, ou aussi que les fortes cocontractions entrainent une multiplication de la raideur supérieure à un facteur 3. 
+Les premières marques d'instabilités sont seulement observées à partir de gain $K_p$ supérieur à 0.25, dans la configuration la plus rigide. Cette différence pourrait indiquer que le choix du filtrage de l'impédance mécanique de l'environnement détaillé précédemment en \cref{chap5_sec_stability_study_sub_env_1} a été placé à une fréquence trop basse, - \textit{ce qui peut augmenter artificiellement la stabilité de l'interaction }-, ou aussi que les fortes co-contractions entrainent une multiplication de la raideur supérieure à un facteur 3. 
 
 L'augmentation de la fréquence de coupure du filtrage passe bas de l'environnement autour de \SI{50}{\hertz} permet de retrouver une cartographie proche de celle obtenue expérimentalement. On peut toutefois remarquer que l'étude est réalisée ici sur un modèle linéarisé du couplage, or des instabilités peuvent être induites par des phénomènes non-linéaires qui ne sont pas pris en compte ici. Pour tenir compte des erreurs de modélisation, la marge de module visée est généralement autour de 0.5. 
 %
@@ -374,21 +443,21 @@ La stabilité n'est toutefois pas le seul critère important. C'est le compromis
 
 \input{latex_figures/chapter_5/fig_close_loop_against_ki}
 
-La \cref{fig_close_loop_against_ki} montre l'évolution de la réponse en boucle fermée en fonction du gain $K_i$, pour l'impédance du participant 000 lors de la phase \cref{item_pert2}. On peut ainsi voir que ce gain joue à la fois sur la latence de la réponse et aussi sur son amplitude. Le maximum de l'amplitude est atteint pour une valeur du gain de \SI{34}{\centi\meter\radian\per\newton\per\second\squared}, le mouvement ne s'amplifie donc pas de manière systématique avec l'incrémentation du gain intégral. Par contre, l'augmentation de ce gain diminue la latence de la réponse en position, jusqu'à tendre vers une erreur de trainage en position de l'ordre de \SI{60}{\milli\second}. Une réponse instable est obtenue lorsque $K_i$ dépasse \SI{9}{\meter\radian\per\newton\per\second\squared}, ce qui se traduit par des oscillations dont l'amplitude augmente.
+La \cref{fig_close_loop_against_ki} montre l'évolution de la réponse en boucle fermée en fonction du gain $K_i$, pour l'impédance du participant 000 lors de la phase \cref{item_pert2}. On peut ainsi voir que ce gain joue à la fois sur la latence de la réponse et aussi sur son amplitude. Le maximum de l'amplitude est atteint pour une valeur du gain de \SI{34}{\centi\meter\radian\per\newton\per\second\squared}, le mouvement ne s'amplifie donc pas de manière systématique avec l'incrément du gain intégral. Par contre, l'augmentation de ce gain diminue la latence de la réponse en position, jusqu'à tendre vers une erreur de trainage en position de l'ordre de \SI{60}{\milli\second}. Une réponse instable est obtenue lorsque $K_i$ dépasse \SI{9}{\meter\radian\per\newton\per\second\squared}, ce qui se traduit par des oscillations dont l'amplitude augmente.
 
 \textcolor{red}{Au niveau fréquentiel, le comportement double intégrateur en basse fréquence est prolongé par l'augmentation de $K_i$, le gain en décibel est donc proportionnel à $K_i$, ce qui peut s'interpréter, comme l'a fait \textcite{lamy_conception_2011}, par la réduction de la masse apparente en basse fréquence. Ainsi pour les valeurs indiquées dans la légende de la \cref{fig_close_loop_against_ki}, on obtient respectivement des gains de \SIlist{13;28;69}{\decibel} à \SI{0.1}{\hertz}. }
 
-En complément, le gain proportionnel $K_p$ modifie principalement le comportement en haute fréquence et permet une augmentation de la bande passante plus importante que celle induite par l'augmentation du gain intégral. Les réhaussements du gain et de la phase interviennent de plus en plus tôt, jusqu'à \SI{40}{\milli\hertz} pour \SI{34}{\centi\meter\per\newton\per\second} ce qui provoque toutefois un comportement instable, comme on peut l'observer sur la \cref{fig_close_loop_against_kp}.
+En complément, le gain proportionnel $K_p$ modifie principalement le comportement en haute fréquence et permet une augmentation de la bande passante plus importante que celle induite par l'augmentation du gain intégral. Les rehaussements du gain et de la phase interviennent de plus en plus tôt, jusqu'à \SI{40}{\milli\hertz} pour \SI{34}{\centi\meter\per\newton\per\second} ce qui provoque toutefois un comportement instable, comme on peut l'observer sur la \cref{fig_close_loop_against_kp}.
 
 \input{latex_figures/chapter_5/fig_close_loop_against_kp}
 \tikzexternaldisable
 
 En effet, la réponse temporelle se caractérise à la fois par une réduction de l'erreur de trainage et une augmentation de l'amplitude en même temps que l'augmentation du gain $K_p$ jusqu'à obtenir un comportement instable. Ces résultats confirment en théorie les études de la littérature \parencite{newman_stability_1992,lamy_achieving_2009} selon lesquelles les gains proportionnels-intégraux du correcteur en admittance doivent être les plus élevés possibles pour améliorer la transparence.
 
-Cette affirmation reste toutefois à constraster, car lorsque la passivité n'est plus assurée et que la stabilité est garantie, elle n'est pas forcément traduite expérimentalement. En effet, des réponses très dynamiques peuvent s'avérer moins instinctives à manipuler pour les utilisateurs, ce qui reste complexe à traduire au niveau théorique. Certaines marges peuvent alors être utilisées comme c'est le cas lors de la mise en place de commande robuste \parencite{buerger_relaxing_2006}.
+Cette affirmation reste toutefois à contraster, car lorsque la passivité n'est plus assurée et que la stabilité est garantie, elle n'est pas forcément traduite expérimentalement. En effet, des réponses très dynamiques peuvent s'avérer moins instinctives à manipuler pour les utilisateurs, ce qui reste complexe à traduire au niveau théorique. Certaines marges peuvent alors être utilisées comme c'est le cas lors de la mise en place de commande robuste \parencite{buerger_relaxing_2006}.
 
 \textcolor{red}{Montrer les limites de la passivité, et d'une analyse robuste, conclure...}
 
 \textcolor{red}{Flexibilités du robot non modélisées ?}
 
-%Ainsi, si on souhaite assurer une marge de module d'au moins 0.5, 
+%Ainsi, si l'onsouhaite assurer une marge de module d'au moins 0.5, 

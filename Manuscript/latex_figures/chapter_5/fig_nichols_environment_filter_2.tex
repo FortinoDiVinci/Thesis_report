@@ -856,12 +856,12 @@
 				377.155678568178	0\\
 			};
 			%
-			\draw[->, mycolor9] (axis cs: 180, -80) -- (axis cs: 37.1187, -80) node[midway,above] {$\Delta_\phi$};	
-			\draw[->, mycolor1] (axis cs: 180, -80) -- (axis cs: 228.1359, -80) node[midway,above] {$\Delta_\phi$};
-			\draw[->, mycolor9] (axis cs: 30, 0) -- (axis cs: 30, 19.6862) node[midway,left] {$\Delta_G$};%fill=white
-			\draw[->, mycolor1] (axis cs: 300, 0) -- (axis cs: 300, -31.1160) node[near end,right] {$\Delta_G$};
+			\draw[->, mycolor9] (axis cs: 180, -80) -- (axis cs: 37.1187, -80) node[midway,above] {\small{$\Delta_\phi^{1kHz} < 0$}};	
+			\draw[->, mycolor1] (axis cs: 180, -80) -- (axis cs: 228.1359, -80) node[midway,above] {\small{$\Delta_\phi^{5Hz} > 0$}};
+			\draw[->, mycolor9] (axis cs: 30, 0) -- (axis cs: 30, 19.6862) node[above, xshift=-3mm] {\small{$\Delta_G^{1kHz}$}};%fill=white
+			\draw[->, mycolor1] (axis cs: 300, 0) -- (axis cs: 300, -31.1160) node[near end,right] {\small{$\Delta_G^{5Hz}$}};
 		\end{axis}		
 	\end{tikzpicture}%
-	\caption{Diagramme de Black-Nichols de la fonction de transfert du système en boucle ouverte $\matr{H}_{BO}$, pour des fréquences de coupure du filtrage variant entre \SIlist{5;1000}{\hertz}. Les marges de gain et de phase sont notées à titre indicatif pour les filtres de fréquences de coupure de \SIlist{5;1000}{\hertz}.}
+	\caption{Diagramme de Black-Nichols de la fonction de transfert du système en boucle ouverte $\matr{H}_{BO}$, pour des fréquences de brisure du filtrage variant entre \SIlist{5;1000}{\hertz}. Les marges de gain et de phase sont notées à titre indicatif pour les filtres de fréquences de brisure de \SIlist{5;1000}{\hertz}.}
 \label{fig_nichols_environment_filter_2}
 \end{figure}
