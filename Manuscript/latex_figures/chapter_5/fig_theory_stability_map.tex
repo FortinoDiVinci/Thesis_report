@@ -1,62 +1,103 @@
 \begin{figure}
 	\resizebox{\textwidth}{!}{
 		\centering
-		\subcaptionbox{Marges de phase pour une raideur nominale\label{subfig_theory_stability_map_nominal_stiffness}}
+		\subcaptionbox{%Marges de phase pour une raideur nominale
+			Raideur nominale ($K=196$)\label{subfig_theory_stability_map_nominal_stiffness}}
 		{
 			\begin{tikzpicture} 
 				\begin{axis}[%
-					width=.5\linewidth,
-					xlabel={$Ki$},
-					ylabel={$Kp$},
+					width=.46\linewidth,
+					height=.43\linewidth,
+					xlabel={$K_p$ (\si{\radian\per\second\per\newton})},
+					ylabel={$K_i$ (\si{\radian\squared\per\second\squared\per\newton})},
 					xlabel style={sloped},
 					ylabel style={sloped},
-					zlabel={$\Delta\phi$ (\si{\degree})},
+					%zlabel={$\Delta\phi$ (\si{\degree})},
+					zlabel={$\Delta_M$},
 					%zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap name=ShirazToOrient,
 					scale only axis,  
-					view = {50}{50},
-					%xmax=299,
-					%ymin=250,
-					point meta max=90,
-					point meta min=-20,
-					ztick={0,45,90,135},
+					view = {0}{90},
+					%point meta max=90,
+					%point meta min=-20,
+					point meta max=1,
+					point meta min=0,
+					%ztick={0,0.25,0.5,0.75,1},
 					clip=false,
+					scaled x ticks={base 10:2},
 					]
 					%
-					\addplot3 [surf, mesh/rows=40, shader=interp, patch type=bilinear] table[col sep=comma, x=ki, y=kp, z=Dphi] {misc/chap_5/stability_map_nominal_theory.csv};
-					\node at (axis cs:0.08,0.015,65) {\pgfuseplotmark{*}};
+					%\addplot3 [surf, mesh/rows=40, shader=interp, patch type=bilinear] table[col sep=comma, x=ki, y=kp, z=Dphi] {misc/chap_5/stability_map_nominal_theory.csv};
+					\addplot3 [surf, mesh/rows=50, shader=interp, patch type=bilinear] table[col sep=comma, y=ki, x=kp, z=zeta] {misc/chap_5/damping_map_nominal_theory.csv};
+					\node at (axis cs:0.015,0.08,0.52) {\pgfuseplotmark{*}};
+					\draw[dashed, black] (axis cs:0,0) rectangle (axis cs:2.2e-2,0.3) node[below, xshift=-0.5cm] {exp.};
 				\end{axis}
 			\end{tikzpicture}
 		}
-		\subcaptionbox{Marges de phase pour une raideur multipliée par 3\label{subfig_theory_stability_map_high_stiffness}}
+		\subcaptionbox{%Marges de phase pour une raideur multipliée par 3
+			Raideur en cocontraction ($K=588$)\label{subfig_theory_stability_map_high_stiffness}}
 		{
 			\begin{tikzpicture} 
 				\begin{axis}[%
-					width=.5\linewidth,
-					xlabel={$Ki$},
-					ylabel={$Kp$},
+					name = ax2,
+					width=.44\linewidth,
+					height=.43\linewidth,
+					xlabel={$K_p$ (\si{\radian\per\second\per\newton})},
+					%ylabel={$Kp$},
 					xlabel style={sloped},
 					ylabel style={sloped},
-					zlabel={$\Delta\phi$ (\si{\degree})},
-					%zticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					%zlabel={$\Delta\phi$ (\si{\degree})},
+					zlabel={$\Delta_M$},
+					%xticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
 					colormap name=ShirazToOrient,
 					scale only axis,  
-					view = {50}{50},
+					view = {0}{90},
 					%xmax=299,
 					%ymin=250,
-					point meta max=90,
-					point meta min=-20,
-					ztick={0,45,90,135},
+					%point meta max=90,
+					%point meta min=-20,
+					point meta max=1,
+					point meta min=0,
+					%ztick={0,45,90,135},
+					%ztick={0,0.25,0.5,0.75,1},
+					yticklabels={,,},
 					clip=false,
+					scaled x ticks={base 10:2},
 					]
 					%
-					\addplot3 [surf, mesh/rows=40, shader=interp, patch type=bilinear] table[col sep=comma, x=ki, y=kp, z=Dphi] {misc/chap_5/stability_map_stiff_theory.csv};
-					\node at (axis cs:0.08,0.015,60) {\pgfuseplotmark{*}};
+					%\addplot3 [surf, mesh/rows=40, shader=interp, patch type=bilinear] table[col sep=comma, x=ki, y=kp, z=Dphi] {misc/chap_5/stability_map_stiff_theory.csv};
+					\addplot3 [surf, mesh/rows=50, shader=interp, patch type=bilinear] table[col sep=comma, y=ki, x=kp, z=zeta] {misc/chap_5/damping_map_stiff_theory.csv};
+					\node at (axis cs:0.015,0.08,0.86) {\pgfuseplotmark{*}};
+					\draw[dashed, black] (axis cs:0,0) rectangle (axis cs:2.2e-2,0.3);
+					\draw[dotted, white, thick] (axis cs:0,0.3) -- (axis cs:0.009,0.8); -- (axis cs:0,0.8) -- (axis cs:0,0.3);
 					%\node at (rel axis cs:0,0.5,1) [above] {\Large{$K$}};
 				\end{axis}
+				\begin{axis}[
+					name=ax3,
+					hide axis,
+					scale only axis,
+					width=0pt,
+					height=0pt,
+					colormap name=ShirazToOrient,
+					colorbar horizontal,					
+					point meta max=1,
+					point meta min=0,
+					colorbar style={
+						width=6.5cm,
+						rotate=90,
+						%title= $\Delta_M$,
+						at={($(ax2.south east) + (0.1cm,0)$)},
+						anchor=south west, 
+						%xtick style={draw=none},
+						xticklabel style={xshift=.4cm},
+					},
+					]
+					\addplot [draw=none] coordinates {(0,0) (1,1)};
+				\end{axis}				
+				\node at ($(ax2.south east) + (0.8cm,-0.5cm)$) {$\zeta$};
 			\end{tikzpicture}
 		}
 	}
-	\caption{Tentative de reproduction de la cartographie expérimentale, en utilisant les paramètres du participant 000 de la phase \cref{item_pert2}, en fonction des gains du correcteur cartésien en admittance.}
+	\caption{Reproduction théorique de la cartographie expérimentale (zone entourée en tirets noirs) utilisant les paramètres du participant 000 de la phase \cref{item_pert2}, en fonction des gains du correcteur cartésien en admittance. La palette de couleurs indique le coefficient d'amortissement $\zeta$ le plus faible des pôles du système en boucle fermée \cref{eq_close_loop_system}. La zone délimitée par des pointillés blancs est instable ($\zeta\leq0$).}
 	\label{fig_theory_stability_map}
 \end{figure}

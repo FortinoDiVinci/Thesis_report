@@ -383,11 +383,11 @@ L'étude de la carte des pôles et zéros montrée en \cref{subfig_damping_ratio
 %Pour les raideurs comprises entre \SIlist{50;375}{\newton\per\meter}, la marge de phase augmente.
 
 %fig_stability_margin_against_stiffness
-\tikzexternaldisable
+%\tikzexternaldisable
 \input{latex_figures/chapter_5/fig_stability_margin_against_stiffness}
-\tikzexternalenable
+%\tikzexternalenable
 
-Si l'on s'intéresse aux effets individuels de la masse $M$ et de l'amortissement $B$, on constate que l'augmentation de la masse modifie plus significativement les fréquences des pôles mal amortis, notamment le deuxième et troisième ($p_2$ et $p_3$) qui atteignent respectivement \SIlist{0.9;59}{\hertz} pour une masse de \SI{10}{\kilogram}. De son côté l'augmentation de l'amortissement contrecarre l'effet de la raideur sur $p_2$.
+Si l'on s'intéresse aux effets individuels de la masse $M$ et de l'amortissement $B$, on constate que l'augmentation de la masse modifie plus significativement les fréquences des pôles mal amortis, notamment le deuxième et troisième ($p_2$ et $p_3$) qui atteignent respectivement \SIlist{0.9;59}{\hertz} pour une masse de \SI{10}{\kilogram}. De son côté, l'augmentation de l'amortissement contrecarre l'effet déstabilisant de la raideur sur $p_2$.
 
 En accord avec la littérature, on peut voir que l'environnement peut déstabiliser le robot contrôlé en admittance, notamment lorsque la raideur est trop importante, d'où l'importance d'adapter les gains du contrôleur en fonction d'attentes concernant les paramètres d'impédance de l'environnement.
 
@@ -395,9 +395,11 @@ En accord avec la littérature, on peut voir que l'environnement peut déstabili
 
 \subsection{Effets de la loi de commande en admittance}
 
-Pour les gammes de paramètres estimés dans le \cref{chap4}, les gains du correcteur en impédance sont toujours stables. Toutefois, comme montré dans la section précédente, le critère de stabilité n'est pas suffisant pour qualifier une interaction intuitive avec un utilisateur, même s'il s'agit d'un critère essentiel qu'il est important d'assurer. 
+Pour les gammes de paramètres estimés dans le \cref{chap4}, les gains du correcteur en impédance sont toujours stables. Toutefois, comme montré dans la section précédente, le critère de stabilité, bien que nécessaire, n'est pas suffisant pour qualifier une interaction intuitive avec un utilisateur. %, même s'il s'agit d'un critère essentiel qu'il est important d'assurer. 
 
-Dans un premier temps, la cartographie expérimentale de la \cref{fig_exp_stability_map} peut être reproduite à partir du modèle et des paramètres estimés de l'utilisateur ayant permis ce réglage. Ces valeurs sont mentionnées dans le \cref{tab_impedance_param_user_000}, avec les intervalles de confiance à \SI{95}{\percent} de la médiane, pour chacune des phases.
+En première approximation, la cartographie expérimentale de la \cref{fig_exp_stability_map} peut être reproduite à partir du modèle \cref{eq_close_loop_system} et des paramètres estimés de l'utilisateur ayant permis ce réglage. Ces valeurs sont mentionnées dans le \cref{tab_impedance_param_user_000}, avec les intervalles de confiance à \SI{95}{\percent} des médianes pour chacune des phases.
+
+\subsubsection{Reproduction de la cartographie expérimentale}
 
 %\begin{table}
 %	\centering
@@ -426,35 +428,69 @@ Dans un premier temps, la cartographie expérimentale de la \cref{fig_exp_stabil
 	\label{tab_impedance_param_user_000}
 \end{table}
 
-Il est important de rappeler que pour garder des marges significatives, la cartographie de la \cref{fig_exp_stability_map} a été réalisée dans des conditions expérimentales où l'utilisateur devait maintenir des co-contractions importantes, de manière à se placer dans la pire configuration possible lors d'une interaction avec un humain, et aussi dans une configuration nominale. Or, comme expliqué en \cref{chap_1_sec_2_subsec_2_visco_elast_char}, les co-contractions entrainent une augmentation de la raideur. \textcite{shabani_simulating_2018} ont ainsi pu montrer qu'une élévation de l'activité musculaire au niveau du genou de \SIrange{0}{20}{\percent}, pouvait engendrer une multiplication de la raideur articulaire par 2 ou 3.
+Il est important de rappeler que pour garder des marges significatives, la cartographie de la \cref{fig_exp_stability_map} a été réalisée dans des conditions expérimentales où l'utilisateur devait maintenir des co-contractions importantes, de manière à se placer dans la pire configuration possible lors d'une interaction avec un humain, en plus d'une configuration nominale. Or, comme expliqué en \cref{chap_1_sec_2_subsec_2_visco_elast_char}, les co-contractions entrainent une augmentation de la raideur. \textcite{shabani_simulating_2018} ont ainsi pu montrer qu'une élévation de l'activité musculaire au niveau du genou de \SIrange{0}{20}{\percent}, pouvait engendrer une multiplication de la raideur articulaire par 2 ou 3.
 
+\textcolor{orange}{On peut voir que la \cref{subfig_theory_stability_map_nominal_stiffness} ne révèle aucune d'instabilité, de plus la \cref{subfig_theory_stability_map_high_stiffness} n'en révèle pas non plus sur l'intervalle des gains testés expérimentalement en \cref{fig_exp_stability_map}. La cartographie théorique semble toutefois moins sévère que celle expérimentale pour les gains $K_p$, qui ne se révèlent source de comportement plus oscillants sur cette dernière.}
+%Toutefois, comme sur la cartographie expérimentale, c'est la progression du gain $K_p$ qui semble la plus déstabilisante. 
+
+%\tikzexternaldisable
 \input{latex_figures/chapter_5/fig_theory_stability_map}
-\input{latex_figures/chapter_5/fig_theory_stability_map_vector_margin} % marge de module
+%\tikzexternalenable
+%\input{latex_figures/chapter_5/fig_theory_stability_map_vector_margin} % marge de module
 
-On peut voir que la \cref{fig_theory_stability_map} ne montre pas d'instabilité sur l'intervalle des gains testés expérimentalement en \cref{fig_exp_stability_map}. Toutefois, comme sur la cartographie expérimentale, c'est la progression du gain $K_p$ qui semble la plus déstabilisante. 
+%Les premières marques d'instabilités sont seulement observées à partir de gain $K_p$ supérieur à 0.25, dans la configuration la plus rigide. Cette différence pourrait indiquer que le choix du filtrage de l'impédance mécanique de l'environnement détaillé précédemment en \cref{chap5_sec_stability_study_sub_env_1} a été placé à une fréquence trop basse, - \textit{ce qui peut augmenter artificiellement la stabilité de l'interaction }-, ou aussi que les fortes co-contractions entrainent une multiplication de la raideur supérieure à un facteur 3. 
+\textcolor{orange}{Les premières instabilités sont observées à partir de gains $K_i$ supérieurs à 0.3, dans la configuration la plus rigide. Or la cartographie empirique a révélée des comportement interprétés comme instable par le manipulateur pour des gains $K_i$ nuls, là où la cartographie théorique indique des coefficients d'amortissement $\zeta$ supérieurs à 0.5. Cette différence pourrait indiquer que le choix du filtrage de l'impédance mécanique de l'environnement détaillé précédemment en \cref{chap5_sec_stability_study_sub_env_1} a été placé à une fréquence trop basse, - \textit{ce qui peut augmenter artificiellement la stabilité de l'interaction }-, ou aussi que les fortes co-contractions entrainent une multiplication de la raideur supérieure à un facteur 3.}
 
-Les premières marques d'instabilités sont seulement observées à partir de gain $K_p$ supérieur à 0.25, dans la configuration la plus rigide. Cette différence pourrait indiquer que le choix du filtrage de l'impédance mécanique de l'environnement détaillé précédemment en \cref{chap5_sec_stability_study_sub_env_1} a été placé à une fréquence trop basse, - \textit{ce qui peut augmenter artificiellement la stabilité de l'interaction }-, ou aussi que les fortes co-contractions entrainent une multiplication de la raideur supérieure à un facteur 3. 
+\textcolor{orange}{En effet, l'augmentation de la fréquence de brisure du filtrage du modèle en impédance mécanique joue sur la bande passante de l'environnement, et entraine une limitation plus restrictive du gain proportionnel $K_p$. Ainsi pour un filtrage à \SI{20}{\hertz} de l'environnement le plus raide, l'interaction est instable pour tous les gains $K_i\leq0.8$ dès que $K_p$ dépasse 0.08. Il faut déplacer la fréquence de brisure du filtre à \SI{60}{\hertz} pour trouver des comportement instable pour les valeurs de $K_p$ dépassant 0.02, comme sur la cartographie expérimentale. Toutefois, la méthode qualitative de la \cref{fig_exp_stability_map} reposant sur la perception d'un participant, il est difficile d'affirmer avec certitude que les instabilités perçues correspondent à la définition au sens de Lyapunov. Ce ressenti permet toutefois d'affirmer que les réglages ne sont pas adéquats à l'interaction physique avec le robot.}
 
-L'augmentation de la fréquence de coupure du filtrage passe bas de l'environnement autour de \SI{50}{\hertz} permet de retrouver une cartographie proche de celle obtenue expérimentalement. On peut toutefois remarquer que l'étude est réalisée ici sur un modèle linéarisé du couplage, or des instabilités peuvent être induites par des phénomènes non-linéaires qui ne sont pas pris en compte ici. Pour tenir compte des erreurs de modélisation, la marge de module visée est généralement autour de 0.5. 
+%L'augmentation de la fréquence de coupure du filtrage passe bas de l'environnement autour de \SI{50}{\hertz} permet de retrouver une cartographie proche de celle obtenue expérimentalement. On peut toutefois remarquer que l'étude est réalisée ici sur un modèle linéarisé du couplage, or des instabilités peuvent être induites par des phénomènes non-linéaires qui ne sont pas pris en compte ici. Pour tenir compte des erreurs de modélisation, la marge de module visée est généralement autour de 0.5. 
 %
 %\input{latex_figures/chapter_5/fig_theory_stability_map_high_stiffness}
 
-La stabilité n'est toutefois pas le seul critère important. C'est le compromis entre la transparence mécanique et la stabilité qui constitue le principal défi de ce type de contrôle \parencite{ajoudani_progress_2018}, et la qualification de la transparence reste plus complexe sur un pur plan théorique. Comme pour l'étude de l'influence de la raideur sur l'interaction, on peut s'intéresser à la réponse de la boucle fermée, en regardant le retard de la réponse, ainsi que son amplitude, lorsqu'une consigne cyclique est injectée. 
+%La stabilité n'est toutefois pas le seul critère important. C'est le compromis entre la transparence mécanique et la stabilité qui constitue le principal défi de ce type de contrôle \parencite{ajoudani_progress_2018}, et la qualification de la transparence reste plus complexe sur un pur plan théorique. Comme pour l'étude de l'influence de la raideur sur l'interaction, on peut s'intéresser à la réponse de la boucle fermée, en regardant le retard de la réponse, ainsi que son amplitude, lorsqu'une consigne cyclique est injectée. 
 
-\input{latex_figures/chapter_5/fig_close_loop_against_ki}
+\textcolor{orange}{Pour qualifier la transparence de l'interaction, et étudier le compromis entre la transparence et la stabilité \parencite{ajoudani_progress_2018} il faut se pencher plus en particulier sur les effets des gains du correcteurs en admittance sur la boucle fermée \cref{eq_close_loop_system}.}
 
-La \cref{fig_close_loop_against_ki} montre l'évolution de la réponse en boucle fermée en fonction du gain $K_i$, pour l'impédance du participant 000 lors de la phase \cref{item_pert2}. On peut ainsi voir que ce gain joue à la fois sur la latence de la réponse et aussi sur son amplitude. Le maximum de l'amplitude est atteint pour une valeur du gain de \SI{34}{\centi\meter\radian\per\newton\per\second\squared}, le mouvement ne s'amplifie donc pas de manière systématique avec l'incrément du gain intégral. Par contre, l'augmentation de ce gain diminue la latence de la réponse en position, jusqu'à tendre vers une erreur de trainage en position de l'ordre de \SI{60}{\milli\second}. Une réponse instable est obtenue lorsque $K_i$ dépasse \SI{9}{\meter\radian\per\newton\per\second\squared}, ce qui se traduit par des oscillations dont l'amplitude augmente.
+\subsubsection{Effets du gain de l'action intégrale}
 
-\textcolor{red}{Au niveau fréquentiel, le comportement double intégrateur en basse fréquence est prolongé par l'augmentation de $K_i$, le gain en décibel est donc proportionnel à $K_i$, ce qui peut s'interpréter, comme l'a fait \textcite{lamy_conception_2011}, par la réduction de la masse apparente en basse fréquence. Ainsi pour les valeurs indiquées dans la légende de la \cref{fig_close_loop_against_ki}, on obtient respectivement des gains de \SIlist{13;28;69}{\decibel} à \SI{0.1}{\hertz}. }
+\textcolor{orange}{La \cref{subfig_bode_sys_close_loop_against_Ki} révèle les variations de la réponse fréquentielle en vitesse de la boucle fermée \cref{eq_close_loop_system} en fonction du gain $K_i$, jusqu'à obtenir des comportements instables, comme on peut le voir sur le plan de Nyquist (\cref{subfig_nyquist_sys_open_loop_against_Ki}). On y voit que l'incrément du gain de l'action intégrale prolonge le comportement dérivateur en basse fréquence, et donc augmente la bande passante de la réponse. Cette prolongation permet ainsi de réduire les forces nécessaires pour déplacer le robot, et donc d'améliorer la transparence vis à vis des forces d'interaction. Par ailleurs, si on s'attarde sur la phase, en se rappelant que la sortie est position est simplement retardée de \SI{90}{\degree}, on peut conclure que le gain intégral permet aussi de réduire le retard de la position sur la force injectée et donc de réduire le temps de réponse du robot.}
 
-En complément, le gain proportionnel $K_p$ modifie principalement le comportement en haute fréquence et permet une augmentation de la bande passante plus importante que celle induite par l'augmentation du gain intégral. Les rehaussements du gain et de la phase interviennent de plus en plus tôt, jusqu'à \SI{40}{\milli\hertz} pour \SI{34}{\centi\meter\per\newton\per\second} ce qui provoque toutefois un comportement instable, comme on peut l'observer sur la \cref{fig_close_loop_against_kp}.
+\input{latex_figures/chapter_5/fig_bode_close_loop_against_ki}
 
-\input{latex_figures/chapter_5/fig_close_loop_against_kp}
+%\textcolor{orange}{La \cref{fig_bode_close_loop_against_ki} montre l'évolution de la réponse fréquentielle du système en boucle fermée. On retrouve un comportement analogue à une masse pure en basse fréquence pour un système impédance mécanique, avec une pente de \SI{20}{\decibel} par décade, et une phase de \SI{90}{\degree}. [Ne devrait-on pas s'attendre à l'inverse, puisque la boucle fermée donne la vitesse en sortie et non la force ?! J'ai l'impression qu'on observe plutôt un comportement analogue à une raideur pure.]}
+
+\textcolor{orange}{Une autre manière de qualifier la transparence du robot avec le contrôle en admittance est de regarder le comportement fréquentiel de la chaîne directe $\matr{Y}_r$ du contrôle décrit en \cref{fig_bloc_diagram_robot_environment}. La \cref{fig_bode_open_loop_against_ki} montre le diagramme de Bode du transfert $\matr{Y}_r$ pour l'axe $\vec{z}$. Comme observé dans le cas articulaire \parencite{lamy_achieving_2009}, le comportement du robot en basse fréquence est analogue à celui d'une masse pure pour un comportement dynamique en admittance ($V(s)/F(s)=1/(M_as)$). Ainsi lorsqu'on manipule le robot pour de faibles déplacements autour de l'équilibre défini en \cref{chap5_sec_model}, la sensation perçue sera celle de manipuler une masse apparente de valeur $M_a$ dont le poids a été compensé, et donc en l'absence de gravité (uniquement pour le robot). On voit donc sur le diagramme, où trois admittances de masse pure ont été représentées, que l'augmentation du gain intégral réduit la masse apparente, comme attendu \parencite{newman_stability_1992,lamy_achieving_2009}.}
+
+%\tikzexternaldisable
+\input{latex_figures/chapter_5/fig_bode_open_loop_against_Ki}
+%\tikzexternalenable
+
+\textcolor{orange}{Ainsi, pour les gains choisis expérimentalement, on peut estimer la masse apparente équivalente en calculant l'inverse du gain statique de la dérivée de la chaine directe $\matr{Y}_r s$. On obtient alors une masse de \SI{13.34}{\kilogram}. Toutefois, il est important de noter qu'à une fréquence de \SI{1}{\hertz}, le comportement du robot s'éloigne de celui d'une masse pure, avec des différentiels de \SI{5}{\decibel} et \SI{60}{\degree} respectivement pour le gain et la phase.}
+
+%\input{latex_figures/chapter_5/fig_close_loop_against_ki}
+
+%La \cref{fig_close_loop_against_ki} montre l'évolution de la réponse en boucle fermée en fonction du gain $K_i$, pour l'impédance du participant 000 lors de la phase \cref{item_pert2}. On peut ainsi voir que ce gain joue à la fois sur la latence de la réponse et aussi sur son amplitude. Le maximum de l'amplitude est atteint pour une valeur du gain de \SI{34}{\centi\meter\radian\per\newton\per\second\squared}, le mouvement ne s'amplifie donc pas de manière systématique avec l'incrément du gain intégral. Par contre, l'augmentation de ce gain diminue la latence de la réponse en position, jusqu'à tendre vers une erreur de trainage en position de l'ordre de \SI{60}{\milli\second}. Une réponse instable est obtenue lorsque $K_i$ dépasse \SI{9}{\meter\radian\per\newton\per\second\squared}, ce qui se traduit par des oscillations dont l'amplitude augmente.
+
+%\textcolor{red}{Au niveau fréquentiel, le comportement double intégrateur en basse fréquence est prolongé par l'augmentation de $K_i$, le gain en décibel est donc proportionnel à $K_i$, ce qui peut s'interpréter, comme l'a fait \textcite{lamy_conception_2011}, par la réduction de la masse apparente en basse fréquence. Ainsi pour les valeurs indiquées dans la légende de la \cref{fig_close_loop_against_ki}, on obtient respectivement des gains de \SIlist{13;28;69}{\decibel} à \SI{0.1}{\hertz}. }
+
+\subsubsection{Effets du gain de l'action proportionnelle}
+
+Le gain proportionnel $K_p$ du correcteur en admittance modifie principalement le comportement en haute fréquence et permet une augmentation de la bande passante plus importante que celle induite par l'augmentation du gain intégral. \textcolor{orange}{Les rehaussements du gain et de la phase interviennent de plus en plus tôt lorsqu'on se penche sur le transfert de la chaîne directe, jusqu'à \SI{50}{\milli\hertz} pour \SI{24.5}{\centi\meter\per\newton\per\second} ce qui induit toutefois l'instabilité de l'interaction, comme on peut l'observer sur le plan de Nyquist en  \cref{subfig_nyquist_sys_open_loop_against_Kp}.}
+
+\input{latex_figures/chapter_5/fig_bode_close_loop_against_kp}
+
+\textcolor{orange}{Si l'on s'attèle à scruter la réponse fréquentielle du transfert de la boucle fermée \cref{eq_close_loop_system} montrée en \cref{fig_bode_close_loop_against_kp}, on peut y distinguer une fréquence de résonance à \SI{0.55}{\hertz} pour les gains proportionnels les plus faibles ($K_p<0.04$). Pour les fréquences supérieures à \SI{0.8}{\hertz}, l'incrément du gain $K_p$ entraîne une augmentation du gain de la phase de plateau qu'on observe typiquement entre \SIlist{2;20}{\hertz} pour $K_i=0.08$. Ce gain permet par ailleurs de réduire les effets de frictions des moteurs qui comprennent notamment des phénomènes non linéaires \parencite{lamy_conception_2011} pas représentés sur ces analyses linéaires.}
+
+%\input{latex_figures/chapter_5/fig_close_loop_against_kp}
 \tikzexternaldisable
 
-En effet, la réponse temporelle se caractérise à la fois par une réduction de l'erreur de trainage et une augmentation de l'amplitude en même temps que l'augmentation du gain $K_p$ jusqu'à obtenir un comportement instable. Ces résultats confirment en théorie les études de la littérature \parencite{newman_stability_1992,lamy_achieving_2009} selon lesquelles les gains proportionnels-intégraux du correcteur en admittance doivent être les plus élevés possibles pour améliorer la transparence.
+\textcolor{orange}{Ainsi pour minimiser les forces d'interaction en basse et en haute fréquence, et donc améliorer la transparence du robot, les gains du correcteur en admittance cartésienne devraient être aussi élevés que possible, tout en garantissant la stabilité. [lien aussi avec l'amortissement ?]} 
+%En effet, la réponse temporelle se caractérise à la fois par une réduction de l'erreur de trainage et une augmentation de l'amplitude en même temps que l'augmentation du gain $K_p$ jusqu'à obtenir un comportement instable. 
+Ces résultats corroborent donc les études de la littérature \parencite{newman_stability_1992,lamy_achieving_2009}. % selon lesquelles les gains proportionnels-intégraux du correcteur en admittance doivent être les plus élevés possibles pour améliorer la transparence.
 
-Cette affirmation reste toutefois à contraster, car lorsque la passivité n'est plus assurée et que la stabilité est garantie, elle n'est pas forcément traduite expérimentalement. En effet, des réponses très dynamiques peuvent s'avérer moins instinctives à manipuler pour les utilisateurs, ce qui reste complexe à traduire au niveau théorique. Certaines marges peuvent alors être utilisées comme c'est le cas lors de la mise en place de commande robuste \parencite{buerger_relaxing_2006}.
+Il faut toutefois contraster cette analyse, car lorsque la passivité n'est plus assurée et que la stabilité est garantie, elle n'est pas forcément traduite expérimentalement. En effet, des réponses très dynamiques peuvent s'avérer moins instinctives à manipuler pour les utilisateurs, \textcolor{orange}{ce qui peut être analysé sous le prisme des marges de stabilité, ou des coefficients d'amortissent des pôles les moins robustes. La mise en place d'une commande robuste \parencite{buerger_relaxing_2006} permet de prendre en compte les marges de stabilité notamment liées aux incertitudes sur la raideur de l'environnement.}
+
+\subsection{Conclusions}
 
 \textcolor{red}{Montrer les limites de la passivité, et d'une analyse robuste, conclure...}
 
