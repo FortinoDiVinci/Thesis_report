@@ -71,7 +71,7 @@
 			\addplot[domain=0.01:100,color=Shiraz,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.57 + 319)^2 + (x*2*pi*15)^2 ) )};
 			\draw[dashed, color=Orient] (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymax});
 			\draw[dashed, color=Shiraz] (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymax});
-			\draw[dashed, color=Pear] (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymax}) node[near start, fill=white, text=black, yshift=-3mm, xshift=.5mm] {$\omega_{n}^{\phi_2}$};
+			\draw[dashed, color=Pear] (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymax}) node[near start, fill=white, text=black, yshift=-3mm, xshift=.5mm] {$\omega_{n}^{\varphi_2}$};
 		\end{semilogxaxis}
 	%\end{tikzpicture}
 	%\\
@@ -90,16 +90,16 @@
 			%use fpu=false,
 			]
 			\addplot[domain=0.01:100,color=Orient,smooth,thick] {-atan2( (x*2*pi*10.3), (119 - x*2*pi*x*2*pi*0.44) )};
-			\addlegendentry{$H_{\phi_1}$}; 
+			\addlegendentry{$H_{\varphi_1}$}; 
 			\addplot[domain=0.01:100,color=Pear,smooth,thick] {-atan2( (x*2*pi*11.4), (157 - x*2*pi*x*2*pi*0.37) )};
-			\addlegendentry{$H_{\phi_2}$}; 
+			\addlegendentry{$H_{\varphi_2}$}; 
 			\addplot[domain=0.01:100,color=Shiraz,smooth,thick] {-atan2( (x*2*pi*15), (319 - x*2*pi*x*2*pi*0.57) )};
-			\addlegendentry{$H_{\phi_3}$}; 
+			\addlegendentry{$H_{\varphi_3}$}; 
 			%{-atan( (x*2*pi*12)/(100 - x*2*pi*x*2*pi*0.45) )};
 			
 			\draw[dashed, color=Pear] (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymax});
-			\draw[dashed, color=Orient] (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymax}) node[near start, fill=white, text=black, yshift=-3mm, xshift=-1mm] {$\omega_{n}^{\phi_1}$};
-			\draw[dashed, color=Shiraz] (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymax}) node[near end, fill=white, text=black, yshift=3mm, xshift=1mm] {$\omega_{n}^{\phi_3}$};
+			\draw[dashed, color=Orient] (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymax}) node[near start, fill=white, text=black, yshift=-3mm, xshift=-1mm] {$\omega_{n}^{\varphi_1}$};
+			\draw[dashed, color=Shiraz] (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymax}) node[near end, fill=white, text=black, yshift=3mm, xshift=1mm] {$\omega_{n}^{\varphi_3}$};
 			
 		\end{semilogxaxis}
 		

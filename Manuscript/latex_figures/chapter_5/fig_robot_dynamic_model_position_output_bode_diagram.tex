@@ -6,13 +6,15 @@
 			\centering
 			%
 			\begin{semilogxaxis}[%
-				width=.85\linewidth, 
-				height=.35\linewidth, 
+				name=ax1,
+				width=.8\linewidth, 
+				height=.2\linewidth, 
+				scale only axis,
 				%xlabel={Fréquence (\si{\hertz})},%\si{\radian\per\second}
 				ylabel={Amplitude (\si{\decibel})},
 				grid=both,
 				xmin=1e-1,
-				xmax=1e5,
+				xmax=1e4,
 				xticklabels=\empty,
 				%ymax=10,
 				%xmode=log,
@@ -24,7 +26,7 @@
 				%xmax = 16,
 				]
 				%
-				\draw[gray] (axis cs:3e-2, 0) -- (axis cs:1e5, 0);
+				\draw[gray] (axis cs:1e-1, 0) -- (axis cs:1e4, 0);
 				\addplot [
 					color=Orient,
 					solid,
@@ -35,25 +37,27 @@
 				\coordinate (b) at (axis cs:12.5664, \pgfkeysvalueof{/pgfplots/ymin});
 				\path[pattern=north west lines, pattern color=Lavender] (a) rectangle (b);
 				%
-				\draw [dashed, gray] (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymax}) node[fill=white,near start, text=black] {$\omega_c$};
+				%\draw [dashed, gray] (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymax}) node[fill=white,near start, text=black] {$\omega_c$};
 				%\draw [dashed, gray] (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymax});
 				%\draw[->, Shiraz] (axis cs: 2.17e2, 0) -- (axis cs: 2.17e2, -83) node[midway,xshift=4mm,yshift=1mm] {$m_G$};	
 				%
 			\end{semilogxaxis}
 			\begin{semilogxaxis}[
-				yshift=-.25\linewidth,
-				width=.85\linewidth, 
-				height=.35\linewidth, 
+				at={($(ax1.south west)+(0,-2.5mm)-(0,.2\linewidth)$)},
+				%yshift=-.2\linewidth,
+				width=.8\linewidth, 
+				height=.2\linewidth, 
+				scale only axis,
 				xlabel={Pulsation (\si{\radian\per\second})},%\si{\radian\per\second}
 				ylabel={Phase (\si{\degree})},
 				grid=both,
 				xmin=1e-1,
-				xmax=1e5,
+				xmax=1e4,
 				ytick={0,-90,-180,-270,-360},
 				%ymax=10,
 				%use fpu=false,
 				]
-				\draw [gray] (axis cs:3e-2, -180) -- (axis cs:1e5, -180);
+				\draw [gray] (axis cs:1e-1, -180) -- (axis cs:1e4, -180);
 				\addplot [
 					color=Orient,
 					solid,
@@ -64,7 +68,7 @@
 				\coordinate (b) at (axis cs:12.5664, \pgfkeysvalueof{/pgfplots/ymin});
 				\path[pattern=north west lines, pattern color=Lavender] (a) rectangle (b);
 				%
-				\draw [dashed, gray] (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymax});
+				%\draw [dashed, gray] (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.28, \pgfkeysvalueof{/pgfplots/ymax});
 				%\draw [dashed, gray] (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:2.17e2, \pgfkeysvalueof{/pgfplots/ymax});	
 				%\draw[->, Shiraz] (axis cs: 0.075, -180) -- (axis cs: 0.075, -90) node[midway,xshift=4mm] {$m_\phi$};	
 			\end{semilogxaxis}		

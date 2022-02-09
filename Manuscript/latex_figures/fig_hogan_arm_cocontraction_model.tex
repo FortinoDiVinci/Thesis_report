@@ -51,7 +51,7 @@
 			\path (elbow) +(33:3cm) coordinate(B)
 				arc (33:87:3cm) coordinate(E)
 				node[draw, springshape, pos=0.5, sloped](S){};
-			\node[above, xshift=3mm, yshift=2mm] at (S){$K$};
+			\node[above, xshift=3mm, yshift=2mm] at (S){$R$};
 			% from B the circle starts at 120 degree, let's se e the landing angle and use a spline
 			\draw let \p1=(S.right), \n1={-90+acos(\x1/3cm)}
 				in (B) to[out=120,in=\n1] (S.right);
@@ -62,7 +62,7 @@
 			\path (elbow) +(35:2cm) coordinate(B2)
 				arc (35:85:2cm) coordinate(E2)
 				node[draw, dampershape, pos=0.5, sloped](S2){};
-			\node[above, xshift=3mm, yshift=2mm] at (S2){$B$};
+			\node[above, xshift=3mm, yshift=2mm] at (S2){$D$};
 			% from B the circle starts at 120 degree, let's se e the landing angle and use a spline
 			\draw let \p1=(S2.right), \n1={-90+acos(\x1/2cm)}
 				in (B2) to[out=120,in=\n1] (S2.right);

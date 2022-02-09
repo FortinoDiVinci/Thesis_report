@@ -1,4 +1,8 @@
-\clearpage
+%\clearpage
+\titleformat{\chapter}[hang]{\bfseries}{\huge\appendixname~\thechapter}{1ex}{\huge}
+\titlespacing{\chapter}{0pt}{*0}{*1}
+\titleformat{\section}[hang]{\bfseries}{\large\thesection}{1ex}{\large}
+\titleformat{\subsection}[hang]{\bfseries}{\large\thesubsection}{1ex}{\large}
 \begin{appendices}
 	%\chapter{Annexes}
 	\crefalias{chapter}{annexe}
@@ -8,7 +12,7 @@
 	%%%%%%%	
 	\chapter{Liens entre les paramètres articulaires et cartésiens} \label{app_link_joint_endpoint}
 	
-	\section{Raideur}
+	%\section{Raideur}
 	
 	La raideur articulaire $ \matr{R} $ est par définition la capacité d'une ou plusieurs articulations $\vect{q}$ à emmaganiser de l'énergie élastique, qui se caractérise par une relation, possiblement non linéaire, entre la force exercée et le déplacement, tel que l'intégrale de la force en fonction de la position soit définie (énergie élastique) \parencite{hogan_mechanics_1985, shadmehr_control_1993}.
 	
@@ -28,6 +32,14 @@
 		\matr{K} = (\jacobian{}{}{t})^{-1} \left(\matr{R} - \frac{\partial \jacobian{}{}{t} }{\partial \vect{q}} \vect{f} \right) \jacobian{}{}{-1}
 	\end{equation}
 	
+	ou : 
+	
+	\begin{equation}
+		\matr{R} = \jacobian{}{}{t} \matr{K} \jacobian{}{}{} + \frac{\partial \jacobian{}{}{t} }{\partial \vect{q}} \vect{f}  
+	\end{equation}
+	
+	Dans la littérature \parencite{hogan_mechanics_1985,tsuji_human_1995}, le terme lié à la dérivée partielle du jacobien est toutefois souvent négligé.
+	
 	Pour que $ \matr{K} $ puisse être considéré comme une raideur pure, l'opérateur rotationnel $ \nabla $, du champ de vecteur de la force doit être nul \parencite{hogan_mechanics_1985, latash_joint_1993}, c'est à dire de nature conservative \parencite[Chapitre~7]{hooge_bcit_2016}.
 	
 	\begin{equation}
@@ -40,19 +52,50 @@
 		 = \matr{0}_{3\times 1}
 	\end{equation}
 	
-	\section{Amortissement / Viscosité}
+	%\section{Amortissement / Viscosité}
 	
-	Idem raideur ??
-	
-	\section{Masse et inertie}
+	Avec un raisonnement similaire \parencite{tsuji_human_1995}, on peut obtenir les relations pour les matrices d'amortissement et d'inertie aux niveaux cartésien (respectivement $\matr{B}$ et $\matr{M}$) et articulaire (respectivement $\matr{D}$ et $\matr{A}$).
 	
 	\begin{equation}
-		\matr{M} = \left(\jacobian{}{}{t}\right)^{-1} A \jacobian{}{}{-1}
+		\matr{D} = \jacobian{}{}{t} \matr{B} \jacobian{}{}{}
+	\end{equation}
+	
+	%\section{Masse et inertie}
+	
+	\begin{equation}
+		\matr{A} = \jacobian{}{}{t} \matr{M} \jacobian{}{}{}
 	\end{equation}
 	
 	
 	%%%%%%%
 	% APP 2
+	%%%%%%%
+	\chapter{Représentation elliptique de l'impédance} \label{app_imp_graph}
+	D'abord introduite par \textcite{mussa-ivaldi_neural_1985} pour la raideur puis étendue à l'ensemble des paramètres dynamiques en impédance par \textcite{dolan_dynamic_1993}, les ellipsoïdes permettent une représentation graphique facilement lisible des forces de restitution dans le cadre de tâches planaires, pour des déplacements induits sur un cercle unitaire.
+	
+	Pour ce tracé, la matrice d'impédance doit être séparée en deux matrices symétrique $Z_s$ (donnée en équation \cref{eq_ellisp_2d}, pour $Z_s\in \Re^{2\times2}$) et antisymétrique, seuls les composants de la matrice symétrique sont représentés. Les axes de l'ellipsoïde sont déterminés par les valeurs propres \textcolor{orange}{$\lambda_i$ de cette dernière matrice, dont la formule est donnée en \cref{eq_ellisp_eigen_values} pour le cas bi-dimensionnel et l'orientation est obtenue grâce à la formule \cref{eq_ellisp_orient}.}
+	
+	\tikzexternalenable
+	\input{latex_figures/fig_ellipse_impedance}
+	\tikzexternaldisable
+	
+	\begin{equation} \label{eq_ellisp_2d}
+		Z_s = \begin{pmatrix}
+			Z_{s11} & Z_{s12}\\%
+			Z_{s12} & Z_{s22}%
+		\end{pmatrix}
+	\end{equation}
+	
+	\begin{equation} \label{eq_ellisp_eigen_values}
+		\lambda_{2,1} = 0.5\left( Z_{s11} + Z_{s22} \pm \sqrt{(Z_{s11} + Z_{s22})^2+ 4(Z_{s12}^2 -Z_{s11}Z_{s22})} \right)
+	\end{equation}
+	
+	\begin{equation} \label{eq_ellisp_orient}
+		\phi=\tan^{-1}\frac{\lambda_2-Z_{s11}}{Z_{s21}}
+	\end{equation}
+	
+	%%%%%%%
+	% APP 2b
 	%%%%%%%
 	\chapter{Calcul du Modèle Géométrique Direct} \label{app_direct_kinem}
 	
@@ -301,6 +344,8 @@
 	%%%%%%%
 	\chapter{Détails du calcul des effets de couplages} \label{app_coupling_effect_details}
 	
+	\vspace{5mm}
+	
 	\section{Effets de couplage} \label{app_coupling_effect_details_sec_coupling}
 	
 	La tâche étant unidimensionnelle, seuls des mouvements sur l'axe vertical $\vec{z}$ sont souhaités. Or des phénomènes de couplage entre les différents axes peuvent être mis en évidence. c'est-à-dire que des forces le long de l'axe $\vec{z}$ entraînent des mouvements sur l'ensemble des degrés de liberté. Considérons le cas simplifié où les actions intégrales $\matr{K}_i$ (\cref{fig_lamy_control}) sont nulles :
@@ -435,7 +480,7 @@
 
 	%\paragraph{Boucles internes} \label{sec_robot_sub_task_ctrl_tunning_2_1}
 	
-	Ces boucles ont été les premières à être corrigées, depuis les plus rapides (boucles de courant/couple) au plus lentes (boucles de vitesse angulaire). La correction a été réalisée en observant la comportement critique des différentes articulations en boucle fermée, avec une méthode inspirée par les réglages proposés initialement par \textcite{ziegler_optimum_1942}. 
+	Ces boucles ont été les premières à être corrigées, depuis les plus rapides (boucles de courant ou couple) au plus lentes (boucles de vitesse angulaire). La correction a été réalisée en observant la comportement critique des différentes articulations en boucle fermée, avec une méthode inspirée par les réglages proposés initialement par \textcite{ziegler_optimum_1942}. 
 	
 	\input{latex_figures/fig_ctrl_inner_loop.tex}
 	
@@ -538,6 +583,8 @@
 	%%%%%%%
 	\chapter{Discrétisation du modèle KBM} \label{app_discretisation}
 	
+	\vspace{5mm}
+	
 	Le modèle du second ordre KBM peut être discrétisé avec une bloqueur d'ordre zéros avec la formule \cref{eq_zoh_discretisation} :
 	
 	\begin{equation} \label{eq_zoh_discretisation}
@@ -570,17 +617,55 @@
 			b_1 &= \alpha \left( 1 - e^{-\xi\omega_0T} \left( 2\cos(\omega_0\Delta T) + \frac{1}{\Delta} \sin(A) \right) \right)
 		\end{cases}
 	\end{equation}
-	
+
 	%%%%%%%
 	% APP 8
 	%%%%%%%
-	\chapter{Compensation des biais du capteur de force} \label{app_force_sensor_bias}
+	\chapter{Matériel} \label{app_apparatus}
 	
-	Le capteur de force 6 axes Mini45 de la marque ATI est placé à l'interface entre l'embout du youBot et de la poignée -\textit{ conçue par les soins de La Fabrique, laboratoire de fabrication de CentraleSupélec}.
+	\section{Robot} \label{app_apparatus_sec_robot}
 	
-	Ce capteur permet d'obtenir les forces et couples d'interaction $\vect{f}_e^s$ en Newton et Newton-mètre dans son référentiel, toutefois, les forces retournées $\vect{f}_s$ sont sensibles à plusieurs facteurs extérieurs comme la température et la luminosité. Les effets liés à la lumière ont pu être compensés grâce à du papier collant opaque, toutefois la température n'étant pas métrisable dans le laboratoire, il faut régulièrement compenser ses effets.
+	Pour ces travaux un petit robot articulé, anciennement commercialisé par Kuka\textsuperscript{TM} sous le nom de youBot arm (\cref{fig_youbot_picture}), est utilisé. Avec ses 5 articulations rotoïdes, le youBot fonctionne avec des moteurs sans balais proposés par Maxon\textsubscript{TM}, d'une puissance comprise en \SIlist{15,50}{\watt}, qui sont pilotés par des cartes électroniques conçues par Trinamic\textsuperscript{TM} \parencite{TRINAMIC_manual_2011} et reliés à des engrenages épicycloïdaux pour augmenter les couples. Ce robot articulé (\SI{65.5}{\centi\meter} tendu) n'a pas de vocations industrielles, mais est plutôt orienté pour des applications en recherche. En effet, de part ses faibles dimensions et ses flexibilités, le robot est assez peu dangereux, et son interface de programmation (API\footnote{\textit{Application Programming Interface}}) ouverte permet d'accéder à des niveaux de contrôle assez avancés. De plus, il peut être manipulé hors tension de manière relativement réversible\footnote{Les frottements des moteurs, réducteurs et transmissions (et toutes autres sources d'irréversibilité) gênent pour obtenir une transparence mécanique importante en l'absence de contrôle du robot.}. Le constructeur conseille de ne pas dépasser la charge utile de \SI{500}{\gram}, et indique une répétabilité positionnelle de \SI{0.1}{\milli\meter}. 
 	
-	Ainsi, les données du capteur de force sont victimes de biais $\vect{b}_{f/\tau}$ dont la dynamique est toutefois suffisamment lente pour permettre une manipulation du robot sans avoir à les corriger en ligne. Ses biais sont donc compensés à chaque nouvelle manipulation dont la durée n'exècede pas \SI{10}{\minute}. Il faut aussi prendre en compte le poids et les autres effets dynamiques provoqués par la poignée $\vect{f}_p$. On peut alors écrire les données retournées par le capteur sous la forme suivante :
+	\begin{figure}
+		\centering
+		\includegraphics[width=.45\linewidth]{misc/youBot_photos.PNG}
+		%\hspace{5mm}
+		\includegraphics[width=.53\linewidth]{misc/youBot_reach.png}
+		\caption{YouBot}
+		\label{fig_youbot_picture}
+	\end{figure}
+	
+	Le système de pince motorisée a été retiré pour les expériences, et une interface %conçue par La Fabrique\footnote{laboratoire de conception de CentraleSupelec},
+	peut être fixée sur le robot pour offrir une poignée permettant de le manipuler par son extrémité, sans générer de moments importants sur le capteur d'efforts.
+	
+	L'interface de programmation mise à disposition par Kuka est disponible en C++, et permet d'envoyer des consignes et réglages aux différents pilotes des moteurs. La dernière version de cette API est disponible sur GitHub\footnote{\url{https://github.com/youbot/youbot_driver}} et fonctionne sur un système Linux en connexion avec le robot via une liaison Ethernet et le protocole EtherCat. L'ensemble de cette interface programmée en logique objet est détaillé dans la documentation de \textcite{paulus_youbot_2013}.
+	
+	\section{Capteurs} \label{app_apparatus_sec_sensors}
+	
+	Que ce soit pour réaliser le contrôle en admittance décrit au \cref{chap2}, ou pour effectuer les estimations d'impédance mécanique de personnes manipulant le robot (\cref{chap3}), des capteurs sont nécessaires pour obtenir les forces d'interaction $\vect{f}_e$ entre l'effecteur final du robot et la main de l'utilisateur, et aussi les positions dans l'espace de la poignée du robot, et donc indirectement de la main des manipulateurs. 
+	
+	\subsection{Capteur de forces et couples} \label{app_apparatus_sec_sensors_1}% \label{chap4_sec_exp_sub_mat_2_1}
+	
+	La marque ATI offre une gamme de capteurs de force six axes pensés pour la robotique. Le Mini45 et ses dimensions compactes, un diamètre de \SI{45}{\milli\meter} pour une hauteur de \SI{15.7}{\milli\meter}, offrent une solution classique en robotique \parencite{ajoudani_tele-impedance:_2011,cherubini_collaborative_2019}. Avec un poids de moins de \SI{100}{\gram}, il peut facilement être équipé sur le youBot. Il fonctionne grâce à des jauges de contraintes en silicone qui permettent d'estimer les efforts sentis par le capteur aussi bien aux niveaux linéaires qu'angulaires, fournissant ainsi le vecteur complet de forces et couples avec une fréquence de fonctionnement interne de \SI{3}{\kilo\hertz}.
+	
+	La documentation technique du capteur indique des résolutions de \SI{0.125}{\newton} pour les forces, de \SI{1.3}{\milli\newton\meter} pour le couple le long de l'axe $\vec{z}$, colinéaire au cylindre formé par le capteur, et de \SI{2.7}{\milli\newton\meter} pour les deux autres couples. Les données acquises par le capteur sont transmises dans un boîtier permettant la communication du capteur avec des équipements externes grâce à une liaison Ethernet et le protocole orienté temps réel, Ethercat.
+	
+	\begin{figure}
+		\centering
+		\includegraphics[width=.3\linewidth]{misc/ati_mini45_picture.jpg}
+		%\hspace{5mm}
+		\includegraphics[width=.3\linewidth]{misc/ati_mini45_drawing.png}
+		\caption{ATI Mini45}
+		\label{fig_ATI_Mini45_picture}
+	\end{figure}
+	
+	Une fois le capteur installé entre l'effecteur final du robot et la poignée, une partie de son poids, ainsi que celui de la poignée sont perçus par le capteur. De plus, chaque axe souffre d'un biais ayant une dépendance à la température, et il s'est avéré que le capteur était aussi sensible à la lumière. Cette dernière problématique a été contrecarrée en plaçant du papier adhésif opaque sur les zones sensibles. La compensation des biais ainsi que du poids perçu en l'absence d'interaction doit être réalisée avant chaque interaction par une phase de calibration qui peut être effectuée dans une position statique connue du robot. %La procédure est détaillée en \cref{app_apparatus_sec_sensors_2}. 
+	Les effets dynamiques ont été évalués et sont négligeables, leur compensation n'est donc pas réalisée pour limiter les temps de calculs.
+	
+	\subsection{Compensation des biais du capteur d'efforts} \label{app_apparatus_sec_sensors_2}
+	
+	Les données du capteur d'efforts sont victimes de biais $\vect{b}_{f/\tau}$ dont la dynamique est toutefois suffisamment lente pour permettre une manipulation du robot sans avoir à les corriger en ligne. Ces biais sont donc compensés à chaque nouvelle manipulation dont la durée n'excède pas \SI{10}{\minute}. Il faut aussi prendre en compte le poids et les autres effets dynamiques provoqués par la poignée $\vect{f}_p$. On peut alors écrire les données retournées par le capteur sous la forme suivante :
 	
 	\begin{equation}
 		\vect{f}_s(t) = \vect{f}_e^s(t) + \vect{f}_p(t) + \vect{b}_{f/\tau}
@@ -588,7 +673,7 @@
 	
 	Les biais $\vect{b}_{f/\tau} \in \Re^{6\times1}$ sont supposés parfaitement statiques pour chaque axe. Pour la poignée, seuls les effets liés à la gravité sont pris en compte, on peut donc considérer qu'ils ne varient qu'en fonction de l'orientation de l'effecteur et donc que des données articulaires du robot, d'où $\vect{f}_p(t) \approx \vect{f}_p(q) \in \Re^{6\times1}$. Cette considération est directement liée à la géométrie de la poignée, dont la masse $m_p$ et la longueur\footnote{entre les centres de masse du capteur de force et de la poignée} $l_p$ peuvent être déterminées à partir des données des fichiers de conception ou identifiées à partir de mesures.
 	
-	Ainsi, pour identifier ces éléments géométriques, on peut donner au robot des trajectoires et poses à réaliser en l'absence de contact sur l'effecteur final, avec des vitesses lentes. De cette manière, les forces d'interactions $\vect{f}_e^s$ sont presques nulles, les effets centrifuges et de Corriolis étant négligeables pour de faibles accélérations avec les caractériques physiques de la poignée comparativement aux forces d'intéractions attendues. On peut alors facilement poser le système suivant, avec $\boldsymbol{\mathcal{R}}$ la matrice de rotation entre la base du robot et l'effecteur final, et $\vect{g} = \begin{bmatrix} 0 & 0 & g\end{bmatrix}^t$ le vecteur de l'accélération statique :
+	Ainsi, pour identifier ces éléments géométriques, on peut donner au robot des trajectoires et poses à réaliser en l'absence de contact sur l'effecteur final, avec des vitesses lentes. De cette manière, les forces d'interactions $\vect{f}_e^s$ sont presque nulles, les effets centrifuges et de Coriolis étant négligeables pour de faibles accélérations avec les caractéristiques physiques de la poignée comparativement aux forces d'interaction attendues. On peut alors facilement poser le système suivant, avec $\boldsymbol{\mathcal{R}}$ la matrice de rotation entre la base du robot et l'effecteur final, et $\vect{g} = \begin{bmatrix} 0 & 0 & g\end{bmatrix}^t$ le vecteur de l'accélération statique :
 	
 	\begin{equation}
 		\vect{f}_s(\vect{q}, t) = \vect{b}_f + \boldsymbol{\mathcal{R}}(\vect{q}) \vect{g} \cdot m_p + \vect{f}_e^s(t)
@@ -624,7 +709,7 @@
 	
 	Les données géométriques de masse $m_p$ et de longueur $l_p$ ne varient pas contrairement aux biais, elles ne sont donc pas à estimer de nouveau.
 	
-	Pour chaque nouvelle expérience, les biais peuvent être de estimés simplement en maintenant le robot dans sa position initiale brièvement (\SI{1}{\second}) afin de récolter suffisemment de données pour une identification par la méthode des moindres carrés, en soustrayant l'effet du poids de la poignée, dont tous les paramètres sont connus.
+	Pour chaque nouvelle expérience, les biais peuvent être de estimés simplement en maintenant le robot dans sa position initiale brièvement (\SI{1}{\second}) afin de récolter suffisamment de données pour une identification par la méthode des moindres carrés, en soustrayant l'effet du poids de la poignée, dont tous les paramètres sont connus.
 	
 	Pour la poignée utilisée :
 	
@@ -635,98 +720,197 @@
 		\end{aligned}
 	\end{equation}
 	
+	\subsection{Système de vision} \label{app_apparatus_sec_sensors_3}
+	
+	A cause des flexibilités présentées par le robot, notamment lors d'interactions physiques, l'utilisation des données articulaires en position, acquises grâce à des encodeurs au niveau des moteurs, n'est pas suffisamment fiable, pour obtenir la position de l'effecteur final grâce au modèle géométrique du robot (voir \cref{app_direct_kinem} pour le modèle géométrique direct du youBot). Un système de vision externe est donc utilisé.
+	
+	Le système de trois caméras V120:Trio, commercialisé par Optitrack avec le logiciel Motive, permet de localiser des objets dans l'espace grâce à des marqueurs rétro-réfléchissants. En positionnant au moins trois marqueurs, le système permet de donner non seulement la position mais aussi la pose d'un corps rigide. Le système de vision fonctionne en émettant de la lumière infrarouge et en observant la réflexion des marqueurs. Par conséquent, toute source de lumière infrarouge, et toutes les surfaces reflétant de l'infrarouge doivent être masquées (soit physiquement avec des occultants, soit au niveau logiciel si les sources sont fixes par rapport à la caméra), pour un fonctionnement nominal de l'équipement. 
+	
+	Les ingénieurs d'Optitrack recommandent de placer entre 4 et 12 marqueurs de manière asymétrique, sur chaque corps rigide devant être traqué. Cette redondance permet non seulement d'améliorer la précision des algorithmes de triangulation, mais aussi offre de la robustesse à d'éventuelles dissimulations des marqueurs. Il est toutefois déconseillé de dépasser plus de 10 marqueurs, à cause de potentiels chevauchements des surfaces réfléchissantes. Le système de trois caméras est fixé à un trépied placé sur un support fixe à une hauteur surélevée par rapport à celle du robot et une distance légèrement supérieure à \SI{1}{\meter}.
+	
+	\begin{figure}
+		\centering
+		\includegraphics[width=.4\linewidth]{misc/v120trioTripod.png}
+		\caption{V120:Trio}
+		\label{fig_optitrack_v120}
+	\end{figure}
+	
+	Le système offre une précision submillimétrique, le logiciel de traquage Motive annonce jusqu'à \SI{0.2}{\milli\meter}, avec une fréquence de fonctionnement de \SI{120}{\hertz} et une latence comprise entre  \SIlist{8.33;10}{\milli\second}, dont il faudra tenir compte par la suite. Un repère composé de trois marqueurs est positionné entre le robot et la caméra, et sert pour le calibrage du plan pour le calcul de la triangulation. Toutefois, ce premier calibrage n'est pas suffisant pour que les données soient dans la même base que le robot.
+	
+	Pour synchroniser spatialement des données du système de vision avec celles du robot, des mouvements lents rectilignes, symétriques et à vitesses constantes par morceaux sont effectués avant les interactions physiques avec le robot. La transformée entre le robot et les caméras est obtenue en minimisant l'erreur quadratique entre les deux systèmes de coordonnées \parencite{horn_closed-form_1987}, en utilisant les mesures articulaires pour obtenir la référence des coordonnées du robot.
+	
+	Les données acquises par les caméras sont envoyées à un ordinateur par liaison USB. Le logiciel Motive n'étant développé que pour Windows, un ordinateur est dédié à cet équipement. Les coordonnées des corps rigides identifiés par le logiciel peuvent ensuite être émises par un serveur virtuel VRPN\footnote{\textit{Virtual-Reality Peripheral Network}}, via un protocole de diffusion UDP\footnote{\textit{User Datagram Protocol}} en liaison locale avec un autre ordinateur.
+	
+	\section{Système de synchronisation} \label{app_apparatus_sec_synchro}%\label{chap4_sec_exp_sub_mat_4}
+	
+	L'ensemble de ces différents équipements doit être ordonnancé afin qu'ils soient correctement synchronisés. Un routeur local est utilisé pour connecter le robot, le capteur de force, et les trois ordinateurs, tout en limitant au minimum les délais induits par les transmissions des données. Les horloges des deux ordinateurs Linux sont harmonisées grâce au protocole de temps réseau NTP\footnote{\textit{Network Time Protocol}}.
+	
+	%\paragraph{Robot Operating System (ROS)} \label{chap4_sec_exp_sub_mat_3_1}
+	
+	Pour cadencer l'ensemble des équipements l'intergiciel \textit{Robot Operating System} (ROS) est utilisé. Cet ensemble d'outils libres de droits permet notamment une abstraction élevée du matériel, un contrôle des périphériques, et la transmission de données formatées. De nombreux paquets sont mis à disposition des utilisateurs pour la gestion d'équipements, d'algorithmes, et d'applications.
+	
+	Le contrôle du robot peut être effectué via une interface ROS développée par les ingénieurs de Kuka (\href{https://github.com/youbot/youbot_driver_ros_interface}{youbot\_driver\_ros\_interface}), qui permet l'envoi de messages pour contrôler youBot à travers son API. L'ensemble des programmes de contrôle a donc été développé dans des processus ROS, programmés en C++ pour permettre des cadences de l'ordre du kilohertz. Quelques modifications ont été opérées au paquet permettant d'interfacer l'API et ROS, afin de pouvoir contrôler le robot en courant, de pouvoir modifier les gains des contrôleurs PID du robot, et aussi de connaître les différentes consignes envoyées au robot.
+	
+	Un paquet était déjà existant pour récupérer les données du capteur de force (\href{https://github.com/UTNuclearRoboticsPublic/netft_utils}{netft\_utils}), un autre paquet permettait la récupération des données du système de capture de mouvements par un client VRPN (\href{https://github.com/ros-drivers/vrpn_client_ros}{vrpn\_client\_ros}).
+	
+	L'ordinateur contrôlant le robot est considéré comme le maître (\textit{ros master}), les autres équipements comme des esclaves, y compris le second ordinateur Linux, permettant l'affichage de la simulation qui a été développée pour fonctionner avec ROS.
+	
 	%%%%%%%
-	% APP 8
+	% APP 8b
 	%%%%%%%
-	\chapter{Lettre de contact pour une participation à une expérience psychomotrice} \label{app_enrolment_mail}
+%	\chapter{Compensation des biais du capteur de force} \label{app_force_sensor_bias}
 	
-	\textit{Exemple de la version française d'un courrier électronique de demande de contact diffusée par mail :}
+%	Le capteur de force 6 axes Mini45 de la marque ATI est placé à l'interface entre l'embout du youBot et de la poignée -\textit{ conçue par les soins de La Fabrique, laboratoire de fabrication de CentraleSupélec}.
+%	
+%	Ce capteur permet d'obtenir les forces et couples d'interaction $\vect{f}_e^s$ en Newton et Newton-mètre dans son référentiel, toutefois, les forces retournées $\vect{f}_s$ sont sensibles à plusieurs facteurs extérieurs comme la température et la luminosité. Les effets liés à la lumière ont pu être compensés grâce à du papier collant opaque, toutefois la température n'étant pas métrisable dans le laboratoire, il faut régulièrement compenser ses effets.
+%	
+%	Ainsi, les données du capteur de force sont victimes de biais $\vect{b}_{f/\tau}$ dont la dynamique est toutefois suffisamment lente pour permettre une manipulation du robot sans avoir à les corriger en ligne. Ses biais sont donc compensés à chaque nouvelle manipulation dont la durée n'exècede pas \SI{10}{\minute}. Il faut aussi prendre en compte le poids et les autres effets dynamiques provoqués par la poignée $\vect{f}_p$. On peut alors écrire les données retournées par le capteur sous la forme suivante :
+%	
+%	\begin{equation}
+%		\vect{f}_s(t) = \vect{f}_e^s(t) + \vect{f}_p(t) + \vect{b}_{f/\tau}
+%	\end{equation}
+%	
+%	Les biais $\vect{b}_{f/\tau} \in \Re^{6\times1}$ sont supposés parfaitement statiques pour chaque axe. Pour la poignée, seuls les effets liés à la gravité sont pris en compte, on peut donc considérer qu'ils ne varient qu'en fonction de l'orientation de l'effecteur et donc que des données articulaires du robot, d'où $\vect{f}_p(t) \approx \vect{f}_p(q) \in \Re^{6\times1}$. Cette considération est directement liée à la géométrie de la poignée, dont la masse $m_p$ et la longueur\footnote{entre les centres de masse du capteur de force et de la poignée} $l_p$ peuvent être déterminées à partir des données des fichiers de conception ou identifiées à partir de mesures.
+%	
+%	Ainsi, pour identifier ces éléments géométriques, on peut donner au robot des trajectoires et poses à réaliser en l'absence de contact sur l'effecteur final, avec des vitesses lentes. De cette manière, les forces d'interactions $\vect{f}_e^s$ sont presques nulles, les effets centrifuges et de Corriolis étant négligeables pour de faibles accélérations avec les caractériques physiques de la poignée comparativement aux forces d'intéractions attendues. On peut alors facilement poser le système suivant, avec $\boldsymbol{\mathcal{R}}$ la matrice de rotation entre la base du robot et l'effecteur final, et $\vect{g} = \begin{bmatrix} 0 & 0 & g\end{bmatrix}^t$ le vecteur de l'accélération statique :
+%	
+%	\begin{equation}
+%		\vect{f}_s(\vect{q}, t) = \vect{b}_f + \boldsymbol{\mathcal{R}}(\vect{q}) \vect{g} \cdot m_p + \vect{f}_e^s(t)
+%	\end{equation}
+%	
+%	On peut, à partir de l'ensemble des mesures $\vect{f}_s$ effectuées, conduire une identification de la masse $m_p$ avec une méthode des moindres carrés, en écrivant le vecteur d'état $\vect{\xi}_f = \begin{bmatrix} b_{fx} & b_{fy} & b_{fz} & m_p \end{bmatrix}^t$ :
+%	%
+%	\begin{equation}
+%		\vect{f}_s(\vect{q}, t) = \begin{bmatrix}\matr{I}_{3\times3} & \boldsymbol{\mathcal{R}}(\vect{q})\vect{g} \end{bmatrix} \vect{\xi}_f + \vect{\epsilon}_f = \matr{\phi}_{3\times4} \vect{\xi}_f + \vect{\epsilon}_f
+%	\end{equation}
+%	%
+%	\begin{equation}
+%		\vect{\xi}_f = \left(\matr{\phi}^t\matr{\phi}\right)^{-1} \matr{\phi}^t \vect{f}_s + \vect{\rho}_f \text{ ,}
+%	\end{equation}
+%	%
+%	avec $\vect{\epsilon}_f \in \Re^{3\times1}$ le vecteur regroupant le bruit blanc et les effets dynamiques négligés et $\vect{\rho}_f = \left(\matr{\phi}^t\matr{\phi}\right)^{-1} \matr{\phi}^t \vect{\epsilon}_f$ la minimisation de l'erreur quadratique.
+%	
+%	On peut ensuite déterminer le bras de levier $l_p$ avec une méthode similaire en notant la relation :
+%	%
+%	\begin{equation}
+%		\vect{\tau}_s(\vect{q}, t) = \vect{b}_\tau + \boldsymbol{\mathcal{R}}(\vect{q}) \vect{g} \times  \begin{bmatrix}0&0&m_p\end{bmatrix}^t \cdot l_p + \vect{\tau}_e^s(t) \text{ ,}
+%	\end{equation}
+%	%
+%	et à partir des mesures de couples $\vect{\tau}_s$ effectuées, conduire l'identification de $l_p$ avec un nouveau vecteur d'état $\vect{\xi}_\tau = \begin{bmatrix} b_{\tau x} & b_{\tau y} & b_{\tau z} & l_p \end{bmatrix}^t$ :
+%	
+%	\begin{equation}
+%		\vect{\tau}_s(\vect{q}, t) = \begin{bmatrix}\matr{I}_{3\times3} & \boldsymbol{\mathcal{R}}(\vect{q})\vect{g} \times  \begin{bmatrix}0&0&m_p\end{bmatrix}^t\end{bmatrix} \vect{\xi}_\tau + \vect{\epsilon}_\tau = \matr{\phi}_{3\times4} \vect{\xi}_\tau + \vect{\epsilon}_\tau
+%	\end{equation}
+%	
+%	\begin{equation}
+%		\vect{\xi}_\tau = \left(\matr{\phi}^t\matr{\phi}\right)^{-1} \matr{\phi}^t \vect{\tau}_s + \vect{\rho}_\tau \text{.}
+%	\end{equation}
+%	
+%	Les données géométriques de masse $m_p$ et de longueur $l_p$ ne varient pas contrairement aux biais, elles ne sont donc pas à estimer de nouveau.
+%	
+%	Pour chaque nouvelle expérience, les biais peuvent être de estimés simplement en maintenant le robot dans sa position initiale brièvement (\SI{1}{\second}) afin de récolter suffisemment de données pour une identification par la méthode des moindres carrés, en soustrayant l'effet du poids de la poignée, dont tous les paramètres sont connus.
+%	
+%	Pour la poignée utilisée :
+%	
+%	\begin{equation}
+%		\begin{aligned}
+%			m_p &= 0.1096 \si{\kilogram}\\
+%			l_p &= 0.0103 \si{\meter}
+%		\end{aligned}
+%	\end{equation}
 	
-	Bonjour,
-	
-	Nous vous proposons de participer à un projet de recherche en \textbf{robotique} et \textbf{science du mouvement humain}.
-	
-	Durant cette expérience, vous serez amené à interagir avec un système robotisé, en présence d’un expérimentateur qui s’assurera du bon déroulement expérimental (\href{https://www.youtube.com/watch?v=6Kh6RiaIf3g}{vidéo}). Vous devrez réaliser, en manipulant le robot, une tâche de jonglerie dans un environnement virtuel. L’expérience devrait durer au total une heure, découpée en deux séances de 30 minutes, et se déroule dans le bâtiment Breguet (salle C3-21). Il vous est possible d’interrompre l’expérience à tout instant.
-	
-	Pour participer à une session expérimentale, il vous est demandé de sélectionner \underline{deux créneaux non consécutifs} un même jour dans le doodle (lien). La fiche de consentement vous sera fourni le jour de l’expérience, il vous est toutefois demandé de prendre connaissance du document avant la session expérimentale si possible.
-	
-	L’ensemble de l’équipe reste à votre disposition pour répondre à vos questions.
-	
-	
-	\textbf{\underline{Équipe du projet de recherche :}}
-	
-	Vincent FORTINEAU, doctorant au L2S et au CIAMS : vincent.fortineau@centralesupélec.fr
-	
-	Maria MAKAROV, maître de conférence à CentraleSupélec et chercheuse au L2S
-	
-	Pedro RODRIGUEZ-AYERBE, professeur à CentraleSupélec et chercheur au L2S
-	
-	Isabelle SIEGLER, professeur de l’Université Paris-Saclay et chercheuse au CIAMS
-	
-	%%%%%%%
-	% APP 9
-	%%%%%%%
-	\chapter{Formulaire de consentement éclairé} \label{app_consent_notice}
-	
-	\textbf{« Identification d’impédance mécanique du membre supérieur lors d’une tâche rythmique en interaction avec l’environnement »}
-	
-	
-	\underline{Chercheur titulaire responsable scientifique du projet :} FORTINEAU Vincent Doctorant au CIAMS vincent.fortineau@centralesupélec.fr, (Siegler Isabelle, isabelle.siegler@u-psud.fr Professeure des Universités) et au L2S (Maria Makarov, maria.makarov@centralesupélec.fr Maître de conférence et Pedro RODRIGUEZ-AYERBE, pedro.rodriguez@centralesupelec.fr professeur)
-	
-	\underline{Lieu de la recherche :} Laboratoire L2S, CentraleSupélec, Bâtiment Breguet 3 rue Joliot Curie, Gif-sur-Yvette. 
-	
-	\underline{But du projet de recherche :} Étudier les variations du comportement biomécanique du bras lors d’une tâche de jonglerie en interaction avec un système robotisé, pour mieux comprendre le mouvement humain.
-	
-	\underline{Ce que l’on attend de vous :} Si vous acceptez de participer à cette étude, vous participerez à une expérience pendant laquelle vous devrez interagir avec un robot articulé motorisé. En manipulant l’extrémité du bras robotisé, comme on pourrait le faire avec un « joystick », vous contrôlerez une raquette dans un environnement virtuel. Il vous sera alors demandé de jongler avec une balle, elle aussi présente dans l’environnement virtuel. Votre objectif sera d’essayer de maintenir la hauteur du rebond au niveau d’une hauteur cible visible dans l’environnement. Une session préparatoire permettra de vous familiariser avec le système robotisé, et aussi de vous présenter les risques pouvant émerger de ce système.
-	
-	Vos droits de vous retirer de la recherche à tout moment : 
-	
-	\begin{enumerate}
-		\item Votre participation à cette recherche est volontaire ; 
-		\item Vous pourrez vous en retirer ou cesser votre participation en tout temps ; 
-		\item Votre décision de participer, de refuser de participer, ou de cesser votre participation n’aura aucun effet sur votre statut ou vos relations futures avec les laboratoires CIAMS et L2S, l’Université Paris Saclay et ou l’école CentraleSupélec. 
-	\end{enumerate}
-	
-	Vos droits à la confidentialité et au respect de la vie privée : 
-	
-	\begin{enumerate}
-		\item  Les données obtenues seront traitées avec la confidentialité la plus entière ; 
-		\item Nous masquerons votre identité à l’aide d’un numéro aléatoire ; 
-		\item Aucun autre renseignement ne pourra révéler votre identité ; 
-		\item Toutes les données seront gardées dans un endroit sécurisé et seuls le responsable scientifique et les chercheurs adjoints y auront accès ; 
-		\item Vous pourrez exercer vos droits d’accès et de rectification ou suppression des données auprès du responsable scientifique du projet. 
-	\end{enumerate}
-	
-	\underline{Bénéfices de l’étude : }Les avantages attendus de cette recherche sont d’obtenir une meilleure compréhension des stratégies humaines pour la génération de mouvements du membre supérieur. Ces résultats aideront au développement de stratégies de commande pour la robotique. Les résultats globaux de l’étude vous seront transmis à la fin de la période d’étude. 
-	
-	\underline{Risques possibles de l’étude :} L’interaction avec un système motorisé peut comporter des risques de dommages physiques en cas de choc. Seuls la main et l’avant-bras en interaction avec le robot peuvent entrer en contact avec le robot. A tout moment, notamment en cas d’inconfort lors de l’interaction avec le robot, il est possible, sans conséquence, de le lâcher et éventuellement d’arrêter l’expérience.
-	
-	\underline{Diffusion :} Cette recherche sera diffusée dans des colloques et elle sera publiée dans des actes de colloque et des articles de revues académiques. 
-	
-	\underline{Vos droits de poser des questions à tout moment :} Vous pouvez poser des questions au sujet de la recherche en communiquant avec le responsable scientifique du projet par courrier électronique à vincent.fortineau@centralesupélec.fr. 
-	
-	\underline{Consentement à la participation :} En signant le formulaire de consentement, vous certifiez que vous avez lu et compris les renseignements ci-dessus, que le chercheur a répondu à vos questions de façon satisfaisante et qu’il vous a avisé que vous étiez libre d’annuler votre consentement ou de vous retirer de cette recherche à tout moment, sans préjudice. 
-	
-	\underline{A remplir par le participant : }
-	
-	J’ai lu et compris les renseignements ci-dessus et j’accepte de plein gré de participer à cette recherche. 
-	
-	Nom, Prénom – Signature 
-	
-	\vspace{1cm}
-	
-	Un exemplaire de ce document vous est remis, un autre exemplaire est conservé dans le dossier. 
+%	%%%%%%%
+%	% APP 8
+%	%%%%%%%
+%	\chapter{Lettre de contact pour une participation à une expérience psychomotrice} \label{app_enrolment_mail}
+%	
+%	\textit{Exemple de la version française d'un courrier électronique de demande de contact diffusée par mail :}
+%	
+%	Bonjour,
+%	
+%	Nous vous proposons de participer à un projet de recherche en \textbf{robotique} et \textbf{science du mouvement humain}.
+%	
+%	Durant cette expérience, vous serez amené à interagir avec un système robotisé, en présence d’un expérimentateur qui s’assurera du bon déroulement expérimental (\href{https://www.youtube.com/watch?v=6Kh6RiaIf3g}{vidéo}). Vous devrez réaliser, en manipulant le robot, une tâche de jonglerie dans un environnement virtuel. L’expérience devrait durer au total une heure, découpée en deux séances de 30 minutes, et se déroule dans le bâtiment Breguet (salle C3-21). Il vous est possible d’interrompre l’expérience à tout instant.
+%	
+%	Pour participer à une session expérimentale, il vous est demandé de sélectionner \underline{deux créneaux non consécutifs} un même jour dans le doodle (lien). La fiche de consentement vous sera fourni le jour de l’expérience, il vous est toutefois demandé de prendre connaissance du document avant la session expérimentale si possible.
+%	
+%	L’ensemble de l’équipe reste à votre disposition pour répondre à vos questions.
+%	
+%	
+%	\textbf{\underline{Équipe du projet de recherche :}}
+%	
+%	Vincent FORTINEAU, doctorant au L2S et au CIAMS : vincent.fortineau@centralesupélec.fr
+%	
+%	Maria MAKAROV, maître de conférence à CentraleSupélec et chercheuse au L2S
+%	
+%	Pedro RODRIGUEZ-AYERBE, professeur à CentraleSupélec et chercheur au L2S
+%	
+%	Isabelle SIEGLER, professeur de l’Université Paris-Saclay et chercheuse au CIAMS
+%	
+%	%%%%%%%
+%	% APP 9
+%	%%%%%%%
+%	\chapter{Formulaire de consentement éclairé} \label{app_consent_notice}
+%	
+%	\textbf{« Identification d’impédance mécanique du membre supérieur lors d’une tâche rythmique en interaction avec l’environnement »}
+%	
+%	
+%	\underline{Chercheur titulaire responsable scientifique du projet :} FORTINEAU Vincent Doctorant au CIAMS vincent.fortineau@centralesupélec.fr, (Siegler Isabelle, isabelle.siegler@u-psud.fr Professeure des Universités) et au L2S (Maria Makarov, maria.makarov@centralesupélec.fr Maître de conférence et Pedro RODRIGUEZ-AYERBE, pedro.rodriguez@centralesupelec.fr professeur)
+%	
+%	\underline{Lieu de la recherche :} Laboratoire L2S, CentraleSupélec, Bâtiment Breguet 3 rue Joliot Curie, Gif-sur-Yvette. 
+%	
+%	\underline{But du projet de recherche :} Étudier les variations du comportement biomécanique du bras lors d’une tâche de jonglerie en interaction avec un système robotisé, pour mieux comprendre le mouvement humain.
+%	
+%	\underline{Ce que l’on attend de vous :} Si vous acceptez de participer à cette étude, vous participerez à une expérience pendant laquelle vous devrez interagir avec un robot articulé motorisé. En manipulant l’extrémité du bras robotisé, comme on pourrait le faire avec un « joystick », vous contrôlerez une raquette dans un environnement virtuel. Il vous sera alors demandé de jongler avec une balle, elle aussi présente dans l’environnement virtuel. Votre objectif sera d’essayer de maintenir la hauteur du rebond au niveau d’une hauteur cible visible dans l’environnement. Une session préparatoire permettra de vous familiariser avec le système robotisé, et aussi de vous présenter les risques pouvant émerger de ce système.
+%	
+%	Vos droits de vous retirer de la recherche à tout moment : 
+%	
+%	\begin{enumerate}
+%		\item Votre participation à cette recherche est volontaire ; 
+%		\item Vous pourrez vous en retirer ou cesser votre participation en tout temps ; 
+%		\item Votre décision de participer, de refuser de participer, ou de cesser votre participation n’aura aucun effet sur votre statut ou vos relations futures avec les laboratoires CIAMS et L2S, l’Université Paris Saclay et ou l’école CentraleSupélec. 
+%	\end{enumerate}
+%	
+%	Vos droits à la confidentialité et au respect de la vie privée : 
+%	
+%	\begin{enumerate}
+%		\item  Les données obtenues seront traitées avec la confidentialité la plus entière ; 
+%		\item Nous masquerons votre identité à l’aide d’un numéro aléatoire ; 
+%		\item Aucun autre renseignement ne pourra révéler votre identité ; 
+%		\item Toutes les données seront gardées dans un endroit sécurisé et seuls le responsable scientifique et les chercheurs adjoints y auront accès ; 
+%		\item Vous pourrez exercer vos droits d’accès et de rectification ou suppression des données auprès du responsable scientifique du projet. 
+%	\end{enumerate}
+%	
+%	\underline{Bénéfices de l’étude : }Les avantages attendus de cette recherche sont d’obtenir une meilleure compréhension des stratégies humaines pour la génération de mouvements du membre supérieur. Ces résultats aideront au développement de stratégies de commande pour la robotique. Les résultats globaux de l’étude vous seront transmis à la fin de la période d’étude. 
+%	
+%	\underline{Risques possibles de l’étude :} L’interaction avec un système motorisé peut comporter des risques de dommages physiques en cas de choc. Seuls la main et l’avant-bras en interaction avec le robot peuvent entrer en contact avec le robot. A tout moment, notamment en cas d’inconfort lors de l’interaction avec le robot, il est possible, sans conséquence, de le lâcher et éventuellement d’arrêter l’expérience.
+%	
+%	\underline{Diffusion :} Cette recherche sera diffusée dans des colloques et elle sera publiée dans des actes de colloque et des articles de revues académiques. 
+%	
+%	\underline{Vos droits de poser des questions à tout moment :} Vous pouvez poser des questions au sujet de la recherche en communiquant avec le responsable scientifique du projet par courrier électronique à vincent.fortineau@centralesupélec.fr. 
+%	
+%	\underline{Consentement à la participation :} En signant le formulaire de consentement, vous certifiez que vous avez lu et compris les renseignements ci-dessus, que le chercheur a répondu à vos questions de façon satisfaisante et qu’il vous a avisé que vous étiez libre d’annuler votre consentement ou de vous retirer de cette recherche à tout moment, sans préjudice. 
+%	
+%	\underline{A remplir par le participant : }
+%	
+%	J’ai lu et compris les renseignements ci-dessus et j’accepte de plein gré de participer à cette recherche. 
+%	
+%	Nom, Prénom – Signature 
+%	
+%	\vspace{1cm}
+%	
+%	Un exemplaire de ce document vous est remis, un autre exemplaire est conservé dans le dossier. 
 	
 	%%%%%%%
 	% APP 10
 	%%%%%%%
-	\chapter{Représentation graphiques des ANOVA} \label{app_anovas}
+	\chapter{Représentation graphique des ANOVA} \label{app_anovas}
 	
-	Les analyses de variance sont classiquement représentées par des diagrammes en boîte où apparaissent la médiane de l'échantillon, la moyenne, l'intervalle de confiance à \SI{95}{\percent} de la médiane (\textit{Notch}), l'écart interquartile - qui contient \SI{50}{\percent} des données -, les moustaches\footnote{Traduction de l'anglais "whiskers", au-delà ces limites les données sont considérées comme aberrante. La longueur des moustaches a une valeur minimale de une fois et demi la largeur de l'écart interquartile (sa valeur exacte est définie par une valeur réelle).} et les données aberrantes.
+	Les analyses de variance sont classiquement représentées par des diagrammes en boîte où apparaissent la médiane de l'échantillon, la moyenne, l'intervalle de confiance à \SI{95}{\percent} de la médiane (\foreignquote{french}{\textit{Notch}}), l'écart interquartile - qui contient \SI{50}{\percent} des données -, les moustaches\footnote{Traduction de l'anglais \foreignquote{french}{\textit{whiskers}}, au-delà ces limites les données sont considérées comme aberrantes. La longueur des moustaches a une valeur minimale de une fois et demi la largeur de l'écart interquartile (sa valeur exacte est définie par une valeur réelle).} et les données aberrantes.
 	
-	\tikzexternalenable
+	%\tikzexternalenable
 	\input{latex_figures/fig_anova_example}
-	\tikzexternaldisable
+	%\tikzexternaldisable
 	
 	L'intervalle de confiance de la médiane $m_{95\%}$ est calculé grâce à la formule \cref{eq_notch} \parencite{mcgill_variations_1978}, avec le i\textsuperscript{ème} quartiles notés $q_{ti}$, et $n$ le nombre de données.
 	
@@ -736,294 +920,296 @@
 
 	Les moustaches sont obtenues en prenant une marge de 1.5 fois l'écart interquartile à partir des premiers et troisième quartiles, ce qui permet lors d'une distribution normale, d'assurer que plus de \SI{99}{\percent} des données sont à l'intérieurs des moustaches.
 	
+	\textcolor{orange}{Lorsqu'une ANOVA à mesure répétée est conduite, les résultats sont présentés succinctement en précisant le résultat du test F (rapport des variances entre et à l'intérieur des groupes), avec les degrés de liberté du facteur étudié et des résidus entre parenthèses. La probabilité $p$ de validation de l'hypothèse nulle est ensuite indiquée, avec l'effet de taille $\eta^2$.}
+	
 	%%%%%%%
 	% APP 11
 	%%%%%%%
-	\chapter{ANOVA des études de performance} \label{app_anovas_perf}
-	
-	\section{Effets des perturbations}
-	
-	Analyse des variances des moyennes des  erreurs de rebonds en fonction des cycles perturbés.
-	
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets intra participants des moyennes $\mean{\epsilon_r}$}
-		\label{tab_anova_avg_bouncing_error_perturbations}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				Perturbations & $0.019$ & $3$ & $0.006$ & $6.771$ & $<0.1$ & $0.026$  \\
-				Perturbations $\times$ Expérience & $0.002$ & $3$ & $7.874e-4$ & $0.836$ & $47.6$ & $0.003$  \\
-				Résidus & $0.170$ & $180$ & $9.424e-4$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
-	
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets entre participants des moyennes $\mean{\epsilon_r}$}
-		\label{tab_anova_avg_bouncing_error_perturbations_between}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				Expérience & $0.003$ & $1$ & $0.003$ & $0.362$ & $55.0$ & $0.004$  \\
-				Résidus & $0.534$ & $60$ & $0.009$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
-
-	Analyse des variances des écarts types des erreurs de rebonds en fonction des cycles perturbés.
-
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
-		\label{tab_anova_std_bouncing_error_perturbations}
-		{
-			\begin{tabular}{lccccccc}
-				\toprule
-				Source & Correction & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^2$ \\
-				\cmidrule[0.4pt]{1-8}
-				Perturbations & sans & $0.003$ & $3.000$ & $0.001$ & $1.465$ & $22.6$ & $0.005$  \\
-				$ $ & Huynh-Feldt & $0.003$ & $2.636$ & $0.001$ & $1.465$ & $23.0$ & $0.005$  \\
-				Perturbations $\times$ Expérience & sans & $0.004$ & $3.000$ & $0.001$ & $1.571$ & $19.8$ & $0.006$  \\
-				$ $ & Huynh-Feldt & $0.004$ & $2.636$ & $0.001$ & $1.571$ & $20.3$ & $0.006$  \\
-				Résidus & sans & $0.136$ & $180.000$ & $7.557e-4$ & $$ & $ $ & $$  \\
-				$ $ & Huynh-Feldt & $0.136$ & $158.138$ & $8.602e-4$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{8}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-				% \multicolumn{8}{p{\linewidth}}{$^{0}$ Le test de \textcite{mauchly_significance_1940} indique que l'hypothèse de sphéricité est violée ($p<0.05$).} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
-
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets entre participants des écarts types $\sigma(\epsilon_r)$}
-		\label{tab_anova_std_bouncing_error_perturbations_between}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				Expérience & $3.693e-4$ & $1$ & $3.693e-4$ & $0.047$ & $83.0$ & $5.963e-4$  \\
-				Résidus & $0.476$ & $60$ & $0.008$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}	
-	
-	\section{Effets des hauteurs cibles}
-	
-	Analyse des variances des moyennes des erreurs de rebonds en fonction des hauteurs cibles.
-	
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets intra participants des moyennes $\mean{\epsilon_r}$}
-		\label{tab_anova_avg_bouncing_error_target_height}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta$$^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				$h$ & $0.022$ & $2$ & $0.011$ & $2.054$ & $13.8$ & $0.048$  \\
-				$h \times exp_1$ & $0.010$ & $2$ & $0.005$ & $0.967$ & $38.7$ & $0.023$  \\
-				$h \times h^1$ & $0.017$ & $2$ & $0.009$ & $1.611$ & $20.9$ & $0.038$  \\
-				$h \times exp_1 \times h^1$ & $0.007$ & $2$ & $0.004$ & $0.681$ & $51.0$ & $0.016$  \\
-				Résidus & $0.290$ & $54$ & $0.005$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}	%\end{table}
-	}
-
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets entre participants des moyennes $\mean{\epsilon_r}$}
-		\label{tab_anova_avg_bouncing_error_target_height_between}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta$$^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				$exp_1$ & $4.894e-4$ & $1$ & $4.894e-4$ & $0.131$ & $72.0$ & $0.001$  \\
-				$h^1$ & $0.009$ & $1$ & $0.009$ & $2.479$ & $12.7$ & $0.020$  \\
-				$exp_1 \times h^1$ & $5.840e-4$ & $1$ & $5.840e-4$ & $0.156$ & $69.6$ & $0.001$  \\
-				Résidus & $0.101$ & $27$ & $0.004$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
-	
-
-	Analyse des variances des écarts types des erreurs de rebonds en fonction des cycles perturbés.
-
-	%\begin{table}[h]
-		{
-			\centering
-			\captionof{table}{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
-			\label{tab_anova_std_bouncing_error_target_height}
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				$h$ & $0.049$ & $2$ & $0.024$ & $11.995$ & $< 0.1$ & $0.173$  \\
-				$h \times exp_1$ & $0.002$ & $2$ & $8.536e-4$ & $0.421$ & $65.9$ & $0.006$  \\
-				$h \times h^1$ & $0.009$ & $2$ & $0.004$ & $2.197$ & $12.1$ & $0.032$  \\
-				$h \times exp_1 \times h^1$  & $0.004$ & $2$ & $0.002$ & $0.985$ & $38.0$ & $0.014$  \\
-				Résidus & $0.109$ & $54$ & $0.002$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	%\end{table}
-
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets entre participants des écarts types $\sigma(\epsilon_r)$}
-		\label{tab_anova_std_bouncing_error_target_height_between}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				$exp_1$ & $0.008$ & $1$ & $0.008$ & $2.162$ & $15.3$ & $0.028$  \\
-				$h^1$ & $0.001$ & $1$ & $0.001$ & $0.308$ & $58.4$ & $0.004$  \\
-				$exp_1 \times h^1$ & $0.002$ & $1$ & $0.002$ & $0.608$ & $44.2$ & $0.008$  \\
-				Résidus & $0.097$ & $27$ & $0.004$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
-	
-	
-	\section{Effets individuels}
-	
-	Analyse des variances des moyennes des erreurs de rebonds sur les expériences 1 en fonction des performances individuels et des essais.
-	
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets intra participants des moyennes $\mean{\epsilon_r}$}
-		\label{tab_anova_avg_bouncing_error_trials_and_expertises}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				$n_i$ & $0.003$ & $2$ & $0.002$ & $1.052$ & $35.7$ & $0.010$  \\
-				$n_i \times e_i$ & $0.004$ & $4$ & $9.695e-4$ & $0.658$ & $62.4$ & $0.013$  \\
-				$n_i \times s_i$ & $7.607e-4$ & $2$ & $3.803e-4$ & $0.258$ & $77.3$ & $0.003$  \\
-				$n_i \times e_i \times s_i$ & $0.002$ & $4$ & $5.843e-4$ & $0.397$ & $81.0$ & $0.008$  \\
-				Résidus & $0.074$ & $50$ & $0.001$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
-
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets entre participants des moyennes $\mean{\epsilon_r}$}
-		\label{tab_anova_avg_bouncing_error_trials_and_expertises_between}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				$e_i$ & $0.020$ & $2$ & $0.010$ & $1.395$ & $26.6$ & $0.067$  \\
-				$s_i$ & $0.001$ & $1$ & $0.001$ & $0.170$ & $68.4$ & $0.004$  \\
-				$e_i \times s_i$ & $0.015$ & $2$ & $0.008$ & $1.055$ & $36.3$ & $0.051$  \\
-				Résidus & $0.182$ & $25$ & $0.007$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
-	
-
-	Analyse des variances des écarts-types des erreurs de rebonds sur les expériences 1 en fonction des performances individuels et des essais.
-
-	%\begin{table}[h]
-	{
-		\centering
-		\captionof{table}{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
-		\label{tab_anova_std_bouncing_error_trials_and_expertises}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				$n_i$ & $0.018$ & $2$ & $0.009$ & $8.745$ & $<0.1$ & $0.076$  \\
-				$n_i \times e_i$ & $0.011$ & $4$ & $0.003$ & $2.722$ & $4.0$ & $0.048$  \\
-				$n_i \times s_i$ & $6.786e-5$ & $2$ & $3.393e-5$ & $0.032$ & $96.8$ & $2.836e-4$  \\
-				$n_i \times e_i \times s_i$ & $0.002$ & $4$ & $4.905e-4$ & $0.470$ & $75.8$ & $0.008$  \\
-				Résidus & $0.052$ & $50$ & $0.001$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
-	
-	%\begin{table}[h]	
-	{
-		\centering
-		\captionof{table}{Effets entre participants des écarts types $\sigma(\epsilon_r)$}
-		\label{tab_anova_std_bouncing_error_trials_and_expertises_between}
-		{
-			\begin{tabular}{lcccccc}
-				\toprule
-				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
-				\cmidrule[0.4pt]{1-7}
-				$e_i$ & $0.088$ & $2$ & $0.044$ & $18.071$ & $<0.1$ & $0.370$  \\
-				$s_i$ & $0.004$ & $1$ & $0.004$ & $1.536$ & $22.7$ & $0.016$  \\
-				$e_i \times s_i$ & $0.002$ & $2$ & $9.910e-4$ & $0.405$ & $67.1$ & $0.008$  \\
-				Résidus & $0.061$ & $25$ & $0.002$ & $$ & $ $ & $$  \\
-				\bottomrule
-				% \addlinespace[1ex]
-				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
-			\end{tabular}
-		}
-	}
-	%\end{table}
+%	\chapter{ANOVA des études de performance} \label{app_anovas_perf}
+%	
+%	\section{Effets des perturbations}
+%	
+%	Analyse des variances des moyennes des erreurs de rebonds en fonction des cycles perturbés.
+%	
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets intra participants des moyennes $\mean{\epsilon_r}$}
+%		\label{tab_anova_avg_bouncing_error_perturbations}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				Perturbations & $0.019$ & $3$ & $0.006$ & $6.771$ & $<0.1$ & $0.026$  \\
+%				Perturbations $\times$ Expérience & $0.002$ & $3$ & $7.874e-4$ & $0.836$ & $47.6$ & $0.003$  \\
+%				Résidus & $0.170$ & $180$ & $9.424e-4$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
+%	
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets entre participants des moyennes $\mean{\epsilon_r}$}
+%		\label{tab_anova_avg_bouncing_error_perturbations_between}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				Expérience & $0.003$ & $1$ & $0.003$ & $0.362$ & $55.0$ & $0.004$  \\
+%				Résidus & $0.534$ & $60$ & $0.009$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
+%
+%	Analyse des variances des écarts types des erreurs de rebonds en fonction des cycles perturbés.
+%
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
+%		\label{tab_anova_std_bouncing_error_perturbations}
+%		{
+%			\begin{tabular}{lccccccc}
+%				\toprule
+%				Source & Correction & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^2$ \\
+%				\cmidrule[0.4pt]{1-8}
+%				Perturbations & sans & $0.003$ & $3.000$ & $0.001$ & $1.465$ & $22.6$ & $0.005$  \\
+%				$ $ & Huynh-Feldt & $0.003$ & $2.636$ & $0.001$ & $1.465$ & $23.0$ & $0.005$  \\
+%				Perturbations $\times$ Expérience & sans & $0.004$ & $3.000$ & $0.001$ & $1.571$ & $19.8$ & $0.006$  \\
+%				$ $ & Huynh-Feldt & $0.004$ & $2.636$ & $0.001$ & $1.571$ & $20.3$ & $0.006$  \\
+%				Résidus & sans & $0.136$ & $180.000$ & $7.557e-4$ & $$ & $ $ & $$  \\
+%				$ $ & Huynh-Feldt & $0.136$ & $158.138$ & $8.602e-4$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{8}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%				% \multicolumn{8}{p{\linewidth}}{$^{0}$ Le test de \textcite{mauchly_significance_1940} indique que l'hypothèse de sphéricité est violée ($p<0.05$).} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
+%
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets entre participants des écarts types $\sigma(\epsilon_r)$}
+%		\label{tab_anova_std_bouncing_error_perturbations_between}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				Expérience & $3.693e-4$ & $1$ & $3.693e-4$ & $0.047$ & $83.0$ & $5.963e-4$  \\
+%				Résidus & $0.476$ & $60$ & $0.008$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}	
+%	
+%	\section{Effets des hauteurs cibles}
+%	
+%	Analyse des variances des moyennes des erreurs de rebonds en fonction des hauteurs cibles.
+%	
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets intra participants des moyennes $\mean{\epsilon_r}$}
+%		\label{tab_anova_avg_bouncing_error_target_height}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta$$^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$h$ & $0.022$ & $2$ & $0.011$ & $2.054$ & $13.8$ & $0.048$  \\
+%				$h \times exp_1$ & $0.010$ & $2$ & $0.005$ & $0.967$ & $38.7$ & $0.023$  \\
+%				$h \times h^1$ & $0.017$ & $2$ & $0.009$ & $1.611$ & $20.9$ & $0.038$  \\
+%				$h \times exp_1 \times h^1$ & $0.007$ & $2$ & $0.004$ & $0.681$ & $51.0$ & $0.016$  \\
+%				Résidus & $0.290$ & $54$ & $0.005$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}	%\end{table}
+%	}
+%
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets entre participants des moyennes $\mean{\epsilon_r}$}
+%		\label{tab_anova_avg_bouncing_error_target_height_between}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta$$^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$exp_1$ & $4.894e-4$ & $1$ & $4.894e-4$ & $0.131$ & $72.0$ & $0.001$  \\
+%				$h^1$ & $0.009$ & $1$ & $0.009$ & $2.479$ & $12.7$ & $0.020$  \\
+%				$exp_1 \times h^1$ & $5.840e-4$ & $1$ & $5.840e-4$ & $0.156$ & $69.6$ & $0.001$  \\
+%				Résidus & $0.101$ & $27$ & $0.004$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
+%	
+%
+%	Analyse des variances des écarts types des erreurs de rebonds en fonction des cycles perturbés.
+%
+%	%\begin{table}[h]
+%		{
+%			\centering
+%			\captionof{table}{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
+%			\label{tab_anova_std_bouncing_error_target_height}
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$h$ & $0.049$ & $2$ & $0.024$ & $11.995$ & $< 0.1$ & $0.173$  \\
+%				$h \times exp_1$ & $0.002$ & $2$ & $8.536e-4$ & $0.421$ & $65.9$ & $0.006$  \\
+%				$h \times h^1$ & $0.009$ & $2$ & $0.004$ & $2.197$ & $12.1$ & $0.032$  \\
+%				$h \times exp_1 \times h^1$  & $0.004$ & $2$ & $0.002$ & $0.985$ & $38.0$ & $0.014$  \\
+%				Résidus & $0.109$ & $54$ & $0.002$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	%\end{table}
+%
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets entre participants des écarts types $\sigma(\epsilon_r)$}
+%		\label{tab_anova_std_bouncing_error_target_height_between}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$exp_1$ & $0.008$ & $1$ & $0.008$ & $2.162$ & $15.3$ & $0.028$  \\
+%				$h^1$ & $0.001$ & $1$ & $0.001$ & $0.308$ & $58.4$ & $0.004$  \\
+%				$exp_1 \times h^1$ & $0.002$ & $1$ & $0.002$ & $0.608$ & $44.2$ & $0.008$  \\
+%				Résidus & $0.097$ & $27$ & $0.004$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
+%	
+%	
+%	\section{Effets individuels}
+%	
+%	Analyse des variances des moyennes des erreurs de rebonds sur les expériences 1 en fonction des performances individuels et des essais.
+%	
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets intra participants des moyennes $\mean{\epsilon_r}$}
+%		\label{tab_anova_avg_bouncing_error_trials_and_expertises}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$n_i$ & $0.003$ & $2$ & $0.002$ & $1.052$ & $35.7$ & $0.010$  \\
+%				$n_i \times e_i$ & $0.004$ & $4$ & $9.695e-4$ & $0.658$ & $62.4$ & $0.013$  \\
+%				$n_i \times s_i$ & $7.607e-4$ & $2$ & $3.803e-4$ & $0.258$ & $77.3$ & $0.003$  \\
+%				$n_i \times e_i \times s_i$ & $0.002$ & $4$ & $5.843e-4$ & $0.397$ & $81.0$ & $0.008$  \\
+%				Résidus & $0.074$ & $50$ & $0.001$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
+%
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets entre participants des moyennes $\mean{\epsilon_r}$}
+%		\label{tab_anova_avg_bouncing_error_trials_and_expertises_between}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$e_i$ & $0.020$ & $2$ & $0.010$ & $1.395$ & $26.6$ & $0.067$  \\
+%				$s_i$ & $0.001$ & $1$ & $0.001$ & $0.170$ & $68.4$ & $0.004$  \\
+%				$e_i \times s_i$ & $0.015$ & $2$ & $0.008$ & $1.055$ & $36.3$ & $0.051$  \\
+%				Résidus & $0.182$ & $25$ & $0.007$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
+%	
+%
+%	Analyse des variances des écarts-types des erreurs de rebonds sur les expériences 1 en fonction des performances individuels et des essais.
+%
+%	%\begin{table}[h]
+%	{
+%		\centering
+%		\captionof{table}{Effets intra participants des écarts types $\sigma(\epsilon_r)$}
+%		\label{tab_anova_std_bouncing_error_trials_and_expertises}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$n_i$ & $0.018$ & $2$ & $0.009$ & $8.745$ & $<0.1$ & $0.076$  \\
+%				$n_i \times e_i$ & $0.011$ & $4$ & $0.003$ & $2.722$ & $4.0$ & $0.048$  \\
+%				$n_i \times s_i$ & $6.786e-5$ & $2$ & $3.393e-5$ & $0.032$ & $96.8$ & $2.836e-4$  \\
+%				$n_i \times e_i \times s_i$ & $0.002$ & $4$ & $4.905e-4$ & $0.470$ & $75.8$ & $0.008$  \\
+%				Résidus & $0.052$ & $50$ & $0.001$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
+%	
+%	%\begin{table}[h]	
+%	{
+%		\centering
+%		\captionof{table}{Effets entre participants des écarts types $\sigma(\epsilon_r)$}
+%		\label{tab_anova_std_bouncing_error_trials_and_expertises_between}
+%		{
+%			\begin{tabular}{lcccccc}
+%				\toprule
+%				Source & $\sum\epsilon^2$ & DL & $\mean{\epsilon^2}$ & $F$ & $p$ (\si{\percent}) & $\eta^{2}$  \\
+%				\cmidrule[0.4pt]{1-7}
+%				$e_i$ & $0.088$ & $2$ & $0.044$ & $18.071$ & $<0.1$ & $0.370$  \\
+%				$s_i$ & $0.004$ & $1$ & $0.004$ & $1.536$ & $22.7$ & $0.016$  \\
+%				$e_i \times s_i$ & $0.002$ & $2$ & $9.910e-4$ & $0.405$ & $67.1$ & $0.008$  \\
+%				Résidus & $0.061$ & $25$ & $0.002$ & $$ & $ $ & $$  \\
+%				\bottomrule
+%				% \addlinespace[1ex]
+%				% \multicolumn{7}{p{0.5\linewidth}}{\textit{Note.} Type III Sum of Squares} \\
+%			\end{tabular}
+%		}
+%	}
+%	%\end{table}
 	
 	
 	%%%%%%%
@@ -1032,6 +1218,8 @@
 	\chapter{Données biomécaniques en fonction de la hauteur cible} \label{app_param_against_target_height}
 	
 	Médianes des paramètres identifiés pour chacun des participants en fonction des positions verticales de consigne $h_i^*$ de l'expérience 2, les intervalles de confiance indiqués correspondent à $m_{95\%}$ (voir la \cref{app_anovas}).
+
+	\vspace{3mm}
 
 	\begin{tabular}{|l|c|c|c|c|c|c|}
 		\hline
@@ -1385,7 +1573,43 @@
 	%%%%%%%
 	% APP 13
 	%%%%%%%
-	\chapter{Représentation d'état du modèle dynamique du robot} \label{app_state_space_representation}
+	\chapter{Paramètres du modèle dynamique du robot} \label{app_dynamic_param}
 	
+	Avec la représentation des paramètres inertielles regroupés décrite par \textcite[Chapitre~9, (9.53)]{khalil_modeling_2002}, on peut exprimer les paramètres dynamiques du robot décrit en \cref{app_apparatus_sec_robot} avec neuf paramètres seulement pour le cas où la première et dernière articulation sont immobilisées par un contrôle actif en position. Il faut ajouter à ces paramètres inertiels les coefficients de frictions visqueux et statiques, ce qui porte le total des paramètres nécessaires pour le modèle dynamique du robot à quinze.
+	
+	\begin{equation}
+		\begin{cases}
+			MXR1 &= 0.40281\\
+			MXR2 &= 0.23989\\
+			MX3 &= 0.090822\\
+			Ia1 &= 0\\
+			Ia2 &= 0\\
+			Ia3 &= 0.028432\\
+			ZZR1 &= 0.31721\\
+			ZZR2 &= 0.11238\\
+			ZZ3 &= 0.017544\\
+		\end{cases}
+	\end{equation}
+	
+	\begin{equation}
+		\matr{F}_v = \text{diag}%
+		\begin{pmatrix}
+			0.48964 & 0.37494 & 0.068094
+		\end{pmatrix}
+	\end{equation}
+
+	\begin{equation}
+		\matr{F}_s = \text{diag}%
+		\begin{pmatrix}
+			0.97571 & 0.65131 & 0.25819
+		\end{pmatrix}
+	\end{equation}
+	
+%	FS1 = 0.97571;
+%	FS2 = 0.65131;
+%	FS3 = 0.25819;
+%	FV1 = 0.48964;
+%	FV2 = 0.37494;
+%	FV3 = 0.068094;
 	
 \end{appendices}

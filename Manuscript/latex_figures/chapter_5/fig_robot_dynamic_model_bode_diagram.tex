@@ -5,13 +5,16 @@
 		\begin{tikzpicture}
 			\centering
 			%
-			\begin{semilogxaxis}[%
-				width=.85\linewidth, 
-				height=.35\linewidth, 
+			\begin{axis}[%
+				name=ax1,
+				width=.8\linewidth, 
+				height=.2\linewidth, 
+				scale only axis,
 				%xlabel={Fréquence (\si{\hertz})},%\si{\radian\per\second}
 				ylabel={Amplitude (\si{\decibel})},
+				xmode=log,
 				grid=both,
-				xmin=3e-2,
+				xmin=1e-1,%3e-2,
 				xmax=1e4,
 				xticklabels=\empty,
 				%ymax=10,
@@ -24,7 +27,7 @@
 				%xmax = 16,
 				]
 				%
-				\draw[gray] (axis cs:3e-2, 0) -- (axis cs:1e4, 0);
+				\draw[gray] (axis cs:1e-1, 0) -- (axis cs:1e4, 0);
 				\addplot [
 					color=Orient,
 					solid,
@@ -35,26 +38,29 @@
 				\coordinate (b) at (axis cs:12.5664, \pgfkeysvalueof{/pgfplots/ymin});
 				\path[pattern=north west lines, pattern color=Lavender] (a) rectangle (b);
 				%
-				\draw [dashed, gray] (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymax}) node[fill=white,near start, text=black] {$\omega_c$};
+				%\draw [dashed, gray] (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymax}) node[fill=white,near start, text=black] {$\omega_c$};
 				%\draw [dashed, gray] (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymax});
 				%\draw[->, Shiraz] (axis cs: 1.1e3, 0) -- (axis cs: 1.1e3, -39) node[midway,xshift=4mm,yshift=1mm] {$m_G$};	
 				%
-			\end{semilogxaxis}
-			\begin{semilogxaxis}[
-				yshift=-.25\linewidth,
-				width=.85\linewidth, 
-				height=.35\linewidth, 
+			\end{axis}
+			\begin{axis}[
+				%yshift=-.25\linewidth,
+				at={($(ax1.south west)+(0,-2.5mm)-(0,.2\linewidth)$)},
+				width=.8\linewidth, 
+				height=.2\linewidth, 
+				scale only axis,
 				xlabel={Pulsation (\si{\radian\per\second})},%\si{\radian\per\second}
 				ylabel={Phase (\si{\degree})},
+				xmode=log,
 				grid=both,
-				xmin=3e-2,
+				xmin=1e-1,%3e-2,
 				xmax=1e4,
 				ytick={0,-90,-180,-270},
 				ymax=0,
 				ymin=-270,
 				%use fpu=false,
 				]
-				\draw [gray] (axis cs:3e-2, -180) -- (axis cs:1e4, -180);
+				\draw [gray] (axis cs:1e-1, -180) -- (axis cs:1e4, -180);
 				\addplot [
 					color=Orient,
 					solid,
@@ -73,10 +79,10 @@
 					(12.5664, -270)
 					(12.5664, 0)
 				};
-				\draw [dashed, gray] (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymax});
+				%\draw [dashed, gray] (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0.075, \pgfkeysvalueof{/pgfplots/ymax});
 				%\draw [dashed, gray] (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:1.1e3, \pgfkeysvalueof{/pgfplots/ymax});	
 				%\draw[->, Shiraz] (axis cs: 0.075, -180) -- (axis cs: 0.075, -90) node[midway,xshift=4mm] {$m_\phi$};	
-			\end{semilogxaxis}		
+			\end{axis}		
 		\end{tikzpicture}
 	%}	
 	\caption{Modèle linéarisé autour de $\vect{\phi}_0$ du robot contrôlé en admittance cartésienne, pour une entrée en force $f_z$ et une sortie en vitesse $\dot{z}$. Les fréquences typiques de la tâche de jonglerie, entre \SIlist{0.5;2}{\hertz} sont signifiées par la zone hachurée.}

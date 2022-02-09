@@ -67,9 +67,9 @@
 			node[align = center, above, midway] {$\vect{y}_2$};
 			
 		\draw[{Latex[length=3mm]}-] (ce1.west) --+ (-3,0)
-			node[align = center, above] {$\vect{x}_1$};
+			node[align = center, above] {$\vect{e}_1$};
 		\draw[{Latex[length=3mm]}-] (ce2.west) --+ (-3,0)
-			node[align = center, below] {$\vect{x}_2$};	
+			node[align = center, below] {$\vect{e}_2$};	
 			
 		\draw[-{Latex[length=3mm]}] ($(ce1.west) + (-2.5,0)$) |- (c2.west);
 		\draw[-{Latex[length=3mm]}] ($(ce2.west) + (-2.6,0)$) |- (c1.west);
@@ -80,6 +80,6 @@
 			node[left] {$n$};	
 		
 	\end{tikzpicture}
-	\caption{Modèle à plusieurs entrées et sorties proposé par \textcite{perreault_multiple-input_1999}, avec $h_{ij}$ la fonction de transfert liant l'entrée $i$ à la sortie $j$.}
+	\caption{Modèle à plusieurs entrées et sorties proposé par \textcite{perreault_multiple-input_1999}, avec $h_{ij}$ la fonction de transfert liant l'entrée $e_i$ à la sortie $y_j$.}
 	\label{fig_mimo_model_perrault} % Label 
 \end{figure}

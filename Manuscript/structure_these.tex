@@ -42,7 +42,8 @@
 \usepackage{xifthen} %for conditional test
 \usepackage{adjustbox}
 \usepackage{etoolbox}
-\usepackage[toc,page]{appendix} % for appendices [title]
+\usepackage{titlesec}
+\usepackage[toc,page,title,header,titletoc]{appendix} % for appendices [title]
 \usepackage{rotating} % for sideway table notably
 \usepackage{booktabs} % for table ouput by JASP(TM)
 \usepackage[inline]{enumitem}
@@ -50,6 +51,7 @@
 	\tcbuselibrary{breakable}
 \usepackage[framemethod=default]{mdframed} % for text boxes
 \usepackage[french]{minitoc}
+\usepackage[french]{nomencl}
 \usepackage{readarray}
 \usepackage{hyperref}
 %\usepackage{cite}
@@ -59,9 +61,12 @@
 	maxbibnames = 99,
 	backref = true,
 	hyperref = true,
-	uniquelist = false,
+	uniquelist = false, %to avoid more than 2 authors in text
+	uniquename = false,
 	backend = biber,
 	eprint = false,
+	url = false,
+	giveninits = true,
 ]{biblatex}
 \usepackage{layout}
 \usepackage[marginparwidth=0pt]{geometry}
@@ -71,6 +76,9 @@
 %\usepackage[T1]{fontenc}
 %\usepackage{adjustbox,libertine,soul,standalone,xcolor} % for quotation boxes
 %
+
+\makenomenclature
+
 \newcommand{\vect}[1]{
 	\boldsymbol{\MakeLowercase{#1}}
 }
@@ -147,13 +155,72 @@
 %\setulmarginsandblock{2.5cm}{2.5cm}{*}
 %\checkandfixthelayout
 
+%% For the nomenclature grouping
+\renewcommand\nomgroup[1]{%
+	\item[\bfseries
+	\ifstrequal{#1}{A}{\large{Général}}{%
+	\ifstrequal{#1}{B}{\large{Impédance mécanique}}{%
+	\ifstrequal{#1}{C}{\large{Robotique}}{%
+	\ifstrequal{#1}{D}{\large{Automatique}}{}}}}%
+	]
+}
+
 %%
+\renewbibmacro{in:}{}
+\AtEveryBibitem{%
+	\clearlist{language}%
+	\clearfield{langid}%
+	\clearlist{origlanguage}%
+}
+%\AtEveryBibitem{\clearfield{langid}}
+%\AtEveryBibitem{\clearlist{origlanguage}}
 
 \DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
 \DeclareLabelname[movie]{
-	\field{director}
-	\field{producer}
+	\field{title}
+	\field{year}
 }
+
+%\DeclareDatamodelEntrytypes{film}
+%\DeclareDatamodelFields[type=list,datatype=name]{
+%	director,
+%}
+
+%\DeclareDatamodelEntryfields[film]{
+%	title,
+%	year,
+%	author,
+%	publisher,
+%}
+
+%\NewBibliographyString{directed}
+%\DeclareBibliographyStrings{%
+%	inherit   = {french},
+%	directed  = {{dirigé par}{dirigé par}},
+%}
+
+\newbibmacro*{filmDirected}{%
+	\printtext{Dirigé par}
+	\setunit{\addspace}%
+	%\usebibmacro{author}%
+	\printnames{author}%
+}
+
+\DeclareBibliographyDriver{movie}{%
+	\usebibmacro{title}%
+	\newunit%
+	\usebibmacro{filmDirected}%
+	%\usebibmacro{publisher}%
+	\newunit%
+	\printlist{organization}%
+	\newunit%
+	%\usebibmacro{year}%
+	%\usebibmacro{date}%
+	\printtext[parens]{\printdate}%
+}
+
+\DeclareNameAlias{sortname}{family-given}
+\DeclareNameAlias{labelname}{given-family} % text
 
 \addbibresource{bibliography/introduction.bib}
 \addbibresource{bibliography/chapter1.bib}

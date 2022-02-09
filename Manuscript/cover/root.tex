@@ -1,0 +1,277 @@
+%%%% Modèle proposé par frederic.mazaleyrat@ens-paris-saclay.fr %%%%
+%%%% màj : 29 octobre 2021 %%%%
+
+\documentclass[french,12pt,a4paper]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{polyglossia}
+	\setdefaultlanguage{french}
+	\setotherlanguages{english}
+\usepackage{fontspec}
+	\setmainfont{Open Sans}
+%\usepackage[default,oldstyle, scale=.95]{opensans} % police Open Sans
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{fancyhdr}
+\usepackage{amssymb}
+\usepackage[nolist]{acronym}
+\usepackage{xcolor} % où color selon l'installation
+\definecolor{Prune}{RGB}{99,0,60} % l14-33 : couleurs de la charte graphique upsaclay
+\definecolor{B1}{RGB}{49,62,72} 
+\definecolor{C1}{RGB}{124,135,143}
+\definecolor{D1}{RGB}{213,218,223}
+\definecolor{A2}{RGB}{198,11,70}
+\definecolor{B2}{RGB}{237,20,91}
+\definecolor{C2}{RGB}{238,52,35}
+\definecolor{D2}{RGB}{243,115,32}
+\definecolor{A3}{RGB}{124,42,144}
+\definecolor{B3}{RGB}{125,106,175}
+\definecolor{C3}{RGB}{198,103,29}
+\definecolor{D3}{RGB}{254,188,24}
+\definecolor{A4}{RGB}{0,78,125}
+\definecolor{B4}{RGB}{14,135,201}
+\definecolor{C4}{RGB}{0,148,181}
+\definecolor{D4}{RGB}{70,195,210}
+\definecolor{A5}{RGB}{0,128,122}
+\definecolor{B5}{RGB}{64,183,105}
+\definecolor{C5}{RGB}{140,198,62}
+\definecolor{D5}{RGB}{213,223,61}
+\usepackage{mdframed}
+\usepackage{multirow} %% Pour mettre un texte sur plusieurs rangées
+\usepackage{multicol} %% Pour mettre un texte sur plusieurs colonnes
+\usepackage{scrextend} %Forcer la 4ème  de couverture en page pair
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage[absolute]{textpos} 
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{microtype}
+\hypersetup{ % paramétrage couleur des liens hypertextes, toujours garder colorlinks=true
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=purple}
+
+
+\pagestyle{plain} % pour ne garder que les n°de page en milieu-bas et supprimer les indications de chapitre en marge haute
+
+%\begin{acronym}
+%	\acro{JMRPF}{jump-Markov regularized particle filter}
+%	\acro{JMS}{jump-Markov system}
+%	\acro{RPF}{regularized particle filter}
+%	\acroplural{RPF}[RPFs]{regularized particle filters}
+%	\acro{UAV}{unmanned aerial vehicle}
+%	\acroplural{UAV}[UAVs]{unmanned aerial vehicles}
+%	\acro{IMM-KF}{interacting multiple model Kalman filters}
+%	\acro{RJMRPF}{robustified jump-Markov regularized particle filter}
+%\end{acronym}
+
+
+
+\begin{document}
+
+\begin{titlepage}
+
+\newgeometry{left=6cm,bottom=2cm, top=1cm, right=1cm}
+
+%\tikz[remember picture,overlay] \node[opacity=1,inner sep=0pt] at (-13mm,-135mm){\includegraphics{Frame-ups.pdf}};
+\tikz[remember picture, overlay] \node[opacity = 1, inner sep = 0pt] at (-11mm, -135mm) {\includegraphics{n_Frame-ups.pdf}};
+
+%*****************************************************
+%******** NUMÉRO D'ORDRE DE LA THÈSE À COMPLÉTER *****
+%******** POUR LE SECOND DÉPOT                   *****
+%*****************************************************
+
+\color{white}
+
+\begin{picture}(0,0)
+\put(-142,-738){\rotatebox{90}{\Huge\textbf{T}\LARGE\textbf{HESE DE DOCTORAT}}} \\
+\put(-100,-732){\rotatebox{90}{NNT : 2020UPASA001}}
+\end{picture}
+ 
+%*****************************************************
+%**  LOGO  ÉTABLISSEMENT PARTENAIRE SI COTUTELLE
+%**  CHANGER L'IMAGE PAR DÉFAUT **
+%*****************************************************
+\vspace{-14mm} % à ajuster en fonction de la hauteur du logo
+%\flushright \includegraphics[height=2cm]{vector_coventry.pdf}
+
+%*****************************************************
+%******************** TITRE **************************
+%*****************************************************
+
+\flushright
+\vspace{10mm} % à régler éventuellement
+\color{Prune}
+\fontsize{20}{24}\selectfont
+\textenglish{Commande bio-inspirée de robot pour des tâches rythmiques en interaction avec l'environnement}
+
+\vspace{10pt}
+
+\normalsize
+\color{black}
+\fontsize{14}{16}\selectfont
+\textit{Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment}
+%*****************************************************
+
+\fontsize{8}{12}\selectfont
+
+\vspace{1cm}
+
+\fontsize{12}{14}\selectfont
+\textbf{Thèse de doctorat de l'université Paris-Saclay}
+
+\vspace{6mm}
+
+\fontsize{10}{12}\selectfont
+École doctorale n\(^{\circ}\) 580, sciences et technologies de l'information et de la communication (STIC)
+
+Spécialité de doctorat: Robotique
+
+\fontsize{9}{10}\selectfont
+Graduate School : Informatique et sciences du numérique, Référent : Faculté des sciences d’Orsay
+
+\vspace{6mm}
+
+\fontsize{10}{12}\selectfont
+Thèse préparée dans les unités de recherche \textbf{Laboratoire des Signaux et Systèmes (Université Paris-Saclay, CentraleSupelec)} et \textbf{Complexité, Innovation, Activités Motrices et Sportives (Université Paris-Saclay)}, sous la direction de \textbf{Pedro RODRIGUEZ-AYERBE}, professeur, la co-direction de \textbf{Isabelle A. SIEGLER}, professeur, le co-encadrement de \textbf{Maria MAKAROV}, maitre de conférence
+
+\vspace{1cm}
+
+\fontsize{12}{14}\selectfont
+\textbf{Thèse soutenue à Paris-Saclay, le xx avril 2022, par}
+
+\bigskip
+\fontsize{20}{22}\selectfont
+{\color{Prune} \textbf{Vincent FORTINEAU}}
+
+%************************************
+\vspace{\fill} % ALIGNER LE TABLEAU EN BAS DE PAGE
+%************************************
+
+\bigskip
+
+\flushleft
+\fontsize{12}{14}\selectfont
+\textcolor{Prune}{\textbf{Composition du Jury}}\\
+\vspace{2mm}
+\fontsize{9}{10}\selectfont
+\begin{tabular}{|p{9cm}l}
+\arrayrulecolor{Prune}
+\textbf{Prénom NOM} &   \multirow{2}{*}{Président}\\ 
+Professeur des universités, INP -- ENSEEIHT Toulouse & \\
+\textbf{Lyudmila MIHAYLOVA} &  \multirow{2}{*}{Rapporteur \& Examinatrice} \\ 
+Professor, The University of Sheffield &   \\ 
+\textbf{Kamal MEDJAHER} &  \multirow{2}{*}{Rapporteur \& Examinateur} \\ 
+Professeur des universités, École nationale d'Ingénieurs de Tarbes  &   \\ 
+\textbf{Dalil ICHALAL} &  \multirow{2}{*}{Examinateur} \\ 
+Professeur des universités, Université d'Evry Val d'Essonne   &   \\ 
+\textbf{Tarek RAISSI} &  \multirow{2}{*}{Examinateur} \\ 
+Professeur des universités, Conservatoire National des Arts et Métiers   &   \\ 
+\textbf{Hélène PIET-LAHANIER} &  \multirow{2}{*}{Directrice de thèse} \\ 
+Directrice de recherche, ONERA, Université Paris-Saclay  &   \\
+\textbf{James BRUSEY} &  \multirow{2}{*}{Co-directeur de thèse} \\ 
+Professor, Coventry University  &   \\ 
+\textbf{Karim DAHIA} &  \multirow{2}{*}{Co-encadrant} \\ 
+Ingenieur de recherche, ONERA, Université Paris-Saclay  &   \\ 
+\textbf{Nadjim HORRI} &  \multirow{2}{*}{Co-encadrant (Invité)}\\ 
+Assistant professor, Coventry University  &   \\ 
+
+\end{tabular} 
+
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% insérez ici les fichiers des chapitres
+
+% \include{chapitre1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 4eme de couverture
+\Ifthispageodd{\newpage\thispagestyle{empty}\null\newpage}{}
+\thispagestyle{empty}
+\newgeometry{top=1.5cm, bottom=1.25cm, left=2cm, right=2cm}
+
+\lhead{}
+\rhead{}
+\rfoot{}
+\cfoot{}
+\lfoot{}
+
+\noindent 
+%*****************************************************
+%***** LOGO DE L'ED À CHANGER IMPÉRATIVEMENT *********
+%*****************************************************
+\includegraphics[height=2.45cm]{logo_usp_STIC.png}
+\vspace{.25cm}
+%*****************************************************
+
+\fontsize{10}{12}\selectfont
+
+\begin{mdframed}[linecolor=Prune,linewidth=1]
+
+\textbf{Titre:} Commande bio-inspirée de robot pour des tâches rythmiques en interaction avec l'environnement
+
+\vspace{.25cm}
+\noindent \textbf{Mots clés:} 3 à 6 mots clefs (version en français)
+
+\vspace{-.5cm}
+\begin{multicols}{2}
+\noindent \textbf{Résumé:}
+Les défaillances d'actionneurs ou de capteurs survenant dans un drone peuvent compromettre l'intégrité de la mission.
+La mise en œuvre de méthodes de diagnostic de fautes est alors nécessaire.
+Dans cette thèse, l'accent est mis sur l'estimation de fautes dues à des défaillances simultanées de capteurs et d'actionneurs pour un drone à voilure fixe.
+Pour faire face à certains scénarios complexes de fautes, tels que les fautes simultanées qui induisent une ambiguïté sur les mesures qui se manifeste par la multimodalité de la densité conditionnelle, un filtre particulaire régularisé de type jump-Markov (\acs{JMRPF}) et des versions améliorées de celui-ci sont présentées dans cette thèse.
+
+Cette méthode est basée sur un filtre particulaire régularisé (\acs{RPF}) qui approche la densité conditionnelle par une mixture de noyaux et sur un système de Markov à sauts (\acs{JMS}).
+La stratégie de saut utilise un petit nombre de particules --- appelées particules sentinelles --- qui permet de tester en continue l'hypothèse alternative en mode sans faute et en mode avec faute.
+
+Les résultats numériques sont obtenus en utilisant un modèle dynamique linéaire puis non linéaire de la dynamique longitudinale d’un drone à voilure fixe.
+Les performances du \acs{JMRPF} sont comparées aux performances des filtres de Kalman à modèles multiples interactifs (\acs{IMM-KF}) et du \acs{RPF}.
+Les performances du \acs{JMRPF} montrent une nette amélioration de terme de précision de l’estimation des fautes capteurs et actionneurs et des paramètres cinématiques et en termes de robustesse et de vitesse de convergence par rapport aux autres filtres.
+L'amélioration des performances par rapport aux autres filtres est plus marquée lorsque l'amplitude des fautes augmente au cours du temps.
+
+Une version améliorée du \acs{JMRPF}, appelée filtre particulaire régularisé robuste à sauts est également présentée et permet d'estimer rapidement et précisément les fautes sans connaissance a priori de la dynamique des fautes.
+Enfin, une nouvelle approche pour calculer une matrice de probabilité de transition adaptative est présentée en calculant les probabilités de fausse alarme et de non-détection à l'aide de l’approximation du point-selle.
+
+Les algorithmes de navigation proposés permettent à un drone d'atteindre son objectif de suivi de trajectoire de manière autonome, avec une sécurité et une précision accrues.
+\end{multicols}
+
+\end{mdframed}
+
+\vspace{.25cm}
+
+\begin{mdframed}[linecolor=Prune,linewidth=1]
+\begin{english}
+\textbf{Title:} Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment
+
+\vspace{.25cm}
+\noindent \textbf{Keywords:} 3 à 6 mots clefs (version en anglais)
+
+\vspace{-.5cm}
+\begin{multicols}{2}
+\noindent \textbf{Abstract:}
+Actuator or sensor faults occurring in an \acl*{UAV} can compromise the system integrity.
+Fault diagnosis methods are therefore becoming a required feature for those systems.
+In this thesis, the focus is on fault estimation for fixed-wing \aclp*{UAV} in the presence of simultaneous actuator and sensor faults.
+To deal with the challenging nature of some fault scenarios, such as simultaneous and ambiguous faults that induce multimodality, a \acl*{JMRPF} and enhanced versions of it are presented in this thesis.
+
+This method is based on a \acl*{RPF} that improves the robustness thanks to the approximation of the posterior density by a kernel mixture, and on a \acl*{JMS}.
+The jump strategy uses a small number of particles --- called sentinel particles --- to continue testing the alternate hypothesis under both fault free and faulty modes.
+
+The numerical results are obtained using linear then non-linear longitudinal dynamics of fixed wing \acl*{UAV}.
+It is compared to \acl*{IMM-KF} and \aclp*{RPF} and shown to outperform them in terms of accuracy, robustness and convergence time in the scenarios considered.
+The state estimation is also more accurate and robust to faults using the proposed approach.
+Performance enhancement compared to other filters is more pronounced when fault amplitudes increase.
+
+An enhanced version of this method named the \acl*{RJMRPF} is also presented and allows one to accurately and rapidly estimate faults with no prior knowledge of the fault dynamics.
+Finally, a new approach to compute an adaptive transition probability matrix is introduced by computing the false alarm and missed detection probabilities using a saddlepoint approximation.
+
+The proposed approaches significantly improve the safety and accuracy for increasingly autonomous \aclp*{UAV} and generalise to other control environments where faults occur.
+\end{multicols}
+\end{english}
+\end{mdframed}
+
+\end{document}

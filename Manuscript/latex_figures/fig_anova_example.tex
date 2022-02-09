@@ -135,7 +135,7 @@
 				\node[left, align=right, anchor=east] at (outlier) (otl) {\normalsize{Possible donnée}\\ \normalsize{aberrante}};
 				
 				% notch
-				\draw[decorate,decoration={brace,amplitude=2pt}] (lowerANotch) -- (upperANotch) node [midway,rotate=90, yshift=4mm] {\normalsize{'\textit{Notch}'}};
+				\draw[decorate,decoration={brace,amplitude=2pt}] (lowerANotch) -- (upperANotch) node [midway,rotate=90, yshift=4mm] {\normalsize{\foreignquote{french}{\textit{Notch}}}};
 				% iqr
 				\draw[decorate,decoration={brace,amplitude=5pt}] (upperAQuartile) -- (lowerAQuartile) node [midway,rotate=-90, yshift=5mm] {\normalsize{Ecart interquartile}};
 				% whiskers
@@ -158,8 +158,8 @@
 				height=0.45\linewidth,
 				scale only axis,
 				unbounded coords=jump,
-				ymin=0.023,
-				ymax=0.055,
+				%ymin=0.023,
+				%ymax=0.055,
 				xmin=0.95,
 				xmax=2.05,
 				xtick={1.25,1.75},
@@ -168,43 +168,59 @@
 				scaled ticks=false, 
 				tick label style={/pgf/number format/fixed},
 				]
-				\addplot [color=white!80!black, dotted, forget plot]
+				\addplot[color=Orient]
 				table[row sep=crcr]{%
-					0.95 	0.024788860231638\\
-					2.05	0.024788860231638\\
-					nan		nan\\
-					0.95	0.0299936719238758\\
-					2.05	0.0299936719238758\\
+					1.25	0.049\\
+					1.75	0.027\\					
 				};
-				\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
-				table[row sep=crcr]{%
-					1.25	0.0511460974812508\\
-				};
-				\addplot [color=Orient, forget plot]
-				table[row sep=crcr]{%
-					1.25	0.0485436916351318\\
-					1.25	0.0537485033273697\\
-				};
-				\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
-				table[row sep=crcr]{%
-					1.75	0.0273912660777569\\
-				};
-				\addplot [color=Shiraz, forget plot]
-				table[row sep=crcr]{%
-					1.75	0.024788860231638\\
-					1.75	0.0299936719238758\\
-				};
-				\coordinate (meanA) at (axis cs:1.25, 0.0511);
-				\coordinate (meanBconfidence) at (axis cs:1.5, 0.033);
+				\addplot[color=Orient, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}] plot [error bars/.cd, y dir = both, y explicit] table[row sep=crcr,x=x, y=y, y error=err]
+				{%
+					x	y	err\\
+					1.25	0.049	0.01\\
+					1.75	0.027	0.005\\					
+				};			
+				%(axis cs:1, 0.0511)
+%				\addplot [color=white!80!black, dotted, forget plot]
+%				table[row sep=crcr]{%
+%					0.95 	0.024788860231638\\
+%					2.05	0.024788860231638\\
+%					nan		nan\\
+%					0.95	0.0299936719238758\\
+%					2.05	0.0299936719238758\\
+%				};
+%				\addplot [color=Orient, only marks, mark=o, mark options={solid, Orient}, forget plot]
+%				table[row sep=crcr]{%
+%					1.25	0.0511460974812508\\
+%				};
+%				\addplot [color=Orient, forget plot]
+%				table[row sep=crcr]{%
+%					1.25	0.0485436916351318\\
+%					1.25	0.0537485033273697\\
+%				};
+%				\addplot [color=Shiraz, only marks, mark=o, mark options={solid, Shiraz}, forget plot]
+%				table[row sep=crcr]{%
+%					1.75	0.0273912660777569\\
+%				};
+%				\addplot [color=Shiraz, forget plot]
+%				table[row sep=crcr]{%
+%					1.75	0.024788860231638\\
+%					1.75	0.0299936719238758\\
+%				};
+%				\coordinate (meanA) at (axis cs:1.25, 0.0511);
+%				\coordinate (meanBconfidence) at (axis cs:1.5, 0.033);
+%				%
+%				\draw[<-] ($(meanA) + (5,-1)$) -- (axis cs:1.75,0.045)
+%					node[below, at end] {\normalsize{moyenne}};
+%				\node[align=center] at (meanBconfidence) (confidenceUp) {Intervalle de \SI{95}{\percent}\\de confiance\\de la moyenne};
+%				\draw[<->] (axis cs:1.25,.025) -- (axis cs:1.25,.0296);
 				%
-				\draw[<-] ($(meanA) + (5,-1)$) -- (axis cs:1.75,0.045)
-					node[below, at end] {\normalsize{moyenne}};
-				\node[align=center] at (meanBconfidence) (confidenceUp) {Intervalle de \SI{95}{\percent}\\de confiance\\de la moyenne};
-				\draw[<->] (axis cs:1.25,.025) -- (axis cs:1.25,.0296);
-				%
+				\draw[<-] (axis cs:1.28,0.0495) -- (axis cs:1.75,0.055)
+				node[above, at end] {\normalsize{moyenne}};
+%				\draw[<-]  (axis cs:1.72, 0.0315) -- (axis cs:1.29,0.023)
+%				node[below, at end] {\normalsize{Erreur type}};
 			\end{axis}
 		\end{tikzpicture}%
 	}
-	\caption{Représentations graphiques d'une analyse de variance par un diagramme en boîte ou diagramme à moustaches, et d'une analyse multiple.}
+	\caption{Représentations graphiques d'une analyse de variance par un diagramme en boîte ou diagramme à moustaches, et d'une analyse multiple (En l'absence de précision, l'intervalle de confiance utilisé correspond à l'erreur type).}
 	\label{fig_anova_example}
 \end{figure}

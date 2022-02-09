@@ -34,11 +34,11 @@
 		\draw[-{Latex[length=3mm]}] (nodeLoad.center) |- (spindles.east);
 		% arrows
 		\draw[{Latex[length=3mm]}-] (alpha.west) --+ ($ (-1, 0) $)
-			node[near end, above, xshift=-1mm] {commande};
+			node[near end, above, xshift=-2mm] {$u$};
 		\draw[{Latex[length=3mm]}-] (gamma.west) --+ ($ (-1, -0) $)
-			node[near end, left, align=center] {cons. \\ longueur};
+			node[near end, left, align=center] {$l^*$};
 		\draw[{Latex[length=3mm]}-] (golgi_fb.west) --+ ($ (-1, -0) $)
-			node[near end, left, align=center] {cons. \\ force};
+			node[near end, left, align=center] {$f^*$};
 		\draw[{Latex[length=3mm]}-] (load.north) --+ ($ (0, 1) $)
 			node[near end, right] {$f_e$};	
 		%
@@ -46,6 +46,6 @@
 			node[midway, above] {longueur};
 		
 	\end{tikzpicture}
-	\caption{Schéma bloc des réflexes spinaux et de leurs rétroactions, adpaté de \cite{shadmehr_computational_2004}}
+	\caption{Schéma bloc des réflexes spinaux et de leurs rétroactions, adapté de \textcite{shadmehr_computational_2004}. Le signal de commande est désigné par $u$, et $f^*$ et $l^*$ représentent respectivement des consignes de force et de longueur.}
 	\label{fig_stretch_reflex_control_loop}
 \end{figure}

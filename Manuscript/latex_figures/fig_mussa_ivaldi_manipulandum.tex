@@ -21,10 +21,11 @@
 		\draw (wrist) circle (0.075cm);
 		% handle
 		\node at (wrist) [rectangle,draw, inner sep=0.4cm, rotate around={-45:(wrist)}] (rectM) {};	
-		\node at (rectM) [right, xshift=3mm, yshift=3.5mm, anchor=west] {$(x',y')$};
+		\node at (rectM) [right, xshift=3mm, yshift=3.5mm, anchor=west] {$(x_1',x_2')$};
 		\draw ($(manipShoulder.center) + (0.0750, 0.0450) + (0.3, -0.3) - (0.06, 0.06)$) circle (0.3cm)
-			node[right, xshift=2.5mm, anchor=west]{$(x_{oa},y_{oa})$};
+			node[right, xshift=2.5mm, anchor=west]{$(x_{1oa},x_{2oa})$};
 		% TODO: try to hide the cross section with square and arm 
+		\draw[white, thick] ($(wrist) + (0.17, -0.39)$) -- ($(wrist) + (0.45, -0.11)$);
 		% drawing manipulandum
 		\draw[line width=2mm, white!30!gray] (manipElbow) -- ($(manipShoulder.center) + (0.0750, 0.0450)$);
 		\draw[line width=2mm, white!30!gray] ($(manipElbow) + (0.3, -0.3)$) -- ($(manipShoulder) + (0.29, -0.31)$);
@@ -59,10 +60,10 @@
 			node[midway, right, yshift=-3mm] {$\theta_2'$};
 		% axis
 		\draw[-{Latex[length=1.5mm]}] (shoulder.center) --+ (1.75,0)
-			node[near end, below] {$x$};
+			node[near end, below] {$x_1$};
 		\draw[-{Latex[length=1.5mm]}] (shoulder.center) --+ (0,1.75)
-			node[near end, left] {$y$};
+			node[near end, left] {$x_2$};
 	\end{tikzpicture}
-	\caption{Expérience décrite par \cite{mussa-ivaldi_neural_1985}, avec le manipulandum maintenue par sa poignée $(x',y')$ dans différentes postures. Vue de haut avec le centre du repère fixé sur l'articulation de l'épaule.}
+	\caption{Expérience décrite par \cite{mussa-ivaldi_neural_1985}, avec le manipulandum maintenue par sa poignée $(x_1',x_2')$ dans différentes postures. Vue de haut avec le centre du repère fixé sur l'articulation de l'épaule.}
 	\label{fig_mussa_ivaldi_manipulandum}
 \end{figure}

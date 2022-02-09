@@ -78,7 +78,9 @@
 		
 		\draw[{Latex[length=3mm]}-] (c1.west) --+ (-.75,0) node[left] {$\vect{f}_{in}$};
 		\node (b) at ($(c1)!0.45!(c2)$) {\pgfuseplotmark{*}};
+		\node[above] at (b) {$\vect{f}_e$};
 		\draw[-{Latex[length=3mm]}] (c1.east) -- (c2.west);
+		%\draw[-{Latex[length=3mm]}] (b.center) --+ (0,.75) node[left] {$\vect{f}_e$};
 		\draw[{Latex[length=3mm]}-] (c2.north) --+ (0,.75) node[left] {$\vect{f}_e^*$};
 		\draw[-{Latex[length=3mm]}] (c2.east) -- (ctrl.west);
 		\draw[-{Latex[length=3mm]}] (ctrl.east) -- (sig_xd.west) node[above, midway, xshift=-2mm] {$\dot{\vect{x}}_d$};		

@@ -1,9 +1,10 @@
-\chapter[Commandes pour les interactions phy. humain-robot]{Structure de commande pour les interactions physiques humain-robot} \label{chap2}
+\chapter{Structure de commande pour les interactions physiques humain-robot} \label{chap2}%[Commandes pour les interactions phy. humain-robot]
+\chaptermark{Commandes pour les interactions phy. humain-robot}
 \minitoc
 
 \textcolor{orange}{Ce chapitre présente une courte revue de la littérature concernant les différentes structures de commandes interactives reposant sur l'idée de contrôle en impédance, c'est-à-dire cherchant à imposer un comportement dynamique visco-élastique au robot. Le contrôle proposé dans ces travaux est ensuite détaillé.}
 
-\section{Les commandes collaboratives lors d'interactions physiques humain-robot} \label{chap2_sec_cmd_collab}
+\section[Les commandes collaboratives]{Les commandes collaboratives lors d'interactions physiques humain-robot} \label{chap2_sec_cmd_collab}
 
 %\subsection{Utilisation du modèle dynamique du robot}
 %
@@ -163,7 +164,7 @@ La réduction apparente de l'inertie est limitée du fait de la présence de fle
 
 \paragraph{Variation d'impédance virtuelle}
 
-\textcolor{orange}{Afin d'améliorer l'expérience des utilisateurs lors de manipulation de robot pour des tâches collaboratives, \textcite{ficuciello_variable_2015} propose une modulation virtuelle des paramètres en impédance. Plus particulièrement, les auteurs proposent de faire varier l'amortissement cartésien en notant que lors de mouvements rapides, un amortissement faible est souhaitable, alors que lors des mouvements lents et précis, c'est l'inverse. La masse virtuelle du contrôle en impédance est modifiée en fonction des variations d'amortissement pour assurer la stabilité, qui a été évaluée expérimentalement. %Pour arriver à maintenir un comportement stable, la région de stabilité dans l'espace des paramètres a été évaluée expérimentalement sur une plage prédéfinie des amortissements. 
+\textcolor{orange}{Afin d'améliorer l'expérience des utilisateurs lors de manipulations de robot pour des tâches collaboratives, \textcite{ficuciello_variable_2015} proposent une modulation virtuelle des paramètres en impédance. Plus particulièrement, les auteurs proposent de faire varier l'amortissement cartésien en notant que lors de mouvements rapides, un amortissement faible est souhaitable, alors que lors des mouvements lents et précis, c'est l'inverse. La masse virtuelle du contrôle en impédance est modifiée en fonction des variations d'amortissement pour assurer la stabilité, qui a été évaluée expérimentalement. %Pour arriver à maintenir un comportement stable, la région de stabilité dans l'espace des paramètres a été évaluée expérimentalement sur une plage prédéfinie des amortissements. 
 Les auteurs ont ensuite comparé empiriquement la méthode de contrôle en impédance cartésienne variable avec deux autres contrôles en impédance à gain constant, et ont montré que le meilleur compromis de précision et vitesse d'exécution était obtenu avec la méthode variable.}
 
 \textcolor{orange}{On trouve par ailleurs d'autres méthodes de variation d'impédance cartésienne, notamment sur la raideur. Ces méthodes sont conçues pour essayer d'améliorer l'expérience des participants lors de la manipulation d'un robot. Ainsi, \textcite{gopinathan_user_2017} utilisent une modulation adaptative de la raideur cartésienne en utilisant les mesures des forces d'interactions après une calibrage personnalisé pour chaque participant. \textcite{peternel_robot_2018} proposent quand à eux d'adapter la raideur du contrôle en impédance en fonction d'une estimation de la raideur des participants, qui repose sur des mesures de l'activité musculaire (EMG), ainsi que sur un index de fatigue. \textcite{roveda_model-based_2020} utilisent une commande prédictive et de l'apprentissage renforcé pour moduler la raideur dans le but de minimiser les forces d'interaction.}
@@ -303,7 +304,7 @@ Dans le cadre de l'expérience devant être mise en place (\cref{chap4}), un uti
 
 \textcolor{orange}{Le contrôle proposé est adapté à la tâche de jonglerie étudiée, mais peut être appliqué à d'autres tâches similaires ayant des caractéristiques proches. La tâche de jonglerie est donc présentée dans un premier temps, avant de décrire le contrôle en admittance mis en place.}
 
-\textcolor{red}{La tâche de jonglerie est finalement présentée ici !}
+\textcolor{red}{[La tâche de jonglerie est finalement présentée ici !]}
 
 \subsubsection{Tâche de jonglerie} \label{chap2_sec_ctrl_vfo_subsec_cartesian_0}
 
@@ -319,13 +320,13 @@ Entre deux impacts $k$ et $k+1$ aux instants $t_k$ et $t_{k+1}$, le mouvement de
 	z_b(t) = -\frac{1}{2}gt^2+\dot{z}_b^+(t_k) t+z_b(t_k)
 \end{equation}
 
-L'impact cinématique de la balle sur la raquette est modélisé d'une manière simplifiée par l'équation \cref{eq_ballistic_impact}, avec l'utilisation d'un coefficient de restitution $ \alpha $, décrit notamment dans \textcite{avrin_self-organization_2018}, pour modéliser le transfert d'énergie entre la balle et la raquette. La position de la raquette est notée $ z_p $ et la vitesse de la balle à l'instant juste avant l'impact $ k $ est donnée par $ \dot{z}_b^-(t_k) = \dot{z}_b^+(t_{k-1})-gt $.
+L'impact cinématique de la balle sur la raquette est modélisé d'une manière simplifiée par l'équation \cref{eq_ballistic_impact}, avec l'utilisation d'un coefficient de restitution $ \alpha=0.6 $, décrit notamment dans \textcite{avrin_self-organization_2018}, pour modéliser le transfert d'énergie entre la balle et la raquette. La position de la raquette est notée $ z_p $ et la vitesse de la balle à l'instant juste avant l'impact $ k $ est donnée par $ \dot{z}_b^-(t_k) = \dot{z}_b^+(t_{k-1})-gt $.
 
 \begin{equation} \label{eq_ballistic_impact}
 	\dot{z}_b^+(t_k) = \max\left(\dot{z}_p(t_k), \left((1+\alpha)\dot{z}_p(t_k)-\alpha\dot{z}_b^-(t_k)\right)\right)
 \end{equation}
 
-La simulation haptique des impacts de balle est réalisée en utilisant le système d'injection des perturbations en couples décrit en \cref{chap3_sec_method_sub_pert}. La force de l'impact est estimée en utilisant l'équation \cref{eq_ball_impact}, inspirée par les travaux de \textcite{kawazoe_dynamics_2002}, avec les indices $b$ et $p$ faisant respectivement référence à la balle et à la raquette, pour les vitesses $v$ et les masses $m$. $\hat{K}$ correspond à une raideur grossièrement estimée du couplage balle-raquette-robot-bras.
+La simulation haptique des impacts de balle est réalisée en utilisant le système d'injection des perturbations en couples décrit en \cref{chap3_sec_method_sub_pert}. La force de l'impact est estimée en utilisant l'équation \cref{eq_ball_impact}, inspirée par les travaux de \textcite{kawazoe_dynamics_2002}, avec les indices $b$ et $p$ faisant respectivement référence à la balle et à la raquette, pour les vitesses $v$ et les masses $m$. \textcolor{orange}{Les masse de la balle $m_b$ et de la raquette $m_p$, ont respectivement été fixés à \SIlist{0.058;1}{\kilogram}.} $\hat{K}$ correspond à une raideur grossièrement estimée du couplage balle-raquette-robot-bras ($\hat{K}=650$).
 
 \begin{equation} \label{eq_ball_impact}
 	f_i(k) = -(v_b(k) - v_p(k)) (1 + \alpha) \frac{\sqrt{m_b \hat{K}}}{\pi \sqrt{1 + m_b/m_p}}
@@ -360,13 +361,13 @@ On distingue alors deux sources d'erreurs pouvant donner lieu à des phénomène
 	\item l'erreur de trainage $ \dot{\vect{q}}_{\epsilon} $ provoquée par la dynamique de la boucle en vitesse articulaire du robot, et multipliée par le jacobien réel du robot $ \jacobian{q}{}{} $,
 	\item les erreurs d'estimation du jacobien $ \Delta\jacobian{q}{}{} $, qui sont multipliées par les consignes de vitesses articulaires $ \dot{\vect{q}}_d $.
 \end{enumerate}
-La deuxième source d'erreur est difficile à quantifier, puisqu'elle provient d'une erreur de modélisation. Par ailleurs, on pourrait considérer les erreurs de mesure des vitesses articulaires, qui comme l'erreur précédente, nécessite des équipements d'observation externes au robot (\textit{eg. caméra}), et un calibrage précis pour leur évaluation.
+La deuxième source d'erreur est difficile à quantifier, puisqu'elle provient d'une erreur de modélisation. Par ailleurs, on pourrait considérer les erreurs de mesure des vitesses articulaires, qui comme l'erreur précédente, nécessite des équipements d'observation externes au robot (\textit{e.g.} caméra), et un calibrage précis pour leur évaluation.
 
 %
-Les calculs théoriques de l'évaluation de la première erreur décrite montrent son influence sur l'axe $ \vec{x} $ en \cref{app_latency_error_effect}. En ayant choisi d'asservir le contrôle uniquement sur les forces en $ \vec{z} $, les forces exercées sur l'axe $ \vec{x} $ ne sont plus utilisées par le contrôle en transparence. Il devient donc impossible de replacer le robot \textit{volontairement} lors de la co-manipulation. En l'absence d'asservissement sur l'axe $ \vec{x} $, il n'est donc pas possible d'assurer l'absence de déplacement sur cet axe, une dérive est donc possible.
+Les calculs théoriques de l'évaluation de la première erreur décrite montrent son influence sur l'axe $ \vec{x} $ en \cref{app_latency_error_effect}. En ayant choisi d'asservir le contrôle uniquement sur les forces en $ \vec{z} $, les forces exercées sur l'axe $ \vec{x} $ ne sont plus utilisées par le contrôle en transparence. Il devient donc impossible de replacer le robot volontairement lors de la co-manipulation. En l'absence d'asservissement sur l'axe $ \vec{x} $, il n'est donc pas possible d'assurer l'absence de déplacement sur cet axe, une dérive est donc possible.
 
 %
-Pour remédier à cette problématique, il suffit d'ajouter un asservissement proportionnel de gain $ K_x $ sur la position en $ \vec{x} $, pour maintenir la position $ x_0 $. Cette tâche étant orthogonale à la principale - \textit{dans un cas idéal} - la transparence n'en est pas affectée. L'équation \cref{eq_Fz_endpoint} devient alors :
+Pour remédier à cette problématique, il suffit d'ajouter un asservissement proportionnel de gain $ K_x $ sur la position en $ \vec{x} $, pour maintenir la position $ x_0 $. Cette tâche étant orthogonale à la principale - dans un cas idéal - la transparence n'en est pas affectée. L'équation \cref{eq_Fz_endpoint} devient alors :
 
 \begin{equation} \label{eq_Fz_endpoint_total}
 	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \left(\begin{bmatrix} 0 & C_z & 0 \end{bmatrix} \cdot {\vect{f}_e} + \begin{bmatrix} K_x & 0 & 0 \end{bmatrix} \cdot (\vect{x}_0 - {\vect{x}})\right)
@@ -374,7 +375,7 @@ Pour remédier à cette problématique, il suffit d'ajouter un asservissement pr
 
 \subsubsection{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}} \label{chap2_sec_ctrl_vfo_subsec_cartesian_3}
 
-Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \textit{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - \textit{pour les tâches en $\vec{z}$ et en $\vec{x}$} -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On souhaite donc maintenir le robot dans une %certaine configuration, qui reflète les positions articulaires médianes 
+Afin de garder un mouvement prévisible et au maximum anthropomorphe, on cherche à éviter les phénomènes de \foreignquote{french}{retournement de coude}, qui sont peu souhaitables et peuvent par ailleurs nuire à la fluidité du mouvement. Deux degrés de liberté sont actuellement utilisés - pour les tâches en $\vec{z}$ et en $\vec{x}$ -, il est donc envisageable d'utiliser le dernier degré de liberté pour traiter cette problématique. On souhaite donc maintenir le robot dans une %certaine configuration, qui reflète les positions articulaires médianes 
 configuration articulaire médiane lors de la tâche de jonglerie. Toutefois, on ne veut pas que cette nouvelle tâche nuise à la transparence du robot. 
 
 Pour ce faire, on peut projeter cette tâche articulaire dans le noyau de la tâche de transparence en $\vec{z}$. La méthodologie détaillée de projection de tâches dans les noyaux d'autres tâches est très bien résumée dans l'article de \textcite{dietrich_overview_2015}. Ainsi on peut écrire $ \jacobian{}{1}{} $ \cref{eq_jacobian_main_task} le jacobien de la tâche principale, qui se résume en fait à la deuxième ligne du jacobien $ \jacobian{}{}{} $ (voir \cref{app_jacobian_sub_3joints}).%, et noter l'exposant $ \matr{W}+ $ pour la pseudo-inverse pondérée, définie par l'équation \cref{eq_pseudo_inverse}.
@@ -385,7 +386,7 @@ Comme défini par \textcite{dietrich_overview_2015}, le projecteur $ \matr{N}_2 
 	\vect{\tau}_2^p = \matr{N}_2^\tau(q)\vect{\tau}_2 \text{,}
 \end{equation}
 %
-avec $ \vect{\tau}_2^p \in \Re^n $ le couple de la tâche projetée qui n'interfère pas avec le couple de la tâche principale $ \vect{\tau}_1 $, et $ \matr{N}_2^\tau(q) $ défini dans l'équation \cref{eq_null_space_proj_2} :
+avec $ \vect{\tau}_2^p \in \Re^n $ le couple de la tâche secondaire projetée qui n'interfère pas avec le couple de la tâche principale $ \vect{\tau}_1 $, et $ \matr{N}_2^\tau(q) $ défini dans l'équation \cref{eq_null_space_proj_2} :
 %
 \begin{equation} \label{eq_null_space_proj_2}
 	\matr{N}_2^\tau(q) = \matr{I} - \jacobian{q}{1}{t}\left(\jacobian{q}{1}{\matr{W}+}\right)^t \text{,}
@@ -454,7 +455,7 @@ La combinaison des trois tâches offre le schéma de contrôle présenté en \cr
 %
 avec : 
 \begin{enumerate}
-	\item[$\bullet$] $ \vect{x} \in \Re^3 $ les coordonnées cartésiennes de l'effecteur dans le référentiel fixe - \textit{base du robot} -, défini par 2 translations et une rotation $ \begin{pmatrix} x & z & \theta \end{pmatrix} $, 
+	\item[$\bullet$] $ \vect{x} \in \Re^3 $ les coordonnées cartésiennes de l'effecteur dans le référentiel fixe - base du robot -, défini par 2 translations et une rotation $ \begin{pmatrix} x & z & \theta \end{pmatrix} $, 
 	\item[$\bullet$] $ \vect{f}_e \in \Re^3 $ les forces d'interactions entre l'effecteur et l'environnement, toujours dans le référentiel fixe, %- \textit{une transformation est donc nécessaire, pour sortir du référentiel du capteur} - 
 	défini par 2 forces et 1 couple, 
 	\item[$\bullet$] $ \vect{q} \in \Re^3 $ le vecteur des positions articulaires,
