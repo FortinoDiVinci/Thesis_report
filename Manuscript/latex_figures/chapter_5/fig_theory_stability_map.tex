@@ -2,7 +2,7 @@
 	\resizebox{\textwidth}{!}{
 		\centering
 		\subcaptionbox{%Marges de phase pour une raideur nominale
-			Raideur nominale ($K=196$)\label{subfig_theory_stability_map_nominal_stiffness}}
+			Raideur nominale ($K_n=196$)\label{subfig_theory_stability_map_nominal_stiffness}}
 		{
 			\begin{tikzpicture} 
 				\begin{axis}[%
@@ -35,7 +35,7 @@
 			\end{tikzpicture}
 		}
 		\subcaptionbox{%Marges de phase pour une raideur multipliée par 3
-			Raideur en cocontraction ($K=588$)\label{subfig_theory_stability_map_high_stiffness}}
+			Raideur supposée en cocontraction ($K_r=3K_n=588$)\label{subfig_theory_stability_map_high_stiffness}}
 		{
 			\begin{tikzpicture} 
 				\begin{axis}[%
@@ -98,6 +98,6 @@
 			\end{tikzpicture}
 		}
 	}
-	\caption{Reproduction théorique de la cartographie expérimentale (zone entourée en tirets noirs) utilisant les paramètres du participant 000 de la phase \cref{item_pert2}, en fonction des gains du correcteur cartésien en admittance. La palette de couleurs indique le coefficient d'amortissement $\zeta$ le plus faible des pôles du système en boucle fermée \cref{eq_close_loop_system}. La zone délimitée par des pointillés blancs est instable ($\zeta\leq0$).}
+	\caption[Reproduction théorique de la cartographie expérimentale de stabilité du robot contrôlé en admittance]{Reproduction théorique de la cartographie expérimentale (zone entourée en tirets noirs) utilisant les paramètres du participant 000 de la phase \cref{item_pert2}, en fonction des gains du correcteur cartésien en admittance. La palette de couleurs indique le coefficient d'amortissement $\zeta$ le plus faible des pôles du système en boucle fermée \cref{eq_close_loop_system}. La zone délimitée par des pointillés blancs est instable.}
 	\label{fig_theory_stability_map}
 \end{figure}

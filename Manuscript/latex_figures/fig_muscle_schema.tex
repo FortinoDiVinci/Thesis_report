@@ -3,7 +3,7 @@
 %	\resizebox{\textwidth}{!}{%
 %	\begin{minipage}[b]{.5\linewidth}
 %	\centering
-%	\subcaptionbox{Muscle \textcolor{orange}{étiré} \label{stretched_muscle}}
+%	\subcaptionbox{Muscle \textcolor{black}{étiré} \label{stretched_muscle}}
 %	{
 %	\begin{tikzpicture} [node distance = 2cm]
 %		\node[](stretched_muscle) at ($(0,0)$) {\includegraphics[width=.5\textwidth]{misc/schema_muscle_stretched.png}};
@@ -22,7 +22,7 @@
 %	}% resizebox
 	\centering
 	\resizebox{0.6\textwidth}{!}{%
-		\subcaptionbox{\scriptsize Muscle \textcolor{orange}{étiré} \label{stretched_muscle_2}}
+		\subcaptionbox{\scriptsize Muscle \textcolor{black}{étiré} \label{stretched_muscle_2}}
 		{
 			\begin{tikzpicture} [node distance = 2cm, scale=1.2]
 				\coordinate (joint) at (0,0);
@@ -35,7 +35,7 @@
 				%\draw (joint) circle (0.5cm) (c1);
 				%\draw (joint) circle (0.1cm);
 				
-				\draw[thick,black!60!white]  (top) -- (c1.north);
+				\draw[thick,black]  (top) -- (c1.north);
 				\draw[thick,black]  (bot) -- (c2.center);
 				
 				\draw[Shiraz] ($(top) + (0.14,-0.24)$) to[out=-85, in=100] ($(botMuscle) + (-0.03,0.12)$);
@@ -47,7 +47,7 @@
 			\end{tikzpicture}
 		}
 	\hspace{2cm}
-		\subcaptionbox{\scriptsize Muscle \textcolor{orange}{contracté} \label{contracted_muscle_2}}
+		\subcaptionbox{\scriptsize Muscle \textcolor{black}{contracté} \label{contracted_muscle_2}}
 		{
 			\begin{tikzpicture} [node distance = 2cm, scale=1.2]
 				\coordinate (joint) at (0,0);
@@ -61,7 +61,7 @@
 				%\draw (joint) circle (0.5cm) (c1);
 				%\draw (joint) circle (0.1cm);
 				
-				\draw[thick,black!60!white]  (top) -- (c1.north);
+				\draw[thick,black]  (top) -- (c1.north);
 				\draw[thick,black]  (bot) -- (c2.center);
 				
 				\draw[Shiraz] ($(top) + (0.14,-0.24)$) to[out=-100, in=140] ($(botMuscle) + (-0.02,0.2)$);

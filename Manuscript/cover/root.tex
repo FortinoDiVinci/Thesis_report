@@ -88,7 +88,7 @@
 
 \begin{picture}(0,0)
 \put(-142,-738){\rotatebox{90}{\Huge\textbf{T}\LARGE\textbf{HESE DE DOCTORAT}}} \\
-\put(-100,-732){\rotatebox{90}{NNT : 2020UPASA001}}
+%\put(-100,-732){\rotatebox{90}{NNT : 2020UPASA001}}
 \end{picture}
  
 %*****************************************************
@@ -136,12 +136,13 @@ Graduate School : Informatique et sciences du numérique, Référent : Faculté 
 \vspace{6mm}
 
 \fontsize{10}{12}\selectfont
-Thèse préparée dans les unités de recherche \textbf{Laboratoire des Signaux et Systèmes (Université Paris-Saclay, CentraleSupelec)} et \textbf{Complexité, Innovation, Activités Motrices et Sportives (Université Paris-Saclay)}, sous la direction de \textbf{Pedro RODRIGUEZ-AYERBE}, professeur, la co-direction de \textbf{Isabelle A. SIEGLER}, professeur, le co-encadrement de \textbf{Maria MAKAROV}, maitre de conférence
+Thèse préparée dans les unités de recherche \textbf{Laboratoire des Signaux et Systèmes (Université Paris-Saclay, CentraleSupelec)} et \textbf{Complexité, Innovation, Activités Motrices et Sportives (Université Paris-Saclay)}, sous la direction de \textbf{Pedro RODRIGUEZ-AYERBE}, professeur, la co-direction d'\textbf{Isabelle A. SIEGLER}, professeur et l'encadrement de \textbf{Maria MAKAROV}, maitre de conférence
 
 \vspace{1cm}
 
 \fontsize{12}{14}\selectfont
-\textbf{Thèse soutenue à Paris-Saclay, le xx avril 2022, par}
+\textbf{Version soumise aux rapporteurs par}
+%\textbf{Thèse soutenue à Paris-Saclay, le xx avril 2022, par}
 
 \bigskip
 \fontsize{20}{22}\selectfont
@@ -160,24 +161,22 @@ Thèse préparée dans les unités de recherche \textbf{Laboratoire des Signaux 
 \fontsize{9}{10}\selectfont
 \begin{tabular}{|p{9cm}l}
 \arrayrulecolor{Prune}
-\textbf{Prénom NOM} &   \multirow{2}{*}{Président}\\ 
-Professeur des universités, INP -- ENSEEIHT Toulouse & \\
-\textbf{Lyudmila MIHAYLOVA} &  \multirow{2}{*}{Rapporteur \& Examinatrice} \\ 
-Professor, The University of Sheffield &   \\ 
-\textbf{Kamal MEDJAHER} &  \multirow{2}{*}{Rapporteur \& Examinateur} \\ 
-Professeur des universités, École nationale d'Ingénieurs de Tarbes  &   \\ 
-\textbf{Dalil ICHALAL} &  \multirow{2}{*}{Examinateur} \\ 
-Professeur des universités, Université d'Evry Val d'Essonne   &   \\ 
-\textbf{Tarek RAISSI} &  \multirow{2}{*}{Examinateur} \\ 
-Professeur des universités, Conservatoire National des Arts et Métiers   &   \\ 
-\textbf{Hélène PIET-LAHANIER} &  \multirow{2}{*}{Directrice de thèse} \\ 
-Directrice de recherche, ONERA, Université Paris-Saclay  &   \\
-\textbf{James BRUSEY} &  \multirow{2}{*}{Co-directeur de thèse} \\ 
-Professor, Coventry University  &   \\ 
-\textbf{Karim DAHIA} &  \multirow{2}{*}{Co-encadrant} \\ 
-Ingenieur de recherche, ONERA, Université Paris-Saclay  &   \\ 
-\textbf{Nadjim HORRI} &  \multirow{2}{*}{Co-encadrant (Invité)}\\ 
-Assistant professor, Coventry University  &   \\ 
+%\textbf{Prénom NOM} &   \multirow{2}{*}{Président}\\ 
+%Professeur des universités, INP -- ENSEEIHT Toulouse & \\
+%\textbf{Lyudmila MIHAYLOVA} &  \multirow{2}{*}{Rapporteur \& Examinatrice} \\ 
+%Professor, The University of Sheffield &   \\ 
+%\textbf{Kamal MEDJAHER} &  \multirow{2}{*}{Rapporteur \& Examinateur} \\ 
+%Professeur des universités, École nationale d'Ingénieurs de Tarbes  &   \\ 
+\textbf{Serena IVALDI} &  \multirow{2}{*}{Examinatrice} \\ 
+Chargée de recherche, INRIA Nancy, Université de Lorraine   &   \\ 
+\textbf{Renaud RONSSE} &  \multirow{2}{*}{Examinateur} \\ 
+Professeur, Institute of Mechanics, Materials and Civil Engineering, Université Catholique de Louvain   &   \\ 
+\textbf{Pedro RODRIGUEZ-AYERBE} &  \multirow{2}{*}{Directeur de thèse} \\ 
+Professeur, Département d'Automatique de CentraleSupélec, Université Paris-Saclay  &   \\
+\textbf{Isabelle A. SIEGLER} &  \multirow{2}{*}{Co-directrice de thèse} \\ 
+Professeur des universités, UFR STAPS, Université Paris-Saclay  &   \\ 
+\textbf{Maria MAKAROV} &  \multirow{2}{*}{Co-encadrante} \\ 
+Maître de conférence, Département d'Automatique de CentraleSupélec, Université Paris-Saclay  &   \\ 
 
 \end{tabular} 
 
@@ -220,23 +219,19 @@ Assistant professor, Coventry University  &   \\
 \vspace{-.5cm}
 \begin{multicols}{2}
 \noindent \textbf{Résumé:}
-Les défaillances d'actionneurs ou de capteurs survenant dans un drone peuvent compromettre l'intégrité de la mission.
-La mise en œuvre de méthodes de diagnostic de fautes est alors nécessaire.
-Dans cette thèse, l'accent est mis sur l'estimation de fautes dues à des défaillances simultanées de capteurs et d'actionneurs pour un drone à voilure fixe.
-Pour faire face à certains scénarios complexes de fautes, tels que les fautes simultanées qui induisent une ambiguïté sur les mesures qui se manifeste par la multimodalité de la densité conditionnelle, un filtre particulaire régularisé de type jump-Markov (\acs{JMRPF}) et des versions améliorées de celui-ci sont présentées dans cette thèse.
 
-Cette méthode est basée sur un filtre particulaire régularisé (\acs{RPF}) qui approche la densité conditionnelle par une mixture de noyaux et sur un système de Markov à sauts (\acs{JMS}).
-La stratégie de saut utilise un petit nombre de particules --- appelées particules sentinelles --- qui permet de tester en continue l'hypothèse alternative en mode sans faute et en mode avec faute.
+Les robots sont de plus en plus amenés à interagir avec des humains ou des environnements anthropiques en vue de collaboration.
+La connaissance des propriétés visco-élastiques cartésiennes humaines durant des interactions physiques avec des environnements procure d'une part un éclairage au champ des sciences du mouvement humain, mais aussi à la robotique collaborative pour la conception de commandes innovantes bio-inspirées.
+Dans cette thèse, la focalisation est placée sur une modélisation linéaire très simple en impédance mécanique du membre supérieur, qui fait entrer en jeu les paramètres cartésien apparent en raideur, amortissement et masse. 
+Cette modélisation permet d'approcher des comportements en rejet de perturbations qui interviennent notamment lors d'interactions physiques.
 
-Les résultats numériques sont obtenus en utilisant un modèle dynamique linéaire puis non linéaire de la dynamique longitudinale d’un drone à voilure fixe.
-Les performances du \acs{JMRPF} sont comparées aux performances des filtres de Kalman à modèles multiples interactifs (\acs{IMM-KF}) et du \acs{RPF}.
-Les performances du \acs{JMRPF} montrent une nette amélioration de terme de précision de l’estimation des fautes capteurs et actionneurs et des paramètres cinématiques et en termes de robustesse et de vitesse de convergence par rapport aux autres filtres.
-L'amélioration des performances par rapport aux autres filtres est plus marquée lorsque l'amplitude des fautes augmente au cours du temps.
+Une expérience a été mise en œuvre avec un robot articulé piloté en admittance cartésienne, pour permettre des estimations d'impédance mécanique du bras de participants pendant une tâche de référence permettant de générer des mouvements rythmiques, avec des retours haptiques.
+Une méthode permettant l'estimation des paramètres du modèle en impédance a été proposée. 
+Cette méthode qui repose sur des interpolations de splines et des optimisations de sinusoïdes permet l'estimation des trajectoires virtuelles en position et force du bras, à la suite de faibles perturbations ne gênant pas la réalisation de la tâche.
 
-Une version améliorée du \acs{JMRPF}, appelée filtre particulaire régularisé robuste à sauts est également présentée et permet d'estimer rapidement et précisément les fautes sans connaissance a priori de la dynamique des fautes.
-Enfin, une nouvelle approche pour calculer une matrice de probabilité de transition adaptative est présentée en calculant les probabilités de fausse alarme et de non-détection à l'aide de l’approximation du point-selle.
+Une trentaine de participants ont pris part aux expériences proposées pour permettre des estimations significatives de variations des paramètres visco-élastiques apparents et mieux comprendre leurs implications dans la réalisation d'une tâche en interaction avec un robot. 
+Le compromis stabilité-transparence du couplage du robot avec un environnement en impédance a finalement été analysé pour proposer une amélioration des réglages du contrôle en admittance cartésienne.
 
-Les algorithmes de navigation proposés permettent à un drone d'atteindre son objectif de suivi de trajectoire de manière autonome, avec une sécurité et une précision accrues.
 \end{multicols}
 
 \end{mdframed}

@@ -1,0 +1,174 @@
+\begin{figure}[!htb] 
+	\centering
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Réglage expérimental \label{subfig_trajectories_admittance_tuning_pos_a}}
+		{
+			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_pos_a}
+			\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					width=.31\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					xlabel={temps (\SI{}{\second})},
+					ylabel={Position (\SI{}{\centi\meter})},
+					axis x line = bottom,
+					axis y line = left, 
+					%xmin=70,xmax=100,
+					]
+					%
+					\addplot [
+					color=Orient,
+					%solid,
+					smooth,
+					]
+					table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_nom}*10] {misc/chap_5/trajectories_admit_tuning.csv};
+					%			
+				\end{axis}
+				%
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$K_i$ max \label{subfig_trajectories_admittance_tuning_pos_b}}
+		{
+			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_pos_b}
+			\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					width=.31\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					xlabel={temps (\SI{}{\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					%xmin=70,xmax=100,
+					]
+					%
+					\addplot [
+					color=Orient,
+					%solid,
+					smooth,
+					]
+					table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_ki}*10] {misc/chap_5/trajectories_admit_tuning.csv};
+					%			
+				\end{axis}
+				%
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$K_p$ max \label{subfig_trajectories_admittance_tuning_pos_c}}
+		{
+		\tikzsetnextfilename{subfig_trajectories_admittance_tuning_pos_c}
+		\begin{tikzpicture}
+			\centering
+			%				
+			\begin{axis}[%
+				width=.31\linewidth,
+				height=.25\linewidth,
+				scale only axis,    
+				xlabel={temps (\SI{}{\second})},
+				axis x line = bottom,
+				axis y line = left, 
+				%xmin=70,xmax=100,
+				]
+				%
+				\addplot [
+				color=Orient,
+				%solid,
+				smooth,
+				]
+				table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_kp}*10] {misc/chap_5/trajectories_admit_tuning.csv};
+				%			
+			\end{axis}
+			%
+		\end{tikzpicture}
+		}
+	}	
+	
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Réglage expérimental \label{subfig_trajectories_admittance_tuning_for_a}}
+		{
+			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_for_a}
+			\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					width=.31\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					xlabel={temps (\SI{}{\second})},
+					ylabel={Force (\SI{}{\newton})},
+					axis x line = bottom,
+					axis y line = left, 
+					%xmin=70,xmax=100,
+					]
+					%
+					\addplot [
+					color=Shiraz,
+					%solid,
+					smooth,
+					]
+					table [col sep=comma, x expr=\coordindex/1000, y=f_nom] {misc/chap_5/trajectories_admit_tuning.csv};
+					%			
+				\end{axis}
+				%
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$K_i$ max\label{subfig_trajectories_admittance_tuning_for_b}}
+		{
+			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_for_b}
+			\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					width=.31\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					xlabel={temps (\SI{}{\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					%xmin=70,xmax=100,
+					]
+					%
+					\addplot [
+					color=Shiraz,
+					%solid,
+					smooth,
+					]
+					table [col sep=comma, x expr=\coordindex/1000, y=f_ki] {misc/chap_5/trajectories_admit_tuning.csv};
+					%			
+				\end{axis}
+				%
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$K_p$ max\label{subfig_trajectories_admittance_tuning_for_c}}
+		{
+			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_for_c}
+			\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					width=.31\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					xlabel={temps (\SI{}{\second})},
+					axis x line = bottom,
+					axis y line = left, 
+					%xmin=70,xmax=100,
+					]
+					%
+					\addplot [
+					color=Shiraz,
+					%solid,
+					smooth,
+					]
+					table [col sep=comma, x expr=\coordindex/1000, y=f_kp] {misc/chap_5/trajectories_admit_tuning.csv};
+					%			
+				\end{axis}
+				%
+			\end{tikzpicture}
+		}
+	}
+	\caption[Comparaison de trajectoires en fonction du réglage du correcteur en admittance]{Trajectoires pseudo-sinusoïdales en position et force en fonction des réglages des gains du correcteur en admittance cartésienne.}
+	\label{fig_trajectories_admittance_tuning}
+\end{figure}

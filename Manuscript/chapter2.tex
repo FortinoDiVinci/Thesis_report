@@ -1,8 +1,8 @@
-\chapter{Structure de commande pour les interactions physiques humain-robot} \label{chap2}%[Commandes pour les interactions phy. humain-robot]
+\chapter{Structures de commande pour les interactions physiques humain-robot} \label{chap2}%[Commandes pour les interactions phy. humain-robot]
 \chaptermark{Commandes pour les interactions phy. humain-robot}
 \minitoc
 
-\textcolor{orange}{Ce chapitre présente une courte revue de la littérature concernant les différentes structures de commandes interactives reposant sur l'idée de contrôle en impédance, c'est-à-dire cherchant à imposer un comportement dynamique visco-élastique au robot. Le contrôle proposé dans ces travaux est ensuite détaillé.}
+\textcolor{black}{Ce chapitre présente une courte revue de la littérature concernant les différentes structures de commandes interactives reposant sur l'idée de contrôle en impédance, c'est-à-dire cherchant à imposer un comportement dynamique visco-élastique au robot. Le contrôle proposé dans ces travaux est ensuite détaillé.}
 
 \section[Les commandes collaboratives]{Les commandes collaboratives lors d'interactions physiques humain-robot} \label{chap2_sec_cmd_collab}
 
@@ -106,13 +106,13 @@ Il est toutefois important de noter que dans le cas des robots flexibles, un con
 Dans des travaux plus récents, \textcite{keppler_elastic_2018, keppler_elastic_2018b} %, mengacci_elastic_2021} 
 expliquent que lorsque des robots conçus avec des raideurs ou impédances articulaires sont contrôlés en impédance, assigner un comportement virtuel trop éloigné des dynamiques initiales a de grande chance d'échouer en pratique. En effet, bien que l'idée semble correcte en théorie, les erreurs de modélisation, la bande passante des actionneurs, les limitations d'amplitudes, etc \parencite{keppler_elastic_2018} viennent borner le champ des possibles pour les dynamiques virtuelles souhaitées. 
 
-Une autre approche, nommée préservation des structures élastiques (PSE)\footnote{Elastic structure preserving (ESP) \parencite{keppler_elastic_2018}} consiste alors à modifier au minimum les dynamiques originelles, et notamment les raideurs non linéaires, pour viser un comportement cartésien amorti ou même en raideur amortie (PSEi)\footnote{Elastic structure preserving impedance (ESPi) \parencite{keppler_elastic_2018b}} comme montré sur la \cref{fig_schema_ESP_keppler}.
+Une autre approche, nommée préservation des structures élastiques (ESP)\footnote{\foreignquote{french}{\textit{Elastic structure preserving}} \parencite{keppler_elastic_2018}} consiste alors à modifier au minimum les dynamiques originelles, et notamment les raideurs non linéaires, pour viser un comportement cartésien amorti ou même en raideur amortie (ESPi)\footnote{\foreignquote{french}{\textit{Elastic structure preserving impedance}} \parencite{keppler_elastic_2018b}} comme montré sur la \cref{fig_schema_ESP_keppler}.
 
 %%%%
 \begin{figure}[h]
 	\centering
 	\includegraphics[height=0.65\textwidth]{misc/robotic_figure_ESPI_keppler.png}
-	\caption{(a) Schéma d'une articulation avec une flexibilité en raideur. (b) Contrôle PSEi. (c) Contrôle PSE. \parencite{keppler_elastic_2018b}}
+	\caption[Schéma de contrôle en impédance pour des articulations flexibles \parencite{keppler_elastic_2018b}]{(a) Schéma d'une articulation avec une flexibilité en raideur. (b) Contrôle ESPi. (c) Contrôle ESP. \parencite{keppler_elastic_2018b}}
 	\label{fig_schema_ESP_keppler}
 \end{figure}
 
@@ -135,7 +135,7 @@ L'appellation de contrôle en admittance a été introduite par \textcite{newman
 
 Le contrôle d'un robot en admittance est particulièrement adapté lorsque les interactions entre un utilisateur humain et un robot sont localisées au niveau de l'effecteur final, et que l'objectif principal est de manipuler le robot pour qu'il soit guidé par les mouvements de l'utilisateur (bien que ces conditions ne soient pas nécessaires). Ce type de contrôle peut s'avérer particulièrement utile lorsque le robot est amené à interagir avec des environnements souples \parencite{ott_unified_2010}. On peut alors utiliser un ou plusieurs capteurs de force pour mesurer les forces d'interaction $\vect{f}_e$ qui sont utilisées pour générer des consignes de vitesse. Il est intéressant de noter que certains travaux récents proposent des contrôles en admittance sans l'utilisation de capteur de force, en utilisant des approches par observateurs pour estimer les couples articulaires par exemple \parencite{yang_force_2021}.
 
-On retrouve ainsi ce type de contrôle pour certaines tâches de téléopération où l'on cherche à reproduire l'impédance du bras humain obtenue lors de la manipulation d'un robot esclave\footnote{\textcolor{orange}{On pourra parler de télé-impédance \parencite{ajoudani_tele-impedance_2012}.}} \textcolor{orange}{\parencite{ajoudani_tele-impedance_2012,laghi_unifying_2020}}, et aussi lorsqu'on cherche à transmettre les sensations tactiles du robot maître lorsqu'il entre en contact avec son environnement. On parle alors de contrôle en admittance bilatéral \parencite{hashtrudi-zaad_analysis_2001, tufail_impedance_2014}. On retrouve aussi ce type de contrôle pour les exosquelettes \parencite{huang_admittance_2017}, où l'on souhaite que le robot soit le plus transparent possible afin de ne pas gêner le mouvement humain, mais aussi pour guider le mouvement dans des applications de réhabilitation \parencite{ozkul_design_2011}. Le contrôle en admittance peut être couplé en alternance avec des modes plus raides pour permettre l'injection de perturbations pour la qualification de propriétés des ensembles SNC et CMS, notamment pour des cas pathologiques \parencite{stienen_act-4d_2011}.
+On retrouve ainsi ce type de contrôle pour certaines tâches de téléopération où l'on cherche à reproduire l'impédance du bras humain obtenue lors de la manipulation d'un robot esclave\footnote{\textcolor{black}{On pourra parler de télé-impédance \parencite{ajoudani_tele-impedance_2012}.}} \textcolor{black}{\parencite{ajoudani_tele-impedance_2012,laghi_unifying_2020}}, et aussi lorsqu'on cherche à transmettre les sensations tactiles du robot maître lorsqu'il entre en contact avec son environnement. On parle alors de contrôle en admittance bilatéral \parencite{hashtrudi-zaad_analysis_2001, tufail_impedance_2014}. On retrouve aussi ce type de contrôle pour les exosquelettes \parencite{huang_admittance_2017}, où l'on souhaite que le robot soit le plus transparent possible afin de ne pas gêner le mouvement humain, mais aussi pour guider le mouvement dans des applications de réhabilitation \parencite{ozkul_design_2011}. Le contrôle en admittance peut être couplé en alternance avec des modes plus raides pour permettre l'injection de perturbations pour la qualification de propriétés des ensembles SNC et CMS, notamment pour des cas pathologiques \parencite{stienen_act-4d_2011}.
 
 \textcite{lamy_achieving_2009} s'est intéressé à ce type de contrôle collaboratif en étudiant notamment les dynamiques apparentes d'un robot pendant un contrôle en admittance, en cherchant à annuler les phénomènes liés à la vitesse comme les frottements visqueux et secs, et en minimisant l'inertie apparente, tout en assurant la stabilité des interactions.
 
@@ -145,7 +145,7 @@ Dans le cas du contrôle en admittance articulaire d'abord décrit par \textcite
  
 \input{latex_figures/fig_ctrl_scheme_lamy}
 
-Le schéma de la \cref{fig_lamy_control} décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ la matrice jacobienne du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. \textcolor{orange}{On peut passer des forces aux couples articulaires en utilisant la matrice jacobienne \parencite{khalil_modeling_2002}, comme montré en équation \cref{eq_torque_to_force_jacobian}.} En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, représentés par la matrice diagonale $ \matr{K}_v \in \Re^n $,  permettent de compenser les effets dûs aux frottements secs \parencite{newman_stable_1994}. La matrice diagonale $ \matr{K}_i \in \Re^n $ contient les gains des correcteurs en admittance de la boucle en couples d'interaction, permettant de réduire l'inertie apparente du robot \parencite[Chapitre~3]{lamy_conception_2011}.
+Le schéma de la \cref{fig_lamy_control} décrit une boucle de contrôle au niveau articulaire avec une commande en vitesse du robot. On distingue $Z_{env}$, qui représente l'impédance variable non modélisée d'un environnement en interaction physique avec le robot, $\jacobian{}{}{}$ la matrice jacobienne du robot, $\vect{f}_e$ les forces d'interactions mesurées par le capteur, exprimées dans la même base que le robot et $\vect{v}_e$ les vitesses d'interactions générées par le robot. \textcolor{black}{On peut passer des forces aux couples articulaires en utilisant la matrice jacobienne \parencite{khalil_modeling_2002}, comme montré en équation \cref{eq_torque_to_force_jacobian}.} En nommant $ n $, le nombre d'articulations actionnées du robot, les $ n $ correcteurs proportionnels de la boucle interne en vitesse, représentés par la matrice diagonale $ \matr{K}_v \in \Re^n $,  permettent de compenser les effets dûs aux frottements secs \parencite{newman_stable_1994}. La matrice diagonale $ \matr{K}_i \in \Re^n $ contient les gains des correcteurs en admittance de la boucle en couples d'interaction, permettant de réduire l'inertie apparente du robot \parencite[Chapitre~3]{lamy_conception_2011}.
 
 \begin{equation} \label{eq_torque_to_force_jacobian}
 	\vect{\tau}_e = \jacobian{\vect{q}}{}{t} \vect{f}_e
@@ -164,10 +164,10 @@ La réduction apparente de l'inertie est limitée du fait de la présence de fle
 
 \paragraph{Variation d'impédance virtuelle}
 
-\textcolor{orange}{Afin d'améliorer l'expérience des utilisateurs lors de manipulations de robot pour des tâches collaboratives, \textcite{ficuciello_variable_2015} proposent une modulation virtuelle des paramètres en impédance. Plus particulièrement, les auteurs proposent de faire varier l'amortissement cartésien en notant que lors de mouvements rapides, un amortissement faible est souhaitable, alors que lors des mouvements lents et précis, c'est l'inverse. La masse virtuelle du contrôle en impédance est modifiée en fonction des variations d'amortissement pour assurer la stabilité, qui a été évaluée expérimentalement. %Pour arriver à maintenir un comportement stable, la région de stabilité dans l'espace des paramètres a été évaluée expérimentalement sur une plage prédéfinie des amortissements. 
+\textcolor{black}{Afin d'améliorer l'expérience des utilisateurs lors de manipulations de robot pour des tâches collaboratives, \textcite{ficuciello_variable_2015} proposent une modulation virtuelle des paramètres en impédance. Plus particulièrement, les auteurs proposent de faire varier l'amortissement cartésien en notant que lors de mouvements rapides, un amortissement faible est souhaitable, alors que lors des mouvements lents et précis, c'est l'inverse. La masse virtuelle du contrôle en impédance est modifiée en fonction des variations d'amortissement pour assurer la stabilité, qui a été évaluée expérimentalement. %Pour arriver à maintenir un comportement stable, la région de stabilité dans l'espace des paramètres a été évaluée expérimentalement sur une plage prédéfinie des amortissements. 
 Les auteurs ont ensuite comparé empiriquement la méthode de contrôle en impédance cartésienne variable avec deux autres contrôles en impédance à gain constant, et ont montré que le meilleur compromis de précision et vitesse d'exécution était obtenu avec la méthode variable.}
 
-\textcolor{orange}{On trouve par ailleurs d'autres méthodes de variation d'impédance cartésienne, notamment sur la raideur. Ces méthodes sont conçues pour essayer d'améliorer l'expérience des participants lors de la manipulation d'un robot. Ainsi, \textcite{gopinathan_user_2017} utilisent une modulation adaptative de la raideur cartésienne en utilisant les mesures des forces d'interactions après une calibrage personnalisé pour chaque participant. \textcite{peternel_robot_2018} proposent quand à eux d'adapter la raideur du contrôle en impédance en fonction d'une estimation de la raideur des participants, qui repose sur des mesures de l'activité musculaire (EMG), ainsi que sur un index de fatigue. \textcite{roveda_model-based_2020} utilisent une commande prédictive et de l'apprentissage renforcé pour moduler la raideur dans le but de minimiser les forces d'interaction.}
+\textcolor{black}{On trouve par ailleurs d'autres méthodes de variation d'impédance cartésienne, notamment sur la raideur. Ces méthodes sont conçues pour essayer d'améliorer l'expérience des participants lors de la manipulation d'un robot. Ainsi, \textcite{gopinathan_user_2017} utilisent une modulation adaptative de la raideur cartésienne en utilisant les mesures des forces d'interactions après une calibrage personnalisé pour chaque participant. \textcite{peternel_robot_2018} proposent quand à eux d'adapter la raideur du contrôle en impédance en fonction d'une estimation de la raideur des participants, qui repose sur des mesures de l'activité musculaire (EMG), ainsi que sur un index de fatigue. \textcite{roveda_model-based_2020} utilisent une commande prédictive et de l'apprentissage renforcé pour moduler la raideur dans le but de minimiser les forces d'interaction.}
 
 \paragraph{Actionneurs à impédance variable (AIV)}
 
@@ -185,7 +185,7 @@ Il est important de souligner, comme rappelé par \textcite{vanderborght_variabl
 
 \begin{figure}[h]
 	\includegraphics[width=\linewidth]{misc/variable_actuator.png}
-	\caption{(a) MACCEPA à deux degrés de liberté et une raideur variable et (b) MACCEPA complet avec deux degrés de liberté et deux raideurs variables indépendantes \parencite{weckx_two-degree_2014}. On peut facilement distinguer les moteurs gérant la position de ceux modulant la raideur.}
+	\caption[Exemples d'actionneurs à impédance variable]{(a) MACCEPA à deux degrés de liberté et une raideur variable et (b) MACCEPA complet avec deux degrés de liberté et deux raideurs variables indépendantes \parencite{weckx_two-degree_2014}. On peut facilement distinguer les moteurs gérant la position de ceux modulant la raideur.}
 	\label{fig_variable_stiffness_actuator}
 \end{figure}
 
@@ -302,9 +302,9 @@ Dans le cadre de l'expérience devant être mise en place (\cref{chap4}), un uti
 
 \subsection{Contrôle cartésien en admittance} \label{chap2_sec_ctrl_vfo_subsec_cartesian}
 
-\textcolor{orange}{Le contrôle proposé est adapté à la tâche de jonglerie étudiée, mais peut être appliqué à d'autres tâches similaires ayant des caractéristiques proches. La tâche de jonglerie est donc présentée dans un premier temps, avant de décrire le contrôle en admittance mis en place.}
+\textcolor{black}{Le contrôle proposé est adapté à la tâche de jonglerie étudiée, mais peut être appliqué à d'autres tâches similaires ayant des caractéristiques proches. La tâche de jonglerie est donc présentée dans un premier temps, avant de décrire le contrôle en admittance mis en place.}
 
-\textcolor{red}{[La tâche de jonglerie est finalement présentée ici !]}
+%\textcolor{red}{[La tâche de jonglerie est finalement présentée ici !]}
 
 \subsubsection{Tâche de jonglerie} \label{chap2_sec_ctrl_vfo_subsec_cartesian_0}
 
@@ -326,7 +326,7 @@ L'impact cinématique de la balle sur la raquette est modélisé d'une manière 
 	\dot{z}_b^+(t_k) = \max\left(\dot{z}_p(t_k), \left((1+\alpha)\dot{z}_p(t_k)-\alpha\dot{z}_b^-(t_k)\right)\right)
 \end{equation}
 
-La simulation haptique des impacts de balle est réalisée en utilisant le système d'injection des perturbations en couples décrit en \cref{chap3_sec_method_sub_pert}. La force de l'impact est estimée en utilisant l'équation \cref{eq_ball_impact}, inspirée par les travaux de \textcite{kawazoe_dynamics_2002}, avec les indices $b$ et $p$ faisant respectivement référence à la balle et à la raquette, pour les vitesses $v$ et les masses $m$. \textcolor{orange}{Les masse de la balle $m_b$ et de la raquette $m_p$, ont respectivement été fixés à \SIlist{0.058;1}{\kilogram}.} $\hat{K}$ correspond à une raideur grossièrement estimée du couplage balle-raquette-robot-bras ($\hat{K}=650$).
+La simulation haptique des impacts de balle est réalisée en utilisant le système d'injection des perturbations en couples décrit en \cref{chap3_sec_method_sub_pert}. La force de l'impact est estimée en utilisant l'équation \cref{eq_ball_impact}, inspirée par les travaux de \textcite{kawazoe_dynamics_2002}, avec les indices $b$ et $p$ faisant respectivement référence à la balle et à la raquette, pour les vitesses $v$ et les masses $m$. \textcolor{black}{Les masse de la balle $m_b$ et de la raquette $m_p$, ont respectivement été fixés à \SIlist{0.058;1}{\kilogram}.} $\hat{K}$ correspond à une raideur grossièrement estimée du couplage balle-raquette-robot-bras ($\hat{K}=650$).
 
 \begin{equation} \label{eq_ball_impact}
 	f_i(k) = -(v_b(k) - v_p(k)) (1 + \alpha) \frac{\sqrt{m_b \hat{K}}}{\pi \sqrt{1 + m_b/m_p}}
@@ -339,7 +339,11 @@ La tâche étudiée étant limitée dans un espace de travail cartésien, il est
 L'objectif étant de minimiser les dynamiques intrinsèques du robot, pour une tâche le long de l'axe $ \vect{z} $, un contrôle cartésien en admittance utilisant les forces d'interactions $\vect{f}_e$ est proposé (\cref{fig_comanipulation_ctrl}), fortement inspiré par la méthodologie décrite en \cref{chap2_sec_cmd_collab_subsec_cmd_imp_2} au niveau articulaire. Ainsi, on retrouve un correcteur $ C_z $ proportionnel-intégral de gains $ K_p \in \Re $ et $ K_i \in \Re $, à la différence qu'il s'agit cette fois d'un correcteur ne prenant qu'une seule entrée, et ne générant qu'une seule sortie (SISO, \textit{single-input, single-output}). Le correcteur prend en entrée la composante en $ \vect{z} $ ($ f_z $) des forces d'interactions $ f_e $, et génère en sortie, une consigne cartésienne en vitesse pour l'effecteur du robot $ \dot{z}_d $. Cette consigne en vitesse peut être passée au niveau articulaire en utilisant l'estimé du jacobien inverse $ \jacobianHat{q}{}{-1} $ comme montré par l'équation \cref{eq_Fz_endpoint}.
 %
 \begin{equation} \label{eq_Fz_endpoint}
-	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \begin{bmatrix} 0 & \left(K_p + \frac{K_i}{s}\right)f_z & 0 \end{bmatrix}^t
+	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \begin{bmatrix} 0 & h_{C_z}(f_z) & 0 \end{bmatrix}^t
+\end{equation}
+
+\begin{equation} 
+	\Laplace(h_{C_z}(f_z))= C_z(s) f_z =\left(K_p + \frac{K_i}{s}\right)f_z
 \end{equation}
 
 Si l'on considère un robot avec 3 articulations actionnées, opérant dans le plan $ \begin{matrix}( \vec{x} & \vec{z} )\end{matrix} $, avec les degrés de liberté $ \begin{matrix}( \vec{x} & \vec{z} & \vec{\theta} )\end{matrix} $, hors de toutes configurations singulières, alors le jacobien $\jacobian{}{}{} \in \Re^{3\times3}$ est défini et inversible. Son expression est donnée en \cref{app_jacobian_sub_3joints}.
@@ -349,11 +353,11 @@ Si l'on considère un robot avec 3 articulations actionnées, opérant dans le p
 Comme expliqué en début de \cref{chap2_sec_ctrl_vfo_subsec_cartesian}, un contrôle cartésien permet d'annuler les effets de couplages théoriques dans le cas d'un contrôle idéal. Toutefois, si l'on considère l'erreur cartésienne de l'asservissement en vitesse $ \dot{\vect{X}}_\epsilon = \dot{\vect{X}}_d - \dot{\vect{X}} $, avec $\jacobian{}{}{}$ le jacobien réel du robot et $\jacobianHat{}{}{}$ le jacobien estimé, alors l'équation \cref{eq_Fz_endpoint_coupling} décrit les phénomènes induits :
 %
 \begin{equation} \label{eq_Fz_endpoint_coupling}
-\begin{split}
-\dot{\vect{X}}_\epsilon &= \jacobianHat{q}{}{}\dot{\vect{q}}_d - \jacobian{q}{}{}\dot{\vect{q}} \\
-\dot{\vect{X}}_\epsilon &= \jacobian{q}{}{}(\dot{\vect{q}}_d - \dot{\vect{q}}) + \jacobianHat{q}{}{}\dot{\vect{q}}_d - \jacobian{q}{}{}\dot{\vect{q}}_d \\
-\dot{\vect{X}}_\epsilon &= \jacobian{q}{}{}\dot{\vect{q}}_{\epsilon} + \Delta\jacobian{q}{}{}\dot{\vect{q}}_d
-\end{split}
+	\begin{split}
+		\dot{\vect{X}}_\epsilon &= \jacobianHat{q}{}{}\dot{\vect{q}}_d - \jacobian{q}{}{}\dot{\vect{q}} \\
+		\dot{\vect{X}}_\epsilon &= \jacobian{q}{}{}(\dot{\vect{q}}_d - \dot{\vect{q}}) + \jacobianHat{q}{}{}\dot{\vect{q}}_d - \jacobian{q}{}{}\dot{\vect{q}}_d \\
+		\dot{\vect{X}}_\epsilon &= \jacobian{q}{}{}\dot{\vect{q}}_{\epsilon} + \Delta\jacobian{q}{}{}\dot{\vect{q}}_d
+	\end{split}
 \end{equation}
 
 On distingue alors deux sources d'erreurs pouvant donner lieu à des phénomènes de couplage : 
@@ -370,7 +374,7 @@ Les calculs théoriques de l'évaluation de la première erreur décrite montren
 Pour remédier à cette problématique, il suffit d'ajouter un asservissement proportionnel de gain $ K_x $ sur la position en $ \vec{x} $, pour maintenir la position $ x_0 $. Cette tâche étant orthogonale à la principale - dans un cas idéal - la transparence n'en est pas affectée. L'équation \cref{eq_Fz_endpoint} devient alors :
 
 \begin{equation} \label{eq_Fz_endpoint_total}
-	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \left(\begin{bmatrix} 0 & C_z & 0 \end{bmatrix} \cdot {\vect{f}_e} + \begin{bmatrix} K_x & 0 & 0 \end{bmatrix} \cdot (\vect{x}_0 - {\vect{x}})\right)
+	\dot{\vect{q}}_d = \jacobianHat{q}{}{-1} \left(\begin{bmatrix} 0 & h_{C_z}(f_z) & 0 \end{bmatrix} + \begin{bmatrix} K_x & 0 & 0 \end{bmatrix} \cdot (\vect{x}_0 - {\vect{x}})\right)
 \end{equation}
 
 \subsubsection{Boucle de contrôle secondaire autour de la configuration q\textsubscript{0}} \label{chap2_sec_ctrl_vfo_subsec_cartesian_3}
@@ -488,7 +492,7 @@ Des exemples théoriques des comportements décrits de la réponse en boucle fer
 
 %\textcolor{red}{à travers le comportement en boucle fermée en effecteur, si. Dire plutôt que dans cette première approche le parti a été pris de se concentrer sur le ressenti empirique, et que l'on s'intéressera à l'analyse théorique dans le chapitre (chapitre stabilité).} 
 %La transparence étant difficilement qualifiable, puisqu'elle repose en partie sur le ressenti de l'utilisateur, qui peut être subjectif, l'avantage d'un réglage expérimental est de pouvoir prendre en compte ce ressenti (qui peut évidement être biaisé). 
-\textcolor{orange}{Dans cette première approche, le choix a été fait de se concentrer sur le ressenti empirique d'un utilisateur, une seconde approche plus théorique est abordée dans le \cref{chap5}.} Le couple de paramètres du correcteur est donc choisi tel que le comportement soit stable et jugé le plus agréable possible lors de la première condition \cref{eq_admittance_ctrl_gains}.
+\textcolor{black}{Dans cette première approche, le choix a été fait de se concentrer sur le ressenti empirique d'un utilisateur, une seconde approche plus théorique est abordée dans le \cref{chap5}.} Le couple de paramètres du correcteur est donc choisi tel que le comportement soit stable et jugé le plus agréable possible lors de la première condition \cref{eq_admittance_ctrl_gains}.
 
 \begin{equation} \label{eq_admittance_ctrl_gains}
 	(K_p, K_i) = (0.015, 0.08)

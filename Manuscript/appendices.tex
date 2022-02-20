@@ -73,7 +73,7 @@
 	\chapter{Représentation elliptique de l'impédance} \label{app_imp_graph}
 	D'abord introduite par \textcite{mussa-ivaldi_neural_1985} pour la raideur puis étendue à l'ensemble des paramètres dynamiques en impédance par \textcite{dolan_dynamic_1993}, les ellipsoïdes permettent une représentation graphique facilement lisible des forces de restitution dans le cadre de tâches planaires, pour des déplacements induits sur un cercle unitaire.
 	
-	Pour ce tracé, la matrice d'impédance doit être séparée en deux matrices symétrique $Z_s$ (donnée en équation \cref{eq_ellisp_2d}, pour $Z_s\in \Re^{2\times2}$) et antisymétrique, seuls les composants de la matrice symétrique sont représentés. Les axes de l'ellipsoïde sont déterminés par les valeurs propres \textcolor{orange}{$\lambda_i$ de cette dernière matrice, dont la formule est donnée en \cref{eq_ellisp_eigen_values} pour le cas bi-dimensionnel et l'orientation est obtenue grâce à la formule \cref{eq_ellisp_orient}.}
+	Pour ce tracé, la matrice d'impédance doit être séparée en deux matrices symétrique $Z_s$ (donnée en équation \cref{eq_ellisp_2d}, pour $Z_s\in \Re^{2\times2}$) et antisymétrique, seuls les composants de la matrice symétrique sont représentés. Les axes de l'ellipsoïde sont déterminés par les valeurs propres \textcolor{black}{$\lambda_i$ de cette dernière matrice, dont la formule est donnée en \cref{eq_ellisp_eigen_values} pour le cas bi-dimensionnel et l'orientation est obtenue grâce à la formule \cref{eq_ellisp_orient}.}
 	
 	\tikzexternalenable
 	\input{latex_figures/fig_ellipse_impedance}
@@ -632,7 +632,7 @@
 		\includegraphics[width=.45\linewidth]{misc/youBot_photos.PNG}
 		%\hspace{5mm}
 		\includegraphics[width=.53\linewidth]{misc/youBot_reach.png}
-		\caption{YouBot}
+		\caption[]{YouBot}
 		\label{fig_youbot_picture}
 	\end{figure}
 	
@@ -656,7 +656,7 @@
 		\includegraphics[width=.3\linewidth]{misc/ati_mini45_picture.jpg}
 		%\hspace{5mm}
 		\includegraphics[width=.3\linewidth]{misc/ati_mini45_drawing.png}
-		\caption{ATI Mini45}
+		\caption[]{ATI Mini45}
 		\label{fig_ATI_Mini45_picture}
 	\end{figure}
 	
@@ -731,7 +731,7 @@
 	\begin{figure}
 		\centering
 		\includegraphics[width=.4\linewidth]{misc/v120trioTripod.png}
-		\caption{V120:Trio}
+		\caption[]{V120:Trio}
 		\label{fig_optitrack_v120}
 	\end{figure}
 	
@@ -920,7 +920,7 @@
 
 	Les moustaches sont obtenues en prenant une marge de 1.5 fois l'écart interquartile à partir des premiers et troisième quartiles, ce qui permet lors d'une distribution normale, d'assurer que plus de \SI{99}{\percent} des données sont à l'intérieurs des moustaches.
 	
-	\textcolor{orange}{Lorsqu'une ANOVA à mesure répétée est conduite, les résultats sont présentés succinctement en précisant le résultat du test F (rapport des variances entre et à l'intérieur des groupes), avec les degrés de liberté du facteur étudié et des résidus entre parenthèses. La probabilité $p$ de validation de l'hypothèse nulle est ensuite indiquée, avec l'effet de taille $\eta^2$.}
+	\textcolor{black}{Lorsqu'une ANOVA à mesure répétée est conduite, les résultats sont présentés succinctement en précisant le résultat du test F (rapport des variances entre et à l'intérieur des groupes), avec les degrés de liberté du facteur étudié et des résidus entre parenthèses. La probabilité $p$ de validation de l'hypothèse nulle est ensuite indiquée, avec l'effet de taille $\eta^2$.}
 	
 	%%%%%%%
 	% APP 11
@@ -1575,7 +1575,8 @@
 	%%%%%%%
 	\chapter{Paramètres du modèle dynamique du robot} \label{app_dynamic_param}
 	
-	Avec la représentation des paramètres inertielles regroupés décrite par \textcite[Chapitre~9, (9.53)]{khalil_modeling_2002}, on peut exprimer les paramètres dynamiques du robot décrit en \cref{app_apparatus_sec_robot} avec neuf paramètres seulement pour le cas où la première et dernière articulation sont immobilisées par un contrôle actif en position. Il faut ajouter à ces paramètres inertiels les coefficients de frictions visqueux et statiques, ce qui porte le total des paramètres nécessaires pour le modèle dynamique du robot à quinze.
+	Avec la représentation des paramètres inertielles regroupés décrite par \textcite[Chapitre~9, (9.53)]{khalil_modeling_2002}, on peut exprimer les paramètres dynamiques du robot décrit en \cref{app_apparatus_sec_robot}, et dont le modèle géométrique directe est détaillé en \cref{app_direct_kinem_sub_3}, avec neuf paramètres seulement pour le cas où la première et dernière articulation sont immobilisées par un contrôle actif en position.  On retrouve ainsi les moments d'inertie autour des axes $\vec{z}$ et $\vec{x}$ pour les trois articulations, ainsi que l'inertie des actionneurs.
+	Il faut ajouter à ces paramètres inertiels les coefficients de frictions visqueux et statiques, ce qui porte le total des paramètres nécessaires pour le modèle dynamique du robot à quinze.
 	
 	\begin{equation}
 		\begin{cases}

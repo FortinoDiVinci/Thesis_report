@@ -1,11 +1,11 @@
 \chapter{Estimation d’impédance mécanique humaine} \label{chap3}
 \minitoc
 
-\textcolor{orange}{Dans ce chapitre, une courte revue des principales de méthodes utilisées pour l'estimation d'impédance mécanique chez l'Homme est présentée dan sun premier temps. Les méthodologies choisies pour l'introduction des perturbations, l'estimation des trajectoires virtuelles en force et position ainsi que l'identification des paramètres en impédance sont ensuite détaillés.}
+\textcolor{black}{Dans ce chapitre, une courte revue des principales de méthodes utilisées pour l'estimation d'impédance mécanique chez l'Homme est présentée dan sun premier temps. Les méthodologies choisies pour l'introduction des perturbations, l'estimation des trajectoires virtuelles en force et position ainsi que l'identification des paramètres en impédance sont ensuite détaillés.}
 
 \section{État de l'art}
 
-\textcolor{orange}{Cette section présente les méthodes de perturbations et  d'identification utilisées dans la littérature pour estimer les caractéristiques visco-élastiques humaines. Les méthodes présentées ne font pas toutes les mêmes suppositions concernant la modélisation du comportement en impédance humain.}
+\textcolor{black}{Cette section présente les méthodes de perturbations et  d'identification utilisées dans la littérature pour estimer les caractéristiques visco-élastiques humaines. Les méthodes présentées ne font pas toutes les mêmes suppositions concernant la modélisation du comportement en impédance humain.}
 
 \subsection{Méthodes de perturbations} \label{chap3_sec_st_art_sub_pert}
 
@@ -13,7 +13,7 @@
 
 %"It was found that the estimated stiffness and damping depended critically on the type of perturbation." ... Our finding that the estimated dynamical parameters depend greatly on i) the nature of the perturbation, ii) the time interval over which the response is being fitted and iii) are very sensitive to measurement errors is supported by the very wide range of joint stiffness reported in the literature \parencite{kistemaker_vivo_2011}
 
-Dans le cadre d'estimation d'impédance \textcolor{orange}{du mouvement humain}, il est très important de spécifier la structure des perturbations utilisées. En effet, comme souligné par \textcite{kistemaker_vivo_2011}, la raideur et l'amortissement semblent non seulement dépendre des intervalles de temps observés pour estimer les paramètres, mais aussi des perturbations utilisées. Il est donc important de préciser la structure et la nature des perturbations, d'autant que ces dernières auront une influence sur le contexte expérimental et leur forme sera souvent dictée par les conditions, objectifs visés et méthodes d'identification proposées.
+Dans le cadre d'estimation d'impédance \textcolor{black}{du mouvement humain}, il est très important de spécifier la structure des perturbations utilisées. En effet, comme souligné par \textcite{kistemaker_vivo_2011}, la raideur et l'amortissement semblent non seulement dépendre des intervalles de temps observés pour estimer les paramètres, mais aussi des perturbations utilisées. Il est donc important de préciser la structure et la nature des perturbations, d'autant que ces dernières auront une influence sur le contexte expérimental et leur forme sera souvent dictée par les conditions, objectifs visés et méthodes d'identification proposées.
 
 Dans tous les cas, il est important de rappeler que le comportement en impédance est considéré linéaire pour de faibles mouvements autour d'une trajectoire d'équilibre, et donc pour de faibles perturbations. 
 
@@ -50,7 +50,7 @@ Injecter directement des perturbations en force simplifie une partie du problèm
 
 Malgré ces difficultés, des perturbations indicielles en force de \SI{100}{\milli\second} ont pu être utilisées dans le cadre d'une tâche réaliste de soudure \parencite{erden_hand_2015}. Ces perturbations ont été commandées avec une amplitude de consigne de \SI{4}{\newton}, choisie pour dépasser la force nominale observée pendant la manipulation d'un robot. Dans le cadre de cette expérience, le robot était utilisé pour introduire les perturbations, pendant que les participants le manipulaient. Il est toutefois nécessaire de noter que les signaux réels ont des effets au-delà de la durée de la consigne en force. Sur un exemple dévoilé dans leur publication, \textcite{erden_hand_2015} montrent ainsi que les effets de la perturbation en force s'étalent au moins jusqu'à \SI{200}{\milli\second}. L'objectif des auteurs n'était donc pas de réaliser des perturbations aussi peu perceptibles que possible.
 
-Pour arriver à ce dernier objectif \textcolor{orange}{où les perturbations sont peu perceptibles, ces dernières} doivent être aussi brèves que possible et de faibles intensités, de manière à ce que l'utilisateur ait du mal à discerner les bruits générés passivement par le contrôle de l'équipement (\cref{chap2_sec_ctrl_vfo}) des perturbations volontairement introduites. On trouve des exemples de perturbations d'une durée de \SI{30}{\milli\second} dans les travaux de \textcite{popescu_elbow_2003}, sous la forme de deux impulsions de \SI{15}{\milli\second}, chacune dans une direction opposée, et d'une amplitude d'environ \SI{20}{\newton\meter}. Pour atteindre ces performances, les perturbations ne sont pas injectées aux niveaux cartésiens comme c'est le cas chez \textcite{erden_hand_2015}, mais au niveau articulaire. En effet, ces derniers auteurs ne se sont intéressés qu'à un cas uni-articulaire dans leur expérience.
+Pour arriver à ce dernier objectif \textcolor{black}{où les perturbations sont peu perceptibles, ces dernières} doivent être aussi brèves que possible et de faibles intensités, de manière à ce que l'utilisateur ait du mal à discerner les bruits générés passivement par le contrôle de l'équipement (\cref{chap2_sec_ctrl_vfo}) des perturbations volontairement introduites. On trouve des exemples de perturbations d'une durée de \SI{30}{\milli\second} dans les travaux de \textcite{popescu_elbow_2003}, sous la forme de deux impulsions de \SI{15}{\milli\second}, chacune dans une direction opposée, et d'une amplitude d'environ \SI{20}{\newton\meter}. Pour atteindre ces performances, les perturbations ne sont pas injectées aux niveaux cartésiens comme c'est le cas chez \textcite{erden_hand_2015}, mais au niveau articulaire. En effet, ces derniers auteurs ne se sont intéressés qu'à un cas uni-articulaire dans leur expérience.
 
 En simulation, \textcite{piovesan_measuring_2012} ont aussi proposé d'introduire des perturbations impulsionnelles de \SI{20}{\milli\second} et d'amplitude \SI{5}{\newton}, dans le but de réaliser des identifications fréquentielles. D'autres auteurs ont aussi proposé de générer des séquences d'impulsions d'amplitudes et de durées variables \parencite{lacquaniti_time-varying_1993}, sous la forme de perturbations qualifiées de stochastiques.
 
@@ -60,7 +60,7 @@ En simulation, \textcite{piovesan_measuring_2012} ont aussi proposé d'introduir
 
 \subsubsection{Perturbations stochastiques} \label{chap3_sec_st_art_sub_pert_2}
 
-Dans leurs premières expériences pour identifier les paramètres en impédance, \textcite{perreault_multiple-input_1999} ont proposé une simulation avec des perturbations sur un modèle à deux degrés de liberté du bras, en utilisant des faibles perturbations en force stochastiques et indépendantes ($\approx$\SI{1}{\newton}). Les auteurs soulignent que l'amplitude et la direction aléatoires des perturbations les rendent impossibles à prédire pour l'utilisateur, réduisant la probabilité d'actions volontaires. Toutefois, comme noté par \textcite{palazzolo_stochastic_2007}, ce type de perturbations peut toujours entrainer des phénomènes compensatoires comme une augmentation des co-contractions ou à l'inverse une relaxation des muscles. Dans leurs expériences, \textcite{palazzolo_stochastic_2007} utilisent ce même type de perturbations, qu'ils génèrent à une fréquence d'échantillonnage de \SI{500}{\hertz}, en filtrant \textcolor{orange}{un signal aléatoire uniformément distribué}, avec un filtre de Butterworth d'ordre 8, à une fréquence de coupure de \SI{15}{\hertz}, choisie pour dépasser la fréquence naturelle du bras, ne dépassant pas \SI{3}{\hertz}.
+Dans leurs premières expériences pour identifier les paramètres en impédance, \textcite{perreault_multiple-input_1999} ont proposé une simulation avec des perturbations sur un modèle à deux degrés de liberté du bras, en utilisant des faibles perturbations en force stochastiques et indépendantes ($\approx$\SI{1}{\newton}). Les auteurs soulignent que l'amplitude et la direction aléatoires des perturbations les rendent impossibles à prédire pour l'utilisateur, réduisant la probabilité d'actions volontaires. Toutefois, comme noté par \textcite{palazzolo_stochastic_2007}, ce type de perturbations peut toujours entrainer des phénomènes compensatoires comme une augmentation des co-contractions ou à l'inverse une relaxation des muscles. Dans leurs expériences, \textcite{palazzolo_stochastic_2007} utilisent ce même type de perturbations, qu'ils génèrent à une fréquence d'échantillonnage de \SI{500}{\hertz}, en filtrant \textcolor{black}{un signal aléatoire uniformément distribué}, avec un filtre de Butterworth d'ordre 8, à une fréquence de coupure de \SI{15}{\hertz}, choisie pour dépasser la fréquence naturelle du bras, ne dépassant pas \SI{3}{\hertz}.
 
 Plus tard, dans d'autres expériences non simulées \parencite{perreault_effects_2001, perreault_multijoint_2004}, ces perturbations ont été injectées en position et non en force, dans le cadre d'expériences quasi-statiques, où les sujets devaient atteindre une force cible en luttant contre un mouvement. Une fois le régime permanent atteint, les perturbations étaient générées avec des amplitudes d'environ \SI{2}{\centi\meter}, et des fréquences dans la gamme des perturbations physiologiquement rencontrées par les humains \parencite{mann_frequency_1989}, c'est-à-dire avec une pente atténuante de \SI{40}{\decibel\per decade} à partir de \SI{3}{\hertz}.
 
@@ -82,11 +82,11 @@ Le principal avantage des perturbations stochastiques, quelle que soit leur natu
 
 \subsubsection{Autres perturbations} \label{chap3_sec_st_art_sub_pert_3}
 
-Au delà des catégories présentées, on trouve d'autres formes moins représentés dans la littérature comme les perturbations sinusoïdales \parencite{bennett_catching_1994,hondori_perturbation-based_2010}, les champs de force \parencite{burdet_central_2001,franklin_adaptation_2003}, l'utilisation d'objets pour générer de réels impacts \parencite{lee_simple_2017} où même d'outils, utilisés dans le cadre de tâches précises, pour générer des perturbations aussi écologiques\textcolor{orange}{\footnote{Présentes dans l'environnement naturel, habituel.}} que possible \parencite{phan_estimating_2020}.
+Au delà des catégories présentées, on trouve d'autres formes moins représentés dans la littérature comme les perturbations sinusoïdales \parencite{bennett_catching_1994,hondori_perturbation-based_2010}, les champs de force \parencite{burdet_central_2001,franklin_adaptation_2003}, l'utilisation d'objets pour générer de réels impacts \parencite{lee_simple_2017} où même d'outils, utilisés dans le cadre de tâches précises, pour générer des perturbations aussi écologiques\textcolor{black}{\footnote{Présentes dans l'environnement naturel, habituel.}} que possible \parencite{phan_estimating_2020}.
 
 \subsection{Méthodes d'identifications} \label{chap3_sec_st_art_sub_ident}
 
-De la même manière qu'il est important de préciser la structure et la nature des perturbations utilisées, la méthode d'identification utilisée est aussi importante à préciser. En effet, si l'on s'intéresse par exemple aux méthodes régressives, l'intervalle de temps utilisé pour l'identification aura une influence non négligeable sur la signification des paramètres estimés. \textcolor{orange}{En fonction de la durée d'identification, des comportements réflexes plus ou moins courts ainsi que des actions volontaires pourraient être amalgamés.}
+De la même manière qu'il est important de préciser la structure et la nature des perturbations utilisées, la méthode d'identification utilisée est aussi importante à préciser. En effet, si l'on s'intéresse par exemple aux méthodes régressives, l'intervalle de temps utilisé pour l'identification aura une influence non négligeable sur la signification des paramètres estimés. \textcolor{black}{En fonction de la durée d'identification, des comportements réflexes plus ou moins courts ainsi que des actions volontaires pourraient être amalgamés.}
 
 \subsubsection{Méthodes paramétriques} \label{chap3_sec_st_art_sub_ident_1}
 
@@ -115,18 +115,18 @@ Le comportement en impédance du bras regroupant plusieurs phénomènes non lin�
 
 \paragraph{Méthodes \foreignquote{french}{MIMO} }
 
-On distingue les méthodes proposées par \textcite{perreault_multiple-input_1999,perreault_effects_2001}, qui prennent comme seul présupposé que le comportement cartésien de la raideur est linéaire pour de faibles perturbations, et donc que les propriétés dynamiques de la raideur peuvent être caractérisées par les matrices de réponses fréquentielles ou impulsionnelles, grâce à l'utilisation de perturbations stochastiques (\cref{chap3_sec_st_art_sub_pert_2}). Les auteurs représentent alors le modèle viscoélastique d'un membre dans le plan comme un système à plusieurs entrées (en force) et plusieurs sorties (en position) qui peut être représenté par plusieurs systèmes à plusieurs entrées $\vect{e}_i$ et d'uniques sorties $\vect{s}_i$, avec des effets de couplages ($c$) et du bruit $n$ sur chaque sortie\textcolor{orange}{, comme montré sur la \cref{fig_mimo_model_perrault}.}
+On distingue les méthodes proposées par \textcite{perreault_multiple-input_1999,perreault_effects_2001}, qui prennent comme seul présupposé que le comportement cartésien de la raideur est linéaire pour de faibles perturbations, et donc que les propriétés dynamiques de la raideur peuvent être caractérisées par les matrices de réponses fréquentielles ou impulsionnelles, grâce à l'utilisation de perturbations stochastiques (\cref{chap3_sec_st_art_sub_pert_2}). Les auteurs représentent alors le modèle viscoélastique d'un membre dans le plan comme un système à plusieurs entrées (en force) et plusieurs sorties (en position) qui peut être représenté par plusieurs systèmes à plusieurs entrées $\vect{e}_i$ et d'uniques sorties $\vect{s}_i$, avec des effets de couplages ($c$) et du bruit $n$ sur chaque sortie\textcolor{black}{, comme montré sur la \cref{fig_mimo_model_perrault}.}
 
 \tikzexternalenable
 \input{latex_figures/fig_mimo_model_perrault.tex}
 
-Les auteurs proposent alors deux méthodes, l'une fréquentielle et l'autre temporelle pour réaliser l'identification. La méthode fréquentielle repose sur les analyses inter et auto-spectrales\footnote{Transformée de Fourier des inter et auto-corrélations} des entrées et sorties, qui sont liées par la relation \cref{eq_mimo_cross_spectra}, avec $G_{e_iy_j}$ l'inter-spectre entre l'entrée $e_i$ et la sortie $y_j$, $G_{e_ie_k}$ l'inter-spectre entre les entrées $e_i$ et $e_k$ et \textcolor{orange}{$H_{e_ky_j}$} la fonction de transfert reliant l'entrée $e_k$ à la sortie $y_j$. 
+Les auteurs proposent alors deux méthodes, l'une fréquentielle et l'autre temporelle pour réaliser l'identification. La méthode fréquentielle repose sur les analyses inter et auto-spectrales\footnote{Transformée de Fourier des inter et auto-corrélations} des entrées et sorties, qui sont liées par la relation \cref{eq_mimo_cross_spectra}, avec $G_{e_iy_j}$ l'inter-spectre entre l'entrée $e_i$ et la sortie $y_j$, $G_{e_ie_k}$ l'inter-spectre entre les entrées $e_i$ et $e_k$ et \textcolor{black}{$H_{e_ky_j}$} la fonction de transfert reliant l'entrée $e_k$ à la sortie $y_j$. 
 
 \begin{equation}\label{eq_mimo_cross_spectra}
 G_{e_iy_j}(f) = \sum_{k=1}^{N}H_{y_je_k}(f)\cdot G_{e_ie_k}(f)
 \end{equation}
 
-La raideur cartésienne dynamique planaire peut alors être obtenue à l'aide de la cohérence $\gamma_{x_1x_2}$ entre les deux entrées du système \cref{eq_mimo_coherence}, comme indiqué sur le \textcolor{orange}{système d'équations \cref{eq_mimo_endpoint_stiffness_id} qui résout le cas bidimensionnel de \cref{eq_mimo_cross_spectra},} avec $j \in [1,2]$.
+La raideur cartésienne dynamique planaire peut alors être obtenue à l'aide de la cohérence $\gamma_{x_1x_2}$ entre les deux entrées du système \cref{eq_mimo_coherence}, comme indiqué sur le \textcolor{black}{système d'équations \cref{eq_mimo_endpoint_stiffness_id} qui résout le cas bidimensionnel de \cref{eq_mimo_cross_spectra},} avec $j \in [1,2]$.
 
 \begin{equation}\label{eq_mimo_endpoint_stiffness_id}
 	\begin{cases}
@@ -139,14 +139,14 @@ La raideur cartésienne dynamique planaire peut alors être obtenue à l'aide de
 	\gamma^2_{e_1e_2}(f) = \dfrac{\abs{G_{e_1e_2}(f)}^2}{G_{e_1e_1}(f)\cdot G_{e_2e_2}(f)}
 \end{equation}
 
-L'autre méthode repose sur les réponses impulsionnelles $h$ et les inter et auto-corrélations des entrées et sorties. \textcolor{orange}{Le symbole $\phi_{ey}$ est utilisé pour noter la corrélation entre $e$ et $y$.} %, et les entrées et sorties sont écrites de manière équivalente à la méthode fréquentielle. 
+L'autre méthode repose sur les réponses impulsionnelles $h$ et les inter et auto-corrélations des entrées et sorties. \textcolor{black}{Le symbole $\phi_{ey}$ est utilisé pour noter la corrélation entre $e$ et $y$.} %, et les entrées et sorties sont écrites de manière équivalente à la méthode fréquentielle. 
 L'opérateur de convolution est noté $*$.
 
 \begin{equation}\label{eq_mimo_cross_correlation}
 \phi_{e_iy_j}(t) = \sum_{k=1}^{N}h_{e_ky_j}(t) * \phi_{e_ie_k}(t)
 \end{equation}
 
-\textcolor{orange}{Les réponses impulsionnelles et donc la raideur dynamique peuvent alors être estimées} en discrétisant \cref{eq_mimo_convolution} et représentant le système d'équation \cref{eq_mimo_cross_correlation} sous forme matricielle, puis en utilisant l'inversion matricielle, en notant que la convolution peut s'écrire sous la forme du produit d'une matrice et d'un vecteur% \cref{eq_mimo_convolution_2}
+\textcolor{black}{Les réponses impulsionnelles et donc la raideur dynamique peuvent alors être estimées} en discrétisant \cref{eq_mimo_convolution} et représentant le système d'équation \cref{eq_mimo_cross_correlation} sous forme matricielle, puis en utilisant l'inversion matricielle, en notant que la convolution peut s'écrire sous la forme du produit d'une matrice et d'un vecteur% \cref{eq_mimo_convolution_2}
 , comme détaillé par \textcite{hunter_two-sided_1983}.
 
 \begin{equation}\label{eq_mimo_convolution}
@@ -208,7 +208,7 @@ Trois solutions sont envisageables pour introduire des perturbations en force di
 	\item Introduire des perturbations dans la boucle interne en courant.
 \end{enumerate}
 
-\textcolor{orange}{Selon la nature des perturbations on préfèrera certaines des solutions proposées. En effet, si l'on souhaite introduire des perturbations aussi brèves que possibles, comme c'est le cas ici présent, c'est vers la dernière solution, celle au plus proche du robot, qu'on se tournera. C'est donc le choix qui a été fait ici.}
+\textcolor{black}{Selon la nature des perturbations on préfèrera certaines des solutions proposées. En effet, si l'on souhaite introduire des perturbations aussi brèves que possibles, comme c'est le cas ici présent, c'est vers la dernière solution, celle au plus proche du robot, qu'on se tournera. C'est donc le choix qui a été fait ici.}
 
 Il est toutefois important de noter que la dernière solution nécessite de pouvoir intervenir au niveau des consignes de courant des boucles internes du robot, ce qui n'est pas le cas de la plupart des robots industriels. De plus, dans le cas de robots avec des flexibilités, et dynamiques non-négligeables, introduire des perturbations au niveau des couples moteurs ne permet pas de garantir l'amplitude des perturbations en force au niveau de l'effecteur final, à moins de compenser parfaitement les dynamiques internes du robot. 
 
@@ -228,13 +228,13 @@ La \cref{fig_short_perturbations_implemented} montre deux exemples de perturbati
 	\vect{\tau} = \jacobian{q}{}{t} \vect{f}_e
 \end{equation}
 
-\textcolor{orange}{Pour introduire une perturbation en couple de \SI{30}{\milli\second}, la structure de commande décrite au \cref{chap2} doit être déconnectée. La boucle interne de couple est directement attaquée avec la référence du couple perturbateur souhaitée. Après les \SI{30}{\milli\second} la boucle de vitesse et la structure de la \cref{fig_comanipulation_ctrl} est reconnectée en conservant la même valeur de référence du couple qu'avant la perturbation. En fait, la consigne de couple perturbateur ayant une très courte durée, la supposition n'est faite que pendant cette intervalle de \SI{30}{\milli\second}, la variation de la consigne de couple produite par la boucle de vitesse est négligeable.}
+\textcolor{black}{Pour introduire une perturbation en couple de \SI{30}{\milli\second}, la structure de commande décrite au \cref{chap2} doit être déconnectée. La boucle interne de couple est directement attaquée avec la référence du couple perturbateur souhaitée. Après les \SI{30}{\milli\second} la boucle de vitesse et la structure de la \cref{fig_comanipulation_ctrl} est reconnectée en conservant la même valeur de référence du couple qu'avant la perturbation. En fait, la consigne de couple perturbateur ayant une très courte durée, la supposition n'est faite que pendant cette intervalle de \SI{30}{\milli\second}, la variation de la consigne de couple produite par la boucle de vitesse est négligeable.}
 
 %\tikzexternaldisable
 \input{latex_figures/fig_short_perturbations_implemented}
 %\tikzexternalenable
 
-On voit donc que malgré les flexibilités du robot, il est possible d'injecter des perturbations de courte durée sur des amplitudes inférieures à \SI{5}{\newton}. Toutefois, pour arriver à ces perturbations, la consigne a du être modifiée, une \textcolor{orange}{référence} de \SI{5}{\newton} ne permettait pas d'observer des amplitudes suffisantes. Pour aller plus loin et minimiser les phénomènes vibratoires dus aux flexibilités, des techniques de modification de la consigne comme l'\foreignquote{french}{\textit{input shaping}} \parencite{singh_tutorial_2002} pourraient être mises en place.
+On voit donc que malgré les flexibilités du robot, il est possible d'injecter des perturbations de courte durée sur des amplitudes inférieures à \SI{5}{\newton}. Toutefois, pour arriver à ces perturbations, la consigne a du être modifiée, une \textcolor{black}{référence} de \SI{5}{\newton} ne permettait pas d'observer des amplitudes suffisantes. Pour aller plus loin et minimiser les phénomènes vibratoires dus aux flexibilités, des techniques de modification de la consigne comme l'\foreignquote{french}{\textit{input shaping}} \parencite{singh_tutorial_2002} pourraient être mises en place.
 
 %\textcolor{red}{Après vérification expérimentale, ... [expliquer qu'on est capable de générer ce type de perturbation malgré les dynamiques et flexibilités du robot, préciser la forme de la commande, éventuellement parler de l'input shaping ?? (qui aurait pu être mis en place pour être plus rigoureux peut être en aparté.)]}
 
@@ -268,9 +268,9 @@ L'identification des paramètres en impédance étant complètement dépendante 
 
 %"etude de la diffusion des erreurs en fonction des entrées/sorties ?" 
 
-\textcolor{orange}{Plusieurs méthodes ont donc été éprouvées et sont détaillées dans les sections suivantes. Certaines sont inspirées de la littérature et servent notamment de référence pour comparer leur précision à celles des méthodes proposées. Les propriétés des signaux de force et de position étant différentes, deux méthodes ont été choisies.}
+\textcolor{black}{Plusieurs méthodes ont donc été éprouvées et sont détaillées dans les sections suivantes. Certaines sont inspirées de la littérature et servent notamment de référence pour comparer leur précision à celles des méthodes proposées. Les propriétés des signaux de force et de position étant différentes, deux méthodes ont été choisies.}
 
-\textcolor{red}{[Le choix des méthodes est présenté de manière anticipée ici :]}
+%\textcolor{red}{[Le choix des méthodes est présenté de manière anticipée ici :]}
 
 C'est l'interpolation d'une spline cubique, décrite en \cref{chap3_sec_method_sub_virt_traj_3}, qui a été retenue pour la position. Cette méthode a l'avantage d'être simple à implémenter tout en présentant une précision moyenne submilimétrique. Sa principale faiblesse, qui est qu'elle utilise un point d'arrivée potentiellement encore perturbé et donc biaisé, peut aussi être vu comme une force. En effet, lorsque le bras est perturbé, les premières actions volontaires peuvent survenir après un peu plus de \SI{100}{\milli\second} (\cref{chap_1_sec_modelling_human_subsec_1_2}), la trajectoire virtuelle peut alors être modifiée, même si ces changements sont considérés négligeables par certains auteurs \parencite{erden_hand_2015}. En réalisant une interpolation entre la trajectoire avant et après la perturbation, on peut s'attendre à ce que l'influence des actions volontaires soit réduite.
 
@@ -294,7 +294,7 @@ Cette méthodologie a été implémentée sans succès dans le cas présent, sur
 \subsubsection{Table de correspondance} \label{chap3_sec_method_sub_virt_traj_2}
 
 \textcite{burdet_method_2000} ont proposé une méthode de prédiction de trajectoire en ligne, qui leur a permis d'injecter des perturbations en position lors de tâches en mouvement. Les auteurs déclarent obtenir des erreurs de prédiction de la position inférieures au centimètre après \SI{200}{\milli\second}. L'idée est d'utiliser la répétabilité du mouvement, ou du moins sa structure globale qui est supposée peu variante, notamment son profil de vitesse. %Ainsi, en utilisant la moyenne des dix trajectoires précédentes, les auteurs proposent de créer un ensemble de profils de vitesse candidats, en modulant la moyenne obtenue aussi bien en modifiant l'amplitude du signal, qu'en appliquant différents retards. 
-\textcolor{orange}{Ainsi, en utilisant la moyenne des dix trajectoires précédentes, les auteurs proposent de créer un ensemble de profils de vitesse candidats en modulant la moyenne obtenue, aussi bien en modifiant l’amplitude du signal qu’en appliquant différents retards.} Au total, 121 courbes candidates sont générées (11 amplitudes $\times$ 11 retards), et celle générant le moins d'erreur sur les dernières \SI{100}{\milli\second} est choisie à l'aide de la fonction récursive \cref{eq_cost_function_burdet_2000}.
+\textcolor{black}{Ainsi, en utilisant la moyenne des dix trajectoires précédentes, les auteurs proposent de créer un ensemble de profils de vitesse candidats en modulant la moyenne obtenue, aussi bien en modifiant l’amplitude du signal qu’en appliquant différents retards.} Au total, 121 courbes candidates sont générées (11 amplitudes $\times$ 11 retards), et celle générant le moins d'erreur sur les dernières \SI{100}{\milli\second} est choisie à l'aide de la fonction récursive \cref{eq_cost_function_burdet_2000}.
 
 \begin{equation} \label{eq_cost_function_burdet_2000}
 	d_{i,k} = (v_k - w_{i,k})^2 + \alpha d_{i,k-1} \text{,}
@@ -338,9 +338,9 @@ _iS_3(n) = \frac{\ddot{y}_i(n - n_{i-1})^3 + \ddot{y}_{i-1}(n_{i} - n)^3}{6(n_i 
 
 Plusieurs solutions s'offrent alors pour essayer d'estimer un morceau de trajectoire en utilisant cette structure. On peut estimer plusieurs nœuds sur une portion définie et relier ces nœuds à l'aide de splines cubiques en utilisant l'équation \cref{eq_explicit_cubic_spline}. Cette stratégie pourrait permettre  de tenir compte des comportements oscillatoires observables sur les signaux de force (\cref{subfig_unp_force_test_trajectory_a}). Toutefois, même si l'on simplifie la problématique de l'estimation de trajectoire à quelques nœuds, on reporte une difficulté qui est de définir ces points d'intersections. 
 
-Une autre solution serait de regarder seulement deux points, et donc de n'utiliser qu'un seul polynôme d'ordre trois pour estimer un morceau de trajectoire. Le premier point est simple à définir, il suffit de prendre le dernier instant non perturbé de la trajectoire, c'est-à-dire juste avant l'injection effective de la perturbation. Le second point suppose de connaître grossièrement la durée réelle des effets de la perturbation, afin de choisir un nouveau point non-perturbé, ou le moins possible. Ce dernier point ne doit pas non plus être trop éloigné du premier, car les trajectoires en position et force ne sont assimilables à des splines \textcolor{orange}{cubiques} que par morceaux. Il y a donc un compromis à trouver sur cette distance.
+Une autre solution serait de regarder seulement deux points, et donc de n'utiliser qu'un seul polynôme d'ordre trois pour estimer un morceau de trajectoire. Le premier point est simple à définir, il suffit de prendre le dernier instant non perturbé de la trajectoire, c'est-à-dire juste avant l'injection effective de la perturbation. Le second point suppose de connaître grossièrement la durée réelle des effets de la perturbation, afin de choisir un nouveau point non-perturbé, ou le moins possible. Ce dernier point ne doit pas non plus être trop éloigné du premier, car les trajectoires en position et force ne sont assimilables à des splines \textcolor{black}{cubiques} que par morceaux. Il y a donc un compromis à trouver sur cette distance.
 
-Pour évaluer la précision des splines en fonction de la durée de la fenêtre d'interpolation, les moyennes des racines des erreurs quadratiques (RMSE) ont été évaluées pour \SI{200}{\milli\second}, sur l'ensemble des trajectoires non-perturbées de la session \cref{item_unp_session}, c'est-à-dire sur plus de \textcolor{orange}{4000} cycles, où l'évaluation était conduite sur une région aléatoire de chaque cycle. La \cref{fig_spline_rmse_evaluation} dévoile les résultats de la moyenne de ces erreurs pour chaque durée des intervalles d'interpolation. Les scores obtenus sont évidemment influencés à la fois par les fenêtres d'interpolation et d'évaluation. Le choix de la durée de la fenêtre d'évaluation est détaillé en \cref{chap3_sec_method_sub_ident}.
+Pour évaluer la précision des splines en fonction de la durée de la fenêtre d'interpolation, les moyennes des racines des erreurs quadratiques (RMSE) ont été évaluées pour \SI{200}{\milli\second}, sur l'ensemble des trajectoires non-perturbées de la session \cref{item_unp_session}, c'est-à-dire sur plus de \textcolor{black}{4000} cycles, où l'évaluation était conduite sur une région aléatoire de chaque cycle. La \cref{fig_spline_rmse_evaluation} dévoile les résultats de la moyenne de ces erreurs pour chaque durée des intervalles d'interpolation. Les scores obtenus sont évidemment influencés à la fois par les fenêtres d'interpolation et d'évaluation. Le choix de la durée de la fenêtre d'évaluation est détaillé en \cref{chap3_sec_method_sub_ident}.
 
 %\tikzexternaldisable
 \input{latex_figures/fig_spline_rmse_evaluation}
@@ -393,7 +393,7 @@ Pour savoir dans quelles mesures ce filtre peut dénaturer le signal en force de
 
 Toutefois, si l'on s'intéresse maintenant au rejet des perturbations, dont on peut voir l'exemple en \cref{subfig_force_filtering_b}, pour une perturbation non prévisible ainsi que pour le retour haptique de la balle, le point de départ du signal filtré à l'instant de la perturbation indique une erreur significative. En effet, si la perturbation semble bien filtrée, et le comportement oscillatoire conservé, à l'instant $t_p$ de la perturbation, un écart de \SI{847}{\milli\newton} vient biaiser l'estimation de la trajectoire virtuelle en force. Des écarts similaires se retrouvent sur la plupart des perturbations filtrées, alors qu'on s'attendrait à ce qu'à l'instant de la perturbation, les valeurs coïncident. Il faut donc une solution complémentaire pour pallier cette problématique.
 
-\textcolor{orange}{Une première piste pour réduire cette erreur est la composante continue de la perturbation. Le filtrage permet d'éliminer les composantes fréquentielles au-delà de 8,5Hz, mais pas la composante continue présente dans la perturbation. En fait, la perturbation produit une modification de la force avec une composante fréquentielle au-delà de 8,5 Hz, mais aussi avec une composante continue fonction de l'amplitude de la perturbation.} %Une 
+\textcolor{black}{Une première piste pour réduire cette erreur est la composante continue de la perturbation. Le filtrage permet d'éliminer les composantes fréquentielles au-delà de 8,5Hz, mais pas la composante continue présente dans la perturbation. En fait, la perturbation produit une modification de la force avec une composante fréquentielle au-delà de 8,5 Hz, mais aussi avec une composante continue fonction de l'amplitude de la perturbation.} %Une 
 La composante basse fréquence ou continue semble en effet devoir être supprimée des perturbations. 
 La durée des perturbations en force étant approximativement de \SI{60}{\milli\second}, on se propose d'extraire \SI{85}{\milli\second} du signal suite à une perturbation. La composante continue est alors déterminée grâce à l'\cref{algo_pert_filtering}, avec $repeat()$ une fonction permettant de répéter un signal, pour garantir la stabilité du filtrage et $filter()$ la fonction de filtrage bi-directionnelle qui minimise le déphasage.
 
@@ -508,7 +508,7 @@ La seconde méthode \cref{item_method_opt_init_b} a apporté des résultats syst
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{Limites inférieures ($b_l$) et supérieures ($b_u$) pour les conditions initiales, et premier point de départ défini manuellement ($ x_0 $)}
+	\caption[Limites et conditions initiales des paramètres de la somme de sinusoïdes, pour la résolution de l'optimisation]{Limites inférieures ($b_l$) et supérieures ($b_u$) pour les conditions initiales, et premier point de départ défini manuellement ($ x_0 $)}
 	\label{tab_sine_opt_intials}	
 \end{table}
 
@@ -530,7 +530,7 @@ Les huit différents modèles ont ensuite été comparés, toujours en utilisant
 	Depuis son introduction, d'autres critères ont été développés, ou sont venus combler des faiblesses de l'AIC. Par exemple le critère de \textcite{schwarz_estimating_1978} (BIC\footnote{\textit{Bayesian Information Criterion}}), qui pénalise plus fortement les degrés de liberté des modèles et garantit de trouver le \foreignquote{french}{vrai} modèle s'il est disponible parmi les candidats (lorsque $n_s\to\infty$). On pourra toutefois noter que le "véritable" modèle, ne fait jamais parti des modèles candidats. Par ailleurs, pour combler la faiblesse de l'AIC lorsque le nombre d'échantillons est trop faible, \textcite{hurvich_regression_1989} ont proposé une version corrigée du critère qui limite les phénomènes de sur-apprentissage (AICc), et des corrections du critère ont encore été proposées récemment \parencite{delsole_correcting_2021}.
 \end{aside}
 
-C'est la somme de trois sinus ($n=3$) sans composants linéaires ($l_b=0$) qui a obtenu le score d'AIC le plus faible. Le même résultat a été obtenu avec l'AICc et le BIC. Ce modèle obtient respectivement des erreurs RMS de \SIlist{279;385}{\milli\newton} pour les \SIlist{100;200}{\milli\second} qui suivent l'introduction de la perturbation. \textcolor{orange}{Comme indiqué dans le \cref{tab_force_estimation_comparison}, cette méthode obtient aussi de meilleurs résultats que la méthode de filtrage successifs.}
+C'est la somme de trois sinus ($n=3$) sans composants linéaires ($l_b=0$) qui a obtenu le score d'AIC le plus faible. Le même résultat a été obtenu avec l'AICc et le BIC. Ce modèle obtient respectivement des erreurs RMS de \SIlist{279;385}{\milli\newton} pour les \SIlist{100;200}{\milli\second} qui suivent l'introduction de la perturbation. \textcolor{black}{Comme indiqué dans le \cref{tab_force_estimation_comparison}, cette méthode obtient aussi de meilleurs résultats que la méthode de filtrage successifs.}
 
 \begin{table}[htbp] 
 	\begin{center}
@@ -646,7 +646,7 @@ Finalement, la dernière relation nécessaire peut être obtenue à partir du ga
 \end{equation}
 
 Grâce aux relations \cref{eq_rel_K,eq_rel_M_K,eq_rel_B_M}, on peut déduire les paramètres continus du modèle KBM \cref{eq_KBM_model_used} à partir des coefficients discrets. %Ces derniers peuvent alors être identifiés grâce à une auto-régression de type ARX\footnote{Autoregressive with Extra Input}, en veillant à assurer que les conditions initiales soient nulles.
-Les paramètres du modèle ARX\footnote{Autoregressive with Extra Input} \cref{eq_KBM_model_discrete} peuvent alors être identifiés par régression linéaire, en veillant à assurer que les conditions initiales soient nulles.
+Les paramètres du modèle ARX\footnote{\foreignquote{french}{\textit{AutoRegressive with eXtra input}}} \cref{eq_KBM_model_discrete} peuvent alors être identifiés par régression linéaire, en veillant à assurer que les conditions initiales soient nulles.
 
 \subsubsection{Analyse de sensibilité locale} \label{chap3_sec_method_sub_ident_1}
 
@@ -670,7 +670,7 @@ La \cref{fig_local_sensitivity_analysis}, réalisée avec des valeurs typiques (
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{Valeurs typiques utilisées pour les coefficients, correspondant aux couples $\vect{\psi} = (K,B,M) = (200,10,1)$}
+	\caption[Valeurs typiques des paramètres du modèle en impédance discrétisé]{Valeurs typiques utilisées pour les coefficients, correspondant aux couples $\vect{\psi} = (K,B,M) = (200,10,1)$}
 	\label{tab_typical_coefficient_sensitivity_analysis}	
 \end{table}
 
@@ -743,7 +743,7 @@ La \cref{fig_interp_spline_id_windows_R2} confirme ce qui est indiqué par les \
 
 %On peut voir que le $R^2$ commence à des valeurs médianes élevées supérieures à \SI{95}{\percent}, avec un écart interquartile inférieur à \SI{10}{\percent} pour le premier jeu de paramètres et encore de meilleur qualité pour l'autre avec des valeurs médianes de plus de \SI{98}{\percent} jusqu'à \SI{300}{\milli\second}, et un écart interquartile d'environ \SI{5}{\percent} jusqu'à \SI{250}{\milli\second}. Il est intéressant de noter que l'écart interquatile du coefficient augmente drastiquement après \SI{300}{\milli\second} pour les deux jeux de paramètres, avec des valeurs basse en dessous de 0 dès \SI{360}{\milli\second}.
 
-En utilisant $R^2$ comme un premier critère de sélection pour sortir les données aberrantes on garde le même comportement global des erreurs relatives médianes. La principale différence provient de la réduction des distributions des erreurs des paramètres, que l'on peut observer grâce aux écarts inter-quartiles. Cette sélection permet en effet de se débarrasser de valeurs erronées extrêmes. Toutefois, la médiane n'est que très peu sensible à ce type d'erreurs, contrairement aux moyennes, d'où les faibles améliorations observées \textcolor{orange}{entre les \cref{fig_interp_spline_and_id_window,fig_interp_spline_and_id_window_r2}}.
+En utilisant $R^2$ comme un premier critère de sélection pour sortir les données aberrantes on garde le même comportement global des erreurs relatives médianes. La principale différence provient de la réduction des distributions des erreurs des paramètres, que l'on peut observer grâce aux écarts inter-quartiles. Cette sélection permet en effet de se débarrasser de valeurs erronées extrêmes. Toutefois, la médiane n'est que très peu sensible à ce type d'erreurs, contrairement aux moyennes, d'où les faibles améliorations observées \textcolor{black}{entre les \cref{fig_interp_spline_and_id_window,fig_interp_spline_and_id_window_r2}}.
 
 %\tikzexternaldisable
 \input{latex_figures/fig_interp_spline_and_id_window_r2.tex}
@@ -767,7 +767,7 @@ Une autre piste pour améliorer l'identification serait d'utiliser une méthode 
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{Gammes de paramètres du modèle KBM simulés, pour évaluer le profil moyen des erreurs des splines.}
+	\caption[Gammes de paramètres du modèle KBM simulés]{Gammes de paramètres du modèle KBM simulés, pour évaluer le profil moyen des erreurs des splines.}
 	\label{tab_impedance_model_param_list}	
 \end{table}
 

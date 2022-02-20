@@ -1,7 +1,7 @@
 \begin{figure} [h]
 	\centering
 	\pgfplotstableread[col sep=semicolon] {misc/chap_4_ball_bouncing/perturbations_significance_post_hoc.csv}\datatable
-	\tikzsetnextfilename{perturbations_significance_post_hoc}
+	\tikzsetnextfilename{fig_perturbations_significance_post_hoc}
 	\begin{tikzpicture}
 		
 		\begin{axis}[%
@@ -28,6 +28,6 @@
 			table[x=source, y=mean_avg, y error=SEM_avg]{\datatable};		
 		\end{axis}		
 	\end{tikzpicture}%
-	\caption{Effets des perturbations sur $\mean{\epsilon_r}$, les erreurs types sont utilisées comme intervalle de confiance.}
+	\caption[ANOVA: Effets des perturbations sur l'erreur moyenne de rebond]{Effets des perturbations sur $\mean{\epsilon_r}$, les erreurs types sont utilisées comme intervalle de confiance.}
 	\label{fig_perturbations_significance_post_hoc}
 \end{figure} 

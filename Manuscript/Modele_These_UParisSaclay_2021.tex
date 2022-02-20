@@ -41,16 +41,66 @@
 \tableofcontents
 \setcounter{page}{1}
 \adjustmtc
-\setcounter{minitocdepth}{4}  
+\setcounter{minitocdepth}{3}  
+
+\mbox{}
+\nomenclature[A,01]{$\Re$}{Ensemble des nombres réels}
+\nomenclature[A,02]{$p$, $P$}{Scalaire}
+\nomenclature[A,03]{$\vect{p}$}{Vecteur}
+\nomenclature[A,04]{$\matr{p}$}{Matrice}
+\nomenclature[A,05]{$\matr{p}_{2\times3}$}{Matrice de deux lignes et trois colonnes}
+\nomenclature[A,06]{$\matr{I}$}{Matrice identité}
+\nomenclature[A,07]{$\dot{p}$}{Dérivée temporelle}
+\nomenclature[A,08]{$\ddot{p}$}{Dérivée temporelle seconde}
+\nomenclature[A,09]{$\delta$, $\Delta$}{Opérateur différentiel}
+\nomenclature[A,10]{$\partial$}{Opérateur dérivée partielle}
+\nomenclature[A,11]{$\hat{p}$}{Estimation de $p$}
+\nomenclature[A,12]{$\mean{\vect{p}}$}{Moyenne de $\vect{p}$}
+\nomenclature[A,13]{$\sigma(\vect{p})$}{Écart type de $\vect{p}$}
+\nomenclature[A,14]{$\epsilon$}{Erreur}
+\nomenclature[A,15]{$\vect{p}^t$}{Transposée de $\vect{p}$}
+\nomenclature[A,16]{$\theta$}{Angle}
+\nomenclature[A,17]{$v$}{Vitesse}
+%
+\nomenclature[B,01]{$K$, $\matr{K}$}{Raideur cartésienne}
+\nomenclature[B,02]{$R$, $\matr{R}$}{Raideur articulaire}
+\nomenclature[B,03]{$B$, $\matr{B}$}{Amortissement cartésienne}
+\nomenclature[B,04]{$D$, $\matr{D}$}{Amortissement articulaire}
+\nomenclature[B,05]{$M$, $\matr{M}$}{Masse}
+\nomenclature[B,06]{$A$, $\matr{A}$}{Inertie}
+\nomenclature[B,07]{$\vect{f}$}{Forces}
+\nomenclature[B,08]{$\vect{x}$}{Positions}
+%
+\nomenclature[C,01]{$\vect{q}$}{Coordonnées articulaires angulaires}
+\nomenclature[C,02]{$\vect{\tau}$}{Couples articulaires}
+\nomenclature[C,03]{$\jacobian{\vect{q}}{}{}$}{Matrice jacobienne du robot}
+\nomenclature[C,04]{$\matr{C}(\dot{\vect{q}},\vect{q})$}{Matrices des forces de Coriolis et centrifuges}
+\nomenclature[C,05]{$\vect{g}(\vect{q})$}{Vecteur des forces ou couples de gravité}
+%
+\nomenclature[D,01]{$s$}{Variable de Laplace}
+\nomenclature[D,02]{$\Laplace$}{Transformée de Laplace}
+\nomenclature[D,03]{$t$}{Temps}
+\nomenclature[D,04]{$f$}{Fréquence}
+\nomenclature[D,05]{$\omega$}{Pulsation}
+\nomenclature[D,06]{$\xi$}{Facteur d'amortissement}
+\nomenclature[D,07]{$\zeta$}{Taux d'amortissement}
+\nomenclature[D,08]{$\phi$}{Phase}
+\nomenclature[D,09]{$e$}{Entrée}
+\nomenclature[D,10]{$y$}{Sortie}
+\nomenclature[D,11]{$H(s)$}{Fonction de transfert}
+
+\printnomenclature
+\listoffigures
+\listoftables
 
 \include{introduction}
-%\include{chapter1}
-%\include{chapter2}
+\include{chapter1}
+\include{chapter2}
 \include{chapter3}
 \include{chapter4}
 \include{chapter5}
 \include{conclusion}
-%\include{appendices}
+\include{appendices}
 
 \printbibliography
 

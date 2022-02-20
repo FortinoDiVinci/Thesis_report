@@ -53,7 +53,7 @@
 			\fill (joint3) circle[radius=2.75pt];
 			
 			\draw (joint3.center) -- (endeffector.center);
-			\fill[blue] (endeffector) circle[radius=2.75pt];
+			\fill[Orient] (endeffector) circle[radius=2.75pt];
 			
 			\draw  [loosely dotted] ($ (joint3.center) + (-0.5,0) $) -- ($ (joint3.center) + (2,0) $);
 			
@@ -71,11 +71,11 @@
 			\draw[-{Latex[length=2mm]}] ($(joint3.center) + (1.5, 0)$) arc (0:\thetal:1.5)
 			node[midway, right] {$\theta$};
 			
-			\draw[blue] [loosely dotted, line width=0.55mm] ( $ (endeffector.center) + (0, 0.5) $ )  --+ (0,-6) 
+			\draw[Orient] [loosely dotted, line width=0.55mm] ( $ (endeffector.center) + (0, 0.5) $ )  --+ (0,-6) 
 			node[at end, right] {$ x_0 $};
 		
 		\end{tikzpicture}
 	}%	
-		\caption{Schéma du robot utilisé, youBot de KUKA, avec ses cinq articulations rotoïdes. Seules trois sont contrôlées en admittance, la première et la dernière étant simplement contrôlées en position pour être fixes. Les trois degrés de liberté restant $(\vec{x}, \vec{z}, \vec{\theta})$ sont représentés.} 
+		\caption[Schéma du robot utilisé]{Schéma du robot utilisé, youBot de KUKA, avec ses cinq articulations rotoïdes. Seules trois sont contrôlées en admittance, la première et la dernière étant simplement contrôlées en position pour être fixes. Les trois degrés de liberté restant $(\vec{x}, \vec{z}, \vec{\theta})$ sont représentés.} 
 		\label{fig_youBot_3joints}
 	\end{figure}
