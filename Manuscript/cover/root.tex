@@ -95,7 +95,7 @@
 %**  LOGO  ÉTABLISSEMENT PARTENAIRE SI COTUTELLE
 %**  CHANGER L'IMAGE PAR DÉFAUT **
 %*****************************************************
-\vspace{-14mm} % à ajuster en fonction de la hauteur du logo
+\vspace{-10mm} % à ajuster en fonction de la hauteur du logo
 %\flushright \includegraphics[height=2cm]{vector_coventry.pdf}
 
 %*****************************************************
@@ -154,31 +154,26 @@ Thèse préparée dans les unités de recherche \textbf{Laboratoire des Signaux 
 
 \bigskip
 
-\flushleft
-\fontsize{12}{14}\selectfont
-\textcolor{Prune}{\textbf{Composition du Jury}}\\
-\vspace{2mm}
-\fontsize{9}{10}\selectfont
-\begin{tabular}{|p{9cm}l}
-\arrayrulecolor{Prune}
-%\textbf{Prénom NOM} &   \multirow{2}{*}{Président}\\ 
-%Professeur des universités, INP -- ENSEEIHT Toulouse & \\
-%\textbf{Lyudmila MIHAYLOVA} &  \multirow{2}{*}{Rapporteur \& Examinatrice} \\ 
-%Professor, The University of Sheffield &   \\ 
-%\textbf{Kamal MEDJAHER} &  \multirow{2}{*}{Rapporteur \& Examinateur} \\ 
-%Professeur des universités, École nationale d'Ingénieurs de Tarbes  &   \\ 
-\textbf{Serena IVALDI} &  \multirow{2}{*}{Examinatrice} \\ 
-Chargée de recherche, INRIA Nancy, Université de Lorraine   &   \\ 
-\textbf{Renaud RONSSE} &  \multirow{2}{*}{Examinateur} \\ 
-Professeur, Institute of Mechanics, Materials and Civil Engineering, Université Catholique de Louvain   &   \\ 
-\textbf{Pedro RODRIGUEZ-AYERBE} &  \multirow{2}{*}{Directeur de thèse} \\ 
-Professeur, Département d'Automatique de CentraleSupélec, Université Paris-Saclay  &   \\
-\textbf{Isabelle A. SIEGLER} &  \multirow{2}{*}{Co-directrice de thèse} \\ 
-Professeur des universités, UFR STAPS, Université Paris-Saclay  &   \\ 
-\textbf{Maria MAKAROV} &  \multirow{2}{*}{Co-encadrante} \\ 
-Maître de conférence, Département d'Automatique de CentraleSupélec, Université Paris-Saclay  &   \\ 
-
-\end{tabular} 
+%\flushleft
+%\fontsize{12}{14}\selectfont
+%\textcolor{Prune}{\textbf{Composition du Jury}}\\
+%\vspace{2mm}
+%\fontsize{9}{10}\selectfont
+%\begin{tabular}{|p{9cm}l}
+%\arrayrulecolor{Prune}
+%%\textbf{Prénom NOM} &   \multirow{2}{*}{Président}\\ 
+%%Professeur des universités, ... & \\
+%\textbf{Serena IVALDI} &  \multirow{2}{*}{Rapporteur} \\ 
+%Chargée de recherche, INRIA Nancy, Université de Lorraine   &   \\ 
+%\textbf{Renaud RONSSE} &  \multirow{2}{*}{Rapporteur} \\ 
+%Professeur, Institute of Mechanics, Materials and Civil Engineering, Université Catholique de Louvain   &   \\ 
+%\textbf{Pedro RODRIGUEZ-AYERBE} &  \multirow{2}{*}{Directeur de thèse} \\ 
+%Professeur, Département d'Automatique de CentraleSupélec, Université Paris-Saclay  &   \\
+%\textbf{Isabelle A. SIEGLER} &  \multirow{2}{*}{Co-directrice de thèse} \\ 
+%Professeur des universités, UFR STAPS, Université Paris-Saclay  &   \\ 
+%\textbf{Maria MAKAROV} &  \multirow{2}{*}{Co-encadrante} \\ 
+%Maître de conférence, Département d'Automatique de CentraleSupélec, Université Paris-Saclay  &   \\ 
+%\end{tabular} 
 
 \end{titlepage}
 
@@ -214,7 +209,7 @@ Maître de conférence, Département d'Automatique de CentraleSupélec, Universi
 \textbf{Titre:} Commande bio-inspirée de robot pour des tâches rythmiques en interaction avec l'environnement
 
 \vspace{.25cm}
-\noindent \textbf{Mots clés:} 3 à 6 mots clefs (version en français)
+\noindent \textbf{Mots clés:} contrôle en admittance, impédance mécanique, bras humain, estimation de trajectoires, interactions physiques humain-robot, ...
 
 \vspace{-.5cm}
 \begin{multicols}{2}
@@ -222,12 +217,15 @@ Maître de conférence, Département d'Automatique de CentraleSupélec, Universi
 
 Les robots sont de plus en plus amenés à interagir avec des humains ou des environnements anthropiques en vue de collaboration.
 La connaissance des propriétés visco-élastiques cartésiennes humaines durant des interactions physiques avec des environnements procure d'une part un éclairage au champ des sciences du mouvement humain, mais aussi à la robotique collaborative pour la conception de commandes innovantes bio-inspirées.
-Dans cette thèse, la focalisation est placée sur une modélisation linéaire très simple en impédance mécanique du membre supérieur, qui fait entrer en jeu les paramètres cartésien apparent en raideur, amortissement et masse. 
+Dans cette thèse, la focalisation est placée sur une modélisation linéaire très simple en impédance mécanique du membre supérieur, qui fait entrer en jeu les paramètres cartésiens apparents en raideur, amortissement et masse. 
 Cette modélisation permet d'approcher des comportements en rejet de perturbations qui interviennent notamment lors d'interactions physiques.
 
-Une expérience a été mise en œuvre avec un robot articulé piloté en admittance cartésienne, pour permettre des estimations d'impédance mécanique du bras de participants pendant une tâche de référence permettant de générer des mouvements rythmiques, avec des retours haptiques.
-Une méthode permettant l'estimation des paramètres du modèle en impédance a été proposée. 
-Cette méthode qui repose sur des interpolations de splines et des optimisations de sinusoïdes permet l'estimation des trajectoires virtuelles en position et force du bras, à la suite de faibles perturbations ne gênant pas la réalisation de la tâche.
+Une expérience a été mise en œuvre avec un robot articulé piloté en admittance cartésienne, pour permettre des estimations d’impédance mécanique du bras de participants pendant une tâche de référence permettant de générer des mouvements rythmiques, avec des retours haptiques. 
+Une méthode permettant l’estimation des paramètres du modèle en impédance, basée sur l’approximation des trajectoires virtuelles en position et force lors de faibles perturbations ne gênant pas la réalisation de la tâche, est proposée. 
+Les trajectoires virtuelles sont approchées par des interpolations de splines ou des optimisations de sinusoïdes.
+%Une expérience a été mise en œuvre avec un robot articulé piloté en admittance cartésienne, pour permettre des estimations d'impédance mécanique du bras de participants pendant une tâche de référence permettant de générer des mouvements rythmiques, avec des retours haptiques.
+%Une méthode permettant l’estimation des paramètres du modèle en impédance est proposée.
+%Cette méthode utilise la réponse du bras à la suite de faibles perturbations en force ne gênant pas la réalisation de la tâche, et repose sur des interpolations de splines et des optimisations de sinusoïdes permettant l’estimation des trajectoires virtuelles en position et force pendant la perturbation, nécessaires pour l’estimation d’impédance. 
 
 Une trentaine de participants ont pris part aux expériences proposées pour permettre des estimations significatives de variations des paramètres visco-élastiques apparents et mieux comprendre leurs implications dans la réalisation d'une tâche en interaction avec un robot. 
 Le compromis stabilité-transparence du couplage du robot avec un environnement en impédance a finalement été analysé pour proposer une amélioration des réglages du contrôle en admittance cartésienne.
@@ -243,28 +241,25 @@ Le compromis stabilité-transparence du couplage du robot avec un environnement 
 \textbf{Title:} Bio-inspired control of robotic systems in rhythmic interaction tasks with the environment
 
 \vspace{.25cm}
-\noindent \textbf{Keywords:} 3 à 6 mots clefs (version en anglais)
+\noindent \textbf{Keywords:} admittance control, mechanical impedance, human arm, trajectory estimation, human-robot physical interactions, ...
 
 \vspace{-.5cm}
 \begin{multicols}{2}
 \noindent \textbf{Abstract:}
-Actuator or sensor faults occurring in an \acl*{UAV} can compromise the system integrity.
-Fault diagnosis methods are therefore becoming a required feature for those systems.
-In this thesis, the focus is on fault estimation for fixed-wing \aclp*{UAV} in the presence of simultaneous actuator and sensor faults.
-To deal with the challenging nature of some fault scenarios, such as simultaneous and ambiguous faults that induce multimodality, a \acl*{JMRPF} and enhanced versions of it are presented in this thesis.
 
-This method is based on a \acl*{RPF} that improves the robustness thanks to the approximation of the posterior density by a kernel mixture, and on a \acl*{JMS}.
-The jump strategy uses a small number of particles --- called sentinel particles --- to continue testing the alternate hypothesis under both fault free and faulty modes.
+Robots are more inclined to interact with humans or their environment for collaborative purposes.
+Knowledge on the human endpoint viscoelastic properties during physical interactions provides insights for the field of human movement science and also for the design of innovative bio-inspired collaborative robotic control strategies.
+In this work, the focus is placed on a simplistic linear mechanical model of the human arm, with endpoint apparent parameters like stiffness, damping and mass.
+Perturbation rejection behaviours occuring remarkably during physical interactions can be met using this modelling.
 
-The numerical results are obtained using linear then non-linear longitudinal dynamics of fixed wing \acl*{UAV}.
-It is compared to \acl*{IMM-KF} and \aclp*{RPF} and shown to outperform them in terms of accuracy, robustness and convergence time in the scenarios considered.
-The state estimation is also more accurate and robust to faults using the proposed approach.
-Performance enhancement compared to other filters is more pronounced when fault amplitudes increase.
+In order to estimate those properties for the human arm, an experimental test-bed was designed using an endpoint admittance controled polyarticulated robot.
+A benchmark task was used so that rhythmic movements emerged, while haptic feedback were introduced by the robot.
+A methodology to identify the linear parameters of the chosen impedance model was designed, tackling the issue of the estimation of virtual trajectories of the arm during dynamic movements. 
+The estimations of the arm's virtual trajectories both in position and force relied on spline interpolations and sine optimisations, for small deviations that did not alter the performances of the task.
 
-An enhanced version of this method named the \acl*{RJMRPF} is also presented and allows one to accurately and rapidly estimate faults with no prior knowledge of the fault dynamics.
-Finally, a new approach to compute an adaptive transition probability matrix is introduced by computing the false alarm and missed detection probabilities using a saddlepoint approximation.
+A cohort of participants took part in experiments proposed to observe significant variations of the viscoelastic apparent parameters, and improve the understanding of the implications of such variations during a physical interaction with a robot.
+The famous trade-off between stability and transparency while the robot is coupled with an environment was then study thanks to the obtained estimations, to enhance the tuning of the endpoint admittance control empirically designed. 
 
-The proposed approaches significantly improve the safety and accuracy for increasingly autonomous \aclp*{UAV} and generalise to other control environments where faults occur.
 \end{multicols}
 \end{english}
 \end{mdframed}
