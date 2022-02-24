@@ -1,7 +1,7 @@
 \begin{figure}[!htb] 
 	\centering
 	\resizebox{\textwidth}{!}{
-		\subcaptionbox{Réglage expérimental \label{subfig_trajectories_admittance_tuning_pos_a}}
+		\subcaptionbox{Réglage expérimental initial \label{subfig_trajectories_admittance_tuning_pos_a}}
 		{
 			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_pos_a}
 			\begin{tikzpicture}
@@ -23,13 +23,13 @@
 					%solid,
 					smooth,
 					]
-					table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_nom}*10] {misc/chap_5/trajectories_admit_tuning.csv};
+					table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_nom}*100] {misc/chap_5/trajectories_admit_tuning.csv};
 					%			
 				\end{axis}
 				%
 			\end{tikzpicture}
 		}
-		\subcaptionbox{$K_i$ max \label{subfig_trajectories_admittance_tuning_pos_b}}
+		\subcaptionbox{$K_i$ max ($\zeta^{obj}=0.6$)\label{subfig_trajectories_admittance_tuning_pos_b}}
 		{
 			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_pos_b}
 			\begin{tikzpicture}
@@ -50,13 +50,13 @@
 					%solid,
 					smooth,
 					]
-					table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_ki}*10] {misc/chap_5/trajectories_admit_tuning.csv};
+					table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_ki}*100] {misc/chap_5/trajectories_admit_tuning.csv};
 					%			
 				\end{axis}
 				%
 			\end{tikzpicture}
 		}
-		\subcaptionbox{$K_p$ max \label{subfig_trajectories_admittance_tuning_pos_c}}
+		\subcaptionbox{$K_p$ max ($\zeta^{obj}=0.6$)\label{subfig_trajectories_admittance_tuning_pos_c}}
 		{
 		\tikzsetnextfilename{subfig_trajectories_admittance_tuning_pos_c}
 		\begin{tikzpicture}
@@ -77,7 +77,7 @@
 				%solid,
 				smooth,
 				]
-				table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_kp}*10] {misc/chap_5/trajectories_admit_tuning.csv};
+				table [col sep=comma, x expr=\coordindex/1000, y expr=\thisrow{x_kp}*100] {misc/chap_5/trajectories_admit_tuning.csv};
 				%			
 			\end{axis}
 			%
@@ -85,8 +85,9 @@
 		}
 	}	
 	
+	\vspace{2.5mm}
 	\resizebox{\textwidth}{!}{
-		\subcaptionbox{Réglage expérimental \label{subfig_trajectories_admittance_tuning_for_a}}
+		\subcaptionbox{Réglage expérimental initial \label{subfig_trajectories_admittance_tuning_for_a}}
 		{
 			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_for_a}
 			\begin{tikzpicture}
@@ -114,7 +115,7 @@
 				%
 			\end{tikzpicture}
 		}
-		\subcaptionbox{$K_i$ max\label{subfig_trajectories_admittance_tuning_for_b}}
+		\subcaptionbox{$K_i$ max ($\zeta^{obj}=0.6$)\label{subfig_trajectories_admittance_tuning_for_b}}
 		{
 			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_for_b}
 			\begin{tikzpicture}
@@ -141,7 +142,7 @@
 				%
 			\end{tikzpicture}
 		}
-		\subcaptionbox{$K_p$ max\label{subfig_trajectories_admittance_tuning_for_c}}
+		\subcaptionbox{$K_p$ max ($\zeta^{obj}=0.6$)\label{subfig_trajectories_admittance_tuning_for_c}}
 		{
 			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_for_c}
 			\begin{tikzpicture}
@@ -163,12 +164,119 @@
 					smooth,
 					]
 					table [col sep=comma, x expr=\coordindex/1000, y=f_kp] {misc/chap_5/trajectories_admit_tuning.csv};
-					%			
+					%		
 				\end{axis}
 				%
 			\end{tikzpicture}
 		}
 	}
-	\caption[Comparaison de trajectoires en fonction du réglage du correcteur en admittance]{Trajectoires pseudo-sinusoïdales en position et force en fonction des réglages des gains du correcteur en admittance cartésienne.}
+	
+	\vspace{2.5mm}
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Réglage expérimental initial \label{subfig_trajectories_admittance_tuning_phase_diag_a}}
+		{
+			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_phase_diag_a}
+			\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					width=.31\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					ylabel={Position (\SI{}{\centi\meter})},
+					xlabel={Force (\SI{}{\newton})},
+					axis x line = bottom,
+					axis y line = left, 
+					ymin=27,ymax=41,
+					xmin=-9.1,xmax=12,
+					]
+					%
+					\addplot [
+					color=Prune,
+					%solid,
+					smooth,
+					]
+					table [col sep=comma, y expr=\thisrow{x_nom}*100, x=f_nom] {misc/chap_5/trajectories_admit_tuning.csv};
+					%			
+					\addplot [
+						color = gray,
+						dashed,
+						domain=-9.1:12,
+						]	
+						{0.6*x + 34.3};
+				\end{axis}
+				%
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$K_i$ max ($\zeta^{obj}=0.6$)\label{subfig_trajectories_admittance_tuning_phase_diag_b}}
+		{
+			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_phase_diag_b}
+			\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					width=.31\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					xlabel={Force (\SI{}{\newton})},
+					axis x line = bottom,
+					axis y line = left, 
+					ymin=27,ymax=41,
+					xmin=-9.1,xmax=12,
+					]
+					%
+					\addplot [
+					color=Prune,
+					%solid,
+					smooth,
+					]
+					table [col sep=comma, y expr=\thisrow{x_ki}*100, x=f_ki] {misc/chap_5/trajectories_admit_tuning.csv};
+					%									
+					\addplot [
+					color = gray,
+					dashed,
+					domain=-9.1:12,
+					]	
+					{1.4*x + 33.7};	
+				\end{axis}
+				%
+			\end{tikzpicture}
+		}
+		\subcaptionbox{$K_p$ max ($\zeta^{obj}=0.6$)\label{subfig_trajectories_admittance_tuning_phase_diag_c}}
+		{
+			\tikzsetnextfilename{subfig_trajectories_admittance_tuning_phase_diag_c}
+			\begin{tikzpicture}
+				\centering
+				%				
+				\begin{axis}[%
+					width=.31\linewidth,
+					height=.25\linewidth,
+					scale only axis,    
+					xlabel={Force (\SI{}{\newton})},
+					axis x line = bottom,
+					axis y line = left, 
+					ymin=27,ymax=41,
+					xmin=-9.1,xmax=12,
+					]
+					%
+					\addplot [
+					color=Prune,
+					%solid,
+					smooth,
+					]
+					table [col sep=comma, y expr=\thisrow{x_kp}*100, x=f_kp] {misc/chap_5/trajectories_admit_tuning.csv};
+					%										
+					\addplot [
+					color = gray,
+					dashed,
+					domain=-9.1:12,
+					]	
+					{1.1*x + 34.6}; 		
+				\end{axis}
+				%
+			\end{tikzpicture}
+		}
+	}
+	\caption[Comparaison de trajectoires en fonction du réglage du correcteur en admittance]{Trajectoires pseudo-sinusoïdales en position et force en fonction des réglages des gains du correcteur en admittance cartésienne. Les figures \subref{subfig_trajectories_admittance_tuning_phase_diag_a} à \subref{subfig_trajectories_admittance_tuning_phase_diag_c} correspondent aux diagrammes liant entre la force d'interaction à la position, les lignes discontinues grises indiquent le ratio des amplitudes des positions et de force.}
 	\label{fig_trajectories_admittance_tuning}
 \end{figure}

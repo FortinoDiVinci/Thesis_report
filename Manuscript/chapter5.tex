@@ -262,7 +262,7 @@ Ainsi on peut écrire la boucle fermée $\matr{H}_{BF}$ de l'interaction du robo
 %	\matr{H}_{BF} = \frac{\vect{V}_e(s)}{\vect{F}_e^*(s)} = \left( \left(\matr{\Sigma}_v \matr{C}_z + \matr{\Sigma}_f\right)\matr{\mu} + \matr{I} \right)^{-1} \matr{\Sigma}_v \matr{C}_z
 %\end{equation}
 \begin{equation} \label{eq_close_loop_system}
-	\matr{H}_{BF}(s) = \frac{\vect{V}_e(s)}{\vect{f}_{in}(s)} = \big( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) \big)\textcolor{black}{\big(\matr{I} + \matr{\mu}(s)( \matr{\Sigma}_f(s) + \matr{\Sigma}_f(s)\matr{C}_z(s) )\big)^{-1}}
+	\matr{H}_{BF}(s) = \frac{\vect{V}_e(s)}{\vect{f}_{in}(s)} = \big( \matr{\Sigma}_f(s) + \matr{\Sigma}_v(s)\matr{C}_z(s) \big)\textcolor{black}{\big(\matr{I} + \matr{\mu}(s)( \matr{\Sigma}_f(s) + \matr{\Sigma}_v(s)\matr{C}_z(s) )\big)^{-1}}
 \end{equation}
 
 Cette représentation permet d'étudier la stabilité du robot en fonction du choix des lois de commande et des environnements.
@@ -511,7 +511,7 @@ Il faut toutefois contraster cette analyse, car lorsque la passivité n'est plus
 
 \subsection{Conclusions}
 
-\textcolor{black}{En fixant un taux d'amortissement $\zeta$ minimum de 0.6 (qui se rapproche pour un second ordre de la réponse amortie (iv) montrée en \cref{subfig_exp_stability_map_b}), on peut choisir une réglage théorique des gains du correcteur $C_z(s)$, en cherchant à maximiser le gain $K_p$ ou $K_i$ en priorité (ou une tout autre choix cherchant une optimisation des deux gains). %Ainsi, si l'on cherche à maximiser le gain intégral $K_i$, on obtient le couple \cref{labellist}, et si l'on cherche à maximiser le gain proportionnel $K_p$, on obtient le couple \cref{labellist}.
+\textcolor{black}{En fixant un taux d'amortissement $\zeta^{obj}$ minimum de 0.6 (qui se rapproche pour un second ordre de la réponse amortie (iv) montrée en \cref{subfig_exp_stability_map_b}), on peut choisir une réglage théorique des gains du correcteur $C_z(s)$, en cherchant à maximiser le gain $K_p$ ou $K_i$ en priorité (ou une tout autre choix cherchant une optimisation des deux gains). %Ainsi, si l'on cherche à maximiser le gain intégral $K_i$, on obtient le couple \cref{labellist}, et si l'on cherche à maximiser le gain proportionnel $K_p$, on obtient le couple \cref{labellist}.
 Ainsi, le \cref{tab_theoretical_tunning} propose deux réglages du correcteur en fonction de la focalisation mise sur les gains $K_p$ et $K_i$. Dans tous les cas, comparativement au réglage expérimental, on peut voir que le gain $K_p$ est approximativement doublement supérieur sur ces réglages théoriques. De plus, si l'on cherche à maximiser l'action intégrale, pour par exemple réduire la masse apparente, il serait en théorie possible de presque tripler le gain choisi empiriquement.} %La masse apparente passerait alors de \SIrange{13.3}{4.7}{\kilogram}, puisqu'en effet, la masse apparente est inversement proportionnelle à $K_i$ \cref{eq_mass_Ki}.}
 
 \begin{table}
@@ -527,7 +527,12 @@ Ainsi, le \cref{tab_theoretical_tunning} propose deux réglages du correcteur en
 	\label{tab_theoretical_tunning}
 \end{table}
 
-L'implémentation expérimentale de ces réglages s'est avérée stable lors de manipulation avec des co-contractions nominales. Pour des co-contractions maximales, le contrôle avec les réglages maximisant $K_p$ s'est révélé très oscillants à la limite de la stabilité, rendant l'interaction non intuitive. En regardant le ratio de l'amplitude des trajectoires en position et en force, on peut attribuer un score en lien avec la transparence. Ainsi, les gains choisis expérimentalement se voit attribuer la valeur de \SI{6}{\milli\meter\per\newton}, contre respectivement \SIlist{14;9}{\milli\meter\per\newton} pour les réglages maximisant $K_i$ et $K_p$. Les oscillations de la trajectoire en force sont toutefois bien plus important pour ces deux derniers réglages ce qui a tendance à rendre l'interaction moins intuitive, comme le révèle la \cref{fig_trajectories_admittance_tuning}.
+L'implémentation expérimentale de ces réglages s'est avérée stable lors de manipulation avec des co-contractions nominales. Pour des co-contractions maximales, le contrôle avec les réglages maximisant $K_p$ s'est révélé très oscillants à la limite de la stabilité, rendant l'interaction non intuitive. %En regardant le ratio de l'amplitude des trajectoires en position et en force, on peut attribuer un score en lien avec la transparence. Ainsi, les gains choisis expérimentalement se voit attribuer la valeur de \SI{6}{\milli\meter\per\newton}, contre respectivement \SIlist{14;9}{\milli\meter\per\newton} pour les réglages maximisant $K_i$ et $K_p$. 
+Si l'on considère le ratio de l'amplitude des trajectoires en position et en force comme un score en lien avec la transparence (plus le ratio est élevé, meilleure est la transparence), le réglage initial obtenu expérimentalement correspond à un ratio de \SI{6}{\milli\meter\per\newton}, tandis que les réglages théoriques maximisant $K_i$ et $K_p$ correspondent respectivement à des scores de \SIlist{14;11}{\milli\meter\per\newton}.
+
+Comme le révèle la \cref{fig_trajectories_admittance_tuning}, les oscillations de la trajectoire en force sont toutefois bien plus importantes pour les deux réglages obtenus théoriquement ce qui a tendance à rendre l'interaction moins intuitive. Les tracés de la position en fonction de la force d'interaction (\cref{subfig_trajectories_admittance_tuning_phase_diag_a} à \subref{subfig_trajectories_admittance_tuning_phase_diag_c}) donnent des indications sur la transparence. En effet, l'orientation des ellipses correspond au score précédemment évoqué, de plus, le petit rayon des ellipses donne une information sur la phase de la fonction de transfert liant les deux grandeurs (plus le petit rayon est grand, plus la latence est importante). 
+
+Ces comportements peuvent s'expliquer par des réglages moins robustes et soulignent la nécessité de critères combinés (en plus du taux d'amortissement) pour exprimer le cahier des charges de l'interaction. On pourrait ainsi penser par exemple aux marges de robustesse, en se dirigeant vers une structure de commande plus élaborée prenant en compte ces paramètres, comme c'est le cas lors de synthèse robuste.
 
 \input{latex_figures/chapter_5/fig_trajectories_admittance_tuning}
 

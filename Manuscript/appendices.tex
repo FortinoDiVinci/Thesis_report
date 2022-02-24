@@ -77,7 +77,6 @@
 	
 	\tikzexternalenable
 	\input{latex_figures/fig_ellipse_impedance}
-	\tikzexternaldisable
 	
 	\begin{equation} \label{eq_ellisp_2d}
 		Z_s = \begin{pmatrix}
@@ -103,9 +102,8 @@
 	
 	Dans le cas très simple du robot plan, dont on rappelle la structure simplifiée, avec les notations des différentes longueurs et conventions d'angles en \cref{fig_robot_simplified_model}, le calcul du modèle géométrique direct ne nécessite pas de passer par la convention de Denavit-Hartenberg, et les combinaisons de transformations homogènes.
 	
-	\tikzexternalenable
 	\input{latex_figures/fig_robot_model}
-	\tikzexternaldisable
+	%\tikzexternaldisable
 	
 	Ainsi, en cherchant à calculer géométriquement les coordonnées $ x_e $, $ z_e $ et $ \theta_e $, par rapport à la base du robot $ ( x_0, 0 ) $ on obtient les résultats présentés dans l'équation \cref{eq_direct_kinematic}.
 	
@@ -442,7 +440,6 @@
 	
 	La \cref{subfig_coupling_effect_b} montre la variation du terme non linéaire entre $ K_p $ et $ f_z $ en \cref{eq_coupling_effect_x_2_b} en fonction des valeurs articulaires. La valeur de la dernière articulation actionnée a été fixée à sa valeur $ q_0 $ définie dans la \cref{chap2_sec_ctrl_vfo_subsec_cartesian_3}, et les valeurs des deux autres articulations ont été limitées à $ \pm20^\circ $ autour de la configuration $ \vect{q}_0 $. On voit que les effets de couplage sont effectivement inférieurs à ce qui est observé dans la diagonale (\cref{subfig_coupling_effect_a}), mais qu'ils restent d'un ordre de grandeur similaire. De plus, il est important de noter que le terme de couplage montré ne prend en compte ni l'amplitude de la force $ f_z $, à priori plus élevée que $ f_x $ lors de la tâche, ni l'ajout du terme de couplage associé aux couples $ \tau_\theta $. 
 	
-	\tikzexternalenable
 	\input{latex_figures/fig_coupling_effect_joint_ctrl}
 	
 	La mise en place expérimentale de la stratégie de contrôle articulaire décrite par \textcite{lamy_achieving_2009} est venue valider cette analyse. Les effets de couplages ne permettaient pas un contrôle intuitif du robot, à cause de la génération de mouvements non souhaités. Ces phénomènes avaient même tendance à donner la sensation d'une co-manipulation avec un robot doué d'une "volonté propre". Les mouvements sur l'axe $\vec{x}$ doivent donc être restreints.
@@ -452,7 +449,6 @@
 	Une solution envisageable pour limiter les mouvements à l'axe vertical $\vec{z}$, réside dans l'utilisation d'un guide virtuel, notamment décrit dans les travaux de thèse de \textcite{sanchez_restrepo_intuitive_2018}. Toutefois, l'utilisation de guides virtuels pour générer des forces sur les autres axes, et limiter le mouvement à l'axe principal $\vec{z}$, entrainerait alors des effets résiduels sur la transparence, toujours à cause des effets de couplage. Une implémentation expérimentale de cette solution détaillée en \cref{fig_virtual_guide_control} a permis d'observer une dégradation de la transparence.
 	
 	\input{latex_figures/fig_ctrl_scheme_virt_guide}
-	\tikzexternaldisable
 	
 	%%%%%%%
 	% APP 5
@@ -501,7 +497,6 @@
 	Le réglage de la correction des vitesses articulaires a suivi un processus équivalent (voir \cref{fig_velocity_response_tunning}) en suivant les recommandations faites par \textcite{newman_stability_1992,lamy_conception_2011}. Il est important de noter, qu'en plus du correcteur proportionnel proposé par \textcite{lamy_conception_2011}, une action intégrale a été ajoutée. En effet, dans un second temps, après la mise en place d'un contrôle en admittance, des dérives ont été constatées lorsque le robot était laissé libre de ses mouvements, sans forces d'interaction. L'ajout de l'action intégrale sur la boucle interne en vitesse a permis de réduire ces comportements sans constat d'impacts négatifs lors des interactions physiques.
 	
 	\input{latex_figures/fig_joint_velocity_response}
-	\tikzexternaldisable
 	
 	La période d'échantillonnage des régulateurs de vitesse articulaire $\delta t_{PIv}$ est par défaut de \SI{1}{\milli\second} et les gains saisis sont divisés par des coefficients tel que $K_{v} = P_{PARAMv}/2^{8}$ et $K_{vi} = I_{PARAMv}/2^{16}$. De plus, pour simplifier le contrôle ainsi que sa modélisation, le générateur de rampe proposé par \textcite{TRINAMIC_manual_2011} a été désactivé. Cette limitation proposée par le constructeur permet de limiter les variations de vitesses, notamment lorsque le robot est contrôlé en position, pour permettre des trajectoires plus lissées.
 	%Le système propose une limitation dans l'incrément de la consigne de  pour éviter des dynamiques rapides, mais cette limitation a été désactivée pour simplifier le contrôle ainsi que sa modélisation.
@@ -542,7 +537,7 @@
 	
 	Une cellule LSTM classique se compose de quatre couches neuronales. Chacun de ces niveaux se compose d'une fonction d'activation $f_a$ (sigmoïde ou tangente hyperbolique), d'une matrice de gain $\matr{W}_i$ et d'un vecteur de biais $\vect{b}_i$, sous la forme suivante $f_a(\matr{W}_i \vect{e}_t + \vect{b}_i)$, avec $\vect{e}$ le vecteur du signal d'entrée. Par ailleurs l'une des particularités des cellules LSTM est qu'elles contiennent deux états, celui de la cellule $\vect{c}_t$ et l'état caché $\vect{h}_t$. Ce dernier état est concaténé au vecteur d'entrée du pas suivant $\vect{x}_{t+1}$, autrement dit l'ancien état caché et regroupé avec l'entrée de la cellule $\vect{e}_t = [\vect{h}_{t-1}, \vect{x}_{t}]$.
 	
-	Les couches neuronales peuvent être regroupée sous forme de trois portes. La première appelée porte d'oubli permet de se débarrasser d'anciennes données, à l'aide d'une fonction d'activation sigmoïdique qui fournit un facteur d'oubli compris entre 0 et 1 pour selectionner partiellement des informations du précédent état de la cellule.
+	Les couches neuronales peuvent être regroupée sous forme de trois portes. La première appelée porte d'oubli permet de se débarrasser d'anciennes données, à l'aide d'une fonction d'activation sigmoïdique qui fournit un facteur d'oubli compris entre 0 et 1 pour sélectionner partiellement des informations du précédent état de la cellule.
 	
 	\begin{equation} \label{eq_lstm_ft_app}
 		\vect{f}_t = \sigma(\matr{W}_f \vect{e}_t + \vect{b}_f)
@@ -574,7 +569,6 @@
 		\vect{h}_t =  \vect{o}_t \hadamard \tanh(\vect{c}_t)
 	\end{equation}
 	
-	\tikzexternalenable
 	\input{latex_figures/fig_lstm_architecture_detailed.tex}
 	\tikzexternaldisable
 	
