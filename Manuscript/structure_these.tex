@@ -41,6 +41,7 @@
 %\usepackage[square]{natbib}
 \usepackage{xifthen} %for conditional test
 \usepackage{adjustbox}
+\usepackage{pdfpages}
 \usepackage{etoolbox}
 \usepackage{titlesec}
 \usepackage[toc,page,title,header,titletoc]{appendix} % for appendices [title]
@@ -53,7 +54,8 @@
 \usepackage[french]{minitoc}
 \usepackage[french]{nomencl}
 \usepackage{readarray}
-\usepackage{hyperref}
+%\usepackage[draft]{hyperref} % for printable version
+\usepackage{hyperref} % for online version
 %\usepackage{cite}
 \usepackage[
 	style = authoryear,
@@ -230,6 +232,7 @@
 \addbibresource{bibliography/chapter4.bib}
 \addbibresource{bibliography/chapter5.bib}
 
+
 \definecolor{Prune}{RGB}{99,0,60}
 \definecolor{LimedSpruce}{RGB}{49,62,72}
 \definecolor{Shiraz}{RGB}{198,11,70}
@@ -238,6 +241,20 @@
 \definecolor{Pear}{RGB}{213,223,61}
 \definecolor{Lavender}{RGB}{185,177,215}
 \definecolor{Sushi}{RGB}{140,198,62}
+
+\colorlet{DarkOrient}{Orient!50!black}
+\colorlet{DarkShiraz}{Shiraz!50!black}
+
+\hypersetup{
+	% draft=true, % for printable version
+	colorlinks=true,
+	linkcolor=DarkOrient,
+	filecolor=Sushi,
+	citecolor=DarkShiraz,      
+	urlcolor=Prune,
+}
+
+
 
 %
 \pgfplotsset{

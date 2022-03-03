@@ -4,7 +4,8 @@
 %\documentclass[fr]{tcthesis}
 %\PassOptionsToPackage{table,xcdraw,svgnames}{xcolor} % for quotation boxes
 %\documentclass[multi=pane,border=4mm,tikz,crop]{book}
-\documentclass[tikz,french,10pt]{book}
+%\documentclass[tikz,french,10pt]{book} % printable version
+\documentclass[tikz,french,10pt]{report} % onlive version
 
 \input{structure_these.tex}
 
@@ -35,6 +36,8 @@
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\includepdf[pages=1]{cover/couverture_version_rapporteurs_v3.pdf}
+\newpage 
 \dominitoc
 \setcounter{secnumdepth}{3} 
 \renewcommand{\thesubsubsection}{\thesubsection.\alph{subsubsection}}
@@ -102,6 +105,9 @@
 \include{conclusion}
 \include{appendices}
 
+
 \printbibliography
+\cleardoublepage
+\includepdf[pages=last]{cover/couverture_version_rapporteurs_v3.pdf}
 
 \end{document}
