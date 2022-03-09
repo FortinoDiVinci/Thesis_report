@@ -1,6 +1,8 @@
 %% structure
 
 \usepackage{shellesc}
+\usepackage{emptypage}
+\usepackage{fancyhdr}
 \usepackage{textgreek}
 \usepackage{polyglossia}
 	\setmainlanguage{french}
@@ -71,7 +73,9 @@
 	giveninits = true,
 ]{biblatex}
 \usepackage{layout}
-\usepackage[marginparwidth=0pt]{geometry}
+%\usepackage{layouts}
+%\usepackage[marginparwidth=0pt, left=3cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage[marginparwidth=0pt, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
 \usepackage{microtype}
 \usepackage{cleveref} % should be loaded last
 
@@ -79,6 +83,11 @@
 %\usepackage[T1]{fontenc}
 %\usepackage{adjustbox,libertine,soul,standalone,xcolor} % for quotation boxes
 %
+
+%\renewcommand{\chaptermark}[1]%
+%{\markboth{\thechapter.\ #1}{}}
+%\renewcommand{\sectionmark}[1]%
+%{\markright{\thesection.\ #1}}
 
 \makenomenclature
 
@@ -396,7 +405,7 @@
 }
 \makeatother
 
-\tikzexternalize
+\tikzexternalize[optimize command away=\includepdf] % option addedto avoid conflict with pdfpages package
 \tcbsetforeverylayer{shield externalize}
 
 \tikzsetexternalprefix{pdf_figures/}
@@ -406,6 +415,32 @@
 \crefname{annexe}{annexe}{annexes}
 \renewcommand{\appendixtocname}{Annexes}%
 \renewcommand{\appendixpagename}{Annexes}%
+
+\pagestyle{fancy}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+%\fancyfoot{}
+%
+%\fancyhead[LE]{\leftmark}
+%\fancyhead[RO]{\rightmark}
+%\renewcommand{\chaptermark}[1]{%
+%\markright{\thechapter.\ #1}{}}
+%\renewcommand{\sectionmark}[1]{%
+%\markleft{\thesection.\ #1}{}}
+%
+
+\fancyhead[LE]{\nouppercase{\leftmark}}
+\fancyhead[RO]{\nouppercase{\rightmark}}
+
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+%\renewcommand{\sectionmark}[1]{\markright{\chaptername\ \thechapter.\ #1}}
+
+%\fancyhead[LO]{\itshape\nouppercase{\rightmark}}
+%\fancyhead[RE]{\itshape\nouppercase{\leftmark}}
+%\renewcommand{\chaptermark}[1]{\markright{Chapitre \thechapter. ##1}{}}
+%\renewcommand{\sectionmark}[1]{\markleft{\thesection\ ##1}}
+
 %\makeatletter
 %\g@addto@macro\appendix{%
 %	\cleardoublepage

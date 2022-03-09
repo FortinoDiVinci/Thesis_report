@@ -21,7 +21,7 @@
 					]
 					%
 					%\addplot3 [mesh] table[x=idx_id_wdw_csv, y=idx_interp_spl_csv, z=K_med_err_csv, col sep=comma] {K_interp_and_id_window.csv};
-					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_pos] {misc/identif_and_interp_window/spline_error_profile_param_2.csv};
+					\addplot3 [mesh, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_pos] {misc/identif_and_interp_window/spline_error_profile_param_2.csv};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_interp_spline_error_profile_neg_2}
@@ -40,7 +40,7 @@
 					point meta min=-1e-3,
 					]
 					%
-					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_neg] {misc/identif_and_interp_window/spline_error_profile_param_2.csv};
+					\addplot3 [mesh, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_neg] {misc/identif_and_interp_window/spline_error_profile_param_2.csv};
 				\end{axis}
 			\end{tikzpicture}
 		}
@@ -66,7 +66,7 @@
 					point meta min=-1e-3,
 					]
 					%
-					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_pos] {misc/identif_and_interp_window/spline_error_profile_param_1.csv};
+					\addplot3 [mesh, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_pos] {misc/identif_and_interp_window/spline_error_profile_param_1.csv};
 				\end{axis}
 			\end{tikzpicture}
 			\tikzsetnextfilename{subfig_interp_spline_error_profile_neg_1}
@@ -85,7 +85,7 @@
 					point meta min=-1e-3,
 					]
 					%
-					\addplot3 [surf, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_neg] {misc/identif_and_interp_window/spline_error_profile_param_1.csv};
+					\addplot3 [mesh, mesh/rows=51, shader=interp, patch type=bilinear] table[col sep=comma, x=time, y=spline_interp_window, z=mean_error_neg] {misc/identif_and_interp_window/spline_error_profile_param_1.csv};
 				\end{axis}
 			\end{tikzpicture}
 		}

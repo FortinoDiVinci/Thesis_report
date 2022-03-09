@@ -1,4 +1,5 @@
 \chapter{Analyse de stabilité} \label{chap5}
+%\chaptermark{\nameref{chap5}}
 \minitoc
 
 \textcolor{black}{Ce chapitre présente une courte revue de la littérature concernant les méthode d'étude de stabilité des systèmes robotiques lors d'interactions avec des environnements physiques. Une analyse paramétrique de la stabilité est ensuite proposée pour mieux appréhender le compromis entre la stabilité et la transparence du contrôle en admittance cartésienne proposé au \cref{chap2}.}
@@ -278,7 +279,7 @@ Comme expliqué en \cref{chap5_sec_model_sub_env}, il n'est pas réaliste de con
 \subsubsection{Effets du filtrage du modèle en impédance} \label{chap5_sec_stability_study_sub_env_1}
 
 %On peut étudier l'influence de l'environnement sur la stabilité de l'interaction pour des valeurs typiques des paramètres d'impédance identifiés au cours des expériences. Les estimations effectuées sur le sujet 851 pour la phase \cref{item_pert3} sont utilisées pour cette analyse et sont rappelées dans le \cref{tab_impedance_param_user_851}. Le choix s'est porté sur ces données pour la raideur $K$ élevée ainsi que le faible amortissement $B$ qui ont été identifiés.
-On peut étudier l'influence de l'environnement sur la stabilité de l'interaction pour des valeurs typiques des paramètres d'impédance identifiés au cours des expériences. Les estimations effectuées sur le sujet \textcolor{black}{573 pour la phase \cref{item_pert3} sont utilisées pour cette analyse et sont rappelées dans le \cref{tab_impedance_param_user_573}. Le choix s'est porté sur ces données pour la raideur $K$ élevée ainsi que le faible amortissement $B$ qui ont été identifiés avec un coefficient de détermination médian de \SI{97.7}{\percent}.}
+On peut étudier l'influence de l'environnement sur la stabilité de l'interaction pour des valeurs typiques des paramètres d'impédance identifiés au cours des expériences. Les estimations effectuées sur le sujet \textcolor{black}{851 pour la phase \cref{item_pert3} sont utilisées pour cette analyse et sont rappelées dans le \cref{tab_impedance_param_user_851}. Le choix s'est porté sur ces données pour la raideur $K$ élevée ainsi que le faible amortissement $B$ qui ont été identifiés avec un coefficient de détermination médian de \SI{96}{\percent}.}
 %Ce sont les estimations effectuées pour le sujet 000 qui sont utilisés (\cref{tab_impedance_param_user_000}), puisque c'est ce dernier qui a permis de réaliser la cartographie faite en \cref{fig_exp_stability_map}.
 
 %\begin{table}
@@ -297,17 +298,19 @@ On peut étudier l'influence de l'environnement sur la stabilité de l'interacti
 	\begin{tabular}{l | c | c | c }
 		%\hline%
 		Paramètres & $K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
-		Valeurs moyennes identifiées & 479 & 11.5 & 0.626\\%
+		Valeurs moyennes identifiées & 348 & 9.2 & 0.566\\%
 		%\hline
 	\end{tabular}
 	\caption{Paramètres typiques utilisés pour le modèle en impédance}
-	\label{tab_impedance_param_user_573}
+	\label{tab_impedance_param_user_851}
 \end{table}
 
 La \cref{subfig_bode_diagram_impedance_environment} montre le diagramme de Bode de l'environnement seul, avant et après le filtrage avec une fréquence de brisure $f_c$ de \SI{10}{\hertz}. Bien que stable, le modèle en impédance filtré n'est pas passif, comme le révèle le plan de Nyquist en \cref{subfig_bode_nyquist_impedance_environment}, où l'on peut voir que l'ensemble des fréquences n'est pas contenu sur les réels positifs.
 %\textcolor{red}{Le gain du système est supérieur à 1 jusqu'à une fréquence de \SI{259}{\hertz}, et donc que dans ces fréquences même avec le filtrage, l'environnement modélisé n'est pas passif. [ce n'est pas vrai, faire une analyse de la passivité...]}
 
+%\tikzexternaldisable
 \input{latex_figures/chapter_5/fig_environment_bode_diagram}
+%\tikzexternalenable
 
 Pour étudier l'influence de la constante de temps $\tau_m$ sur la stabilité de l'interaction, on peut étudier son influence sur les marges de stabilité obtenues à partir de l'étude de la boucle ouverte $\matr{H}_{BO}$.
 
@@ -332,7 +335,7 @@ Comme rappelé par \textcite{ott_unified_2010}, contrairement au contrôle en im
 Ainsi, si le comportement est stable mais demande des efforts très importants pour réaliser des déplacements, le critère de transparence du robot est faible et risque de compromettre la réalisation de la tâche. Inversement, si le système a un comportement oscillant bien que stable, il peut se révéler désagréable et peu intuitif pour l'utilisateur. C'est le compromis stabilité-transparence décrit en \cref{sec_robot_sub_task_ctrl_tunning_1}, qui a été traité expérimentalement dans cette même section.
 
 %Dans un premier temps, on s'intéresse au comportement en boucle fermée du couplage pour une entrée $\vect{f}_{in}$ sinusoïdale uniquement sur l'axe $\vec{z}$. Les caractéristiques du signal injecté sont choisies pour se rapprocher des observations. Une amplitude de \SI{5}{\newton}, et une fréquence de \SI{0.9}{\hertz} sont donc utilisées, comme on peut l'observer en \cref{fig_stability_transparency_against_stiffness}.
-\textcolor{black}{Dans un premier temps, on peut s'intéresser au diagramme de Bode du système en boucle ouverte (\cref{fig_stability_transparency_against_stiffness}) pour analyser la stabilité du système lors de variation de la raideur de l'environnement. On y confirme bien que l'augmentation de la raideur réduit les marges de stabilité. Une tendance monotonique décroissante de la marge de module est par ailleurs observée en \cref{subfig_stability_margin_against_stiffness}, après un maximum local de $\Delta_M=0.92$ atteint sur un plateau allant de \SIrange{121}{484}{\newton\per\meter} (ce qui correspond à plus de \SI{63}{\percent} des raideurs estimées pour les 3 phases cycliques étudiées), et une instabilité constatée après \SI{3.7}{\kilo\newton\per\meter}. On peut aussi noter, qu'une marge de module inférieure à 0.5 est constatée après \SI{1.6}{\kilo\newton\per\meter}.}
+\textcolor{black}{Dans un premier temps, on peut s'intéresser au diagramme de Bode du système en boucle ouverte (\cref{fig_stability_transparency_against_stiffness}) pour analyser la stabilité du système lors de variation de la raideur de l'environnement. On y confirme bien que l'augmentation de la raideur réduit les marges de stabilité. Une tendance monotonique décroissante de la marge de module est par ailleurs observée en \cref{subfig_stability_margin_against_stiffness}, après un maximum local de $\Delta_M=0.92$ atteint sur un plateau allant de \SIrange{121}{484}{\newton\per\meter} (ce qui correspond respectivement à \SIlist{32;74;94}{\percent} des raideurs estimées pour les 3 phases cycliques étudiées), et une instabilité constatée après \SI{3.7}{\kilo\newton\per\meter}. On peut aussi noter, qu'une marge de module inférieure à 0.5 est constatée après \SI{1.6}{\kilo\newton\per\meter}.}
 
 %\tikzexternaldisable
 \input{latex_figures/chapter_5/fig_stability_transparency_against_stiffness}
@@ -501,7 +504,6 @@ Le gain proportionnel $K_p$ du correcteur en admittance modifie principalement l
 \textcolor{black}{Si l'on s'attèle à scruter la réponse fréquentielle du transfert de la boucle fermée \cref{eq_close_loop_system} montrée en \cref{fig_bode_close_loop_against_kp}, on peut y distinguer une fréquence de résonance à \SI{0.55}{\hertz} pour les gains proportionnels les plus faibles ($K_p<0.04$). Pour les fréquences supérieures à \SI{0.8}{\hertz}, l'incrément du gain $K_p$ entraîne une augmentation du gain de la phase de plateau qu'on observe typiquement entre \SIlist{2;20}{\hertz} pour $K_i=0.08$. Ce gain permet par ailleurs de réduire les effets de frictions des moteurs qui comprennent notamment des phénomènes non linéaires \parencite{lamy_conception_2011} pas représentés sur ces analyses linéaires.}
 
 %\input{latex_figures/chapter_5/fig_close_loop_against_kp}
-\tikzexternaldisable
 
 \textcolor{black}{Ainsi pour minimiser les forces d'interaction en basse et en haute fréquence, et donc améliorer la transparence du robot, les gains du correcteur en admittance cartésienne devraient être aussi élevés que possible, tout en garantissant la stabilité.} 
 %En effet, la réponse temporelle se caractérise à la fois par une réduction de l'erreur de trainage et une augmentation de l'amplitude en même temps que l'augmentation du gain $K_p$ jusqu'à obtenir un comportement instable. 
@@ -537,6 +539,7 @@ Comme le révèle la \cref{fig_trajectories_admittance_tuning}, les oscillations
 Les comportements issus des nouveaux réglages théoriques bien que meilleurs pour les indicateurs définis se sont révélés plus oscillants et moins intuitifs lors d'interactions à fortes co-contractions, ce qui pourrait s'expliquer par des réglages des gains moins robustes vis à vis de l'environnement, et potentiellement vis à vis des dynamiques du robot. Il semble donc qu'il soit nécessaire d'utiliser des critères combinés (en plus du taux d'amortissement) pour exprimer un cahier des charges plus exhaustif de l'interaction. On pourrait ainsi penser aux marges de robustesse, en se dirigeant vers une structure de commande plus élaborée qu'un simple, PI en prenant en compte des nouveaux critères, comme c'est le cas lors de synthèse robuste.
 
 \input{latex_figures/chapter_5/fig_trajectories_admittance_tuning}
+\tikzexternaldisable
 
 %\textcolor{black}{Il serait aussi intéressant de proposer une synthèse robuste reposant sur l'ensemble des observations et non seulement sur celle du participant 000.}
 

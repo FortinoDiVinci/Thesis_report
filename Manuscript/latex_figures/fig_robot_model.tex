@@ -26,7 +26,7 @@
 				
 				\newcommand{\alpB}{0.75}
 				
-				\path ($ (joint2) + \coeff*(0.135*\alpB, {0.135*(1 - \alpB)}) $) coordinate (joint3) node[yshift=3mm,xshift=-1mm] {$\mathcal{O}_4$};
+				\path ($ (joint2) + \coeff*(0.135*\alpB, {0.135*(1 - \alpB)}) $) coordinate (joint3) node[yshift=-3mm, xshift=0mm] {$\mathcal{O}_4$};
 				
 				\path ($ (joint3) + \coeff*({(2*\exceeding)*\alpB}, {(2*\exceeding)*(1 - \alpB)}) $) coordinate (joint3Exceed);
 				
@@ -100,7 +100,7 @@
 			\draw[Sushi,-{Latex[length=2mm]}] (joint0) --+ ($ (-0.75, 0) $) node[at end, below, left] {$\vec{x}_1$}; 
 			\draw[Sushi,-{Latex[length=2mm]}] (joint1) --+ ($ (-1*\alpA, {1*(1 - \alpA)}) $) node[at end, left] {$\vec{x}_2$}; 
 			\draw[Sushi,-{Latex[length=2mm]}] (joint2) --+ ($ (1*\alpB, {1*(1 - \alpB)}) $) node[at end, above] {$\vec{x}_3$}; 
-			\draw[Sushi,-{Latex[length=2mm]}] (joint3) --+ ($ (1*\alpC, {1*(1 - \alpC)}) $) node[at end, above, left, yshift=1mm, xshift=-.5mm] {$\vec{x}_4$};
+			\draw[Sushi,-{Latex[length=2mm]}] (joint3) --+ ($ (-0.4749, 0.5805) $) node[at end, above, left, yshift=1mm, xshift=-.5mm] {$\vec{x}_4$};
 			\draw[Shiraz,-{Latex[length=2mm]}] (endeffector) --+ ($ (1*\alpC, {1*(1 - \alpC)}) $) node[at end, above] {$\vec{z}_5$};
 %			\draw[Sushi,-{Latex[length=2mm]}] (endeffector) --+ ($ (-1*\alpC, {1*(1 - \alpC)}) $) node[at end, above] {$\vec{x}_5$};
 			

@@ -19,7 +19,7 @@
 					%width = .3\linewidth,
 					]
 					%
-					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=rmse_300ms] {misc/trajectory_estimation_sines/sine_opt_err_traject.csv};
+					\addplot3 [mesh, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=rmse_300ms] {misc/trajectory_estimation_sines/sine_opt_err_traject.csv};
 				\end{axis}
 			\end{tikzpicture}
 		}
@@ -40,7 +40,7 @@
 					%width = .3\linewidth,
 					]
 					%
-					\addplot3 [surf, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=rmse_100ms] {misc/trajectory_estimation_sines/sine_opt_err_traject.csv};
+					\addplot3 [mesh, mesh/rows=13, shader=interp, patch type=bilinear] table[col sep=comma, x=lower_window, y=upper_window, z=rmse_100ms] {misc/trajectory_estimation_sines/sine_opt_err_traject.csv};
 				\end{axis}
 			\end{tikzpicture}
 		}
