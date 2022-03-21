@@ -345,7 +345,7 @@
 	%%%%%%%
 	% APP 4
 	%%%%%%%
-	\chapter{Détails du calcul des effets de couplages} \label{app_coupling_effect_details}
+	\chapter{Détails du calcul des effets de couplage} \label{app_coupling_effect_details}
 	%\chaptermark{\nameref{app_coupling_effect_details}}
 	
 	\vspace{5mm}
@@ -544,9 +544,10 @@
 	\chapter[LSTM]{Réseaux de neurones récurrents à mémoire court et long terme (LSTM)} \label{app_lstm_rnn}
 	%\chaptermark{\nameref{app_lstm_rnn}}
 	
-	Une cellule LSTM classique se compose de quatre couches neuronales. Chacun de ces niveaux se compose d'une fonction d'activation $f_a$ (sigmoïde ou tangente hyperbolique), d'une matrice de gain $\matr{W}_i$ et d'un vecteur de biais $\vect{b}_i$, sous la forme suivante $f_a(\matr{W}_i \vect{e}_t + \vect{b}_i)$, avec $\vect{e}$ le vecteur du signal d'entrée. Par ailleurs l'une des particularités des cellules LSTM est qu'elles contiennent deux états, celui de la cellule $\vect{c}_t$ et l'état caché $\vect{h}_t$. Ce dernier état est concaténé au vecteur d'entrée du pas suivant $\vect{x}_{t+1}$, autrement dit l'ancien état caché et regroupé avec l'entrée de la cellule $\vect{e}_t = [\vect{h}_{t-1}, \vect{x}_{t}]$.
+	Une cellule LSTM classique se compose de 3 portes. %quatre couches neuronales. 
+	Chacun de ces niveaux se compose d'une ou deux fonction d'activation $f_a$ (sigmoïde ou tangente hyperbolique), d'une matrice de gain $\matr{W}_i$ et d'un vecteur de biais $\vect{b}_i$ pour chaque fonction, sous la forme suivante $f_a(\matr{W}_i \vect{e}_t + \vect{b}_i)$, avec $\vect{e}$ le vecteur du signal d'entrée. Par ailleurs l'une des particularités des cellules LSTM est qu'elles contiennent deux états, celui de la cellule $\vect{c}_t$ et l'état caché $\vect{h}_t$. Ce dernier état est concaténé au vecteur d'entrée du pas suivant $\vect{x}_{t+1}$, autrement dit l'ancien état caché et regroupé avec l'entrée de la cellule $\vect{e}_t = [\vect{h}_{t-1}, \vect{x}_{t}]$.
 	
-	Les couches neuronales peuvent être regroupée sous forme de trois portes. La première appelée porte d'oubli permet de se débarrasser d'anciennes données, à l'aide d'une fonction d'activation sigmoïdique qui fournit un facteur d'oubli compris entre 0 et 1 pour sélectionner partiellement des informations du précédent état de la cellule.
+	La première porte appelée porte d'oubli permet de se débarrasser d'anciennes données, à l'aide d'une fonction d'activation sigmoïdique qui fournit un facteur d'oubli compris entre 0 et 1 pour sélectionner partiellement des informations du précédent état de la cellule.
 	
 	\begin{equation} \label{eq_lstm_ft_app}
 		\vect{f}_t = \sigma(\matr{W}_f \vect{e}_t + \vect{b}_f)
@@ -1233,37 +1234,38 @@
 		\multicolumn{1}{|c|}{Ref.}&\multicolumn{2}{c|}{Raideur (\si{\newton\per\meter})} & \multicolumn{2}{c|}{Amortis.\textsuperscript{nt} (\si{\newton\second\per\meter})} & \multicolumn{2}{c|}{Masse (\si{\gram})} \\[2mm]
 		\hline
 		&$h_1^*$&$h_3^*$&$h_1^*$&$h_3^*$&$h_1^*$&$h_3^*$\\\hline
-		\textbf{000}&$116 \pm 112$&$63 \pm 28$&$10.5 \pm 3.3$&$7.1 \pm 2.9$&$487 \pm 101$&$506 \pm 41$\\\hline
-		\textbf{008}&$58 \pm 50$&$45 \pm 115$&$9.5 \pm 2.1$&$3.5 \pm 2.9$&$544 \pm 58$&$519 \pm 86$\\\hline
-		\textbf{029}&$57 \pm 41$&$192 \pm 60$&$9.2 \pm 3.2$&$15.0 \pm 2.0$&$369 \pm 43$&$332 \pm 47$\\\hline
-		\textbf{041}&$114 \pm 173$&$110 \pm 82$&$10.4 \pm 4.3$&$11.3 \pm 1.9$&$541 \pm 53$&$292 \pm 21$\\\hline
-		\textbf{050}&$113 \pm 47$&$73 \pm 57$&$13.2 \pm 1.4$&$4.8 \pm 3.8$&$285 \pm 18$&$406 \pm 49$\\\hline
-		\textbf{113}&$103 \pm 80$&$59 \pm 96$&$3.9 \pm 1.7$&$9.3 \pm 2.2$&$436 \pm 34$&$361 \pm 36$\\\hline
-		\textbf{160}&$132 \pm 113$&$121 \pm 133$&$5.3 \pm 2.7$&$13.8 \pm 3.1$&$501 \pm 39$&$486 \pm 59$\\\hline
-		\textbf{194}&$145 \pm 125$&$265 \pm 151$&$5.0 \pm 2.0$&$13.2 \pm 4.5$&$665 \pm 84$&$442 \pm 75$\\\hline
-		\textbf{208}&$134 \pm 53$&$160 \pm 86$&$9.7 \pm 2.2$&$10.2 \pm 4.2$&$438 \pm 23$&$515 \pm 82$\\\hline
-		\textbf{211}&$105 \pm 127$&$82 \pm 65$&$8.7 \pm 4.9$&$9.3 \pm 1.8$&$599 \pm 162$&$331 \pm 32$\\\hline
-		\textbf{278}&$61 \pm 74$&$85 \pm 115$&$8.7 \pm 2.7$&$9.8 \pm 4.4$&$479 \pm 53$&$432 \pm 45$\\\hline
-		\textbf{311}&$76 \pm 50$&$100 \pm 56$&$9.8 \pm 2.0$&$11.6 \pm 1.7$&$440 \pm 41$&$272 \pm 15$\\\hline
-		\textbf{353}&$88 \pm 70$&$110 \pm 52$&$14.6 \pm 2.5$&$8.7 \pm 3.4$&$300 \pm 29$&$481 \pm 72$\\\hline
-		\textbf{364}&$76 \pm 47$&$150 \pm 242$&$8.3 \pm 1.5$&$9.6 \pm 3.8$&$300 \pm 28$&$491 \pm 138$\\\hline
-		\textbf{378}&$101 \pm 65$&$98 \pm 42$&$7.5 \pm 3.0$&$13.1 \pm 3.3$&$382 \pm 26$&$549 \pm 81$\\\hline
-		\textbf{388}&$157 \pm 87$&$99 \pm 37$&$8.0 \pm 2.1$&$9.0 \pm 1.6$&$369 \pm 29$&$371 \pm 22$\\\hline
-		\textbf{418}&$148 \pm 50$&$154 \pm 155$&$9.1 \pm 2.5$&$14.0 \pm 3.8$&$456 \pm 54$&$458 \pm 51$\\\hline
-		\textbf{456}&$139 \pm 36$&$293 \pm 125$&$16.4 \pm 1.1$&$12.1 \pm 2.5$&$364 \pm 19$&$599 \pm 79$\\\hline
-		\textbf{495}&$89 \pm 52$&$88 \pm 30$&$5.7 \pm 2.3$&$10.0 \pm 1.2$&$424 \pm 35$&$395 \pm 42$\\\hline
-		\textbf{546}&$85 \pm 37$&$164 \pm 66$&$12.9 \pm 1.9$&$16.5 \pm 5.5$&$431 \pm 34$&$406 \pm 54$\\\hline
-		\textbf{548}&$76 \pm 40$&$98 \pm 78$&$9.8 \pm 2.2$&$5.8 \pm 3.1$&$472 \pm 53$&$306 \pm 30$\\\hline
-		\textbf{555}&$94 \pm 25$&$94 \pm 39$&$8.9 \pm 1.2$&$11.2 \pm 2.1$&$330 \pm 17$&$392 \pm 50$\\\hline
-		\textbf{573}&$102 \pm 148$&$159 \pm 36$&$8.4 \pm 2.9$&$16.8 \pm 2.2$&$498 \pm 78$&$332 \pm 15$\\\hline
-		\textbf{640}&$401 \pm 251$&$110 \pm 133$&$2.2 \pm 5.0$&$12.1 \pm 2.8$&$893 \pm 140$&$460 \pm 53$\\\hline
-		\textbf{661}&$151 \pm 65$&$86 \pm 65$&$12.2 \pm 4.0$&$10.4 \pm 3.0$&$648 \pm 106$&$391 \pm 36$\\\hline
-		\textbf{666}&$72 \pm 50$&$134 \pm 162$&$10.6 \pm 2.7$&$9.8 \pm 4.1$&$489 \pm 40$&$542 \pm 61$\\\hline
-		\textbf{710}&$118 \pm 80$&$77 \pm 142$&$11.5 \pm 4.8$&$5.3 \pm 3.4$&$414 \pm 107$&$521 \pm 63$\\\hline
-		\textbf{740}&$72 \pm 44$&$83 \pm 26$&$11.5 \pm 2.3$&$11.9 \pm 2.2$&$452 \pm 32$&$350 \pm 22$\\\hline
-		\textbf{841}&$128 \pm 57$&$90 \pm 61$&$9.1 \pm 1.5$&$9.2 \pm 2.7$&$297 \pm 29$&$449 \pm 43$\\\hline
-		\textbf{851}&$94 \pm 45$&$220 \pm 196$&$7.6 \pm 2.4$&$6.2 \pm 4.3$&$409 \pm 45$&$680 \pm 159$\\\hline
-		\textbf{922}&$52 \pm 84$&$70 \pm 21$&$10.0 \pm 2.8$&$12.5 \pm 2.5$&$523 \pm 45$&$401 \pm 29$\\\hline
+		\hline
+		\textbf{000}&$139 \pm 36$&$159 \pm 36$&$16.4 \pm 1.1$&$16.8 \pm 2.2$&$364 \pm 19$&$332 \pm 15$\\\hline
+		\textbf{008}&$116 \pm 112$&$265 \pm 151$&$10.5 \pm 3.3$&$13.2 \pm 4.5$&$487 \pm 101$&$442 \pm 75$\\\hline
+		\textbf{029}&$52 \pm 84$&$110 \pm 133$&$10.0 \pm 2.8$&$12.1 \pm 2.8$&$523 \pm 45$&$460 \pm 53$\\\hline
+		\textbf{041}&$151 \pm 65$&$293 \pm 125$&$12.2 \pm 4.0$&$12.1 \pm 2.5$&$648 \pm 106$&$599 \pm 79$\\\hline
+		\textbf{050}&$72 \pm 50$&$88 \pm 30$&$10.6 \pm 2.7$&$10.0 \pm 1.2$&$489 \pm 40$&$395 \pm 42$\\\hline
+		\textbf{113}&$89 \pm 52$&$86 \pm 65$&$5.7 \pm 2.3$&$10.4 \pm 3.0$&$424 \pm 35$&$391 \pm 36$\\\hline
+		\textbf{160}&$85 \pm 37$&$134 \pm 162$&$12.9 \pm 1.9$&$9.8 \pm 4.1$&$431 \pm 34$&$542 \pm 61$\\\hline
+		\textbf{194}&$76 \pm 40$&$77 \pm 142$&$9.8 \pm 2.2$&$5.3 \pm 3.4$&$472 \pm 53$&$521 \pm 63$\\\hline
+		\textbf{208}&$94 \pm 25$&$83 \pm 26$&$8.9 \pm 1.2$&$11.9 \pm 2.2$&$330 \pm 17$&$350 \pm 22$\\\hline
+		\textbf{211}&$118 \pm 80$&$164 \pm 66$&$11.5 \pm 4.8$&$16.5 \pm 5.5$&$414 \pm 107$&$406 \pm 54$\\\hline
+		\textbf{278}&$58 \pm 50$&$160 \pm 86$&$9.5 \pm 2.1$&$10.2 \pm 4.2$&$544 \pm 58$&$515 \pm 82$\\\hline
+		\textbf{311}&$57 \pm 41$&$82 \pm 65$&$9.2 \pm 3.2$&$9.3 \pm 1.8$&$369 \pm 43$&$331 \pm 32$\\\hline
+		\textbf{353}&$114 \pm 173$&$85 \pm 115$&$10.4 \pm 4.3$&$9.8 \pm 4.4$&$541 \pm 53$&$432 \pm 45$\\\hline
+		\textbf{364}&$61 \pm 74$&$63 \pm 28$&$8.7 \pm 2.7$&$7.1 \pm 2.9$&$479 \pm 53$&$506 \pm 41$\\\hline
+		\textbf{378}&$72 \pm 44$&$70 \pm 21$&$11.5 \pm 2.3$&$12.5 \pm 2.5$&$452 \pm 32$&$401 \pm 29$\\\hline
+		\textbf{388}&$113 \pm 47$&$100 \pm 56$&$13.2 \pm 1.4$&$11.6 \pm 1.7$&$285 \pm 18$&$272 \pm 15$\\\hline
+		\textbf{418}&$76 \pm 50$&$45 \pm 115$&$9.8 \pm 2.0$&$3.5 \pm 2.9$&$440 \pm 41$&$519 \pm 86$\\\hline
+		\textbf{456}&$88 \pm 70$&$192 \pm 60$&$14.6 \pm 2.5$&$15.0 \pm 2.0$&$300 \pm 29$&$332 \pm 47$\\\hline
+		\textbf{495}&$76 \pm 47$&$110 \pm 82$&$8.3 \pm 1.5$&$11.3 \pm 1.9$&$300 \pm 28$&$292 \pm 21$\\\hline
+		\textbf{546}&$103 \pm 80$&$110 \pm 52$&$3.9 \pm 1.7$&$8.7 \pm 3.4$&$436 \pm 34$&$481 \pm 72$\\\hline
+		\textbf{548}&$101 \pm 65$&$73 \pm 57$&$7.5 \pm 3.0$&$4.8 \pm 3.8$&$382 \pm 26$&$406 \pm 49$\\\hline
+		\textbf{555}&$132 \pm 113$&$150 \pm 242$&$5.3 \pm 2.7$&$9.6 \pm 3.8$&$501 \pm 39$&$491 \pm 138$\\\hline
+		\textbf{573}&$145 \pm 125$&$98 \pm 42$&$5.0 \pm 2.0$&$13.1 \pm 3.3$&$665 \pm 84$&$549 \pm 81$\\\hline
+		\textbf{640}&$134 \pm 53$&$99 \pm 37$&$9.7 \pm 2.2$&$9.0 \pm 1.6$&$438 \pm 23$&$371 \pm 22$\\\hline
+		\textbf{661}&$128 \pm 57$&$98 \pm 78$&$9.1 \pm 1.5$&$5.8 \pm 3.1$&$297 \pm 29$&$306 \pm 30$\\\hline
+		\textbf{666}&$102 \pm 148$&$90 \pm 61$&$8.4 \pm 2.9$&$9.2 \pm 2.7$&$498 \pm 78$&$449 \pm 43$\\\hline
+		\textbf{710}&$401 \pm 251$&$220 \pm 196$&$2.2 \pm 5.0$&$6.2 \pm 4.3$&$893 \pm 140$&$680 \pm 159$\\\hline
+		\textbf{740}&$157 \pm 87$&$59 \pm 96$&$8.0 \pm 2.1$&$9.3 \pm 2.2$&$369 \pm 29$&$361 \pm 36$\\\hline
+		\textbf{841}&$94 \pm 45$&$94 \pm 39$&$7.6 \pm 2.4$&$11.2 \pm 2.1$&$409 \pm 45$&$392 \pm 50$\\\hline
+		\textbf{851}&$148 \pm 50$&$121 \pm 133$&$9.1 \pm 2.5$&$13.8 \pm 3.1$&$456 \pm 54$&$486 \pm 59$\\\hline
+		\textbf{922}&$105 \pm 127$&$154 \pm 155$&$8.7 \pm 4.9$&$14.0 \pm 3.8$&$599 \pm 162$&$458 \pm 51$\\\hline
 		\textbf{moy}&$112$&$120$&$9.3$&$10.4$&$459$&$435$\\\hline
 	\end{tabular}
 
@@ -1322,38 +1324,38 @@
 		\multicolumn{1}{|c|}{Ref.}&\multicolumn{3}{c|}{Raideur (\si{\newton\per\meter})} & \multicolumn{3}{c|}{Amortissement (\si{\newton\second\per\meter})} \\[2mm]
 		\hline
 		&$\phi_1$&$\phi_2$&$\phi_3$&$\phi_1$&$\phi_2$&$\phi_3$\\\hline
-		\textbf{000}&$167 \pm 42$&$196 \pm 51$&$221 \pm 63$&$15.0 \pm 2.8$&$12.9 \pm 2.9$&$9.8 \pm 2.4$\\\hline
-		\textbf{008}&$73 \pm 33$&$130 \pm 30$&$139 \pm 181$&$10.9 \pm 2.9$&$12.6 \pm 2.7$&$11.0 \pm 3.5$\\\hline
-		\textbf{029}&$154 \pm 57$&$170 \pm 32$&$187 \pm 62$&$12.4 \pm 1.9$&$10.4 \pm 2.0$&$11.6 \pm 3.5$\\\hline
-		\textbf{041}&$83 \pm 59$&$192 \pm 67$&$200 \pm 72$&$11.5 \pm 2.7$&$11.3 \pm 2.5$&$10.0 \pm 2.1$\\\hline
-		\textbf{050}&$139 \pm 90$&$161 \pm 72$&$246 \pm 91$&$12.2 \pm 2.9$&$12.5 \pm 2.2$&$9.1 \pm 1.7$\\\hline
-		\textbf{113}&$79 \pm 82$&$211 \pm 54$&$236 \pm 67$&$12.2 \pm 2.4$&$12.6 \pm 1.8$&$12.4 \pm 4.5$\\\hline
-		\textbf{160}&$90 \pm 45$&$135 \pm 47$&$70 \pm 45$&$11.3 \pm 3.9$&$10.5 \pm 1.6$&$8.1 \pm 2.3$\\\hline
-		\textbf{194}&$133 \pm 61$&$122 \pm 90$&$208 \pm 63$&$9.2 \pm 1.7$&$8.5 \pm 2.5$&$9.0 \pm 2.6$\\\hline
-		\textbf{208}&$330 \pm 237$&$94 \pm 39$&$110 \pm 49$&$8.5 \pm 3.0$&$9.7 \pm 2.6$&$8.9 \pm 2.7$\\\hline
-		\textbf{211}&$88 \pm 24$&$170 \pm 71$&$237 \pm 78$&$10.3 \pm 2.1$&$13.8 \pm 2.6$&$9.2 \pm 2.9$\\\hline
-		\textbf{278}&$197 \pm 133$&$107 \pm 31$&$140 \pm 43$&$9.9 \pm 2.9$&$8.4 \pm 3.3$&$7.6 \pm 2.3$\\\hline
-		\textbf{311}&$80 \pm 35$&$236 \pm 76$&$201 \pm 80$&$10.3 \pm 2.8$&$11.3 \pm 2.4$&$11.7 \pm 3.6$\\\hline
-		\textbf{353}&$80 \pm 89$&$175 \pm 39$&$221 \pm 94$&$7.7 \pm 1.1$&$11.4 \pm 1.7$&$7.3 \pm 2.4$\\\hline
-		\textbf{364}&$41 \pm 62$&$207 \pm 63$&$201 \pm 127$&$9.9 \pm 3.6$&$13.8 \pm 2.4$&$10.3 \pm 3.6$\\\hline
-		\textbf{378}&$124 \pm 72$&$209 \pm 54$&$166 \pm 60$&$11.1 \pm 2.8$&$14.0 \pm 1.7$&$11.4 \pm 2.5$\\\hline
-		\textbf{388}&$315 \pm 135$&$128 \pm 27$&$176 \pm 81$&$11.9 \pm 2.4$&$10.8 \pm 2.1$&$11.9 \pm 2.6$\\\hline
-		\textbf{418}&$111 \pm 113$&$149 \pm 33$&$195 \pm 103$&$10.7 \pm 3.1$&$12.9 \pm 1.7$&$10.0 \pm 4.4$\\\hline
-		\textbf{456}&$178 \pm 111$&$105 \pm 30$&$241 \pm 76$&$15.1 \pm 3.8$&$9.7 \pm 1.9$&$8.8 \pm 2.8$\\\hline
-		\textbf{495}&$94 \pm 76$&$88 \pm 52$&$152 \pm 68$&$7.9 \pm 1.3$&$7.5 \pm 1.3$&$9.1 \pm 2.2$\\\hline
-		\textbf{546}&$92 \pm 75$&$258 \pm 117$&$154 \pm 179$&$9.6 \pm 3.5$&$13.9 \pm 2.6$&$12.6 \pm 4.5$\\\hline
-		\textbf{548}&$85 \pm 57$&$172 \pm 66$&$187 \pm 66$&$7.6 \pm 1.8$&$9.5 \pm 3.5$&$7.9 \pm 4.0$\\\hline
-		\textbf{555}&$95 \pm 21$&$176 \pm 45$&$129 \pm 97$&$9.1 \pm 2.0$&$10.9 \pm 1.8$&$8.6 \pm 1.4$\\\hline
-		\textbf{573}&$62 \pm 125$&$143 \pm 61$&$175 \pm 70$&$7.4 \pm 2.2$&$10.9 \pm 2.1$&$10.2 \pm 2.2$\\\hline
-		\textbf{640}&$68 \pm 55$&$110 \pm 39$&$184 \pm 137$&$10.0 \pm 1.7$&$10.5 \pm 1.8$&$11.1 \pm 3.8$\\\hline
-		\textbf{661}&$63 \pm 68$&$83 \pm 31$&$179 \pm 66$&$9.8 \pm 1.5$&$8.1 \pm 1.2$&$6.0 \pm 1.6$\\\hline
-		\textbf{666}&$83 \pm 140$&$148 \pm 65$&$217 \pm 119$&$10.4 \pm 4.3$&$12.8 \pm 2.5$&$8.3 \pm 2.2$\\\hline
-		\textbf{710}&$156 \pm 68$&$231 \pm 81$&$216 \pm 106$&$5.6 \pm 3.8$&$13.6 \pm 3.5$&$10.8 \pm 3.5$\\\hline
-		\textbf{740}&$119 \pm 83$&$189 \pm 42$&$240 \pm 72$&$8.9 \pm 4.2$&$12.5 \pm 2.7$&$7.6 \pm 2.2$\\\hline
-		\textbf{841}&$109 \pm 116$&$157 \pm 65$&$200 \pm 52$&$10.8 \pm 3.2$&$14.8 \pm 1.8$&$11.9 \pm 2.6$\\\hline
-		\textbf{851}&$115 \pm 52$&$113 \pm 76$&$348 \pm 83$&$8.9 \pm 2.2$&$10.1 \pm 1.9$&$9.2 \pm 3.5$\\\hline
-		\textbf{922}&$74 \pm 51$&$116 \pm 44$&$142 \pm 77$&$13.5 \pm 2.5$&$11.4 \pm 1.4$&$8.0 \pm 3.5$\\\hline
-		\textbf{moy}&$119$&$157$&$191$&$10.3$&$11.4$&$9.7$\\\hline
+		\textbf{000}&$151 \pm 34$&$194 \pm 30$&$164 \pm 52$&$15.0 \pm 1.4$&$12.9 \pm 1.9$&$10.1 \pm 2.1$\\\hline
+		\textbf{008}&$136 \pm 91$&$192 \pm 60$&$197 \pm 42$&$9.2 \pm 1.9$&$12.2 \pm 2.2$&$10.3 \pm 3.3$\\\hline
+		\textbf{029}&$95 \pm 208$&$78 \pm 30$&$295 \pm 143$&$9.4 \pm 2.5$&$11.0 \pm 2.6$&$9.1 \pm 2.7$\\\hline
+		\textbf{041}&$180 \pm 148$&$139 \pm 58$&$218 \pm 76$&$10.2 \pm 4.2$&$14.4 \pm 2.8$&$10.8 \pm 2.6$\\\hline
+		\textbf{050}&$107 \pm 67$&$148 \pm 37$&$328 \pm 84$&$12.2 \pm 3.4$&$13.8 \pm 1.5$&$11.1 \pm 3.4$\\\hline
+		\textbf{113}&$77 \pm 70$&$106 \pm 54$&$123 \pm 94$&$8.3 \pm 3.2$&$12.1 \pm 3.0$&$7.9 \pm 2.4$\\\hline
+		\textbf{160}&$240 \pm 148$&$344 \pm 100$&$267 \pm 84$&$11.8 \pm 3.6$&$14.8 \pm 2.9$&$12.3 \pm 3.6$\\\hline
+		\textbf{194}&$96 \pm 157$&$116 \pm 40$&$165 \pm 56$&$8.3 \pm 2.4$&$8.8 \pm 2.7$&$8.4 \pm 2.4$\\\hline
+		\textbf{208}&$107 \pm 24$&$123 \pm 58$&$119 \pm 75$&$9.2 \pm 1.5$&$11.1 \pm 1.9$&$8.9 \pm 2.5$\\\hline
+		\textbf{211}&$445 \pm 248$&$107 \pm 40$&$140 \pm 50$&$10.2 \pm 3.7$&$9.4 \pm 2.6$&$8.0 \pm 2.2$\\\hline
+		\textbf{278}&$83 \pm 86$&$96 \pm 61$&$145 \pm 69$&$12.4 \pm 3.3$&$10.9 \pm 2.1$&$6.7 \pm 3.3$\\\hline
+		\textbf{311}&$96 \pm 87$&$174 \pm 43$&$163 \pm 33$&$8.8 \pm 1.6$&$10.6 \pm 1.6$&$8.7 \pm 1.6$\\\hline
+		\textbf{353}&$53 \pm 23$&$250 \pm 89$&$132 \pm 195$&$9.6 \pm 3.4$&$15.3 \pm 2.7$&$11.9 \pm 3.8$\\\hline
+		\textbf{364}&$66 \pm 50$&$211 \pm 69$&$220 \pm 76$&$7.0 \pm 2.2$&$14.3 \pm 2.4$&$17.1 \pm 4.8$\\\hline
+		\textbf{378}&$67 \pm 23$&$267 \pm 71$&$201 \pm 84$&$11.2 \pm 2.3$&$17.5 \pm 3.4$&$8.8 \pm 1.9$\\\hline
+		\textbf{388}&$128 \pm 85$&$132 \pm 39$&$148 \pm 114$&$12.9 \pm 1.3$&$10.6 \pm 1.4$&$8.6 \pm 1.4$\\\hline
+		\textbf{418}&$57 \pm 32$&$118 \pm 39$&$168 \pm 62$&$10.7 \pm 2.2$&$11.9 \pm 1.6$&$10.0 \pm 3.2$\\\hline
+		\textbf{456}&$179 \pm 84$&$113 \pm 22$&$114 \pm 65$&$14.9 \pm 2.7$&$8.5 \pm 1.1$&$8.9 \pm 2.0$\\\hline
+		\textbf{495}&$88 \pm 81$&$94 \pm 33$&$135 \pm 58$&$8.7 \pm 1.1$&$7.9 \pm 1.2$&$8.8 \pm 2.5$\\\hline
+		\textbf{546}&$110 \pm 192$&$138 \pm 49$&$179 \pm 112$&$10.4 \pm 4.1$&$11.3 \pm 2.7$&$10.5 \pm 3.6$\\\hline
+		\textbf{548}&$95 \pm 45$&$62 \pm 54$&$250 \pm 83$&$8.8 \pm 4.0$&$8.5 \pm 3.2$&$8.8 \pm 3.1$\\\hline
+		\textbf{555}&$188 \pm 68$&$192 \pm 51$&$139 \pm 84$&$8.7 \pm 4.5$&$9.9 \pm 2.5$&$6.8 \pm 2.0$\\\hline
+		\textbf{573}&$71 \pm 120$&$257 \pm 70$&$221 \pm 65$&$9.3 \pm 2.2$&$15.3 \pm 2.6$&$13.5 \pm 2.0$\\\hline
+		\textbf{640}&$73 \pm 21$&$106 \pm 30$&$219 \pm 76$&$8.9 \pm 1.2$&$10.2 \pm 1.2$&$11.8 \pm 3.0$\\\hline
+		\textbf{661}&$71 \pm 48$&$76 \pm 34$&$177 \pm 63$&$8.5 \pm 2.5$&$7.5 \pm 1.8$&$7.4 \pm 2.1$\\\hline
+		\textbf{666}&$81 \pm 60$&$164 \pm 57$&$216 \pm 103$&$9.7 \pm 4.1$&$10.7 \pm 2.6$&$9.2 \pm 3.4$\\\hline
+		\textbf{710}&$223 \pm 136$&$289 \pm 92$&$276 \pm 90$&$3.5 \pm 3.5$&$12.7 \pm 3.8$&$9.2 \pm 3.9$\\\hline
+		\textbf{740}&$72 \pm 58$&$163 \pm 41$&$135 \pm 63$&$10.3 \pm 1.8$&$11.4 \pm 1.5$&$11.3 \pm 2.3$\\\hline
+		\textbf{841}&$136 \pm 138$&$132 \pm 63$&$191 \pm 59$&$10.5 \pm 3.9$&$14.3 \pm 3.2$&$8.2 \pm 3.0$\\\hline
+		\textbf{851}&$199 \pm 90$&$224 \pm 82$&$363 \pm 75$&$10.4 \pm 4.7$&$11.7 \pm 1.7$&$9.9 \pm 4.8$\\\hline
+		\textbf{922}&$91 \pm 46$&$147 \pm 24$&$128 \pm 45$&$11.9 \pm 3.4$&$12.5 \pm 1.4$&$11.4 \pm 2.9$\\\hline
+		\textbf{moy}&$125$&$160$&$191$&$10.0$&$11.7$&$9.8$\\\hline
 	\end{tabular}
 	
 %	\begin{tabular}{|l|c|c|c|c|c|c|}
@@ -1400,38 +1402,38 @@
 		\multicolumn{1}{|c|}{Ref.}&\multicolumn{3}{c|}{Masse (\si{\gram})} & \multicolumn{3}{c|}{Coef. de détermination (\si{\percent})} \\[2mm]
 		\hline
 		&\textbf{$\phi_1$}&\textbf{$\phi_2$}&\textbf{$\phi_3$}&\textbf{$\phi_1$}&\textbf{$\phi_2$}&\textbf{$\phi_3$}\\\hline
-		\textbf{000}&$402 \pm 43$&$370 \pm 43$&$466 \pm 48$&$96.5 \pm 1.8$&$98.6 \pm 0.8$&$97.8 \pm 1.9$\\\hline
-		\textbf{008}&$432 \pm 46$&$390 \pm 36$&$478 \pm 71$&$97.2 \pm 2.3$&$96.6 \pm 2.1$&$96.9 \pm 2.6$\\\hline
-		\textbf{029}&$437 \pm 93$&$413 \pm 36$&$443 \pm 67$&$95.7 \pm 1.4$&$97.1 \pm 1.5$&$94.5 \pm 4.7$\\\hline
-		\textbf{041}&$397 \pm 59$&$531 \pm 74$&$461 \pm 71$&$94.3 \pm 4.8$&$95.1 \pm 2.7$&$97.0 \pm 1.2$\\\hline
-		\textbf{050}&$409 \pm 71$&$378 \pm 66$&$427 \pm 45$&$93.9 \pm 5.8$&$96.6 \pm 1.8$&$96.6 \pm 1.3$\\\hline
-		\textbf{113}&$512 \pm 70$&$395 \pm 51$&$425 \pm 86$&$94.6 \pm 3.9$&$97.8 \pm 1.4$&$95.4 \pm 9.2$\\\hline
-		\textbf{160}&$405 \pm 74$&$321 \pm 45$&$381 \pm 68$&$93.3 \pm 3.6$&$97.3 \pm 1.3$&$95.6 \pm 2.4$\\\hline
-		\textbf{194}&$386 \pm 47$&$305 \pm 61$&$384 \pm 108$&$96.0 \pm 4.2$&$96.5 \pm 1.2$&$94.3 \pm 5.8$\\\hline
-		\textbf{208}&$513 \pm 63$&$332 \pm 19$&$363 \pm 29$&$86.7 \pm 7.2$&$96.1 \pm 2.7$&$96.7 \pm 2.3$\\\hline
-		\textbf{211}&$465 \pm 64$&$356 \pm 46$&$531 \pm 54$&$96.1 \pm 4.2$&$97.9 \pm 0.7$&$95.8 \pm 2.8$\\\hline
-		\textbf{278}&$506 \pm 72$&$354 \pm 56$&$438 \pm 50$&$92.6 \pm 4.9$&$97.4 \pm 3.3$&$96.8 \pm 2.9$\\\hline
-		\textbf{311}&$470 \pm 47$&$410 \pm 29$&$478 \pm 38$&$92.3 \pm 3.5$&$97.6 \pm 1.9$&$96.9 \pm 3.4$\\\hline
-		\textbf{353}&$320 \pm 60$&$310 \pm 39$&$442 \pm 93$&$95.3 \pm 2.1$&$97.6 \pm 1.6$&$96.1 \pm 5.4$\\\hline
-		\textbf{364}&$427 \pm 57$&$369 \pm 40$&$498 \pm 62$&$91.9 \pm 4.0$&$98.3 \pm 0.9$&$97.0 \pm 2.5$\\\hline
-		\textbf{378}&$461 \pm 101$&$420 \pm 34$&$427 \pm 47$&$94.2 \pm 2.4$&$95.4 \pm 1.6$&$97.5 \pm 1.2$\\\hline
-		\textbf{388}&$416 \pm 97$&$315 \pm 42$&$408 \pm 59$&$95.4 \pm 5.1$&$97.4 \pm 2.2$&$97.6 \pm 1.2$\\\hline
-		\textbf{418}&$390 \pm 35$&$303 \pm 19$&$364 \pm 59$&$97.0 \pm 2.1$&$96.8 \pm 1.2$&$94.7 \pm 3.3$\\\hline
-		\textbf{456}&$503 \pm 92$&$366 \pm 51$&$481 \pm 68$&$96.8 \pm 2.3$&$95.5 \pm 2.2$&$95.3 \pm 3.4$\\\hline
-		\textbf{495}&$287 \pm 31$&$324 \pm 53$&$363 \pm 50$&$95.1 \pm 1.8$&$92.2 \pm 4.9$&$95.2 \pm 3.3$\\\hline
-		\textbf{546}&$416 \pm 50$&$363 \pm 29$&$479 \pm 101$&$92.1 \pm 3.1$&$97.9 \pm 1.6$&$95.6 \pm 1.9$\\\hline
-		\textbf{548}&$457 \pm 30$&$434 \pm 59$&$420 \pm 77$&$93.5 \pm 5.1$&$95.9 \pm 1.6$&$96.8 \pm 4.6$\\\hline
-		\textbf{555}&$339 \pm 63$&$353 \pm 62$&$359 \pm 63$&$96.6 \pm 1.7$&$98.4 \pm 0.9$&$96.7 \pm 2.2$\\\hline
-		\textbf{573}&$472 \pm 71$&$321 \pm 23$&$453 \pm 71$&$88.8 \pm 6.6$&$97.6 \pm 1.3$&$96.9 \pm 2.5$\\\hline
-		\textbf{640}&$326 \pm 40$&$255 \pm 39$&$426 \pm 87$&$93.4 \pm 3.2$&$97.5 \pm 0.8$&$97.9 \pm 3.2$\\\hline
-		\textbf{661}&$284 \pm 19$&$278 \pm 18$&$325 \pm 44$&$96.6 \pm 2.9$&$96.6 \pm 1.6$&$96.2 \pm 3.6$\\\hline
-		\textbf{666}&$505 \pm 83$&$329 \pm 64$&$478 \pm 75$&$89.4 \pm 2.9$&$96.8 \pm 2.7$&$93.1 \pm 3.3$\\\hline
-		\textbf{710}&$714 \pm 111$&$655 \pm 67$&$596 \pm 102$&$88.9 \pm 5.4$&$93.4 \pm 1.8$&$94.9 \pm 3.5$\\\hline
-		\textbf{740}&$444 \pm 139$&$392 \pm 74$&$524 \pm 43$&$94.7 \pm 2.7$&$95.9 \pm 1.5$&$95.9 \pm 2.9$\\\hline
-		\textbf{841}&$536 \pm 62$&$405 \pm 17$&$439 \pm 52$&$93.1 \pm 3.2$&$97.1 \pm 1.1$&$98.0 \pm 1.5$\\\hline
-		\textbf{851}&$536 \pm 97$&$413 \pm 75$&$566 \pm 151$&$91.3 \pm 5.1$&$96.2 \pm 2.5$&$95.8 \pm 3.0$\\\hline
-		\textbf{922}&$413 \pm 57$&$316 \pm 40$&$438 \pm 59$&$95.8 \pm 3.3$&$97.9 \pm 1.5$&$97.0 \pm 2.2$\\\hline
-		\textbf{moy}&$438$&$370$&$444$&$93.8$&$96.7$&$96.2$\\\hline
+		\textbf{000}&$349 \pm 29$&$374 \pm 21$&$413 \pm 35$&$98.0 \pm 1.1$&$97.4 \pm 1.0$&$97.1 \pm 1.8$\\\hline
+		\textbf{008}&$397 \pm 43$&$337 \pm 19$&$331 \pm 36$&$96.5 \pm 1.8$&$96.9 \pm 1.8$&$97.3 \pm 1.7$\\\hline
+		\textbf{029}&$581 \pm 105$&$455 \pm 35$&$585 \pm 71$&$89.8 \pm 6.1$&$96.2 \pm 2.2$&$94.2 \pm 2.8$\\\hline
+		\textbf{041}&$603 \pm 80$&$375 \pm 45$&$472 \pm 60$&$93.9 \pm 5.0$&$96.8 \pm 2.1$&$96.8 \pm 2.1$\\\hline
+		\textbf{050}&$583 \pm 76$&$446 \pm 58$&$522 \pm 62$&$92.2 \pm 5.8$&$96.3 \pm 1.3$&$96.0 \pm 3.1$\\\hline
+		\textbf{113}&$410 \pm 43$&$417 \pm 32$&$469 \pm 51$&$93.0 \pm 3.5$&$97.6 \pm 2.5$&$93.3 \pm 3.2$\\\hline
+		\textbf{160}&$548 \pm 57$&$507 \pm 63$&$680 \pm 102$&$90.7 \pm 5.3$&$96.3 \pm 3.1$&$93.0 \pm 7.3$\\\hline
+		\textbf{194}&$505 \pm 61$&$328 \pm 21$&$370 \pm 31$&$92.5 \pm 3.8$&$95.4 \pm 4.0$&$98.6 \pm 2.4$\\\hline
+		\textbf{208}&$328 \pm 25$&$306 \pm 21$&$321 \pm 42$&$97.3 \pm 1.7$&$97.4 \pm 0.7$&$96.6 \pm 2.1$\\\hline
+		\textbf{211}&$545 \pm 105$&$324 \pm 26$&$352 \pm 49$&$89.0 \pm 5.4$&$96.7 \pm 1.8$&$96.3 \pm 2.8$\\\hline
+		\textbf{278}&$508 \pm 59$&$433 \pm 29$&$478 \pm 46$&$94.4 \pm 3.0$&$97.6 \pm 2.4$&$96.8 \pm 2.9$\\\hline
+		\textbf{311}&$299 \pm 31$&$302 \pm 22$&$345 \pm 27$&$95.1 \pm 1.8$&$98.3 \pm 1.1$&$97.5 \pm 0.8$\\\hline
+		\textbf{353}&$364 \pm 36$&$376 \pm 26$&$534 \pm 109$&$92.8 \pm 2.4$&$98.0 \pm 1.3$&$96.3 \pm 2.9$\\\hline
+		\textbf{364}&$422 \pm 44$&$450 \pm 60$&$531 \pm 120$&$92.0 \pm 4.6$&$95.9 \pm 1.6$&$97.5 \pm 5.1$\\\hline
+		\textbf{378}&$483 \pm 43$&$511 \pm 51$&$508 \pm 49$&$93.4 \pm 5.4$&$98.2 \pm 1.4$&$96.7 \pm 3.3$\\\hline
+		\textbf{388}&$259 \pm 19$&$252 \pm 13$&$335 \pm 31$&$96.9 \pm 1.0$&$96.8 \pm 2.4$&$97.5 \pm 2.5$\\\hline
+		\textbf{418}&$363 \pm 22$&$272 \pm 17$&$412 \pm 73$&$93.4 \pm 3.5$&$97.6 \pm 0.9$&$96.9 \pm 3.4$\\\hline
+		\textbf{456}&$326 \pm 58$&$229 \pm 12$&$293 \pm 35$&$96.3 \pm 2.3$&$97.0 \pm 0.8$&$97.7 \pm 2.8$\\\hline
+		\textbf{495}&$263 \pm 22$&$227 \pm 18$&$270 \pm 36$&$95.8 \pm 2.1$&$94.7 \pm 2.1$&$96.1 \pm 5.1$\\\hline
+		\textbf{546}&$413 \pm 76$&$313 \pm 21$&$365 \pm 40$&$91.2 \pm 3.4$&$97.9 \pm 1.7$&$94.5 \pm 2.2$\\\hline
+		\textbf{548}&$472 \pm 58$&$469 \pm 59$&$537 \pm 53$&$93.4 \pm 3.4$&$95.3 \pm 4.3$&$95.3 \pm 2.4$\\\hline
+		\textbf{555}&$592 \pm 92$&$516 \pm 43$&$539 \pm 36$&$94.3 \pm 4.2$&$97.9 \pm 1.3$&$95.6 \pm 1.3$\\\hline
+		\textbf{573}&$572 \pm 73$&$404 \pm 23$&$482 \pm 38$&$90.8 \pm 4.5$&$97.7 \pm 0.9$&$97.4 \pm 1.0$\\\hline
+		\textbf{640}&$302 \pm 22$&$272 \pm 14$&$412 \pm 35$&$95.9 \pm 1.6$&$97.6 \pm 0.7$&$94.7 \pm 6.3$\\\hline
+		\textbf{661}&$326 \pm 28$&$295 \pm 20$&$356 \pm 42$&$96.1 \pm 4.3$&$96.4 \pm 2.1$&$97.0 \pm 3.1$\\\hline
+		\textbf{666}&$524 \pm 70$&$427 \pm 49$&$535 \pm 89$&$89.3 \pm 2.9$&$94.0 \pm 3.4$&$92.8 \pm 3.3$\\\hline
+		\textbf{710}&$815 \pm 167$&$698 \pm 44$&$688 \pm 82$&$88.9 \pm 6.3$&$93.3 \pm 2.1$&$92.0 \pm 4.2$\\\hline
+		\textbf{740}&$294 \pm 17$&$258 \pm 24$&$381 \pm 52$&$98.0 \pm 2.0$&$97.6 \pm 0.9$&$98.2 \pm 0.9$\\\hline
+		\textbf{841}&$571 \pm 91$&$423 \pm 33$&$532 \pm 49$&$89.4 \pm 4.3$&$96.9 \pm 1.6$&$96.5 \pm 4.7$\\\hline
+		\textbf{851}&$635 \pm 36$&$533 \pm 50$&$567 \pm 84$&$94.2 \pm 2.5$&$96.3 \pm 2.8$&$95.8 \pm 6.1$\\\hline
+		\textbf{922}&$417 \pm 42$&$316 \pm 25$&$416 \pm 30$&$93.9 \pm 5.4$&$98.1 \pm 1.0$&$97.7 \pm 1.0$\\\hline
+		\textbf{moy}&$454$&$382$&$453$&$93.5$&$96.8$&$96.1$\\\hline
 	\end{tabular}
 	
 	%%%%%%%

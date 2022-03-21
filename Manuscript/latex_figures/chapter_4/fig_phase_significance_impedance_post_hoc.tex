@@ -2,7 +2,7 @@
 	\centering
 	\pgfplotstableread[col sep=semicolon] {misc/chap_4_impedance/new/phase_significance_post_hoc.csv}\datatable
 	\resizebox{\textwidth}{!}{
-		\subcaptionbox{Moyenne des raideurs estimées\label{subfig_phase_significance_K_post_hoc}}
+		\subcaptionbox{Moyenne des raideurs estimés\label{subfig_phase_significance_K_post_hoc}}
 		{
 			\tikzsetnextfilename{subfig_phase_significance_K_post_hoc}
 			\begin{tikzpicture}		
@@ -28,7 +28,7 @@
 				\end{axis}		
 			\end{tikzpicture}%
 		}
-		\subcaptionbox{Moyenne des amortissements estimées\label{subfig_phase_significance_B_post_hoc}}
+		\subcaptionbox{Moyenne des amortissements estimés\label{subfig_phase_significance_B_post_hoc}}
 		{
 			\tikzsetnextfilename{subfig_phase_significance_B_post_hoc}
 			\begin{tikzpicture}		
@@ -47,10 +47,21 @@
 			ylabel style={yshift=-1mm},
 			%boxplot/draw direction=y, 
 			]
-			\addplot [color=Orient, forget plot] table[x=phase,y=B_med_AVG]{\datatable};
+			\addplot [color=Lavender, forget plot] table[x=phase,y=B_med_e1_AVG]{\datatable};
+			\addplot [color=Lavender, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+			plot [error bars/.cd, y dir = both, y explicit]
+			table[x=phase, y=B_med_e1_AVG, y error=B_med_e1_SEM]{\datatable};		
+			\addplot [color=Prune, forget plot] table[x=phase,y=B_med_e2_AVG]{\datatable};
+			\addplot [color=Prune, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+			plot [error bars/.cd, y dir = both, y explicit]
+			table[x=phase, y=B_med_e2_AVG, y error=B_med_e2_SEM]{\datatable};	
+			\addplot [color=Orient, forget plot] table[x=phase,y=B_med_e3_AVG]{\datatable};
 			\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
 			plot [error bars/.cd, y dir = both, y explicit]
-			table[x=phase, y=B_med_AVG, y error=B_med_SEM]{\datatable};		
+			table[x=phase, y=B_med_e3_AVG, y error=B_med_e3_SEM]{\datatable};		
+			\addlegendentry{$e_1$}
+			\addlegendentry{$e_2$}
+			\addlegendentry{$e_3$}
 			\end{axis}		
 			\end{tikzpicture}%
 		}

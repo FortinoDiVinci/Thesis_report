@@ -298,10 +298,10 @@ On peut étudier l'influence de l'environnement sur la stabilité de l'interacti
 	\begin{tabular}{l | c | c | c }
 		%\hline%
 		Paramètres & $K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
-		Valeurs moyennes identifiées & 348 & 9.2 & 0.566\\%
+		Valeurs moyennes identifiées & 363 & 9.9 & 0.567\\%
 		%\hline
 	\end{tabular}
-	\caption{Paramètres typiques utilisés pour le modèle en impédance}
+	\caption{Paramètres utilisés pour le modèle en impédance}
 	\label{tab_impedance_param_user_851}
 \end{table}
 
@@ -428,9 +428,9 @@ En première approximation, la cartographie expérimentale de la \cref{fig_exp_s
 	\begin{tabular}{ l | c | c | c }
 		%\hline%
 		$\phi$ & $K$ (\si{\newton\per\meter}) & $B$ (\si{\newton\second\per\meter}) & $M$ (\si{\kilogram})\\\hline%
-		\cref{item_pert1} & 167 $\pm$ 42 & 15.0 $\pm$ 2.8 & 0.402 $\pm$ 0.043\\%
-		\cref{item_pert2} & 196 $\pm$ 51 & 12.9 $\pm$ 2.9 & 0.370 $\pm$ 0.043\\%
-		\cref{item_pert3} & 252 $\pm$ 63 & 19.8 $\pm$ 2.4 & 0.529 $\pm$ 0.048\\%
+		\cref{item_pert1} & 151 $\pm$ 34 & 15.0 $\pm$ 1.4 & 0.349 $\pm$ 0.029\\%
+		\cref{item_pert2} & 194 $\pm$ 30 & 12.9 $\pm$ 1.9 & 0.374 $\pm$ 0.021\\%
+		\cref{item_pert3} & 164 $\pm$ 52 & 10.1 $\pm$ 2.1 & 0.413 $\pm$ 0.035\\%
 		%\hline
 	\end{tabular}
 	\caption[Paramètres estimés pour l'utilisateur ayant réalisé la cartographie de stabilité du contrôle en admittance]{Paramètres estimés pour l'utilisateur ayant réalisé la cartographie de stabilité du contrôle en admittance (\cref{fig_exp_stability_map}).}
@@ -443,9 +443,9 @@ Il est important de rappeler que pour garder des marges significatives, la carto
 %qui ne se révèlent source de comportement plus oscillants sur cette dernière.
 %Toutefois, comme sur la cartographie expérimentale, c'est la progression du gain $K_p$ qui semble la plus déstabilisante. 
 
-%\tikzexternaldisable
+\tikzexternaldisable
 \input{latex_figures/chapter_5/fig_theory_stability_map}
-%\tikzexternalenable
+\tikzexternalenable
 %\input{latex_figures/chapter_5/fig_theory_stability_map_vector_margin} % marge de module
 
 %Les premières marques d'instabilités sont seulement observées à partir de gain $K_p$ supérieur à 0.25, dans la configuration la plus rigide. Cette différence pourrait indiquer que le choix du filtrage de l'impédance mécanique de l'environnement détaillé précédemment en \cref{chap5_sec_stability_study_sub_env_1} a été placé à une fréquence trop basse, - \textit{ce qui peut augmenter artificiellement la stabilité de l'interaction }-, ou aussi que les fortes co-contractions entrainent une multiplication de la raideur supérieure à un facteur 3. 

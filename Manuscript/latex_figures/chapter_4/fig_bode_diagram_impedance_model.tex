@@ -51,9 +51,9 @@
 %	    \pgfmathsetmacro{\wnA}{2.372543}
 %	    \pgfmathsetmacro{\wnB}{3.16209}
 %	    \pgfmathsetmacro{\wnC}{3.35528}
-		\pgfmathsetmacro{\wnA}{2.6234}
-		\pgfmathsetmacro{\wnB}{3.2785}
-		\pgfmathsetmacro{\wnC}{3.3010}	            
+		\pgfmathsetmacro{\wnA}{2.6409}
+		\pgfmathsetmacro{\wnB}{3.2572}
+		\pgfmathsetmacro{\wnC}{3.2680}	            
 		\begin{semilogxaxis}[
 			name=ax1,
 			width=.7\linewidth, 
@@ -66,9 +66,9 @@
 			xticklabels=\empty,
 			%ymax=10,
 			]
-			\addplot[domain=0.01:100,color=Orient,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.44 + 119)^2 + (x*2*pi*10.3)^2 ) )};
-			\addplot[domain=0.01:100,color=Pear,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.37 + 157)^2 + (x*2*pi*11.4)^2 ) )};
-			\addplot[domain=0.01:100,color=Shiraz,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.44 + 191)^2 + (x*2*pi*9.7)^2 ) )};
+			\addplot[domain=0.01:100,color=Orient,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.454 + 125)^2 + (x*2*pi*10.0)^2 ) )};
+			\addplot[domain=0.01:100,color=Pear,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.382 + 160)^2 + (x*2*pi*11.7)^2 ) )};
+			\addplot[domain=0.01:100,color=Shiraz,smooth,thick] {10 * log10( 1/( (-x*2*pi*x*2*pi*0.453 + 191)^2 + (x*2*pi*9.8)^2 ) )};
 			\draw[dashed, color=Orient] (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnA, \pgfkeysvalueof{/pgfplots/ymax});
 			\draw[dashed, color=Shiraz] (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnC, \pgfkeysvalueof{/pgfplots/ymax});
 			\draw[dashed, color=Pear] (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:\wnB, \pgfkeysvalueof{/pgfplots/ymax}) node[near start, fill=white, text=black, yshift=-3mm, xshift=.5mm] {$\omega_{n}^{\varphi_2}$};
@@ -89,11 +89,11 @@
 			%ymax=10,
 			%use fpu=false,
 			]
-			\addplot[domain=0.01:100,color=Orient,smooth,thick] {-atan2( (x*2*pi*10.3), (119 - x*2*pi*x*2*pi*0.44) )};
+			\addplot[domain=0.01:100,color=Orient,smooth,thick] {-atan2( (x*2*pi*10.0), (125 - x*2*pi*x*2*pi*0.454) )};
 			\addlegendentry{$H_{\varphi_1}$}; 
-			\addplot[domain=0.01:100,color=Pear,smooth,thick] {-atan2( (x*2*pi*11.4), (157 - x*2*pi*x*2*pi*0.37) )};
+			\addplot[domain=0.01:100,color=Pear,smooth,thick] {-atan2( (x*2*pi*11.7), (160 - x*2*pi*x*2*pi*0.382) )};
 			\addlegendentry{$H_{\varphi_2}$}; 
-			\addplot[domain=0.01:100,color=Shiraz,smooth,thick] {-atan2( (x*2*pi*9.7), (191 - x*2*pi*x*2*pi*0.44) )};
+			\addplot[domain=0.01:100,color=Shiraz,smooth,thick] {-atan2( (x*2*pi*9.8), (191 - x*2*pi*x*2*pi*0.453) )};
 			\addlegendentry{$H_{\varphi_3}$}; 
 			%{-atan( (x*2*pi*12)/(100 - x*2*pi*x*2*pi*0.45) )};
 			
