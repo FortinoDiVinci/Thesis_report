@@ -1,3 +1,5 @@
+clear all
+
 addpath('../Dynamics/dynamic_sim')
 %
 time_start = 0;
@@ -47,26 +49,32 @@ tau_m = 1/(fc*2*pi); % s
 %%
 %[num,den] = filter1(0,1.5,2*pi*0.5);
 %W1 = ss(tf(num,den));
-W1 = makeweight(1.5,[2*pi*3,1],0);
-W2 = makeweight(1.5,[2*pi*3,1],0);
-W3 = makeweight(0,[2*pi*0.5,1],1.5); 
-W4 = makeweight(0,[2*pi*1,1],1.5)*makeweight(1.5,[2*pi*1,1],0); 
+% joint velocity loop 10 ms
+% robot mechanical force constant 30 ms ?
+
+tau_v = 0.01;
+tau_f = 0.03;
+
+W1 = 1/makeweight(0.1,[2*pi/tau_f,1],2);
+%W2 = 1/makeweight(0.1,[2*pi*3,1],2);
+W2 = 1/makeweight(2,[2*pi/tau_f,1],0.1); 
+%W4 = 1/makeweight(0,[2*pi*1,1],1.5)*makeweight(1.5,[2*pi*1,1],0); 
 
 figure
-subplot(2,2,1);
-bodemag(W1)
-title('W1 (epsilon)')
-subplot(2,2,2);
-bodemag(W2)
-title('W2')
-subplot(2,2,3);
-bodemag(W3)
-title('W3 (u)')
-subplot(2,2,4);
-bodemag(W4)
-title('W4')
+subplot(2,1,1);
+bodemag(1/W1)
+title('1/W1 (epsilon)')
+subplot(2,1,2);
+bodemag(1/W2)
+title('1/W2')
+% subplot(2,2,3);
+% bodemag(1/W3)
+% title('1/W3 (u)')
+% subplot(2,2,4);
+% bodemag(1/W4)
+% title('1/W4')
 
-[A_p,B_p,C_p,D_p] = gettf('dynamic_simulation_synth_admittance_alone_2020a',1:3,1:2);
+[A_p,B_p,C_p,D_p] = gettf('dynamic_simulation_synth_admittance_alone',1:3,1:2);
 
 Co = length(A_p) - rank(ctrb(A_p,B_p));
 Ob = length(A_p) - rank(obsv(A_p,C_p));
@@ -80,56 +88,5 @@ nb_cmd = 1;   % nb cmd
 [ctrl,bf,gamma] = hinfsyn(H,nb_meas,nb_cmd,'display','on');
 
 
-%%
-addpath(genpath('C:/Users/Fortineau_Vin/Documents/MATLAB/yalmip'))
-
-load('dyn_model_ss_b.mat')
-
-Sigma_f = dyn_model_ss_b(1);
-Sigma_v = dyn_model_ss_b(3);
-
-Sigma = Sigma_f + Sigma_v;
 
 
-syms K B M tau
-
-A_env = [0     1        0   ;
-         0     0        1   ;
-         0 -1/(tau^2) -2/tau];
-B_env = [0; 0; 1];
-C_env = [K, B, M];
-
-
-A = [Sigma.A, Sigma.B*C_env;
-        0   ,       A_env  ];
-B = [0; B_env];
-C = [Sigma.C, 0];
-
-
-%% snippet
-% Q = sdpvar(n,n);
-% Y = sdpvar(m_u,n);
-% gamma = sdpvar(1,1);
-% 
-% tollerance = 1e-6;
-% 
-% inequalities = [];
-% 
-% inequalities = [Q >= tollerance];
-% inequalities = [inequalities; gamma >= tollerance];
-% 
-% for i = 1 : 4
-%     A_i = A_all(i);
-%     
-%     tmp_mat = [A_i * Q + A_' * Q, ...];
-%         
-%     inequalities = [inequalities; tmp_mat <= -tollerance];
-% end
-% 
-% cost = gamma;
-% 
-% options = sdpsettings('solver','mosek','verbose',1,'debug',1);
-% 
-% optimize(inequalities, cost, options);
-% 
-% Y_val = value(Y);
