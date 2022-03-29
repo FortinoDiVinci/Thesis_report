@@ -24,33 +24,33 @@ Kp = 0.015;
 Ki = 0.08;
 
 argout = linmod('analysis_PI_ctrl_lin_model_z');
-% input 1) is fin, 2) is w (noise on meas)
+% input 1) is fin, 2) is b (cmd)
 % output 1) is eps, 2) is u (cmd), 3) is r (fz)
 
 S = minreal(ss(argout.a, argout.b(:,1), argout.c(1,:), argout.d(1,1))); % sensivity
 T = minreal(ss(argout.a, argout.b(:,2), argout.c(1,:), argout.d(1,2))); % comp. sens.
-Ks = minreal(ss(argout.a, argout.b(:,2), argout.c(2,:), argout.d(1,2))); % u/w
-Ss = minreal(ss(argout.a, argout.b(:,1), argout.c(2,:), argout.d(1,2))); % u/fin
+Ks = minreal(ss(argout.a, argout.b(:,2), argout.c(2,:), argout.d(2,2))); % u/w
+Ss = minreal(ss(argout.a, argout.b(:,1), argout.c(2,:), argout.d(2,1))); % u/fin
 
 figure
 subplot(2,2,1)
-bode(S)
+bodemag(S)
 title('Fonction de sensibilité S')
 subplot(2,2,2)
-bode(T)
+bodemag(T)
 title('Fonction de sensibilité complémentaire T')
 subplot(2,2,3)
-bode(Ks)
+bodemag(Ks)
 title('Fonction de sensibilité K = u/w')
 subplot(2,2,4)
-bode(Ss)
+bodemag(Ss)
 title('Fonction de sensibilité K = u/fin')
 
 % fc(S) = 0.4 Hz
 % fc(T) = 0.5 Hz
 
 W1 = 1/makeweight(0.1,[2*pi*0.4,1],2);
-W2 = 1/makeweight(0.1,[2*pi*0.5,1],2);
+W2 = 1/makeweight(2,[2*pi*0.5,1],0.1);
 
 figure
 subplot(2,1,1)
