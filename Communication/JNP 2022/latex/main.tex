@@ -1,0 +1,18 @@
+\documentclass[tikz,english,12pt,a4paper]{report} % printable version
+%\documentclass[tikz,french, 12pt]{report} % online version
+
+\input{structure_jnp.tex}
+
+\begin{document}
+	
+	
+	\tikzexternalenable 
+		\input{fig_short_perturbations_implemented}
+		\input{fig_perturbations_significance_post_hoc}
+		\input{fig_perf_height_significance_ball_bouncing_post_hoc}	
+		\input{fig_phase_significance_impedance_post_hoc}
+		\input{fig_trajectory_perturbations}
+		\input{fig_performance_cluster_anova}
+	\tikzexternaldisable
+	
+\end{document}

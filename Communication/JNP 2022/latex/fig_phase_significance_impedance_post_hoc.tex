@@ -1,0 +1,170 @@
+\begin{figure}
+	\centering
+	\pgfplotstableread[col sep=semicolon] {../../../Manuscript/misc/chap_4_impedance/new/phase_significance_post_hoc.csv}\datatable
+	\resizebox{\textwidth}{!}{
+		\subcaptionbox{Moyenne des raideurs estimés\label{subfig_phase_significance_K_post_hoc}}
+		{
+			\tikzsetnextfilename{subfig_phase_significance_K_post_hoc}
+			\begin{tikzpicture}		
+				\begin{axis}[%
+					height=0.25\linewidth,
+					scale only axis,
+					%xmin=0.65,
+					%xmax=2.35,
+					%xtick={1,1.5,2},
+					xtick={1,2,3},
+					xticklabels={{$\varphi_1$},{$\varphi_2$},{$\varphi_3$}},
+					%ymin=1.06276752948761,
+					%ymax=1.78985784053802,
+					ylabel=$\mean{\hat{K}}$ (\si{\newton\per\meter}),
+					ylabel near ticks,
+					ylabel style={yshift=-1mm},
+					%boxplot/draw direction=y, 
+					]
+					\addplot [color=Orient, forget plot, thick] table[x=phase,y=K_med_AVG]{\datatable};
+					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+					plot [error bars/.cd, y dir = both, y explicit]
+					table[x=phase, y=K_med_AVG, y error=K_med_SEM]{\datatable};		
+					\node [below right, xshift=-1mm, color=Orient] at (axis cs:  1, 124.6) {\tiny$(b)$};
+					\node [below right, xshift=-1mm, color=Orient] at (axis cs:  2, 159.7) {\tiny$(ab)$};
+					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 191.4) {\tiny$(a)$};
+				\end{axis}		
+			\end{tikzpicture}%
+		}
+		\subcaptionbox{Moyenne des amortissements estimés\label{subfig_phase_significance_B_post_hoc}}
+		{
+			\tikzsetnextfilename{subfig_phase_significance_B_post_hoc}
+			\begin{tikzpicture}	
+				\begin{axis}[%
+					height=0.25\linewidth,
+					ybar,
+					bar width=.65,
+					scale only axis,
+					ytick style={draw=none},
+					yticklabels={\empty},
+					%xmin=0.75,
+					%xmax=3.25,
+					xtick={1,2,3},
+					xticklabels={$e_1$,$e_2$,$e_3$},
+					xticklabel style={color=Jewel},
+					ymin=9.1,
+					ymax=12.6,
+					enlarge x limits=0.28,
+					]
+					\addplot [color=Jewel, style={fill=Jewel}, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Jewel, ]
+					plot [error bars/.cd, y dir = both, y explicit]
+					table[row sep=crcr, x=phase, y=avg, y error=sem]{
+						phase	avg	sem\\
+						1	11.04109961	0.306751059\\
+						2	9.587646388	0.37037969\\
+						3	11.6838263	0.742533397\\
+					};								
+					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 1, 11.04) {\tiny$(a)$};
+					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 2, 9.59) {\tiny$(b)$};
+					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 3, 11.68) {\tiny$(a)$};
+				\end{axis}	
+				\begin{axis}[%
+					height=0.25\linewidth,
+					scale only axis,
+					%xmin=0.65,
+					%xmax=2.35,
+					%xtick={1,1.5,2},
+					axis x line*=top,
+					xtick={1,2,3},
+					%every axis label/.append style ={Orient},
+					xticklabels={{$\varphi_1$},{$\varphi_2$},{$\varphi_3$}},
+					xticklabel style={color=Orient},
+					%ymin=1.06276752948761,
+					%ymax=1.78985784053802,
+					ylabel=$\mean{\hat{B}}$ (\si{\newton\second\per\meter}),
+					ylabel near ticks,
+					ylabel style={yshift=-1mm},
+					ymin=9.1,
+					ymax=12.6,
+					enlarge x limits=0.28,
+					%xmin=0.75,
+					%xmax=3.25,
+					%boxplot/draw direction=y, 
+					]
+					%% separate line for each performance level
+		%			\addplot [color=NovColor, forget plot, thick] table[x=phase,y=B_med_e1_AVG]{\datatable};
+		%			\addplot [color=NovColor, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+		%			plot [error bars/.cd, y dir = both, y explicit]
+		%			table[x=phase, y=B_med_e1_AVG, y error=B_med_e1_SEM]{\datatable};		
+		%			\addplot [color=AdvColor, forget plot, thick] table[x=phase,y=B_med_e2_AVG]{\datatable};
+		%			\addplot [color=AdvColor, only marks, mark=pentagon*, mark options={fill=white, fill opacity=1}]
+		%			plot [error bars/.cd, y dir = both, y explicit]
+		%			table[x=phase, y=B_med_e2_AVG, y error=B_med_e2_SEM]{\datatable};	
+		%			\addplot [color=ExpColor, forget plot, thick] table[x=phase,y=B_med_e3_AVG]{\datatable};
+		%			\addplot [color=ExpColor, only marks, mark=triangle*, mark options={fill=white, fill opacity=1}]
+		%			plot [error bars/.cd, y dir = both, y explicit]
+		%			table[x=phase, y=B_med_e3_AVG, y error=B_med_e3_SEM]{\datatable};		
+		%			\addlegendentry{$e_1$}
+		%			\addlegendentry{$e_2$}
+		%			\addlegendentry{$e_3$}
+		
+					%% phase and performance separated
+					\addplot [color=Orient, forget plot, thick] table[row sep=crcr]{
+						1	10.03265015\\
+						2	11.7441701\\
+						3	9.828937436\\
+					};
+					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+						plot [error bars/.cd, y dir = both, y explicit]
+						table[row sep=crcr, x=phase, y=avg, y error=sem]{
+							phase	avg	sem\\
+							1	10.03265015	0.396885927\\
+							2	11.7441701	0.433956223\\
+							3	9.828937436	0.378303713\\
+					};				
+					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 1, 10.03) {\tiny$(b)$};
+					\node [above right, xshift=-1mm, color=Orient] at (axis cs: 2, 11.74) {\tiny$(a)$};
+					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 9.83) {\tiny$(b)$};
+					%
+%					\node [color=Jewel] at (axis cs: 1, 12.75) {$e_1$};
+%					\node [color=Jewel] at (axis cs: 2, 12.75) {$e_2$};
+%					\node [color=Jewel] at (axis cs: 3, 12.75) {$e_3$};
+					
+%					\addplot [color=Jewel, forget plot, thick] table[row sep=crcr]{
+%						1	11.04109961\\
+%						2	9.587646388\\
+%						3	11.6838263\\
+%					};					
+					%
+				\end{axis}		
+			\end{tikzpicture}%
+		}
+		\subcaptionbox{Moyenne des masses estimées\label{subfig_phase_significance_M_post_hoc}}
+		{
+			\tikzsetnextfilename{subfig_phase_significance_M_post_hoc}
+			\begin{tikzpicture}		
+				\begin{axis}[%
+					height=0.25\linewidth,
+					scale only axis,
+					%xmin=0.65,
+					%xmax=2.35,
+					%xtick={1,1.5,2},
+					xtick={1,2,3},
+					xticklabels={{$\varphi_1$},{$\varphi_2$},{$\varphi_3$}},
+					%ymin=1.06276752948761,
+					%ymax=1.78985784053802,
+					ylabel=$\mean{\hat{M}}$ (\si{\kilogram}),
+					ylabel near ticks,
+					ylabel style={yshift=-1mm},
+					%boxplot/draw direction=y, 
+					]
+					\addplot [color=Orient, forget plot, thick] table[x=phase,y=M_med_AVG]{\datatable};
+					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+					plot [error bars/.cd, y dir = both, y explicit]
+					table[x=phase, y=M_med_AVG, y error=M_med_SEM]{\datatable};		
+					\node [above right, xshift=-1mm, color=Orient] at (axis cs:  1, 0.454) {\tiny$(a)$};
+					\node [below right, xshift=-1mm, color=Orient] at (axis cs:  2, 0.382) {\tiny$(b)$};
+					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 0.453) {\tiny$(a)$};	
+				\end{axis}		
+			\end{tikzpicture}%
+		}
+	}
+	%\caption{Effets des variations de hauteur de la cible sur $\sigma(\epsilon_r)$, l'erreur type est utilisée comme intervalle de confiance.}
+	%\caption[ANOVA: Effets de la phase sur les paramètres en impédance cartésienne apparente]{Effets de la phase $\varphi$ sur les paramètres en impédance cartésienne apparente.}
+	%\label{fig_phase_significance_impedance_post_hoc}
+\end{figure} 
