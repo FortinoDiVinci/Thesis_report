@@ -1,0 +1,128 @@
+% figure 
+{
+	\tikzsetnextfilename{subfig_position_trajectory_estimation_example}
+	\centering
+		\resizebox{8.69cm}{!}{
+			\begin{tikzpicture}
+				\centering
+				%
+				\begin{axis}[%
+					name=ax1,
+					%width=.33\linewidth,
+					width=8cm,
+					height=4cm,
+					%height=.27\linewidth,
+					scale only axis,   
+					scaled y ticks = false,
+					xticklabels={\empty},
+					%xlabel={Time (\si{\second})},
+					ylabel={Position (\si{\centi\meter})},
+					yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}},
+					xmin=0,
+					axis x line = bottom,
+					axis y line = left, 
+					ylabel near ticks,
+					%xtick={1,2,3},
+					legend style={fill opacity=0, text opacity=1, draw=none},
+					]
+					%
+					\addplot [
+						color=Orient,
+						smooth,
+						thick,
+						]
+						table [col sep=comma, x expr=\thisrow{t}-94.8, y expr=\thisrow{x}-0.32] {virt_trajectory_example.csv};
+					%
+					\addplot [
+						color=Shiraz,
+						smooth,
+						very thick,
+						dashed,
+						]
+						table [col sep=comma, x expr=\thisrow{t}-94.8, y expr=\thisrow{x0}-0.32] {virt_trajectory_example.csv};
+					%
+					\addlegendentry{$x$};	
+					\addlegendentry{$x_0$};	
+				\end{axis}
+				%
+				\begin{axis}[%
+					at={($(ax1.south)+(0,-2mm)$)},
+					anchor={north},
+					width=8cm,
+					height=4cm,
+					scale only axis,   
+					xlabel={Time (\si{\second})},
+					ylabel={Force (\si{\newton})},
+					xmin=0,
+					axis x line = bottom,
+					axis y line = left, 
+					ylabel near ticks,
+					legend style={fill opacity=0, text opacity=1, draw=none},
+					]
+					%
+					\addplot [
+					color=Orient,
+					smooth,
+					thick,
+					]
+					table [col sep=comma, x expr=\thisrow{t}-94.8, y=f] {virt_trajectory_example.csv};
+					%
+					\addplot [
+					color=Shiraz,
+					smooth,
+					very thick,
+					dashed,
+					]
+					table [col sep=comma, x expr=\thisrow{t}-94.8, y=f0] {virt_trajectory_example.csv};
+					%
+					\addlegendentry{$f$};	
+					\addlegendentry{$f_0$};	
+				\end{axis}			
+			\end{tikzpicture}
+		}%\\	
+		%
+%		\resizebox{8.69cm}{!}{
+%			\tikzsetnextfilename{subfig_force_trajectory_estimation_example}
+%			\begin{tikzpicture}
+%				\centering
+%				%
+%				\begin{axis}[%
+%					width=8cm,
+%					height=6cm,
+%					scale only axis,   
+%					xlabel={Time (\si{\second})},
+%					ylabel={Force (\si{\newton})},
+%					axis x line = bottom,
+%					axis y line = left, 
+%					ylabel near ticks,
+%					legend style={fill opacity=0, text opacity=1, draw=none},
+%					]
+%					%
+%					\addplot [
+%						color=Orient,
+%						smooth,
+%						thick,
+%						]
+%						table [col sep=comma, x expr=\thisrow{t}-94.6, y=f] {virt_trajectory_example.csv};
+%					%
+%					\addplot [
+%						color=Shiraz,
+%						smooth,
+%						very thick,
+%						dashed,
+%						]
+%						table [col sep=comma, x expr=\thisrow{t}-94.6, y=f0] {virt_trajectory_example.csv};
+%					%
+%					\addlegendentry{$f$};	
+%					\addlegendentry{$f_0$};	
+%				\end{axis}			
+%			\end{tikzpicture}
+%		}
+	%\caption[Réponse simulée impulsionnelle en position du modèle KBM]{Réponse impulsionnelle en position du modèle viscoélastique à une impulsion d'amplitude unitaire (\SI{1}{\newton}), pour les valeurs extrêmes des paramètres identifiés par \textcite{erden_hand_2015}.}
+	%\label{fig_KBM_typical_impulse_response}
+	\captionof{figure}{Position and force trajectories (blue), with the estimated virtual trajectories (red).}
+	\label{fig_4}
+}
+%\end{figure}
+	%%
+	%

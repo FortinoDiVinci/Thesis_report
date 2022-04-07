@@ -1,10 +1,13 @@
-\begin{figure}
+{
 	\centering
 	\pgfplotstableread[col sep=comma] {../../../Manuscript/misc/chap_4_ball_bouncing/user_000_avg_cyclic_position.csv}\datatable
 	\tikzsetnextfilename{fig_trajectory_perturbations}
+	\resizebox{8.69cm}{!}{
 	\begin{tikzpicture}			
 		\begin{axis}[%
-			width=.48\linewidth,
+			%width=.48\linewidth,8.9
+			width=8cm,
+			heighth=6cm,
 			scale only axis,
 			%xmin=0,
 			%xmax=0.99,
@@ -57,6 +60,7 @@
 			
 		\end{axis}
 	\end{tikzpicture}%
-	%\caption[Trajectoire normalisée]{Exemple de trajectoires en position avec les perturbations moyennes}
-	%\label{fig_trajectory_perturbations}
-\end{figure}
+	}
+	\captionof{figure}{Phases perturbed along a time normalized cyclic position trajectory (the colored area represents the standard deviation).}
+	\label{fig_2}
+}

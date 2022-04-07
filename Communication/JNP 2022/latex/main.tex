@@ -1,18 +1,419 @@
-\documentclass[tikz,english,12pt,a4paper]{report} % printable version
+\documentclass[english,12pt,a4paper]{article} % printable version
 %\documentclass[tikz,french, 12pt]{report} % online version
 
 \input{structure_jnp.tex}
 
+\title{\textbf{Human arm endpoint-impedance estimation in a rhythmic human-robot interaction}}
+\author[1,2]{Vincent Fortineau}
+\author[1]{Isabelle A. Siegler}
+\author[2]{Maria Makarov}
+\author[2]{Pedro Rodriguez-Ayerbe}
+
+\affil[1]{\small Université Paris-Saclay, CIAMS, 91405, Orsay, France}
+\affil[2]{\small Université Paris-Saclay, CNRS, CentraleSupélec, Laboratoire des signaux et systèmes (L2S), 91190, Gif-sur-Yvette, France}
+
+\date{}
+
 \begin{document}
 	
+	\includepdf[pages={1-}]{Human_arm_impedance_estimation_in_a_rhythmic_human_robot_interaction_02_04_22.pdf}
+	
+%	\maketitle
+%	
+%	\section*{Abstract}
+%	
+%	Estimating the human endpoint impedance interacting with a physical environment provides insights for goal-directed human movements during physical interactions. 
+%	The endpoint impedance of the upper limb was examined during a hybrid ball-bouncing task with simulated haptic feedback while participants manipulated an admittance-controlled robot.
+%	A force-perturbation method was used to estimate the endpoint parameters of a cohort of participants in two experiments. 
+%	Experimental conditions of the ball-bouncing task were simulated in a digital environment. One experiment studied the influence of the target height, while the other studied the impedance at three cyclic phases of the rhythmic movement induced by the task. 
+%	It was hypothesized that the endpoint impedance described cyclic variations during a rhythmic task. 
+%	Moreover, the participant’s performances during the task were analyzed and compared with estimated impedance parameters. 
+%	
+%	\subsection*{News \& Noteworthy}
+%	
+%	%The endpoint impedance was evaluated using the constraints imposed by the uni-dimensionnal ball-bouncing task, and joint movements were not restricted. 
+%	The arm's endpoint impedance of more than thirty participants was examined in a dynamic rhythmic task inducing movements up to \SI{5}{\meter\per\second}, during physical human-robot interactions without constraint about the participant's joints. 
+%	Satisfying  results were still obtained ($\avg{R^2} \geq $\SI{90}{\percent}) indicating significant rhythmic variations of the endpoint impedance parameters, and notably an increase of stiffness throughout the cycle, but performances were not correlated with impedance variations.
+%	%
+%
+%	\section*{Introduction}
+%	
+%	Humans can tailor their limbs’ dynamic properties to achieve stable behavior with a wide range of environments while ensuring dexterous performances \parencite{burdet_central_2001,milner_impedance_2005,tsuji_bio-mimetic_2008}. %(Burdet et al. 2001; Milner and Franklin 2005; Tsuji and Tanaka 2008). 
+%	Measuring the properties of the humans’ interactions during various tasks is relevant to understand the emergence of perturbed goal-directed movements. 
+%	Moreover, reproducing these behaviors applies to the design of bio-inspired robot control and can also help gain insight into human motor control. 
+%	Among limbs’ dynamic properties, the limbs’ mechanical impedance has been studied for decades under the control prism (Mussa-Ivaldi et al. 1985) and is still an active research topic (Börner et al. 2020; van de Ruit et al. 2021). 
+%	Impedance relates kinematics to forces, allowing the modeling of human movements during physical interactions. 
+%	Despite their limitations (Kistemaker and Rozendaal 2011), elementary models, such as mass-spring-damper models (KBM or KBI) or Hill-type muscle models, have been shown to approach human behavior (Tsuji and Tanaka 2008) and performances (Tee et al. 2004). 
+%	These models do not intend to explain the complete human motor control but rather reproduce some of its aspects. More comprehensive models are required to analyze the neural processes underlying the control of dynamic limbs’ properties (Guarin and Kearney 2018; Sobhani Tehrani et al. 2017). 
+%	Indeed, to account for passive muscle viscoelastic properties and active behaviors induced by reflexes and motion, Latash (1993) explained that a single joint would at least need 13 parameters, making it very sophisticated and almost impossible to study multiple joints impedance during movements. 
+%	Less elaborated models at the endpoint level have been widely studied (Burdet et al. 2001; Dolan et al. 1993; Erden and Billard 2015a; Tsuji and Tanaka 2008), notably to study impedance during movements of multiple joints (Burdet et al. 2001; Erden and Billard 2015a). 
+%	Decoupling simple models from biological considerations to study movements at the endpoint level with a behavioral approach even allowed to analyze performances, expertise (Erden and Billard 2015a), learning (Burdet et al. 2001; Tee et al. 2004), and exploration (Li et al. 2017).
+%	
+%	One of the main difficulties is that the mechanical impedance cannot be directly measured. 
+%	To be estimated, it requires perturbing the limbs and comparing the observed movement to an unperturbed trajectory. 
+%	Two configurations can be easily distinguished: static or isometric tasks (Dolan et al. 1993; Fang et al. 2018), where the unperturbed pose is well known, and dynamic tasks, where the estimation of the unperturbed trajectory is much more complex (Burdet et al. 2000; Gomi and Kawato 1997). 
+%	When studying dynamic tasks, it can also be relevant to distinguish free movements without physical interaction with the environment from hybrid movements for which interactions with the environment are intermittent, potentially requiring time-varying mechanical impedance.
+%	
+%	Indeed, the study of impedance variations during movements and notably cyclic movements with contact phases and hybrid transitions is especially relevant for locomotion. 
+%	The literature about ankle joint time-varying stiffness is rich during walking (Lee et al. 2016) or running (Shorter and Rouse 2020). 
+%	Guarin (2018) also studied the reflex and intrinsic viscoelastic properties contributions of the ankle time-varying stiffness. 
+%	To provide insights into the flexibility of human walking, Huang (2015) designed a Central Pattern Generator (CPG)-based human locomotion model, where the CPG model controlled not only joint torque but also joint stiffness (stiffness constant and equilibrium point). 
+%	They improved the disturbance rejection from the ground ruggedness compared to previous models. 
+%	The time-varying viscoelastic properties of the upper limbs have also been investigated in free cyclic movements (Bennett et al. 1992) and rhythmic movements with various loads (Li et al. 2019). 
+%	Lacquaniti et al. (1993) and Tsuji (2008) studied the endpoint impedance of a ball-catching hybrid task (with both free movements and contact phases) with predictable physical interactions. 
+%	
+%	The present study characterizes the upper-limb mechanical impedance in a hybrid rhythmic task, such as a ball-bouncing task. 
+%	The ball-bouncing task has already been studied for its apparent simplicity in order to address several motor control issues  (Ankarali et al. 2014; de Rugy et al. 2003; Siegler et al. 2010, 2013; Sternad et al. 2001). 
+%	Avrin et al. (2017) implemented a CPG-based control structure to reproduce human-like kinematic performances in the ball bouncing. 
+%	Yet, in the experimental data used to validate this model (Siegler et al. 2010, 2013), the dynamics of the physical interactions between the ball, the paddle, and the human were not simulated. 
+%	For this purpose, a new experimental setup was designed using an admittance-controlled robot (Fortineau et al. 2020) that participants manipulated in order to vertically move a virtual paddle and bounce a virtual ball in a digital environment. 
+%	The haptic feedback was also simulated during ball-paddle impacts. 
+%	It is known to be relevant for performances as it reduces the noise in the state estimation of the ball (Ankarali et al. 2014). 
+%	A methodology for endpoint impedance estimation during cyclic movements was also validated (Fortineau et al. 2021a, 2021b). 
+%	Two experiments were conducted in order to characterize endpoint impedance in such an ecological multijoint rhythmic movement with low constraints generated by the robot. 
+%	The first goal  was to assess whether endpoint-impedance parameters vary and follow a cyclic behavior. 
+%	The second goal was to study the potential influence of the ball height to be reached on endpoint impedance and a possible relation between endpoint impedance parameters and performance level, as suggested by previous research on this topic (Erden and Billard 2015a). 
+%	
+%	
+%	\section*{Materials and Methods}
+%	
+%	\subsection*{Participants}
+%	
+%	Thirty-one healthy participants with no known motor disorders took part in the experiment. Among the participants, \SI{25}{\percent} were women, \SI{10}{\percent} were left-handed, \SI{40}{\percent} had already manipulated a similar robotic system, and \SI{30}{\percent} had never interacted physically with a robot. 
+%	On average (SD standard deviation), participants were 30.0 years old (SD 8.6), declared a height of \SI{176.2}{\centi\meter} (SD 9.3), and weighed \SI{71.3}{\kilogram} (SD 12.7). 
+%	Before the experiment, participants were required to read and sign an informed consent form approved by the Ethics Committee for Research (CER) of the Université Paris-Saclay (file number 217, September 2020). 
+%	The Ethics Committee also approved the experimental procedure.
+%		
+%	\subsection*{Apparatus}
+%	
+%	%Figure 1 
+%	\cref{fig_1} depicts the experimental setup used for the experiment. Participants were standing in front of a table supporting a KUKA youBot 5 DOF robot. 
+%	The robot had its first and last joints position-controlled to a fixed orientation to evolve only in the participants’ sagittal plane. 
+%	The other three joints were admittance-controlled at 1 kHz, as detailed in Fortineau et al. (2020), so that participants could move the robot along a vertical line without feeling the robot’s weight, joints’ friction and with reduced apparent inertia (Lamy et al. 2009). 
+%	Forces of interaction were measured using a 6-axis force/torque sensor ATI Mini 45, placed between the robot endpoint and a handle that participants maneuvered. 
+%	The data from the sensor was sampled at 1 kHz. For the control, the endpoint position of the robot was obtained using joint data. 
+%	However, to limit bias from joint flexibility, a motion capture system V120:Trio by Optitrack measured handle position with a submillimetric accuracy at \SI{120}{\hertz}. 
+%	This position measurement was used for data analysis. 
+%	
+%	FIGURE 1 HERE
+%	
+%	\subsection*{Ball-bouncing task}
+%	
+%	Participants had to operate the robot handle to move a paddle in a digital environment where the ball-bouncing task was simulated. 
+%	The ball kinematics were computed using the ballistic equation during free movement, and the ball post-impact velocity used a restitution coefficient $\alpha=0.6$ to account for energy loss, as described in Fortineau (2020).
+%	
+%	The goal of the task was to match the ball apex position with a target height $h^*$, kept constant during each trial, and materialized by a horizontal line. 
+%	A score was displayed slightly above the target line to help participants reduce the bouncing error $\epsilon_r$ between the ball center at the apex and $h^*$. 
+%	Participants were instructed to try to maintain a constant ball impact position $z_k$ during trials. 
+%	During both experiences, the robot introduced perturbations timed from the ball impacts on the simulated paddle at three possible cyclic phases: ($\varphi_1$) after the ball impact, ($\varphi_2$) during the decreasing phase of the paddle, and ($\varphi_3$) before the subsequent ball impact near the lowest position. 
+%	These phases are shown in \cref{fig_2}. 
+%	Perturbations were randomly spaced between \SIlist{2;5}{\second}.
+%	
+%	FIGURE 2 HERE
+%	
+%	\subsection*{Haptic feedback \& Perturbations}
+%	
+%	The robot admittance control loop was interrupted for \SI{30}{\milli\second}, and a force $f_i$ along the vertical axis was introduced using only the torque control loop, with a constant setpoint to simulate ball impacts. 
+%	The magnitude of the force was computed with the equation (1) adapted from Kawazoe (2002), with $b$ and $p$ indicating either the ball or the paddle, $v$ the velocity right before the impact $k$, $m$ the mass, and  $\hat{K} = 650$ an estimated coupled stiffness between the arm and the ball.
+%	
+%	\begin{equation}
+%		f_i (k) =-(v_b (k) - v_p (k)) (1+\alpha)  \sqrt{\frac{m_b+K}{\pi^2(1+m_b/m_p)}}
+%	\end{equation}
+%	
+%	
+%	Perturbations were introduced through the same pathway in stochastic directions. 
+%	An example of two resulting endpoint force perturbations is shown in \cref{fig_3}. 
+%	The peak value is reached approximately \SI{30}{\milli\second} after the onset of the torque control, and the next front lasts less than \SI{30}{\milli\second} afterward. 
+%	The total duration of a perturbation is, therefore, below \SI{60}{\milli\second}.
+%	
+%	FIGURE 3 HERE
+%	
+%	\subsection*{Mechanical impedance modeling}
+%	
+%	The KBM model used is reminded in equation (2). 
+%	This model relates a differential force $\delta f$ to a differential position $\delta x$ when a perturbation force $\delta_f$ is introduced along the virtual trajectories $f_0$ and $x_0$. 
+%	The differentials are the differences between virtual and perturbed trajectories (measured). 
+%	The model can be seen as a perturbation rejection system with the linear parameters $K$, $B$, and $M$: the stiffness, damping, and mass, respectively. 
+%	Virtual trajectories (Tsuji 1997) refer to completely unperturbed behaviors. 
+%	They are approached considering the nominal trajectories in the absence of the perturbations described in the previous section. 
+%	The model is considered decoupled, as done by Erden and Billard (2015a, 2015b), and only the impedance along the movement is studied.
+%	
+%	\begin{equation}
+%		\delta f = K\delta x + B \dot{x} + M\delta\ddot{x}
+%	\end{equation}
+%	
+%	The virtual paddle position was approximated using spline interpolation with a window of \SI{350}{\milli\second}, chosen to minimize the quadratic error with an undisturbed trajectory and maximize the duration to account for the arm’s time response. 
+%	The virtual force was estimated using a sum of sines optimization with a masked window of \SI{100}{\milli\second} after the perturbation (Fortineau et al. 2021a). 
+%	\cref{fig_4} shows an example for both trajectories.
+%	
+%	FIGURE 4 HERE
+%	
+%	The impedance parameters were then estimated using an ARX identification on a discretized impedance model on an identification window of \SI{150}{\milli\second}. 
+%	This window was minimal while allowing proper identification (Fortineau et al. 2021a). 
+%	Indeed, automatic responses or voluntary actions can occur with \SIrange{100}{180}{\milli\second} delays (Kurtzer et al. 2008; Libet 1985) and cannot be modeled with a linear impedance model. 
+%	They were, however, considered not dominant even after \SI{200}{\milli\second} (Erden and Billard 2015b, 2015a).
+%	
+%	\subsection*{Experimental protocol}
+%	
+%	Two experiments (Experiment P, Experiment H) occurred during two sessions on the same day (for all but three participants) separated by at least 45 min. 
+%	Each session lasted 30 min on average. The first session (Session 1) consisted of a familiarization phase, and two trials of 5 min each were conducted with a brief pause in between. 
+%	Participants started the first trial when confident enough with the ball-bouncing task. 
+%	The second session (Session 2) consisted of three other trials of 5 min each, also separated by small pauses to limit fatigue. 
+%	
+%	Experiment P was composed of three trials: either the two trials of Session 1 and the last trial of Session 2, or the three trials of Session 2. 
+%	The target height $h_2^*$ was fixed at 1.75m, and the three cyclic phases $\varphi$ were randomly perturbed in all trials. 
+%	Experiment H was composed of two trials (the two trials of Session 1 or the two first trials of Session 2). 
+%	The two trials randomly attributed a target height of either 1.5 m ($h_1^*$) or 2 m ($h_3^*$). 
+%	In this experiment, all perturbations occurred at phase $\varphi_1$. 
+%	
+%	Participants were randomly selected to start with Experiment H (17 participants) or Experiment P (14 participants), which parted the participants into two experiment-order subgroups. 
+%	After each experiment, participants were asked to report their perception of haptic feedback and perturbations.	
+%	
+%	\subsection*{Data Analysis}
+%	
+%	With 31 participants, 155 trials were conducted that represent more than 14h of recording without considering familiarization. 
+%	All data acquired was interpolated on a time vector sampled at 1 kHz. 
+%	The position and force were filtered using Butterworth second-order digital filters with cutoff frequencies of 25 Hz and 50 Hz, respectively. 
+%	Cycles were defined using ball impacts.
+%	
+%	Three performance levels were distinguishable from both experiments’ data, defined as novice $e_1$, intermediate $e_2$, and advanced $e_3$. 
+%	Individual performance was first evaluated using the interquartile range of the bouncing errors $\epsilon_r$ on each participant’s data, and the median of the quadratic bouncing errors $\sqrt{\epsilon_r^2}$ as a first measure of repeatability. 
+%	These groups were generated using a k-means clustering algorithm on the interquartile range of $\epsilon_r$ since repeatability was proven to qualify performances (Wei et al. 2008).
+%	
+%	For the rest of the analyses on performance, using the same method as previous studies on ball bouncing, two dependent variables were used to characterize it: 1) the precision defined by the average bouncing error $\avg{\epsilon_r}$, 2) the repeatability defined by the standard deviation of the bouncing errors $\sigma(\epsilon_r)$. 
+%	
+%	On average, 32.4 (SD 6.1) impedance parameter identifications for each experiment, configuration ($h^*$ and φ), and participant were used to estimate the endpoint impedance parameters. 
+%	Medians  were computed for every parameter since they proved to be more accurate in simulations than average values after taking out outliers. 
+%	Each impedance parameter was populated with 93 estimations (31 participants $\times$ 3 phases) for Experiment P and with 62 estimations for Experiment H (31 participants $\times$ 2 target heights).
+%	
+%	The adequation of the impedance parameters of each identification was evaluated using the coefficient of determination $R^2$ of the reconstruction of the perturbed position trajectory with the identified parameters and the differential force trajectory.
+%	
+%	Analyses of variance (ANOVA) were performed with a threshold of \SI{5}{\percent}. 
+%	Post-hoc tests were proceeded using the Bonferroni correction. 
+%	Only significant results will be detailed in the result section. Matlab (release 2020b) was used to process data, and JASP (version 0.16) was used for statistical analyses.
+%	
+%	\section*{Results}
+%	
+%	\subsection*{Effect of perturbations on participants’ performance}
+%	
+%	Perturbations were programmed to be as seamless as possible while providing sufficient deviations for impedance estimations (Fortineau 2021a). 
+%	Even if participants were warned of both haptic feedback and perturbations, only \SI{55}{\percent} declared having felt perturbations during at least one of the trials. 
+%	
+%	All the bouncing errors taking place the cycle before a perturbation $c^{-1}$ and three cycles after ($c^1$, $c^2$, $c^3$) were averaged for each participant and compared using a mixed-design ANOVA (4 cycles $\times$ 2 experiments) to assess the effect of perturbations on performance. 
+%	Only a significant effect of cycle order on $\avg{\epsilon_r}$was observed $F(3,180) = 6.8,p<0.001,\eta^2=0.026$. 
+%	A post-hoc analysis revealed that the bouncing error at $c^1$ was significantly larger than other cycles’ errors, with a mean difference of 2.0 cm (\cref{fig_5}). 
+%	
+%	FIGURE 5 HERE
+%	
+%	A second mixed-design ANOVA conducted on $\sigma(\epsilon_r)$ with the same factors had to be corrected (Huynh and Feldt 1976) since the sphericity test was not verified (Mauchly 1940). 
+%	No significant effect was observed for the main effect factor , the random effect, or the interaction. 
+%	Therefore the repeatability of the bouncing error was similar for all cycles, with an average standard deviation of 25.1 cm (SD 5.0). 
+%	
+%	\subsection*{Performance-based clustering of participants}
+%	
+%	It is relevant to notice that among all participants, \SI{40}{\percent} were already familiar with the experimental setup, while \SI{50}{\percent} had never manipulated an articulated robot. 
+%	K-means analysis showed that one participant had to be discarded from the computation of group performances because his score was too low, putting him in a group by himself. 
+%	The clustering was populated with 5 advanced, 13 intermediate, and 13 novice users.
+%	 Interestingly, a similar clustering was obtained using the precision. 
+%	 Only 3 participants were classified differently. 
+%	 
+%	To validate the essence of the clustering, the differences between performance-level groups $e_i$ were studied using two one-way ANOVAs, on the precision using the mean bouncing error $\avg{\epsilon_r}$ and on the repeatability using the standard deviation $\sigma(\epsilon_r)$. 
+%	The ANOVA on $\avg{\epsilon_r}$ unveiled no significant effect of the level-group factor $F(2,28)=3.0,p=0.064,\eta^2=0.178$, while the ANOVA on $\sigma(\epsilon_r)$ revealed a strong and significant effect of the performance-level factor $F(2,28)=33.0,p<0.001,\eta^2=0.702$.
+%	Another way of looking at individual performances concerns the paddle acceleration at impact (Morice et al. 2007; Sternad et al. 2001). 
+%	However, the accelerations estimated with two points numerical derivatives were not significant between the performance-level groups. 
+%	Participants hit the ball with an average post-impact acceleration of 0.29 ms-2 (SD 1.69).
+%	
+%	\subsection*{Experiment H}	
+%	
+%	\subsubsection*{Performances}
+%	
+%	For target heights $h_1^*$= 1.5m and $h_3^*$=2m, the mean ball-bouncing magnitudes (difference between apex and impact position) were 1.176 m (SD 0.019) and 1.670 m (SD 0.019), respectively. 
+%	These values show that participants hit the ball at similar vertical positions in both conditions and did not tend to hit it at a higher position when the target was higher.
+%	
+%	The effect of target height $h_i^*$ and performance-level groups $e_i$ on $\avg{\epsilon_r}$was analyzed using a mixed-design ANOVA (between: 2 $\times$ within: 3). 
+%	It revealed a significant main effect of factor $h_i^*$, $F(1,28)=7.0,p=0.014,\eta^2=0.043$. Neither the effect of performance level $e_i$  nor the interaction  was significant. Overall, the mean errors for $h_1^*$ and $h_3^*$ were 6.8 cm (6.3 SD) and 3.2 cm (7.1 SD), respectively.
+%	
+%	On the whole group, the mean σ($\epsilon_r$ ) increased from 21.7 cm (SD 4.2) to 27.2 cm (SD 6.1) for $h_1^*$ and $h_3^*$, respectively. 
+%	A mixed ANOVA (between: 2 $h_i^*$ $\times$ within: 3 $e_i$) revealed a significant main effect of $h_i^*$, $F(1,28)=44.8,p<0.001,\eta^2=0.179$, a significant effect of $e_i$ $F(1,28)=19.6,p<0.001,\eta^2=0.404$, but no significant interaction. 
+%	The post-hoc analysis revealed that the level of performance was significantly different for each pair. 
+%	\cref{fig_6} details the variations of the mean $\sigma(\epsilon_r)$ according to both factors.
+%	
+%	FIGURE 6 HERE
+%	
+%	\subsubsection*{Endpoint-impedance parameters}
+%	
+%	The same factors $h_i^*$ and $e_i$ were analyzed for each endpoint-impedance parameter. 
+%	ANOVAs did not yield any significant results neither for the stiffness nor for the damping. 
+%	The average estimated stiffness  was 116 N/m (SD 60), with a minimum value of 45 N/m and a maximum of 401 N/m. The average estimated damping  was 9.9 Ns/m (SD 3.1), with a minimum value of 2.2 Ns/m and a maximum of 16.8 Ns/m. 
+%	
+%	The mixed ANOVA about the estimated mass revealed a significant effect of the main factor $h_i^*$, $F(1,28)=4.6,p=0.040,\eta^2=0.014$. 
+%	Neither the effect of performances  $e_i$ nor the interaction  was significant. The average mass estimated for $h_1^*$ was 459 g (SD 126) and 434 g (SD 94) for $h_2^*$ with a minimum value of 272 g and a maximum of 893 g.
+%	
+%	\subsection*{Experiment P}
+%	
+%	\subsubsection*{Performances}
+%	
+%	The one-way ANOVA for each variable used to characterize performances was conducted on the regrouped data of the three trials, studying the effect of performance clusters.
+%	
+%	The ANOVA about the average bouncing error $\avg{\epsilon_r}$ revealed no significant effect of the performance clusters $e_i$. 
+%	The mean error for $h_2^*$ (Experience P) was 5.4 cm (SD 5.1). 
+%	The ANOVA about the standard deviation of the error $\sigma(\epsilon_r)$ revealed a significant effect on the performance clusters $e_i$, $F(2,28)=24.0,p<0.001,\eta^2=0.631$. 
+%	The average standard deviation was 27.8 cm (SD 3.6), 22.7cm (SD 2.1), and 18.2 cm (SD 2.0), respectively for the clusters $e_1$, $e_2$, and $e_3$. The post-hoc analysis showed that each pair had significant differences .
+%	
+%	FIGURE 7 HERE
+%	
+%	\subsubsection*{Endpoint-impedance parameters (cyclic phase factor)}
+%	
+%	The factors $\varphi_i$ and $e_i$ were analyzed for each endpoint-impedance parameter estimated using mixed-design ANOVAs (between: 3 $\times$ within: 3). 
+%	
+%	The mixed ANOVA about the endpoint stiffness revealed a significant effect of $\varphi_i$, $F(2,56)=8.3,p<0.001,\eta^2=0.134$. 
+%	Neither the effect of performances $e_i$ nor the interaction was significant. 
+%	The post-hoc analysis indicated that the variations were significant for the couple ($\varphi_1$,$\varphi_3$). 
+%	The couple ($\varphi_1$,$\varphi_2$), indicated a significant variation with Holm correction but not with Bonferroni  correction. 
+%	The stiffness progressively increased from $\varphi_1$ 125 N/m (SD 78) to $\varphi_3$ 191 N/m (SD 64), as shown in \cref{fig_8}-i. 
+%	The stiffness values were bounded between 53 N/m and 445 N/m.
+%	
+%	The mixed ANOVA about the endpoint damping revealed a significant effect of $\varphi_i$, $F(2,56)=8.6,p<0.001,\eta^2=0.138$, and of performances $e_i$ $F(2,56)=6.4,p=0.005,\eta^2=0.123$. 
+%	No significant interaction was observed. 
+%	The post-hoc analysis indicated that the variations were significant for the couples ($\varphi_1$,$\varphi_2$)  and ($\varphi_2$,$\varphi_3$) with an average difference of 1.9 Ns/m and 2.2 Ns/m, respectively. 
+%	Moreover, the clusters of performances were significantly different for the couples ($e_1$, $e_2$) and ($e_2$, $e_3$). 
+%	All damping values were bounded between 3.5 Ns/m and 17.5 Ns/m. The cyclic behavior of the damping is shown in \cref{fig_8}-ii.
+%	
+%	The mixed ANOVA about the apparent mass used Huynh-Feldt’s (1976) correction because the sphericity assumption was violated (p<0.05). 
+%	It revealed a significant effect of the main factor $\varphi_i$, $F(1.5,41.3)=16.2,p<0.001,\eta^2=0.063$. Neither the effect of performances $e_i$ nor the interaction  was significant. 
+%	The post-analysis indicated that the variations were significant for the couples ($\varphi_1$, $\varphi_2$), with an average difference of 71 g, and ($\varphi_2$,$\varphi_3$), with an average difference of 67 g. 
+%	All mass values were bounded between 227 g and 815 g. 
+%	The cyclic behavior of the mass is shown in \cref{fig_8}-iii.
+%	
+%	FIGURE 8 HERE
+%	
+%	The mixed ANOVA about the coefficients of determination used Huynh-Feld’s correction since the sphericity assumption was violated (p<0.05). 
+%	It revealed a significant effect of the main factor $\varphi_i$, $F(1.6,45.9)=31.1, p<0.001, \eta^2=0.302$. 
+%	Neither the effect of performances  $e_i$ nor the interaction  was significant. 
+%	The post-hoc analysis indicated that the variations were significant for the couples ($\varphi_1$, $\varphi_2$), with an average difference of \SI{3.3}{\percent}, and ($\varphi_1$, $\varphi_3$), with an average difference of \SI{2.6}{\percent}. 
+%	Phase $\varphi_1$ had the lowest average score with \SI{93.5}{\percent} (SD 2.7). 
+%	The minimum users’ coefficient of determination (\SI{88.9}{\percent}) was obtained at phase 1 and the maximum (\SI{98.6}{\percent}) at phase 3.
+%	
+%	The factors $\varphi_i$ and $e_i$ were analyzed for each endpoint-impedance parameter notch interval (median \SI{95}{\percent} confidence interval) using mixed-design ANOVA (between: 3 $\times$ within: 3).  
+%	
+%	The mixed ANOVA about the endpoint stiffness variability used Huynh-Feld’s correction since the sphericity assumption was violated (p<0.05). 
+%	It revealed a significant effect of $\varphi_i$, $F(1.4,39.0)=4.8, p=0.024, \eta^2=0.094$. 
+%	Neither the effect of performances $e_i$ nor the interaction was significant. 
+%	The post-hoc analysis indicated that the variations were significant for the couple ($\varphi_1$, $\varphi_2$), with a decrease from 89 N/m (SD 58) to 52 N/m (SD 20). 
+%	The phase $\varphi_3$ had an average notch of 78 N/m (SD 32).
+%	
+%	The mixed ANOVA about the endpoint damping variability revealed a significant effect of $\varphi_i$, $F(2,56)=3.5, p=0.037, \eta^2=0.041$, and the interaction $F(4,56)=2.7, p=0.037, \eta^2=0.065$. 
+%	However, the effect of performances $e_i$ was not significant. 
+%	The post-hoc analysis indicated that the variations were significant for the couple ($\varphi_1$, $\varphi_2$), with a decrease of 0.5 Ns/m (SE 0.2). 
+%	The damping notches ranged from 1.1 Ns/m to 4.8 Ns/m.
+%	
+%	The mixed ANOVA about the endpoint mass variability used Huynh-Feld’s correction since the sphericity assumption was violated (p<0.05). It revealed a significant effect of $\varphi_i$, $F(1.4,39.0)=8.0, p=0.004, \eta^2=0.114$. 
+%	Neither the effect of performances $e_i$ nor the interaction was significant. 
+%	The post-hoc analysis indicated that the variations were significant with phase $\varphi_2$ and both other phases, with a lower notch value of 32 g (SD 16), compared to 56 g (SD 33) and 55 g (SD 25) for $\varphi_1$ and $\varphi_3$, respectively.
+%	
+%	\section*{Discussion}
+%	
+%	This work has been focusing on analyzing the endpoint impedance of the upper limb during a ball bouncing task with haptic feedback. 
+%	Two main questions are raised here, wondering if performances are related to certain endpoint-impedance behaviors and if the endpoint-impedance has a rhythmic nature during a cyclic task. 
+%	Results are compared with the literature, and the perturbations’ influence is discussed to comfort the methodology.
+%	
+%	\subsubsection*{Impedance estimation validation during a ball bouncing task}
+%	
+%	As presented in the perturbed and unperturbed cycles section (see page 7), only one of the two criteria used unveiled significant variations due to the introduced torque perturbations. 
+%	Only the cycles after a perturbation unveiled a significant mean error $\avg{\epsilon_r}$ increase of about 2.0 cm on average. 
+%	This can be considered negligible with respect to the mean bouncing magnitude of 1.42 m and the standard deviation of the bouncing error $\sigma(\epsilon_r)$, around 25 cm for all participants. 
+%	Moreover, the ANOVA on $\sigma(\epsilon_r)$ did not underline significant differences between the cycles, showing that their repeatability did not deteriorate. 
+%	Therefore, the methodology used to introduce these perturbations is close to the main objective of total transparency or seamlessness, which could allow online impedance estimation without disturbing the studied task. 
+%	
+%	The endpoint impedance parameters estimated ranged from 45 to 445 N/m, 2.2 to 17.5 Ns/m, and 227 to 893 g for the endpoint stiffness, damping, and mass, respectively. 
+%	No constraints were imposed on the participants, inducing the involvement of at least three joints (wrist, elbow, shoulder) to whom the hip joint might be added. 
+%	A projection of 52 (13 $\times$ 4) parameters (without considering coupling effects between joints) would have been required for joint impedance analysis. 
+%	With only three parameters, \SI{94.6}{\percent} (SD 2.9) of the observed behavior could be reproduced on average for the case of slight deviations from trajectory imposed by a rhythmic task, pointing out the adequacy of the linear impedance model used.
+%	
+%	Moreover, the endpoint parameters obtained from the linear model are comparable to those found in the literature. 
+%	For point-to-point movements, Burdet et al. (2001) found higher stiffness parameters ranging from 150 to 700 N/m. 
+%	In the preparation of ball impacts, Tsuji and Tanaka (2008) found stiffness from 44 to 189 N/m, and in a collaborative welding task, Erden and Billard (2015a) found similar stiffness values from 49 to 339 N/m in the direction of the movement. 
+%	This study’s apparent endpoint damping and mass are slightly lower than Tsuji and Tanaka’s (2008)  and Erden and Billard’s (2015a)  observations. 
+%	Lower damping values might be explained by the kinematic requirements of the ball-bouncing task and lower masses by the geometric configuration imposed by the experimental setup.
+%	
+%	\subsubsection*{Are there cyclic variations of the endpoint-impedance parameters?}
+%	
+%	In the preparation of a predictable contact with an environment, joint stiffness in the case of the ankle for locomotion (Lee et al. 2016) or elbow and wrist in a ball catching task (Lacquaniti et al. 1993) increased prior to the contact. 
+%	Tsuji and Tanaka (2008) also found an increase in stiffness at the endpoint level right before motion compared to maintaining a stable posture. 
+%	They deduced that the impedance regulation occurred before starting motions for a task. 
+%	However, shreds of evidence imply neurophysiological differences in the emergence of rhythmic movement in opposition to discrete or point-to-point movements (Hogan and Sternad 2007; Schaal et al. 2004), even if unified theories have been proposed (Degallier and Ijspeert 2010; Sternad et al. 2000). 
+%	Consequently, impedance variations results during discrete tasks might not transfer to rhythmic movements.  
+%	The results of the endpoint impedance estimation described in this study also indicate significant variations of the impedance parameters at three key point phases of the ball bouncing cycle. 
+%	
+%	The lowest stiffness values are obtained at phase $\varphi_1$, which takes place 0.3 s after the impact, and progresses to reach the highest values right before the impact at phase $\varphi_3$, 0.3 s before the impact. 
+%	As detailed in the result section, this increase is almost linear throughout the three phases, with a significant growth of \SI{53}{\percent} between $\varphi_1$ and $\varphi_3$, implying smaller displacements when subject to equivalent force.  
+%	
+%	Counter-intuitively, the endpoint damping reached its lowest values at $\varphi_3$ (no significant difference with $\varphi_1$) and highest value in the middle of the decreasing phase at $\varphi_2$, with significant differences from the other two phases. 
+%	One might have expected a behavior correlated with the endpoint stiffness to improve perturbation rejection. 
+%	Indeed the damping factor of a second-order model is proportional to the damping B of the impedance model, and the settling time of such a model is inversely proportional to the damping factor. 
+%	If we consider the average parameters of all participants for each phase, the settling time in response to a force pulse of both $\varphi_1$ and $\varphi_3$ is 0.43 s, while it is about 0.34 s for $\varphi_2$.
+%	Therefore, at phase $\varphi_2$, the arm returns faster to its equilibrium position.  
+%	Endpoint damping variations seem uncorrelated with the expected requirements imposed by the hybrid task since an increase in the time response would decrease the perturbation rejection performance.
+%	
+%	It is essential to remind that the identifications are conducted on 150 ms with the probably wrong assumption of constant parameters during that time frame. 
+%	Despite this, significant variations are observed within 0.6 s.  
+%	Moreover, because of this assumption, parameters estimated at $\varphi_1$ would be shifted away from the perturbation while shifted closer to the perturbation for $\varphi_3$, making both phases positioned in a positive acceleration  cyclic phase, as opposed to $\varphi_2$. 
+%	Therefore, damping variation could be related to velocity or the sign of acceleration. 
+%	
+%	The increase in response time to perturbation rejection for the phases close to a predictable perturbation might notify involuntary impedance variation. 
+%	Indeed, it has been widely reported that joint impedance is related to the joint configuration and velocity (Kuxhaus et al. 2014).  
+%	To reject this latter hypothesis, an experience involving similar kinematics but varying interaction force could be tested by changing the ball mass.
+%	
+%	\subsubsection*{Can endpoint-impedance parameters explain performance?}
+%	
+%	During a point-to-point task, Burdet et al. (2001) reported a selective increase of stiffness in the direction of instability generated by a force field but a low impedance in the direction of the movement. 
+%	As explained by the authors, since co-contractions have a high metabolic cost and full central nervous system (CNS) control is computationally costly, the CNS is facing an optimization problem to enhance robustness in the direction of perturbation while minimizing metabolic cost. 
+%	After some trials, the adaptation of the stiffness in the absence of the destabilizing force underlined the learning of the optimal endpoint impedance. 
+%	Therefore the CNS can adapt not only the endpoint stiffness magnitude but also the endpoint stiffness geometry (shape and orientation) in a predictive way that is independent of the force required to compensate for the newly imposed dynamics. 
+%	
+%	In two other experiments, Erden and Billard (2015a, 2015b) demonstrated differences in endpoint impedance between expert and novice participants or according to handedness. 
+%	Indeed, they found significant expertise effects on both endpoint stiffness and damping. 
+%	Novice users tended to have lower average impedance parameters. 
+%	Similar results were obtained for handedness.
+%	
+%	These experiments emphasize the importance of adapting the endpoint impedance parameters during movements and the relationship between these parameters and expertise or skill. 
+%	Therefore, it would be expected to find significant differences while looking at endpoint parameters according to performance levels. 
+%	However, despite significant performance differences between the three levels chosen, most endpoint impedance parameters were not significantly different. 
+%	There might be two main explanations. 
+%	
+%	A first elucidation could be about the strategies used by participants to improve their performances. 
+%	Morice et al. (2007) and de Rugy et al. (2003) reported that the ball bouncing task might be achieved outside of a passively stable regime thanks to an active control relying on visual information about the ball. 
+%	Compared to kinematic and timing, it could underline a minor role of viscoelastic endpoint properties in this task. 
+%	Indeed, if the impedance is not critical to the task, its variability might increase. 
+%	The participant’s endpoint acceleration at the ball’s impacts was on the verge of active and passive control and did not allow to draw any conclusion. 
+%	It is also important to stress that no significant impact acceleration variation was found between the different performance levels, suggesting that all participants used both passive and active control. 
+%	To dismiss the hypothesis that impedance variations are not critical in the ball bouncing task, an experiment with variations of dynamic considerations could be proposed, using the change of the gravity constant or the ball mass.
+%	
+%	The proposed protocol could also bring some enlightenment. 
+%	Indeed, even if some participants had prior experience with the experimental setup, the performance clusters were not defined according to expertise like Erden and Billard (2015a); it was instead done retrospectively. 
+%	Therefore, it could be assumed that the clusters chosen, even if significant, were not important enough. 
+%	The variations caused by performance need to be more critical than individual variations to be statistically significant. 
+%	To be able to observe slighter variations and reduce noise in the estimated parameters, the position trajectories precision could be enhanced, or more participants could be included. 
+%	
+%	\subsubsection*{Conclusion}
+%	
+%	In realistic case studies, joint impedance might be complicated to estimate when human movements are free and the environment is partially unknown. 
+%	The use of endpoint impedance provides a good approximation for small deviations from a nominal trajectory, allowing the monitoring of a global behavior that did not discriminate reflexes from intrinsic properties in this study.
+%	
+%	This study observed significant rapid impedance variations (<0.6 s) during the ball bouncing task, supporting the idea of cyclic variations of the endpoint impedance during rhythmic tasks. 
+%	Estimation techniques not relying on the assumption of constant parameters like the ones described by Piovesan et al. (2012) or Guarin and Kearney (2018) could provide more specific and descriptive cyclic impedance data to draw more delicate variations and consolidate the findings of this work. 
+%	
+%	\printbibliography
 	
 	\tikzexternalenable 
-		\input{fig_short_perturbations_implemented}
-		\input{fig_perturbations_significance_post_hoc}
-		\input{fig_perf_height_significance_ball_bouncing_post_hoc}	
-		\input{fig_phase_significance_impedance_post_hoc}
+		\input{fig_experimental_setup}
 		\input{fig_trajectory_perturbations}
-		\input{fig_performance_cluster_anova}
+		\input{fig_short_perturbations_implemented}
+		\input{fig_trajectory_estimation_examples}		
+		\input{fig_perturbations_significance_post_hoc}		
+		\input{fig_perf_height_significance_ball_bouncing_post_hoc}	
+		\input{fig_performance_cluster_anova}	
+		\input{fig_phase_significance_impedance_post_hoc}	
 	\tikzexternaldisable
 	
 \end{document}
