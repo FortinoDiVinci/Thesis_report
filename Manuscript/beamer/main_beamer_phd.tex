@@ -1,0 +1,329 @@
+% Der Mensch kann zwar tun, was er will, aber er kann nicht wollen, was er will.
+\documentclass[10pt,xcolor=table]{beamer}
+
+\input{structure_beamer.tex}
+
+\author{Vincent FORTINEAU\\%
+	{\footnotesize Codirecteur : Pedro Rodriguez-Ayerbe}\\%
+	{\footnotesize Codirectrice : Isabelle A. Siegler}\\%
+	{\footnotesize Encadrante : Maria Makarov}}
+\title{Couplage physique humain robot lors de tâches rythmiques en interaction avec l’environnement : estimation de l’impédance mécanique}
+
+\institute{Université Paris-Saclay} 
+
+%% logo of my university
+\titlegraphic{%
+	\begin{tikzpicture}[overlay,remember picture]
+	\node[right=0.2cm, yshift=-.5cm] at (current page.180){
+		\includegraphics[width=2cm]{logo_ciams.png}
+	};
+	\node[left=0.2cm, yshift=-.5cm] at (current page.0){
+			\includegraphics[width=2.5cm]{logo_l2s.png}
+	};
+	\end{tikzpicture}
+}
+
+\date{19 mai 2022} 
+
+\setbeamertemplate{title page}[default][rounded=true,shadow=false]
+%\subject{}
+
+\begin{document}
+
+%% TITLE PAGE AND TABLE OF CONTENTS
+{
+	\setbeamertemplate{headline}{}
+	\setbeamertemplate{footline}{}
+	\begin{frame}
+		\titlepage
+	\end{frame}	
+
+	\begin{frame}{Overview}
+	%\frametitle{\insertsubsection} %\insertsection: 
+		\tableofcontents[hideallsubsections]
+	\end{frame}	
+}
+%%%%%%%%%%%%%%%%%%
+%%% INTRODUCTION	
+\section[Introduction]{Introduction}
+
+%%%
+\subsection{Robotique collaborative}
+\begin{frame}
+\frametitle{\insertsubsection}
+	% 1
+	\begin{textblock*}{5.75cm}(0.5cm,2.5cm) %(0.78cm,2cm)
+		\begin{itemize}[<+>]
+			\item<1> Robots industriels (1970 automobile)
+			\item<1> Chute des accidents professionnels\footcite{gihleb_industrial_2020}
+			\item<1> Vitesse et précision élevée, mais versatilité limitée
+			%\item<1> Need to interact with new environments
+		\end{itemize}
+	\end{textblock*}
+
+	\begin{textblock*}{6cm}(6.25cm,3cm) % {block width} (coords)
+		\begin{figure}
+			\includegraphics<1>[width=6cm]{fig_industrial_robotic_growth}%\\
+			%\visible<1>{\input{latex_figures/fig_industrial_robotic_growth}}
+		\end{figure}
+		%\captionof{figure}{\scriptsize Worldwide annual installations of industrial robots, with forecast in blue}
+		\begin{center}
+			\visible<1>{\vspace{-3mm}\scriptsize Installations annuelles de robots industriels dans le monde, avec des prédictions en bleu}
+		\end{center}
+	\end{textblock*}	
+	% 2
+	\begin{textblock*}{5.75cm}(0.5cm,6cm) %(0.78cm,2cm)
+		\begin{itemize}[<+>]
+			\item<2> Interagir avec des environnements mal connus
+			\item<2> Interagir avec des humains
+			\item<2>[$\Rightarrow$] Problématiques de sécurité
+		\end{itemize}
+	\end{textblock*}	
+	\begin{textblock*}{6cm}(6.25cm,3cm) % {block width} (coords)
+		\begin{figure}
+			\includegraphics<2>[width=6cm]{fig_collaborative_robotic_growth}%\\
+			%\visible<2>{\input{latex_figures/fig_collaborative_robotic_growth}}%\\<2>
+		\end{figure}
+		%\captionof{figure}{\scriptsize Worldwide annual installations of industrial robots, with forecast in blue}
+		\begin{center}
+			\visible<2>{\vspace{-3mm}\scriptsize Robots industriels collaboratifs et traditionnels}
+		\end{center}
+	\end{textblock*}
+
+\end{frame}
+
+%%%
+\subsection{Scenarios de collaboration}
+\begin{frame}
+\frametitle{\insertsubsection}
+\begin{figure}
+	\uncovergraphics<1>[width=4.5cm]{../misc/cobot_workspace_coexistance}\hspace{3mm}
+	\uncovergraphics<2>[width=4.5cm]{../misc/cobot_workspace_alternating}\\
+	\vspace{1mm} \hspace{8mm}Coexistence \hspace{2.4cm} Collaboration alternée\\ \vspace{1mm}\hspace{-1.5mm}
+	\uncovergraphics<3>[width=4.5cm]{../misc/cobot_workspace_simultaneous}\hspace{3mm}
+	\uncovergraphics<4>[width=4.5cm]{../misc/cobot_workspace_assistance}\\ 
+	\vspace{1mm} \hspace{-5mm}Collaboration simultanée\hspace{1.75cm} Assistance physique	
+\end{figure}
+\end{frame}
+
+%%%
+\subsection{Quels types de collaborations ?}
+\begin{frame}
+\frametitle{\insertsubsection}
+%	\begin{itemize}[<+>]
+%		\item<1> Remote interaction
+%		\item<1> Proximal interaction
+%		\item<1> High velocity and accuracy but limited adaptiveness
+%		%\item<1> Need to interact with new environments
+%	\end{itemize}
+	\begin{center}
+%		\begin{tabular}{ |c|c c| } 
+%			\hline
+%			\multicolumn{3}{|c|}{\textbf{Interaction}\footcite{goodrich_humanrobot_2008}}\\ 
+%			\hline
+%			                  & \textbf{Remote}  & \textbf{Proximal} \\ 
+%        	\hline
+%			\textbf{mobility} & teleoperation    & assistant        \\ 
+%			\textbf{physical} & telemanipulation & \textbf<2>{phri} \\ 
+%			\textbf{social}   & /                & theory of mind   \\ 
+%			\hline
+%		\end{tabular}
+		\begin{table}[]
+			\begin{tabular}{|ccc|}
+				\hline
+				\multicolumn{3}{|c|}{\cellcolor{Prune}{\textcolor{white}{\textbf{Interactions}\footcite{goodrich_humanrobot_2008}}}} \\ \hline
+				\multicolumn{1}{|c|}{}                  & \textbf{Distancielles}  & \textbf{Proches} \\ \hline
+				\multicolumn{1}{|c|}{\textbf{Mobile}} & téléopération    & assistant         \\
+				\multicolumn{1}{|c|}{\textbf{Physique}} & télémanipulation & \tikzmark{start}\textbf<2>{phri}\tikzmark{end}  \\
+				\multicolumn{1}{|c|}{\textbf{Social}}   & /                & théorie de l'esprit \\ \hline
+			\end{tabular}
+		\end{table}
+		%
+		\begin{tikzpicture}[remember picture,overlay]
+			\node<2>[yshift=3pt,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:start) (pic cs:end)}] {};
+		\end{tikzpicture}  
+		%
+		\begin{figure}
+			\includegraphics<2>[width=6cm]{../misc/example_cobot}
+		\end{figure}
+	\end{center}
+\end{frame}
+
+%%%
+\subsection{Impédance mécanique}
+\begin{frame}
+\frametitle{\insertsubsection}
+	\begin{block}{Impédance \only<2>{mécanique}}
+		L'impédance \only<2>{mécanique} $H$ est le rapport entre \only<1>{un potentiel extensif $E$ (\textit{eg.} tension, force)}\only<2>{une \textbf{force} $F$} à \only<1>{un flux extensif $\phi$ (\textit{eg.} courant, vitesse)}\only<2>{un \textbf{mouvement} $v$}: %\\
+		\only<1>{$$ E(t)=H(t)\phi(t) $$}\only<2>{$$ F(t)=H(t)v(t) $$}
+	\end{block}
+	\vspace{1cm}
+	\begin{figure}
+		\begin{tikzpicture}
+			\node[rectangle, draw, align=center, minimum width=3cm, minimum height=1.25cm, line width=1, font=\large] (impedance) at (0,0) {\emph{Impédance}};
+			\node[rectangle, draw, align=center, minimum width=3cm, minimum height=1.25cm, line width=1, font=\large] (admittance) at ($(impedance) + (4.5, 0)$) {\emph{Admittance}};
+			\draw[-{Latex[length=3mm]}, line width=1] (impedance.east) -- (admittance.west)
+			node[midway, above] {\only<1>{$E$}\only<2>{$F$}};
+			\draw[{Latex[length=3mm]}-, line width=1] (impedance.west) -- +(-1.25,0)
+			node[midway, above] {\only<1>{$\phi$}\only<2>{$v$}};		
+			\draw[-{Latex[length=3mm]}, line width=1] (admittance.east) -- +(1.25,0)
+			node[midway, above] {\only<1>{$\phi$}\only<2>{$v$}};
+		\end{tikzpicture}
+	\end{figure}
+
+\end{frame}
+
+%%%
+\subsection{Commandes collaboratives}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\begin{textblock*}{10cm}(1.5cm,2.25cm)
+		\textcolor<1>{Prune}{\large{Contrôler seulement la force ou la position est insuffisant !}}%Controlling either force or position alone is insufficient!
+	\end{textblock*}
+	\begin{textblock*}{12cm}(0.5cm,3.25cm) %(0.78cm,2cm)
+		\begin{itemize}[<+>]
+			\item<2-> Commande hybride\footcite{raibert_hybrid_1981} (force \& position sur des axes différents)
+			\item<3-> Commande en impédance\footcite{hogan_impedance_1985}
+			\item<4-> Commande en admittance\footcite{newman_stable_1994}\tikzmark{bracket}
+		\end{itemize}
+	\end{textblock*}
+	%
+	\begin{textblock*}{5cm}(0.5cm,5cm) 
+		\begin{figure}
+			\centering
+			\tikzstyle{block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm]  % bloc
+			%
+			%
+			\begin{tikzpicture} [node distance = 1.75cm, visible on=<3>]
+				\node (O) at (0,0) {};
+				\node[block, left of = O, align=center] (robot) {Robot \\ (Impédance)};
+				\node[block, right of = O, align=center] (env) {Environnement \\ (Admittance)};
+				%
+				\draw[>=Latex, ->] ($(robot.east) + (0,0.5)$) -- ($(env.west) + (0,0.5)$)
+				node[midway, above] {$\vect{f}$};
+				\draw[>=Latex, <-] ($(robot.east) - (0,0.5)$) -- ($(env.west) - (0,0.5)$)
+				node[midway, above] {$\vect{v}$};
+			\end{tikzpicture}
+		\end{figure} 
+	\end{textblock*}
+	%
+	\begin{textblock*}{5cm}(6.75cm,5cm) 
+		\begin{figure}
+			\centering
+			\tikzstyle{block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm]  % bloc
+			%
+			%
+			\begin{tikzpicture} [node distance = 1.75cm, visible on=<4>]
+				\node (O) at (0,0) {};
+				\node[block, left of = O, align=center] (robot2) {Robot \\ (Admittance)};
+				\node[block, right of = O, align=center] (human) {Humain \\ (Impédance)};
+				%
+				\draw[>=Latex, <-] ($(robot2.east) + (0,0.5)$) -- ($(human.west) + (0,0.5)$)
+				node[midway, above] {$\vect{f}$};
+				\draw[>=Latex, ->] ($(robot2.east) - (0,0.5)$) -- ($(human.west) - (0,0.5)$)
+				node[midway, above] {$\vect{v}$};
+			\end{tikzpicture}
+		\end{figure}
+	\end{textblock*}
+	%
+	\begin{tikzpicture}[remember picture,overlay]
+		%\node<2>[yshift=3pt,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:start) (pic cs:end)}] {};
+		\draw<5>[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:bracket) + (0.1cm,0.75cm)$) -- ($(pic cs:bracket) + (0.1cm,0)$) node [midway,xshift=.2cm,anchor=west] {Complémentaire (Unification\footcite{ott_unified_2010})};
+	\end{tikzpicture}
+\end{frame}
+
+%%%
+\subsection{Modéliser le comportement humain articulaire}%Modelling human behaviour during physical interactions
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\begin{itemize}
+		\item Modèle articulaire linéaire (\textit{eg.} coude\footcite{hogan_adaptive_1984})%Linear joint model of the elbow
+		\item Activation agoniste et antagoniste des muscles (cocontraction)%Agonist and antagonist muscle activation
+	\end{itemize}
+	%
+	\begin{figure}
+		\centering
+		\uncovergraphics<1>[width=3.5cm]{fig_hogan_arm_cocontraction_model_a}\hspace{2cm}
+		\uncovergraphics<2->[width=3.5cm]{fig_hogan_arm_cocontraction_model_b}
+	\end{figure}
+	%
+	\begin{equation*}
+		\visible<3->{\tikzmark{eqHoganA}A \ddot{\theta}\tikzmark{eqHoganA2} = \tikzmark{eqHoganT}T\tikzmark{eqHoganT2}(u_b - u_t) - \tikzmark{eqHoganR}R(u_b + u_t)\theta\tikzmark{eqHoganR2} + \tikzmark{eqHoganGrav}mgl \sin(\theta - \pi/2)\tikzmark{eqHoganGrav2} - \tikzmark{eqHoganD}D \dot{\theta}\tikzmark{eqHoganD2}}
+	\end{equation*}
+	%
+	\begin{tikzpicture}[remember picture, overlay, arrow/.style={thick, ->, >=latex}]
+		%\node<2>[yshift=3pt,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:start) (pic cs:end)}] {};
+		\draw<4->[decorate,decoration={brace,amplitude=2pt}] ($(pic cs:eqHoganA2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganA) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north] {\textbf<4>{\textcolor<4>{Prune}{PFD}}};%, xshift=-1cm
+		\draw<5->[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:eqHoganR2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganT) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<5>{\textcolor<5>{Prune}{Couple musculaire}} \\ \textbf<5>{\textcolor<5>{Prune}{net isometrique}}};
+		\draw<6->[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:eqHoganGrav2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganGrav) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<6>{\textcolor<6>{Prune}{Poids}}};
+		\draw<7->[decorate,decoration={brace,amplitude=2pt}] ($(pic cs:eqHoganD2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganD) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<7>{\textcolor<7>{Prune}{Viscosité}}};
+		%
+		\draw<5->[arrow] ($(pic cs:eqHoganT) + (0.1cm,0.3cm)$) to[out=100,in=-90] ($(pic cs:eqHoganT) + (-1cm,1.25cm)$) node [yshift=.15cm] {Couple max};
+		\draw<5->[arrow] ($(pic cs:eqHoganR) + (0.1cm,0.3cm)$) to[out=80,in=-90] ($(pic cs:eqHoganR) + (1cm,1.5cm)$) node [yshift=.15cm] {Raideur angulaire};
+	\end{tikzpicture}
+	
+\end{frame}
+
+%%%
+\subsection{Modéliser le comportement humain cartésien}%Modelling human behaviour during physical interactions
+\begin{frame}
+	\frametitle{\insertsubsection}
+	%\includepdf{../misc/virtual_trajectory_impedance_tsuji.pdf}
+	\includegraphics[width=5cm]{../misc/virtual_trajectory_impedance_tsuji.pdf}%
+	%\uncovergraphics<1>[width=4.5cm]{../misc/cobot_workspace_coexistance}\hspace{3mm}%
+	
+	\begin{textblock*}{6cm}(6.25cm,3cm) % {block width} (coords)
+		\begin{itemize}
+			\item text text\footcite{tsuji_human_1997}
+			\item text text 
+		\end{itemize}
+	\end{textblock*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%
+%%% EXPERIMENT	
+\section[Banc expérimental]{Banc expérimental - Contrôle en admittance}
+\subsection{SubSection 1}
+
+\begin{frame}
+\frametitle{\insertsubsection}
+Some Text.
+\end{frame}
+
+\subsection{SubSection 2}
+
+\begin{frame}
+\frametitle{\insertsubsection}
+Some Text.
+\end{frame}
+
+\subsection{SubSection 3}
+
+\begin{frame}
+\frametitle{\insertsubsection}
+Some Text.
+\end{frame}
+
+\section{Section 3}
+\subsection{SubSection 1}
+
+\begin{frame}
+\frametitle{\insertsubsection}
+Some Text.
+\end{frame}
+
+\subsection{SubSection 2}
+
+\begin{frame}
+\frametitle{\insertsubsection}
+Some Text.
+\end{frame}
+
+\subsection{SubSection 3}
+
+\begin{frame}
+\frametitle{\insertsubsection}
+Some Text.
+\end{frame}
+
+\end{document}
