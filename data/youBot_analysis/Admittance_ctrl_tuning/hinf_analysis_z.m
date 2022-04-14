@@ -40,10 +40,10 @@ argout = linmod('analysis_PI_ctrl_lin_model_z');
 % output 1) is eps, 2) is u (cmd), 3) is r (fz)
 
 S = minreal(ss(argout.a, argout.b(:,1), argout.c(1,:), argout.d(1,1))); % sensivity
-T = minreal(ss(argout.a, argout.b(:,3), argout.c(1,:), argout.d(1,2))); % comp. sens.
-KS = minreal(ss(argout.a, argout.b(:,1), argout.c(2,:), argout.d(2,2))); % u/fin
-SG = minreal(ss(argout.a, argout.b(:,2), argout.c(1,:), argout.d(2,1))); % eps/b
-H_cl = minreal(ss(argout.a, argout.b(:,1), argout.c(4,:), argout.d(1,1))); % close loop s/fin
+T = minreal(ss(argout.a, argout.b(:,1), argout.c(3,:), argout.d(3,1))); % comp. sens.
+KS = minreal(ss(argout.a, argout.b(:,1), argout.c(2,:), argout.d(2,1))); % u/fin
+SG = minreal(ss(argout.a, argout.b(:,2), argout.c(1,:), argout.d(1,2))); % eps/b
+H_cl = minreal(ss(argout.a, argout.b(:,1), argout.c(4,:), argout.d(4,1))); % close loop s/fin
 
 figure(99)
 subplot(2,2,1)
@@ -63,11 +63,11 @@ bodemag(SG)
 grid on
 title('Fonction de sensibilité -SG = eps/b')
 
-fc_s = 1;% fc(S) = [1, 0.55] Hz
-fc_t = 0.8;% fc(T) = [0.8, 0.45] Hz
+fc_s = 0.55;%1;% fc(S) = [1, 0.55] Hz
+fc_t = 0.45;%0.8;% fc(T) = [0.8, 0.45] Hz
 
 W1 = 1/makeweight(1e-6,[2*pi*fc_s,1],2,0,2);
-W2 = 1/makeweight(2,[2*pi*fc_t,1],0.1); %,0,2
+W2 = 1/makeweight(15,[2*pi*fc_t,1],0.1); %,0,2
 
 figure
 subplot(2,1,1)
@@ -130,33 +130,38 @@ argout_hinf = linmod('analysis_hinf_ctrl_lin_model_z');
 % output 1) is eps, 2) is u (cmd), 3) is r (fz)
 
 S2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(1,:), argout_hinf.d(1,1))); % sensivity
-T2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,3), argout_hinf.c(1,:), argout_hinf.d(1,2))); % comp. sens.
-KS2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), argout_hinf.d(2,2))); % u/fin
-SG2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(2,1))); % eps/b
-H_cl2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(1,1))); % close loop s/fin
+T2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(3,:), argout_hinf.d(3,1))); % comp. sens.
+KS2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), argout_hinf.d(2,1))); % u/fin
+SG2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(1,2))); % eps/b
+H_cl2 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(4,1))); % close loop s/fin
 
 Hinf_ctrl_tmp = Hinf_ctrl;
 Hinf_ctrl = Hinf_ctrl_red;
 argout_hinf = linmod('analysis_hinf_ctrl_lin_model_z');
 
 S1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(1,:), argout_hinf.d(1,1))); % sensivity
-T1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,3), argout_hinf.c(1,:), argout_hinf.d(1,2))); % comp. sens.
-KS1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), argout_hinf.d(2,2))); % u/fin
-SG1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(2,1))); % eps/b
-H_cl1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(1,1))); % close loop s/fin
+T1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(3,:), argout_hinf.d(3,1))); % comp. sens.
+KS1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), argout_hinf.d(2,1))); % u/fin
+SG1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(1,2))); % eps/b
+H_cl1 = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(4,1))); % close loop s/fin
 
 Hinf_ctrl = Hinf_ctrl_tmp;
-Hinf_ctrl_red_dis = c2d(Hinf_ctrl_red, 1e-3, 'least-squares');
+Hinf_ctrl_red_dis = c2d(Hinf_ctrl_red, 1e-3, 'tustin');
 tmp = tf(Hinf_ctrl_red_dis);
 num_dis_hinf = tmp.Numerator{:};
 den_dis_hinf = tmp.Denominator{:};
 
-argout_hinf = linmod('analysis_discrete_hinf_ctrl_lin_model_z');
-S1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(1,:), argout_hinf.d(1,1))); % sensivity
-T1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,3), argout_hinf.c(1,:), argout_hinf.d(1,2))); % comp. sens.
-KS1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), argout_hinf.d(2,2))); % u/fin
-SG1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(2,1))); % eps/b
-H_cl1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(1,1))); % close loop s/fin
+argout_hinf = dlinmod('analysis_discrete_hinf_ctrl_lin_model_z', 1e-3);
+S1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(1,:), argout_hinf.d(1,1), 1e-3)); % sensivity
+T1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(3,:), argout_hinf.d(3,1), 1e-3)); % comp. sens.
+KS1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), argout_hinf.d(2,1), 1e-3)); % u/fin
+SG1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(1,2), 1e-3)); % eps/b
+H_cl1d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(4,1), 1e-3)); % close loop s/fin
+
+figure
+bode(H_cl1)
+hold on
+bode(H_cl1d)
 
 figure(99)
 subplot(2,2,1)
@@ -180,13 +185,12 @@ bodemag(SG,SG1,SG2)
 grid on
 title('Fonction de sensibilité -SG = eps/b')
 
-
 t = (0:1e-3:10);
 u = sin(2*pi*0.9.*t);
 y_pi = lsim(H_cl, u, t);
 y_hinf = lsim(H_cl1, u, t);
 %y_hinf2 = lsim(minreal(H_cl2), u, t);
-y_hinfd = lsim(minreal(H_cl1d), u, t);
+y_hinfd = lsim(H_cl1d, u, t);
 
 figure
 plot(t, y_pi)
@@ -207,3 +211,29 @@ hold on
 step(H_cl1)
 step(H_cl1d)
 
+%%%
+
+in = zeros(1,7);
+out = zeros(1,7);
+for i = 1:length(u)
+    n_in = u(i);
+    in = circshift(in,1);
+    out = circshift(out,1);
+    in(1) = n_in;
+    out = num_dis_hinf.*in - den_dis_hinf.*out;  
+    y_cpp(i) = out(1);
+end
+
+y_matlab = lsim(Hinf_ctrl_red_dis2, u, t);
+y_hinf_ctrl = lsim(Hinf_ctrl_red, u, t);
+
+figure
+plot(t, y_matlab)
+hold on
+plot(t, y_cpp)
+yyaxis right
+plot(t,u)
+
+figure
+plot(t, y_hinf_ctrl)
+%return output[0];
