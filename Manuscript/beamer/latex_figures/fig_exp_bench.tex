@@ -1,0 +1,132 @@
+\documentclass[12pt]{book}
+
+\input{../../structure_these.tex}
+
+\begin{document}
+	
+	\tikzexternalenable 
+
+	\begin{figure}[!htb] 
+			\centering
+			%\includegraphics[width=3in]{misc/exp_bench.png}
+			
+		\resizebox{.8\textwidth}{!}{%
+			\tikzsetnextfilename{fig_exp_bench}
+			\begin{tikzpicture} [node distance = 2cm]
+			
+			\path (0,0) coordinate (origin) 
+			node[below left] {$ \mathcal{O} $};
+			
+			\path ($ (origin) + (2.5,0) $) coordinate (originR);
+			
+			\node[opacity=0.5](youBot) at ($(originR) + (-0.1,2.5)$) {\includegraphics[width=2.2in]{../../misc/youBot.pdf}};
+			
+			\newcommand{\coeff}{20}
+			
+			\path ($ (originR) + \coeff*(0,0.147/2) $) coordinate (joint0);
+			
+			\path ($ (joint0) + \coeff*(-0.033,0) $) coordinate (joint1)
+			node[below left] {$ q_1 $};
+			
+			\newcommand{\alp}{0.35}
+			
+			\path ($ (joint1) + \coeff*(-0.155*\alp, {0.155*(1 - \alp)}) $) coordinate (joint2)
+			node[below left] {$ q_2 $};
+			
+			\renewcommand{\alp}{0.75}
+			
+			\path ($ (joint2) + \coeff*(0.135*\alp, {0.135*(1 - \alp)}) $) coordinate (joint3)
+			node[above left] {$ q_3 $};
+			
+			\renewcommand{\alp}{0.55}
+			
+			\path ($ (joint3) + \coeff*(0.113*\alp, {0.113*(1 - \alp)}) $) coordinate (endeffector);
+			
+			\node[right of = endeffector, node distance = 0.5cm](hand) 
+			{\includegraphics[width=0.75in]{../../misc/hand}};
+			\node[right of = hand, align=center, xshift=-1cm, yshift=1cm, text=white] {main\\perturbée};
+%			
+%			%% impedance circuittikz schema
+%			\coordinate (hand_imp) at ($ (hand) + (0.5, -0.5) $);
+%			\coordinate (M) at ($ (hand_imp) + (0,-1.25) $);
+%			\coordinate (Kb) at ($ (M) + (0.5,0) $);
+%			\coordinate (Bb) at ($ (M) + (-0.5,0) $);
+%			\coordinate (Kt) at ($ (Kb) + (0, -1.25) $);
+%			\coordinate (Bt) at ($ (Bb) + (0, -1.25) $);
+%			\coordinate (mb) at ($ (Kt) + (-0.5,0) $);
+%			\coordinate (mt) at ($ (mb) + (0,-0.25) $);
+%			
+%			\node[left of = mt, node distance = 0.5cm, opacity=0.5](virt_hand) {\includegraphics[width=0.75in, angle=20]{../../misc/hand}};
+%			\node[right of = virt_hand, align=center, xshift=-1cm,yshift=-1cm]{main \\ virtuelle};
+%			
+%			\draw (hand_imp)
+%			to[mass=$M$] (M);
+%			\draw (Kb)
+%			to[spring=$K$] (Kt);
+%			\draw (Bb)
+%			to[damper=$B$] (Bt);
+%			
+%			\draw (Kb) -- (Bb);
+%			\draw (Kt) -- (Bt);
+%			\draw (mb) -- (mt);
+%			
+%			\fill[black] (hand_imp) circle[radius=1.5pt];
+%			\node [right of = hand_imp, node distance = 0.35cm] {$ z $};
+%			\fill[black] (mt) circle[radius=1.5pt];
+%			\node [right of = mt, node distance = 0.35cm] {$ z_v $};
+%			%% end of impedance drawing
+			
+			\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (0, 5) $)
+			node[at end, left] {$\vect{z}$};
+			\draw[-{Latex[length=3mm]}] (origin.center) --+ ($ (5, 0) $)
+			node[at end, below] {$\vect{x}$};
+			
+			\draw (originR.center) -- (joint0.center);
+			
+			\draw (joint0.center) -- (joint1.center);
+			\fill (joint1) circle[radius=2.75pt];
+			
+			\draw (joint1.center) -- (joint2.center);
+			\fill (joint2) circle[radius=2.75pt];
+			
+			\draw (joint2.center) -- (joint3.center);
+			\fill (joint3) circle[radius=2.75pt];
+			
+			\draw (joint3.center) -- (endeffector.center);
+			\fill[Orient] (endeffector) circle[radius=2.75pt];
+			
+			\draw  [loosely dotted] ($ (joint3.center) + (-0.5,0) $) -- ($ (joint3.center) + (2,0) $);
+			
+			\draw[-{Latex[length=2mm]}] ($(joint1.center) + (0.5, -0.1)$) arc (-10:100:0.5)
+			node[midway, right] {};
+			
+			\draw[-{Latex[length=2mm]}] ($(joint2.center) + (0.5, -0.1)$) arc (0:100:0.5)
+			node[midway, right] {};
+			
+			\draw[-{Latex[length=2mm]}] ($(joint3.center) + (0.5, -0.1)$) arc (0:100:0.5)
+			node[midway, right] {};
+			
+			\pgfExtractAngle{\thetal}{joint3}{endeffector}
+			
+			\draw[-{Latex[length=2mm]}] ($(joint3.center) + (1.5, 0)$) arc (0:\thetal:1.5)
+			node[midway, right] {$\theta$};
+			
+			\draw[Orient] [loosely dotted, line width=0.55mm] ( $ (endeffector.center) + (0, 0.5) $ )  --+ (0,-6) 
+			node[at end, right] {$ x_0 $};
+			
+			% virtual environment
+			\node at ($(joint2) + (1,2.5)$) [draw,ultra thick,minimum width=2cm,minimum height=1.5cm, fill=black!5] (screen) {};
+			\draw [line width=0.9mm] ($(screen) + (-0.3, -0.4)$) -- node[centered, above]{} ($(screen) + (0.3, -0.4)$);
+			\draw[<->, shorten >=2pt,shorten <=2pt,dashed]
+				($(screen) + (0.3, -0.4) + (0.2, 0.3)$) 
+				--  ($(screen) + (0.3, -0.4) + (0.2, -0.3)$) ;
+			\fill ($(screen) + (0, 0.2)$) circle[radius=2.5pt];
+			\draw [dashed, Shiraz] ($(screen) + (-0.3, 0.4)$) -- ($(screen) + (0.3, 0.4)$); 
+			\node [] at ($(screen) + (0, 1.1)$) {Environnement simulé};
+			\end{tikzpicture}
+		}%	
+	%		\caption{Proposed interactive system for impedance estimation: a human interacts with the 3 DOF robot thanks to a handle. $ q_i $ are the joint positions of the robot, $ \theta $ is the endpoint orientation, $ z $ is the endpoint position along the $ \vect{z} $ axis, \textit{represented here after a perturbation responsible for the hand deviation from it's nominal trajectory} denoted by $ z_v $, the virtual position.}
+	%		\label{fig_exp_bench}
+	\end{figure}
+
+\end{document}

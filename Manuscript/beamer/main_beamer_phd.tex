@@ -38,7 +38,7 @@
 		\titlepage
 	\end{frame}	
 
-	\begin{frame}{Overview}
+	\begin{frame}{Plan}
 	%\frametitle{\insertsubsection} %\insertsection: 
 		\tableofcontents[hideallsubsections]
 	\end{frame}	
@@ -107,7 +107,7 @@
 \end{frame}
 
 %%%
-\subsection{Quels types de collaborations ?}
+\subsection{Quels types de collaboration ?}
 \begin{frame}
 \frametitle{\insertsubsection}
 %	\begin{itemize}[<+>]
@@ -133,15 +133,15 @@
 				\hline
 				\multicolumn{3}{|c|}{\cellcolor{Prune}{\textcolor{white}{\textbf{Interactions}\footcite{goodrich_humanrobot_2008}}}} \\ \hline
 				\multicolumn{1}{|c|}{}                  & \textbf{Distancielles}  & \textbf{Proches} \\ \hline
-				\multicolumn{1}{|c|}{\textbf{Mobile}} & téléopération    & assistant         \\
-				\multicolumn{1}{|c|}{\textbf{Physique}} & télémanipulation & \tikzmark{start}\textbf<2>{phri}\tikzmark{end}  \\
-				\multicolumn{1}{|c|}{\textbf{Social}}   & /                & théorie de l'esprit \\ \hline
+				\multicolumn{1}{|c|}{\textbf{Mobiles}} & téléopération    & assistant         \\
+				\multicolumn{1}{|c|}{\textbf{Physiques}} & télémanipulation & \tikzmark{start}\textbf<2>{phri}\tikzmark{end}  \\
+				\multicolumn{1}{|c|}{\textbf{Sociales}}   & /                & théorie de l'esprit \\ \hline
 			\end{tabular}
 		\end{table}
 		%
 		\begin{tikzpicture}[remember picture,overlay]
 			\node<2>[yshift=3pt,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:start) (pic cs:end)}] {};
-		\end{tikzpicture}  
+		\end{tikzpicture}
 		%
 		\begin{figure}
 			\includegraphics<2>[width=6cm]{../misc/example_cobot}
@@ -154,7 +154,7 @@
 \begin{frame}
 \frametitle{\insertsubsection}
 	\begin{block}{Impédance \only<2>{mécanique}}
-		L'impédance \only<2>{mécanique} $H$ est le rapport entre \only<1>{un potentiel extensif $E$ (\textit{eg.} tension, force)}\only<2>{une \textbf{force} $F$} à \only<1>{un flux extensif $\phi$ (\textit{eg.} courant, vitesse)}\only<2>{un \textbf{mouvement} $v$}: %\\
+		L'impédance \only<2>{mécanique} $H$ est le rapport entre \only<1>{un potentiel extensif $E$ (\textit{eg.} tension, force)}\only<2>{une \textbf{force} $F$} à \only<1>{un flux intensif $\phi$ (\textit{eg.} courant, vitesse)}\only<2>{un \textbf{mouvement} $v$}: %\\
 		\only<1>{$$ E(t)=H(t)\phi(t) $$}\only<2>{$$ F(t)=H(t)v(t) $$}
 	\end{block}
 	\vspace{1cm}
@@ -248,18 +248,18 @@
 	\end{figure}
 	%
 	\begin{equation*}
-		\visible<3->{\tikzmark{eqHoganA}A \ddot{\theta}\tikzmark{eqHoganA2} = \tikzmark{eqHoganT}T\tikzmark{eqHoganT2}(u_b - u_t) - \tikzmark{eqHoganR}R(u_b + u_t)\theta\tikzmark{eqHoganR2} + \tikzmark{eqHoganGrav}mgl \sin(\theta - \pi/2)\tikzmark{eqHoganGrav2} - \tikzmark{eqHoganD}D \dot{\theta}\tikzmark{eqHoganD2}}
+		\visible<2->{\tikzmark{eqHoganA}A \ddot{\theta}\tikzmark{eqHoganA2} = \tikzmark{eqHoganT}T\tikzmark{eqHoganT2}(u_b - u_t) - \tikzmark{eqHoganR}R(u_b + u_t)\theta\tikzmark{eqHoganR2} + \tikzmark{eqHoganGrav}mgl \sin(\theta - \pi/2)\tikzmark{eqHoganGrav2} - \tikzmark{eqHoganD}D \dot{\theta}\tikzmark{eqHoganD2}}
 	\end{equation*}
 	%
 	\begin{tikzpicture}[remember picture, overlay, arrow/.style={thick, ->, >=latex}]
 		%\node<2>[yshift=3pt,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:start) (pic cs:end)}] {};
-		\draw<4->[decorate,decoration={brace,amplitude=2pt}] ($(pic cs:eqHoganA2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganA) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north] {\textbf<4>{\textcolor<4>{Prune}{PFD}}};%, xshift=-1cm
-		\draw<5->[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:eqHoganR2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganT) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<5>{\textcolor<5>{Prune}{Couple musculaire}} \\ \textbf<5>{\textcolor<5>{Prune}{net isometrique}}};
-		\draw<6->[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:eqHoganGrav2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganGrav) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<6>{\textcolor<6>{Prune}{Poids}}};
-		\draw<7->[decorate,decoration={brace,amplitude=2pt}] ($(pic cs:eqHoganD2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganD) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<7>{\textcolor<7>{Prune}{Viscosité}}};
+		\draw<3->[decorate,decoration={brace,amplitude=2pt}] ($(pic cs:eqHoganA2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganA) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north] {\textbf<3>{\textcolor<3>{Prune}{PFD}}};%, xshift=-1cm
+		\draw<4->[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:eqHoganR2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganT) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<4>{\textcolor<4>{Prune}{Couple musculaire}} \\ \textbf<4>{\textcolor<4>{Prune}{net isometrique}}};
+		\draw<5->[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:eqHoganGrav2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganGrav) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<5>{\textcolor<5>{Prune}{Poids}}};
+		\draw<6->[decorate,decoration={brace,amplitude=2pt}] ($(pic cs:eqHoganD2) + (0,-0.1cm)$) -- ($(pic cs:eqHoganD) + (0,-0.1cm)$) node [midway,yshift=-.2cm,anchor=north, align=center] {\textbf<6>{\textcolor<6>{Prune}{Viscosité}}};
 		%
-		\draw<5->[arrow] ($(pic cs:eqHoganT) + (0.1cm,0.3cm)$) to[out=100,in=-90] ($(pic cs:eqHoganT) + (-1cm,1.25cm)$) node [yshift=.15cm] {Couple max};
-		\draw<5->[arrow] ($(pic cs:eqHoganR) + (0.1cm,0.3cm)$) to[out=80,in=-90] ($(pic cs:eqHoganR) + (1cm,1.5cm)$) node [yshift=.15cm] {Raideur angulaire};
+		\draw<4->[arrow] ($(pic cs:eqHoganT) + (0.1cm,0.3cm)$) to[out=100,in=-90] ($(pic cs:eqHoganT) + (-1cm,1.25cm)$) node [yshift=.15cm] {Couple max};
+		\draw<4->[arrow] ($(pic cs:eqHoganR) + (0.1cm,0.3cm)$) to[out=80,in=-90] ($(pic cs:eqHoganR) + (1cm,1.5cm)$) node [yshift=.15cm] {Raideur angulaire};
 	\end{tikzpicture}
 	
 \end{frame}
@@ -268,62 +268,507 @@
 \subsection{Modéliser le comportement humain cartésien}%Modelling human behaviour during physical interactions
 \begin{frame}
 	\frametitle{\insertsubsection}
+	\begin{textblock*}{12cm}(0.35cm,2cm) % {block width} (coords)
+		\centering
+		Étude au niveau cartésien : vis à vis d'une tâche ou trajectoire
+	\end{textblock*}
 	%\includepdf{../misc/virtual_trajectory_impedance_tsuji.pdf}
-	\includegraphics[width=5cm]{../misc/virtual_trajectory_impedance_tsuji.pdf}%
+	\includegraphics[width=4.75cm]{../misc/virtual_trajectory_impedance_tsuji.pdf}%
 	%\uncovergraphics<1>[width=4.5cm]{../misc/cobot_workspace_coexistance}\hspace{3mm}%
 	
 	\begin{textblock*}{6cm}(6.25cm,3cm) % {block width} (coords)
-		\begin{itemize}
-			\item text text\footcite{tsuji_human_1997}
-			\item text text 
+		\begin{itemize}[<+->]
+			\item Maintien de posture (modulation géométrique\footcite{mussa-ivaldi_neural_1985})
+			\begin{itemize}
+				\item Configuration isométrique
+				\item Variation de charge/pose
+				\item Position d'équilibre connue
+			\end{itemize}
+			\vspace{5mm}
+			\item Tâches en mouvement\footcite{tsuji_human_1997}
+			\begin{itemize}
+				\item Configuration variable dans le temps
+				\item Trajectoire virtuelle à estimer ou imposer
+			\end{itemize} 
 		\end{itemize}
 	\end{textblock*}
+	%
+	\begin{textblock*}{5.75cm}(0.45cm,6.5cm) % {block width} (coords)
+		\begin{equation*}
+			\visible<8->{\delta \vect{f} = \tikzmark{eqImpM}\matr{M}_e\delta \ddot{\vect{x}} + \tikzmark{eqImpB}\matr{B}_e\delta \dot{\vect{x}} + \tikzmark{eqImpK}\matr{K}_e\delta \vect{x}}
+		\end{equation*}
+		\vspace{-5mm}
+		\begin{equation*}
+			\only<9>{\delta \vect{f} = \vect{f}_e - \vect{f}_v}
+			\only<10>{\delta \vect{x} = \vect{x}_e - \vect{x}_v}
+		\end{equation*}
+		%
+		\begin{tikzpicture}[remember picture, overlay, arrow/.style={thick, ->, >=latex}]
+			\draw<11->[arrow] ($(pic cs:eqImpM) + (0.1cm,-0.1cm)$) to[out=-100,in=90] ($(pic cs:eqImpM) + (-1cm,-1.00cm)$) node [yshift=-.15cm] {\textbf<11>{\textcolor<11>{Prune}{Masse}}};
+			\draw<12->[arrow] ($(pic cs:eqImpB) + (0.1cm,-0.1cm)$) to[out=-100,in=90] ($(pic cs:eqImpB) + (-0.5cm,-1.25cm)$) node [yshift=-.15cm] {\textbf<12>{\textcolor<12>{Prune}{Amortissement}}};
+			\draw<13->[arrow] ($(pic cs:eqImpK) + (0.1cm,-0.1cm)$) to[out=-100,in=90] ($(pic cs:eqImpK) + (0.5cm,-1.0cm)$) node [yshift=-.15cm] {\textbf<13>{\textcolor<13>{Prune}{Raideur}}};
+		\end{tikzpicture}
+	\end{textblock*}
+\end{frame}
+
+%%%
+\subsection{Contributions}%Modelling human behaviour during physical interactions
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\begin{itemize}[<+->]
+		\item[$\Rightarrow$] \textcolor<1-4>{Prune}{Estimation de l'\textbf<1>{impédance} au cours d'une \textbf<1>{tâche dynamique}}
+		\begin{itemize}
+			\item Conception d'un banc expérimental
+			\item Estimation de trajectoires (force et position)
+			\item Analyse des erreurs d'identification
+		\end{itemize}
+		\vspace{3mm}
+		\item[$\Rightarrow$] \textcolor<5-7>{Prune}{Comportement en impédance au cours d'une \textbf<5>{tâche rythmique hybride}}
+		\begin{itemize}
+			\item Mise en évidence de variation cyclique de l'impédance
+			\item Absence de lien clair entre les performances et l'impédance
+		\end{itemize} 
+		\vspace{3mm}
+		\item[$\Rightarrow$] \textcolor<8->{Prune}{Analyse de la \textbf<8>{stabilité} des interactions physiques humain-robot}
+		\begin{itemize}
+			\item Analyse paramétrique en fonction des résultats d'expérience
+		\end{itemize} 
+	\end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%
 %%% EXPERIMENT	
 \section[Banc expérimental]{Banc expérimental - Contrôle en admittance}
-\subsection{SubSection 1}
 
+%%%
+\subsection{La tâche de jonglerie}
 \begin{frame}
-\frametitle{\insertsubsection}
-Some Text.
+	\frametitle{\insertsubsection}
+	\begin{textblock*}{6cm}(6.25cm,2cm) % {block width} (coords)
+		\begin{figure}
+			\includegraphics<1->[width=6cm]{fig_ball_bouncing_task_beamer}
+		\end{figure}
+	\end{textblock*}
+	%
+	\begin{textblock*}{5.5cm}(0.5cm,2.15cm) % {block width} (coords)
+		\begin{itemize}[<+->]
+			\item Tâche uni-dimensionnelle
+			\item Possibles trajectoires chaotiques
+			\item Équation balistique pour la chute libre
+			\item Coefficient de restitution pour l'impact ($\alpha=0.6$)
+			\begin{itemize}
+				\item Vitesse post-impact ($\dot{z}_b(t_k^+)$)
+				\item Retour haptique ($f_i(t_k)$)
+			\end{itemize} 
+		\end{itemize} 
+	\end{textblock*}
+	%
+	\begin{textblock*}{5.5cm}(0.5cm,5.85cm) 
+		\begin{equation*}
+			\visible<3->{z_b(t) = -\frac{1}{2}gt^2+\tikzmark{eqPostImpactVel}\dot{z}_b(t_k^+)t + z_b(t_k)}
+		\end{equation*}
+		\vspace{-2mm}
+		\begin{equation*}
+			\visible<5->{\dot{z}_b(t_k^+) = \frac{m_p\left((1+\alpha)\dot{z}_p(t_{k})-\alpha\dot{z}_b(t_{k}^-)\right) + m_b \dot{z}_b(t_{k}^-)}{m_p+\tikzmark{eqBallMass}m_b}}
+		\end{equation*}
+		\vspace{-2mm}
+		\begin{equation*}
+			\visible<6->{f_i(t_k) = -(\dot{z}_b(t_k) - \dot{z}_p(t_k)) (1 + \alpha) \frac{\sqrt{m_b \hat{K}\tikzmark{eqCoupledK}}}{\pi \sqrt{1 + m_b/m_p}}}
+		\end{equation*}
+	\end{textblock*}
+	%
+	\begin{tikzpicture}[remember picture, overlay, arrow/.style={thick, ->, >=latex}]
+		\draw<3-4>[arrow] ($(pic cs:eqPostImpactVel) + (0.15cm,-0.1cm)$) to[out=-100,in=90] ($(pic cs:eqPostImpactVel) + (-1cm,-1.00cm)$) node [yshift=-.15cm, xshift=.25cm] {\textbf<3>{\textcolor<3>{Prune}{Vitesse post-impact de la balle}}};
+		\draw<5>[arrow] ($(pic cs:eqBallMass) + (0,-0.1cm)$) to[out=-35,in=-110] ($(pic cs:eqBallMass) + (4cm,0.45cm)$) node [yshift=.15cm] {\textbf<5>{\textcolor<5>{Prune}{masses}}};
+		\draw<6>[arrow] ($(pic cs:eqCoupledK) + (0.1cm,0.1cm)$) to[out=-35,in=140] ($(pic cs:eqCoupledK) + (2cm,0.45cm)$) node [yshift=-.15cm, anchor=west] {\textbf<6>{\textcolor<6>{Prune}{Raideur couplée}}};
+	\end{tikzpicture}	
 \end{frame}
 
-\subsection{SubSection 2}
-
+%%%
+\subsection{Banc expérimental}
 \begin{frame}
-\frametitle{\insertsubsection}
-Some Text.
+	\frametitle{\insertsubsection}
+	\begin{textblock*}{6cm}(0.25cm,2.15cm)
+		\begin{figure}
+			\includegraphics<1-3>[width=5cm]{fig_exp_bench_2}
+			\includegraphics<4->[width=5cm]{fig_exp_bench}
+		\end{figure}
+	\end{textblock*}
+	%
+	\begin{textblock*}{5.75cm}(6.25cm,2.5cm)
+		 \begin{itemize}[<+->]
+		 	\item Tâche de \textbf<1>{jonglerie simulée} 
+		 	\item \textbf<2>{Raquette virtuelle} pilotée par la position de l'\textbf<2>{effecteur} du robot
+		 	\item Robot aussi \textbf<3>{transparent} que possible (contrôle en admittance) 
+		 	\item \textbf<4>{Retours haptiques et perturbations} générés par le robot
+		 	\item \textbf<5>{Forces d'interaction} mesurées (robot/utilisateur)
+		 	\item \textbf<6>{Position cartésienne} mesurée (MGD \& sys. vision)
+		 \end{itemize} 
+	\end{textblock*}
 \end{frame}
 
+%%%
+\subsection{Contrôle en admittance naturelle}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\centering
+	\vspace{-1cm}
+	%\hspace{-3mm}\includegraphics[width=11cm]{fig_ctrl_scheme_lamy}
+	\hspace{-3mm}%
+	\input{latex_figures/fig_natural_admittance_ctrl}
+	\begin{itemize}
+		\item<4-> Réduction de l'\textbf<4>{inertie} apparente\footcite{newman_stable_1994,lamy_achieving_2009}\tikzmark{bracketNatAdm1}
+		\item<4-> Correcteur PI
+		\item<5-> Compensation des \textbf<4>{frottements}\footcite{newman_stable_1994}
+		\item<5-> Correcteur des vitesses articulaires\tikzmark{bracketNatAdm2}
+	\end{itemize}
+	\begin{tikzpicture}[remember picture,overlay]
+%		\draw<5>[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:bracket) + (0.1cm,0.75cm)$) -- ($(pic cs:bracket) + (0.1cm,0)$) node [midway,xshift=.2cm,anchor=west] {Complémentaire (Unification\footcite{ott_unified_2010})};
+		\draw<6>[decorate,decoration={brace,amplitude=5pt}] ($(pic cs:bracketNatAdm2) + (0.1cm,1.8cm)$) -- ($(pic cs:bracketNatAdm2) + (0.1cm,0)$) node [midway,xshift=.2cm,anchor=west] {Compromis transparence-stabilité};
+	\end{tikzpicture}
+	%
+	\begin{textblock*}{6cm}(6.75cm,6cm)
+		\begin{equation*}
+			\only<4>{J_{rob}=\frac{K_v+B_m\tikzmark{NatAdmBm}}{K_i+K_v}}
+		\end{equation*}
+	\end{textblock*}
+	\begin{tikzpicture}[remember picture,overlay, arrow/.style={thick, ->, >=latex}]
+		\node<3>[yshift=-7mm,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:NatAdmTau1) (pic cs:NatAdmTau2)}] {};
+%		\draw<4>[arrow] ($(pic cs:NatAdmBm) + (0.1cm,0.1cm)$) to[out=-35,in=110] ($(pic cs:NatAdmBm) + (-2cm,-1.5cmcm)$) node [yshift=-.15cm, anchor=west, align=center] {}; %\textbf{\textcolor{Prune}{Amortissement\\côté moteur}}
+		\draw<4>[arrow] ($(pic cs:NatAdmBm) + (0.1cm,0.1cm)$) to[out=-25,in=70] ($(pic cs:NatAdmBm) + (-1.25cm,-1.75cm)$) node [yshift=-.35cm, align=center] {\textbf{\textcolor{Prune}{Amortissement}}\\\textbf{\textcolor{Prune}{côté moteur}}};
+		\draw<6>[arrow] ($(pic cs:NatAdmJe) + (-0.1cm,0.1cm)$) to[out=180,in=-10] ($(pic cs:NatAdmJe) + (-1.45cm,-0.15cm)$) node [yshift=-.15cm, xshift=0.75cm, align=center, anchor=east] {\textbf{\textcolor{Prune}{Inertie}}\\\textbf{\textcolor{Prune}{côté actionneur}}};
+	\end{tikzpicture}
+	%
+	\begin{textblock*}{6cm}(6.75cm,7.15cm)
+		\begin{equation*}
+		\only<6>{K_i\leq\frac{K_v+B_m}{\tikzmark{NatAdmJe}J_e K_v}}
+		\end{equation*}
+	\end{textblock*}  
+\end{frame}
+
+%%%
+\subsection{Contrôle en admittance cartésienne}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\begin{textblock*}{13cm}(-0.15cm,1.75cm)
+		%\centering
+		\input{latex_figures/fig_endpoint_admittance_ctrl}
+	\end{textblock*}
+	%
+	\begin{textblock*}{6.15cm}(6cm,2cm)
+		\only<4-8>{\textcolor{Prune}{\textbf{Boucle principale en admittance}}}
+		\only<9-12>{\textcolor{Prune}{\textbf{Boucle secondaire en position}}}
+		\only<13->{\textcolor{Prune}{\textbf{Boucle secondaire articulaire}}}
+	\end{textblock*} 
+	%
+	\only<1-3>{
+		\begin{textblock*}{8cm}(3cm,7cm)
+			\begin{itemize}
+				\item<1-3> Contrôle dans le même plan que la tâche
+				\item<2-3> Trois boucles de contrôle
+				\item<3> Transparence assurée le long de l'axe $\vec{z}$
+			\end{itemize}
+		\end{textblock*} 
+	} 
+	\begin{textblock*}{6.15cm}(0.35cm,7cm)
+		\only<7-8>{
+			\begin{equation*}
+				C_z(s) = K_p + \frac{K_i}{s}
+			\end{equation*}
+			%
+			\begin{equation*}
+				K_p = 0.015,\; K_i = 0.08
+			\end{equation*}
+		}
+		\only<9-12>{
+			\begin{equation*}
+				\begin{split}
+					\dot{\vect{X}}_\epsilon &= \jacobianHat{q}{}{}\dot{\vect{q}}_d - \jacobian{q}{}{}\dot{\vect{q}} \\
+					\dot{\vect{X}}_\epsilon &= \jacobian{q}{}{}(\dot{\vect{q}}_d - \dot{\vect{q}}) + \jacobianHat{q}{}{}\dot{\vect{q}}_d - \jacobian{q}{}{}\dot{\vect{q}}_d \\
+					\dot{\vect{X}}_\epsilon &= \tikzmark{admCtrlErr1a}\jacobian{q}{}{}\dot{\vect{q}}_{\epsilon}\tikzmark{admCtrlErr1b} + \tikzmark{admCtrlErr2a}\Delta\jacobian{q}{}{}\dot{\vect{q}}_d\tikzmark{admCtrlErr2b}
+				\end{split}
+			\end{equation*}
+		}
+		\only<16->{
+			\begin{itemize}
+				\item<16-> Correcteur PD, $\matr{C}_{q2} \in diag(\Re^{3\times 3})$
+				\item<17-> Projection dans le noyau de la tâche en $\vec{z}$ pour ne pas dégrader la transparence
+			\end{itemize}
+		}
+	\end{textblock*}  
+	%
+	\begin{textblock*}{6.15cm}(-1cm,7cm) 
+		\only<13-15>{
+			\vspace{-1.45cm}
+			\input{latex_figures/fig_robot_model}
+		}
+	\end{textblock*}  
+	%
+	\begin{textblock*}{6.15cm}(6.5cm,7cm)
+		\only<8>{
+			\vspace{-.5cm}
+			\begin{equation*}
+				\jacobianHat{q}{}{} \in \Re^{3\times 3}
+			\end{equation*}
+			\vspace{-.25cm}
+			\begin{itemize}
+				\item Hors des configurations singulières (faibles mvt.)
+				\item[$\Rightarrow$] Défini et inversible
+			\end{itemize}
+		}
+		\only<12>{
+			\begin{itemize}
+				\item Correcteur proportionnel
+				\item[$\Rightarrow$] Empêche les dérives l'axe $\vec{x}$ 
+			\end{itemize}
+		}
+		\only<13-15>{
+			\vspace{-.5cm}
+			\begin{itemize}
+				\item<13-> Phénomènes de retournement de coude
+				\item<14-> Interactions peu intuitives
+				\item<15->[$\Rightarrow$] Ajout d'un contrôle articulaire sur le dernier DDL
+			\end{itemize}
+		}
+		\only<17->{
+			\begin{equation*} 
+				\matr{N}_2(q) = \matr{I} - \jacobian{q}{1}{\matr{W}+\tikzmark{admCtrlW}}\tikzmark{admCtrlJac1}\jacobian{q}{1}{}
+			\end{equation*}
+		}
+		\only<19>{
+			\begin{equation*} 
+				\matr{A}^{\matr{W}+} = \matr{W}^{-1}\matr{A}^t\left(\matr{AW}^{-1}\matr{A}^t\right)^{-1}
+			\end{equation*}
+		}
+	\end{textblock*}  
+	%
+	\begin{tikzpicture}[remember picture,overlay, arrow/.style={thick, ->, >=latex}]
+		\node<10>[yshift=1mm,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:admCtrlErr1a) (pic cs:admCtrlErr1b)}] {};
+		\node<11>[yshift=1mm,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:admCtrlErr2a) (pic cs:admCtrlErr2b)}] {};
+		\draw<18>[arrow] ($(pic cs:admCtrlJac1) + (0.1cm,-0.1cm)$) to[out=-110,in=70] ($(pic cs:admCtrlJac1) + (-1.25cm,-.5cm)$) node [yshift=-.2cm, align=center] {\textbf{\textcolor{Prune}{Jacobien de la tâche en $\vec{z}$}}};
+		\draw<19>[arrow] ($(pic cs:admCtrlW) + (-0.2cm,0.25cm)$) to[out=110,in=-70] ($(pic cs:admCtrlW) + (-1.25cm,.75cm)$) node [yshift=.2cm, align=center] {\textbf{\textcolor{Prune}{Pseudo-inverse pondérée}}};
+%		\draw<19>[arrow] ($(pic cs:admCtrlW) + (0.1cm,0.1cm)$) to[out=110,in=70] ($(pic cs:admCtrlW) + (-1.25cm,.5cm)$) node [yshift=-.35cm, align=center] {\textbf{\textcolor{Prune}{Pseudo inverse};
+	\end{tikzpicture}
+\end{frame}
+
+%%%
+\subsection{Réglage expérimental du correcteur en admittance}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\begin{textblock*}{7.15cm}(0.35cm,2cm)
+		\begin{figure}
+			\includegraphics[width=7cm]{fig_stability_map_a}
+		\end{figure}
+	\end{textblock*}
+	%	
+	\begin{textblock*}{1.1cm}(7.95cm,2cm)
+		\vspace{6mm}
+		\hspace{-3mm}\includegraphics[width=1cm]{fig_stability_map_b}
+	\end{textblock*}
+	%
+	\begin{textblock*}{4cm}(8.95cm,3.5cm)
+		\begin{itemize}
+			\item<1-> Deux conditions :
+				\begin{itemize}
+					\item<1-> Nominale
+					\item<1-> Fortes co-contractions
+				\end{itemize}
+			\item<2-> Stabilité
+			\item<2-> Transparence
+		\end{itemize}
+	\end{textblock*}
+	%
+	\begin{textblock*}{4cm}(3.5cm,7.5cm)
+		\begin{equation*}
+			C_z(s) = K_p + \frac{K_i}{s} \;\;\;\;\;\;\;\;\; K_p = 0.015,\; K_i = 0.08
+		\end{equation*}
+	\end{textblock*}
+\end{frame}
+
+%%%
+\subsection{Résultat du contrôle en admittance}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	% insérer gif de la vidéo de contrôle
+	\centering
+	\animategraphics[autoplay, width=0.75\linewidth]{12}{gif_youbot_2/youbot_admittance_ctrl_}{000}{218}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%
+%%% IMPEDANCE ESTIMATION
+\section[Estimation de l'impédance]{Estimation de l'impédance mécanique humaine}
+
+%%%
+\subsection{Méthode de perturbation}
+\begin{frame}
+\frametitle{\insertsubsection}
+	\only<1-7>{
+	\begin{itemize}
+		\item<1-> Nature des perturbations
+		\begin{itemize}
+			\item<2-> Position
+			\begin{itemize}
+				\item<2>[>] Possibilité d'estimer la raideur seule
+				\item<2>[>] Nécessite de connaître la trajectoire virtuelle en position en ligne
+			\end{itemize}
+			\item<3-> Force
+			\begin{itemize}
+				\item<3>[>] Pas besoin d'apriori sur la trajectoire
+				\item<3>[>] Nécessite l'estimation de l'ensemble des paramètres
+			\end{itemize}
+		\end{itemize}
+		\item<4-> Forme des perturbations
+		\begin{itemize}
+			\item<5> Indicielle ou Impulsionnelle
+			\item<6> Stochastique
+			\item<7> Sinusoïdale et autre...
+		\end{itemize}
+	\end{itemize}
+	}
+	\only<8->{
+		\vspace{-1.5cm}
+		\begin{itemize}
+			\item<8-> Tâche en mouvement
+			\item<9-> Perturbations injectées par le robot
+			\item<10-> Minimiser l'influence sur la tâche
+			\item<11->[$\Rightarrow$] Perturbation en \textcolor<11>{Prune}{\textbf<11>{force}}
+			\item<12->[$\Rightarrow$] Faible \textcolor<12>{Prune}{\textbf<12>{durée ($\approx$ \SI{50}{\milli\second})}}
+			\item<13->[$\Rightarrow$] Faible \textcolor<13>{Prune}{\textbf<13>{amplitude ($\approx$ \SI{5}{\newton})}}
+		\end{itemize}		
+	}	
+	\begin{textblock*}{6cm}(0.35cm,6.5cm)	
+		\visible<14->{		
+			\input{latex_figures/fig_youbot_inner_ctrl}
+		}	
+	\end{textblock*}
+	\begin{textblock*}{6cm}(7.15cm,3cm)	
+		\visible<15->{	
+			\begin{equation*}
+				\vect{i}_d = \jacobian{q}{}{t}\vect{f}_p\tikzmark{eqPertFp} \left(\matr{R}\tikzmark{eqPertR} \matr{T}_c\tikzmark{eqPertTc}\right)^{-1}
+			\end{equation*}			
+		}
+	\end{textblock*}
+	\begin{tikzpicture}[remember picture,overlay, arrow/.style={thick, ->, >=latex}]
+		\draw<16->[arrow] ($(pic cs:eqPertFp) + (-0.2cm,-0.1cm)$) to[out=-110,in=70] ($(pic cs:eqPertFp) + (-3cm,-.65cm)$) node [yshift=-.2cm, align=center] {\textbf<16>{\textcolor<16>{Prune}{Consigne en force}}};
+		\draw<17->[arrow] ($(pic cs:eqPertR) + (-0.2cm,-0.1cm)$) to[out=-110,in=70] ($(pic cs:eqPertR) + (-1.5cm,-1.1cm)$) node [yshift=-.2cm, align=center] {\textbf<17>{\textcolor<17>{Prune}{Rapport de réduction}}};		
+		\draw<18->[arrow] ($(pic cs:eqPertTc) + (-0.2cm,-0.1cm)$) to[out=-70,in=70] ($(pic cs:eqPertTc) + (-.25cm,-1.5cm)$) node [yshift=-.2cm, xshift=-.25cm, align=center] {\textbf<18>{\textcolor<18>{Prune}{Constantes de couple}}};
+	\end{tikzpicture}
+	%
+	\begin{textblock*}{6cm}(7.15cm,5.25cm)
+		\visible<19->{	
+			\input{latex_figures/fig_short_perturbations_implemented}
+		}
+	\end{textblock*}
+\end{frame}
+
+%%%
+\subsection{Méthode d'identification}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\begin{textblock*}{6cm}(0.5cm,2.15cm)
+		\begin{itemize}[<+->]
+			\item Méthodes \textbf<6>{paramétriques} / non-paramétriques
+			\item Réflexes rapide entre \SIlist{20;50}{\milli\second}\footcite{kurtzer_long-latency_2008,pruszynski_long-latency_2011,lakatos_conditioning_2011}%\protect\label{citeLatencyReflex}
+			\item Réflexes long entre \SIlist{50;110}{\milli\second}%\cref{citeLatencyReflex}
+			\item \sout<5>{Actions volontaires} dès \SI{110}{\milli\second}%\cref{citeLatencyReflex}%\only<1-4>{Actions volontaires dès \SI{110}{\milli\second}}\only<5->{\sout{Actions volontaires} dès \SI{110}{\milli\second}}
+			%
+		\end{itemize}
+	\end{textblock*}
+	%
+	\begin{textblock*}{5.75cm}(6.5cm,2.5cm)
+		\visible<6->{
+			\begin{equation*}
+				H_d(z) = \frac{X_z(z)}{F_z(z)} = \frac{b_1 z + b_0}{z^2 + a_1 z + a_0}
+			\end{equation*}
+		}
+		\visible<7->{
+			\begin{equation*} 
+				\begin{split}
+					K &= \frac{1 + a_1 + a_0}{b_1 + b_0}\\
+					B &= -\ln(a_0)\frac{M}{\delta_t}\\
+					M &= \frac{-K\delta_t^2}{\ln(\alpha_1)\left(\ln(\tikzmark{eqMAlpha}\alpha_1) - \ln(a_0)\right)}
+				\end{split}
+			\end{equation*}
+		}
+	\end{textblock*}
+	%
+	\begin{tikzpicture}[remember picture,overlay, arrow/.style={thick, ->, >=latex}]
+		\draw<10->[arrow] ($(pic cs:eqMAlpha) + (0.1cm,-0.1cm)$) to[out=-110,in=70] ($(pic cs:eqMAlpha) + (-3cm,-.65cm)$) node [yshift=-.2cm, align=center] {\textbf<10>{\textcolor<10>{Prune}{pôle}}};
+	\end{tikzpicture}
+	%
+	\begin{textblock*}{6cm}(0.5cm,5.5cm)
+		\uncovergraphics<11>[width=5cm]{fig_local_sensitivity_analysis}
+	\end{textblock*}	
+\end{frame}
+
+%%%
 \subsection{SubSection 3}
-
 \begin{frame}
-\frametitle{\insertsubsection}
-Some Text.
+	\frametitle{\insertsubsection}
+	\begin{itemize}
+		\item 
+	\end{itemize}
 \end{frame}
 
-\section{Section 3}
+%%%%%%%%%%%%%%%%%%
+%%% EXPERIMENT
+\section{Expérience}
+
+%%%
 \subsection{SubSection 1}
-
 \begin{frame}
-\frametitle{\insertsubsection}
-Some Text.
+	\frametitle{\insertsubsection}
+	Some Text.
 \end{frame}
 
+%%%
 \subsection{SubSection 2}
-
 \begin{frame}
-\frametitle{\insertsubsection}
-Some Text.
+	\frametitle{\insertsubsection}
+	Some Text.
 \end{frame}
 
+%%%
 \subsection{SubSection 3}
-
 \begin{frame}
-\frametitle{\insertsubsection}
-Some Text.
+	\frametitle{\insertsubsection}
+	Some Text.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%
+%%% STABILITY ANALYSIS
+\section{Analyse de stabilité}
+
+%%%
+\subsection{SubSection 1}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	Some Text.
+\end{frame}
+
+%%%
+\subsection{SubSection 2}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	Some Text.
+\end{frame}
+
+%%%
+\subsection{SubSection 3}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	Some Text.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%
+%%% CONCLUSION
+\section[Conclusion]{Conclusion et perspectives}
+
+%%%
+\subsection{SubSection 1}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	Some Text.
 \end{frame}
 
 \end{document}

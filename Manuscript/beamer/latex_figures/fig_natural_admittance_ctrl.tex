@@ -1,0 +1,104 @@
+%\documentclass[12pt]{book}
+
+%\input{../../structure_these.tex}
+
+%\begin{document}
+
+\begin{figure} [h]
+	%\tikzsetnextfilename{fig_ctrl_scheme_lamy}
+	\centering
+	
+	\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
+	\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
+	\tikzstyle{big_block} = [rectangle, draw, minimum width = 2cm, minimum height = 2cm, line width=0.7]  % bloc style
+	
+	\newcommand{\comp}[3][]{ % comparator command
+		\node[comp] (#2) at #3 {};
+		\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+		\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+		\ifthenelse{
+			\isempty{#1}{}
+		}{}
+		{
+			\ifthenelse{
+				\equal{#1}{a}
+			}{
+				\node[above right] at (#2) {$-$\phantom{p}};
+			}{}
+			\ifthenelse{
+				\equal{#1}{b}
+			}{
+				\node[below right] at (#2) {$-$\phantom{l}};
+			}{}
+		}
+	}
+	\resizebox{\textwidth}{!}{
+	\begin{tikzpicture} [node distance = 2cm]
+	
+	\comp[a]{c1}{(0, 0)};
+	
+	\node[left of = c1, node distance = 1.5cm] (tau_r) {};
+	\node[block, right of = c1] (imp_ctrl) {$\matr{K}_p + \frac{\matr{K}_i}{s}$};
+	\only<4>{\node[block, right of = c1, line width=1.4, pattern=north east lines, pattern color=Prune, opacity=0.35] (imp_ctrl) {\textbf{$\matr{K}_p + \frac{\matr{K}_i}{s}$}};
+	\node[block, right of = c1, line width=1.4] (imp_ctrl) {\textbf{$\matr{K}_p + \frac{\matr{K}_i}{s}$}};}
+	 %, \only<2>{line width=1.4}
+	
+	\comp[b]{c2}{($(imp_ctrl) + (2.5,0)$)};
+	
+	\node[block, above of = c2, align = center, node distance = 2cm] (neg) {$-1$};
+	\node[block, right of = neg, node distance = 2.5cm](jacobian) {$\jacobian{q}{}{t}$};
+	
+	\node[block, right of = c2] (kv) {$\matr{K}_v$};
+	\only<5>{\node[block, right of = c2, line width=1.4, pattern=north east lines, pattern color=Prune, opacity=0.35] (kv) {\textbf{$\matr{K}_v$}};
+	\node[block, right of = c2, line width=1.4] (kv) {\textbf{$\matr{K}_v$}};}
+	
+	\node[big_block, right of = kv, node distance = 2.7cm] (robot) {$Robot$};
+	
+	\node[right of = robot, node distance = 1.75cm] (force) {};
+	\fill ($ (force) + (0, 0.5) $) circle[radius=1.75pt];
+	
+	\node[big_block, right of = robot, node distance = 3.5cm] (env) {$-\matr{Z}_{env}$};
+	
+	\draw[{Latex[length=3mm]}-] (c1.west) --+ (-1.5,0)
+	node[align = center, above] {$\tikzmark{NatAdmTau1}\vect{\tau}_r = 0\tikzmark{NatAdmTau2}$};
+	\draw[{Latex[length=3mm]}-] (c1.north) |- (neg.west);
+	\draw[-{Latex[length=3mm]}] (c1.east) -- (imp_ctrl.west);
+	
+	\draw[-{Latex[length=3mm]}] (imp_ctrl.east) -- (c2.west)
+	node[midway, align = center, above] {$\dot{\vect{q}}_d$};
+	\draw[-{Latex[length=3mm]}] (c2.east) -- (kv.west);
+	
+	\draw[-{Latex[length=3mm]}] (kv.east) -- (robot.west)
+	node[midway, above] {$\vect{\tau}_d$};
+	
+	\draw[{Latex[length=3mm]}-] (neg.east) -- (jacobian.west);
+	
+	\draw[-{Latex[length=3mm]}] (robot.south) --+ (0,-0.5)  
+	node[below] {$\dot{\vect{q}}$}
+	-| (c2.south);
+	
+	\draw[-{Latex[length=3mm]}] ($ (force.center) + (0, 0.5) $) |- (jacobian.east);
+	\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
+	node[midway, align = center, below] {$\tikzmark{NatAdmFe1}\vect{F}_e\tikzmark{NatAdmFe2}$};
+	\only<2>{\draw[{Latex[length=3mm]}-] ($(robot.east) + (0, 0.5) $) -- ($(env.west) + (0, 0.5) $)
+		node[midway, align = center, below, draw, line width=1.5pt, circle, Prune, yshift=1.5mm] {\phantom{$\vect{F}_e$}};}
+	\draw[-{Latex[length=3mm]}] ($(robot.east) + (0, -0.5) $) -- ($(env.west) + (0, -0.5) $)
+	node[midway, align = center, below] {$\vect{V}_e$};
+	
+	\draw[gray, -{Latex[length=3mm]}] (env.south west) -- (env.north east);
+	
+	\node[circle,line width=1.5pt,Prune, minimum width=1cm]
+	at ($(robot.east) + (1, 0.5)$) {};
+	%\node<2>[yshift=3pt,draw,line width=1.5pt,Prune,circle,inner ysep=6pt,fit={($(pic cs:NatAdmFe)+ (5mm,5mm)$), ($(pic cs:NatAdmFe) - (5mm,5mm)$)}] {};
+	%\node<3>[draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:NatAdmTau1) (pic cs:NatAdmTau2)}] {};
+	%\node<3>[draw,line width=1.5pt,Prune,circle,inner ysep=6pt] at ($(c1.west) + (-1.5,-0.5)$) {\phantom{f}};
+	
+	\end{tikzpicture}
+	}
+%	\caption{Schéma bloc du contrôle en admittance articulaire avec capteur de force proposé par \textcite{lamy_achieving_2009}} % Figure caption
+%		%Bloc diagram of the admittance control with a force sensor, proposed by \cite{Lamy_achieving_2009}}
+%		%
+%	\label{fig_lamy_control} % Label 
+\end{figure}
+
+%\end{document}

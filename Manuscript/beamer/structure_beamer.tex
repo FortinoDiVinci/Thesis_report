@@ -1,4 +1,6 @@
 \usepackage{shellesc}
+\usepackage{polyglossia}
+	\setmainlanguage{french}
 \usepackage{tikz} 
 	\usetikzlibrary{shapes}
 	\usetikzlibrary{arrows, arrows.meta}
@@ -13,8 +15,17 @@
 	\usetikzlibrary{intersections}
 	\usetikzlibrary{tikzmark}
 %
+\usepackage{pgfplotstable}
+\usepackage[
+	separate-uncertainty=true,
+	multi-part-units=single,
+	]{siunitx}
+\usepackage{ulem}
+%
+\usepackage{animate}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.8}
+\usepackage{xifthen} %for conditional test
 %
 %\usepackage[table,xcdraw]{xcolor}
 \usepackage{pdfpages}
@@ -60,6 +71,7 @@
 \setbeamercolor{section in head/foot}{fg=white, bg=DarkPrune}
 \setbeamertemplate{itemize items}[circle]
 \setbeamercolor{itemize item}{fg=Prune}
+\setbeamercolor{itemize subitem}{fg=Orient}
 \setbeamercolor{block title}{bg=Prune}
 \setbeamercovered{transparent}
 %\colorlet{bullet}{Prune}
@@ -94,6 +106,14 @@
 %	urlcolor=Prune,
 %}
 
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+	\frametitle{\insertsection}
+	\tableofcontents[currentsection,sectionstyle=hide/hide,subsectionstyle=show/show/hide]
+\end{frame}
+}
+
 % for figure opacity
 \newcommand<>{\uncovergraphics}[2][{}]{
 	% Taken from: <https://tex.stackexchange.com/a/354033/95423>
@@ -104,6 +124,10 @@
 			\fill [draw=none, fill=white, fill opacity=0.9] (B.north west) -- (B.north east) -- (B.south east) -- (B.south west) -- (B.north west) -- cycle;
 		}
 	\end{tikzpicture}
+}
+
+\renewcommand<>{\sout}[1]{%
+	\alt#2{\beameroriginal{\sout}{#1}}{#1}
 }
 
 %% math
