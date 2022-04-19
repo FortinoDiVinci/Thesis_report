@@ -2,7 +2,7 @@
 	\centering
 	\pgfplotstableread[col sep=comma] {../../../Manuscript/misc/short_force_perturbations.csv}\datatable
 	\resizebox{8.69cm}{!}{	
-		\tikzsetnextfilename{fig_short_perturbations_implemented}		
+		\tikzsetnextfilename{figure_3}		
 		\begin{tikzpicture}
 			\centering
 			%
@@ -20,7 +20,7 @@
 				]
 				%
 				\addplot [
-					color=Orient,
+					color=black,%Orient,
 					smooth,
 					thick,
 					]
@@ -31,7 +31,7 @@
 					] 
 					{\datatable};
 				\addplot [
-					color=Shiraz,
+					color=black!30,%Shiraz,
 					smooth,
 					mark=none,
 					thick,

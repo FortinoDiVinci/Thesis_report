@@ -1,6 +1,6 @@
 % figure 
 {
-	\tikzsetnextfilename{subfig_position_trajectory_estimation_example}
+	\tikzsetnextfilename{figure_4}
 	\centering
 		\resizebox{8.69cm}{!}{
 			\begin{tikzpicture}
@@ -27,14 +27,14 @@
 					]
 					%
 					\addplot [
-						color=Orient,
+						color=black!50,
 						smooth,
 						thick,
 						]
 						table [col sep=comma, x expr=\thisrow{t}-94.8, y expr=\thisrow{x}-0.32] {virt_trajectory_example.csv};
 					%
 					\addplot [
-						color=Shiraz,
+						color=black,
 						smooth,
 						very thick,
 						dashed,
@@ -61,14 +61,14 @@
 					]
 					%
 					\addplot [
-					color=Orient,
+					color=black!50,
 					smooth,
 					thick,
 					]
 					table [col sep=comma, x expr=\thisrow{t}-94.8, y=f] {virt_trajectory_example.csv};
 					%
 					\addplot [
-					color=Shiraz,
+					color=black,
 					smooth,
 					very thick,
 					dashed,
@@ -99,14 +99,14 @@
 %					]
 %					%
 %					\addplot [
-%						color=Orient,
+%						color=black!50,
 %						smooth,
 %						thick,
 %						]
 %						table [col sep=comma, x expr=\thisrow{t}-94.6, y=f] {virt_trajectory_example.csv};
 %					%
 %					\addplot [
-%						color=Shiraz,
+%						color=black,
 %						smooth,
 %						very thick,
 %						dashed,

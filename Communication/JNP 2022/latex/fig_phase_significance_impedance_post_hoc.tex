@@ -5,7 +5,7 @@
 	\resizebox{7.06cm}{!}{
 		%\subcaptionbox{\label{fig_8a}}
 		%{
-			\tikzsetnextfilename{fig_phase_significance_impedance_post_hoc}
+			\tikzsetnextfilename{figure_8}
 			\begin{tikzpicture}		
 				\begin{axis}[%
 					name=ax1,
@@ -21,13 +21,13 @@
 					enlarge x limits=0.2,					
 					%boxplot/draw direction=y, 
 					]
-					\addplot [color=Orient, forget plot, thick] table[x=phase,y=K_med_AVG]{\datatable};
-					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+					\addplot [color=black, forget plot, thick] table[x=phase,y=K_med_AVG]{\datatable};
+					\addplot [color=black, only marks, mark=*, mark options={fill=white, fill opacity=1}]
 					plot [error bars/.cd, y dir = both, y explicit]
 					table[x=phase, y=K_med_AVG, y error=K_med_SEM]{\datatable};		
-					\node [below right, xshift=-1mm, color=Orient] at (axis cs:  1, 124.6) {\tiny$(b)$};
-					\node [below right, xshift=-1mm, color=Orient] at (axis cs:  2, 159.7) {\tiny$(ab)$};
-					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 191.4) {\tiny$(a)$};
+					\node [below right, xshift=-1mm, color=black] at (axis cs:  1, 124.6) {\tiny$(b)$};
+					\node [below right, xshift=-1mm, color=black] at (axis cs:  2, 159.7) {\tiny$(ab)$};
+					\node [below right, xshift=-1mm, color=black] at (axis cs: 3, 191.4) {\tiny$(a)$};
 					\node at (axis cs: 3.175, 200) {(i)};
 				\end{axis}	
 				\begin{axis}[%
@@ -42,13 +42,13 @@
 					yticklabels={\empty},
 					xtick={1,2,3},
 					xticklabels={$e_1$,$e_2$,$e_3$},
-					xticklabel style={color=Jewel,yshift=1mm},
+					xticklabel style={color=black!50,yshift=1mm},
 					xtick style={draw=none},
 					ymin=9.1,
 					ymax=12.6,
 					enlarge x limits=0.28,
 					]
-					\addplot [color=Jewel, style={fill=Jewel}, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Jewel, ]
+					\addplot [color=black!50, style={fill=black!50}, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=black!50, ]
 					plot [error bars/.cd, y dir = both, y explicit]
 					table[row sep=crcr, x=phase, y=avg, y error=sem]{
 						phase	avg	sem\\
@@ -56,9 +56,9 @@
 						2	9.587646388	0.37037969\\
 						3	11.6838263	0.742533397\\
 					};								
-					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 1, 11.04) {\tiny$(a)$};
-					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 2, 9.59) {\tiny$(b)$};
-					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 3, 11.68) {\tiny$(a)$};
+					\node [above left, xshift=1mm, color=black!50] at (axis cs: 1, 11.04) {\tiny$(a)$};
+					\node [above left, xshift=1mm, color=black!50] at (axis cs: 2, 9.59) {\tiny$(b)$};
+					\node [above left, xshift=1mm, color=black!50] at (axis cs: 3, 11.68) {\tiny$(a)$};
 				\end{axis}
 				%	
 				\begin{axis}[%
@@ -69,7 +69,7 @@
 					axis x line*=top,
 					xtick={1,2,3},
 					xticklabels={{$\varphi_1$},{$\varphi_2$},{$\varphi_3$}},
-					xticklabel style={color=Orient},
+					xticklabel style={color=black},
 					ylabel=$\avg{\hat{B}}$ (\si{\newton\second\per\meter}),
 					ylabel near ticks,
 					ylabel style={yshift=-1mm},
@@ -78,12 +78,12 @@
 					enlarge x limits=0.2,
 					]
 					%% phase and performance separated
-					\addplot [color=Orient, forget plot, thick] table[row sep=crcr]{
+					\addplot [color=black, forget plot, thick] table[row sep=crcr]{
 						1	10.03265015\\
 						2	11.7441701\\
 						3	9.828937436\\
 					};
-					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+					\addplot [color=black, only marks, mark=*, mark options={fill=white, fill opacity=1}]
 					plot [error bars/.cd, y dir = both, y explicit]
 					table[row sep=crcr, x=phase, y=avg, y error=sem]{
 						phase	avg	sem\\
@@ -91,9 +91,9 @@
 						2	11.7441701	0.433956223\\
 						3	9.828937436	0.378303713\\
 					};				
-					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 1, 10.03) {\tiny$(b)$};
-					\node [above right, xshift=-1mm, color=Orient] at (axis cs: 2, 11.74) {\tiny$(a)$};
-					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 9.83) {\tiny$(b)$};
+					\node [below right, xshift=-1mm, color=black] at (axis cs: 1, 10.03) {\tiny$(b)$};
+					\node [above right, xshift=-1mm, color=black] at (axis cs: 2, 11.74) {\tiny$(a)$};
+					\node [below right, xshift=-1mm, color=black] at (axis cs: 3, 9.83) {\tiny$(b)$};
 					\node at (axis cs: 3.175, 12.2) {(ii)};
 				\end{axis}	
 				%
@@ -109,13 +109,13 @@
 					ylabel style={yshift=-1mm},
 					enlarge x limits=0.2,
 					]
-					\addplot [color=Orient, forget plot, thick] table[x=phase,y=M_med_AVG]{\datatable};
-					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+					\addplot [color=black, forget plot, thick] table[x=phase,y=M_med_AVG]{\datatable};
+					\addplot [color=black, only marks, mark=*, mark options={fill=white, fill opacity=1}]
 					plot [error bars/.cd, y dir = both, y explicit]
 					table[x=phase, y=M_med_AVG, y error=M_med_SEM]{\datatable};		
-					\node [above right, xshift=-1mm, color=Orient] at (axis cs:  1, 0.454) {\tiny$(a)$};
-					\node [below right, xshift=-1mm, color=Orient] at (axis cs:  2, 0.382) {\tiny$(b)$};
-					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 0.453) {\tiny$(a)$};
+					\node [above right, xshift=-1mm, color=black] at (axis cs:  1, 0.454) {\tiny$(a)$};
+					\node [below right, xshift=-1mm, color=black] at (axis cs:  2, 0.382) {\tiny$(b)$};
+					\node [below right, xshift=-1mm, color=black] at (axis cs: 3, 0.453) {\tiny$(a)$};
 					\node at (axis cs: 3.175, 0.48) {(iii)};	
 				\end{axis}
 			\end{tikzpicture}
@@ -141,13 +141,13 @@
 %					%xmax=3.25,
 %					xtick={1,2,3},
 %					xticklabels={$e_1$,$e_2$,$e_3$},
-%					xticklabel style={color=Jewel},
+%					xticklabel style={color=black!50},
 %					xtick style={draw=none},
 %					ymin=9.1,
 %					ymax=12.6,
 %					enlarge x limits=0.28,
 %					]
-%					\addplot [color=Jewel, style={fill=Jewel}, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Jewel, ]
+%					\addplot [color=black!50, style={fill=black!50}, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=black!50, ]
 %					plot [error bars/.cd, y dir = both, y explicit]
 %					table[row sep=crcr, x=phase, y=avg, y error=sem]{
 %						phase	avg	sem\\
@@ -155,9 +155,9 @@
 %						2	9.587646388	0.37037969\\
 %						3	11.6838263	0.742533397\\
 %					};								
-%					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 1, 11.04) {\tiny$(a)$};
-%					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 2, 9.59) {\tiny$(b)$};
-%					\node [above left, xshift=1mm, color=Jewel] at (axis cs: 3, 11.68) {\tiny$(a)$};
+%					\node [above left, xshift=1mm, color=black!50] at (axis cs: 1, 11.04) {\tiny$(a)$};
+%					\node [above left, xshift=1mm, color=black!50] at (axis cs: 2, 9.59) {\tiny$(b)$};
+%					\node [above left, xshift=1mm, color=black!50] at (axis cs: 3, 11.68) {\tiny$(a)$};
 %				\end{axis}	
 %				\begin{axis}[%
 %					%height=0.25\linewidth,
@@ -168,9 +168,9 @@
 %					%xtick={1,1.5,2},
 %					axis x line*=top,
 %					xtick={1,2,3},
-%					%every axis label/.append style ={Orient},
+%					%every axis label/.append style ={black},
 %					xticklabels={{$\varphi_1$},{$\varphi_2$},{$\varphi_3$}},
-%					xticklabel style={color=Orient},
+%					xticklabel style={color=black},
 %					%ymin=1.06276752948761,
 %					%ymax=1.78985784053802,
 %					ylabel=$\avg{\hat{B}}$ (\si{\newton\second\per\meter}),
@@ -201,12 +201,12 @@
 %		%			\addlegendentry{$e_3$}
 %		
 %					%% phase and performance separated
-%					\addplot [color=Orient, forget plot, thick] table[row sep=crcr]{
+%					\addplot [color=black, forget plot, thick] table[row sep=crcr]{
 %						1	10.03265015\\
 %						2	11.7441701\\
 %						3	9.828937436\\
 %					};
-%					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+%					\addplot [color=black, only marks, mark=*, mark options={fill=white, fill opacity=1}]
 %						plot [error bars/.cd, y dir = both, y explicit]
 %						table[row sep=crcr, x=phase, y=avg, y error=sem]{
 %							phase	avg	sem\\
@@ -214,15 +214,15 @@
 %							2	11.7441701	0.433956223\\
 %							3	9.828937436	0.378303713\\
 %					};				
-%					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 1, 10.03) {\tiny$(b)$};
-%					\node [above right, xshift=-1mm, color=Orient] at (axis cs: 2, 11.74) {\tiny$(a)$};
-%					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 9.83) {\tiny$(b)$};
+%					\node [below right, xshift=-1mm, color=black] at (axis cs: 1, 10.03) {\tiny$(b)$};
+%					\node [above right, xshift=-1mm, color=black] at (axis cs: 2, 11.74) {\tiny$(a)$};
+%					\node [below right, xshift=-1mm, color=black] at (axis cs: 3, 9.83) {\tiny$(b)$};
 %					%
-%%					\node [color=Jewel] at (axis cs: 1, 12.75) {$e_1$};
-%%					\node [color=Jewel] at (axis cs: 2, 12.75) {$e_2$};
-%%					\node [color=Jewel] at (axis cs: 3, 12.75) {$e_3$};
+%%					\node [color=black!50] at (axis cs: 1, 12.75) {$e_1$};
+%%					\node [color=black!50] at (axis cs: 2, 12.75) {$e_2$};
+%%					\node [color=black!50] at (axis cs: 3, 12.75) {$e_3$};
 %					
-%%					\addplot [color=Jewel, forget plot, thick] table[row sep=crcr]{
+%%					\addplot [color=black!50, forget plot, thick] table[row sep=crcr]{
 %%						1	11.04109961\\
 %%						2	9.587646388\\
 %%						3	11.6838263\\
@@ -256,13 +256,13 @@
 %					ylabel style={yshift=-1mm},
 %					%boxplot/draw direction=y, 
 %					]
-%					\addplot [color=Orient, forget plot, thick] table[x=phase,y=M_med_AVG]{\datatable};
-%					\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+%					\addplot [color=black, forget plot, thick] table[x=phase,y=M_med_AVG]{\datatable};
+%					\addplot [color=black, only marks, mark=*, mark options={fill=white, fill opacity=1}]
 %					plot [error bars/.cd, y dir = both, y explicit]
 %					table[x=phase, y=M_med_AVG, y error=M_med_SEM]{\datatable};		
-%					\node [above right, xshift=-1mm, color=Orient] at (axis cs:  1, 0.454) {\tiny$(a)$};
-%					\node [below right, xshift=-1mm, color=Orient] at (axis cs:  2, 0.382) {\tiny$(b)$};
-%					\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 0.453) {\tiny$(a)$};	
+%					\node [above right, xshift=-1mm, color=black] at (axis cs:  1, 0.454) {\tiny$(a)$};
+%					\node [below right, xshift=-1mm, color=black] at (axis cs:  2, 0.382) {\tiny$(b)$};
+%					\node [below right, xshift=-1mm, color=black] at (axis cs: 3, 0.453) {\tiny$(a)$};	
 %				\end{axis}		
 %			\end{tikzpicture}%
 %		%}

@@ -1,7 +1,7 @@
 {
 	\centering
 	\pgfplotstableread[col sep=semicolon] {../../../Manuscript/misc/chap_4_ball_bouncing/perturbations_significance_post_hoc.csv}\datatable
-	\tikzsetnextfilename{fig_perturbations_significance_post_hoc}
+	\tikzsetnextfilename{figure_5}
 	\resizebox{7.06cm}{!}{	
 		\begin{tikzpicture}		
 			\begin{axis}[%
@@ -15,7 +15,7 @@
 				xticklabels={{$c^{-1}$},{$c^1$},{$c^2$},{$c^3$}},
 				%ymin=1.06276752948761,
 				%ymax=1.78985784053802,
-				ylabel=$\mean{\epsilon_r}$ (\si{\centi\meter}),%$\sigma(\epsilon_r)$
+				ylabel=$\avg{\epsilon_r}$ (\si{\centi\meter}),%$\sigma(\epsilon_r)$
 				ylabel near ticks,
 				yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}}, % conversion from m to cm
 				scaled ticks=false, 
@@ -23,17 +23,17 @@
 				ylabel style={yshift=-1mm},
 				nodes near coords, 
 				point meta=explicit symbolic, % for label
-				every node near coord/.append style={font=\tiny, color=Orient, yshift=.22cm, xshift=.2cm}, %\scriptsize
+				every node near coord/.append style={font=\tiny, color=black, yshift=.22cm, xshift=.2cm}, %\scriptsize
 				%boxplot/draw direction=y, 
 				]
-				\addplot [color=Orient, thick] table[x=source, y=mean_avg]{\datatable};
-				\addplot [color=Orient, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}]
+				\addplot [color=black, thick] table[x=source, y=mean_avg]{\datatable};
+				\addplot [color=black, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}]
 				plot [error bars/.cd, y dir = both, y explicit]
 				table[x=source, y=mean_avg, y error=SEM_avg, meta=label]{\datatable};		
 			\end{axis}		
 		\end{tikzpicture}%
 	}
-	%\caption[ANOVA: Effets des perturbations sur l'erreur moyenne de rebond]{Effets des perturbations sur $\mean{\epsilon_r}$, les erreurs types sont utilisées comme intervalle de confiance.}
+	%\caption[ANOVA: Effets des perturbations sur l'erreur moyenne de rebond]{Effets des perturbations sur $\avg{\epsilon_r}$, les erreurs types sont utilisées comme intervalle de confiance.}
 	%\label{fig_perturbations_significance_post_hoc}
 	\captionof{figure}{Mean bouncing error $\avg{\epsilon_r}$ as a function of cycle order, with standard errors used as confidence intervals.}
 	\label{fig_5}	

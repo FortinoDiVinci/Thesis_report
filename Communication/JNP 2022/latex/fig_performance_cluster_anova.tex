@@ -1,7 +1,7 @@
 {
 	\centering
 	\resizebox{7.06cm}{!}{
-		\tikzsetnextfilename{subfig_perf_significance_mean_ball_bouncing_error_post_hoc}
+		\tikzsetnextfilename{figure_7}
 		\begin{tikzpicture}	
 			\pgfplotsset{major grid style={dashed,opacity=0.3,gray}}	
 			\begin{axis}[%
@@ -30,7 +30,7 @@
 				ymin=0,
 				ymax=15.25,
 				nodes near coords,
-				every node near coord/.append style={font=\footnotesize, color=Orient, yshift=.5cm, fill=white, opacity=1, inner sep=1pt},
+				every node near coord/.append style={font=\footnotesize, color=black, yshift=.5cm, fill=white, opacity=1, inner sep=1pt},
 				%boxplot/draw direction=y, 
 				]
 	%			\addplot [color=Orient, forget plot, thick] table[x=phase,y=K_med_AVG]{\datatable};
@@ -44,7 +44,7 @@
 	%				3	0.15927448\\
 	%			}; 
 	
-				\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%thick, 
+				\addplot [color=black, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=black]%thick, 
 				plot [error bars/.cd, y dir = both, y explicit]
 				table[row sep=crcr, x=e, y=mean, y error=sem]{
 					e	mean	sem\\
@@ -53,9 +53,9 @@
 					3	4.7687508	1.3038563\\
 				};	
 				%
-				\node [above left, xshift=.5mm, color=Orient] at (axis cs:  1, 7.71) {\tiny$(a)$};
-				\node [above left, xshift=.5mm, color=Orient] at (axis cs:  2, 3.37) {\tiny$(a)$};
-				\node [above left, xshift=.5mm, color=Orient] at (axis cs:  3, 4.77) {\tiny$(a)$};
+				\node [above left, xshift=.5mm, color=black] at (axis cs:  1, 7.71) {\tiny$(a)$};
+				\node [above left, xshift=.5mm, color=black] at (axis cs:  2, 3.37) {\tiny$(a)$};
+				\node [above left, xshift=.5mm, color=black] at (axis cs:  3, 4.77) {\tiny$(a)$};
 				
 				\node [] at (axis cs:  2, 13) {$h_2^*$};
 				%	
@@ -86,7 +86,7 @@
 				ymin=0,
 				ymax=30.5,
 				nodes near coords,
-				every node near coord/.append style={font=\footnotesize, color=Orient, yshift=-1cm, fill=white, opacity=1, inner sep=1pt},
+				every node near coord/.append style={font=\footnotesize, color=black, yshift=-1cm, fill=white, opacity=1, inner sep=1pt},
 				%boxplot/draw direction=y, 
 				]
 				%			\addplot [color=Orient, forget plot, thick] table[x=phase,y=K_med_AVG]{\datatable};
@@ -100,7 +100,7 @@
 				%				3	0.15927448\\
 				%			};
 				%
-				\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+				\addplot [color=black, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=black]%
 				plot [error bars/.cd, y dir = both, y explicit]
 				table[row sep=crcr,x=e, y=mean, y error=sem]{
 					e	mean	sem\\
@@ -109,9 +109,9 @@
 					3	18.326436	0.7106506\\
 				};	
 				%
-				\node [above left, yshift=-1mm, xshift=.5mm, color=Orient] at (axis cs:  1, 28.26) {\tiny$(a)$};
-				\node [above left, xshift=.5mm, color=Orient] at (axis cs:  2, 23.03) {\tiny$(b)$};
-				\node [above left, xshift=.5mm, color=Orient] at (axis cs:  3, 18.33) {\tiny$(c)$};
+				\node [above left, yshift=-1mm, xshift=.5mm, color=black] at (axis cs:  1, 28.26) {\tiny$(a)$};
+				\node [above left, xshift=.5mm, color=black] at (axis cs:  2, 23.03) {\tiny$(b)$};
+				\node [above left, xshift=.5mm, color=black] at (axis cs:  3, 18.33) {\tiny$(c)$};
 				
 				\node [] at (axis cs:  2, 28) {$h_2^*$};
 				%	
