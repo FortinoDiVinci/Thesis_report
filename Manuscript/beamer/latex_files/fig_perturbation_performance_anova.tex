@@ -1,0 +1,57 @@
+\centering
+\pgfplotstableread[col sep=semicolon] {../misc/chap_4_ball_bouncing/perturbations_significance_post_hoc.csv}\datatable
+\tikzsetnextfilename{fig_perturbation_performance_anova}
+\begin{tikzpicture}
+	
+	\begin{axis}[%
+		name=ax1,
+		height=3.5cm,
+		scale only axis,
+		%xmin=0.65,
+		%xmax=2.35,
+		%xtick={1,1.5,2},
+		xtick={0,1,2,3},
+		xticklabels={{$c^{-1}$},{$c^1$},{$c^2$},{$c^3$}},
+		ylabel=$\mean{\epsilon_r}$ (\si{\centi\meter}),%$\sigma(\epsilon_r)$
+		ylabel near ticks,
+		yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}}, % conversion from m to cm
+		scaled ticks=false, 
+		tick label style={/pgf/number format/fixed},
+		ylabel style={yshift=-1mm},
+		nodes near coords, 
+		point meta=explicit symbolic, % for label
+		every node near coord/.append style={font=\tiny, color=Orient, yshift=.22cm, xshift=.15cm}, 
+		%boxplot/draw direction=y, 
+		]
+		\addplot [color=Orient] table[x=source, y=mean_avg]{\datatable};
+		\addplot [color=Orient, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}]
+		plot [error bars/.cd, y dir = both, y explicit]
+		table[x=source, y=mean_avg, y error=SEM_avg, meta=label_avg]{\datatable};		
+	\end{axis}	%
+	\hspace{2mm}
+	\begin{axis}[%
+		at={($(ax1.south east)+(1.25cm,0)$)},
+		height=3.5cm,
+		scale only axis,
+		%xmin=0.65,
+		%xmax=2.35,
+		%xtick={1,1.5,2},
+		xtick={0,1,2,3},
+		xticklabels={{$c^{-1}$},{$c^1$},{$c^2$},{$c^3$}},
+		ylabel=$\sigma(\epsilon_r)$ (\si{\centi\meter}),%$\sigma(\epsilon_r)$
+		ylabel near ticks,
+		yticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}}, % conversion from m to cm
+		scaled ticks=false, 
+		tick label style={/pgf/number format/fixed},
+		ylabel style={yshift=-1mm},
+		nodes near coords, 
+		point meta=explicit symbolic, % for label
+		every node near coord/.append style={font=\tiny, color=Orient, yshift=.22cm, xshift=.15cm}, 
+		%boxplot/draw direction=y, 
+		]
+		\addplot [color=Orient] table[x=source, y=mean_std]{\datatable};
+		\addplot [color=Orient, only marks, mark=*, mark size=1.7pt, mark options={fill=white, fill opacity=1}]
+		plot [error bars/.cd, y dir = both, y explicit]
+		table[x=source, y=mean_std, y error=SEM_std, meta=label_std]{\datatable};		
+	\end{axis}
+\end{tikzpicture}%

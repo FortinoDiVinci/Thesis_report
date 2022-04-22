@@ -1,0 +1,66 @@
+\tikzsetnextfilename{fig_ball_bouncing_perturbation_cycles_example}
+%\resizebox{.5\textwidth}{!}{%
+
+
+\begin{tikzpicture}[arrow/.style={thick, ->, >=latex}]
+	%
+	\centering
+	\begin{axis}[%
+		width=8cm,
+		height=4.5cm,
+		scale only axis,    
+%				xmin=111.9,
+%				xmax=114.3,
+		xlabel={Temps},
+%				ymin=-0.2,
+		ymax=2.2,
+		ylabel={Position verticale},
+		axis lines=left,
+%				xtick=\empty,
+%				ytick=\empty,
+		%axis line style={-latex},
+		trim axis left, trim axis right,
+		]
+		%
+		\addplot [
+			color=Orient,
+			solid,
+			thick,
+			]
+			table [col sep=comma, x=t, y=xp] {misc/example_ball_bouncing_000.csv};
+		%
+		\addplot [
+			color=Shiraz,
+			solid,
+			thick,
+			]
+			table [col sep=comma, x=t, y=xb] {misc/example_ball_bouncing_000.csv};
+		%
+		%
+		\addplot [
+		color=black,
+		mark=asterisk,
+		mark options={scale=1.75, line width=1pt},%
+		]
+		table[row sep=crcr]{
+			142.927	0.2235\\
+		};
+		\coordinate (pert) at (axis cs: 142.927, 0.2235);
+		%\tikzmark{end}
+		%\node[cross,rotate=30,centered] at (axis cs:142.927, 0.2235) {};
+		\draw[dashed, thick] (axis cs:\pgfkeysvalueof{/pgfplots/xmin}, 1.75) -- (axis cs:\pgfkeysvalueof{/pgfplots/xmax}, 1.75) node[at start, above, xshift=.75cm] {$h_2^*$};
+		\node[above] at (axis cs:143.192, 1.85) {$c^{-1}$}; %1.6484
+		\node[above] at (axis cs:144.326, 1.85) {$c^{1}$};  %1.8303
+		\node[above] at (axis cs:145.455, 1.85) {$c^{2}$};  %1.7911
+		\node[above] at (axis cs:146.652, 1.85) {$c^{3}$};  %1.7255
+		\draw[dashed] (axis cs:142.647, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:142.647, \pgfkeysvalueof{/pgfplots/ymax});
+		\draw[dashed] (axis cs:143.729, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:143.729, \pgfkeysvalueof{/pgfplots/ymax});
+		\draw[dashed] (axis cs:144.892, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:144.892, \pgfkeysvalueof{/pgfplots/ymax});
+		\draw[dashed] (axis cs:146.058, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:146.058, \pgfkeysvalueof{/pgfplots/ymax});
+		\draw[dashed] (axis cs:147.211, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:147.211, \pgfkeysvalueof{/pgfplots/ymax});		
+	\end{axis}
+		\draw<2>[arrow] (pert) to[out=-70,in=110] ($(pert) + (-.25cm, -1.5cm)$) node [yshift=-.2cm, align=center] {\textbf<2>{\textcolor<2>{Prune}{perturbation}}};
+\end{tikzpicture}
+%}
+%%
+%

@@ -1,0 +1,49 @@
+\centering
+\tikzsetnextfilename{fig_virtual_position_trajectory_spline}
+\begin{tikzpicture}
+    \begin{axis}[%
+		width=.85\textwidth,
+		height=.65\textwidth,
+		scale only axis,    
+		xlabel={$t (s)$},
+		ymin=29,
+		ymax=36,
+		%ymax=2.5,
+		ylabel={$z (cm)$},
+		xlabel style={font=\footnotesize,yshift=0.65em},
+		ylabel style={font=\footnotesize,yshift=-1.5em},
+		tick label style={font=\footnotesize, fill=white},
+		axis lines=middle,
+		grid=both,
+        grid style={line width=.1pt, draw=gray!10},
+        major grid style={line width=.2pt,draw=gray!50},
+        minor tick num=4,
+		]
+		% perturbation
+        %\draw[dashed, line width=0.4mm] (rel axis cs:0.313, 1) -- (rel axis cs:0.313, 0);
+		%
+		%y expr=(\thisrow{avg}+\thisrow{std})*6.88
+		\addplot [
+			dashed,
+			Shiraz,
+			thick,
+			] table [x=t, y expr=\thisrow{z0}*100, col sep=semicolon] {misc/data_spline_trajec.csv};
+		\addplot [
+			solid,
+			Orient,
+			%blue!60!black,
+			%line width=.5pt,
+			] table [x=t, y expr=\thisrow{z}*100, col sep=semicolon] {misc/data_spline_trajec.csv};
+		%		
+		\only<7->{
+			\path[pattern=north west lines, pattern color=Prune, opacity=.55] (axis cs:259.953, \pgfkeysvalueof{/pgfplots/ymin}) rectangle (axis cs:260.153, \pgfkeysvalueof{/pgfplots/ymax});
+			\draw[<->] (axis cs:259.953, 35.2) -- (axis cs:260.306, 35.2) node[below, midway, fill=white, inner sep = 2pt] {\footnotesize\SI{350}{\milli\second}};
+		}
+		\only<5->{
+			\draw[dotted, line width=0.25mm] (axis cs:259.953, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:259.953, \pgfkeysvalueof{/pgfplots/ymax});
+			\draw[dotted, line width=0.25mm] (axis cs:260.306, \pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:260.306, \pgfkeysvalueof{/pgfplots/ymax});
+			\draw[<->] (axis cs:259.953, 35.2) -- (axis cs:260.306, 35.2) node[below, midway, inner sep = 2pt] {\footnotesize\SI{350}{\milli\second}};
+		}
+		%
+    \end{axis}
+\end{tikzpicture}

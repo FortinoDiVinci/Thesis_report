@@ -1,0 +1,76 @@
+\tikzsetnextfilename{fig_spline_rmse_evaluation}
+\centering
+\begin{tikzpicture}
+	\centering
+	%
+	\begin{axis}[%
+		width=.75\textwidth,
+		height=.55\linewidth,
+		scale only axis,
+		xlabel={\footnotesize Fenêtre d'interpolation (\si{\milli\second})},
+		ylabel={\footnotesize Erreur (\si{\milli\meter})},
+		ylabel near ticks,
+		tick label style={font=\footnotesize},
+		axis x line = bottom,
+		axis y line = left, 
+		no markers,
+		xmin = 100,
+		legend style={nodes={scale=0.75, transform shape}}, 
+		%legend image post style={mark=*}
+		]
+		%
+		\addplot [
+			color=Orient,
+			solid,
+			]
+		table [col sep=comma, x=time_window, y=perc50] {../misc/spline_rmse_evaluation_tot.csv};
+		\addlegendentry{médiane};
+		%
+		\addplot+ [
+			color=Orient,
+			dashed,
+			opacity=0.5,
+			name path=A,
+			forget plot,
+			] 
+		table [domain=101:500, col sep=comma, x=time_window, y=perc25] {../misc/spline_rmse_evaluation_tot.csv};
+		\addplot+ [
+			color=Orient,
+			dashed,
+			opacity=0.5,
+			name path=B,
+			forget plot,
+			] 
+		table [domain=101:500, col sep=comma, x=time_window, y=perc75] {../misc/spline_rmse_evaluation_tot.csv};		
+		%
+		\addplot+ [
+			color=Orient,
+			dotted,
+			opacity=0.3,
+			name path=C,
+			forget plot,
+			] 
+		table [domain=101:500, col sep=comma, x=time_window, y=perc10] {../misc/spline_rmse_evaluation_tot.csv};
+		\addplot+ [
+			color=Orient,
+			dotted,
+			opacity=0.3,
+			name path=D,
+			forget plot,
+			] 
+		table [domain=101:500, col sep=comma, x=time_window, y=perc90] {../misc/spline_rmse_evaluation_tot.csv};
+		%
+		\addplot [
+			fill=Orient!5,
+			]
+		fill between [of=C and D];			
+		\addlegendentry{\SI{90}{\percent}};	
+		%
+		\addplot [
+		fill=Orient!15,
+		]
+		fill between [of=A and B];		
+		\addlegendentry{écart interquartile};	
+	\end{axis}
+
+\end{tikzpicture}

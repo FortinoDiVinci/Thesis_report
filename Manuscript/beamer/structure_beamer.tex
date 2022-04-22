@@ -20,11 +20,13 @@
 	separate-uncertainty=true,
 	multi-part-units=single,
 	]{siunitx}
+\DeclareSIUnit\year{an}
 \usepackage{ulem}
 %
 \usepackage{animate}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.8}
+	\usepgfplotslibrary{fillbetween}
 \usepackage{xifthen} %for conditional test
 %
 %\usepackage[table,xcdraw]{xcolor}
@@ -90,12 +92,27 @@
 \setbeamercolor{section in toc}{fg=Prune}
 \setbeamertemplate{subsection in toc}[subsections numbered]
 
+\beamertemplatenavigationsymbolsempty % delete navigation footer
+
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily} % for lower case authors
 \addbibresource{../bibliography/introduction.bib}
 \addbibresource{../bibliography/chapter1.bib}
 \addbibresource{../bibliography/chapter2.bib}
 \addbibresource{../bibliography/chapter3.bib}
 \addbibresource{../bibliography/chapter4.bib}
 \addbibresource{../bibliography/chapter5.bib}
+\addbibresource{../bibliography/own.bib}
+
+\makeatletter
+\DeclareCiteCommand{\fullcite}
+{\defcounter{maxnames}{\blx@maxbibnames}%
+	\usebibmacro{prenote}}
+{\usedriver
+	{\DeclareNameAlias{sortname}{default}}
+	{\thefield{entrytype}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+\makeatother
 
 %\hypersetup{
 %	% draft=true, % for printable version
@@ -106,13 +123,13 @@
 %	urlcolor=Prune,
 %}
 
-\AtBeginSection[]
-{
-	\begin{frame}<beamer>
-	\frametitle{\insertsection}
-	\tableofcontents[currentsection,sectionstyle=hide/hide,subsectionstyle=show/show/hide]
-\end{frame}
-}
+%\AtBeginSection[]
+%{
+%	\begin{frame}<beamer>
+%	\frametitle{\insertsection}
+%	\tableofcontents[currentsection,sectionstyle=hide/hide,subsectionstyle=show/show/hide]
+%\end{frame}
+%}
 
 % for figure opacity
 \newcommand<>{\uncovergraphics}[2][{}]{
