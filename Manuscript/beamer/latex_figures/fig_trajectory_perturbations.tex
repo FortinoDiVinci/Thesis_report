@@ -1,0 +1,65 @@
+{
+	\definecolor{Ph1Color}{RGB}{99,0,60} % prune
+	\definecolor{Ph2Color}{RGB}{198,11,70} % shiraz
+	\definecolor{Ph3Color}{RGB}{201,148,199} % lilac
+	\centering
+	\pgfplotstableread[col sep=comma] {../misc/chap_4_ball_bouncing/user_000_avg_cyclic_position.csv}\datatable
+	\tikzsetnextfilename{fig_typical_trajectory_perturbed_phases}
+	\begin{tikzpicture}			
+		\begin{axis}[%
+			%width=.48\linewidth,8.9
+			width=8cm,
+			height=4.5cm,
+			scale only axis,
+			%xmin=0,
+			%xmax=0.99,
+			%ymin=-9.5,
+			%ymax=9.5,
+			xlabel=Temps normalisé,
+			ylabel=Position (\si{\centi\meter}),
+			axis x line=bottom,
+			axis y line=left,
+			xticklabels=\empty,
+			legend style={legend cell align=left, align=left, draw=white!15!black},
+			legend image post style={scale=0.75},
+			]
+			
+			\addplot [color=Orient, dashed, forget plot,thick] table [x expr=\coordindex, y expr=\thisrow{avg}*6.88] {\datatable};
+			%
+			\addplot [name path=pathA, color=Orient, dotted, forget plot,] table [x expr=\coordindex, y expr=(\thisrow{avg}+\thisrow{std})*6.88] {\datatable};
+			%
+			\addplot [name path=pathB, color=Orient, dotted, forget plot,] table [x expr=\coordindex, y expr=(\thisrow{avg}-\thisrow{std})*6.88] {\datatable};
+			%
+			\addplot[fill=Orient,opacity=0.2,forget plot] fill between[of=pathA and pathB,split,];
+			%			
+			\coordinate (ph1Top) at (axis cs:294, \pgfkeysvalueof{/pgfplots/ymax});
+			\coordinate (ph1WdwBot) at (axis cs:440, \pgfkeysvalueof{/pgfplots/ymin});
+			\coordinate (ph2Top) at (axis cs:592, \pgfkeysvalueof{/pgfplots/ymax});
+			\coordinate (ph2WdwBot) at (axis cs:742, \pgfkeysvalueof{/pgfplots/ymin});
+			\coordinate (ph3Top) at (axis cs:884, \pgfkeysvalueof{/pgfplots/ymax});
+			\coordinate (ph3WdwBot) at (axis cs:1034, \pgfkeysvalueof{/pgfplots/ymin});
+			\path[pattern=north west lines, pattern color=Ph1Color, opacity=0.2] (ph1Top) rectangle (ph1WdwBot); %!50!white
+			\path[pattern=north west lines, pattern color=Ph2Color, opacity=0.2] (ph2Top) rectangle (ph2WdwBot);
+			\path[pattern=north west lines, pattern color=Ph3Color, opacity=0.3] (ph3Top) rectangle (ph3WdwBot);
+			%
+			\addplot[only marks, mark=square*, mark options={}, mark size=3pt, color=Ph1Color, fill=Ph1Color, fill opacity=0.2, line width=1.25pt] table[row sep=crcr]{%
+				x	y\\
+				294	1.88\\
+			};
+			\addlegendentry{$\varphi_1$}
+			%
+			\addplot[only marks, mark=diamond*, mark options={}, mark size=5.0pt, color=Ph2Color, fill=Ph2Color, fill opacity=0.2, line width=1.25pt] table[row sep=crcr]{%
+				x	y\\
+				592	-1.78\\
+			};
+			\addlegendentry{$\varphi_2$}
+			%
+			\addplot[only marks, mark=*, mark options={}, mark size=3.75pt, color=Ph3Color, fill=Ph3Color, fill opacity=0.2, line width=1.25pt] table[row sep=crcr]{%
+				x	y\\
+				884	-4.13\\
+			};
+			\addlegendentry{$\varphi_3$}
+			
+		\end{axis}
+	\end{tikzpicture}%
+}

@@ -1,0 +1,110 @@
+\tikzsetnextfilename{fig_exp_h_perf_avg_anova}
+\centering
+\begin{tikzpicture}			
+	\pgfplotsset{major grid style={dashed,opacity=0.3,gray}}
+	%
+	\begin{axis}[%
+		%height=0.25\linewidth,
+		width=3.5cm,
+		scale only axis,
+		xtick={1,2},
+		xticklabels={{$h_1^*$},{$h_3^*$}},
+		%xticklabels={\empty},
+		%xtick style={draw=none},
+		ymajorgrids,
+		ylabel=$\mean{\epsilon_r}$ (\si{\centi\meter}),
+		ylabel near ticks,
+		%ylabel style={yshift=-1mm},
+		ybar,
+		bar width=.8,
+		enlarge x limits=0.45,
+		ymin=0,
+		ymax=8.5,
+		nodes near coords,
+		every node near coord/.append style={font=\scriptsize, color=Orient, yshift=-1cm, fill=white, opacity=1, inner sep=1pt},
+		]
+		\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+		plot [error bars/.cd, y dir = both, y explicit]
+		table[row sep=crcr, x=h, y=mean, y error=sem]{
+			h	mean	sem\\
+			1	6.81985	1.1377479\\
+			2	3.247263	1.2785609\\
+		};	
+		\node [above left, xshift=.5mm, color=Orient] at (axis cs:  1, 6.82) {\tiny$(a)$};
+		\node [above left, xshift=.5mm, color=Orient] at (axis cs:  2, 3.25) {\tiny$(b)$};
+	\end{axis}	
+%	\begin{axis}[%
+%		name=ax1,
+%		%height=0.25\linewidth,
+%		width=3.5cm,
+%		scale only axis,
+%		xtick={1,2,3},
+%		xticklabels={{$e_1$},{$e_2$},{$e_3$}},
+%		%xticklabels={\empty},
+%		%xtick style={draw=none},
+%		ymajorgrids,
+%		ylabel=$\mean{\epsilon_r}$ (\si{\centi\meter}),
+%		ylabel near ticks,
+%		%ylabel style={yshift=-1mm},
+%		ybar,
+%		bar width=.8,
+%		enlarge x limits=0.33,
+%		ymin=-2,
+%		ymax=12,
+%		nodes near coords,
+%		every node near coord/.append style={font=\scriptsize, color=Orient, yshift=-.75cm, fill=white, opacity=1, inner sep=1pt},
+%		]
+%		\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+%		plot [error bars/.cd, y dir = both, y explicit]
+%		table[row sep=crcr, x=e, y=mean, y error=sem]{
+%			e	mean	sem\\
+%			1	9.2974023	1.8217311\\
+%			2	5.3503527	1.773745\\
+%			3	4.1989072	1.6297266\\
+%		};	
+%		\node [above left, xshift=.5mm, color=Orient] at (axis cs:  1, 9.30) {\tiny$(a)$};
+%		\node [above left, xshift=.5mm, color=Orient] at (axis cs:  2, 5.35) {\tiny$(b)$};
+%		\node [above left, xshift=.5mm, color=Orient] at (axis cs:  3, 4.20) {\tiny$(c)$};
+%						
+%		\node [] at (axis cs:  2, 11) {$h_1^*$};
+%	\end{axis}	
+%	\begin{axis}[%
+%	%height=0.25\linewidth,
+%		at={($(ax1.south east)+(1.5cm,0)$)},
+%		width=3.5cm,
+%		scale only axis,
+%		xtick={1,2,3},
+%		xticklabels={{$e_1$},{$e_2$},{$e_3$}},
+%		xtick style={draw=none},
+%		ymajorgrids,
+%		ylabel=$\sigma(\epsilon_r)$ (\si{\centi\meter}),
+%		ylabel near ticks,
+%		ylabel style={yshift=-1mm},
+%		ybar,
+%		bar width=.8,
+%		enlarge x limits=0.33,
+%		ymin=-2,
+%		ymax=12,
+%		%nodes near coords,
+%		%every node near coord/.append style={font=\scriptsize, color=Orient, yshift=-1cm, fill=white, opacity=1, inner sep=1pt}, %\scriptsize
+%		]
+%		0.016309525
+%		\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+%		plot [error bars/.cd, y dir = both, y explicit]
+%		table[row sep=crcr,x=e, y=mean, y error=sem]{
+%			e	mean	sem\\
+%			1	6.5366635	2.1831747\\
+%			2	0.0568927	1.6988662\\
+%			3	2.9897842	1.6309525\\
+%		};		
+%		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  1, 6.54) {\tiny$(a)$};
+%		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  2, 0.06) {\tiny$(b)$};
+%		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  3, 2.99) {\tiny$(c)$};
+%		%
+%		\node [above, yshift=-.75cm, color=Orient, fill=white, inner sep=1pt, font=\scriptsize] at (axis cs:  1, 6.54) {$6.54$};
+%		\node [above, yshift=.75cm, color=Orient, fill=white, inner sep=1pt, font=\scriptsize] at (axis cs:  2, 0.06) {$0.06$};
+%		\node [above, yshift=.75cm, color=Orient, fill=white, inner sep=1pt, font=\scriptsize] at (axis cs:  3, 2.99) {$2.99$};
+%		\node [] at (axis cs:  2, 11) {$h_3^*$};		
+%	\end{axis}
+%		
+\end{tikzpicture}%

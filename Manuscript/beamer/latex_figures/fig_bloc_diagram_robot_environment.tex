@@ -1,0 +1,62 @@
+\centering
+%, line width=0.7
+\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm] % comparator style
+\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm]  % bloc style
+\tikzstyle{big_block} = [rectangle, draw, minimum width = 2.2cm, minimum height = 2.2cm]  % bloc style
+
+\newcommand{\comp}[3][]{ % comparator command
+	\node[comp] (#2) at #3 {};
+	\draw (#2) -- + (45:0.25) -- + (45:-0.25);
+	\draw (#2) -- + (-45:0.25) -- + (-45:-0.25);
+	\ifthenelse{
+		\isempty{#1}{}
+	}{}
+	{
+		\ifthenelse{
+			\equal{#1}{a}
+		}{
+			\node[above right] at (#2) {$-$\phantom{p}};
+		}{}
+		\ifthenelse{
+			\equal{#1}{b}
+		}{
+			\node[below right] at (#2) {$-$\phantom{l}};
+		}{}
+	}
+}
+\resizebox{.95\textwidth}{!}{
+	\tikzsetnextfilename{fig_bloc_diagram_robot_environment}
+	\begin{tikzpicture} [node distance = 2cm]
+		
+		\comp{c1}{(0, 0)};
+		\comp{c2}{($(c1.center) + (2.0,0)$)};
+		\node[block, right of = c2] (ctrl) {$\matr{C}_z$};
+		\node[block, right of = ctrl, minimum height = 0.7cm, node distance = 2.5cm] (sig_xd) {$\matr{\Sigma}_v$};
+		\node[block, below of = sig_xd, minimum height = 0.7cm, node distance = 1cm] (sig_fe) {$\matr{\Sigma}_f$};
+		\node[big_block, below of = sig_xd, dashed, yshift=1.5cm] (sigma) {};
+		\comp{c3}{($(sig_xd) + (2.0,0)$)};	
+		\node[block, below of = ctrl, node distance = 2.5cm, minimum width = 2cm] (mu) {$-\matr{\mu}$};	
+		
+		\draw[{Latex[length=3mm]}-] (c1.west) --+ (-.75,0) node[left] {\tikzmark{coupledModelFin1}$\vect{f}_{in}$\tikzmark{coupledModelFin2}};
+		\node (b) at ($(c1)!0.45!(c2)$) {\pgfuseplotmark{*}};
+		\node[above] at (b) {$\vect{f}_e$};
+		\draw[-{Latex[length=3mm]}] (c1.east) -- (c2.west);
+		%\draw[-{Latex[length=3mm]}] (b.center) --+ (0,.75) node[left] {$\vect{f}_e$};
+		\draw[{Latex[length=3mm]}-] (c2.north) --+ (0,.75) node[left] {$\vect{f}_e^*$};
+		\draw[-{Latex[length=3mm]}] (c2.east) -- (ctrl.west);
+		\draw[-{Latex[length=3mm]}] (ctrl.east) -- (sig_xd.west) node[above, midway, xshift=-2mm] {$\dot{\vect{x}}_d$};		
+		\draw[-{Latex[length=3mm]}] (sig_xd.east) -- (c3.west);
+		
+		\draw[-{Latex[length=3mm]}] (b.center) |- (sig_fe.west);
+		\draw[-{Latex[length=3mm]}] (sig_fe.east) -| (c3.south);
+		
+		\draw[-{Latex[length=3mm]}] (c3) --+ (1.5,0) node[above] {$\dot{\vect{x}}$};
+		\node (s) at ($(c3) + (0.75,0)$) {\pgfuseplotmark{*}};
+		
+		\draw[-{Latex[length=3mm]}] (s.center) |- (mu.east);
+		\draw[-{Latex[length=3mm]}] (mu.west) -| (c1.south) node[left, near end] {$\vect{f}_{\mu}$};		
+		
+		\node[below of = sigma, node distance = 1.5cm] {Robot};
+		
+	\end{tikzpicture}
+}

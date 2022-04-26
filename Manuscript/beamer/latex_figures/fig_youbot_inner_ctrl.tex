@@ -1,5 +1,5 @@
 \begin{figure}
-		\tikzsetnextfilename{fig_youbotçinner_ctrl}
+		\tikzsetnextfilename{fig_youbot_inner_ctrl}
 		
 		\tikzstyle{comp} = [circle, draw, minimum size = 0.5cm, line width=0.7] % comparator style
 		\tikzstyle{block} = [rectangle, draw, minimum width = 1.2cm, minimum height = 1.2cm, line width=0.7]  % bloc style
@@ -29,11 +29,11 @@
 		\begin{tikzpicture} [node distance = 2cm, scale = 0.75,remember picture]%overlay
 		
 		\onslide<14>{
-			\comp[]{c1}{(0, 0)};
+			\comp[b]{c1}{(0, 0)};
 			\node[block, right of = c1, node distance = 1.75cm] (cv) {$\matr{C}_v(z)$};	
 		}
 		
-		\comp[]{c2}{($ (cv) + (2.5,0) $)};
+		\comp[b]{c2}{($ (cv) + (2.5,0) $)};
 		\node[block, right of = c2, node distance = 1.75cm] (ci) {$\matr{C}_i(z)$};	
 		
 		\onslide<14>{
@@ -43,8 +43,11 @@
 			node[near end, right] {$\dot{\vect{q}}$};
 			\draw[-{Latex[length=3mm]}] (c1.east) -- (cv.west);
 		}
+		\onslide<15->{
+			\draw[{Latex[length=3mm]}-] (c2.north) --+ (0, 1) node[left]{$\vect{i}_p$};
+		}
 		
-		\draw[-{Latex[length=3mm]}] (cv.east) -- (c2.west) node[above, yshift=2mm]{$\vect{i}_d$};
+		\draw[-{Latex[length=3mm]}] (cv.east) -- (c2.west) node[above, yshift=2mm, xshift=-2mm]{$\vect{i}_d$};
 		\draw[{Latex[length=3mm]}-] (c2.south) --+ ($ (0, -1) $)
 		node[near end, right] {$\vect{i}$};
 		\draw[-{Latex[length=3mm]}] (c2.east) -- (ci.west);

@@ -583,8 +583,8 @@
 %		\begin{itemize}
 %			\item<1-> Deux conditions :
 %				\begin{itemize}
-%					\item<1-> Nominale
 %					\item<1-> Fortes co-contractions
+%					\item<1-> Nominale
 %				\end{itemize}
 %			\item<2-> Stabilité
 %			\item<2-> Transparence
@@ -663,7 +663,7 @@
 %	\begin{textblock*}{6cm}(7.15cm,3cm)	
 %		\visible<15->{	
 %			\begin{equation*}
-%				\vect{i}_d = \jacobian{q}{}{t}\vect{f}_p\tikzmark{eqPertFp} \left(\matr{R}\tikzmark{eqPertR} \matr{T}_c\tikzmark{eqPertTc}\right)^{-1}
+%				\vect{i}_p = \jacobian{q}{}{t}\vect{f}_p\tikzmark{eqPertFp} \left(\matr{R}\tikzmark{eqPertR} \matr{T}_c\tikzmark{eqPertTc}\right)^{-1}
 %			\end{equation*}			
 %		}
 %	\end{textblock*}
@@ -804,12 +804,12 @@
 %		\begin{itemize}
 %			\item<7-> Optimisation sur des trajectoires réelles non perturbées
 %			%\item<8-> Observations fréquentielles
-%			\item<9-> Choix des hyper-paramètres (AIC\footcite{akaike_fitting_1969})	
-%			\begin{itemize}	
+%			\item<9-> Choix des hyper-paramètres (AIC\footcite{akaike_fitting_1969})%
+%			\begin{itemize}%
 %				\item<10-> $n=3$
 %				\item<10-> $l_b=0$
-%			\end{itemize}	
-%			\item<11-> RMSE\footnote{Racine des erreurs moyennes quadratiques}: \SI{385}{\milli\newton} sur le masque (\SI{100}{\milli\second})
+%			\end{itemize}
+%			\item<11-> RMSE\footnote{Racine des erreurs moyennes quadratiques} : \SI{385}{\milli\newton} sur le masque (\SI{100}{\milli\second})
 %		\end{itemize}
 %	\end{textblock*}
 %\end{frame}
@@ -945,188 +945,304 @@
 %		\item Filtrage avec $R^2$ pour diminuer la variabilité provoquée par les erreurs
 %	\end{itemize}
 %\end{frame}
-
-%%%%%%%%%%%%%%%%%%
-%%% EXPERIMENT
-\section{Expérience}
-
-\begin{frame}
-	\frametitle{\insertsection}
-	\tableofcontents[currentsection,sectionstyle=hide/hide,subsectionstyle=show/show/hide]
-	\footnotesize{\fullcite{fortineau_human_2021}}%
-	\\
-	\footnotesize{\fullcite{fortineau_human_2022}}
-\end{frame}
-
-%%%
-\subsection{Hypothèses}
-\begin{frame}
-	\frametitle{\insertsubsection}
-	\only<1->{
-		\begin{block}{\textbf<1>{Hypothèse 1 : Performances}}
-			Les performances lors de la tâche de jonglerie sont corrélées à la raideur et/ou à l’amortissement cartésiens du bras.
-		\end{block}
-		\vspace{1cm}
-	}	
-	%
-%	\begin{block}{Hypothèse 2}
-%		Les variations d’impédance observées permettent d’améliorer les marges de stabilité, et
-%		donc la robustesse lors d’interactions physiques avec un environnement.
-%	\end{block}
-	%
-	\only<2->{
-		\begin{block}{\textbf<2>{Hypothèse 2 : Cyclicité}}
-			La raideur apparente cartésienne du bras humain varie de manière cyclique en régime
-			stable de la tâche de jonglerie.
-		\end{block}
-	}
-\end{frame}
-
-%%%
-\subsection{Protocole}
-\begin{frame}
-	\frametitle{\insertsubsection}
-	\begin{itemize}
-		\item<1-> Cohorte de 31 personnes
-		\begin{itemize}
-			\item<2-> \SI{25}{\percent} de femmes
-			\item<2-> \SI{40}{\percent} de personnes familières avec le banc
-			\item<3-> \SI{30}{\year} (SD 8.6)
-			\item<3-> \SI{176.2}{\centi\meter} (SD 9.3)
-			\item<3-> \SI{71.3}{\kilogram} (SD 12.7)
-		\end{itemize}
-		\item<4-> 2 expériences
-		\begin{itemize}
-			\item<5-> Expérience H : variation de la hauteur cible (2 essais)
-			\item<6-> Expérience P : perturbation à 3 phases différentes (3 essais)
-		\end{itemize}
-		\item<7-> 2 sessions (2 $\times$ \SI{30}{\minute})
-		\begin{itemize}
-			\item<8-> Session 1 : Phase de familiarisation
-			\item<9-> Session 1 : 2 essais $\times$ \SI{5}{\minute}
-			\item<10-> Session 2 : 3 essais $\times$ \SI{5}{\minute}
-		\end{itemize}
-	\end{itemize}
-\end{frame}
-
-%%%
-\subsection{Traitement des données}
-\begin{frame}
-	\frametitle{\insertsubsection}
-	\begin{itemize}
-		\item<1-> Données interpolées sur un même vecteur temps (\SI{1}{\kilo\hertz})
-		\item<2-> Filtrage de la position (\SI{25}{\hertz}) et de la force (\SI{50}{\hertz}) avec Butterworth d'ordre 2 ("zero-phase")
-		\item<3-> Performances évaluées sur les erreurs de rebonds (précision et répétabilité)
-		\item<4-> 32.4 identifications (SD 6.1) par configurations (participants, expériences)
-		\begin{itemize}
-			\item<5-> Filtrage des données aberrantes ($R^2 > 0.5$)
-			\item<5-> Médiane des paramètres identifiés
-		\end{itemize}
-		\item<6-> Seuil des ANOVA : \SI{5}{\percent}
-		\item<7-> Analyses post-hoc : correction de Bonferroni
-	\end{itemize}
-\end{frame}
-
-%%%
-\subsection{Résultats : Effets des perturbations}
-\begin{frame}
-	\frametitle{\insertsubsection}
-	\only<1-2>{
-		\input{latex_files/fig_ball_bouncing_perturbation_cycles_example}
-	}
-	%
-	\only<3->{
-		\hspace{1cm}Précision \hspace{4cm} Répétabilité
-		\input{latex_files/fig_perturbation_performance_anova}
-	}
-	\only<4->{
-		\small
-		$F(3, 180) = 6.8$, $p<0.001$,  $\eta^2 = 0.026$ %
-		\hspace{1cm}%
-		Aucune différence significative
-		\vspace{2mm}
-	}
-	\begin{itemize}
-		\item<5-> Pas d'effet significatif sur la répétabilité
-		\item<6-> Augmentation significative de $\mean{\epsilon_r}$ après la perturbation
-		\item<7-> \textbf<7>{Mais}, variation de $\mean{\epsilon_r}$  inférieure à \SI{10}{\percent} de la moyenne $\sigma(\epsilon_r)$
-	\end{itemize}
-\end{frame}
-
-%%%
-\subsection{Résultats : Expérience "hauteur variable"}
-\begin{frame}
-	\frametitle{\insertsubsection}
+%
+%%%%%%%%%%%%%%%%%%%
+%%%% EXPERIMENT
+%\section{Expérience}
+%
+%\begin{frame}
+%	\frametitle{\insertsection}
+%	\tableofcontents[currentsection,sectionstyle=hide/hide,subsectionstyle=show/show/hide]
+%	\footnotesize{\fullcite{fortineau_human_2021}}%
+%	\\
+%	\footnotesize{\fullcite{fortineau_human_2022}}
+%\end{frame}
+%
+%%%%
+%\subsection{Hypothèses}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
+%	\only<1->{
+%		\begin{block}{\textbf<1>{Hypothèse 1 : Performances}}
+%			Les performances lors de la tâche de jonglerie sont corrélées à la raideur et/ou à l’amortissement cartésiens du bras.
+%		\end{block}
+%		\vspace{1cm}
+%	}	
+%	%
+%%	\begin{block}{Hypothèse 2}
+%%		Les variations d’impédance observées permettent d’améliorer les marges de stabilité, et
+%%		donc la robustesse lors d’interactions physiques avec un environnement.
+%%	\end{block}
+%	%
+%	\only<2->{
+%		\begin{block}{\textbf<2>{Hypothèse 2 : Cyclicité}}
+%			La raideur apparente cartésienne du bras humain varie de manière cyclique en régime
+%			stable de la tâche de jonglerie.
+%		\end{block}
+%	}
+%\end{frame}
+%
+%%%%
+%\subsection{Protocole}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
 %	\begin{itemize}
-%		\item<1-> Analyse des performances (ANOVA 2 hauteurs $\times$ 3 performances)
-%		\item<3-> Analyse de l'impédance (ANOVA 2 hauteurs $\times$ 3 performances)
+%		\item<1-> Cohorte de 31 personnes
+%		\begin{itemize}
+%			\item<2-> \SI{25}{\percent} de femmes
+%			\item<2-> \SI{40}{\percent} de personnes familières avec le banc
+%			\item<3-> \SI{30}{\year} (SD 8.6)
+%			\item<3-> \SI{176.2}{\centi\meter} (SD 9.3)
+%			\item<3-> \SI{71.3}{\kilogram} (SD 12.7)
+%		\end{itemize}
+%		\item<4-> 2 expériences
+%		\begin{itemize}
+%			\item<5-> Expérience H : variation de la hauteur cible (2 essais)
+%			\item<6-> Expérience P : perturbation à 3 phases différentes (3 essais)
+%		\end{itemize}
+%		\item<7-> 2 sessions (2 $\times$ \SI{30}{\minute})
+%		\begin{itemize}
+%			\item<8-> Session 1 : Phase de familiarisation
+%			\item<9-> Session 1 : 2 essais $\times$ \SI{5}{\minute}
+%			\item<10-> Session 2 : 3 essais $\times$ \SI{5}{\minute}
+%		\end{itemize}
 %	\end{itemize}
-	\only<1-7>{
-		Analyse des performances (ANOVA 2 hauteurs $\times$ 3 performances)
-		
-		\vspace{2mm}
-	}
-	\only<8->{
-		Analyse de l'impédance (ANOVA 2 hauteurs $\times$ 3 performances)
-		
-		\vspace{2mm}
-	}
-	%
-	\visible<2-5>{
-		\input{latex_figures/fig_exp_h_performance_anova}
-	}
-	%
-	\visible<3-7>{
-		\only<3-5>{
-			\begin{itemize}
-				\item<3-> Répétabilité ($\sigma(\epsilon_r)$)
-				\begin{itemize}
-					\item<3-> Effet significatif de $h_i^*$ : $F(1, 28) = 44.8$, $p<0.001$,  $\eta^2 = 0.179$
-					\item<4-> Effet significatif de $e_i$ : $F(1, 28) = 19.6$, $p<0.001$,  $\eta^2 = 0.404$
-					\item<5-> Pas d'interaction $(h_i^*\times e_i)$
-				\end{itemize}
-			\end{itemize}
-		}
-		\only<6-7>{
-			\begin{itemize}
-				\item<6-> Précision $(\mean{\epsilon_r})$
-				\begin{itemize}
-					\item<6-> Effet significatif de $h_i^*$ : $F(1, 28) = 7.0$, $p=0.014$,  $\eta^2 = 0.043$
-					\item<7-> Pas d'effet de $e_i$ 
-				\end{itemize}
-			\end{itemize}
-		}
-	}
-	
-\end{frame}
-
-%%%
-\subsection{Résultats : Expérience "phase variable"}
-\begin{frame}
-	\frametitle{\insertsubsection}
-	Some Text.
-\end{frame}
-
-%%%
-\subsection{Discussion : Validation des résultats}
-\begin{frame}
-	\frametitle{\insertsubsection}
-	Some Text.
-\end{frame}
-
-%%%
-\subsection{Discussion : Variations cycliques de l'impédance}
-\begin{frame}
-	\frametitle{\insertsubsection}
-	Some Text.
-\end{frame}
-
-%%%
-\subsection{Discussion : Lien entre l'impédance et les performances}
-\begin{frame}
-	\frametitle{\insertsubsection}
-	Some Text.
-\end{frame}
+%\end{frame}
+%
+%%%%
+%\subsection{Traitement des données}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
+%	\begin{itemize}
+%		\item<1-> Données interpolées sur un même vecteur temps (\SI{1}{\kilo\hertz})
+%		\item<2-> Filtrage de la position (\SI{25}{\hertz}) et de la force (\SI{50}{\hertz}) avec Butterworth d'ordre 2 ("zero-phase")
+%		\item<3-> Performances évaluées sur les erreurs de rebonds (précision et répétabilité)
+%		\item<4-> 32.4 identifications (SD 6.1) par configurations (participants, expériences)
+%		\begin{itemize}
+%			\item<5-> Filtrage des données aberrantes ($R^2 > 0.5$)
+%			\item<5-> Médiane des paramètres identifiés
+%		\end{itemize}
+%		\item<6-> Seuil des ANOVA : \SI{5}{\percent}
+%		\item<7-> Analyses post-hoc : correction de Bonferroni
+%	\end{itemize}
+%\end{frame}
+%
+%%%%
+%\subsection{Résultats : Effets des perturbations}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
+%	\only<1-2>{
+%		\input{latex_files/fig_ball_bouncing_perturbation_cycles_example}
+%	}
+%	%
+%	\only<3->{
+%		\hspace{1cm}Précision \hspace{4cm} Répétabilité
+%		\input{latex_files/fig_perturbation_performance_anova}
+%	}
+%	\visible<4->{
+%		\small
+%		$F(3, 180) = 6.8$, $p<0.001$,  $\eta^2 = 0.026$ %
+%		\hspace{1cm}%
+%		Aucune différence significative
+%		\vspace{2mm}
+%	}
+%	\begin{itemize}
+%		\item<5-> Pas d'effet significatif sur la répétabilité
+%		\item<6-> Augmentation significative de $\mean{\epsilon_r}$ après la perturbation
+%		\item<7-> \textbf<7>{Mais}, variation de $\mean{\epsilon_r}$  inférieure à \SI{10}{\percent} de la moyenne $\sigma(\epsilon_r)$
+%	\end{itemize}
+%\end{frame}
+%
+%%%%
+%\subsection{Résultats : Expérience "hauteur variable"}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
+%%	\begin{itemize}
+%%		\item<1-> Analyse des performances (ANOVA 2 hauteurs $\times$ 3 performances)
+%%		\item<3-> Analyse de l'impédance (ANOVA 2 hauteurs $\times$ 3 performances)
+%%	\end{itemize}
+%	\begin{textblock*}{12cm}(1.5cm,2cm)
+%	\only<1-7>{
+%			Analyse des performances (ANOVA 2 hauteurs $\times$ 3 performances)
+%			
+%			\vspace{2mm}
+%		}
+%		\only<8->{
+%			Analyse de l'impédance (ANOVA 2 hauteurs $\times$ 3 performances)
+%			
+%			\vspace{2mm}
+%		}
+%	\end{textblock*}
+%	%	
+%	\begin{textblock*}{12cm}(0.1cm,3cm)
+%		\centering
+%		\visible<2->{
+%			\tikzexternalenable
+%			\only<2-5>{
+%				\input{latex_figures/fig_exp_h_performance_anova}
+%			}
+%			\only<6-7>{
+%				\input{latex_figures/fig_exp_h_performance_anova_mean}
+%			}
+%			\only<9->{
+%				\input{latex_figures/fig_exp_h_impedance_anova}
+%			}
+%			\tikzexternaldisable
+%		}
+%	\end{textblock*}
+%	%
+%	\begin{textblock*}{12cm}(1cm,7cm)
+%	\visible<3->{
+%		\only<3-5>{
+%			\begin{itemize}
+%				\item<3-> Répétabilité ($\sigma(\epsilon_r)$)
+%				\begin{itemize}
+%					\item<3-> Effet significatif de $h_i^*$ : $F(1, 28) = 44.8$, $p<0.001$,  $\eta^2 = 0.179$
+%					\item<4-> Effet significatif de $e_i$ : $F(1, 28) = 19.6$, $p<0.001$,  $\eta^2 = 0.404$
+%					\item<5-> Pas d'interaction $(h_i^*\times e_i)$
+%				\end{itemize}
+%			\end{itemize}
+%		}
+%		\only<6-7>{
+%			\begin{itemize}
+%				\item<6-> Précision $(\mean{\epsilon_r})$
+%				\begin{itemize}
+%					\item<6-> Effet significatif de $h_i^*$ : $F(1, 28) = 7.0$, $p=0.014$,  $\eta^2 = 0.043$
+%					\item<7-> Pas d'effet de $e_i$ 
+%				\end{itemize}
+%			\end{itemize}
+%		}
+%		\only<9-12>{
+%			\begin{itemize}
+%				\item<9-> Aucun effet significatif sur la raideur $K$ ($h_i^*$ et $e_i$)
+%				\item<10-> Aucun effet significatif sur l'amortissement $B$ ($h_i^*$ et $e_i$)
+%				\item<11-> Faible effet significatif de $h_i^*$ sur la masse $M$ ($F(1, 28) = 4.6$, $p=0.040$,  $\eta^2 = 0.014$)
+%				\item<12->[$\Rightarrow$] Aucun effet observé sur les groupes de performances
+%			\end{itemize}
+%		}
+%	}
+%	\end{textblock*}	
+%\end{frame}
+%
+%%%%
+%\subsection{Résultats : Expérience "phase variable"}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
+%	\only<1>{
+%		\tikzexternalenable
+%			\input{latex_figures/fig_trajectory_perturbations}
+%		\tikzexternaldisable
+%	}
+%	%
+%	\begin{textblock*}{12cm}(1.5cm,2cm)
+%		\only<2-4>{
+%			Analyse des performances (ANOVA 3 performances)
+%		}
+%		\only<5->{
+%			Analyse de l'impédance (ANOVA 3 phases $\times$ 3 performances)
+%		}
+%	\end{textblock*}
+%	%	
+%	\begin{textblock*}{12cm}(0.1cm,3cm)
+%		\centering
+%		\visible<2->{
+%			\tikzexternalenable
+%			\only<2-4>{
+%				\input{latex_figures/fig_exp_p_performance_anova}
+%			}
+%			\only<5->{
+%				\vspace{-.35cm}
+%				
+%				\input{latex_figures/fig_exp_p_impedance_anova}
+%			}
+%			\tikzexternaldisable
+%		}
+%	\end{textblock*}
+%	%
+%	\begin{textblock*}{12cm}(1cm,7cm)
+%		\visible<3->{
+%			\only<3-4>{
+%				\begin{itemize}
+%					\item<3-> Précision $(\mean{\epsilon_r})$
+%					\begin{itemize}
+%						\item<3> Pas d'effet de $e_i$ 
+%					\end{itemize}
+%					\item<4-> Répétabilité ($\sigma(\epsilon_r)$)
+%					\begin{itemize}
+%						\item<4> Effet significatif de $e_i$ : $F(2, 28) = 24.0$, $p<0.001$,  $\eta^2 = 0.631$
+%					\end{itemize}
+%				\end{itemize}
+%			}
+%		}
+%	\end{textblock*}
+%	%
+%	\begin{textblock*}{12.9cm}(0cm,6.85cm)
+%		\only<5->{
+%			\small
+%			\begin{itemize}
+%				\item<5-> Un effet significatif de $\varphi_i$ sur la raideur $K$ ($F(2, 56) = 8.3$, $p<0.001$,  $\eta^2 = 0.134$)
+%				\item<6-> Des effets significatifs de $\varphi_i$ et $e_i$ sur l'amortissement $B$
+%				\begin{itemize}
+%					\item<6> $\varphi_i$ : $F(2, 56) = 8.6$, $p<0.001$,  $\eta^2 = 0.138$
+%					\item<6> $e_i$ : $F(2, 56) = 6.4$, $p=0.005$,  $\eta^2 = 0.123$
+%				\end{itemize}
+%				\item<7-> Un effet significatif de $\varphi_i$ sur la masse $M$ ($F(1.5, 41.3) = 16.2$, $p<0.001$,  $\eta^2 = 0.063$)
+%				%\item<12->[$\Rightarrow$] Aucun effet observé sur les groupes de performances
+%			\end{itemize}
+%		}
+%	\end{textblock*}
+%\end{frame}
+%
+%%%%
+%\subsection{Discussion : Validation des résultats}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
+%	Tableau de la littérature ?
+%\end{frame}
+%
+%%%%
+%\subsection{Discussion : Variations cycliques de l'impédance}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
+%	\begin{itemize}[<+->]
+%		\item Observation de variation cyclique significative pour tous les paramètres
+%		\begin{itemize}
+%			\item[$\Rightarrow$] Hypothèse 2
+%		\end{itemize}
+%		\item Augmentation presque linéaire de la raideur
+%		\begin{itemize}
+%			\item Réduction du gain statique ($1/K$)	pour une sortie en position
+%			\item[$\Rightarrow$] Cohérent avec une amélioration du rejet de perturbations en préparation d'impact 
+%		\end{itemize}
+%		\item Variations de l'amortissement et de la masse inversement corrélées
+%		\begin{itemize}
+%			\item Augmentation de le temps de rejet de perturbation juste avant l'impact
+%			\item[$\Rightarrow$] Variations liées à des considérations cinématiques/géométriques
+%		\end{itemize}		
+%	\end{itemize}
+%\end{frame}
+%
+%%%%
+%\subsection{Discussion : Lien entre l'impédance et les performances}
+%\begin{frame}
+%	\frametitle{\insertsubsection}
+%	\begin{itemize}[<+->]
+%		\item Liens entre performance/expertise et impédance cartésienne observés dans la littérature\footcite{erden_end-point_2015,burdet_central_2001}
+%		\item Pas de lien solide entre $e_i$ et les paramètres en impédance
+%		\begin{itemize}
+%			\item[$\Rightarrow$] Cinématique et synchronisation plus critiques (contrôle actif)\footcite{morice_learning_2007,de_rugy_actively_2003}
+%			\begin{itemize}
+%				\item Expérience avec changement dynamique (sans impact cinématique : \textit{eg.} changement de la masse de la balle)
+%			\end{itemize}
+%			\item[$\Rightarrow$] Niveau d'expertise défini à posteriori (différences trop faibles bien que significatives)
+%			\begin{itemize}
+%				\item Amélioration de l'estimation de trajectoire en position
+%				\item Meilleur précision des équipements
+%				\item Cohorte plus importante
+%			\end{itemize}
+%		\end{itemize}
+%	\end{itemize}
+%\end{frame}
 
 %%%%%%%%%%%%%%%%%%
 %%% STABILITY ANALYSIS
@@ -1138,25 +1254,170 @@
 \end{frame}
 
 %%%
-\subsection{SubSection 1}
+\subsection{Outils d'étude de la stabilité}
 \begin{frame}
 	\frametitle{\insertsubsection}
-	Some Text.
+	\begin{block}{\textbf<1>{Passivité}}
+		Un système causal est dit passif, au sens thermodynamique, lorsqu’il ne peut pas restituer
+		plus d’énergie $E_s$ qu’il n’en reçoit. La passivité est vérifiée si :
+		\begin{equation*} 
+			\underbrace{\int_{t_1}^{t_2} \matrCal{P}(\tau) d\tau}_\text{Energie fournie} \geq \overbrace{E_s(t_2) - E_s(t_1)}^\text{Energie emmaganisée} \geq 0\text{,}
+		\end{equation*}
+		avec $\matrCal{P} = \vect{y}^t \vect{u}$ la puissance instantanée du système sur l'intervalle $[t_1,t_2]$.
+	\end{block}
+	\begin{itemize}
+		\item<2-> 2 systèmes passifs connectés forment un ensemble stable\footcite{colgate_robust_1988}
+		\item<3-> Membres humains passifs\footcite{hogan_controlling_1989}
+		\item<4->[$\Rightarrow$]  Il suffit de montrer que le robot est passif : couplage stable
+		\begin{itemize}
+			\item<5->[\textcolor{Shiraz}{$\blacktriangleright$}] Critère conservatif !
+		\end{itemize}
+	\end{itemize}
 \end{frame}
 
 %%%
-\subsection{SubSection 2}
+\subsection{Modèle dynamique du robot}
 \begin{frame}
 	\frametitle{\insertsubsection}
-	Some Text.
+	\begin{textblock*}{12cm}(1.5cm,2cm)
+		\begin{itemize}
+			\item<1-> Modèle de Lagrange de robot sériel rigide\footcite{khalil_modeling_2002}
+		\end{itemize}
+	\end{textblock*}
+		%
+	\begin{textblock*}{12cm}(.75cm,2.35cm)
+		\begin{equation*} 
+			\ddot{\vect{q}} = \tikzmark{youBotDynModelA}\matr{A}(\vect{q})^{-1} \left( \tikzmark{youBotDynModelTauR}\vect{\tau}_r + \tikzmark{youBotDynModelNu}\matr{\nu}\jacobian{\vect{q}}{}{t} \vect{f}_{e} - \tikzmark{youBotDynModelFv}\matr{F}_v \dot{\vect{q}} - \tikzmark{youBotDynModelFs}\matr{F}_s \sign(\dot{\vect{q}}) - \tikzmark{youBotDynModelC}\matr{C}(\vect{q}, \dot{\vect{q}}) \dot{\vect{q}} - \tikzmark{youBotDynModelG}\vect{g}(\vect{q}) - \vect{\tau}_0 \right)
+		\end{equation*}
+	\end{textblock*}
+	%
+	\begin{tikzpicture}[remember picture,overlay, arrow/.style={thick, ->, >=latex}]
+		\draw<2->[arrow] ($(pic cs:youBotDynModelA) + (0.1cm,-0.1cm)$) to[out=-110,in=70] ($(pic cs:youBotDynModelA) + (-.75cm,-.65cm)$) node [yshift=-.2cm, xshift=.4cm, align=center] {\textbf<2>{\textcolor<2>{Prune}{Matrice d'inertie}}};
+		\draw<3->[arrow] ($(pic cs:youBotDynModelTauR) + (0.2cm,-0.1cm)$) to[out=-130,in=80] ($(pic cs:youBotDynModelTauR) + (-.3cm,-1.3cm)$) node [yshift=-.2cm, align=center] {\textbf<3>{\textcolor<3>{Prune}{Couples de commande}}};
+		\draw<4->[arrow] ($(pic cs:youBotDynModelNu) + (0.1cm,-0.15cm)$) to[out=-100,in=130] ($(pic cs:youBotDynModelNu) + (.2cm,-.5cm)$) node [yshift=-.4cm, align=center] {\textbf<4>{\textcolor<4>{Prune}{Coeff. de}}\\\textbf<4>{\textcolor<4>{Prune}{transmission}}};
+		\draw<5->[arrow] ($(pic cs:youBotDynModelFv) + (0.2cm,-0.1cm)$) to[out=-110,in=70] ($(pic cs:youBotDynModelFv) + (-.1cm,-1.35cm)$) node [yshift=-.4cm, align=center] {\textbf<5>{\textcolor<5>{Prune}{Frottements}} \\ \textbf<5>{\textcolor<5>{Prune}{visqueux}}};
+		\draw<6->[arrow] ($(pic cs:youBotDynModelFs) + (0.2cm,-0.1cm)$) to[out=-80,in=80] ($(pic cs:youBotDynModelFs) + (.1cm,-.5cm)$) node [yshift=-.4cm, align=center] {\textbf<6>{\textcolor<6>{Prune}{Frottements}} \\ \textbf<6>{\textcolor<6>{Prune}{statiques}}};
+		\draw<7->[arrow] ($(pic cs:youBotDynModelC) + (0.1cm,-0.1cm)$) to[out=-110,in=70] ($(pic cs:youBotDynModelC) + (-.75cm,-1.35cm)$) node [yshift=-.2cm, xshift=.4cm, align=center] {\textbf<7>{\textcolor<7>{Prune}{Forces de Coriolis}}};
+		\draw<8->[arrow] ($(pic cs:youBotDynModelG) + (0.1cm,-0.2cm)$) to[out=-110,in=70] ($(pic cs:youBotDynModelG) + (-.75cm,-.75cm)$) node [yshift=-.2cm, xshift=.4cm, align=center] {\textbf<8>{\textcolor<8>{Prune}{Forces de gravité}}};
+	\end{tikzpicture}
+	%
+	\begin{textblock*}{12cm}(1.5cm,5.5cm)		
+		\begin{itemize}
+			\item<9-> Commande en admittance
+			\begin{itemize}
+				\item<9-> Boucle de vitesse articulaire
+			\end{itemize}
+		\end{itemize}
+	\end{textblock*}
+	%
+	\begin{textblock*}{12cm}(.25cm,6.35cm)		
+		\visible<9->{
+			\begin{equation*} 
+				\vect{\tau}_r = \matr{R} \matr{T}_m \vect{i}_r \onslide<10->{\approx \matr{R} \matr{T}_m \vect{i}_d} \onslide<11->{=  \matr{K}_v \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) + \matr{K}_{vi} \int \left( \dot{\vect{q}}_d - \dot{\vect{q}} \right) \mathrm{d}t}
+			\end{equation*}
+		}
+	\end{textblock*}
+	%
+	\begin{textblock*}{12cm}(1.5cm,7.1cm)		
+		\begin{itemize}
+			\item<12->[]\begin{itemize}
+				\item<12-> Contrôle en admittance cartésienne
+			\end{itemize}
+		\end{itemize}
+	\end{textblock*}
+	%
+	\begin{textblock*}{12cm}(.25cm,7.45cm)		
+		\visible<12->{
+			\begin{equation*} 
+				\dot{\vect{q}}_d = \jacobianHat{\vect{q}}{}{-1} \begin{pmatrix} 0 & c_z (f_z) & 0 \end{pmatrix}^{t} \onslide<13->{= \jacobianHat{\vect{q}}{}{-1}\left( \matr{K}_p \vect{f}_e + \matr{K}_i \int \vect{f}_e \; \mathrm{d}t \right)}
+			\end{equation*}
+		}
+	\end{textblock*}
 \end{frame}
 
 %%%
-\subsection{SubSection 3}
+\subsection{Couplage avec un environnement}
 \begin{frame}
 	\frametitle{\insertsubsection}
-	Some Text.
+	\input{latex_figures/fig_bloc_diagram_robot_environment}
+	\begin{tikzpicture}[remember picture,overlay, arrow/.style={thick, ->, >=latex}]
+		\node<2>[yshift=-.4cm,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:coupledModelFin1) (pic cs:coupledModelFin2)}] {};
+		\node<4>[yshift=.1cm,draw,line width=1.5pt,Prune,ellipse,inner ysep=6pt,fit={(pic cs:envModelImp1) (pic cs:envModelImp2)}] (elipseA) {};
+		\draw<4>[arrow] (elipseA.east) to[out=10,in=-80] ($(pic cs:envModelImp2) + (1cm,.75cm)$) node [yshift=.15cm, align=center] {Modèle en impédance};
+		\draw<5>[arrow] ($(pic cs:envModelFilt) + (-0.1cm,-0.1cm)$) to[out=-30,in=-100] ($(pic cs:envModelFilt) + (2.15cm,0.35cm)$) node [yshift=.35cm, align=center] {Filtre mécanique\\$f_c=10$\si{\hertz}};
+	\end{tikzpicture}%$(pic cs:envModelImp2) + (0.1cm,0.1cm)$
+	%
+	\visible<3->{
+		\begin{equation*}
+			\mu_z(s) = \frac{f_z(s)}{v_z(s)} = \frac{\tikzmark{envModelImp1}K_z + B_z s  + M_z s^2\tikzmark{envModelImp2}}{s(1+\tau_ms)\tikzmark{envModelFilt}^2}
+		\end{equation*}
+	}
+	\visible<6->{
+		\begin{equation*} 
+			\matr{H}_{BO}(s) = \frac{\vect{f}_\mu(s)}{\vect{f}_{e}(s)} = \matr{\mu}(s)\left( \matr{\Sigma}_f(s) + \matr{\Sigma}_v(s) \matr{C}_z(s) \right)
+		\end{equation*}
+	}
+	\visible<7->{
+		\begin{equation*}
+			\matr{H}_{BF}(s) = \frac{\vect{V}_e(s)}{\vect{f}_{in}(s)} = \big( \matr{\Sigma}_f(s) + \matr{\Sigma}_v(s)\matr{C}_z(s) \big)\big(\matr{I} + \matr{\mu}(s)( \matr{\Sigma}_f(s) + \matr{\Sigma}_v(s)\matr{C}_z(s) )\big)^{-1}
+		\end{equation*}
+	}
 \end{frame}
+
+%%%
+\subsection{Reproduction de la cartographie expérimentale}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\only<1>{
+		\begin{textblock*}{7.15cm}(1.35cm,1.5cm)
+			\begin{figure}
+				\includegraphics[width=7cm]{fig_stability_map_a}
+			\end{figure}
+		\end{textblock*}
+		%	
+		\begin{textblock*}{1.1cm}(8.95cm,2cm)
+			\vspace{6mm}
+			\hspace{-3mm}\includegraphics[width=1cm]{fig_stability_map_b}
+		\end{textblock*}
+	}
+%
+	\only<2->{	
+		\begin{textblock*}{12cm}(.5cm,2cm)
+			\hspace{.5cm} Raideur nominale ($K_n=194$) \hspace{.85cm} Raideur en cocontraction ($K_r=3\times K_n$) \\
+			\includegraphics[width=5cm]{subfig_theory_stability_map_nominal}\hspace{1.5cm}%
+			\includegraphics[width=5.25cm]{subfig_theory_stability_map_cocontraction}
+		\end{textblock*}
+	}
+	\begin{textblock*}{12cm}(1cm,7.25cm)
+		\begin{itemize}
+			\item<3-> Cartographie théorique moins sévère pour les gains $K_p$
+			\begin{itemize}
+				\item<3-> Instabilité à partir de $K_i\geq0.3$ ($K_r$)
+				\item<4-> Instabilité constatée pour $K_i=0$ et $K_p\geq0.02$
+			\end{itemize}
+			\item<5->[$\Rightarrow$] Pour reproduire ces instabilités : $f_c\geq60$\si{\hertz}
+		\end{itemize}
+	\end{textblock*}
+\end{frame}
+
+%%%
+\subsection{Effet de l'action intégrale $K_i$}
+\begin{frame}
+	\frametitle{\insertsubsection}
+	\begin{textblock*}{12.5cm}(.5cm,2cm)
+		\hspace{2cm} Diagramme de Bode ($H_{BF}$) \hspace{2cm} Plan de Nyquist ($H_{BO}$) \\ \vspace{2mm}
+		
+		\tikz[remember picture]{\node(figBodeHbf){\includegraphics[width=8cm]{subfig_bode_sys_close_loop_against_Ki}};}
+		\hspace{2mm}
+		\includegraphics[width=3cm]{subfig_nyquist_sys_open_loop_against_Ki}
+	\end{textblock*}
+	%
+	\begin{tikzpicture}[remember picture, overlay, arrow/.style={thick, ->, >=latex}]
+		\draw<2>[arrow] ($(figBodeHbf) + (0.4cm,1.25cm)$) to[out=100,in=-70] ($(figBodeHbf) + (-1.5cm,-2cm)$) node [yshift=.1cm, align=center] {\textbf<2>{\textcolor<2>{Prune}{tâche}}};
+%		\draw<8>[arrow] ($(figOptSine) + (0.1cm,-0.5cm)$) to[out=-110,in=70] ($(figOptSine) + (-.75cm,-1.75cm)$) node [yshift=-.2cm, align=center] {\textbf<8>{\textcolor<8>{Prune}{fenêtre d'optimisation}}};
+	\end{tikzpicture}	
+\end{frame}
+
 
 %%%%%%%%%%%%%%%%%%
 %%% CONCLUSION
@@ -1166,7 +1427,7 @@
 \subsection{SubSection 1}
 \begin{frame}
 	\frametitle{\insertsubsection}
-	Some Text.
+
 \end{frame}
 
 \end{document}

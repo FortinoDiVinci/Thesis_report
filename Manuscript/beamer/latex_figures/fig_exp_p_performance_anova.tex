@@ -1,0 +1,94 @@
+{
+	\centering
+	\tikzsetnextfilename{fig_exp_p_performance_anova}
+	\begin{tikzpicture}	
+		\pgfplotsset{major grid style={dashed,opacity=0.3,gray}}	
+		\begin{axis}[%
+			name=ax1,
+			%height=0.25\linewidth,
+			%height=3.5cm,
+			width=3.5cm,
+			scale only axis,
+			%xmin=0.65,
+			%xmax=2.35,
+			%xtick={1,1.5,2},
+			xtick={1,2,3},
+			xticklabels={{$e_1$},{$e_2$},{$e_3$}},
+			xtick style={draw=none},
+			%ymin=1.06276752948761,
+			%ymax=1.78985784053802,
+			ylabel=$\mean{\epsilon_r}$ (\si{\centi\meter}),
+			ylabel near ticks,
+			yticklabel style={yshift=.5mm},
+			ymajorgrids,
+			%ylabel style={yshift=-1mm},
+			ybar,
+			bar width=.8,
+			enlarge x limits=0.33,
+			ymin=0,
+			ymax=30.5,
+			nodes near coords,
+			every node near coord/.append style={font=\footnotesize, color=Orient, yshift=.5cm, fill=white, opacity=1, inner sep=1pt},
+			%boxplot/draw direction=y, 
+			]				
+			\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%thick, 
+			plot [error bars/.cd, y dir = both, y explicit]
+			table[row sep=crcr, x=e, y=mean, y error=sem]{
+				e	mean	sem\\
+				1	7.7134272	1.6085139\\
+				2	3.3746595	1.1696524\\
+				3	4.7687508	1.3038563\\
+			};	
+			%
+			\node [above left, xshift=.5mm, color=Orient] at (axis cs:  1, 7.71) {\tiny$(a)$};
+			\node [above left, xshift=.5mm, color=Orient] at (axis cs:  2, 3.37) {\tiny$(a)$};
+			\node [above left, xshift=.5mm, color=Orient] at (axis cs:  3, 4.77) {\tiny$(a)$};
+			
+			%\node [] at (axis cs:  2, 13) {$h_2^*$};
+			%	
+		\end{axis}	
+		%
+		\begin{axis}[%
+			at={($(ax1.south east)+(1.5cm,0)$)},
+			%anchor={north},
+			%height=4.5cm,
+			width=3.5cm,
+			scale only axis,
+			%xmin=0.65,
+			%xmax=2.35,
+			%xtick={1,1.5,2},
+			xtick={1,2,3},
+			xticklabels={{$e_1$},{$e_2$},{$e_3$}},
+			xtick style={draw=none},
+			%ymin=1.06276752948761,
+			%ymax=1.78985784053802,
+			ylabel=$\sigma(\epsilon_r)$ (\si{\centi\meter}),
+			ylabel near ticks,
+			ylabel style={yshift=-1mm},
+			yticklabel style={yshift=-.5mm},
+			ymajorgrids,
+			ybar,
+			bar width=.8,
+			enlarge x limits=0.33,
+			ymin=0,
+			ymax=30.5,
+			nodes near coords,
+			every node near coord/.append style={font=\footnotesize, color=Orient, yshift=-1cm, fill=white, opacity=1, inner sep=1pt},
+			%boxplot/draw direction=y, 
+			]
+			\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+			plot [error bars/.cd, y dir = both, y explicit]
+			table[row sep=crcr,x=e, y=mean, y error=sem]{
+				e	mean	sem\\
+				1	28.25728	0.9179146\\
+				2	23.0311746	0.4312623\\
+				3	18.326436	0.7106506\\
+			};	
+			%
+			\node [above left, yshift=-1mm, xshift=.5mm, color=Orient] at (axis cs:  1, 28.26) {\tiny$(a)$};
+			\node [above left, xshift=.5mm, color=Orient] at (axis cs:  2, 23.03) {\tiny$(b)$};
+			\node [above left, xshift=.5mm, color=Orient] at (axis cs:  3, 18.33) {\tiny$(c)$};
+			%	
+		\end{axis}	
+	\end{tikzpicture}%
+}

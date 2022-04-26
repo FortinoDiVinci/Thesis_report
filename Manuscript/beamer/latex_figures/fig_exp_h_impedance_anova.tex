@@ -1,0 +1,100 @@
+\tikzsetnextfilename{fig_exp_h_impedance_anova}
+\centering
+\begin{tikzpicture}			
+	\pgfplotsset{major grid style={dashed,opacity=0.3,gray}}
+	%
+	\begin{axis}[%
+		name=ax1,
+		%height=0.25\linewidth,
+		width=3cm,
+		scale only axis,
+		xtick={1,2},
+		xticklabels={{$h_1^*$},{$h_3^*$}},
+		%xticklabels={\empty},
+		%xtick style={draw=none},
+		ymajorgrids,
+		ylabel=$K$ (\si{\newton\per\meter}),
+		ylabel near ticks,
+		%ylabel style={yshift=-1mm},
+		ybar,
+		bar width=.8,
+		enlarge x limits=0.45,
+		ymin=0,
+		ymax=140,
+		nodes near coords,
+		every node near coord/.append style={font=\scriptsize, color=Orient, yshift=-1cm, fill=white, opacity=1, inner sep=1pt},
+		ylabel shift = -.25cm,
+		]
+		\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+		plot [error bars/.cd, y dir = both, y explicit]
+		table[row sep=crcr, x=h, y=mean, y error=sem]{
+			h	mean	sem\\
+			1	111.5154277	11.03374015\\
+			2	120.3440334	10.51047768\\
+		};	
+		\node [above left, xshift=.5mm, color=Orient] at (axis cs:  1, 111) {\tiny$(a)$};
+		\node [above left, xshift=.5mm, color=Orient] at (axis cs:  2, 120) {\tiny$(a)$};
+	\end{axis}	
+	%
+	\begin{axis}[%
+	%height=0.25\linewidth,
+		name=ax2,
+		at={($(ax1.south east)+(1.15cm,0)$)},
+		width=3cm,
+		scale only axis,
+		xtick={1,2},
+		xticklabels={{$h_1^*$},{$h_3^*$}},
+		ymajorgrids,
+		ylabel=$B$ (\si{\newton\second\per\meter}),
+		ylabel near ticks,
+		ybar,
+		bar width=.8,
+		enlarge x limits=0.45,
+		ymin=0,
+		ymax=12,
+		nodes near coords,
+		every node near coord/.append style={font=\scriptsize, color=Orient, yshift=-1cm, fill=white, opacity=1, inner sep=1pt}, %\scriptsize
+		ylabel shift = -.25cm,
+		]
+		\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+		plot [error bars/.cd, y dir = both, y explicit]
+		table[row sep=crcr,x=h, y=mean, y error=sem]{
+			h	mean	sem\\
+			1	9.29940576	0.537145376\\
+			2	10.41707066	0.584347887\\
+		};
+		
+		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  1, 9.30) {\tiny$(a)$};
+		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  2, 10.42) {\tiny$(a)$};		
+	\end{axis}
+	%
+	\begin{axis}[%
+		at={($(ax2.south east)+(1.15cm,0)$)},
+		width=3cm,
+		scale only axis,
+		xtick={1,2},
+		xticklabels={{$h_1^*$},{$h_3^*$}},
+		ymajorgrids,
+		ylabel=$M$ (\si{\kilogram}),
+		ylabel near ticks,
+		ybar,
+		bar width=.8,
+		enlarge x limits=0.45,
+		ymin=0,
+		ymax=0.52,
+		nodes near coords,
+		every node near coord/.append style={font=\scriptsize, color=Orient, yshift=-1cm, fill=white, opacity=1, inner sep=1pt}, %\scriptsize
+		ylabel shift = -.25cm,
+		]
+		\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+		plot [error bars/.cd, y dir = both, y explicit]
+		table[row sep=crcr,x=h, y=mean, y error=sem]{
+			h	mean	sem\\
+			1	0.459239038	0.022560942\\
+			2	0.434499214	0.016946454\\
+		};
+		
+		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  1, 0.46) {\tiny$(a)$};
+		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  2, 0.43) {\tiny$(b)$};		
+	\end{axis}
+\end{tikzpicture}%
