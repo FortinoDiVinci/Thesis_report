@@ -224,16 +224,87 @@ for i = 1:length(u)
     y_cpp(i) = out(1);
 end
 
-y_matlab = lsim(Hinf_ctrl_red_dis2, u, t);
-y_hinf_ctrl = lsim(Hinf_ctrl_red, u, t);
+% y_matlab = lsim(Hinf_ctrl_red_dis, u, t);
+% y_hinf_ctrl = lsim(Hinf_ctrl_red, u, t);
+% 
+% figure
+% plot(t, y_matlab)
+% hold on
+% plot(t, y_cpp)
+% yyaxis right
+% plot(t,u)
+% 
+% figure
+% plot(t, y_hinf_ctrl)
 
-figure
-plot(t, y_matlab)
+%% genetic tuning of the weights
+lb = [0.1;0.1;1.001;1.001];
+ub = [10;10;100;100];
+% x = ga(@hinfCostFunc,4,[],[],[],[],lb,ub);
+x = [0.609846053238310, 0.100000000000000, 2.617334912050727, 1.001000000000000];
+
+W1 = 1/makeweight(1e-6,[2*pi*x(1),1],x(3),0,2);
+W2 = 1/makeweight(x(4),[2*pi*x(2),1],0.1); %,0,2
+
+[A_p,B_p,C_p,D_p] = gettf('synth_hinf_ctrl_lin_model_z',1:3,1:2);
+nb_meas = 1;  % nb input for controller
+nb_cmd = 1;   % nb cmd
+%
+H_new = ss(A_p,B_p,C_p,D_p);
+
+[Hinf_ctrl_ga,~,gamma_ga] = hinfsyn(H_new,nb_meas,nb_cmd,'display','on');
+H_inf_tf_ga = zpk(Hinf_ctrl_ga);
+
+% order reduction
+z_sel_ga = H_inf_tf_ga.Z{1}((H_inf_tf_ga.Z{1} > -1e3) & (H_inf_tf_ga.Z{1} < -5e-1));
+p_sel_ga = H_inf_tf_ga.P{1}((H_inf_tf_ga.P{1} > -1e3) & (H_inf_tf_ga.P{1} < -5e-1));
+nb_integrator = sum(~(H_inf_tf_ga.P{1} < -5e-1));
+p_sel_ga = [p_sel_ga; zeros(nb_integrator,1)];
+sys_ga = zpk(z_sel_ga,p_sel_ga,H_inf_tf_ga.K);
+Hinf_ctrl_red_ga = ss(minreal(sys_ga, 0.15));
+
+Hinf_ctrl_tmp = Hinf_ctrl;
+Hinf_ctrl = Hinf_ctrl_red;
+argout_hinf_ga = linmod('analysis_hinf_ctrl_lin_model_z');
+
+Sga = minreal(ss(argout_hinf_ga.a, argout_hinf_ga.b(:,1), argout_hinf_ga.c(1,:), argout_hinf_ga.d(1,1))); % sensivity
+Tga = minreal(ss(argout_hinf_ga.a, argout_hinf_ga.b(:,1), argout_hinf_ga.c(3,:), argout_hinf_ga.d(3,1))); % comp. sens.
+KSga = minreal(ss(argout_hinf_ga.a, argout_hinf_ga.b(:,1), argout_hinf_ga.c(2,:), argout_hinf_ga.d(2,1))); % u/fin
+SGga = minreal(ss(argout_hinf_ga.a, argout_hinf_ga.b(:,2), argout_hinf_ga.c(1,:), argout_hinf_ga.d(1,2))); % eps/b
+H_clga = minreal(ss(argout_hinf_ga.a, argout_hinf_ga.b(:,1), argout_hinf_ga.c(4,:), argout_hinf_ga.d(4,1))); % close loop s/fin
+
+Hinf_ctrl = Hinf_ctrl_tmp;
+
+figure(99)
+subplot(2,2,1)
+bodemag(S,S1,S2,Sga)
+grid on
+title('Fonction de sensibilité S')
+subplot(2,2,2)
 hold on
-plot(t, y_cpp)
-yyaxis right
-plot(t,u)
+bodemag(T,T1,T2,Tga)
+grid on
+title('Fonction de sensibilité complémentaire T')
+legend("PI", "H_{inf}^{red}", "H_{inf}", "H_{inf}^{red} ga")
+subplot(2,2,3)
+hold on
+bodemag(KS,KS1,KS2,KSga)
+grid on
+title('Fonction de sensibilité KS = u/fin')
+subplot(2,2,4)
+hold on
+bodemag(SG,SG1,SG2,SGga)
+grid on
+title('Fonction de sensibilité -SG = eps/b')
+
+y_hinf_ga = lsim(H_clga, u, t);
 
 figure
-plot(t, y_hinf_ctrl)
-%return output[0];
+plot(t, y_pi)
+hold on
+plot(t, y_hinf)
+plot(t, y_hinfd)
+plot(t, y_hinf_ga)
+yyaxis right
+plot(t, u)
+legend('PI', 'H_{inf}^{red}', 'H_{inf}^{red} disc', 'H_{inf}^{red} ga', 'u')
