@@ -19,10 +19,15 @@ dq0 = [0;0;0];
 ev0 = [0;0;0];
 
 % env
-K = 150;
-B = 10;
-M = 0.45;
+K = ureal('K',160,'Percentage',50);
+B = 11; % +/- 15%
+M = 0.42; % +/- 10%
 tau_m = 1/(10*2*pi);
+
+u_env = (K + B*s + M*s^2)/(1 + tau_m*s)^2;
+
+unc_pole = ureal('unc_pole',-5,'Range',[-10 -4]);
+plant = ss(unc_pole,5,1,0);
 
 % H_env = K + B*s + M*s^2;
 % H_filt = 1/(1 + tau_m*s)^2;
@@ -35,7 +40,18 @@ Kp = 0.015;
 Ki = 0.08;
 H_pi = Ki/s + Kp;
 
-argout = linmod('analysis_PI_ctrl_lin_model_z');
+open_system('analysis_PI_ctrl_lin_uncertain_model_z')
+io(1) = linio('analysis_PI_ctrl_lin_uncertain_model_z/fin',1, 'input');
+io(2) = linio('analysis_PI_ctrl_lin_uncertain_model_z/b',1, 'input');
+io(3) = linio('analysis_PI_ctrl_lin_uncertain_model_z/w',1, 'input');
+io(4) = linio('analysis_PI_ctrl_lin_uncertain_model_z/Sum',1, 'output'); % eps
+io(5) = linio('analysis_PI_ctrl_lin_uncertain_model_z/Admittance PI',1, 'output'); % u
+io(6) = linio('analysis_PI_ctrl_lin_uncertain_model_z/Sum1',1, 'output'); % w
+io(7) = linio('analysis_PI_ctrl_lin_uncertain_model_z/endpoint model of youBot',1, 'output'); % s
+%io = getlinio('analysis_PI_ctrl_lin_uncertain_model_z');
+
+argout = ulinearize('analysis_PI_ctrl_lin_uncertain_model_z',io);
+% argout = linmod('analysis_PI_ctrl_lin_model_z');
 % input 1) is fin, 2) is b (cmd), 3) is w (meas. noise)
 % output 1) is eps, 2) is u (cmd), 3) is r (fz)
 
@@ -69,7 +85,7 @@ fc_t = 0.45;%0.8;% fc(T) = [0.8, 0.45] Hz
 W1 = 1/makeweight(1e-6,[2*pi*fc_s,1],2,0,2);
 W2 = 1/makeweight(15,[2*pi*fc_t,1],0.1); %,0,2
 
-figure(50)
+figure
 subplot(2,1,1)
 bodemag(1/W1)
 title('1/W1 (epsilon)')
@@ -77,26 +93,20 @@ subplot(2,1,2);
 bodemag(1/W2)
 title('1/W2 (cmd)')
 
-[A_p,B_p,C_p,D_p] = gettf('synth_hinf_ctrl_lin_model_z',1:3,1:2);
+open_system('synth_hinf_ctrl_lin_uncertain_model_z')
+io_hinf(1) = linio('synth_hinf_ctrl_lin_uncertain_model_z/fin',1, 'input');
+io_hinf(2) = linio('synth_hinf_ctrl_lin_uncertain_model_z/cmd',1, 'input');
+io_hinf(3) = linio('synth_hinf_ctrl_lin_uncertain_model_z/e1',1, 'output');
+io_hinf(4) = linio('synth_hinf_ctrl_lin_uncertain_model_z/e2',1, 'output');
+io_hinf(5) = linio('synth_hinf_ctrl_lin_uncertain_model_z/eps',1, 'output');
+
+H = ulinearize('analysis_PI_ctrl_lin_uncertain_model_z',io);
+%[A_p,B_p,C_p,D_p] = gettf('synth_hinf_ctrl_lin_model_z',1:3,1:2);
 nb_meas = 1;  % nb input for controller
 nb_cmd = 1;   % nb cmd
 %
-H = ss(A_p,B_p,C_p,D_p);
 
-[HS,HNS] = stabsep(H);
-if (rank(ctrb(HNS.A,HNS.B)) - size(HNS.A,1)) == 0
-    disp('H is controllable')
-else
-    disp('H is not controllable')
-end
-%
-if (rank(obsv(HNS.A,HNS.C)) - size(HNS.A,1)) == 0
-    disp('H is observable')
-else
-    disp('H is not observable')
-end
-
-[Hinf_ctrl,bf,gamma] = hinfsyn(H,nb_meas,nb_cmd,'display','on');
+[Hinf_ctrl,bf,gamma] = musyn(H,nb_meas,nb_cmd);
 %Hinf_ctrl_red = minreal(Hinf_ctrl, 0.01);
 H_inf_tf = zpk(Hinf_ctrl);
     
@@ -240,24 +250,12 @@ end
 %% genetic tuning of the weights
 lb = [0.1;0.01;1.001;1.001];
 ub = [3;1;30;30];
-% [x, fval, exitflag, output, pop, scores] = ga(@hinfCostFunc,4,[],[],[],[],lb,ub);
+[x, fval, exitflag, output, pop, scores] = ga(@hinfCostFunc,4,[],[],[],[],lb,ub);
 % x = [0.609846053238310, 0.100000000000000, 2.617334912050727, 1.001000000000000];
-% x = [0.466914435684700, 0.0100, 1.0010, 1.0010]; % Pedro
-% x = [0.911842323761425, 0.0100, 1.0010, 1.0010]; % 
-
-W1old = W1;
-W2old = W2;
+% x = [0.466914435684700, 0.0100, 1.0010, 1.0010]; % unstable solution ?!
 
 W1 = 1/makeweight(1e-6,[2*pi*x(1),1],x(3),0,2);
 W2 = 1/makeweight(x(4),[2*pi*x(2),1],0.1); %,0,2
-
-figure(50)
-subplot(2,1,1)
-bodemag(1/W1, 1/W1old)
-title('1/W1 (epsilon)')
-subplot(2,1,2);
-bodemag(1/W2, 1/W2old)
-title('1/W2 (cmd)')
 
 [A_p,B_p,C_p,D_p] = gettf('synth_hinf_ctrl_lin_model_z',1:3,1:2);
 nb_meas = 1;  % nb input for controller
@@ -272,13 +270,13 @@ H_inf_tf_ga = zpk(Hinf_ctrl_ga);
 z_sel_ga = H_inf_tf_ga.Z{1}((H_inf_tf_ga.Z{1} > -1e3) & (H_inf_tf_ga.Z{1} < -5e-1));
 p_sel_ga = H_inf_tf_ga.P{1}((H_inf_tf_ga.P{1} > -1e3) & (H_inf_tf_ga.P{1} < -5e-1));
 nb_integrator = sum(~(H_inf_tf_ga.P{1} < -5e-1));
-p_sel_ga = [p_sel_ga; zeros(nb_integrator,1)];
-%p_sel_ga = [p_sel_ga; 0];
+%p_sel_ga = [p_sel_ga; zeros(nb_integrator,1)];
+p_sel_ga = [p_sel_ga; 0];
 sys_ga = zpk(z_sel_ga,p_sel_ga,H_inf_tf_ga.K);
 Hinf_ctrl_red_ga = ss(minreal(sys_ga, 0.15));
 
 Hinf_ctrl_tmp = Hinf_ctrl;
-Hinf_ctrl = ss(H_inf_tf_ga);
+Hinf_ctrl = Hinf_ctrl_red_ga;
 argout_hinf_ga = linmod('analysis_hinf_ctrl_lin_model_z');
 
 Sga = minreal(ss(argout_hinf_ga.a, argout_hinf_ga.b(:,1), argout_hinf_ga.c(1,:), argout_hinf_ga.d(1,1))); % sensivity
@@ -328,11 +326,3 @@ Hinf_ctrl_red_ga_dis = c2d(Hinf_ctrl_red_ga, 1e-3, 'tustin');
 tmp = tf(Hinf_ctrl_red_ga_dis);
 num_dis_hinf_ga = tmp.Numerator{:};
 den_dis_hinf_ga = tmp.Denominator{:};
-
-
-figure(98)
-bode(H_pi)
-hold on
-bode(Hinf_ctrl_ga)
-bode(Hinf_ctrl_red_ga)
-legend('H pi', 'Hinf ga', 'Hinf ga red')
