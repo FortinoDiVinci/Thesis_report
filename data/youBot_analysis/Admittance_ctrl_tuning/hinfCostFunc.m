@@ -38,7 +38,7 @@ function [cost] = hinfCostFunc(x)
     S = ss(argout_PI.a, argout_PI.b(:,1), argout_PI.c(1,:), argout_PI.d(1,1)); % sensivity
     T = ss(argout_PI.a, argout_PI.b(:,1), argout_PI.c(3,:), argout_PI.d(3,1)); % comp. sens.
 
-    w = linspace(2*2*pi,5*2*pi,15);
+    w = linspace(0.8*2*pi,5*2*pi,50);
     [mag_s_pi,~,~] = bode(S,w);
     
     %% Weights (to be tunned)
@@ -57,28 +57,46 @@ function [cost] = hinfCostFunc(x)
     H_inf_tf = zpk(Hinf_ctrl);
     
     % reducing the degree of the controller 
-    z_sel = H_inf_tf.Z{1}((H_inf_tf.Z{1} > -1e3) & (H_inf_tf.Z{1} < -5e-1));
-    p_sel = H_inf_tf.P{1}((H_inf_tf.P{1} > -1e3) & (H_inf_tf.P{1} < -5e-1));
-    nb_integrator = sum(~(H_inf_tf.P{1} < -5e-1));
-    p_sel = [p_sel; zeros(nb_integrator,1)];
-    Hinf_ctrl_red_tmp = zpk(z_sel,p_sel,H_inf_tf.K);
-    Hinf_ctrl_red = ss(minreal(Hinf_ctrl_red_tmp, 0.15));
+%     z_sel = H_inf_tf.Z{1}((H_inf_tf.Z{1} > -1e3) & (H_inf_tf.Z{1} < -5e-1));
+%     p_sel = H_inf_tf.P{1}((H_inf_tf.P{1} > -1e3) & (H_inf_tf.P{1} < -5e-1));
+%     nb_integrator = sum(~(H_inf_tf.P{1} < -5e-1));
+%     p_sel = [p_sel; zeros(nb_integrator,1)];
+%     Hinf_ctrl_red_tmp = zpk(z_sel,p_sel,H_inf_tf.K);
+%     Hinf_ctrl_red = ss(minreal(Hinf_ctrl_red_tmp, 0.15));
+    
+    [Hinf_ctrl_bal,G_Hinf_ctrl]=balreal(Hinf_ctrl);
+    elim = G_Hinf_ctrl< 0.001;
+    Hinf_ctrl_red = modred(Hinf_ctrl_bal,elim);
+    
+    tmp = Hinf_ctrl;
+    Hinf_ctrl = Hinf_ctrl_red;
     
     argout_hinf = linmod('analysis_hinf_ctrl_lin_model_z');
     % input 1) is fin, 2) is b (cmd), 3) is w (meas. noise)
     % output 1) is eps, 2) is u (cmd), 3) is r (fz)
 
+    Hinf_ctrl = tmp;
+    
     S2 = ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(1,:), argout_hinf.d(1,1)); % sensivity
     T2 = ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(3,:), argout_hinf.d(3,1)); % comp. sens.
+    CL2 = ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(4,1)); % comp. sens.
     
-    [mag_s_hinf,~,~] = bode(S2,w);
+    if isstable(CL2)
     
-    cost_bode = sum((squeeze(mag_s_hinf)-squeeze(mag_s_pi)).^2)/15; % sum of quadratic diff
-    cost_gamma = gamma*abs(gamma - 1);
-    cost_S_sig = log(max(sigma(S2)));
-    cost_T_sig = log(max(sigma(T2)));
+        [mag_s_hinf,~,~] = bode(S2,w);
     
-    cost = cost_bode + cost_gamma + cost_S_sig + cost_T_sig;%exp(-1/cost_bode) + exp(-1/cost_gamma) + exp(-1/cost_S_sig) + exp(-1/cost_T_sig);    
+        cost_bode = 10*sum((squeeze(mag_s_hinf)-squeeze(mag_s_pi)).^2)/50; % sum of quadratic diff
+        %cost_gamma = gamma*abs(gamma - 1);
+        cost_gamma = 10*(gamma - 0.95)^2;
+        cost_S_sig = log(max(sigma(S2)))/2;
+        cost_T_sig = log(max(sigma(T2)))/3;
+        
+
+        cost = cost_bode + cost_gamma + cost_S_sig + cost_T_sig;%exp(-1/cost_bode) + exp(-1/cost_gamma) + exp(-1/cost_S_sig) + exp(-1/cost_T_sig);    
     
+    else
+        cost = 10;
+    end
+        
 end
 

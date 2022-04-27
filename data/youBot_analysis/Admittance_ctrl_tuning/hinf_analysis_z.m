@@ -69,7 +69,7 @@ fc_t = 0.45;%0.8;% fc(T) = [0.8, 0.45] Hz
 W1 = 1/makeweight(1e-6,[2*pi*fc_s,1],2,0,2);
 W2 = 1/makeweight(15,[2*pi*fc_t,1],0.1); %,0,2
 
-figure
+figure(50)
 subplot(2,1,1)
 bodemag(1/W1)
 title('1/W1 (epsilon)')
@@ -238,13 +238,25 @@ end
 % plot(t, y_hinf_ctrl)
 
 %% genetic tuning of the weights
-lb = [0.1;0.1;1.001;1.001];
-ub = [10;10;100;100];
-% x = ga(@hinfCostFunc,4,[],[],[],[],lb,ub);
-x = [0.609846053238310, 0.100000000000000, 2.617334912050727, 1.001000000000000];
+lb = [0.1;0.01;1.001;1.001];
+ub = [3;1;30;30];
+% [x, fval, exitflag, output, pop, scores] = ga(@hinfCostFunc,4,[],[],[],[],lb,ub);
+% x = [0.609846053238310, 0.100000000000000, 2.617334912050727, 1.001000000000000];
+% x = [0.466914435684700, 0.0100, 1.0010, 1.0010]; % unstable solution ?!
+
+W1old = W1;
+W2old = W2;
 
 W1 = 1/makeweight(1e-6,[2*pi*x(1),1],x(3),0,2);
 W2 = 1/makeweight(x(4),[2*pi*x(2),1],0.1); %,0,2
+
+figure(50)
+subplot(2,1,1)
+bodemag(1/W1, 1/W1old)
+title('1/W1 (epsilon)')
+subplot(2,1,2);
+bodemag(1/W2, 1/W2old)
+title('1/W2 (cmd)')
 
 [A_p,B_p,C_p,D_p] = gettf('synth_hinf_ctrl_lin_model_z',1:3,1:2);
 nb_meas = 1;  % nb input for controller
@@ -260,11 +272,12 @@ z_sel_ga = H_inf_tf_ga.Z{1}((H_inf_tf_ga.Z{1} > -1e3) & (H_inf_tf_ga.Z{1} < -5e-
 p_sel_ga = H_inf_tf_ga.P{1}((H_inf_tf_ga.P{1} > -1e3) & (H_inf_tf_ga.P{1} < -5e-1));
 nb_integrator = sum(~(H_inf_tf_ga.P{1} < -5e-1));
 p_sel_ga = [p_sel_ga; zeros(nb_integrator,1)];
+%p_sel_ga = [p_sel_ga; 0];
 sys_ga = zpk(z_sel_ga,p_sel_ga,H_inf_tf_ga.K);
 Hinf_ctrl_red_ga = ss(minreal(sys_ga, 0.15));
 
 Hinf_ctrl_tmp = Hinf_ctrl;
-Hinf_ctrl = Hinf_ctrl_red;
+Hinf_ctrl = ss(H3);%Hinf_ctrl_red_ga;
 argout_hinf_ga = linmod('analysis_hinf_ctrl_lin_model_z');
 
 Sga = minreal(ss(argout_hinf_ga.a, argout_hinf_ga.b(:,1), argout_hinf_ga.c(1,:), argout_hinf_ga.d(1,1))); % sensivity
@@ -308,3 +321,17 @@ plot(t, y_hinf_ga)
 yyaxis right
 plot(t, u)
 legend('PI', 'H_{inf}^{red}', 'H_{inf}^{red} disc', 'H_{inf}^{red} ga', 'u')
+
+% discrete form
+Hinf_ctrl_red_ga_dis = c2d(Hinf_ctrl_red_ga, 1e-3, 'tustin');
+tmp = tf(Hinf_ctrl_red_ga_dis);
+num_dis_hinf_ga = tmp.Numerator{:};
+den_dis_hinf_ga = tmp.Denominator{:};
+
+
+figure(98)
+bode(H_pi)
+hold on
+bode(Hinf_ctrl_ga)
+bode(Hinf_ctrl_red_ga)
+legend('H pi', 'Hinf ga', 'Hinf ga red')
