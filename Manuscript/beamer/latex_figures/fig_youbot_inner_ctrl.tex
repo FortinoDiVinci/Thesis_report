@@ -28,7 +28,7 @@
 		\resizebox{0.5\paperwidth}{!}{
 		\begin{tikzpicture} [node distance = 2cm, scale = 0.75,remember picture]%overlay
 		
-		\onslide<14>{
+		\onslide<14,15>{
 			\comp[b]{c1}{(0, 0)};
 			\node[block, right of = c1, node distance = 1.75cm] (cv) {$\matr{C}_v(z)$};	
 		}
@@ -36,14 +36,14 @@
 		\comp[b]{c2}{($ (cv) + (2.5,0) $)};
 		\node[block, right of = c2, node distance = 1.75cm] (ci) {$\matr{C}_i(z)$};	
 		
-		\onslide<14>{
+		\onslide<14,15>{
 			\draw[{Latex[length=3mm]}-] (c1.west) --+ ($ (-1, 0) $)
 			node[near end, above] {$\dot{\vect{q}}_d$};
 			\draw[{Latex[length=3mm]}-] (c1.south) --+ ($ (0, -1) $)
-			node[near end, right] {$\dot{\vect{q}}$};
+			node[near end, right] {\tikzmark{pertInjectQd1}$\dot{\vect{q}}$\tikzmark{pertInjectQd2}};
 			\draw[-{Latex[length=3mm]}] (c1.east) -- (cv.west);
 		}
-		\onslide<15->{
+		\onslide<16->{
 			\draw[{Latex[length=3mm]}-] (c2.north) --+ (0, 1) node[left]{$\vect{i}_p$};
 		}
 		

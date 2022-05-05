@@ -1,0 +1,131 @@
+%\begin{figure}[h]
+{
+	\centering
+	\pgfplotstableread[col sep=semicolon] {../misc/chap_4_impedance/new/phase_significance_post_hoc.csv}\datatable
+	\visible<6->{%
+		\tikzsetnextfilename{fig_exp_p_impedance_K_anova}
+		\begin{tikzpicture}		
+			\begin{axis}[%
+				name=ax1,
+				width=3cm,
+				scale only axis,
+				xtick={1,2,3},
+				xticklabels={{$\varphi_1$},{$\varphi_2$},{$\varphi_3$}},
+				xlabel=$\mean{\hat{K}}$ (\si{\newton\per\meter}),
+				xlabel style={yshift=1mm},
+				%ylabel=$\mean{\hat{K}}$ (\si{\newton\per\meter}),
+				%ylabel near ticks,
+				%ylabel style={yshift=-1mm},
+				enlarge x limits=0.2,					
+				%boxplot/draw direction=y, 
+				]
+				\addplot [color=Orient, forget plot, thick] table[x=phase,y=K_med_AVG]{\datatable};
+				\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+				plot [error bars/.cd, y dir = both, y explicit]
+				table[x=phase, y=K_med_AVG, y error=K_med_SEM]{\datatable};		
+				\node [below right, xshift=-1mm, color=Orient] at (axis cs:  1, 124.6) {\tiny$(b)$};
+				\node [below right, xshift=-1mm, color=Orient] at (axis cs:  2, 159.7) {\tiny$(ab)$};
+				\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 191.4) {\tiny$(a)$};
+				%\node at (axis cs: 3.175, 200) {(i)};
+			\end{axis}	
+		\end{tikzpicture}
+	}
+	\visible<7->{%
+		\tikzsetnextfilename{fig_exp_p_impedance_B_anova}
+		\begin{tikzpicture}	
+			\begin{axis}[%
+	%			name=ax2,
+	%			at={($(ax1.south east)+(1cm,0)$)},
+				width=3cm,
+				ybar,
+				bar width=.65,
+				scale only axis,
+				ytick style={draw=none},
+				xtick={1,2,3},
+				xticklabels={$e_1$,$e_2$,$e_3$},
+				xticklabel style={color=Orient!50,yshift=1mm},
+				xtick style={draw=none},
+				xlabel=$\mean{\hat{B}}$ (\si{\newton\second\per\meter}),
+				xlabel style={yshift=1mm},
+				ymin=9.1,
+				ymax=12.6,
+				enlarge x limits=0.28,
+				]
+				\addplot [color=Orient!50, style={fill=Orient!50}, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient!50, ]
+				plot [error bars/.cd, y dir = both, y explicit]
+				table[row sep=crcr, x=phase, y=avg, y error=sem]{
+					phase	avg	sem\\
+					1	11.04109961	0.306751059\\
+					2	9.587646388	0.37037969\\
+					3	11.6838263	0.742533397\\
+				};								
+				\node [above left, xshift=1mm, color=Orient!50] at (axis cs: 1, 11.04) {\tiny$(a)$};
+				\node [above left, xshift=1mm, color=Orient!50] at (axis cs: 2, 9.59) {\tiny$(b)$};
+				\node [above left, xshift=1mm, color=Orient!50] at (axis cs: 3, 11.68) {\tiny$(a)$};
+			\end{axis}
+			%	
+			\begin{axis}[%
+	%			at={($(ax1.south east)+(1cm,0)$)},
+				width=3cm,
+				scale only axis,
+				axis x line*=top,
+				xtick={1,2,3},
+				xticklabels={{$\varphi_1$},{$\varphi_2$},{$\varphi_3$}},
+				xticklabel style={color=Orient},
+	%			ylabel=$\mean{\hat{B}}$ (\si{\newton\second\per\meter}),
+	%			ylabel near ticks,
+	%			ylabel style={yshift=-1mm},
+				ymin=9.1,
+				ymax=12.6,
+				enlarge x limits=0.2,
+				]
+				%% phase and performance separated
+				\addplot [color=Orient, forget plot, thick] table[row sep=crcr]{
+					1	10.03265015\\
+					2	11.7441701\\
+					3	9.828937436\\
+				};
+				\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+				plot [error bars/.cd, y dir = both, y explicit]
+				table[row sep=crcr, x=phase, y=avg, y error=sem]{
+					phase	avg	sem\\
+					1	10.03265015	0.396885927\\
+					2	11.7441701	0.433956223\\
+					3	9.828937436	0.378303713\\
+				};				
+				\node [below right, xshift=-1mm, color=Orient] at (axis cs: 1, 10.03) {\tiny$(b)$};
+				\node [above right, xshift=-1mm, color=Orient] at (axis cs: 2, 11.74) {\tiny$(a)$};
+				\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 9.83) {\tiny$(b)$};
+				%\node at (axis cs: 3.175, 12.2) {(ii)};
+			\end{axis}
+		\end{tikzpicture}
+	}	
+	%
+	\visible<8->{%
+		\tikzsetnextfilename{fig_exp_p_impedance_M_anova}
+		\begin{tikzpicture}	
+			\begin{axis}[%
+	%			at={($(ax2.south east)+(1cm,0)$)},,
+				width=3cm,
+				scale only axis,
+				xtick={1,2,3},
+				xticklabels={{$\varphi_1$},{$\varphi_2$},{$\varphi_3$}},
+	%			ylabel=$\mean{\hat{M}}$ (\si{\kilogram}),
+	%			ylabel near ticks,
+	%			ylabel style={yshift=-1mm},
+				xlabel=$\mean{\hat{M}}$ (\si{\kilogram}),
+				xlabel style={yshift=1mm},
+				enlarge x limits=0.2,
+				]
+				\addplot [color=Orient, forget plot, thick] table[x=phase,y=M_med_AVG]{\datatable};
+				\addplot [color=Orient, only marks, mark=*, mark options={fill=white, fill opacity=1}]
+				plot [error bars/.cd, y dir = both, y explicit]
+				table[x=phase, y=M_med_AVG, y error=M_med_SEM]{\datatable};		
+				\node [above right, xshift=-1mm, color=Orient] at (axis cs:  1, 0.454) {\tiny$(a)$};
+				\node [below right, xshift=-1mm, color=Orient] at (axis cs:  2, 0.382) {\tiny$(b)$};
+				\node [below right, xshift=-1mm, color=Orient] at (axis cs: 3, 0.453) {\tiny$(a)$};
+				%\node at (axis cs: 3.175, 0.48) {(iii)};	
+			\end{axis}
+		\end{tikzpicture}
+	}
+}

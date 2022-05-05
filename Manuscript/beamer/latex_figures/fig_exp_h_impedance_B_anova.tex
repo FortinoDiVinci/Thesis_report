@@ -1,0 +1,38 @@
+\tikzsetnextfilename{fig_exp_h_impedance_B_anova}
+\begin{tikzpicture}			
+	\pgfplotsset{major grid style={dashed,opacity=0.3,gray}}
+	%
+	\begin{axis}[%
+		%height=0.25\linewidth,
+%		name=ax2,
+%		at={($(ax1.south east)+(1.15cm,0)$)},
+		width=3cm,
+		scale only axis,
+		xtick={1,2},
+		xticklabels={{$h_1^*$},{$h_3^*$}},
+		ymajorgrids,
+%		ylabel={\small $B$ (\si{\newton\second\per\meter})},
+%		ylabel near ticks,
+%		ylabel shift = -.25cm,
+		title={\small $B$ (\si{\newton\second\per\meter})},
+		title style={yshift=-0.25cm},
+		ybar,
+		bar width=.8,
+		enlarge x limits=0.45,
+		ymin=0,
+		ymax=12,
+		nodes near coords,
+		every node near coord/.append style={font=\scriptsize, color=Orient, yshift=-1cm, fill=white, opacity=1, inner sep=1pt}, %\scriptsize
+		]
+		\addplot [color=Orient, fill opacity = 0.3, text opacity=1, pattern=north west lines, pattern color=Orient]%
+		plot [error bars/.cd, y dir = both, y explicit]
+		table[row sep=crcr,x=h, y=mean, y error=sem]{
+			h	mean	sem\\
+			1	9.29940576	0.537145376\\
+			2	10.41707066	0.584347887\\
+		};
+		
+		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  1, 9.30) {\tiny$(a)$};
+		\node [above left, xshift=.5mm, yshift=-.35mm, color=Orient] at (axis cs:  2, 10.42) {\tiny$(a)$};		
+	\end{axis}
+\end{tikzpicture}%
