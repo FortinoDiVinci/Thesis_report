@@ -85,9 +85,11 @@ fc_w1 = 0.45;%1;% fc(S) = [1, 0.55] Hz
 fc_w2 = 1.2255;%0.45;%0.8;% fc(T) = [0.8, 0.45] Hz
 fc_w3 = 2.65;
 
-W1 = 1/makeweight(1e-6,[2*pi*fc_w1,1],1.5,0,2);
 %W2 = 1/makeweight(15,[2*pi*fc_t,1],0.1); %,0,2
-W2 = 1/makeweight(10^(-27/20),[2*pi*fc_w2,10^(-35/20)],10^(-37/20));
+
+W1 = 1/makeweight(1e-4,[2*pi*fc_w1,1],1.5,0,2);
+%W2 = 1/makeweight(10^(-27/20),[2*pi*fc_w2,10^(-35/20)],10^(-37/20));
+W2 = ss(tf(1/10^(-25/20)));
 W3 = 1/makeweight(10^(33.4/20),[2*pi*fc_w3,10],0.1); %,0,2
 
 % figure(97)
@@ -138,12 +140,11 @@ Hinf_ctrl_red = orderRed(Hinf_ctrl,7);
 Hinf_ctrl_red = minreal(Q_red,0.1);
 
 figure(98)
-bode(Hinf_ctrl)
-hold on
-%bode(Hinf_ctrl_red)
-bode(Hinf_ctrl_red)
 bode(H_pi)
-legend('Hinf', 'Hinf red', 'H pi')
+hold on
+bode(Hinf_ctrl)
+bode(Hinf_ctrl_red)
+legend('H pi', 'Hinf', 'Hinf red')
 
 % figure
 % bode(Hinf_ctrl)
@@ -229,7 +230,7 @@ hold on
 bodemag(1/W1/W3, '--k')
 grid on
 title('Fonction de sensibilité SG = eps/b')
-legend("PI", "H_{inf}^{red}", "H_{inf}")
+legend("PI", "H_{inf}", "H_{inf}^{red}")
 subplot(2,2,3)
 bodemag(KS,KS_mu,KS_mu_red)
 hold on
