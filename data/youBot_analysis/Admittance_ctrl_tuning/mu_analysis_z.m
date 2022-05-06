@@ -53,11 +53,11 @@ io(7) = linio('analysis_PI_ctrl_lin_uncertain_model_z/endpoint model of youBot',
 
 argout = ulinearize('analysis_PI_ctrl_lin_uncertain_model_z',io);
 % argout = linmod('analysis_PI_ctrl_lin_model_z');
-% input 1) is fin, 2) is b (cmd), 3) is w (meas. noise)
-% output 1) is eps, 2) is u (cmd), 3) is r (fz)
+% input 1) is fin, 2) is b (cmd noise), 3) is w (meas. noise)
+% output 1) is eps, 2) is u (cmd), 3) is r (fz), 4) is y (vz)
 
 S = minreal(ss(argout.a, argout.b(:,1), argout.c(1,:), argout.d(1,1))); % sensivity
-T = minreal(ss(argout.a, argout.b(:,1), argout.c(3,:), argout.d(3,1))); % comp. sens.
+T = minreal(ss(argout.a, argout.b(:,2), argout.c(2,:), argout.d(2,2))); % comp. sens.
 KS = minreal(ss(argout.a, argout.b(:,1), argout.c(2,:), argout.d(2,1))); % u/fin
 SG = minreal(ss(argout.a, argout.b(:,2), argout.c(1,:), argout.d(1,2))); % eps/b
 Hcl = minreal(ss(argout.a, argout.b(:,1), argout.c(4,:), argout.d(4,1))); % close loop s/fin
@@ -65,46 +65,49 @@ Hcl = minreal(ss(argout.a, argout.b(:,1), argout.c(4,:), argout.d(4,1))); % clos
 figure(99)
 hold on
 subplot(2,2,1)
-hold on
 bodemag(S, S.NominalValue)
 grid on
 title('Fonction de sensibilité S')
 subplot(2,2,2)
-hold on
-bodemag(T, T.NominalValue)
+bodemag(SG,SG.NominalValue)
 grid on
-title('Fonction de sensibilité complémentaire T')
+title('Fonction de sensibilité SG = eps/b')
 subplot(2,2,3)
-hold on
 bodemag(KS, KS.NominalValue)
 grid on
 title('Fonction de sensibilité KS = u/fin')
 subplot(2,2,4)
-hold on
-bodemag(SG,SG.NominalValue)
+bodemag(T, T.NominalValue)
 grid on
-title('Fonction de sensibilité -SG = eps/b')
+title('Fonction de sensibilité complémentaire T')
 
-fc_s = 0.55;%1;% fc(S) = [1, 0.55] Hz
-fc_t = 0.45;%0.8;% fc(T) = [0.8, 0.45] Hz
+fc_w1 = 0.45;%1;% fc(S) = [1, 0.55] Hz
+fc_w2 = 1.2255;%0.45;%0.8;% fc(T) = [0.8, 0.45] Hz
+fc_w3 = 2.65;
 
-W1 = 1/makeweight(1e-6,[2*pi*fc_s,1],2,0,2);
-W2 = 1/makeweight(15,[2*pi*fc_t,1],0.1); %,0,2
+W1 = 1/makeweight(1e-6,[2*pi*fc_w1,1],1.5,0,2);
+%W2 = 1/makeweight(15,[2*pi*fc_t,1],0.1); %,0,2
+W2 = 1/makeweight(10^(-27/20),[2*pi*fc_w2,10^(-35/20)],10^(-37/20));
+W3 = 1/makeweight(10^(33.4/20),[2*pi*fc_w3,10],0.1); %,0,2
 
-figure(97)
-subplot(2,1,1)
-bodemag(1/W1)
-title('1/W1 (epsilon)')
-subplot(2,1,2);
-bodemag(1/W2)
-title('1/W2 (cmd)')
+% figure(97)
+% subplot(1,3,1)
+% bodemag(1/W1)
+% title('1/W1 (epsilon)')
+% subplot(1,3,2);
+% bodemag(1/W2)
+% title('1/W2 (u out)')
+% subplot(1,3,3);
+% bodemag(1/W3)
+% title('1/W3 (u in)')
 
 load_system('synth_hinf_ctrl_lin_uncertain_model_z')
 io_hinf(1) = linio('synth_hinf_ctrl_lin_uncertain_model_z/fin',1, 'input');
-io_hinf(2) = linio('synth_hinf_ctrl_lin_uncertain_model_z/cmd',1, 'input');
-io_hinf(3) = linio('synth_hinf_ctrl_lin_uncertain_model_z/W1',1, 'output');
-io_hinf(4) = linio('synth_hinf_ctrl_lin_uncertain_model_z/W2',1, 'output');
-io_hinf(5) = linio('synth_hinf_ctrl_lin_uncertain_model_z/Sum',1, 'output');
+io_hinf(2) = linio('synth_hinf_ctrl_lin_uncertain_model_z/b',1, 'input');
+io_hinf(3) = linio('synth_hinf_ctrl_lin_uncertain_model_z/cmd',1, 'input');
+io_hinf(4) = linio('synth_hinf_ctrl_lin_uncertain_model_z/W1',1, 'output');
+io_hinf(5) = linio('synth_hinf_ctrl_lin_uncertain_model_z/W2',1, 'output');
+io_hinf(6) = linio('synth_hinf_ctrl_lin_uncertain_model_z/Sum',1, 'output');
 
 H = ulinearize('synth_hinf_ctrl_lin_uncertain_model_z',io_hinf);
 %[A_p,B_p,C_p,D_p] = gettf('synth_hinf_ctrl_lin_model_z',1:3,1:2);
@@ -117,27 +120,28 @@ gamma = info(end).gamma;
 %Hinf_ctrl_red = minreal(Hinf_ctrl, 0.01);
 H_inf_tf = zpk(Hinf_ctrl);
     
-z_sel = H_inf_tf.Z{1}((H_inf_tf.Z{1} > -8e1) & (H_inf_tf.Z{1} < -5e-1));
-p_sel = H_inf_tf.P{1}((H_inf_tf.P{1} > -1.5e2) & (H_inf_tf.P{1} < -5e-1));
-nb_integrator = sum(~(H_inf_tf.P{1} < -5e-1));
-p_sel = [p_sel; 0];
+% z_sel = H_inf_tf.Z{1}((H_inf_tf.Z{1} > -8e1) & (H_inf_tf.Z{1} < -5e-1));
+% p_sel = H_inf_tf.P{1}((H_inf_tf.P{1} > -1.5e2) & (H_inf_tf.P{1} < -5e-1));
+% nb_integrator = sum(~(H_inf_tf.P{1} < -5e-1));
+% p_sel = [p_sel; 0];
+% 
+% sys = zpk(z_sel,p_sel,H_inf_tf.K);
+% Hinf_ctrl_red = ss(minreal(sys, 0.15));
+% 
+% mag_red = bode(Hinf_ctrl_red, 2*pi);
+% mag_hinf = bode(H_inf_tf, 2*pi);
+% gain_red = mag_hinf/mag_red;
+% 
+% Hinf_ctrl_red_corr = gain_red*Hinf_ctrl_red;
 
-sys = zpk(z_sel,p_sel,H_inf_tf.K);
-% Hinf_ctrl = ss(sys);
-
-Hinf_ctrl_red = ss(minreal(sys, 0.15));
-
-mag_red = bode(Hinf_ctrl_red, 2*pi);
-mag_hinf = bode(H_inf_tf, 2*pi);
-gain_red = mag_hinf/mag_red;
-
-Hinf_ctrl_red_corr = gain_red*Hinf_ctrl_red;
+Hinf_ctrl_red = orderRed(Hinf_ctrl,7);
+Hinf_ctrl_red = minreal(Q_red,0.1);
 
 figure(98)
 bode(Hinf_ctrl)
 hold on
 %bode(Hinf_ctrl_red)
-bode(Hinf_ctrl_red_corr)
+bode(Hinf_ctrl_red)
 bode(H_pi)
 legend('Hinf', 'Hinf red', 'H pi')
 
@@ -164,26 +168,27 @@ argout_hinf = ulinearize('analysis_hinf_ctrl_lin_uncertain_model_z',io);
 % output 1) is eps, 2) is u (cmd), 3) is r (fz)
 
 S_mu = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(1,:), argout_hinf.d(1,1))); % sensivity
-T_mu = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(3,:), argout_hinf.d(3,1))); % comp. sens.
+T_mu = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(2,:), argout_hinf.d(2,2))); % comp. sens.
 KS_mu = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), argout_hinf.d(2,1))); % u/fin
 SG_mu = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(1,2))); % eps/b
 Hcl_mu = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(4,1))); % close loop s/fin
 
 Hinf_ctrl_tmp = Hinf_ctrl;
-Hinf_ctrl = ss(Hinf_ctrl_red_corr);%Hinf_ctrl_red;
+Hinf_ctrl = ss(Hinf_ctrl_red);%Hinf_ctrl_red;
 argout_hinf = ulinearize('analysis_hinf_ctrl_lin_uncertain_model_z',io);
 
 S_mu_red = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(1,:), argout_hinf.d(1,1))); % sensivity
-T_mu_red = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(3,:), argout_hinf.d(3,1))); % comp. sens.
+T_mu_red = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(2,:), argout_hinf.d(3,1))); % comp. sens.
 KS_mu_red = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), argout_hinf.d(2,1))); % u/fin
 SG_mu_red = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(1,2))); % eps/b
 Hcl_mu_red = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(4,1))); % close loop s/fin
 
 Hinf_ctrl = Hinf_ctrl_tmp;
 
-Hinf_ctrl_red_dis = c2d(ss(Hinf_ctrl_red_corr), 1e-3,  'tustin');%c2d(Hinf_ctrl_red, 1e-3, 'tustin');
+Hinf_ctrl_red_dis = c2d(ss(Hinf_ctrl_red), 1e-3,  'tustin');%c2d(Hinf_ctrl_red, 1e-3, 'tustin');
 figure
-bode(Hinf_ctrl_red_corr, Hinf_ctrl_red_dis)
+bode(Hinf_ctrl_red, Hinf_ctrl_red_dis)
+title('Tustin discretisation H_{inf}^{red}')
 
 tmp = tf(Hinf_ctrl_red_dis);
 num_dis_hinf = tmp.Numerator{:};
@@ -206,32 +211,37 @@ KS_mu_red_d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(2,:), 
 SG_mu_red_d = minreal(ss(argout_hinf.a, argout_hinf.b(:,2), argout_hinf.c(1,:), argout_hinf.d(1,2), 1e-3)); % eps/b
 Hcl_mu_red_d = minreal(ss(argout_hinf.a, argout_hinf.b(:,1), argout_hinf.c(4,:), argout_hinf.d(4,1), 1e-3)); % close loop s/fin
 
-figure
-bode(Hcl_mu_red)
-hold on
-bode(Hcl_mu_red_d)
+% figure
+% bode(Hcl_mu_red)
+% hold on
+% bode(Hcl_mu_red_d)
 
 figure(99)
 subplot(2,2,1)
 bodemag(S,S_mu,S_mu_red)
+hold on
+bodemag(1/W1, '--k')
 grid on
 title('Fonction de sensibilité S')
 subplot(2,2,2)
+bodemag(SG,SG_mu,SG_mu_red)
 hold on
-bodemag(T,T_mu,T_mu_red)
+bodemag(1/W1/W3, '--k')
 grid on
-title('Fonction de sensibilité complémentaire T')
+title('Fonction de sensibilité SG = eps/b')
 legend("PI", "H_{inf}^{red}", "H_{inf}")
 subplot(2,2,3)
-hold on
 bodemag(KS,KS_mu,KS_mu_red)
+hold on
+bodemag(1/W2, '--k')
 grid on
 title('Fonction de sensibilité KS = u/fin')
 subplot(2,2,4)
+bodemag(T,T_mu,T_mu_red)
 hold on
-bodemag(SG,SG_mu,SG_mu_red)
+bodemag(1/W2/W3, '--k')
 grid on
-title('Fonction de sensibilité -SG = eps/b')
+title('Fonction de sensibilité complémentaire T')
 
 t = (0:1e-3:10);
 u = sin(2*pi*0.9.*t);
